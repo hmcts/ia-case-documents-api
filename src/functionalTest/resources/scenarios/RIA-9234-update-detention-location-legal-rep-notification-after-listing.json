@@ -18,7 +18,17 @@
           "listCaseHearingDate": "2023-05-03T14:25:15.000",
           "detentionFacility": "immigrationRemovalCentre",
           "ircName": "Brookhouse",
-          "previousDetentionLocation": "Colnbrook"
+          "previousDetentionLocation": "Colnbrook",
+          "legalRepHasAddress": "Yes",
+          "legalRepAddressUK": {
+            "County": "",
+            "Country": "United Kingdom",
+            "PostCode": "NW7 1BJ",
+            "PostTown": "London",
+            "AddressLine1": "Flat 1",
+            "AddressLine2": "Tamarind Court",
+            "AddressLine3": "1 Sanders Lane"
+          }
         }
       }
     }
@@ -31,7 +41,7 @@
       "replacements": {
         "notificationsSent": [
           {
-            "id": "923429_UPDATE_DETENTION_LOCATION_LEGAL_REP",
+            "id": "923429_UPDATE_DETENTION_LOCATION_LETTER_LEGAL_REPRESENTATIVE",
             "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
           }
         ]

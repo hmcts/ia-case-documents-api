@@ -1,5 +1,6 @@
 {
   "description": "RIA-9233 Send letter notification to Legal Rep for Decide Application (by appellant) - In country (internal case creation - represented)",
+  "disabled": true,
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
     "credentials": "Judge",

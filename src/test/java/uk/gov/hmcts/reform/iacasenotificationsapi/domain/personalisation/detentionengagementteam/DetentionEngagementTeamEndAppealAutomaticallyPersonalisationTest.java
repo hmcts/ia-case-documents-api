@@ -26,7 +26,7 @@ import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.DocumentTag;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.DocumentWithMetadata;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field.IdValue;
-import uk.gov.hmcts.reform.iacasenotificationsapi.domain.service.DetEmailService;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.service.DetentionEmailService;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.PersonalisationProvider;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.clients.DocumentDownloadClient;
 import uk.gov.service.notify.NotificationClientException;
@@ -40,7 +40,7 @@ class DetentionEngagementTeamEndAppealAutomaticallyPersonalisationTest {
     @Mock
     private DocumentDownloadClient documentDownloadClient;
     @Mock
-    private DetEmailService detEmailService;
+    private DetentionEmailService detEmailService;
     @Mock
     private PersonalisationProvider personalisationProvider;
     private String templateId = "templateId";
@@ -87,7 +87,7 @@ class DetentionEngagementTeamEndAppealAutomaticallyPersonalisationTest {
     void should_return_given_det_email_address() {
         String detentionEngagementTeamEmail = "det@email.com";
         when(asylumCase.read(DETENTION_FACILITY, String.class)).thenReturn(Optional.of("immigrationRemovalCentre"));
-        when(detEmailService.getRecipientsList(asylumCase)).thenReturn(Collections.singleton(detentionEngagementTeamEmail));
+        when(detEmailService.getDetentionEmailAddress(asylumCase)).thenReturn(detentionEngagementTeamEmail);
 
         assertTrue(
                 detentionEngagementTeamEndAppealAutomaticallyPersonalisation.getRecipientsList(asylumCase).contains(detentionEngagementTeamEmail));

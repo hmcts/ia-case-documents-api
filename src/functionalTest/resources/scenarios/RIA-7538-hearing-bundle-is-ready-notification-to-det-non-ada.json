@@ -13,6 +13,8 @@
           "detentionFacility": "immigrationRemovalCentre",
           "ircName": "Brookhouse",
           "appellantInDetention": "Yes",
+          "isAdmin": "Yes",
+          "appellantsRepresentation": "Yes",
           "isAcceleratedDetainedAppeal": "No",
           "listCaseHearingCentre": "harmondsworth",
           "ariaListingReference": "LP/12345/2019",
@@ -67,10 +69,6 @@
         "listCaseHearingCentre": "harmondsworth",
         "ariaListingReference": "LP/12345/2019",
         "notificationsSent": [
-          {
-            "id": "7538_HEARING_BUNDLE_IS_READY_INTERNAL_DET_EMAIL",
-            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
-          },
           {
             "id": "7538_HEARING_BUNDLE_IS_READY_HOME_OFFICE",
             "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"

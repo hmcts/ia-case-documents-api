@@ -14,10 +14,12 @@
           "detentionFacility": "immigrationRemovalCentre",
           "ircName": "Brookhouse",
           "isAdmin": "Yes",
+          "appellantsRepresentation": "Yes",
           "isAcceleratedDetainedAppeal": "No",
           "listCaseHearingCentre": "taylorHouse",
           "ariaListingReference": "LP/12345/2019",
           "appellantInDetention": "Yes",
+          "appellantsRepresentation" : "Yes",
           "notificationAttachmentDocuments": [
             {
               "id": "1",
@@ -46,9 +48,14 @@
       "replacements": {
         "detentionFacility": "immigrationRemovalCentre",
         "ircName": "Brookhouse",
+        "appellantsRepresentation" : "Yes",
         "notificationsSent": [
           {
             "id": "7675_INTERNAL_DETAINED_APPLY_FOR_FTPA_RESPONDENT",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          },
+          {
+            "id": "7675_FTPA_SUBMITTED_RESPONDENT",
             "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
           }
         ]
@@ -58,7 +65,7 @@
       {
         "reference": "7675_INTERNAL_DETAINED_APPLY_FOR_FTPA_RESPONDENT",
         "recipient": "det-irc-brookhouse@example.com",
-        "subject": "IAFT – SERVE IN PERSON: FTPA submitted by respondent",
+        "subject": "IAFT – SERVE IN PERSON",
         "body": [
           "Home Office reference: A1234567",
           "HMCTS reference: PA/12345/2019",

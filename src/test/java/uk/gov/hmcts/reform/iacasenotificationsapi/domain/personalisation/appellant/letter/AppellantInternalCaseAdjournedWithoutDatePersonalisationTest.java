@@ -102,7 +102,7 @@ class AppellantInternalCaseAdjournedWithoutDatePersonalisationTest {
 
     @Test
     void should_return_given_reference_id() {
-        Assertions.assertEquals(ccdCaseId + "_INTERNAL_CASE_AJOURN_WITHOUT_DATE_APPELLANT_LETTER",
+        Assertions.assertEquals(ccdCaseId + "_INTERNAL_CASE_ADJOURN_WITHOUT_DATE_APPELLANT_LETTER",
             internalCaseAdjournedWithoutDatePersonalisation.getReferenceId(ccdCaseId));
     }
 

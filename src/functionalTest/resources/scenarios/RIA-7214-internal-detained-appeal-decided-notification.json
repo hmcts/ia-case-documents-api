@@ -47,25 +47,9 @@
           {
             "id": "72141_APPEAL_OUTCOME_HOME_OFFICE",
             "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
-          },
-          {
-            "id": "72141_INTERNAL_DET_APPEAL_DECIDED_EMAIL",
-            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
           }
         ]
       }
-    },
-    "notifications": [
-      {
-        "reference": "72141_INTERNAL_DET_APPEAL_DECIDED_EMAIL",
-        "recipient": "det-irc-brookhouse@example.com",
-        "subject": "IAFT – SERVE IN PERSON: Appeal decided",
-        "body": [
-          "Home Office reference: A1234567",
-          "HMCTS reference: PA/12345/2019",
-          "Appellant name: Talha Awan"
-        ]
-      }
-    ]
+    }
   }
 }

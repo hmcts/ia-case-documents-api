@@ -1,6 +1,6 @@
 {
   "description": "RIA-7327 Detention engagement team Notification of respondent's ftpa application submitted Ada",
-  "enabled": "{$featureFlag.homeOfficeGovNotifyEnabled}",
+  "disabled": "true",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
     "credentials": "HomeOfficePOU",
@@ -14,6 +14,7 @@
           "detentionFacility": "immigrationRemovalCentre",
           "ircName": "Brookhouse",
           "isAdmin": "Yes",
+          "appellantsRepresentation": "Yes",
           "isAcceleratedDetainedAppeal": "Yes",
           "listCaseHearingCentre": "taylorHouse",
           "ariaListingReference": "LP/12345/2019",
@@ -58,7 +59,7 @@
       {
         "reference": "7327_INTERNAL_DETAINED_APPLY_FOR_FTPA_RESPONDENT",
         "recipient": "det-irc-brookhouse@example.com",
-        "subject": "ADA – SERVE IN PERSON: FTPA submitted by respondent",
+        "subject": "ADA – SERVE IN PERSON",
         "body": [
           "Home Office reference: A1234567",
           "HMCTS reference: PA/12345/2019",

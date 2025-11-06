@@ -39,10 +39,6 @@
           {
             "id": "952512_END_APPEAL_HOME_OFFICE",
             "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
-          },
-          {
-            "id": "952512_END_APPEAL_LEGAL_REPRESENTATIVE",
-            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
           }
         ]
       }
@@ -55,23 +51,6 @@
         "body": [
           "PA/12345/2019",
           "A1234567",
-          "Talha Awan",
-          "{$iaExUiFrontendUrl}",
-          "Withdrawn",
-          "some outcome reason",
-          "Judge",
-          "13 Aug 2019",
-          "{$customerServices.telephoneNumber}",
-          "{$customerServices.emailAddress}"
-        ]
-      },
-      {
-        "reference": "952512_END_APPEAL_LEGAL_REPRESENTATIVE",
-        "recipient": "{$TEST_LAW_FIRM_A_USERNAME}",
-        "subject": "Immigration and Asylum appeal: appeal ended – Withdrawn",
-        "body": [
-          "PA/12345/2019",
-          "CASE001",
           "Talha Awan",
           "{$iaExUiFrontendUrl}",
           "Withdrawn",

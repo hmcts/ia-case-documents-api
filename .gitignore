@@ -31,3 +31,4 @@
 ### VS ###
 bin/
 !bin/*.sh
+settings.json

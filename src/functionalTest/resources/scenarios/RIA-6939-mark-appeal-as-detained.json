@@ -32,11 +32,11 @@
         "listCaseHearingDate": "2023-05-01T13:30:15.000",
         "notificationsSent":[
           {
-            "id":"6939_MARK_APPEAL_AS_DETAINED_LEGAL_REP",
+            "id":"6939_MARK_APPEAL_AS_DETAINED_HOME_OFFICE",
             "value":"$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
           },
           {
-            "id":"6939_MARK_APPEAL_AS_DETAINED_HOME_OFFICE",
+            "id":"6939_MARK_APPEAL_AS_DETAINED_LEGAL_REP",
             "value":"$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
           }
         ]

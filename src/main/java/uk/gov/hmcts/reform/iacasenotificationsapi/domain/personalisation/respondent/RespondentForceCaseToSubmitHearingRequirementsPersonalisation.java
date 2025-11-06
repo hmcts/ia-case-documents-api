@@ -18,6 +18,7 @@ import uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.EmailNo
 public class RespondentForceCaseToSubmitHearingRequirementsPersonalisation implements EmailNotificationPersonalisation {
 
     private final String respondentForceCaseToSubmitHearingRequirementsTemplateId;
+    private final String respondentForceCaseToSubmitHearingRequirementsDetentionTemplateId;
     private final String respondentEmailAddressAtRespondentReview;
 
     @Value("${govnotify.emailPrefix.ada}")
@@ -29,17 +30,23 @@ public class RespondentForceCaseToSubmitHearingRequirementsPersonalisation imple
     public RespondentForceCaseToSubmitHearingRequirementsPersonalisation(
         @NotNull(message = "respondentForceCaseToSubmitHearingRequirementsTemplateId cannot be null")
         @Value("${govnotify.template.forceCaseProgression.respondentReview.to.submitHearingRequirements.respondent.email}") String respondentForceCaseToSubmitHearingRequirementsTemplateId,
+        @Value("${govnotify.template.forceCaseProgression.respondentReview.to.submitHearingRequirements.respondent.detention.email}") String respondentForceCaseToSubmitHearingRequirementsDetentionTemplateId,
         @NotNull(message = "respondentEmailAddressAtRespondentReview cannot be null")
         @Value("${respondentEmailAddresses.respondentReviewDirection}") String respondentEmailAddressAtRespondentReview
     ) {
 
         this.respondentForceCaseToSubmitHearingRequirementsTemplateId = respondentForceCaseToSubmitHearingRequirementsTemplateId;
+        this.respondentForceCaseToSubmitHearingRequirementsDetentionTemplateId = respondentForceCaseToSubmitHearingRequirementsDetentionTemplateId;
         this.respondentEmailAddressAtRespondentReview = respondentEmailAddressAtRespondentReview;
     }
 
     @Override
-    public String getTemplateId() {
-        return respondentForceCaseToSubmitHearingRequirementsTemplateId;
+    public String getTemplateId(AsylumCase asylumCase) {
+        if (isAppellantInDetention(asylumCase)) {
+            return respondentForceCaseToSubmitHearingRequirementsDetentionTemplateId;
+        } else {
+            return respondentForceCaseToSubmitHearingRequirementsTemplateId;
+        }
     }
 
     @Override

@@ -27,7 +27,6 @@ public class DetentionEngagementTeamUpdateHearingAdjustmentsPersonalisation impl
     private final DetEmailService detEmailService;
     private String adaPrefix;
     private String nonAdaPrefix;
-    private final String ircValue = "immigrationRemovalCentre";
 
     public DetentionEngagementTeamUpdateHearingAdjustmentsPersonalisation(
         @Value("${govnotify.template.updateHearingAdjustments.detentionEngagementTeam.email}") String internalUpdateHearingAdjustmentsTemplateId,

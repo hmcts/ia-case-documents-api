@@ -47,7 +47,7 @@ public class AppellantInternalHomeOfficeApplyForFtpaNonDetainedAndOutOfCountryPe
 
     @Override
     public String getReferenceId(Long caseId) {
-        return caseId + "_INTERNAL_HO_APPLY_FOR_FTPA_NON_DETAINED_OR_OOC_APPELLANT_LETTER";
+        return caseId + "_INTERNAL_HO_APPLY_FOR_FTPA_NON_DETAINED_OR_OOC_OR_DETAINED_OTHER_APPELLANT_LETTER";
     }
 
     @Override

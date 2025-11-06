@@ -13,6 +13,7 @@
           "detentionFacility": "immigrationRemovalCentre",
           "ircName": "Brookhouse",
           "isAdmin": "Yes",
+          "appellantsRepresentation": "Yes",
           "isAcceleratedDetainedAppeal": "No",
           "appellantInDetention": "Yes",
           "notificationAttachmentDocuments": [
@@ -42,10 +43,6 @@
       "template": "minimal-appeal-submitted.json",
       "replacements": {
         "notificationsSent": [
-          {
-            "id": "7695_INTERNAL_DET_MAINTAIN_CASE_UNLINK_APPEAL_EMAIL",
-            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
-          },
           {
             "id": "7695_CASE_UNLINK_APPEAL_HOME_OFFICE",
             "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"

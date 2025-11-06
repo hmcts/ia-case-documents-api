@@ -8,15 +8,43 @@
       "eventId": "updateTribunalDecision",
       "state": "ftpaDecided",
       "caseData": {
-        "template": "minimal-appeal-submitted.json",
+        "template": "minimal-internal-appeal-submitted.json",
         "replacements": {
           "isAdmin": "Yes",
           "appellantsRepresentation": "No",
+          "appellantInDetention": "No",
           "legalRepEmail": "{$TEST_LAW_FIRM_A_USERNAME}",
           "isDlrmSetAsideEnabled": "Yes",
           "listCaseHearingCentre": "taylorHouse",
           "legalRepresentativeEmailAddress": "sample@mail.com",
-          "updateTribunalDecisionList": "underRule31"
+          "updateTribunalDecisionList": "underRule31",
+          "appellantInUk": "Yes",
+          "legalRepHasAddress": "Yes",
+          "legalRepAddressUK": {
+            "County": "",
+            "Country": "United Kingdom",
+            "PostCode": "NE21JX",
+            "PostTown": "Example Town",
+            "AddressLine1": "5",
+            "AddressLine2": "Example Street"
+          },
+          "updatedAppealDecision": "Allowed",
+          "typesOfUpdateTribunalDecision": {
+            "value": {
+              "code": "dismissed",
+              "label": "Yes, change decision to Dismissed"
+            },
+            "list_items": [
+              {
+                "code": "dismissed",
+                "label": "Yes, change decision to Dismissed"
+              },
+              {
+                "code": "allowed",
+                "label": "No"
+              }
+            ]
+          }
         }
       }
     }
@@ -25,22 +53,50 @@
     "status": 200,
     "errors": [],
     "caseData": {
-      "template": "minimal-appeal-submitted.json",
+      "template": "minimal-internal-appeal-submitted.json",
       "replacements": {
         "isAdmin": "Yes",
         "appellantsRepresentation": "No",
+        "appellantInDetention": "No",
         "legalRepEmail": "{$TEST_LAW_FIRM_A_USERNAME}",
         "isDlrmSetAsideEnabled": "Yes",
         "listCaseHearingCentre": "taylorHouse",
         "legalRepresentativeEmailAddress": "sample@mail.com",
         "updateTribunalDecisionList": "underRule31",
+        "appellantInUk": "Yes",
+        "legalRepHasAddress": "Yes",
+        "legalRepAddressUK": {
+          "County": "",
+          "Country": "United Kingdom",
+          "PostCode": "NE21JX",
+          "PostTown": "Example Town",
+          "AddressLine1": "5",
+          "AddressLine2": "Example Street"
+        },
+        "updatedAppealDecision": "Allowed",
+        "typesOfUpdateTribunalDecision": {
+          "value": {
+            "code": "dismissed",
+            "label": "Yes, change decision to Dismissed"
+          },
+          "list_items": [
+            {
+              "code": "dismissed",
+              "label": "Yes, change decision to Dismissed"
+            },
+            {
+              "code": "allowed",
+              "label": "No"
+            }
+          ]
+        },
         "notificationsSent": [
           {
             "id": "923430_RESPONDENT_UPDATE_TRIBUNAL_DECISION_RULE_31_EMAIL",
             "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
           },
           {
-            "id": "923430_LEGAL_REPRESENTATIVE_UPDATE_TRIBUNAL_DECISION_RULE_31_EMAIL",
+            "id": "923430_INTERNAL_UPDATE_TRIBUNAL_DECISION_RULE31_LETTER",
             "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
           }
         ]

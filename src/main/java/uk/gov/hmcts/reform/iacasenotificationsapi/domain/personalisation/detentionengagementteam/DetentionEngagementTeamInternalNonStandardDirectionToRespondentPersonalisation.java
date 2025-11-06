@@ -73,11 +73,11 @@ public class DetentionEngagementTeamInternalNonStandardDirectionToRespondentPers
         requireNonNull(asylumCase, "asylumCase must not be null");
 
         return ImmutableMap
-                .<String, Object>builder()
-                .put("subjectPrefix", isAcceleratedDetainedAppeal(asylumCase) ? adaPrefix : nonAdaPrefix)
-                .putAll(personalisationProvider.getAppellantPersonalisation(asylumCase))
-                .put("documentLink", getAppealDecidedLetterJsonObject(asylumCase))
-                .build();
+            .<String, Object>builder()
+            .put("subjectPrefix", isAcceleratedDetainedAppeal(asylumCase) ? adaPrefix : nonAdaPrefix)
+            .putAll(personalisationProvider.getAppellantPersonalisation(asylumCase))
+            .put("documentLink", getAppealDecidedLetterJsonObject(asylumCase))
+            .build();
     }
 
     private JSONObject getAppealDecidedLetterJsonObject(AsylumCase asylumCase) {

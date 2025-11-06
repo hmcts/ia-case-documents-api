@@ -20,6 +20,15 @@
           "isAcceleratedDetainedAppeal": "Yes",
           "legalRepEmail": "ia-law-firm-a@fake.hmcts.net",
           "appellantsRepresentation": "No",
+          "legalRepHasAddress": "Yes",
+          "legalRepAddressUK": {
+            "County": "",
+            "Country": "United Kingdom",
+            "PostCode": "NE21JX",
+            "PostTown": "Example Town",
+            "AddressLine1": "5",
+            "AddressLine2": "Example Street"
+          },
           "notificationAttachmentDocuments": [
             {
               "id": "1",
@@ -60,11 +69,7 @@
             "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
           },
           {
-            "id": "7428_REINSTATE_APPEAL_LEGAL_REP",
-            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
-          },
-          {
-            "id": "7428_INTERNAL_DET_REINSTATE_APPEAL_EMAIL",
+            "id": "7428_INTERNAL_REINSTATE_APPEAL_APPELLANT_LETTER",
             "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
           }
         ]
@@ -80,16 +85,6 @@
           "Home Office reference: A1234567",
           "Appellant name: Talha Awan",
           "The online service: {$iaExUiFrontendUrl}"
-        ]
-      },
-      {
-        "reference": "7428_INTERNAL_DET_REINSTATE_APPEAL_EMAIL",
-        "recipient": "det-irc-brookhouse@example.com",
-        "subject": "ADA – SERVE IN PERSON: Appeal reinstated",
-        "body": [
-          "HMCTS reference: PA/12345/2019",
-          "Home Office reference: A1234567",
-          "Appellant name: Talha Awan"
         ]
       }
     ]

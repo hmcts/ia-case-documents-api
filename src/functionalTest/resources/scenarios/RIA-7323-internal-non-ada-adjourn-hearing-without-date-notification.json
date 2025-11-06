@@ -45,7 +45,7 @@
       "replacements": {
         "notificationsSent": [
           {
-            "id": "73230_INTERNAL_DETAINED_ADJOURN_HEARING_WITHOUT_DATE_DET",
+            "id": "73230_DETAINED_APPEAL_ADJOURN_HEARING_NO_DATE_APPELLANT_LETTER",
             "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
           }
         ]
@@ -53,7 +53,7 @@
     },
     "notifications": [
       {
-        "reference": "73230_INTERNAL_DETAINED_ADJOURN_HEARING_WITHOUT_DATE_DET",
+        "reference": "73230_DETAINED_APPEAL_ADJOURN_HEARING_NO_DATE_APPELLANT_LETTER",
         "recipient": "det-irc-brookhouse@example.com",
         "subject": "IAFT – SERVE IN PERSON: Hearing adjourned without a date",
         "body": [

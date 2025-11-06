@@ -94,7 +94,7 @@ class AppellantInternalHomeOfficeApplyForFtpaNonDetainedAndOutOfCountryPersonali
 
     @Test
     void should_return_given_reference_id() {
-        assertEquals(ccdCaseId + "_INTERNAL_HO_APPLY_FOR_FTPA_NON_DETAINED_OR_OOC_APPELLANT_LETTER",
+        assertEquals(ccdCaseId + "_INTERNAL_HO_APPLY_FOR_FTPA_NON_DETAINED_OR_OOC_OR_DETAINED_OTHER_APPELLANT_LETTER",
             appellantInternalHomeOfficeApplyForFtpaNonDetainedAndOutOfCountryPersonalisation.getReferenceId(ccdCaseId));
     }
 

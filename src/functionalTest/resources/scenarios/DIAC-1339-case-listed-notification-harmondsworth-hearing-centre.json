@@ -1,0 +1,139 @@
+{
+  "description": "DIAC-1339 Send case listed production notification",
+  "enabled": "{$featureFlag.homeOfficeGovNotifyEnabled}",
+  "request": {
+    "uri": "/asylum/ccdAboutToSubmit",
+    "credentials": "AdminOfficer",
+    "input": {
+      "id": 13391,
+      "eventId": "listCase",
+      "state": "prepareForHearing",
+      "caseData": {
+        "template": "minimal-appeal-submitted.json",
+        "replacements": {
+          "appealReferenceNumber": "PA/12345/2023",
+          "ariaListingReference": "LP/12345/2023",
+          "listCaseHearingCentre": "harmondsworth",
+          "listCaseHearingDate": "2023-09-03T14:25:15.000",
+          "legalRepresentativeEmailAddress": "{$TEST_LAW_FIRM_A_USERNAME}",
+          "appellantInDetention": "Yes",
+          "detentionFacility": "prison",
+          "prisonName": "Albany",
+          "hearingChannel": {
+            "value": {
+              "code": "INTER",
+              "label": "In Person"
+            },
+            "list_items": [
+              {
+                "code": "INTER",
+                "label": "In Person"
+              },
+              {
+                "code": "NA",
+                "label": "Not in Attendance"
+              },
+              {
+                "code": "TEL",
+                "label": "Telephone"
+              },
+              {
+                "code": "VID",
+                "label": "Video"
+              }
+            ]
+          },
+          "notificationAttachmentDocuments": [
+            {
+              "id": "1",
+              "value": {
+                "tag": "internalCaseListedLetterBundle",
+                "document": {
+                  "document_url": "{$FIXTURE_DOC1_PDF_URL}",
+                  "document_binary_url": "{$FIXTURE_DOC1_PDF_URL_BINARY}",
+                  "document_filename": "{$FIXTURE_DOC1_PDF_FILENAME}"
+                },
+                "suppliedBy": "",
+                "description": "",
+                "dateUploaded": "{$TODAY}"
+              }
+            }
+          ]
+        }
+      }
+    }
+  },
+  "expectation": {
+    "status": 200,
+    "errors": [],
+    "caseData": {
+      "template": "minimal-appeal-submitted.json",
+      "replacements": {
+        "appealReferenceNumber": "PA/12345/2023",
+        "listCaseHearingCentre": "harmondsworth",
+        "listCaseHearingDate": "2023-09-03T14:25:15.000",
+        "legalRepresentativeEmailAddress": "{$TEST_LAW_FIRM_A_USERNAME}",
+        "notificationsSent": [
+          {
+            "id": "13391_CASE_LISTED_LEGAL_REPRESENTATIVE",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          },
+          {
+            "id": "13391_CASE_LISTED_HOME_OFFICE",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          },
+          {
+            "id": "13391_CASE_LISTED_CASE_OFFICER",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          },
+          {
+            "id": "13391_INTERNAL_DETAINED_CASE_LISTED_DET",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          },
+          {
+            "id": "13391_DETAINED_CASE_LISTED_PRODUCTION_DET",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          }
+        ]
+      }
+    },
+    "notifications": [
+      {
+        "reference": "13391_CASE_LISTED_LEGAL_REPRESENTATIVE",
+        "recipient": "{$TEST_LAW_FIRM_A_USERNAME}",
+        "subject": "Immigration and Asylum appeal: check the details of your hearing",
+        "body": [
+          "PA/12345/2023",
+          "LP/12345/2023",
+          "3 Sep 2023",
+          "14:25",
+          "Harmondsworth Tribunal Hearing Centre, Colnbrook Bypass, UB7 0HB"
+        ]
+      },
+      {
+        "reference": "13391_CASE_LISTED_HOME_OFFICE",
+        "recipient": "ho-harmondsworth@example.com",
+        "subject": "Immigration and Asylum appeal: case listed",
+        "body": [
+          "PA/12345/2023",
+          "LP/12345/2023",
+          "3 Sep 2023",
+          "14:25",
+          "Harmondsworth Tribunal Hearing Centre, Colnbrook Bypass, UB7 0HB"
+        ]
+      },
+      {
+        "reference": "13391_DETAINED_CASE_LISTED_PRODUCTION_DET",
+        "recipient": "det-prison-albany@example.com",
+        "subject": "IAFT – SERVE IN PERSON: Hearing details",
+        "body": [
+          "PA/12345/2023",
+          "Appellant name: Talha Awan",
+          "3 Sep 2023",
+          "14:25",
+          "Harmondsworth Tribunal Hearing Centre, Colnbrook Bypass, UB7 0HB"
+        ]
+      }
+    ]
+  }
+}

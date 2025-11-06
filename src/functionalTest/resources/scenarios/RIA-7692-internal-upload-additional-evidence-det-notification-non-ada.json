@@ -14,6 +14,7 @@
           "ircName": "Brookhouse",
           "isAcceleratedDetainedAppeal": "No",
           "appellantInDetention": "Yes",
+          "appellantsRepresentation": "Yes",
           "notificationAttachmentDocuments": [
             {
               "id": "1",
@@ -43,10 +44,6 @@
         "notificationsSent": [
           {
             "id": "7692_UPLOADED_ADDITIONAL_EVIDENCE_HOME_OFFICE",
-            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
-          },
-          {
-            "id": "7692_INTERNAL_DET_UPLOAD_ADDITIONAL_EVIDENCE_EMAIL",
             "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
           }
         ]

@@ -2,6 +2,10 @@ java:
   # Don't modify below here
   image: ${IMAGE_NAME}
   ingressHost: ${SERVICE_FQDN}
+  devcpuRequests: 1000m
+  devmemoryRequests: 1024Mi
+  devcpuLimits: 3000m
+  devmemoryLimits: 1536Mi
   environment:
     IA_AIP_FRONTEND_URL: "https://immigration-appeal.{{ .Values.global.environment }}.platform.hmcts.net/"
     IA_EXUI_FRONTEND_URL: "https://manage-case.{{ .Values.global.environment }}.platform.hmcts.net/"

@@ -1,5 +1,6 @@
 {
   "description": "RIA-7553 Send request respondent evidence notification (Home Office directed to upload bundle) Internal Non-ADA to DET prison (The Mount) for ",
+  "disabled": true,
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
     "credentials": "caseOfficer",
@@ -14,6 +15,7 @@
           "currentCaseStateVisibleToLegalRepresentative": "awaitingRespondentEvidence",
           "appellantInDetention": "Yes",
           "isAcceleratedDetainedAppeal": "No",
+          "appellantsRepresentation" : "Yes",
           "detentionFacility": "immigrationRemovalCentre",
           "ircName": "Brookhouse",
           "directions": [
@@ -58,10 +60,6 @@
           {
             "id": "7553_RESPONDENT_EVIDENCE_DIRECTION",
             "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
-          },
-          {
-            "id": "7553_INTERNAL_DET_REQUEST_RESPONDENT_EVIDENCE_EMAIL",
-            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
           }
         ]
       }
@@ -80,16 +78,6 @@
           "The legal representative details for this appeal are:",
           "Legal representative name: ",
           "{$customerServices.emailAddress}"
-        ]
-      },
-      {
-        "reference": "7553_INTERNAL_DET_REQUEST_RESPONDENT_EVIDENCE_EMAIL",
-        "recipient": "det-irc-brookhouse@example.com",
-        "subject": "IAFT – SERVE BY POST: Home Office directed to upload bundle",
-        "body": [
-          "Home Office reference: A1234567",
-          "HMCTS reference: PA/12345/2019",
-          "Appellant name: Talha Awan"
         ]
       }
     ]

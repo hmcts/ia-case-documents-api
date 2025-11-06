@@ -4,6 +4,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.RequiredFieldMissingException;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.*;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.CaseDetails;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.NationalityGovUk;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field.AddressUk;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field.IdValue;
@@ -16,10 +17,17 @@ import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.util.*;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 
+import static java.util.Collections.*;
+import static java.util.stream.Collectors.*;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AppealType.DC;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AppealType.RP;
 import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.*;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.DetentionFacility.*;
 import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.JourneyType.AIP;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.RemissionDecision.APPROVED;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.RemissionDecision.PARTIALLY_APPROVED;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.RemissionDecision.REJECTED;
 import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field.YesOrNo.NO;
 import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field.YesOrNo.YES;
 
@@ -68,11 +76,19 @@ public class AsylumCaseUtils {
     }
 
     public static boolean legalRepInCountryAppeal(AsylumCase asylumCase) {
-        return asylumCase.read(LEGAL_REP_HAS_ADDRESS, YesOrNo.class).map(value -> value.equals(YesOrNo.YES)).orElse(false);
+        return asylumCase.read(LEGAL_REP_HAS_ADDRESS, YesOrNo.class)
+            .map(value -> value.equals(YesOrNo.YES))
+            .orElse(false);
     }
 
     public static boolean isAriaMigrated(AsylumCase asylumCase) {
         return asylumCase.read(IS_ARIA_MIGRATED, YesOrNo.class).map(isAdmin -> YES == isAdmin).orElse(false);
+    }
+
+    public static boolean isRemissionApproved(AsylumCase asylumCase) {
+        Optional<RemissionDecision> remissionDecision = asylumCase.read(REMISSION_DECISION, RemissionDecision.class);
+
+        return remissionDecision.isPresent() && remissionDecision.get().equals(RemissionDecision.APPROVED);
     }
 
     public static Optional<FtpaDecisionOutcomeType> getFtpaDecisionOutcomeType(AsylumCase asylumCase) {
@@ -110,11 +126,21 @@ public class AsylumCaseUtils {
     public static DocumentWithMetadata getLetterForNotification(AsylumCase asylumCase, DocumentTag documentTag) {
         Optional<List<IdValue<DocumentWithMetadata>>> optionalNotificationLetters = asylumCase.read(NOTIFICATION_ATTACHMENT_DOCUMENTS);
         return optionalNotificationLetters
-                .orElse(Collections.emptyList())
+                .orElse(emptyList())
                 .stream()
                 .map(IdValue::getValue)
                 .filter(d -> d.getTag() == documentTag)
                 .findFirst().orElseThrow(() -> new IllegalStateException(documentTag + " document not available"));
+    }
+
+    public static DocumentWithMetadata getBundledLetter(AsylumCase asylumCase, DocumentTag documentTag) {
+        Optional<List<IdValue<DocumentWithMetadata>>> optionalNotificationLetters = asylumCase.read(LETTER_BUNDLE_DOCUMENTS);
+        return optionalNotificationLetters
+            .orElse(emptyList())
+            .stream()
+            .map(IdValue::getValue)
+            .filter(d -> d.getTag() == documentTag)
+            .findFirst().orElseThrow(() -> new IllegalStateException(documentTag + " document not available"));
     }
 
     private static String getFacilityName(AsylumCaseDefinition field, AsylumCase asylumCase) {
@@ -133,7 +159,7 @@ public class AsylumCaseUtils {
         Optional<List<IdValue<DocumentWithMetadata>>> maybeExistingAdditionalEvidenceDocuments =
                 asylumCase.read(ADDENDUM_EVIDENCE_DOCUMENTS);
         if (maybeExistingAdditionalEvidenceDocuments.isEmpty()) {
-            return Collections.emptyList();
+            return emptyList();
         }
 
         return maybeExistingAdditionalEvidenceDocuments.get();
@@ -378,24 +404,37 @@ public class AsylumCaseUtils {
     }
 
     public static boolean hasAppellantAddressInCountryOrOutOfCountry(AsylumCase asylumCase) {
-        return asylumCase.read(APPELLANT_HAS_FIXED_ADDRESS, YesOrNo.class)
-                .map(flag -> flag.equals(YesOrNo.YES)).orElse(false)
-                || asylumCase.read(APPELLANT_HAS_FIXED_ADDRESS_ADMIN_J, YesOrNo.class)
-                .map(flag -> flag.equals(YesOrNo.YES)).orElse(false);
+        boolean appellantHasFixedUkAddress = asylumCase.read(APPELLANT_HAS_FIXED_ADDRESS, YesOrNo.class)
+            .map(flag -> flag.equals(YES))
+            .orElse(false);
+
+        boolean appellantHasFixedOutOfCountryAddress = asylumCase.read(APPELLANT_HAS_FIXED_ADDRESS_ADMIN_J, YesOrNo.class)
+            .map(flag -> flag.equals(YES))
+            .orElse(false);
+
+        return appellantHasFixedUkAddress || appellantHasFixedOutOfCountryAddress || isDetainedInFacilityType(asylumCase, OTHER);
     }
 
     public static Set<String> getAppellantAddressInCountryOrOoc(final AsylumCase asylumCase) {
-        return inCountryAppeal(asylumCase) ? Collections.singleton(getAppellantAddressAsList(asylumCase).stream()
-                .map(item -> item.replaceAll("\\s", "")).collect(Collectors.joining("_"))) :
-                Collections.singleton(getAppellantAddressAsListOoc(asylumCase).stream()
-                        .map(item -> item.replaceAll("\\s", "")).collect(Collectors.joining("_")));
+        return inCountryAppeal(asylumCase) ? singleton(getAppellantAddressAsList(asylumCase)
+            .stream()
+            .map(item -> item.replaceAll("\\s", ""))
+            .collect(joining("_"))) :
+                singleton(getAppellantAddressAsListOoc(asylumCase).stream()
+                        .map(item -> item.replaceAll("\\s", "")).collect(joining("_")));
     }
 
     public static Set<String> getLegalRepAddressInCountryOrOoc(final AsylumCase asylumCase) {
-        return legalRepInCountryAppeal(asylumCase) ? Collections.singleton(getLegalRepresentativeAddressAsList(asylumCase).stream()
-                .map(item -> item.replaceAll("\\s", "")).collect(Collectors.joining("_"))) :
-                Collections.singleton(getLegalRepresentativeAddressOocAsList(asylumCase).stream()
-                        .map(item -> item.replaceAll("\\s", "")).collect(Collectors.joining("_")));
+        if (legalRepInCountryAppeal(asylumCase)) {
+            return singleton(getLegalRepresentativeAddressAsList(asylumCase)
+                .stream()
+                .map(item -> item.replaceAll("\\s", ""))
+                .collect(joining("_")));
+        }
+        return singleton(getLegalRepresentativeAddressOocAsList(asylumCase)
+            .stream()
+            .map(item -> item.replaceAll("\\s", ""))
+            .collect(joining("_")));
     }
 
     public static String getLegalRepEmailInternalOrLegalRepJourney(final AsylumCase asylumCase) {
@@ -424,8 +463,15 @@ public class AsylumCaseUtils {
     }
 
     public static boolean hasBeenSubmittedAsLegalRepresentedInternalCase(AsylumCase asylumCase) {
-        return asylumCase.read(APPELLANTS_REPRESENTATION, YesOrNo.class)
-                .map(yesOrNo -> Objects.equals(NO, yesOrNo)).orElse(false);
+        Boolean isInternal = asylumCase.read(IS_ADMIN, YesOrNo.class)
+            .map(yesOrNo -> Objects.equals(YES, yesOrNo))
+            .orElse(false);
+
+        Boolean isLegallyRepresented = asylumCase.read(APPELLANTS_REPRESENTATION, YesOrNo.class)
+            .map(yesOrNo -> Objects.equals(NO, yesOrNo))
+            .orElse(false);
+
+        return isInternal && isLegallyRepresented;
     }
 
     public static List<String> getAppellantOrLegalRepAddressLetterPersonalisation(AsylumCase asylumCase) {
@@ -453,6 +499,77 @@ public class AsylumCaseUtils {
         } else {
             return "";
         }
+    }
+
+    public static boolean isDetainedInOneOfFacilityTypes(AsylumCase asylumCase, DetentionFacility... facilityTypes) {
+        for (DetentionFacility facilityType : facilityTypes) {
+            if (isDetainedInFacilityType(asylumCase, facilityType)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static boolean isDetainedInFacilityType(AsylumCase asylumCase, DetentionFacility facilityType) {
+        if (!isAppellantInDetention(asylumCase)) {
+            return false;
+        }
+        String detentionFacility = asylumCase.read(DETENTION_FACILITY, String.class).orElse("none");
+
+        return detentionFacility.equals(facilityType.getValue());
+    }
+
+    public static Boolean isFeeExemptAppeal(AsylumCase asylumCase) {
+        return asylumCase
+            .read(APPEAL_TYPE, AppealType.class)
+            .map(type -> type == RP || type == DC).orElse(false);
+    }
+
+    public static boolean isHearingChannel(AsylumCase asylumCase, String hearingChannelCode) {
+        return asylumCase.read(HEARING_CHANNEL, DynamicList.class)
+                .map(hearingChannels -> hearingChannels.getValue().getCode().equals(hearingChannelCode))
+                .orElse(false);
+    }
+
+    public static Boolean remissionDecisionPartiallyGrantedOrRefused(AsylumCase asylumCase) {
+        return asylumCase.read(REMISSION_DECISION, RemissionDecision.class)
+            .map(decision -> PARTIALLY_APPROVED == decision || REJECTED == decision)
+            .orElse(false);
+    }
+
+    public static Boolean remissionDecisionPartiallyGranted(AsylumCase asylumCase) {
+        return asylumCase.read(REMISSION_DECISION, RemissionDecision.class)
+                .map(decision -> PARTIALLY_APPROVED == decision)
+                .orElse(false);
+    }
+
+    public static Boolean remissionDecisionGranted(AsylumCase asylumCase) {
+        return asylumCase.read(REMISSION_DECISION, RemissionDecision.class)
+                .map(decision -> APPROVED == decision)
+                .orElse(false);
+    }
+
+    public static boolean isInternalNonDetainedCase(AsylumCase asylumCase) {
+        return isInternalCase(asylumCase) && !isAppellantInDetention(asylumCase);
+    }
+
+    public static boolean internalNonDetainedWithAddressAvailable(AsylumCase asylumCase) {
+        return hasAppellantAddressInCountryOrOutOfCountry(asylumCase) && isInternalNonDetainedCase(asylumCase);
+    }
+
+    public static boolean isHearingDetailsUpdated(AsylumCase asylumCase,
+                                                  Optional<CaseDetails<AsylumCase>> caseDetailsBefore) {
+        boolean result = false;
+        if (caseDetailsBefore.isPresent()) {
+            AsylumCase asylumCaseBefore = caseDetailsBefore.get().getCaseData();
+            result = !asylumCase.read(LIST_CASE_HEARING_CENTRE, HearingCentre.class)
+                    .equals(asylumCaseBefore.read(LIST_CASE_HEARING_CENTRE, HearingCentre.class))
+                || !asylumCase.read(LIST_CASE_HEARING_DATE, String.class)
+                    .equals(asylumCaseBefore.read(LIST_CASE_HEARING_DATE, String.class))
+                || !asylumCase.read(HEARING_CHANNEL, DynamicList.class)
+                    .equals(asylumCaseBefore.read(HEARING_CHANNEL, DynamicList.class));
+        }
+        return result;
     }
 
 }

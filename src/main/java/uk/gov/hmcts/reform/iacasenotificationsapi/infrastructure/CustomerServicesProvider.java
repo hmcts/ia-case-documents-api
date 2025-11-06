@@ -20,20 +20,24 @@ public class CustomerServicesProvider {
     private final String internalCaseCustomerServicesEmail;
 
     private String customerServicesEmail;
+    private String appealIaCustomerServicesEmail;
 
     public CustomerServicesProvider(
         @Value("${customerServices.telephoneNumber}") String customerServicesTelephone,
         @Value("${customerServices.emailAddress}") String standardCustomerServicesEmail,
-        @Value("${customerServices.internalCaseEmailAddress}") String internalCaseCustomerServicesEmail
+        @Value("${customerServices.internalCaseEmailAddress}") String internalCaseCustomerServicesEmail,
+        @Value("${customerServices.appealIaEmailAddress}") String appealIaCustomerServicesEmail
     ) {
         requireNonNull(customerServicesTelephone);
         requireNonNull(standardCustomerServicesEmail);
         requireNonNull(internalCaseCustomerServicesEmail);
+        requireNonNull(appealIaCustomerServicesEmail);
 
         this.customerServicesTelephone = customerServicesTelephone;
         this.standardCustomerServicesEmail = standardCustomerServicesEmail;
         this.internalCaseCustomerServicesEmail = internalCaseCustomerServicesEmail;
         this.customerServicesEmail = standardCustomerServicesEmail;
+        this.appealIaCustomerServicesEmail = appealIaCustomerServicesEmail;
     }
 
     public void setCorrectEmail(AsylumCase asylumCase) {
@@ -47,7 +51,8 @@ public class CustomerServicesProvider {
         final Builder<String, String> customerServicesValues = ImmutableMap
             .<String, String>builder()
             .put("customerServicesTelephone", customerServicesTelephone)
-            .put("customerServicesEmail", customerServicesEmail);
+            .put("customerServicesEmail", customerServicesEmail)
+            .put("AppealIAEmail", appealIaCustomerServicesEmail);
 
         return customerServicesValues.build();
     }

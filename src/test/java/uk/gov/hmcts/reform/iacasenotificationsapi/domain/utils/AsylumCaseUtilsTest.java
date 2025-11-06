@@ -1,15 +1,66 @@
 package uk.gov.hmcts.reform.iacasenotificationsapi.domain.utils;
 
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.mockStatic;
 import static org.powermock.api.mockito.PowerMockito.when;
-import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.*;
+
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.ADDENDUM_EVIDENCE_DOCUMENTS;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.APPEAL_TYPE;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.APPELLANTS_REPRESENTATION;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.APPELLANT_HAS_FIXED_ADDRESS;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.APPELLANT_HAS_FIXED_ADDRESS_ADMIN_J;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.APPELLANT_IN_DETENTION;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.APPLIES_FOR_COSTS;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.DETENTION_FACILITY;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.FTPA_RESPONDENT_DECISION_OUTCOME_TYPE;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.FTPA_RESPONDENT_RJ_DECISION_OUTCOME_TYPE;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.HEARING_CHANNEL;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.IS_ACCELERATED_DETAINED_APPEAL;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.IS_ADMIN;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.IS_ARIA_MIGRATED;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.JOURNEY_TYPE;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.LEGAL_REP_REFERENCE_EJP;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.LIST_CASE_HEARING_CENTRE;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.REMISSION_DECISION;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.RESPOND_TO_COSTS_LIST;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.SUBMISSION_OUT_OF_TIME;
+
 import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field.YesOrNo.NO;
 import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field.YesOrNo.YES;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.utils.AsylumCaseUtils.calculateFeeDifference;
 import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.utils.AsylumCaseUtils.generateAppellantPinIfNotPresent;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.utils.AsylumCaseUtils.getAddendumEvidenceDocuments;
 import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.utils.AsylumCaseUtils.getApplicantAndRespondent;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.utils.AsylumCaseUtils.getApplicationById;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.utils.AsylumCaseUtils.getFtpaDecisionOutcomeType;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.utils.AsylumCaseUtils.getLatestAddendumEvidenceDocument;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.utils.AsylumCaseUtils.hasAppellantAddressInCountryOrOutOfCountry;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.utils.AsylumCaseUtils.isHearingChannel;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.utils.AsylumCaseUtils.isAcceleratedDetainedAppeal;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.utils.AsylumCaseUtils.isAgeAssessmentAppeal;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.utils.AsylumCaseUtils.isAipJourney;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.utils.AsylumCaseUtils.isAppealListed;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.utils.AsylumCaseUtils.isAppellantInDetention;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.utils.AsylumCaseUtils.isAriaMigrated;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.utils.AsylumCaseUtils.isDetainedInFacilityType;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.utils.AsylumCaseUtils.isDetainedInOneOfFacilityTypes;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.utils.AsylumCaseUtils.isFeeExemptAppeal;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.utils.AsylumCaseUtils.isInternalCase;
 import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.utils.AsylumCaseUtils.isLegalRepEjp;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.utils.AsylumCaseUtils.isLoggedUserIsHomeOffice;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.utils.AsylumCaseUtils.isNotInternalOrIsInternalWithLegalRepresentation;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.utils.AsylumCaseUtils.internalNonDetainedWithAddressAvailable;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.utils.AsylumCaseUtils.isInternalNonDetainedCase;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.utils.AsylumCaseUtils.isSubmissionOutOfTime;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.utils.AsylumCaseUtils.remissionDecisionGranted;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.utils.AsylumCaseUtils.remissionDecisionPartiallyGranted;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.utils.AsylumCaseUtils.remissionDecisionPartiallyGrantedOrRefused;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.utils.AsylumCaseUtils.retrieveLatestApplyForCosts;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -28,7 +79,11 @@ import org.mockito.MockedStatic;
 import org.mockito.Mockito;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
+
+import org.mockito.junit.jupiter.MockitoSettings;
+import org.mockito.quality.Strictness;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.*;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.CaseDetails;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field.Document;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field.IdValue;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field.YesOrNo;
@@ -37,7 +92,7 @@ import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.AccessCodeGener
 @ExtendWith(MockitoExtension.class)
 public class AsylumCaseUtilsTest {
 
-    @Mock
+    @Mock(lenient = true)
     private AsylumCase asylumCase;
     @Spy
     private AsylumCase asylumCaseSpy;
@@ -83,31 +138,31 @@ public class AsylumCaseUtilsTest {
     @Test
     void should_return_correct_value_for_det() {
         when(asylumCase.read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(YES));
-        assertTrue(AsylumCaseUtils.isAppellantInDetention(asylumCase));
+        assertTrue(isAppellantInDetention(asylumCase));
     }
 
     @Test
     void should_return_correct_value_for_ada() {
         when(asylumCase.read(IS_ACCELERATED_DETAINED_APPEAL, YesOrNo.class)).thenReturn(Optional.of(YES));
-        assertTrue(AsylumCaseUtils.isAcceleratedDetainedAppeal(asylumCase));
+        assertTrue(isAcceleratedDetainedAppeal(asylumCase));
     }
 
     @Test
     void should_return_correct_value_for_aaa() {
         when(asylumCase.read(APPEAL_TYPE, AppealType.class)).thenReturn(Optional.of(AppealType.AG));
-        assertTrue(AsylumCaseUtils.isAgeAssessmentAppeal(asylumCase));
+        assertTrue(isAgeAssessmentAppeal(asylumCase));
     }
 
     @Test
     void isAdmin_should_return_true() {
         when(asylumCase.read(IS_ADMIN, YesOrNo.class)).thenReturn(Optional.of(YES));
-        assertTrue(AsylumCaseUtils.isInternalCase(asylumCase));
+        assertTrue(isInternalCase(asylumCase));
     }
 
     @Test
     void isAdmin_should_return_false() {
         when(asylumCase.read(IS_ADMIN, YesOrNo.class)).thenReturn(Optional.of(NO));
-        assertFalse(AsylumCaseUtils.isInternalCase(asylumCase));
+        assertFalse(isInternalCase(asylumCase));
     }
 
     @Test
@@ -115,45 +170,45 @@ public class AsylumCaseUtilsTest {
         when(asylumCase.read(IS_ADMIN, YesOrNo.class)).thenReturn(Optional.of(YES));
         when(asylumCase.read(APPELLANTS_REPRESENTATION, YesOrNo.class)).thenReturn(Optional.of(NO));
 
-        assertTrue(AsylumCaseUtils.isNotInternalOrIsInternalWithLegalRepresentation(asylumCase));
+        assertTrue(isNotInternalOrIsInternalWithLegalRepresentation(asylumCase));
     }
 
     @Test
     void isNotInternalOrIsInternalWithLegalRepresentation_should_return_false() {
         when(asylumCase.read(IS_ADMIN, YesOrNo.class)).thenReturn(Optional.of(YES));
 
-        assertFalse(AsylumCaseUtils.isNotInternalOrIsInternalWithLegalRepresentation(asylumCase));
+        assertFalse(isNotInternalOrIsInternalWithLegalRepresentation(asylumCase));
     }
 
     @Test
     void isAriaMigrated_should_return_true() {
         when(asylumCase.read(IS_ARIA_MIGRATED, YesOrNo.class)).thenReturn(Optional.of(YES));
-        assertTrue(AsylumCaseUtils.isAriaMigrated(asylumCase));
+        assertTrue(isAriaMigrated(asylumCase));
     }
 
     @Test
     void isAriaMigrated_should_return_false() {
         when(asylumCase.read(IS_ARIA_MIGRATED, YesOrNo.class)).thenReturn(Optional.of(NO));
-        assertFalse(AsylumCaseUtils.isAriaMigrated(asylumCase));
+        assertFalse(isAriaMigrated(asylumCase));
     }
 
     @Test
     void isAipJourney_should_return_true() {
         when(asylumCase.read(JOURNEY_TYPE, JourneyType.class)).thenReturn(Optional.of(JourneyType.AIP));
-        assertTrue(AsylumCaseUtils.isAipJourney(asylumCase));
+        assertTrue(isAipJourney(asylumCase));
     }
 
     @Test
     void isAipJourney_should_return_false() {
         when(asylumCase.read(JOURNEY_TYPE, JourneyType.class)).thenReturn(Optional.of(JourneyType.REP));
-        assertFalse(AsylumCaseUtils.isAipJourney(asylumCase));
+        assertFalse(isAipJourney(asylumCase));
     }
 
     @Test
     void getFtpaDecisionOutcomeType_should_return_granted() {
         when(asylumCase.read(FTPA_RESPONDENT_DECISION_OUTCOME_TYPE, FtpaDecisionOutcomeType.class))
             .thenReturn(Optional.of(FtpaDecisionOutcomeType.FTPA_GRANTED));
-        assertEquals(FtpaDecisionOutcomeType.FTPA_GRANTED, AsylumCaseUtils.getFtpaDecisionOutcomeType(asylumCase).orElse(null));
+        assertEquals(FtpaDecisionOutcomeType.FTPA_GRANTED, getFtpaDecisionOutcomeType(asylumCase).orElse(null));
     }
 
     @Test
@@ -162,7 +217,7 @@ public class AsylumCaseUtilsTest {
             .thenReturn(Optional.of(FtpaDecisionOutcomeType.FTPA_REFUSED));
         when(asylumCase.read(FTPA_RESPONDENT_DECISION_OUTCOME_TYPE, FtpaDecisionOutcomeType.class))
             .thenReturn(Optional.empty());
-        assertEquals(FtpaDecisionOutcomeType.FTPA_REFUSED, AsylumCaseUtils.getFtpaDecisionOutcomeType(asylumCase).orElse(null));
+        assertEquals(FtpaDecisionOutcomeType.FTPA_REFUSED, getFtpaDecisionOutcomeType(asylumCase).orElse(null));
     }
 
     @ParameterizedTest
@@ -170,7 +225,7 @@ public class AsylumCaseUtilsTest {
     void isListed_should_return_correct_value(String hearingCentre) {
         Optional<HearingCentre> mayBeListCaseHearingCenter = HearingCentre.from(hearingCentre);
         when(asylumCase.read(LIST_CASE_HEARING_CENTRE, HearingCentre.class)).thenReturn(mayBeListCaseHearingCenter);
-        assertEquals(mayBeListCaseHearingCenter.isPresent(), AsylumCaseUtils.isAppealListed(asylumCase));
+        assertEquals(mayBeListCaseHearingCenter.isPresent(), isAppealListed(asylumCase));
     }
 
     @Test
@@ -179,8 +234,8 @@ public class AsylumCaseUtilsTest {
         addendumDocuments.add(addendumOne);
         when(asylumCase.read(ADDENDUM_EVIDENCE_DOCUMENTS)).thenReturn(Optional.of(addendumDocuments));
 
-        assertEquals(addendumDocuments, AsylumCaseUtils.getAddendumEvidenceDocuments(asylumCase));
-        assertEquals(Optional.of(addendumOne), AsylumCaseUtils.getLatestAddendumEvidenceDocument(asylumCase));
+        assertEquals(addendumDocuments, getAddendumEvidenceDocuments(asylumCase));
+        assertEquals(Optional.of(addendumOne), getLatestAddendumEvidenceDocument(asylumCase));
     }
 
     @Test
@@ -190,16 +245,16 @@ public class AsylumCaseUtilsTest {
         addendumDocuments.add(addendumTwo);
         when(asylumCase.read(ADDENDUM_EVIDENCE_DOCUMENTS)).thenReturn(Optional.of(addendumDocuments));
 
-        assertEquals(addendumDocuments, AsylumCaseUtils.getAddendumEvidenceDocuments(asylumCase));
-        assertEquals(2, AsylumCaseUtils.getAddendumEvidenceDocuments(asylumCase).size());
+        assertEquals(addendumDocuments, getAddendumEvidenceDocuments(asylumCase));
+        assertEquals(2, getAddendumEvidenceDocuments(asylumCase).size());
     }
 
     @Test
     void should_return_empty_list_when_no_addendum_evidence_documents_present() {
         when(asylumCase.read(ADDENDUM_EVIDENCE_DOCUMENTS)).thenReturn(Optional.empty());
 
-        assertEquals(Collections.emptyList(), AsylumCaseUtils.getAddendumEvidenceDocuments(asylumCase));
-        assertEquals(Optional.empty(), AsylumCaseUtils.getLatestAddendumEvidenceDocument(asylumCase));
+        assertEquals(Collections.emptyList(), getAddendumEvidenceDocuments(asylumCase));
+        assertEquals(Optional.empty(), getLatestAddendumEvidenceDocument(asylumCase));
     }
 
     @Test
@@ -218,7 +273,7 @@ public class AsylumCaseUtilsTest {
     @Test
     void should_throw_when_applies_for_costs_are_not_present() {
         when(asylumCase.read(APPLIES_FOR_COSTS)).thenReturn(Optional.empty());
-        assertThatThrownBy(() -> AsylumCaseUtils.retrieveLatestApplyForCosts(asylumCase))
+        assertThatThrownBy(() -> retrieveLatestApplyForCosts(asylumCase))
             .hasMessage("Applies for costs are not present")
             .isExactlyInstanceOf(IllegalStateException.class);
     }
@@ -231,7 +286,7 @@ public class AsylumCaseUtilsTest {
         );
         when(asylumCase.read(APPLIES_FOR_COSTS)).thenReturn(Optional.of(applyForCostsList));
 
-        assertEquals(applyForCostsList.get(0).getValue(), AsylumCaseUtils.retrieveLatestApplyForCosts(asylumCase));
+        assertEquals(applyForCostsList.get(0).getValue(), retrieveLatestApplyForCosts(asylumCase));
     }
 
     @Test
@@ -245,7 +300,7 @@ public class AsylumCaseUtilsTest {
         when(asylumCase.read(RESPOND_TO_COSTS_LIST, DynamicList.class)).thenReturn(Optional.of(respondsToCostsList));
         when(asylumCase.read(APPLIES_FOR_COSTS)).thenReturn(Optional.of(applyForCostsList));
 
-        assertEquals(applyForCostsList.get(0).getValue(), AsylumCaseUtils.getApplicationById(asylumCase, RESPOND_TO_COSTS_LIST));
+        assertEquals(applyForCostsList.get(0).getValue(), getApplicationById(asylumCase, RESPOND_TO_COSTS_LIST));
     }
 
     @Test
@@ -255,7 +310,7 @@ public class AsylumCaseUtilsTest {
         when(asylumCase.read(RESPOND_TO_COSTS_LIST, DynamicList.class)).thenReturn(Optional.of(respondsToCostsList));
         when(asylumCase.read(APPLIES_FOR_COSTS)).thenReturn(Optional.empty());
 
-        assertThatThrownBy(() -> AsylumCaseUtils.getApplicationById(asylumCase, RESPOND_TO_COSTS_LIST))
+        assertThatThrownBy(() -> getApplicationById(asylumCase, RESPOND_TO_COSTS_LIST))
             .hasMessage("appliesForCost are not present")
             .isExactlyInstanceOf(IllegalStateException.class);
     }
@@ -271,7 +326,7 @@ public class AsylumCaseUtilsTest {
         when(asylumCase.read(RESPOND_TO_COSTS_LIST, DynamicList.class)).thenReturn(Optional.of(respondsToCostsList));
         when(asylumCase.read(APPLIES_FOR_COSTS)).thenReturn(Optional.of(applyForCostsList));
 
-        assertThatThrownBy(() -> AsylumCaseUtils.getApplicationById(asylumCase, RESPOND_TO_COSTS_LIST))
+        assertThatThrownBy(() -> getApplicationById(asylumCase, RESPOND_TO_COSTS_LIST))
             .hasMessage("Apply for costs with id 3 not found")
             .isExactlyInstanceOf(IllegalStateException.class);
     }
@@ -286,7 +341,7 @@ public class AsylumCaseUtilsTest {
         when(asylumCase.read(RESPOND_TO_COSTS_LIST, DynamicList.class)).thenReturn(Optional.of(respondsToCostsList));
         when(asylumCase.read(APPLIES_FOR_COSTS)).thenReturn(Optional.of(applyForCostsList));
 
-        assertTrue(AsylumCaseUtils.isLoggedUserIsHomeOffice(asylumCase, testFunc -> AsylumCaseUtils.getApplicationById(asylumCase, RESPOND_TO_COSTS_LIST)));
+        assertTrue(isLoggedUserIsHomeOffice(asylumCase, testFunc -> getApplicationById(asylumCase, RESPOND_TO_COSTS_LIST)));
     }
 
     @Test
@@ -299,7 +354,7 @@ public class AsylumCaseUtilsTest {
         when(asylumCase.read(RESPOND_TO_COSTS_LIST, DynamicList.class)).thenReturn(Optional.of(respondsToCostsList));
         when(asylumCase.read(APPLIES_FOR_COSTS)).thenReturn(Optional.of(applyForCostsList));
 
-        assertThatThrownBy(() -> AsylumCaseUtils.isLoggedUserIsHomeOffice(asylumCase, testFunc -> AsylumCaseUtils.getApplicationById(asylumCase, RESPOND_TO_COSTS_LIST)))
+        assertThatThrownBy(() -> isLoggedUserIsHomeOffice(asylumCase, testFunc -> getApplicationById(asylumCase, RESPOND_TO_COSTS_LIST)))
             .hasMessage("Correct applicant type is not present")
             .isExactlyInstanceOf(IllegalStateException.class);
     }
@@ -315,7 +370,7 @@ public class AsylumCaseUtilsTest {
         when(asylumCase.read(RESPOND_TO_COSTS_LIST, DynamicList.class)).thenReturn(Optional.of(selectedValue));
         when(asylumCase.read(APPLIES_FOR_COSTS)).thenReturn(Optional.of(applyForCostsList));
 
-        ImmutablePair<String, String> getApplicantAndRespondent = getApplicantAndRespondent(asylumCase, testFunc -> AsylumCaseUtils.getApplicationById(asylumCase, RESPOND_TO_COSTS_LIST));
+        ImmutablePair<String, String> getApplicantAndRespondent = getApplicantAndRespondent(asylumCase, testFunc -> getApplicationById(asylumCase, RESPOND_TO_COSTS_LIST));
 
         assertEquals("Legal representative", getApplicantAndRespondent.getRight());
         assertEquals("Home office", getApplicantAndRespondent.getLeft());
@@ -332,7 +387,7 @@ public class AsylumCaseUtilsTest {
         when(asylumCase.read(RESPOND_TO_COSTS_LIST, DynamicList.class)).thenReturn(Optional.of(selectedValue));
         when(asylumCase.read(APPLIES_FOR_COSTS)).thenReturn(Optional.of(applyForCostsList));
 
-        assertThatThrownBy(() -> getApplicantAndRespondent(asylumCase, testFunc -> AsylumCaseUtils.getApplicationById(asylumCase, RESPOND_TO_COSTS_LIST)))
+        assertThatThrownBy(() -> getApplicantAndRespondent(asylumCase, testFunc -> getApplicationById(asylumCase, RESPOND_TO_COSTS_LIST)))
             .hasMessage("Correct applicant type is not present")
             .isExactlyInstanceOf(IllegalStateException.class);
     }
@@ -348,7 +403,7 @@ public class AsylumCaseUtilsTest {
         when(asylumCase.read(RESPOND_TO_COSTS_LIST, DynamicList.class)).thenReturn(Optional.of(selectedValue));
         when(asylumCase.read(APPLIES_FOR_COSTS)).thenReturn(Optional.of(applyForCostsList));
 
-        assertThatThrownBy(() -> getApplicantAndRespondent(asylumCase, testFunc -> AsylumCaseUtils.getApplicationById(asylumCase, RESPOND_TO_COSTS_LIST)))
+        assertThatThrownBy(() -> getApplicantAndRespondent(asylumCase, testFunc -> getApplicationById(asylumCase, RESPOND_TO_COSTS_LIST)))
             .hasMessage("Correct respondent type is not present")
             .isExactlyInstanceOf(IllegalStateException.class);
     }
@@ -382,34 +437,55 @@ public class AsylumCaseUtilsTest {
     @Test
     void submissionOutOfTime_should_return_true() {
         when(asylumCase.read(SUBMISSION_OUT_OF_TIME, YesOrNo.class)).thenReturn(Optional.of(YES));
-        assertTrue(AsylumCaseUtils.isSubmissionOutOfTime(asylumCase));
+        assertTrue(isSubmissionOutOfTime(asylumCase));
     }
 
     @Test
     void submissionOutOfTime_should_return_false() {
         when(asylumCase.read(SUBMISSION_OUT_OF_TIME, YesOrNo.class)).thenReturn(Optional.of(NO));
-        assertFalse(AsylumCaseUtils.isSubmissionOutOfTime(asylumCase));
+        assertFalse(isSubmissionOutOfTime(asylumCase));
     }
 
     @Test
     void should_return_true_if_in_country_is_present() {
         when(asylumCase.read(APPELLANT_HAS_FIXED_ADDRESS, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
-        assertTrue(AsylumCaseUtils.hasAppellantAddressInCountryOrOutOfCountry(asylumCase));
+        assertTrue(hasAppellantAddressInCountryOrOutOfCountry(asylumCase));
     }
 
     @Test
     void should_return_true_if_ooc_is_present() {
         when(asylumCase.read(APPELLANT_HAS_FIXED_ADDRESS, YesOrNo.class)).thenReturn(Optional.empty());
         when(asylumCase.read(APPELLANT_HAS_FIXED_ADDRESS_ADMIN_J, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
-        assertTrue(AsylumCaseUtils.hasAppellantAddressInCountryOrOutOfCountry(asylumCase));
+        assertTrue(hasAppellantAddressInCountryOrOutOfCountry(asylumCase));
     }
 
     @Test
     void should_return_false_if_neither_in_country_nor_ooc_is_present() {
         when(asylumCase.read(APPELLANT_HAS_FIXED_ADDRESS, YesOrNo.class)).thenReturn(Optional.empty());
         when(asylumCase.read(APPELLANT_HAS_FIXED_ADDRESS_ADMIN_J, YesOrNo.class)).thenReturn(Optional.empty());
+        when(asylumCase.read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(NO));
 
-        assertFalse(AsylumCaseUtils.hasAppellantAddressInCountryOrOutOfCountry(asylumCase));
+        assertFalse(hasAppellantAddressInCountryOrOutOfCountry(asylumCase));
+    }
+
+    @Test
+    void should_return_true_if_appellant_is_detained_in_other_facility() {
+        when(asylumCase.read(APPELLANT_HAS_FIXED_ADDRESS, YesOrNo.class)).thenReturn(Optional.empty());
+        when(asylumCase.read(APPELLANT_HAS_FIXED_ADDRESS_ADMIN_J, YesOrNo.class)).thenReturn(Optional.empty());
+        when(asylumCase.read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(YES));
+        when(asylumCase.read(DETENTION_FACILITY, String.class)).thenReturn(Optional.of("other"));
+
+        assertTrue(hasAppellantAddressInCountryOrOutOfCountry(asylumCase));
+    }
+
+    @Test
+    void should_return_false_if_appellant_is_detained_in_non_other_facility() {
+        when(asylumCase.read(APPELLANT_HAS_FIXED_ADDRESS, YesOrNo.class)).thenReturn(Optional.empty());
+        when(asylumCase.read(APPELLANT_HAS_FIXED_ADDRESS_ADMIN_J, YesOrNo.class)).thenReturn(Optional.empty());
+        when(asylumCase.read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(YES));
+        when(asylumCase.read(DETENTION_FACILITY, String.class)).thenReturn(Optional.of("prison"));
+
+        assertFalse(hasAppellantAddressInCountryOrOutOfCountry(asylumCase));
     }
 
     @ParameterizedTest
@@ -419,7 +495,468 @@ public class AsylumCaseUtilsTest {
         "10000, 10000, 0.00"
     })
     void should_return_absolute_fee_amount_even_when_negative_difference(String originalFeeTotal, String newFeeTotal, String expectedDifference) {
-        String feeDifference = AsylumCaseUtils.calculateFeeDifference(originalFeeTotal, newFeeTotal);
+        String feeDifference = calculateFeeDifference(originalFeeTotal, newFeeTotal);
         assertEquals(expectedDifference, feeDifference);
+    }
+
+    @Test
+    void should_return_true_when_appellant_is_in_detention_and_one_of_facility_types_matches() {
+        Mockito.when(asylumCase.read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(YES));
+        Mockito.when(asylumCase.read(DETENTION_FACILITY, String.class)).thenReturn(Optional.of("immigrationRemovalCentre"));
+
+        assertTrue(isDetainedInOneOfFacilityTypes(asylumCase, DetentionFacility.IRC));
+        assertTrue(isDetainedInOneOfFacilityTypes(asylumCase, DetentionFacility.IRC, DetentionFacility.PRISON));
+    }
+
+    @Test
+    void should_return_false_when_appellant_is_in_detention_and_none_of_facility_types_matches() {
+        Mockito.when(asylumCase.read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(YES));
+        Mockito.when(asylumCase.read(DETENTION_FACILITY, String.class)).thenReturn(Optional.of("other"));
+
+        assertFalse(isDetainedInOneOfFacilityTypes(asylumCase, DetentionFacility.IRC));
+        assertFalse(isDetainedInOneOfFacilityTypes(asylumCase, DetentionFacility.IRC, DetentionFacility.PRISON));
+    }
+
+    @Test
+    void should_return_false_when_appellant_is_not_in_detention_for_multipole_facility_types() {
+        Mockito.when(asylumCase.read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(NO));
+
+        assertFalse(isDetainedInOneOfFacilityTypes(asylumCase, DetentionFacility.IRC));
+        assertFalse(isDetainedInOneOfFacilityTypes(asylumCase, DetentionFacility.IRC, DetentionFacility.PRISON));
+    }
+
+    @Test
+    void should_return_true_when_appellant_is_in_detention_and_facility_type_matches() {
+        when(asylumCase.read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(YES));
+        when(asylumCase.read(DETENTION_FACILITY, String.class)).thenReturn(Optional.of("immigrationRemovalCentre"));
+        
+        assertTrue(isDetainedInFacilityType(asylumCase, DetentionFacility.IRC));
+    }
+
+    @Test
+    void should_return_false_when_appellant_is_not_in_detention() {
+        when(asylumCase.read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(NO));
+        
+        assertFalse(isDetainedInFacilityType(asylumCase, DetentionFacility.IRC));
+    }
+
+    @Test
+    void should_return_false_when_facility_type_does_not_match() {
+        when(asylumCase.read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(YES));
+        when(asylumCase.read(DETENTION_FACILITY, String.class)).thenReturn(Optional.of("prison"));
+        
+        assertFalse(isDetainedInFacilityType(asylumCase, DetentionFacility.IRC));
+    }
+
+    @Test
+    void should_return_false_when_detention_facility_is_empty() {
+        when(asylumCase.read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(YES));
+        when(asylumCase.read(DETENTION_FACILITY, String.class)).thenReturn(Optional.empty());
+        
+        assertFalse(isDetainedInFacilityType(asylumCase, DetentionFacility.IRC));
+    }
+
+    @ParameterizedTest
+    @CsvSource({
+        "immigrationRemovalCentre, IRC",
+        "prison, PRISON",
+        "other, OTHER"
+    })
+    void should_return_true_for_all_facility_types_when_appellant_is_detained(String detentionFacilityValue, DetentionFacility facilityType) {
+        when(asylumCase.read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(YES));
+        when(asylumCase.read(DETENTION_FACILITY, String.class)).thenReturn(Optional.of(detentionFacilityValue));
+        
+        assertTrue(isDetainedInFacilityType(asylumCase, facilityType));
+    }
+
+    @Test
+    void should_return_true_when_appellant_is_detained_in_any_of_the_specified_facility_types() {
+        when(asylumCase.read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(YES));
+        when(asylumCase.read(DETENTION_FACILITY, String.class)).thenReturn(Optional.of("prison"));
+
+        assertTrue(
+            isDetainedInOneOfFacilityTypes(asylumCase, DetentionFacility.IRC, DetentionFacility.PRISON, DetentionFacility.OTHER));
+    }
+
+    @Test
+    void should_return_true_when_appellant_is_detained_in_first_specified_facility_type() {
+        when(asylumCase.read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(YES));
+        when(asylumCase.read(DETENTION_FACILITY, String.class)).thenReturn(Optional.of("immigrationRemovalCentre"));
+
+        assertTrue(
+            isDetainedInOneOfFacilityTypes(asylumCase, DetentionFacility.IRC, DetentionFacility.PRISON));
+    }
+
+    @Test
+    void should_return_false_when_appellant_is_detained_in_none_of_the_specified_facility_types() {
+        when(asylumCase.read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(YES));
+        when(asylumCase.read(DETENTION_FACILITY, String.class)).thenReturn(Optional.of("other"));
+
+        assertFalse(
+            isDetainedInOneOfFacilityTypes(asylumCase, DetentionFacility.IRC, DetentionFacility.PRISON));
+    }
+
+    @Test
+    void should_return_false_when_appellant_is_not_detained_for_facility_types_check() {
+        when(asylumCase.read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(NO));
+
+        assertFalse(
+            isDetainedInOneOfFacilityTypes(asylumCase, DetentionFacility.IRC, DetentionFacility.PRISON, DetentionFacility.OTHER));
+    }
+
+    @Test
+    void should_return_false_when_no_facility_types_specified() {
+        assertFalse(isDetainedInOneOfFacilityTypes(asylumCase));
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"RP", "DC"})
+    void should_return_true_for_fee_exempt_appeal_types(String appealTypeValue) {
+        AppealType appealType = AppealType.valueOf(appealTypeValue);
+        when(asylumCase.read(APPEAL_TYPE, AppealType.class)).thenReturn(Optional.of(appealType));
+
+        assertTrue(isFeeExemptAppeal(asylumCase));
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"PA", "EA", "HU", "EU", "AG"})
+    void should_return_false_for_non_fee_exempt_appeal_types(String appealTypeValue) {
+        AppealType appealType = AppealType.valueOf(appealTypeValue);
+        when(asylumCase.read(APPEAL_TYPE, AppealType.class)).thenReturn(Optional.of(appealType));
+
+        assertFalse(isFeeExemptAppeal(asylumCase));
+    }
+
+    @Test
+    void should_return_false_when_appeal_type_is_not_present() {
+        when(asylumCase.read(APPEAL_TYPE, AppealType.class)).thenReturn(Optional.empty());
+
+        assertFalse(isFeeExemptAppeal(asylumCase));
+    }
+
+    @Test
+    void shouldReturnTrue_whenRemissionDecisionIsApproved() {
+        AsylumCase asylumCase = mock(AsylumCase.class);
+        Mockito.when(asylumCase.read(REMISSION_DECISION, RemissionDecision.class)).thenReturn(Optional.of(RemissionDecision.APPROVED));
+
+        boolean result = AsylumCaseUtils.isRemissionApproved(asylumCase);
+
+        assertThat(result).isTrue();
+    }
+
+    @Test
+    void shouldReturnFalse_whenRemissionDecisionIsRejected() {
+        AsylumCase asylumCase = mock(AsylumCase.class);
+        Mockito.when(asylumCase.read(REMISSION_DECISION, RemissionDecision.class)).thenReturn(Optional.of(RemissionDecision.REJECTED));
+
+        boolean result = AsylumCaseUtils.isRemissionApproved(asylumCase);
+
+        assertThat(result).isFalse();
+    }
+
+    @Test
+    void shouldReturnFalse_whenRemissionDecisionIsEmpty() {
+        AsylumCase asylumCase = mock(AsylumCase.class);
+        Mockito.when(asylumCase.read(REMISSION_DECISION, RemissionDecision.class)).thenReturn(Optional.empty());
+
+        boolean result = AsylumCaseUtils.isRemissionApproved(asylumCase);
+
+        assertThat(result).isFalse();
+    }
+
+    @Test
+    void should_return_true_when_is_hearing_channel() {
+        DynamicList hearingChannelList = new DynamicList(
+                new Value("INTER", "In Person"),
+                List.of(new Value("INTER", "In Person"),
+                        new Value("NA", "Not in Attendance"),
+                        new Value("VID", "Video"),
+                        new Value("TEL", "Telephone"))
+        );
+
+        when(asylumCase.read(HEARING_CHANNEL, DynamicList.class)).thenReturn(Optional.of(hearingChannelList));
+
+        assertTrue(isHearingChannel(asylumCase, "INTER"));
+    }
+
+    @Test
+    void should_return_false_when_not_hearing_channel() {
+        DynamicList hearingChannelList = new DynamicList(
+                new Value("VID", "Video"),
+                List.of(new Value("INTER", "In Person"),
+                        new Value("NA", "Not in Attendance"),
+                        new Value("VID", "Video"),
+                        new Value("TEL", "Telephone"))
+        );
+
+        when(asylumCase.read(HEARING_CHANNEL, DynamicList.class)).thenReturn(Optional.of(hearingChannelList));
+
+        assertFalse(isHearingChannel(asylumCase, "INTER"));
+    }
+
+    @Test
+    void should_return_false_when_hearing_channel_is_empty() {
+        when(asylumCase.read(HEARING_CHANNEL, DynamicList.class)).thenReturn(Optional.empty());
+
+        assertFalse(isHearingChannel(asylumCase, "INTER"));
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"PARTIALLY_APPROVED", "REJECTED"})
+    void should_return_true_for_remission_decision_partially_granted_or_refused(String remissionDecisionValue) {
+        RemissionDecision remissionDecision = RemissionDecision.valueOf(remissionDecisionValue);
+        Mockito.when(asylumCase.read(REMISSION_DECISION, RemissionDecision.class)).thenReturn(Optional.of(remissionDecision));
+
+        assertTrue(remissionDecisionPartiallyGrantedOrRefused(asylumCase));
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"APPROVED"})
+    void should_return_false_for_other_remission_decisions(String remissionDecisionValue) {
+        RemissionDecision remissionDecision = RemissionDecision.valueOf(remissionDecisionValue);
+        Mockito.when(asylumCase.read(REMISSION_DECISION, RemissionDecision.class)).thenReturn(Optional.of(remissionDecision));
+
+        assertFalse(remissionDecisionPartiallyGrantedOrRefused(asylumCase));
+    }
+
+    @Test
+    void should_return_false_when_remission_decision_is_not_present() {
+        Mockito.when(asylumCase.read(REMISSION_DECISION, RemissionDecision.class)).thenReturn(Optional.empty());
+
+        assertFalse(remissionDecisionPartiallyGrantedOrRefused(asylumCase));
+    }
+
+    @Test
+    void should_return_true_for_remission_decision_partially_granted() {
+        RemissionDecision remissionDecision = RemissionDecision.PARTIALLY_APPROVED;
+        Mockito.when(asylumCase.read(REMISSION_DECISION, RemissionDecision.class)).thenReturn(Optional.of(remissionDecision));
+
+        assertTrue(remissionDecisionPartiallyGranted(asylumCase));
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"APPROVED", "REJECTED"})
+    void should_return_false_for_remission_decision_not_partially_granted(String remissionDecisionValue) {
+        RemissionDecision remissionDecision = RemissionDecision.valueOf(remissionDecisionValue);
+        Mockito.when(asylumCase.read(REMISSION_DECISION, RemissionDecision.class)).thenReturn(Optional.of(remissionDecision));
+
+        assertFalse(remissionDecisionPartiallyGranted(asylumCase));
+    }
+
+    @Test
+    void should_return_false_when_remission_decision_is_not_present_for_partially_granted() {
+        Mockito.when(asylumCase.read(REMISSION_DECISION, RemissionDecision.class)).thenReturn(Optional.empty());
+
+        assertFalse(remissionDecisionPartiallyGranted(asylumCase));
+    }
+
+    @Test
+    void should_return_true_for_internal_non_detained_case() {
+        Mockito.when(asylumCase.read(IS_ADMIN, YesOrNo.class)).thenReturn(Optional.of(YES));
+        Mockito.when(asylumCase.read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(NO));
+
+        assertTrue(AsylumCaseUtils.isInternalNonDetainedCase(asylumCase));
+    }
+
+    @ParameterizedTest
+    @CsvSource({
+        "NO, NO, false",
+        "YES, YES, false",
+        "YES, NO, true"
+    })
+    void should_return_correct_value_for_internal_non_detained_case(YesOrNo isAdmin, YesOrNo inDetention, boolean expected) {
+        Mockito.when(asylumCase.read(IS_ADMIN, YesOrNo.class)).thenReturn(Optional.of(isAdmin));
+        Mockito.when(asylumCase.read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(inDetention));
+
+        assertEquals(expected, isInternalNonDetainedCase(asylumCase));
+    }
+
+    @Test
+    void should_return_true_for_internal_non_detained_with_in_country_address() {
+        Mockito.when(asylumCase.read(IS_ADMIN, YesOrNo.class)).thenReturn(Optional.of(YES));
+        Mockito.when(asylumCase.read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(NO));
+        Mockito.when(asylumCase.read(APPELLANT_HAS_FIXED_ADDRESS, YesOrNo.class)).thenReturn(Optional.of(YES));
+        Mockito.when(asylumCase.read(APPELLANT_HAS_FIXED_ADDRESS_ADMIN_J, YesOrNo.class)).thenReturn(Optional.empty());
+        Mockito.when(asylumCase.read(DETENTION_FACILITY, String.class)).thenReturn(Optional.empty());
+
+        assertTrue(internalNonDetainedWithAddressAvailable(asylumCase));
+    }
+
+    @Test
+    void should_return_true_for_internal_non_detained_with_out_of_country_address() {
+        Mockito.when(asylumCase.read(IS_ADMIN, YesOrNo.class)).thenReturn(Optional.of(YES));
+        Mockito.when(asylumCase.read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(NO));
+        Mockito.when(asylumCase.read(APPELLANT_HAS_FIXED_ADDRESS, YesOrNo.class)).thenReturn(Optional.empty());
+        Mockito.when(asylumCase.read(APPELLANT_HAS_FIXED_ADDRESS_ADMIN_J, YesOrNo.class)).thenReturn(Optional.of(YES));
+        Mockito.when(asylumCase.read(DETENTION_FACILITY, String.class)).thenReturn(Optional.empty());
+
+        assertTrue(internalNonDetainedWithAddressAvailable(asylumCase));
+    }
+
+    @Test
+    void should_return_false_for_internal_non_detained_without_address() {
+        Mockito.when(asylumCase.read(IS_ADMIN, YesOrNo.class)).thenReturn(Optional.of(YES));
+        Mockito.when(asylumCase.read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(NO));
+        Mockito.when(asylumCase.read(APPELLANT_HAS_FIXED_ADDRESS, YesOrNo.class)).thenReturn(Optional.empty());
+        Mockito.when(asylumCase.read(APPELLANT_HAS_FIXED_ADDRESS_ADMIN_J, YesOrNo.class)).thenReturn(Optional.empty());
+        Mockito.when(asylumCase.read(DETENTION_FACILITY, String.class)).thenReturn(Optional.empty());
+
+        assertFalse(internalNonDetainedWithAddressAvailable(asylumCase));
+    }
+
+    @Test
+    void should_return_false_for_non_internal_case_with_address() {
+        Mockito.when(asylumCase.read(IS_ADMIN, YesOrNo.class)).thenReturn(Optional.of(NO));
+        Mockito.when(asylumCase.read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(NO));
+        Mockito.when(asylumCase.read(APPELLANT_HAS_FIXED_ADDRESS, YesOrNo.class)).thenReturn(Optional.of(YES));
+        Mockito.when(asylumCase.read(APPELLANT_HAS_FIXED_ADDRESS_ADMIN_J, YesOrNo.class)).thenReturn(Optional.empty());
+        Mockito.when(asylumCase.read(DETENTION_FACILITY, String.class)).thenReturn(Optional.empty());
+
+        assertFalse(internalNonDetainedWithAddressAvailable(asylumCase));
+    }
+
+    @Test
+    void should_return_false_for_internal_detained_case_with_address() {
+        Mockito.when(asylumCase.read(IS_ADMIN, YesOrNo.class)).thenReturn(Optional.of(YES));
+        Mockito.when(asylumCase.read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(YES));
+        Mockito.when(asylumCase.read(APPELLANT_HAS_FIXED_ADDRESS, YesOrNo.class)).thenReturn(Optional.of(YES));
+        Mockito.when(asylumCase.read(APPELLANT_HAS_FIXED_ADDRESS_ADMIN_J, YesOrNo.class)).thenReturn(Optional.empty());
+        Mockito.when(asylumCase.read(DETENTION_FACILITY, String.class)).thenReturn(Optional.of("prison"));
+
+        assertFalse(internalNonDetainedWithAddressAvailable(asylumCase));
+    }
+
+    @Test
+    void should_return_true_for_remission_decision_granted() {
+        RemissionDecision remissionDecision = RemissionDecision.APPROVED;
+        Mockito.when(asylumCase.read(REMISSION_DECISION, RemissionDecision.class)).thenReturn(Optional.of(remissionDecision));
+
+        assertTrue(remissionDecisionGranted(asylumCase));
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"PARTIALLY_APPROVED", "REJECTED"})
+    void should_return_false_for_remission_decision_not_approved(String remissionDecisionValue) {
+        RemissionDecision remissionDecision = RemissionDecision.valueOf(remissionDecisionValue);
+        Mockito.when(asylumCase.read(REMISSION_DECISION, RemissionDecision.class)).thenReturn(Optional.of(remissionDecision));
+
+        assertFalse(remissionDecisionGranted(asylumCase));
+    }
+
+    @Test
+    @SuppressWarnings("unchecked")
+    @MockitoSettings(strictness = Strictness.LENIENT)
+    void should_return_true_when_hearing_centre_updated() {
+        AsylumCase asylumCase = mock(AsylumCase.class);
+        CaseDetails<AsylumCase> caseDetailsBefore = Mockito.mock(CaseDetails.class);
+        AsylumCase asylumCaseBefore = mock(AsylumCase.class);
+
+        Mockito.when(caseDetailsBefore.getCaseData()).thenReturn(asylumCaseBefore);
+
+        setupHearingDataNotUpdated(asylumCase, asylumCaseBefore);
+
+        Mockito.when(asylumCase.read(AsylumCaseDefinition.LIST_CASE_HEARING_CENTRE, HearingCentre.class))
+                .thenReturn(Optional.of(HearingCentre.MANCHESTER));
+
+        assertTrue(AsylumCaseUtils.isHearingDetailsUpdated(asylumCase, Optional.of(caseDetailsBefore)));
+    }
+
+    @Test
+    @SuppressWarnings("unchecked")
+    void should_return_false_when_hearing_details_not_updated() {
+        AsylumCase asylumCase = mock(AsylumCase.class);
+        CaseDetails<AsylumCase> caseDetailsBefore = mock(CaseDetails.class);
+        AsylumCase asylumCaseBefore = mock(AsylumCase.class);
+
+        Mockito.when(caseDetailsBefore.getCaseData()).thenReturn(asylumCaseBefore);
+
+        setupHearingDataNotUpdated(asylumCase, asylumCaseBefore);
+
+        assertFalse(AsylumCaseUtils.isHearingDetailsUpdated(asylumCase, Optional.of(caseDetailsBefore)));
+    }
+
+    @Test
+    void should_return_false_when_case_details_before_empty() {
+        AsylumCase asylumCase = mock(AsylumCase.class);
+
+        assertFalse(AsylumCaseUtils.isHearingDetailsUpdated(asylumCase, Optional.empty()));
+    }
+
+    @Test
+    @SuppressWarnings("unchecked")
+    @MockitoSettings(strictness = Strictness.LENIENT)
+    void should_return_true_when_hearing_date_updated() {
+        AsylumCase asylumCase = mock(AsylumCase.class);
+        CaseDetails<AsylumCase> caseDetailsBefore = mock(CaseDetails.class);
+        AsylumCase asylumCaseBefore = mock(AsylumCase.class);
+
+        Mockito.when(caseDetailsBefore.getCaseData()).thenReturn(asylumCaseBefore);
+
+        setupHearingDataNotUpdated(asylumCase, asylumCaseBefore);
+
+        Mockito.when(asylumCase.read(AsylumCaseDefinition.LIST_CASE_HEARING_DATE, String.class))
+                .thenReturn(Optional.of("2023-10-02"));
+
+        assertTrue(AsylumCaseUtils.isHearingDetailsUpdated(asylumCase, Optional.of(caseDetailsBefore)));
+    }
+
+    @Test
+    @SuppressWarnings("unchecked")
+    void should_return_true_when_hearing_channel_updated() {
+        AsylumCase asylumCase = mock(AsylumCase.class);
+        CaseDetails<AsylumCase> caseDetailsBefore = mock(CaseDetails.class);
+        AsylumCase asylumCaseBefore = mock(AsylumCase.class);
+
+        Mockito.when(caseDetailsBefore.getCaseData()).thenReturn(asylumCaseBefore);
+
+        setupHearingDataNotUpdated(asylumCase, asylumCaseBefore);
+
+        Mockito.when(asylumCase.read(AsylumCaseDefinition.HEARING_CHANNEL, DynamicList.class))
+                .thenReturn(Optional.of(new DynamicList(new Value("telephone", "Telephone"), List.of(new Value("telephone", "Telephone")))));
+
+        assertTrue(AsylumCaseUtils.isHearingDetailsUpdated(asylumCase, Optional.of(caseDetailsBefore)));
+    }
+
+    @Test
+    @SuppressWarnings("unchecked")
+    @MockitoSettings(strictness = Strictness.LENIENT)
+    void should_return_true_when_all_updated() {
+        AsylumCase asylumCase = mock(AsylumCase.class);
+        CaseDetails<AsylumCase> caseDetailsBefore = mock(CaseDetails.class);
+        AsylumCase asylumCaseBefore = mock(AsylumCase.class);
+
+        Mockito.when(caseDetailsBefore.getCaseData()).thenReturn(asylumCaseBefore);
+
+        setupHearingDataNotUpdated(asylumCase, asylumCaseBefore);
+
+        Mockito.when(asylumCase.read(AsylumCaseDefinition.LIST_CASE_HEARING_CENTRE, HearingCentre.class))
+                .thenReturn(Optional.of(HearingCentre.MANCHESTER));
+
+        Mockito.when(asylumCase.read(AsylumCaseDefinition.LIST_CASE_HEARING_DATE, String.class))
+                .thenReturn(Optional.of("2023-10-02"));
+
+        Mockito.when(asylumCase.read(AsylumCaseDefinition.HEARING_CHANNEL, DynamicList.class))
+                .thenReturn(Optional.of(new DynamicList(new Value("telephone", "Telephone"), List.of(new Value("telephone", "Telephone")))));
+
+        assertTrue(AsylumCaseUtils.isHearingDetailsUpdated(asylumCase, Optional.of(caseDetailsBefore)));
+    }
+
+
+    void setupHearingDataNotUpdated(AsylumCase asylumCase, AsylumCase asylumCaseBefore) {
+
+        Mockito.when(asylumCase.read(AsylumCaseDefinition.LIST_CASE_HEARING_CENTRE, HearingCentre.class))
+                .thenReturn(Optional.of(HearingCentre.TAYLOR_HOUSE));
+        Mockito.when(asylumCaseBefore.read(AsylumCaseDefinition.LIST_CASE_HEARING_CENTRE, HearingCentre.class))
+                .thenReturn(Optional.of(HearingCentre.TAYLOR_HOUSE));
+
+        Mockito.when(asylumCase.read(AsylumCaseDefinition.LIST_CASE_HEARING_DATE, String.class))
+                .thenReturn(Optional.of("2023-10-01"));
+        Mockito.when(asylumCaseBefore.read(AsylumCaseDefinition.LIST_CASE_HEARING_DATE, String.class))
+                .thenReturn(Optional.of("2023-10-01"));
+
+        Mockito.when(asylumCase.read(AsylumCaseDefinition.HEARING_CHANNEL, DynamicList.class))
+                .thenReturn(Optional.of(new DynamicList(new Value("video", "Video"), List.of(new Value("video", "Video")))));
+        Mockito.when(asylumCaseBefore.read(AsylumCaseDefinition.HEARING_CHANNEL, DynamicList.class))
+                .thenReturn(Optional.of(new DynamicList(new Value("video", "Video"), List.of(new Value("video", "Video")))));
     }
 }

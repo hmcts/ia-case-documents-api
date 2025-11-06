@@ -26,16 +26,16 @@ public class DetEmailServiceTest {
     @Mock
     AsylumCase asylumCase;
     private final Map<String, String> mockIrcToExpectedEmailMap =
-        ImmutableMap
-            .<String, String>builder()
-            .put("Brookhouse", "det-irc-brookhouse@example.com")
-            .put("Colnbrook", "det-irc-colnbrook@example.com")
-            .put("Derwentside", "det-irc-derwentside@example.com")
-            .put("Dungavel", "det-irc-dungavel@example.com")
-            .put("Harmondsworth", "det-irc-harmondsworth@example.com")
-            .put("TinsleyHouse", "det-irc-tinsleyhouse@example.com")
-            .put("Yarlswood", "det-irc-yarlswood@example.com")
-            .build();
+            ImmutableMap
+                    .<String, String>builder()
+                    .put("Brookhouse", "det-irc-brookhouse@example.com")
+                    .put("Colnbrook", "det-irc-colnbrook@example.com")
+                    .put("Derwentside", "det-irc-derwentside@example.com")
+                    .put("Dungavel", "det-irc-dungavel@example.com")
+                    .put("Harmondsworth", "det-irc-harmondsworth@example.com")
+                    .put("TinsleyHouse", "det-irc-tinsleyhouse@example.com")
+                    .put("Yarlswood", "det-irc-yarlswood@example.com")
+                    .build();
     private DetEmailService detEmailService;
     private final String ircValue = "immigrationRemovalCentre";
     private final String prisonValue = "prison";
@@ -61,7 +61,7 @@ public class DetEmailServiceTest {
         when(asylumCase.read(AsylumCaseDefinition.IRC_NAME, String.class)).thenReturn(Optional.of("Tinsley House"));
 
         assertThat(mockIrcToExpectedEmailMap.get("TinsleyHouse"))
-            .isEqualTo(detEmailService.getDetEmailAddress(asylumCase));
+                .isEqualTo(detEmailService.getDetEmailAddress(asylumCase));
     }
 
     @Test
@@ -70,8 +70,8 @@ public class DetEmailServiceTest {
         when(asylumCase.read(IRC_NAME, String.class)).thenReturn(Optional.empty());
 
         assertThatThrownBy(() -> detEmailService.getDetEmailAddress(asylumCase))
-            .isExactlyInstanceOf(IllegalStateException.class)
-            .hasMessage("IRC name is not present");
+                .isExactlyInstanceOf(IllegalStateException.class)
+                .hasMessage("IRC name is not present");
     }
 
     @Test
@@ -80,8 +80,8 @@ public class DetEmailServiceTest {
         when(asylumCase.read(IRC_NAME, String.class)).thenReturn(Optional.of("Larne House"));
 
         assertThatThrownBy(() -> detEmailService.getDetEmailAddress(asylumCase))
-            .isExactlyInstanceOf(IllegalStateException.class)
-            .hasMessage("DET email address not found for: Larne House");
+                .isExactlyInstanceOf(IllegalStateException.class)
+                .hasMessage("DET email address not found for: Larne House");
     }
 
     @Test

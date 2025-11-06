@@ -47,10 +47,6 @@
         "legalRepresentativeEmailAddress": "{$TEST_LAW_FIRM_A_USERNAME}",
         "notificationsSent": [
           {
-            "id": "95259_CASE_RE_LISTED_NO_CHANGE_LEGAL_REPRESENTATIVE",
-            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
-          },
-          {
             "id": "95259_CASE_RE_LISTED_NO_CHANGE_HOME_OFFICE",
             "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
           }
@@ -58,31 +54,6 @@
       }
     },
     "notifications": [
-      {
-        "reference": "95259_CASE_RE_LISTED_NO_CHANGE_LEGAL_REPRESENTATIVE",
-        "recipient": "{$TEST_LAW_FIRM_A_USERNAME}",
-        "subject": "Immigration and Asylum appeal: check the details of your hearing",
-        "body": [
-          "PA/12345/2019",
-          "LP/12345/2019",
-          "CASE001",
-          "Talha Awan",
-          "{$iaExUiFrontendUrl}",
-          "Remote hearing",
-          "3 May 2019",
-          "3 May 2019",
-          "14:25",
-          "Remote hearing",
-          "Some tribunal response",
-          "No special adjustments are being made to accommodate vulnerabilities",
-          "No multimedia equipment is being provided",
-          "The court will not be single sex",
-          "The hearing will be held in public court",
-          "No other adjustments are being made",
-          "{$customerServices.telephoneNumber}",
-          "{$customerServices.emailAddress}"
-        ]
-      },
       {
         "reference": "95259_CASE_RE_LISTED_NO_CHANGE_HOME_OFFICE",
         "recipient": "{$homeOfficeEmailAddresses.bradford}",

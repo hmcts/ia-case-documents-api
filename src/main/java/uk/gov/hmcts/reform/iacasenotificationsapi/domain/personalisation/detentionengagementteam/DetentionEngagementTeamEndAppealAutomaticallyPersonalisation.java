@@ -5,7 +5,9 @@ import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.Documen
 import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.utils.AsylumCaseUtils.getLetterForNotification;
 
 import java.io.IOException;
+import java.util.Collections;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import com.google.common.collect.ImmutableMap;
 import lombok.extern.slf4j.Slf4j;
@@ -13,8 +15,9 @@ import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.EmailWithLinkNotificationPersonalisation;
-import uk.gov.hmcts.reform.iacasenotificationsapi.domain.service.DetEmailService;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.service.DetentionEmailService;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.PersonalisationProvider;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.clients.DocumentDownloadClient;
 import uk.gov.service.notify.NotificationClientException;
@@ -25,7 +28,7 @@ public class DetentionEngagementTeamEndAppealAutomaticallyPersonalisation implem
 
     private final String endAppealAutomaticallyDueToNonPaymentTemplateId;
     private final String nonAdaPrefix;
-    private final DetEmailService detEmailService;
+    private final DetentionEmailService detEmailService;
     private final DocumentDownloadClient documentDownloadClient;
     private final PersonalisationProvider personalisationProvider;
 
@@ -33,7 +36,7 @@ public class DetentionEngagementTeamEndAppealAutomaticallyPersonalisation implem
             @Value("${govnotify.template.endAppealAutomatically.detentionEngagementTeam.nonAda.email}")
             String endAppealAutomaticallyDueToNonPaymentTemplateId,
             @Value("${govnotify.emailPrefix.nonAdaInPerson}") String nonAdaPrefix,
-            DetEmailService detEmailService,
+            DetentionEmailService detEmailService,
             DocumentDownloadClient documentDownloadClient,
             PersonalisationProvider personalisationProvider
     ) {
@@ -51,7 +54,11 @@ public class DetentionEngagementTeamEndAppealAutomaticallyPersonalisation implem
 
     @Override
     public Set<String> getRecipientsList(AsylumCase asylumCase) {
-        return detEmailService.getRecipientsList(asylumCase);
+        Optional<String> detentionFacility = asylumCase.read(AsylumCaseDefinition.DETENTION_FACILITY, String.class);
+        if (detentionFacility.isEmpty() || detentionFacility.get().equals("other")) {
+            return Collections.emptySet();
+        }
+        return Collections.singleton(detEmailService.getDetentionEmailAddress(asylumCase));
     }
 
     @Override

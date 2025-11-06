@@ -35,6 +35,16 @@
             "accessCode": "AI123BX",
             "expiryDate": "01/01/2022",
             "pinUsed": "No"
+          },
+          "legalRepHasAddress": "Yes",
+          "legalRepAddressUK": {
+            "County": "",
+            "Country": "United Kingdom",
+            "PostCode": "NW7 1BJ",
+            "PostTown": "London",
+            "AddressLine1": "Flat 1",
+            "AddressLine2": "Tamarind Court",
+            "AddressLine3": "1 Sanders Lane"
           }
         }
       }
@@ -65,6 +75,16 @@
         "legalRepFamilyNameEjp": "Smith",
         "legalRepReferenceEjp": "TEST923428",
         "mobileNumber": "{$TEST_CITIZEN_MOBILE}",
+        "legalRepHasAddress": "Yes",
+        "legalRepAddressUK": {
+          "County": "",
+          "Country": "United Kingdom",
+          "PostCode": "NW7 1BJ",
+          "PostTown": "London",
+          "AddressLine1": "Flat 1",
+          "AddressLine2": "Tamarind Court",
+          "AddressLine3": "1 Sanders Lane"
+        },
         "notificationsSent": [
           {
             "id": "923428_TURN_ON_NOTIFICATIONS_RESPONDENT",

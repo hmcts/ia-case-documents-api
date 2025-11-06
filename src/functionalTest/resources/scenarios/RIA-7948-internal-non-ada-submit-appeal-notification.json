@@ -15,7 +15,8 @@
           "ircName": "Brookhouse",
           "isAdmin": "Yes",
           "isAcceleratedDetainedAppeal": "No",
-          "appellantInDetention": "Yes"
+          "appellantInDetention": "Yes",
+          "appellantsRepresentation": "No"
         }
       }
     }

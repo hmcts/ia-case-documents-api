@@ -31,7 +31,7 @@ import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.DocumentTag;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.DocumentWithMetadata;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field.IdValue;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field.YesOrNo;
-import uk.gov.hmcts.reform.iacasenotificationsapi.domain.service.DetEmailService;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.service.DetentionEmailService;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.PersonalisationProvider;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.clients.DocumentDownloadClient;
 import uk.gov.service.notify.NotificationClientException;
@@ -46,7 +46,7 @@ class DetentionEngagementTeamListCasePersonalisationTest {
     @Mock
     private DocumentDownloadClient documentDownloadClient;
     @Mock
-    private DetEmailService detEmailService;
+    private DetentionEmailService detEmailService;
     @Mock
     private PersonalisationProvider personalisationProvider;
     @Mock
@@ -61,7 +61,7 @@ class DetentionEngagementTeamListCasePersonalisationTest {
     private DetentionEngagementTeamListCasePersonalisation detentionEngagementTeamListCasePersonalisation;
 
     DocumentWithMetadata caseListedDoc = TestUtils.getDocumentWithMetadata(
-            "id", "detained-appellant-list-case-letter", "some other desc", DocumentTag.INTERNAL_LIST_CASE_LETTER);
+            "id", "detained-appellant-list-case-letter", "some other desc", DocumentTag.INTERNAL_CASE_LISTED_LETTER_BUNDLE);
     IdValue<DocumentWithMetadata> caseListedBundle = new IdValue<>("1", caseListedDoc);
 
     DetentionEngagementTeamListCasePersonalisationTest() {
@@ -107,7 +107,7 @@ class DetentionEngagementTeamListCasePersonalisationTest {
         String detentionEngagementTeamEmail = "det@email.com";
         when(asylumCase.read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(YES));
         when(asylumCase.read(DETENTION_FACILITY, String.class)).thenReturn(Optional.of("immigrationRemovalCentre"));
-        when(detEmailService.getRecipientsList(asylumCase)).thenReturn(Collections.singleton(detentionEngagementTeamEmail));
+        when(detEmailService.getDetentionEmailAddress(asylumCase)).thenReturn(detentionEngagementTeamEmail);
 
         assertTrue(
                 detentionEngagementTeamListCasePersonalisation.getRecipientsList(asylumCase).contains(detentionEngagementTeamEmail));
@@ -165,7 +165,7 @@ class DetentionEngagementTeamListCasePersonalisationTest {
         when(asylumCase.read(NOTIFICATION_ATTACHMENT_DOCUMENTS)).thenReturn(Optional.empty());
         assertThatThrownBy(() -> detentionEngagementTeamListCasePersonalisation.getPersonalisationForLink(asylumCase))
                 .isExactlyInstanceOf(IllegalStateException.class)
-                .hasMessage("internalListCaseLetter document not available");
+                .hasMessage("internalCaseListedLetterBundle document not available");
     }
 
     @Test

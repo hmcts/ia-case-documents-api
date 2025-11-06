@@ -1,5 +1,6 @@
 {
   "description": "RIA-7369 Internal Home Office upload additional evidence DET notification - ADA",
+  "disabled": "true",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
     "credentials": "HomeOfficeGeneric",

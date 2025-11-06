@@ -28,7 +28,7 @@ public class AppellantInternalCaseSubmitAppealWithExemptionLetterPersonalisation
     }
 
     @Override
-    public String getTemplateId() {
+    public String getTemplateId(AsylumCase asylumCase) {
         return appellantInternalCaseSubmitAppealWithExemptionLetterTemplateId;
     }
 

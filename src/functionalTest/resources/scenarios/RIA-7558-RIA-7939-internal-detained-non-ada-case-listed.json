@@ -23,7 +23,7 @@
             {
               "id": "1",
               "value": {
-                "tag": "internalListCaseLetter",
+                "tag": "internalCaseListedLetterBundle",
                 "document": {
                   "document_url": "{$FIXTURE_DOC1_PDF_URL}",
                   "document_binary_url": "{$FIXTURE_DOC1_PDF_URL_BINARY}",
@@ -55,11 +55,15 @@
         "listCaseHearingDate": "2019-05-03T14:25:15.000",
         "notificationsSent": [
           {
-            "id": "7558_INTERNAL_DETAINED_CASE_LISTED_DET",
+            "id": "7558_CASE_LISTED_HOME_OFFICE",
             "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
           },
           {
-            "id": "7558_CASE_LISTED_HOME_OFFICE",
+            "id": "7558_CASE_LISTED_CASE_OFFICER",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          },
+          {
+            "id": "7558_INTERNAL_DETAINED_CASE_LISTED_DET",
             "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
           }
         ]
@@ -69,11 +73,23 @@
       {
         "reference": "7558_INTERNAL_DETAINED_CASE_LISTED_DET",
         "recipient": "det-irc-brookhouse@example.com",
-        "subject": "IAFT – SERVE IN PERSON: Hearing details",
+        "subject": "IAFT – SERVE IN PERSON",
         "body": [
           "Home Office reference: A1234567",
           "HMCTS reference: PA/12345/2019",
           "Appellant name: Talha Awan"
+        ]
+      },
+      {
+        "reference": "7558_CASE_LISTED_CASE_OFFICER",
+        "recipient": "{$hearingCentreEmailAddresses.taylorHouse}",
+        "subject": "Immigration and Asylum appeal: case listed",
+        "body": [
+          "PA/12345/2019",
+          "LP/12345/2019",
+          "3 May 2019",
+          "14:25",
+          "IAC Taylor House, 88 Rosebery Avenue, London, EC1R 4QU"
         ]
       },
       {

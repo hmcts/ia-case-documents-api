@@ -58,6 +58,7 @@ public class HomeOfficeMarkAppealAsDetainedPersonalisationTest {
         when(asylumCase.read(APPELLANT_GIVEN_NAMES, String.class)).thenReturn(Optional.of(appellantGivenNames));
         when(asylumCase.read(APPELLANT_FAMILY_NAME, String.class)).thenReturn(Optional.of(appellantFamilyName));
         when(asylumCase.read(HOME_OFFICE_REFERENCE_NUMBER, String.class)).thenReturn(Optional.of(homeOfficeRefNumber));
+        when(asylumCase.read(LIST_CASE_HEARING_CENTRE, HearingCentre.class)).thenReturn(Optional.of(hearingCentre));
         when((customerServicesProvider.getCustomerServicesTelephone())).thenReturn(customerServicesTelephone);
         when((customerServicesProvider.getCustomerServicesEmail())).thenReturn(customerServicesEmail);
 
@@ -80,6 +81,39 @@ public class HomeOfficeMarkAppealAsDetainedPersonalisationTest {
     public void should_return_given_reference_id() {
         assertEquals(caseId + "_MARK_APPEAL_AS_DETAINED_HOME_OFFICE",
                 homeOfficeMarkAppealAsDetainedPersonalisation.getReferenceId(caseId));
+    }
+
+
+    @Test
+    public void should_return_the_ho_apc_email_address_until_awaiting_reasons_for_appeal() {
+        when(asylumCase.read(AsylumCaseDefinition.CURRENT_CASE_STATE_VISIBLE_TO_HOME_OFFICE_ALL, State.class))
+                .thenReturn(Optional.of(State.AWAITING_REASONS_FOR_APPEAL));
+
+        assertEquals(Collections.singleton(homeOfficeApcEmailAddress), homeOfficeMarkAppealAsDetainedPersonalisation.getRecipientsList(asylumCase));
+    }
+
+    @Test
+    public void should_return_the_ho_apc_email_address_until_awaiting_clarifying_questions_answers() {
+        when(asylumCase.read(AsylumCaseDefinition.CURRENT_CASE_STATE_VISIBLE_TO_HOME_OFFICE_ALL, State.class))
+                .thenReturn(Optional.of(State.AWAITING_CLARIFYING_QUESTIONS_ANSWERS));
+
+        assertEquals(Collections.singleton(homeOfficeApcEmailAddress), homeOfficeMarkAppealAsDetainedPersonalisation.getRecipientsList(asylumCase));
+    }
+
+    @Test
+    public void should_return_the_ho_apc_email_address_until_reasons_for_appeal_submitted() {
+        when(asylumCase.read(AsylumCaseDefinition.CURRENT_CASE_STATE_VISIBLE_TO_HOME_OFFICE_ALL, State.class))
+                .thenReturn(Optional.of(State.REASONS_FOR_APPEAL_SUBMITTED));
+
+        assertEquals(Collections.singleton(homeOfficeApcEmailAddress), homeOfficeMarkAppealAsDetainedPersonalisation.getRecipientsList(asylumCase));
+    }
+
+    @Test
+    public void should_return_the_ho_apc_email_address_until_clarifying_questions_answers_submitted() {
+        when(asylumCase.read(AsylumCaseDefinition.CURRENT_CASE_STATE_VISIBLE_TO_HOME_OFFICE_ALL, State.class))
+                .thenReturn(Optional.of(State.CLARIFYING_QUESTIONS_ANSWERS_SUBMITTED));
+
+        assertEquals(Collections.singleton(homeOfficeApcEmailAddress), homeOfficeMarkAppealAsDetainedPersonalisation.getRecipientsList(asylumCase));
     }
 
     @Test

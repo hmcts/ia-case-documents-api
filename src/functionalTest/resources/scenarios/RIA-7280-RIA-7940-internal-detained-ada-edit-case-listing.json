@@ -1,6 +1,6 @@
 {
   "description": "RIA-7280 RIA-7940 Internal Detained ADA edit case listing notification",
-  "enabled": "{$featureFlag.homeOfficeGovNotifyEnabled}",
+  "enabled": "false",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
     "credentials": "AdminOfficer",
@@ -14,6 +14,7 @@
           "detentionFacility": "immigrationRemovalCentre",
           "ircName": "Brookhouse",
           "isAdmin": "Yes",
+          "appellantsRepresentation": "Yes",
           "appellantInDetention": "Yes",
           "isAcceleratedDetainedAppeal": "Yes",
           "listCaseHearingCentre": "bradford",

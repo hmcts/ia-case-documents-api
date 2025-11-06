@@ -61,7 +61,7 @@ public class CaseOfficerRemoveRepresentationPersonalisation implements EmailNoti
 
     @Override
     public Set<String> getRecipientsList(AsylumCase asylumCase) {
-        return Collections.singleton(emailAddressFinder.getHearingCentreEmailAddress(asylumCase));
+        return Collections.singleton(emailAddressFinder.getHearingCentreEmailAddress(asylumCase));        
     }
 
     @Override

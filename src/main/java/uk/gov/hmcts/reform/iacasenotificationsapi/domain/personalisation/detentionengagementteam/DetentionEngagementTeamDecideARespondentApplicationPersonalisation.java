@@ -16,7 +16,7 @@ import org.springframework.stereotype.Service;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.EmailWithLinkNotificationPersonalisation;
-import uk.gov.hmcts.reform.iacasenotificationsapi.domain.service.DetEmailService;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.service.DetentionEmailService;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.CustomerServicesProvider;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.clients.DocumentDownloadClient;
 import uk.gov.service.notify.NotificationClientException;
@@ -27,7 +27,7 @@ public class DetentionEngagementTeamDecideARespondentApplicationPersonalisation 
 
     private final CustomerServicesProvider customerServicesProvider;
     private final String detentionEngagementTeamDecideARespondentApplicationApplicantTemplateId;
-    private final DetEmailService detEmailService;
+    private final DetentionEmailService detEmailService;
 
     @Value("${govnotify.emailPrefix.adaByPost}")
     private String adaPrefix;
@@ -39,7 +39,7 @@ public class DetentionEngagementTeamDecideARespondentApplicationPersonalisation 
     public DetentionEngagementTeamDecideARespondentApplicationPersonalisation(
             @Value("${govnotify.template.decideARespondentApplication.detentionEngagementTeam.email}") String detentionEngagementTeamDecideARespondentApplicationApplicantTemplateId,
             CustomerServicesProvider customerServicesProvider,
-            DetEmailService detEmailService,
+            DetentionEmailService detEmailService,
             DocumentDownloadClient documentDownloadClient
     ) {
         this.detentionEngagementTeamDecideARespondentApplicationApplicantTemplateId = detentionEngagementTeamDecideARespondentApplicationApplicantTemplateId;
@@ -59,7 +59,7 @@ public class DetentionEngagementTeamDecideARespondentApplicationPersonalisation 
             return Collections.emptySet();
         }
 
-        return detEmailService.getRecipientsList(asylumCase);
+        return Collections.singleton(detEmailService.getDetentionEmailAddress(asylumCase));
     }
 
     @Override

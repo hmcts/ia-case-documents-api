@@ -7,11 +7,14 @@ import com.google.common.collect.ImmutableMap;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import javax.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.HearingCentre;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.State;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.EmailNotificationPersonalisation;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.CustomerServicesProvider;
@@ -88,7 +91,11 @@ public class HomeOfficeRemoveDetentionStatusPersonalisation implements EmailNoti
                             State.PENDING_PAYMENT,
                             State.AWAITING_RESPONDENT_EVIDENCE,
                             State.CASE_BUILDING,
-                            State.CASE_UNDER_REVIEW
+                            State.CASE_UNDER_REVIEW,
+                            State.AWAITING_REASONS_FOR_APPEAL,
+                            State.AWAITING_CLARIFYING_QUESTIONS_ANSWERS,
+                            State.REASONS_FOR_APPEAL_SUBMITTED,
+                            State.CLARIFYING_QUESTIONS_ANSWERS_SUBMITTED
                     ).contains(s)) {
                         return respondentEmailAddressUntilRespondentReview;
                     } else if (Arrays.asList(
@@ -99,7 +106,14 @@ public class HomeOfficeRemoveDetentionStatusPersonalisation implements EmailNoti
                         return respondentEmailAddressAtRespondentReview;
                     }
 
-                    return emailAddressFinder.getListCaseHomeOfficeEmailAddress(asylumCase);
+                    final Optional<HearingCentre> maybeCaseIsListed = asylumCase
+                            .read(AsylumCaseDefinition.LIST_CASE_HEARING_CENTRE, HearingCentre.class);
+
+                    if (maybeCaseIsListed.isPresent()) {
+                        return emailAddressFinder.getListCaseHomeOfficeEmailAddress(asylumCase);
+                    } else {
+                        return  emailAddressFinder.getHomeOfficeEmailAddress(asylumCase);
+                    }
                 })
                 .orElseThrow(() -> new IllegalStateException("currentCaseStateVisibleToHomeOfficeAll flag is not present"));
     }

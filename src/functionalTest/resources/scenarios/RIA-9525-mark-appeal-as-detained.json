@@ -18,7 +18,17 @@
           "appellantFamilyName": "User",
           "listCaseHearingDate": "2023-05-01T13:30:15.000",
           "listCaseHearingCentre": "harmondsworth",
-          "currentCaseStateVisibleToHomeOfficeAll": "awaitingRespondentEvidence"
+          "currentCaseStateVisibleToHomeOfficeAll": "awaitingRespondentEvidence",
+          "legalRepHasAddress": "Yes",
+          "legalRepAddressUK": {
+            "County": "",
+            "Country": "United Kingdom",
+            "PostCode": "NW7 1BJ",
+            "PostTown": "London",
+            "AddressLine1": "Flat 1",
+            "AddressLine2": "Tamarind Court",
+            "AddressLine3": "1 Sanders Lane"
+          }
         }
       }
     }
@@ -38,11 +48,11 @@
         "listCaseHearingDate": "2023-05-01T13:30:15.000",
         "notificationsSent":[
           {
-            "id":"952516_MARK_APPEAL_AS_DETAINED_LEGAL_REP",
+            "id":"952516_MARK_APPEAL_AS_DETAINED_HOME_OFFICE",
             "value":"$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
           },
           {
-            "id":"952516_MARK_APPEAL_AS_DETAINED_HOME_OFFICE",
+            "id":"952516_MARK_APPEAL_AS_DETAINED_LEGAL_REP_LETTER",
             "value":"$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
           }
         ]

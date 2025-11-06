@@ -1,0 +1,95 @@
+{
+  "description": "DIAC-1405: Late remission request refused - Appellant detained in Prison",
+  "request": {
+    "uri": "/asylum/ccdAboutToSubmit",
+    "credentials": "AdminOfficer",
+    "input": {
+      "id": 14051,
+      "eventId": "recordRemissionDecision",
+      "state": "appealSubmitted",
+      "caseData": {
+        "template": "minimal-appeal-submitted.json",
+        "replacements": {
+          "appealType": "refusalOfHumanRights",
+          "isAdmin": "Yes",
+          "appellantsRepresentation": "Yes",
+          "appellantInDetention": "Yes",
+          "detentionFacility": "prison",
+          "prisonName": "HMP Brixton",
+          "prisonNumber": "A1234BC",
+          "remissionDecision": "rejected",
+          "lateRemissionType": "hoWaiverRemission",
+          "paymentStatus": "Paid",
+          "remissionClaim": "asylumSupport",
+          "asylumSupportReference": "20/02/1234",
+          "remissionDecisionReason": "The asylum support reference provided could not be verified. No active asylum support was found for the reference number submitted.",
+          "appellantInUk": "Yes",
+          "appellantHasFixedAddress": "Yes",
+          "appellantAddress": {
+            "County": "",
+            "Country": "United Kingdom",
+            "PostCode": "SW2 5XF",
+            "PostTown": "London",
+            "AddressLine1": "10",
+            "AddressLine2": "Prison Road"
+          },
+          "notificationAttachmentDocuments": [
+            {
+              "id": "1",
+              "value": {
+                "tag": "internalDetainedLateRemissionRefusedTemplateLetter",
+                "document": {
+                  "document_url": "{$FIXTURE_DOC1_PDF_URL}",
+                  "document_binary_url": "{$FIXTURE_DOC1_PDF_URL_BINARY}",
+                  "document_filename": "{$FIXTURE_DOC1_PDF_FILENAME}"
+                },
+                "suppliedBy": "",
+                "description": "",
+                "dateUploaded": "{$TODAY}"
+              }
+            }
+          ]
+        }
+      }
+    }
+  },
+  "expectation": {
+    "status": 200,
+    "errors": [],
+    "caseData": {
+      "template": "minimal-appeal-submitted.json",
+      "replacements": {
+        "appealType": "refusalOfHumanRights",
+        "isAdmin": "Yes",
+        "appellantsRepresentation": "Yes",
+        "appellantInDetention": "Yes",
+        "detentionFacility": "prison",
+        "prisonName": "HMP Brixton",
+        "prisonNumber": "A1234BC",
+        "remissionDecision": "rejected",
+        "lateRemissionType": "hoWaiverRemission",
+        "paymentStatus": "Paid",
+        "remissionClaim": "asylumSupport",
+        "asylumSupportReference": "20/02/1234",
+        "remissionDecisionReason": "The asylum support reference provided could not be verified. No active asylum support was found for the reference number submitted.",
+        "appellantInUk": "Yes",
+        "appellantHasFixedAddress": "Yes",
+        "appellantAddress": {
+          "County": "",
+          "Country": "United Kingdom",
+          "PostCode": "SW2 5XF",
+          "PostTown": "London",
+          "AddressLine1": "10",
+          "AddressLine2": "Prison Road"
+        },
+        "notificationsSent": [
+          {
+            "id": "14051_INTERNAL_DETAINED_LATE_REMISSION_REFUSED_IN_PRISON_OR_IRC",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          }
+        ]
+      }
+    }
+  }
+}
+

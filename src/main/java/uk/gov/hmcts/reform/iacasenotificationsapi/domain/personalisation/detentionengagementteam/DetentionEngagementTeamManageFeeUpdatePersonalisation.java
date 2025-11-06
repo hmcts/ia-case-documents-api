@@ -3,7 +3,6 @@ package uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.detent
 import static java.util.Objects.requireNonNull;
 import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.DocumentTag.INTERNAL_DETAINED_MANAGE_FEE_UPDATE_LETTER;
 import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.utils.AsylumCaseUtils.getLetterForNotification;
-import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.utils.AsylumCaseUtils.isAcceleratedDetainedAppeal;
 import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.utils.AsylumCaseUtils.isAppellantInDetention;
 
 import com.google.common.collect.ImmutableMap;
@@ -17,7 +16,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.EmailWithLinkNotificationPersonalisation;
-import uk.gov.hmcts.reform.iacasenotificationsapi.domain.service.DetEmailService;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.service.DetentionEmailService;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.PersonalisationProvider;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.clients.DocumentDownloadClient;
 import uk.gov.service.notify.NotificationClientException;
@@ -28,25 +27,21 @@ public class DetentionEngagementTeamManageFeeUpdatePersonalisation implements Em
 
     private final String internalDetainedManageFeeUpdateTemplateId;
     private final DocumentDownloadClient documentDownloadClient;
-    private final DetEmailService detEmailService;
+    private final DetentionEmailService detentionEmailService;
     private final PersonalisationProvider personalisationProvider;
     private String adaPrefix;
     private String nonAdaPrefix;
 
 
     public DetentionEngagementTeamManageFeeUpdatePersonalisation(
-            @Value("${govnotify.template.manageFeeUpdate.detentionEngagementTeam.email}") String internalDetainedManageFeeUpdateTemplateId,
-            DetEmailService detEmailService,
+            @Value("${govnotify.template.det-email-template}") String internalDetainedManageFeeUpdateTemplateId,
+            DetentionEmailService detentionEmailService,
             DocumentDownloadClient documentDownloadClient,
-            @Value("${govnotify.emailPrefix.adaInPerson}") String adaPrefix,
-            @Value("${govnotify.emailPrefix.nonAdaInPerson}") String nonAdaPrefix,
             PersonalisationProvider personalisationProvider
     ) {
         this.internalDetainedManageFeeUpdateTemplateId = internalDetainedManageFeeUpdateTemplateId;
-        this.detEmailService = detEmailService;
+        this.detentionEmailService = detentionEmailService;
         this.documentDownloadClient = documentDownloadClient;
-        this.adaPrefix = adaPrefix;
-        this.nonAdaPrefix = nonAdaPrefix;
         this.personalisationProvider = personalisationProvider;
     }
 
@@ -61,7 +56,7 @@ public class DetentionEngagementTeamManageFeeUpdatePersonalisation implements Em
             return Collections.emptySet();
         }
 
-        return detEmailService.getRecipientsList(asylumCase);
+        return Collections.singleton(detentionEmailService.getDetentionEmailAddress(asylumCase));
     }
 
     @Override
@@ -75,7 +70,7 @@ public class DetentionEngagementTeamManageFeeUpdatePersonalisation implements Em
 
         return ImmutableMap
                 .<String, Object>builder()
-                .put("subjectPrefix", isAcceleratedDetainedAppeal(asylumCase) ? adaPrefix : nonAdaPrefix)
+                .put("subjectPrefix", "IAFT - SERVE IN PERSON")
                 .putAll(personalisationProvider.getAppellantPersonalisation(asylumCase))
                 .put("documentLink", getInternalDetainedManageFeeUpdateLetterInJsonObject(asylumCase))
                 .build();

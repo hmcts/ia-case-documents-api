@@ -58,6 +58,8 @@ def secrets = [
         secret('hearing-centre-glasgow-telephone', 'IA_HEARING_CENTRE_GLASGOW_TELEPHONE'),
         secret('hearing-centre-virtual-region-telephone', 'IA_HEARING_CENTRE_VIRTUAL_REGION_TELEPHONE'),
 
+        secret('ia-det-prison-email-mappings', 'IA_DET_PRISON_EMAIL_MAPPINGS'),
+
         secret('respondent-evidence-direction-email', 'IA_RESPONDENT_EVIDENCE_DIRECTION_EMAIL'),
         secret('respondent-review-direction-email', 'IA_RESPONDENT_REVIEW_DIRECTION_EMAIL'),
         secret('respondent-non-standard-direction-until-listing-email', 'IA_RESPONDENT_NON_STANDARD_DIRECTION_UNTIL_LISTING_EMAIL'),
@@ -112,6 +114,7 @@ def secrets = [
 
         secret('customer-services-telephone', 'IA_CUSTOMER_SERVICES_TELEPHONE'),
         secret('customer-services-email', 'IA_CUSTOMER_SERVICES_EMAIL'),
+        secret('customer-services-appeal-email', 'IA_CUSTOMER_SERVICES_APPEAL_EMAIL'),
         secret('fees-admin-officer-email', 'FEES_ADMIN_OFFICER_EMAIL'),
         secret('payment-exceptions-admin-officer-email', 'PAYMENT_EXCEPTIONS_ADMIN_OFFICER_EMAIL'),
 
@@ -147,7 +150,16 @@ def secrets = [
         secret('bail-test-applicant-mobile', 'IA_TEST_APPLICANT_MOBILE'),
 
         secret('system-username', 'IA_SYSTEM_USERNAME'),
-        secret('system-password', 'IA_SYSTEM_PASSWORD')
+        secret('system-password', 'IA_SYSTEM_PASSWORD'),
+
+        secret('det-irc-brookhouse-email', 'IA_DET_IRC_BROOKHOUSE_EMAIL'),
+        secret('det-irc-colnbrook-email', 'IA_DET_IRC_COLNBROOK_EMAIL'),
+        secret('det-irc-derwentside-email', 'IA_DET_IRC_DERWENTSIDE_EMAIL'),
+        secret('det-irc-harmondsworth-email', 'IA_DET_IRC_DUNGAVEL_EMAIL'),
+        secret('det-irc-dungavel-email', 'IA_DET_IRC_HARMONDSWORTH_EMAIL'),
+        secret('det-irc-swinderby-email', 'IA_DET_IRC_SWINDERBY_EMAIL'),
+        secret('det-irc-tinsleyhouse-email', 'IA_DET_IRC_TINSLEYHOUSE_EMAIL'),
+        secret('det-irc-yarlswood-email', 'IA_DET_IRC_YARLSWOOD_EMAIL')
     ]
 ]
 

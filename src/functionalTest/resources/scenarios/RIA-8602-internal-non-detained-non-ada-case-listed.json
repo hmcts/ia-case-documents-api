@@ -1,5 +1,5 @@
 {
-  "description": "RIA-7558-RIA-7939 Internal Detained non ADA case listed direction notification",
+  "description": "RIA-8602-Internal non ADA case listed direction notification",
   "enabled": "{$featureFlag.homeOfficeGovNotifyEnabled}",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",

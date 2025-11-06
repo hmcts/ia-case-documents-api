@@ -1,0 +1,72 @@
+{
+  "description": "DIAC-1441 Update detention location for LR manual appeal - letter",
+  "request": {
+    "uri": "/asylum/ccdAboutToSubmit",
+    "credentials": "CaseOfficer",
+    "input": {
+      "id": 1441,
+      "eventId": "updateDetentionLocation",
+      "state": "appealSubmitted",
+      "caseData": {
+        "template": "minimal-appeal-submitted.json",
+        "replacements": {
+          "appellantInDetention": "Yes",
+          "appellantsRepresentation": "No",
+          "legalRepEmail": "{$TEST_LAW_FIRM_A_USERNAME}",
+          "isAdmin": "Yes",
+          "journeyType": null,
+          "legalRepHasAddress": "Yes",
+          "legalRepAddressUK": {
+            "County": "",
+            "Country": "United Kingdom",
+            "PostCode": "NW7 1BJ",
+            "PostTown": "London",
+            "AddressLine1": "Flat 1",
+            "AddressLine2": "Tamarind Court",
+            "AddressLine3": "1 Sanders Lane"
+          },
+          "notificationsSent": [],
+          "legalRepresentativeEmailAddress": "{$TEST_LAW_FIRM_A_USERNAME}",
+          "detentionFacility": "prison",
+          "prisonName": "Aylesbury",
+          "previousDetentionLocation": "Colnbrook",
+          "isAcceleratedDetainedAppeal": "No"
+        }
+      }
+    }
+  },
+  "expectation": {
+    "status": 200,
+    "errors": [],
+    "caseData": {
+      "template": "minimal-appeal-submitted.json",
+      "replacements": {
+        "appellantInDetention": "Yes",
+        "appellantsRepresentation": "No",
+        "legalRepEmail": "{$TEST_LAW_FIRM_A_USERNAME}",
+        "isAdmin": "Yes",
+        "journeyType": null,
+        "detentionFacility": "prison",
+        "prisonName": "Aylesbury",
+        "ircName": null,
+        "isAcceleratedDetainedAppeal": "No",
+        "legalRepHasAddress": "Yes",
+        "legalRepAddressUK": {
+          "County": "",
+          "Country": "United Kingdom",
+          "PostCode": "NW7 1BJ",
+          "PostTown": "London",
+          "AddressLine1": "Flat 1",
+          "AddressLine2": "Tamarind Court",
+          "AddressLine3": "1 Sanders Lane"
+        },
+        "notificationsSent": [
+          {
+            "id": "1441_UPDATE_DETENTION_LOCATION_LETTER_LEGAL_REPRESENTATIVE",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          }
+        ]
+      }
+    }
+  }
+}

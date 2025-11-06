@@ -39,6 +39,7 @@ public enum State {
     APPEAL_TAKEN_OFFLINE("appealTakenOffline"),
     REMITTED("remitted"),
     DECISION_CONDITIONAL_BAIL("decisionConditionalBail"),
+    MIGRATED("migrated"),
 
 
     @JsonEnumDefaultValue

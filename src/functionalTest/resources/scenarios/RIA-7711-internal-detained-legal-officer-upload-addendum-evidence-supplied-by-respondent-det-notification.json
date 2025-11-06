@@ -1,5 +1,6 @@
 {
   "description": "RIA-7711 Internal Legal Officer upload addendum evidence DET notification - Detained non-ada",
+  "disabled" : "true",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
     "credentials": "CaseOfficer",
@@ -15,6 +16,8 @@
           "detentionFacility": "immigrationRemovalCentre",
           "ircName": "Brookhouse",
           "appellantInDetention": "Yes",
+          "isAdmin": "Yes",
+          "appellantsRepresentation": "Yes",
           "isAcceleratedDetainedAppeal": "No",
           "addendumEvidenceDocuments": [
             {

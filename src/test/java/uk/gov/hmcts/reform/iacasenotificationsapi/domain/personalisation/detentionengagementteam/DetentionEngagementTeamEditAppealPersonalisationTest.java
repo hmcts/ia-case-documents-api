@@ -1,6 +1,5 @@
 package uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.detentionengagementteam;
 
-import static com.google.common.collect.Lists.newArrayList;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
@@ -9,13 +8,13 @@ import static uk.gov.hmcts.reform.iacasenotificationsapi.TestUtils.getDocumentWi
 import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.*;
 import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field.YesOrNo.NO;
 import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field.YesOrNo.YES;
-import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.utils.SubjectPrefixesInitializer.initializePrefixesForInternalAppealByPost;
 
 import java.io.IOException;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
+
 import org.json.JSONObject;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -31,7 +30,7 @@ import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.DocumentTag;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.DocumentWithMetadata;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field.IdValue;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field.YesOrNo;
-import uk.gov.hmcts.reform.iacasenotificationsapi.domain.service.DetEmailService;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.service.DetentionEmailService;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.PersonalisationProvider;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.clients.DocumentDownloadClient;
 import uk.gov.service.notify.NotificationClientException;
@@ -43,7 +42,7 @@ class DetentionEngagementTeamEditAppealPersonalisationTest {
     @Mock
     AsylumCase asylumCase;
     @Mock
-    DetEmailService detEmailService;
+    DetentionEmailService detEmailService;
     @Mock
     JSONObject jsonDocument;
     @Mock
@@ -58,7 +57,6 @@ class DetentionEngagementTeamEditAppealPersonalisationTest {
     private final String homeOfficeReferenceNumber = "someReferenceNumber";
     private final String appellantGivenNames = "someAppellantGivenNames";
     private final String appellantFamilyName = "someAppellantFamilyName";
-    private final String adaPrefix = "ADA - SERVE BY POST";
     private final String nonAdaPrefix = "IAFT - SERVE BY POST";
     DocumentWithMetadata internalEditAppealLetter = getDocumentWithMetadata(
             "1", "Edit appeal letter", "some other desc", DocumentTag.INTERNAL_EDIT_APPEAL_LETTER);
@@ -74,7 +72,7 @@ class DetentionEngagementTeamEditAppealPersonalisationTest {
         appelantInfo.put("appealReferenceNumber", appealReferenceNumber);
 
         when(personalisationProvider.getAppellantPersonalisation(asylumCase)).thenReturn(appelantInfo);
-        when(asylumCase.read(NOTIFICATION_ATTACHMENT_DOCUMENTS)).thenReturn(Optional.of(newArrayList(internalMaintainCaseLinksLetterId)));
+        when(asylumCase.read(NOTIFICATION_ATTACHMENT_DOCUMENTS)).thenReturn(Optional.of(Collections.singletonList(internalMaintainCaseLinksLetterId)));
         when(documentDownloadClient.getJsonObjectFromDocument(internalEditAppealLetter)).thenReturn(jsonDocument);
 
         detentionEngagementTeamEditAppealPersonalisation =
@@ -83,11 +81,9 @@ class DetentionEngagementTeamEditAppealPersonalisationTest {
                         detEmailService,
                         documentDownloadClient,
                         personalisationProvider,
-                        adaPrefix,
                         nonAdaPrefix
                 );
 
-        initializePrefixesForInternalAppealByPost(detentionEngagementTeamEditAppealPersonalisation);
     }
 
     @Test
@@ -106,7 +102,7 @@ class DetentionEngagementTeamEditAppealPersonalisationTest {
     void should_return_given_email_address_from_asylum_case() {
         when(asylumCase.read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(YES));
         when(asylumCase.read(DETENTION_FACILITY, String.class)).thenReturn(Optional.of("immigrationRemovalCentre"));
-        when(detEmailService.getRecipientsList(asylumCase)).thenReturn(Collections.singleton(detEmailAddress));
+        when(detEmailService.getDetentionEmailAddress(asylumCase)).thenReturn(detEmailAddress);
 
         assertTrue(
                 detentionEngagementTeamEditAppealPersonalisation.getRecipientsList(asylumCase).contains(detEmailAddress));
@@ -161,11 +157,7 @@ class DetentionEngagementTeamEditAppealPersonalisationTest {
         expectedPersonalisation.put("appellantFamilyName", appellantFamilyName);
         expectedPersonalisation.put("documentLink", jsonDocument);
 
-        if (yesOrNo.equals(YesOrNo.YES)) {
-            expectedPersonalisation.put("subjectPrefix", adaPrefix);
-        } else {
-            expectedPersonalisation.put("subjectPrefix", nonAdaPrefix);
-        }
+        expectedPersonalisation.put("subjectPrefix", nonAdaPrefix);
 
         Map<String, Object> actualPersonalisation =
                 detentionEngagementTeamEditAppealPersonalisation.getPersonalisationForLink(asylumCase);

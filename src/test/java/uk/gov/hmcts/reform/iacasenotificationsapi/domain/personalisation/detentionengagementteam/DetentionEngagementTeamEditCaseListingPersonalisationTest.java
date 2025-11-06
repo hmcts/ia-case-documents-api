@@ -13,10 +13,8 @@ import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.fie
 
 import com.google.common.collect.ImmutableMap;
 import java.io.IOException;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
+
 import org.json.JSONObject;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -31,7 +29,7 @@ import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.DocumentTag;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.DocumentWithMetadata;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field.IdValue;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field.YesOrNo;
-import uk.gov.hmcts.reform.iacasenotificationsapi.domain.service.DetEmailService;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.service.DetentionEmailService;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.PersonalisationProvider;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.clients.DocumentDownloadClient;
 import uk.gov.service.notify.NotificationClientException;
@@ -44,7 +42,7 @@ class DetentionEngagementTeamEditCaseListingPersonalisationTest {
     @Mock
     private DocumentDownloadClient documentDownloadClient;
     @Mock
-    private DetEmailService detEmailService;
+    private DetentionEmailService detEmailService;
     @Mock
     private PersonalisationProvider personalisationProvider;
     @Mock
@@ -60,7 +58,7 @@ class DetentionEngagementTeamEditCaseListingPersonalisationTest {
     private DetentionEngagementTeamEditCaseListingPersonalisation detentionEngagementTeamEditCaseListingPersonalisation;
 
     DocumentWithMetadata caseListedDoc = TestUtils.getDocumentWithMetadata(
-            "id", "detained-appellant-edit-case-listing-letter", "some other desc", DocumentTag.INTERNAL_DETAINED_EDIT_CASE_LISTING_LETTER);
+            "id", "detained-appellant-edit-case-listing-letter", "some other desc", DocumentTag.INTERNAL_EDIT_CASE_LISTING_LETTER_BUNDLE);
     IdValue<DocumentWithMetadata> caseListedBundle = new IdValue<>("1", caseListedDoc);
 
     DetentionEngagementTeamEditCaseListingPersonalisationTest() {
@@ -75,7 +73,7 @@ class DetentionEngagementTeamEditCaseListingPersonalisationTest {
         appelantInfo.put("appealReferenceNumber", appealReferenceNumber);
 
         when(personalisationProvider.getAppellantPersonalisation(asylumCase)).thenReturn(appelantInfo);
-        when(asylumCase.read(NOTIFICATION_ATTACHMENT_DOCUMENTS)).thenReturn(Optional.of(newArrayList(caseListedBundle)));
+        when(asylumCase.read(LETTER_BUNDLE_DOCUMENTS)).thenReturn(Optional.of(newArrayList(caseListedBundle)));
         when(documentDownloadClient.getJsonObjectFromDocument(any(DocumentWithMetadata.class))).thenReturn(jsonDocument);
 
         detentionEngagementTeamEditCaseListingPersonalisation = new DetentionEngagementTeamEditCaseListingPersonalisation(
@@ -107,8 +105,7 @@ class DetentionEngagementTeamEditCaseListingPersonalisationTest {
         String detentionEngagementTeamEmail = "det@email.com";
         when(asylumCase.read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(YES));
         when(asylumCase.read(DETENTION_FACILITY, String.class)).thenReturn(Optional.of("immigrationRemovalCentre"));
-        when(detEmailService.getRecipientsList(asylumCase)).thenReturn(Collections.singleton(detentionEngagementTeamEmail));
-
+        when(detEmailService.getDetentionEmailAddress(asylumCase)).thenReturn(detentionEngagementTeamEmail);
         assertTrue(
                 detentionEngagementTeamEditCaseListingPersonalisation.getRecipientsList(asylumCase).contains(detentionEngagementTeamEmail));
     }
@@ -153,7 +150,7 @@ class DetentionEngagementTeamEditCaseListingPersonalisationTest {
     }
 
     @Test
-    void should_return_personalisation_if_decision_dismissed_for_nonAda() throws NotificationClientException, IOException {
+    void should_return_personalisation_if_decision_dismissed_for_nonAda() {
         when(asylumCase.read(IS_ACCELERATED_DETAINED_APPEAL, YesOrNo.class)).thenReturn(Optional.of(YES));
         Map<String, Object> personalisation = detentionEngagementTeamEditCaseListingPersonalisation.getPersonalisationForLink(asylumCase);
 
@@ -170,10 +167,10 @@ class DetentionEngagementTeamEditCaseListingPersonalisationTest {
 
     @Test
     public void should_throw_exception_when_appeal_submission_is_empty() {
-        when(asylumCase.read(NOTIFICATION_ATTACHMENT_DOCUMENTS)).thenReturn(Optional.empty());
+        when(asylumCase.read(LETTER_BUNDLE_DOCUMENTS)).thenReturn(Optional.empty());
         assertThatThrownBy(() -> detentionEngagementTeamEditCaseListingPersonalisation.getPersonalisationForLink(asylumCase))
                 .isExactlyInstanceOf(IllegalStateException.class)
-                .hasMessage("internalDetainedEditCaseListingLetter document not available");
+                .hasMessage("internalEditCaseListingLetterBundle document not available");
     }
 
     @Test

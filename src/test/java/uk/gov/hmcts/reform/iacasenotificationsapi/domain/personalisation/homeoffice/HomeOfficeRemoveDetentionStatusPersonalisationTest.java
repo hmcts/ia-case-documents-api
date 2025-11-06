@@ -105,6 +105,8 @@ public class HomeOfficeRemoveDetentionStatusPersonalisationTest {
         when(emailAddressFinder.getListCaseHomeOfficeEmailAddress(asylumCase)).thenReturn(homeOfficeBhamEmailAddress);
         when(asylumCase.read(AsylumCaseDefinition.CURRENT_CASE_STATE_VISIBLE_TO_HOME_OFFICE_ALL, State.class))
                 .thenReturn(Optional.of(State.PRE_HEARING));
+        when(asylumCase.read(AsylumCaseDefinition.LIST_CASE_HEARING_CENTRE, HearingCentre.class))
+                .thenReturn(Optional.of(HearingCentre.BIRMINGHAM));
 
         assertEquals(Collections.singleton(homeOfficeBhamEmailAddress), homeOfficeRemoveDetentionStatusPersonalisation.getRecipientsList(asylumCase));
     }

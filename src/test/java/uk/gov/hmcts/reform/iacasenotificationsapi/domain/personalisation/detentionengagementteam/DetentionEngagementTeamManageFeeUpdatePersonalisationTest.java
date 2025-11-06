@@ -30,7 +30,7 @@ import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.DocumentTag;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.DocumentWithMetadata;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field.IdValue;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field.YesOrNo;
-import uk.gov.hmcts.reform.iacasenotificationsapi.domain.service.DetEmailService;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.service.DetentionEmailService;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.PersonalisationProvider;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.clients.DocumentDownloadClient;
 import uk.gov.service.notify.NotificationClientException;
@@ -43,7 +43,7 @@ class DetentionEngagementTeamManageFeeUpdatePersonalisationTest {
     @Mock
     private DocumentDownloadClient documentDownloadClient;
     @Mock
-    private DetEmailService detEmailService;
+    private DetentionEmailService detentionEmailService;
     @Mock
     private PersonalisationProvider personalisationProvider;
     @Mock
@@ -53,8 +53,7 @@ class DetentionEngagementTeamManageFeeUpdatePersonalisationTest {
     private final String homeOfficeReferenceNumber = "1234-1234-1234-1234";
     private final String appellantGivenNames = "someAppellantGivenNames";
     private final String appellantFamilyName = "someAppellantFamilyName";
-    private final String adaPrefix = "ADA - SERVE IN PERSON";
-    private final String nonAdaPrefix = "IAFT - SERVE IN PERSON";
+    private final String subect = "IAFT - SERVE IN PERSON";
     private final Long caseId = 12345L;
     private DetentionEngagementTeamManageFeeUpdatePersonalisation detentionEngagementTeamManageFeeUpdatePersonalisation;
 
@@ -79,10 +78,8 @@ class DetentionEngagementTeamManageFeeUpdatePersonalisationTest {
 
         detentionEngagementTeamManageFeeUpdatePersonalisation = new DetentionEngagementTeamManageFeeUpdatePersonalisation(
                 templateId,
-                detEmailService,
+                detentionEmailService,
                 documentDownloadClient,
-                adaPrefix,
-                nonAdaPrefix,
                 personalisationProvider
         );
     }
@@ -106,7 +103,7 @@ class DetentionEngagementTeamManageFeeUpdatePersonalisationTest {
         String detentionEngagementTeamEmail = "det@email.com";
         when(asylumCase.read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(YES));
         when(asylumCase.read(DETENTION_FACILITY, String.class)).thenReturn(Optional.of("immigrationRemovalCentre"));
-        when(detEmailService.getRecipientsList(asylumCase)).thenReturn(Collections.singleton(detentionEngagementTeamEmail));
+        when(detentionEmailService.getDetentionEmailAddress(asylumCase)).thenReturn(detentionEngagementTeamEmail);
 
         assertTrue(
                 detentionEngagementTeamManageFeeUpdatePersonalisation.getRecipientsList(asylumCase).contains(detentionEngagementTeamEmail));
@@ -138,7 +135,7 @@ class DetentionEngagementTeamManageFeeUpdatePersonalisationTest {
         final Map<String, Object> expectedPersonalisation =
                 ImmutableMap
                         .<String, Object>builder()
-                        .put("subjectPrefix", nonAdaPrefix)
+                        .put("subjectPrefix", subect)
                         .put("appealReferenceNumber", appealReferenceNumber)
                         .put("homeOfficeReferenceNumber", homeOfficeReferenceNumber)
                         .put("appellantGivenNames", appellantGivenNames)
@@ -150,14 +147,6 @@ class DetentionEngagementTeamManageFeeUpdatePersonalisationTest {
                 detentionEngagementTeamManageFeeUpdatePersonalisation.getPersonalisationForLink(asylumCase);
 
         assertTrue(compareStringsAndJsonObjects(expectedPersonalisation, actualPersonalisation));
-    }
-
-    @Test
-    void should_return_personalisation_if_decision_dismissed_for_nonAda() throws NotificationClientException, IOException {
-        when(asylumCase.read(IS_ACCELERATED_DETAINED_APPEAL, YesOrNo.class)).thenReturn(Optional.of(YES));
-        Map<String, Object> personalisation = detentionEngagementTeamManageFeeUpdatePersonalisation.getPersonalisationForLink(asylumCase);
-
-        assertEquals(adaPrefix, personalisation.get("subjectPrefix"));
     }
 
     @Test

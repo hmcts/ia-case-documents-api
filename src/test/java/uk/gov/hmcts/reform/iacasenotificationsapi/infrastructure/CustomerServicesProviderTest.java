@@ -30,6 +30,7 @@ public class CustomerServicesProviderTest {
     private String customerServicesTelephone = "555 555";
     private String standardCustomerServicesEmail = "some.email@example.com";
     private String internalCaseCustomerServicesEmail = "some.internal.email@example.com";
+    private String appealIaCustomerServicesEmail = "some.appeal.email@example.com";
 
     private CustomerServicesProvider customerServicesProvider;
 
@@ -39,7 +40,8 @@ public class CustomerServicesProviderTest {
         customerServicesProvider = new CustomerServicesProvider(
             customerServicesTelephone,
             standardCustomerServicesEmail,
-            internalCaseCustomerServicesEmail
+            internalCaseCustomerServicesEmail,
+            appealIaCustomerServicesEmail
         );
     }
 
@@ -51,8 +53,9 @@ public class CustomerServicesProviderTest {
 
         assertThat(customerServicesPersonalisation.get("customerServicesTelephone"))
             .isEqualTo(customerServicesTelephone);
-
         assertThat(customerServicesPersonalisation.get("customerServicesEmail")).isEqualTo(standardCustomerServicesEmail);
+        assertThat(customerServicesPersonalisation.get("AppealIAEmail"))
+                .isEqualTo(appealIaCustomerServicesEmail);
     }
 
     @Test
@@ -61,20 +64,30 @@ public class CustomerServicesProviderTest {
         assertThatThrownBy(() -> new CustomerServicesProvider(
             null,
             standardCustomerServicesEmail,
-            internalCaseCustomerServicesEmail))
+            internalCaseCustomerServicesEmail,
+            appealIaCustomerServicesEmail))
             .isExactlyInstanceOf(NullPointerException.class);
 
         assertThatThrownBy(() -> new CustomerServicesProvider(
             customerServicesTelephone,
             null,
-            internalCaseCustomerServicesEmail))
+            internalCaseCustomerServicesEmail,
+            appealIaCustomerServicesEmail))
             .isExactlyInstanceOf(NullPointerException.class);
 
         assertThatThrownBy(() -> new CustomerServicesProvider(
             customerServicesTelephone,
             standardCustomerServicesEmail,
-            null))
+            null,
+            appealIaCustomerServicesEmail))
             .isExactlyInstanceOf(NullPointerException.class);
+
+        assertThatThrownBy(() -> new CustomerServicesProvider(
+                customerServicesTelephone,
+                standardCustomerServicesEmail,
+                internalCaseCustomerServicesEmail,
+                null))
+                .isExactlyInstanceOf(NullPointerException.class);
     }
 
     @Test

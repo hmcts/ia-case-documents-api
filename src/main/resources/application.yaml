@@ -46,7 +46,7 @@ spring:
         jwt:
           jwk-set-uri: ${OPEN_ID_IDAM_URL:http://127.0.0.1:5000}/o/jwks
   cache:
-    cache-names: userInfoCache
+    cache-names: userInfoCache, systemUserTokenCache
     caffeine:
       spec: expireAfterAccess=3600s
 featureFlag:
@@ -66,6 +66,9 @@ govnotify:
   key: ${IA_GOV_NOTIFY_KEY}
   timeout: 5000
   template:
+    detained-iaft-email-template: 18e6cd66-54c6-463c-a54f-3e5aa880bc01
+    detained-iaft-5-email-template: 5d16344c-a62c-48b5-a068-21cf0275e47c
+    det-email-template: fe92c79d-212e-4ffe-b619-c2fb4dd304ac
     forceCaseProgression:
       caseBuilding.to.caseUnderReview:
         legalRep:
@@ -81,6 +84,11 @@ govnotify:
       respondentReview.to.submitHearingRequirements:
         respondent:
           email: 7b597ead-8218-4227-8168-31d24a2824c5
+          detention:
+            email: a60e2dfe-df22-4633-a172-e54c37aeabd9
+        legalRep:
+          detention:
+            email: 8f191673-6f52-425f-910e-5222769c513a
       awaitingRespondentEvidence.to.caseBuilding:
         respondent:
           email: fe79c1c1-2f1c-4e46-a58d-e28845ac9761
@@ -115,7 +123,7 @@ govnotify:
         sms: 5b7091e5-908a-4c5b-ac66-5dc5216fc53b
         letter:
           inTime:
-            withExemption: a50c2b6c-d3ff-4d54-b8c7-f62bd57d624a
+            withExemption: f161d437-d17d-421b-8118-48ec0f2c5446
             withFee: d70da0bd-baad-4ae8-ad0a-777b8c7aecc3
           outOfTime:
             withExemption: 3049a8fc-8d13-47d0-84dd-a6997229a8e1
@@ -147,6 +155,10 @@ govnotify:
           email: c6fb22e2-c3fa-41f6-a4de-b9f6a55aa417
         nonAdaInTimeDetainedOnly:
           email: 0e187f28-ee4e-4ef0-8218-0f922c433bf4
+        nonAdaInTimeDetainedPrisonIrc:
+          email: ad15aa59-3cec-48a3-a723-3143c2aadc30
+      detentionEngagementTeam:
+        email: fe92c79d-212e-4ffe-b619-c2fb4dd304ac
     sendPaymentReminder:
       appellant:
         email: a1628213-dfd3-4f91-a66e-b8d3961947a9
@@ -176,6 +188,10 @@ govnotify:
         approved:
           email: b37bfeae-cc9a-4389-92d6-b3a65060b192
           sms: 352c22ca-8dbf-44f0-96d8-8ad5d5550345
+          onTime:
+            letter: 863a6855-eabb-48d2-86f3-db31c6fb9afc
+          outOfTime:
+            letter: 5360d4f4-511e-496a-ae35-ffdd04f3705f
         partiallyApproved:
           email: 6ed39862-b574-4df6-b82e-e544957cf529
           sms: 87e44e78-ee3a-41af-98b1-d8e78bd54681
@@ -184,10 +200,6 @@ govnotify:
           email: 5e23cb62-9c63-4fc2-8c04-cdb3adf69013
           sms: 4bebbf93-8aef-47c0-b1a9-a89da915f9e5
           letter: 473a6c61-69a0-41bf-bd7c-8919445695d6
-          outOfTime:
-            letter: 5360d4f4-511e-496a-ae35-ffdd04f3705f
-          onTime:
-            letter: 14fd949c-d879-4878-ae6d-844abce5baf3
         pa:
           approved:
             email: b37bfeae-cc9a-4389-92d6-b3a65060b192
@@ -203,6 +215,10 @@ govnotify:
             letter: 590ee79d-a47c-47a0-9d31-a804aad483c2
           partiallyApproved:
             letter: 7e81f236-db91-4f42-b3b2-a7e56edf5957
+      detentionEngagementTeam:
+        approved:
+          onTime:
+            email: bce666a3-9267-4f9b-8d89-58d932bd94a1
 
     editPaymentMethod:
       adminOfficer:
@@ -222,7 +238,9 @@ govnotify:
           email: e1461a4c-9437-4ec9-8aae-dc3d1134e3b0
           sms: f84000c5-7ba0-4bd9-bb64-437f4b51b878
 
-
+    outOfTimeDecisionAllowed:
+      detentionEngagementTeam:
+        email: 18e6cd66-54c6-463c-a54f-3e5aa880bc01
     decisionHomeOfficeNotificationFailed:
       caseOfficer:
         email: 2f33706d-6de1-4617-8393-ac99306b85d5
@@ -276,9 +294,13 @@ govnotify:
         email:
           nonEjp: dfc0ee96-c71a-4db3-98ca-f70d7eec1525
           ejp: 492e19f3-6e91-4eb2-961c-7abe1931a0b2
+        detention:
+          email: c3829e8a-e9e5-4661-8e8e-222e0f0b46e8
       detentionEngagementTeam:
         email:
           nonAda: f965b4b2-98d8-4ff3-bd92-add1938b1580
+        appellant:
+          email: 26ed296f-7b8f-47b1-a8eb-96e4720aa1e5
     markAppealAsPaid:
       detentionEngagementTeam:
         email:
@@ -309,13 +331,20 @@ govnotify:
     buildCaseDirection:
       legalRep:
         email: b96c8935-66b1-4a46-aca6-f8e86d7a5d8f
+        detention:
+          email: 68fdfc26-6bef-45c8-84cf-ae1ece8572cf
     reviewDirection:
       legalRep:
         email: 99f45880-25a3-4ca4-bce0-fdc7e0a81a88
       detentionTeam:
-        email: 816d35c8-e4b8-45d3-a4fe-789c1badc408
+        email: 7542be99-2359-4e1f-bc73-5ee44d79ea9f
       respondent:
         email: 6c9d4e44-7eba-4058-a928-20da6f447d74
+        detention:
+          aip:
+            email: 56c2546a-2567-4b3d-80dc-b0e3206122b7
+          legalRep:
+            email: 9ea5bf72-34b1-433d-b6d8-99a3df12657e
       appellant:
         email: 85a38d4a-166a-49c8-9b03-8ebbf64690e2
         sms: b9a45d5e-b070-4876-9c2f-ed4ff9f18116
@@ -403,6 +432,8 @@ govnotify:
       detentionEngagementTeam:
         nonAda:
           email: b7e398f0-4a1a-4e13-ae98-9569967e1a7d
+        production:
+          email: 0efe4c2f-d2f4-47f6-baf6-cd723f5bba3d
     adaCaseListedSendDirection:
       legalRep:
         email: a61da7e2-d70f-4d62-89c5-fc54155321c9
@@ -480,7 +511,9 @@ govnotify:
       appellant:
         sms: b7aba09e-4df5-486f-9107-f7721db52a02
       detentionEngagementTeam:
-        email: cef6603c-b5dd-4e63-b438-1e93644bad5c
+        email: fe92c79d-212e-4ffe-b619-c2fb4dd304ac
+        production:
+          email: 73985562-43a4-417e-b201-175e8bf36682
     endAppealBeforeListing:
       legalRep:
         email: 7eb6e398-c85d-483f-9ff7-6ec7a3e17651
@@ -508,6 +541,9 @@ govnotify:
     requestCaseBuilding:
       legalRep:
         email: 190f9645-8fe7-4f28-a854-62fb312622ec
+        detention:
+          email: 7fd3785b-082e-4b91-bed4-aff3d95fce52
+          letter: fa0b0ba8-4cf6-419c-b829-1f5c3a1430df
       detentionEngagementTeam:
         ada:
           email: 9609ebb3-cb45-4322-ba2c-f3d2a162f7b6
@@ -685,14 +721,14 @@ govnotify:
       caseOfficer:
         email: 09d9305f-dc5d-4fb0-b89d-3998c7b609bb
       detentionEngagementTeam:
-        email: 23bfcd0d-e47c-4f51-ae51-19e21492fc0e
+        email: fe92c79d-212e-4ffe-b619-c2fb4dd304ac
       otherLegalRep:
         email: 3219c9a3-afc7-4439-bb2e-90de798f98a8
       otherHomeOffice:
         email: 690d236e-60bf-4dee-b9e5-37b885555278
       homeOffice:
         detentionEngagementTeam:
-          email: 25fcdc45-722c-4d8e-a199-42f1387ee339
+          email: fe92c79d-212e-4ffe-b619-c2fb4dd304ac
     ftpaDecidedByResidentJudge:
       detentionEngagementTeam:
         email: e1bf96d6-505f-4fcc-bc90-12ad29065bb9
@@ -734,6 +770,10 @@ govnotify:
         email: 8a87904f-5a67-4a79-a56a-8450b7829f9b
       detentionEngagementTeam:
         email: b1c38360-82de-4aa7-bbe1-a395d73376b5
+        production:
+          email: b92c6233-5729-4844-a64c-4100274ecdc4
+        appellant:
+          email: 8d9cb04d-b5ab-4607-846a-dd8601df25b0
       nonDetained:
         homeOffice:
           email: 59774cb8-1360-448b-ad65-192c1157a7ee
@@ -750,6 +790,13 @@ govnotify:
         email: 153cab2a-0533-424f-bcaf-41b916d06321
       adminOfficer:
         email: 6c007d84-488d-498a-9d53-85ba5e008d31
+      detentionEngagementTeam:
+        production:
+          email: f97b30d5-c41c-4b85-a18c-8d4efa1a0f3e
+    hearingCancelled:
+      detentionEngagementTeam:
+        production:
+          email: b92c6233-5729-4844-a64c-4100274ecdc4
     reListCase:
       adminOfficer:
         email: 495c6f2b-46da-431f-a890-22371f2150dd
@@ -999,10 +1046,12 @@ govnotify:
     decideAnApplication:
         applicant:
           detentionEngagementTeam:
-            email: 7c806a4d-bc0f-49e8-b068-0951296e7569
+            email: fe92c79d-212e-4ffe-b619-c2fb4dd304ac
         otherParty:
           detentionEngagementTeam:
             email: 47289033-479f-45e2-aa17-2c785378733a
+            production:
+              email: c0d82e4c-6f72-4fb9-b002-1d47e1fc5115
           appellant:
             beforeListing:
               email: 22cee197-d6a9-4a9f-bdc9-a8aec8ab36f8
@@ -1098,6 +1147,9 @@ govnotify:
       appellant:
         email: 7d2b7690-12d4-43b4-8793-cd505d8033a9
         sms: 318452c5-230f-4471-aafa-847accf5f20b
+        detention:
+          other:
+            letter: cd39c5ce-ef8b-4de6-ad00-65116da2820b
     requestFeeRemission:
       legalRep:
         email: 7c336cc1-ff6e-431a-afc1-812c9bf1b883
@@ -1177,7 +1229,7 @@ govnotify:
         letter: c8f81920-5b59-4db6-b565-d4c997181618
       detentionEngagementTeam:
         nonAda:
-          email: 0eb6e602-b92d-4e28-93c1-9ab94d22387e
+          email: fe92c79d-212e-4ffe-b619-c2fb4dd304ac
     decisionWithoutHearing:
       homeOffice:
         email: 991d5898-cdc1-4a8c-8927-456106aab084
@@ -1222,11 +1274,13 @@ govnotify:
     markAppealAsDetained:
       legalRep:
         email: 1baf79a7-1a7f-4a2c-9a03-eb5ec6ff7a49
+        letter: 40b7c42a-a378-46b5-a636-3add03e3a1c8
       homeOffice:
         email: 7b972a67-7665-4b3b-a64c-ed74d1ca8d55
     removeDetentionStatus:
       legalRep:
         email: 23669485-ffb0-4ae2-9d36-26c437a57e92
+        letter: 753d6f8c-19b1-498e-b80a-868be0c33e3f
       homeOffice:
         email: 3891dcd8-a9d1-47e8-8b87-3da77789a913
       appellant:
@@ -1288,6 +1342,7 @@ govnotify:
           email: acf67e1c-ec14-48f5-aed9-61a703831a5c
         afterListing:
           email: 59bbd0ed-2b2f-432b-8111-0cb4b9ea9a7d
+        letter: aa1c859d-d5c8-4576-bbb9-7bf46c1f54a2
     appealDecided:
       detentionTeam:
         dismissed:
@@ -1296,7 +1351,10 @@ govnotify:
           email: 03cb8170-abe1-42f1-9cfd-8526e1635294
     editCaseListing:
       detentionEngagementTeam:
+#        3d3ca452-5de2-4674-bc4f-ea4d98386a36
         email: 698cccf8-99b5-4360-b2b5-8aedb9667e21
+        production:
+          email: 1b456113-9c31-41be-9fe8-dc2f2f9a10b1
     hoFtpaDecided:
       detentionEngagementTeam:
         granted:
@@ -1413,7 +1471,7 @@ govnotify:
       appellant:
         email: ad550328-3529-443a-be7e-b9109e1926ab
         sms: a898d622-e399-4dfd-b86d-cc92be0c777d
-        letter: fb14e920-9834-4d11-91b7-bb38e7dfbb1e
+        letter: 24c26241-2fad-494b-91a8-f4dcb26e4e28
     recordRefundDecision:
       appellant:
         approved:
@@ -1577,6 +1635,7 @@ tsvStringsFileLocation: strings.tsv
 
 ia_system_user: ${IA_SYSTEM_USERNAME:system-user}
 ia_system_user_password: ${IA_SYSTEM_PASSWORD:system-password}
+ia_system_user_scope: "openid profile authorities acr roles create-user manage-user search-user"
 
 security:
   anonymousPaths:
@@ -1856,6 +1915,7 @@ security:
       - "makeNewApplication"
       - "sendBailDirection"
       - "createBailCaseLink"
+      - "markAppealAsRemitted"
     hearing-centre-admin:
       - "progressMigratedCase"
       - "requestFeeRemission"
@@ -1899,6 +1959,7 @@ security:
       - "editAppeal"
       - "startAppeal"
       - "refundConfirmation"
+      - "hearingCancelled"
     ctsc:
       - "progressMigratedCase"
       - "requestFeeRemission"
@@ -1942,6 +2003,7 @@ security:
       - "editAppeal"
       - "startAppeal"
       - "refundConfirmation"
+      - "hearingCancelled"
     ctsc-team-leader:
       - "progressMigratedCase"
       - "requestFeeRemission"
@@ -1985,6 +2047,7 @@ security:
       - "startAppeal"
       - "refundConfirmation"
       - "editDocuments"
+      - "hearingCancelled"
     national-business-centre:
       - "progressMigratedCase"
       - "requestFeeRemission"
@@ -2028,6 +2091,7 @@ security:
       - "editAppeal"
       - "startAppeal"
       - "refundConfirmation"
+      - "hearingCancelled"
     challenged-access-ctsc:
       - "progressMigratedCase"
       - "requestFeeRemission"
@@ -2071,6 +2135,7 @@ security:
       - "editAppeal"
       - "startAppeal"
       - "refundConfirmation"
+      - "hearingCancelled"
     challenged-access-admin:
       - "progressMigratedCase"
       - "requestFeeRemission"
@@ -2114,6 +2179,7 @@ security:
       - "editAppeal"
       - "startAppeal"
       - "refundConfirmation"
+      - "hearingCancelled"
     caseworker-ia-homeofficeapc:
       - "startApplication"
       - "editBailApplication"
@@ -2430,6 +2496,7 @@ security:
       - "caseListing"
       - "sendPaymentReminderNotification"
       - "recordRemissionReminder"
+      - "hearingCancelled"
     caseworker-ia-homeofficebail:
       - "startApplication"
       - "editBailApplication"
@@ -2446,6 +2513,7 @@ document_management.url: ${DM_URL:http://127.0.0.1:4506}
 #OpenID
 idam:
   baseUrl: ${OPEN_ID_IDAM_URL:http://127.0.0.1:5000}
+  redirectUrl: ${IA_IDAM_REDIRECT_URI:http://localhost:3002/oauth2/callback}
   s2s-auth:
     totp_secret: ${IA_S2S_SECRET:AAAAAAAAAAAAAAAC}
     microservice: ${IA_S2S_MICROSERVICE:ia}
@@ -2596,170 +2664,15 @@ detentionEngagementTeamIrcEmailAddresses:
   Derwentside: ${IA_DET_IRC_DERWENTSIDE_EMAIL:det-irc-derwentside@example.com}
   Dungavel: ${IA_DET_IRC_DUNGAVEL_EMAIL:det-irc-dungavel@example.com}
   Harmondsworth: ${IA_DET_IRC_HARMONDSWORTH_EMAIL:det-irc-harmondsworth@example.com}
+  Swinderby: ${IA_DET_IRC_SWINDERBY_EMAIL:det-irc-swinderby@example.com}
   TinsleyHouse: ${IA_DET_IRC_TINSLEYHOUSE_EMAIL:det-irc-tinsleyhouse@example.com}
   Yarlswood: ${IA_DET_IRC_YARLSWOOD_EMAIL:det-irc-yarlswood@example.com}
 
-### DET Email addresses for Prison
-detentionEngagementTeamPrisonEmailAddresses:
-  Acklington: ${IA_DET_PRISON_ACKLINGTON_EMAIL:det-prison-acklington@example.com}
-  Addiewell: ${IA_DET_PRISON_ADDIEWELL_EMAIL:det-prison-addiewell@example.com}
-  Albany: ${IA_DET_PRISON_ALBANY_EMAIL:det-prison-albany@example.com}
-  Altcourse: ${IA_DET_PRISON_ALTCOURSE_EMAIL:det-prison-altcourse@example.com}
-  Ashfield: ${IA_DET_PRISON_ASHFIELD_EMAIL:det-prison-ashfield@example.com}
-  Ashwell: ${IA_DET_PRISON_ASHWELL_EMAIL:det-prison-ashwell@example.com}
-  AskhamGrange: ${IA_DET_PRISON_ASKHAM_GRANGE_EMAIL:det-prison-askham-grange@example.com}
-  Aylesbury: ${IA_DET_PRISON_AYLESBURY_EMAIL:det-prison-aylesbury@example.com}
-  Barlinnie: ${IA_DET_PRISON_BARLINNIE_EMAIL:det-prison-barlinnie@example.com}
-  Bedford: ${IA_DET_PRISON_BEDFORD_EMAIL:det-prison-bedford@example.com}
-  Belmarsh: ${IA_DET_PRISON_BELMARSH_EMAIL:det-prison-belmarsh@example.com}
-  Birmingham: ${IA_DET_PRISON_BIRMINGHAM_EMAIL:det-prison-birmingham@example.com}
-  Blakenhurst: ${IA_DET_PRISON_BLAKENHURST_EMAIL:det-prison-blakenhurst@example.com}
-  BlantyreHouse: ${IA_DET_PRISON_BLANTYRE_HOUSE_EMAIL:det-prison-blantyre-house@example.com}
-  Blundeston: ${IA_DET_PRISON_BLUNDESTON_EMAIL:det-prison-blundeston@example.com}
-  Brinsford: ${IA_DET_PRISON_BRINSFORD_EMAIL:det-prison-brinsford@example.com}
-  Bristol: ${IA_DET_PRISON_BRISTOL_EMAIL:det-prison-bristol@example.com}
-  Brixton: ${IA_DET_PRISON_BRIXTON_EMAIL:det-prison-brixton@example.com}
-  Brockhill: ${IA_DET_PRISON_BROCKHILL_EMAIL:det-prison-brockhill@example.com}
-  Bronzefield: ${IA_DET_PRISON_BRONZEFIELD_EMAIL:det-prison-bronzefield@example.com}
-  BuckleyHall: ${IA_DET_PRISON_BUCKLEY_HALL_EMAIL:det-prison-buckley-hall@example.com}
-  Bullingdon: ${IA_DET_PRISON_BULLINGDON_EMAIL:det-prison-bullingdon@example.com}
-  BullwoodHall: ${IA_DET_PRISON_BULLWOOD_HALL_EMAIL:det-prison-bullwood-hall@example.com}
-  CampHill: ${IA_DET_PRISON_CAMP_HILL_EMAIL:det-prison-camp-hill@example.com}
-  Canterbury: ${IA_DET_PRISON_CANTERBURY_EMAIL:det-prison-canterbury@example.com}
-  Cardiff: ${IA_DET_PRISON_CARDIFF_EMAIL:det-prison-cardiff@example.com}
-  Castington: ${IA_DET_PRISON_CASTINGTON_EMAIL:det-prison-castington@example.com}
-  CastleHuntly: ${IA_DET_PRISON_CASTLE_HUNTLY_EMAIL:det-prison-castle-huntly@example.com}
-  ChanningsWood: ${IA_DET_PRISON_CHANNINGS_WOOD_EMAIL:det-prison-channings-wood@example.com}
-  Chelmsford: ${IA_DET_PRISON_CHELMSFORD_EMAIL:det-prison-chelmsford@example.com}
-  Coldingley: ${IA_DET_PRISON_COLDINGLEY_EMAIL:det-prison-coldingley@example.com}
-  CookhamWood: ${IA_DET_PRISON_COOKHAM_WOOD_EMAIL:det-prison-cookham-wood@example.com}
-  CorntonVale: ${IA_DET_PRISON_CORNTON_VALE_EMAIL:det-prison-cornton-vale@example.com}
-  Dartmoor: ${IA_DET_PRISON_DARTMOOR_EMAIL:det-prison-dartmoor@example.com}
-  Deerbolt: ${IA_DET_PRISON_DEERBOLT_EMAIL:det-prison-deerbolt@example.com}
-  Doncaster: ${IA_DET_PRISON_DONCASTER_EMAIL:det-prison-doncaster@example.com}
-  Dorchester: ${IA_DET_PRISON_DORCHESTER_EMAIL:det-prison-dorchester@example.com}
-  Dovegate: ${IA_DET_PRISON_DOVEGATE_EMAIL:det-prison-dovegate@example.com}
-  Downview: ${IA_DET_PRISON_DOWNVIEW_EMAIL:det-prison-downview@example.com}
-  DrakeHall: ${IA_DET_PRISON_DRAKE_HALL_EMAIL:det-prison-drake-hall@example.com}
-  Dumfries: ${IA_DET_PRISON_DUMFRIES_EMAIL:det-prison-dumfries@example.com}
-  Durham: ${IA_DET_PRISON_DURHAM_EMAIL:det-prison-durham@example.com}
-  EastSuttonPark: ${IA_DET_PRISON_EAST_SUTTON_PARK_EMAIL:det-prison-east-sutton-park@example.com}
-  EastwoodPark: ${IA_DET_PRISON_EASTWOOD_PARK_EMAIL:det-prison-eastwood-park@example.com}
-  EdinburghSaughton: ${IA_DET_PRISON_EDINBURGH_SAUGHTON_EMAIL:det-prison-edinburgh-saughton@example.com}
-  EdmundsHill: ${IA_DET_PRISON_EDMUNDS_HILL_EMAIL:det-prison-edmunds-hill@example.com}
-  Elmley: ${IA_DET_PRISON_ELMLEY_EMAIL:det-prison-elmley@example.com}
-  Erlestoke: ${IA_DET_PRISON_ERLESTOKE_EMAIL:det-prison-erlestoke@example.com}
-  Everthorpe: ${IA_DET_PRISON_EVERTHORPE_EMAIL:det-prison-everthorpe@example.com}
-  Exeter: ${IA_DET_PRISON_EXETER_EMAIL:det-prison-exeter@example.com}
-  Featherstone: ${IA_DET_PRISON_FEATHERSTONE_EMAIL:det-prison-featherstone@example.com}
-  Feltham: ${IA_DET_PRISON_FELTHAM_EMAIL:det-prison-feltham@example.com}
-  Ford: ${IA_DET_PRISON_FORD_EMAIL:det-prison-ford@example.com}
-  ForestBank: ${IA_DET_PRISON_FOREST_BANK_EMAIL:det-prison-forest-bank@example.com}
-  FostonHall: ${IA_DET_PRISON_FOSTON_HALL_EMAIL:det-prison-foston-hall@example.com}
-  Frankland: ${IA_DET_PRISON_FRANKLAND_EMAIL:det-prison-frankland@example.com}
-  FullSutton: ${IA_DET_PRISON_FULL_SUTTON_EMAIL:det-prison-full-sutton@example.com}
-  Garth: ${IA_DET_PRISON_GARTH_EMAIL:det-prison-garth@example.com}
-  Gartree: ${IA_DET_PRISON_GARTREE_EMAIL:det-prison-gartree@example.com}
-  GlenParva: ${IA_DET_PRISON_GLEN_PARVA_EMAIL:det-prison-glen-parva@example.com}
-  Glenochil: ${IA_DET_PRISON_GLENOCHIL_EMAIL:det-prison-glenochil@example.com}
-  Gloucester: ${IA_DET_PRISON_GLOUCESTER_EMAIL:det-prison-gloucester@example.com}
-  Grampian: ${IA_DET_PRISON_GRAMPIAN_EMAIL:det-prison-grampian@example.com}
-  Greenock: ${IA_DET_PRISON_GREENOCK_EMAIL:det-prison-greenock@example.com}
-  GrendonSpringHill: ${IA_DET_PRISON_GRENDON_SPRING_HILL_EMAIL:det-prison-grendon-spring-hill@example.com}
-  GuysMarsh: ${IA_DET_PRISON_GUYS_MARSH_EMAIL:det-prison-guys-marsh@example.com}
-  Haverigg: ${IA_DET_PRISON_HAVERIGG_EMAIL:det-prison-haverigg@example.com}
-  HewellGrange: ${IA_DET_PRISON_HEWELL_GRANGE_EMAIL:det-prison-hewell-grange@example.com}
-  HighDown: ${IA_DET_PRISON_HIGH_DOWN_EMAIL:det-prison-high-down@example.com}
-  Highpoint: ${IA_DET_PRISON_HIGHPOINT_EMAIL:det-prison-highpoint@example.com}
-  Hindley: ${IA_DET_PRISON_HINDLEY_EMAIL:det-prison-hindley@example.com}
-  HollesleyBayHmyoiWarrenHill: ${IA_DET_PRISON_HOLLESLEY_BAY_HMYOI_WARREN_HILL_EMAIL:det-prison-hollesley-bay-hmyoi-warren-hill@example.com}
-  Holloway: ${IA_DET_PRISON_HOLLOWAY_EMAIL:det-prison-holloway@example.com}
-  HolmeHouse: ${IA_DET_PRISON_HOLME_HOUSE_EMAIL:det-prison-holme-house@example.com}
-  Hull: ${IA_DET_PRISON_HULL_EMAIL:det-prison-hull@example.com}
-  Huntercombe: ${IA_DET_PRISON_HUNTERCOMBE_EMAIL:det-prison-huntercombe@example.com}
-  HydebankWood: ${IA_DET_PRISON_HYDEBANK_WOOD_EMAIL:det-prison-hydebank-wood@example.com}
-  Inverness: ${IA_DET_PRISON_INVERNESS_EMAIL:det-prison-inverness@example.com}
-  Isis: ${IA_DET_PRISON_ISIS_EMAIL:det-prison-isis@example.com}
-  Kennet: ${IA_DET_PRISON_KENNET_EMAIL:det-prison-kennet@example.com}
-  Kilmarnock: ${IA_DET_PRISON_KILMARNOCK_EMAIL:det-prison-kilmarnock@example.com}
-  Kingston: ${IA_DET_PRISON_KINGSTON_EMAIL:det-prison-kingston@example.com}
-  Kirkham: ${IA_DET_PRISON_KIRKHAM_EMAIL:det-prison-kirkham@example.com}
-  KirklevingtonGrange: ${IA_DET_PRISON_KIRKLEVINGTON_GRANGE_EMAIL:det-prison-kirklevington-grange@example.com}
-  Lancaster: ${IA_DET_PRISON_LANCASTER_EMAIL:det-prison-lancaster@example.com}
-  LancasterFarms: ${IA_DET_PRISON_LANCASTER_FARMS_EMAIL:det-prison-lancaster-farms@example.com}
-  LatchmereHouse: ${IA_DET_PRISON_LATCHMERE_HOUSE_EMAIL:det-prison-latchmere-house@example.com}
-  Leeds: ${IA_DET_PRISON_LEEDS_EMAIL:det-prison-leeds@example.com}
-  Leicester: ${IA_DET_PRISON_LEICESTER_EMAIL:det-prison-leicester@example.com}
-  Lewes: ${IA_DET_PRISON_LEWES_EMAIL:det-prison-lewes@example.com}
-  Leyhill: ${IA_DET_PRISON_LEYHILL_EMAIL:det-prison-leyhill@example.com}
-  Lincoln: ${IA_DET_PRISON_LINCOLN_EMAIL:det-prison-lincoln@example.com}
-  Lindholme: ${IA_DET_PRISON_LINDHOLME_EMAIL:det-prison-lindholme@example.com}
-  Littlehey: ${IA_DET_PRISON_LITTLEHEY_EMAIL:det-prison-littlehey@example.com}
-  Liverpool: ${IA_DET_PRISON_LIVERPOOL_EMAIL:det-prison-liverpool@example.com}
-  LongLartin: ${IA_DET_PRISON_LONG_LARTIN_EMAIL:det-prison-long-lartin@example.com}
-  LowMoss: ${IA_DET_PRISON_LOW_MOSS_EMAIL:det-prison-low-moss@example.com}
-  LowNewton: ${IA_DET_PRISON_LOW_NEWTON_EMAIL:det-prison-low-newton@example.com}
-  LowdhamGrange: ${IA_DET_PRISON_LOWDHAM_GRANGE_EMAIL:det-prison-lowdham-grange@example.com}
-  Magilligan: ${IA_DET_PRISON_MAGILLIGAN_EMAIL:det-prison-magilligan@example.com}
-  Maghaberry: ${IA_DET_PRISON_MAGHABERRY_EMAIL:det-prison-maghaberry@example.com}
-  Maidstone: ${IA_DET_PRISON_MAIDSTONE_EMAIL:det-prison-maidstone@example.com}
-  Manchester: ${IA_DET_PRISON_MANCHESTER_EMAIL:det-prison-manchester@example.com}
-  MoorlandClosed: ${IA_DET_PRISON_MOORLAND_CLOSED_EMAIL:det-prison-moorland-closed@example.com}
-  MoorlandOpen: ${IA_DET_PRISON_MOORLAND_OPEN_EMAIL:det-prison-moorland-open@example.com}
-  MortonHall: ${IA_DET_PRISON_MORTON_HALL_EMAIL:det-prison-morton-hall@example.com}
-  NewHall: ${IA_DET_PRISON_NEW_HALL_EMAIL:det-prison-new-hall@example.com}
-  NorthSeaCamp: ${IA_DET_PRISON_NORTH_SEA_CAMP_EMAIL:det-prison-north-sea-camp@example.com}
-  Northallerton: ${IA_DET_PRISON_NORTHALLERTON_EMAIL:det-prison-northallerton@example.com}
-  Norwich: ${IA_DET_PRISON_NORWICH_EMAIL:det-prison-norwich@example.com}
-  Nottingham: ${IA_DET_PRISON_NOTTINGHAM_EMAIL:det-prison-nottingham@example.com}
-  Onley: ${IA_DET_PRISON_ONLEY_EMAIL:det-prison-onley@example.com}
-  Parc: ${IA_DET_PRISON_PARC_EMAIL:det-prison-parc@example.com}
-  Parkhurst: ${IA_DET_PRISON_PARKHURST_EMAIL:det-prison-parkhurst@example.com}
-  Pentonville: ${IA_DET_PRISON_PENTONVILLE_EMAIL:det-prison-pentonville@example.com}
-  Perth: ${IA_DET_PRISON_PERTH_EMAIL:det-prison-perth@example.com}
-  Peterborough: ${IA_DET_PRISON_PETERBOROUGH_EMAIL:det-prison-peterborough@example.com}
-  Polmont: ${IA_DET_PRISON_POLMONT_EMAIL:det-prison-polmont@example.com}
-  Portland: ${IA_DET_PRISON_PORTLAND_EMAIL:det-prison-portland@example.com}
-  Prescoed: ${IA_DET_PRISON_PRESCOED_EMAIL:det-prison-prescoed@example.com}
-  Preston: ${IA_DET_PRISON_PRESTON_EMAIL:det-prison-preston@example.com}
-  Ranby: ${IA_DET_PRISON_RANBY_EMAIL:det-prison-ranby@example.com}
-  Reading: ${IA_DET_PRISON_READING_EMAIL:det-prison-reading@example.com}
-  Risley: ${IA_DET_PRISON_RISLEY_EMAIL:det-prison-risley@example.com}
-  Rochester: ${IA_DET_PRISON_ROCHESTER_EMAIL:det-prison-rochester@example.com}
-  RyeHill: ${IA_DET_PRISON_RYE_HILL_EMAIL:det-prison-rye-hill@example.com}
-  Send: ${IA_DET_PRISON_SEND_EMAIL:det-prison-send@example.com}
-  SheptonMallet: ${IA_DET_PRISON_SHEPTON_MALLET_EMAIL:det-prison-shepton-mallet@example.com}
-  Shotts: ${IA_DET_PRISON_SHOTTS_EMAIL:det-prison-shotts@example.com}
-  Shrewsbury: ${IA_DET_PRISON_SHREWSBURY_EMAIL:det-prison-shrewsbury@example.com}
-  SpringHill: ${IA_DET_PRISON_SPRING_HILL_EMAIL:det-prison-spring-hill@example.com}
-  Stafford: ${IA_DET_PRISON_STAFFORD_EMAIL:det-prison-stafford@example.com}
-  StandfordHill: ${IA_DET_PRISON_STANDFORD_HILL_EMAIL:det-prison-standford-hill@example.com}
-  Stocken: ${IA_DET_PRISON_STOCKEN_EMAIL:det-prison-stocken@example.com}
-  StokeHeath: ${IA_DET_PRISON_STOKE_HEATH_EMAIL:det-prison-stoke-heath@example.com}
-  Styal: ${IA_DET_PRISON_STYAL_EMAIL:det-prison-styal@example.com}
-  Sudbury: ${IA_DET_PRISON_SUDBURY_EMAIL:det-prison-sudbury@example.com}
-  Swaleside: ${IA_DET_PRISON_SWALESIDE_EMAIL:det-prison-swaleside@example.com}
-  Swansea: ${IA_DET_PRISON_SWANSEA_EMAIL:det-prison-swansea@example.com}
-  SwinfenHall: ${IA_DET_PRISON_SWINFEN_HALL_EMAIL:det-prison-swinfen-hall@example.com}
-  TheMount: ${IA_DET_PRISON_THE_MOUNT_EMAIL:det-prison-the-mount@example.com}
-  TheWeare: ${IA_DET_PRISON_THE_WEARE_EMAIL:det-prison-the-weare@example.com}
-  ThornCross: ${IA_DET_PRISON_THORN_CROSS_EMAIL:det-prison-thorn-cross@example.com}
-  Usk: ${IA_DET_PRISON_USK_EMAIL:det-prison-usk@example.com}
-  Wakefield: ${IA_DET_PRISON_WAKEFIELD_EMAIL:det-prison-wakefield@example.com}
-  Wandsworth: ${IA_DET_PRISON_WANDSWORTH_EMAIL:det-prison-wandsworth@example.com}
-  WarrenHill: ${IA_DET_PRISON_WARREN_HILL_EMAIL:det-prison-warren-hill@example.com}
-  Wayland: ${IA_DET_PRISON_WAYLAND_EMAIL:det-prison-wayland@example.com}
-  Wealstun: ${IA_DET_PRISON_WEALSTUN_EMAIL:det-prison-wealstun@example.com}
-  Wellingborough: ${IA_DET_PRISON_WELLINGBOROUGH_EMAIL:det-prison-wellingborough@example.com}
-  Werrington: ${IA_DET_PRISON_WERRINGTON_EMAIL:det-prison-werrington@example.com}
-  Wetherby: ${IA_DET_PRISON_WETHERBY_EMAIL:det-prison-wetherby@example.com}
-  Whatton: ${IA_DET_PRISON_WHATTON_EMAIL:det-prison-whatton@example.com}
-  Whitemoor: ${IA_DET_PRISON_WHITEMOOR_EMAIL:det-prison-whitemoor@example.com}
-  Winchester: ${IA_DET_PRISON_WINCHESTER_EMAIL:det-prison-winchester@example.com}
-  Wolds: ${IA_DET_PRISON_WOLDS_EMAIL:det-prison-wolds@example.com}
-  Woodhill: ${IA_DET_PRISON_WOODHILL_EMAIL:det-prison-woodhill@example.com}
-  WormwoodScrubs: ${IA_DET_PRISON_WORMWOOD_SCRUBS_EMAIL:det-prison-wormwood-scrubs@example.com}
-  Wymott: ${IA_DET_PRISON_WYMOTT_EMAIL:det-prison-wymott@example.com}
+  # Prison email addresses injected via Azure Key Vault (ia-det-prison-email-mappings)
+  # See README.md for local development setup instructions
+prison:
+  email:
+    mappings: ${IA_DET_PRISON_EMAIL_MAPPINGS:}
 
 detentionEngagementTeamEmailAddress: ${DET_EMAIL_ADDRESS:dummyDetentionEngagementTeam@example.gov.uk}
 
@@ -2771,6 +2684,7 @@ customerServices:
   emailAddress: ${IA_CUSTOMER_SERVICES_EMAIL:contactia@justice.gov.uk}
   internalCaseEmailAddress: ${IA_CUSTOMER_SERVICES_UNREPRESENTED_EMAIL:IAC-ADA-HW@justice.gov.uk}
   telephoneNumber: ${IA_CUSTOMER_SERVICES_TELEPHONE:0300 123 1711}
+  appealIaEmailAddress: ${IA_CUSTOMER_SERVICES_APPEAL_EMAIL:AppealIA@Justice.gov.uk}
 
 appellantDaysToWait:
   afterSubmission: 28
@@ -2796,6 +2710,7 @@ appellantDaysToAskReinstate: 14
 
 legalRepDaysToWait:
   afterManageFeeUpdate: 14
+  afterRequestingHearingRequirements: 5
 
 ftpaOutOfCountryDays: 28
 ftpaInCountryDays: 14

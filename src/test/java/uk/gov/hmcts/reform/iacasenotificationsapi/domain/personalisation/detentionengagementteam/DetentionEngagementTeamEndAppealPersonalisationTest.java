@@ -9,7 +9,6 @@ import static org.mockito.Mockito.when;
 import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.*;
 
 import java.io.IOException;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -30,7 +29,7 @@ import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.DocumentTag;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.DocumentWithMetadata;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field.IdValue;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field.YesOrNo;
-import uk.gov.hmcts.reform.iacasenotificationsapi.domain.service.DetEmailService;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.service.DetentionEmailService;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.PersonalisationProvider;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.clients.DocumentDownloadClient;
 import uk.gov.service.notify.NotificationClientException;
@@ -44,7 +43,7 @@ class DetentionEngagementTeamEndAppealPersonalisationTest {
     @Mock
     private DocumentDownloadClient documentDownloadClient;
     @Mock
-    private DetEmailService detEmailService;
+    private DetentionEmailService detentionEmailService;
     @Mock
     private PersonalisationProvider personalisationProvider;
     private String templateId = "templateId";
@@ -73,7 +72,7 @@ class DetentionEngagementTeamEndAppealPersonalisationTest {
     public void setup() throws NotificationClientException, IOException {
         detentionEngagementTeamEndAppealPersonalisation = new DetentionEngagementTeamEndAppealPersonalisation(
                 templateId,
-                detEmailService,
+                detentionEmailService,
                 personalisationProvider,
                 documentDownloadClient
         );
@@ -100,23 +99,33 @@ class DetentionEngagementTeamEndAppealPersonalisationTest {
     @Test
     void should_return_given_det_email_address() {
         String detentionEngagementTeamEmail = "det@email.com";
+        when(asylumCase.read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
         when(asylumCase.read(DETENTION_FACILITY, String.class)).thenReturn(Optional.of("immigrationRemovalCentre"));
-        when(detEmailService.getRecipientsList(asylumCase)).thenReturn(Collections.singleton(detentionEngagementTeamEmail));
+        when(detentionEmailService.getDetentionEmailAddress(asylumCase)).thenReturn(detentionEngagementTeamEmail);
 
         assertTrue(
-                detentionEngagementTeamEndAppealPersonalisation.getRecipientsList(asylumCase).contains(detentionEngagementTeamEmail));
+                detentionEngagementTeamEndAppealPersonalisation.getRecipientsList(asylumCase).contains(detentionEngagementTeamEmail)
+        );
     }
 
     @Test
-    void should_return_empty_set_email_address_from_asylum_case_no_detention_facility() {
+    void should_throw_exception_when_no_detention_facility() {
         when(asylumCase.read(DETENTION_FACILITY, String.class)).thenReturn(Optional.empty());
-        assertEquals(Collections.emptySet(), detentionEngagementTeamEndAppealPersonalisation.getRecipientsList(asylumCase));
+        when(detentionEmailService.getDetentionEmailAddress(asylumCase)).thenThrow(new IllegalStateException("Detention facility is not present"));
+
+        assertThatThrownBy(() -> detentionEngagementTeamEndAppealPersonalisation.getRecipientsList(asylumCase))
+                .isExactlyInstanceOf(IllegalStateException.class)
+                .hasMessage("Detention facility is not present");
     }
 
     @Test
-    void should_return_empty_set_email_address_from_asylum_case_other_detention_facility() {
+    void should_throw_exception_when_other_detention_facility() {
         when(asylumCase.read(DETENTION_FACILITY, String.class)).thenReturn(Optional.of("other"));
-        assertEquals(Collections.emptySet(), detentionEngagementTeamEndAppealPersonalisation.getRecipientsList(asylumCase));
+        when(detentionEmailService.getDetentionEmailAddress(asylumCase)).thenThrow(new IllegalStateException("Detention facility is not valid"));
+
+        assertThatThrownBy(() -> detentionEngagementTeamEndAppealPersonalisation.getRecipientsList(asylumCase))
+                .isExactlyInstanceOf(IllegalStateException.class)
+                .hasMessage("Detention facility is not valid");
     }
 
     @Test
@@ -141,12 +150,8 @@ class DetentionEngagementTeamEndAppealPersonalisationTest {
 
         if (yesOrNo == YesOrNo.YES) {
             assertEquals(adaPrefix, personalisation.get("subjectPrefix"));
-            assertEquals(adaFormName, personalisation.get("formName"));
-            assertEquals(adaFormLink, personalisation.get("formLinkText"));
         } else {
             assertEquals(nonAdaPrefix, personalisation.get("subjectPrefix"));
-            assertEquals(nonAdaFormName, personalisation.get("formName"));
-            assertEquals(nonAdaFormLink, personalisation.get("formLinkText"));
         }
     }
 

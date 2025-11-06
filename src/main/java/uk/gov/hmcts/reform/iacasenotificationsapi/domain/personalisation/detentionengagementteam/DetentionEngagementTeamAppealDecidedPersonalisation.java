@@ -1,13 +1,15 @@
 package uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.detentionengagementteam;
 
 import static java.util.Objects.requireNonNull;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.DETENTION_FACILITY;
 import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.IS_DECISION_ALLOWED;
 import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.DocumentTag.INTERNAL_DET_DECISION_AND_REASONS_LETTER;
-import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.utils.AsylumCaseUtils.getLetterForNotification;
-import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.utils.AsylumCaseUtils.isAcceleratedDetainedAppeal;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.utils.AsylumCaseUtils.*;
 
 import java.io.IOException;
+import java.util.Collections;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import com.google.common.collect.ImmutableMap;
 import lombok.extern.slf4j.Slf4j;
@@ -20,7 +22,7 @@ import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AppealDecision
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.EmailWithLinkNotificationPersonalisation;
-import uk.gov.hmcts.reform.iacasenotificationsapi.domain.service.DetEmailService;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.service.DetentionEmailService;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.clients.DocumentDownloadClient;
 import uk.gov.service.notify.NotificationClientException;
 
@@ -30,7 +32,7 @@ public class DetentionEngagementTeamAppealDecidedPersonalisation implements Emai
 
     private final String detentionEngagementTeamUploadAppealDecidedDismissedTemplateId;
     private final String detentionEngagementTeamUploadAppealDecidedAllowedTemplateId;
-    private final DetEmailService detEmailService;
+    private final DetentionEmailService detEmailService;
     private final DocumentDownloadClient documentDownloadClient;
 
     @Value("${govnotify.emailPrefix.adaInPerson}")
@@ -42,7 +44,7 @@ public class DetentionEngagementTeamAppealDecidedPersonalisation implements Emai
     public DetentionEngagementTeamAppealDecidedPersonalisation(
             @Value("${govnotify.template.appealDecided.detentionTeam.dismissed.email}") String detentionEngagementTeamUploadAppealDecidedDismissedTemplateId,
             @Value("${govnotify.template.appealDecided.detentionTeam.allowed.email}") String detentionEngagementTeamUploadAppealDecidedAllowedTemplateId,
-            DetEmailService detEmailService,
+            DetentionEmailService detEmailService,
             DocumentDownloadClient documentDownloadClient
     ) {
         this.detentionEngagementTeamUploadAppealDecidedDismissedTemplateId = detentionEngagementTeamUploadAppealDecidedDismissedTemplateId;
@@ -64,7 +66,16 @@ public class DetentionEngagementTeamAppealDecidedPersonalisation implements Emai
 
     @Override
     public Set<String> getRecipientsList(AsylumCase asylumCase) {
-        return detEmailService.getRecipientsList(asylumCase);
+        if (!isAppellantInDetention(asylumCase)) {
+            return Collections.emptySet();
+        }
+
+        Optional<String> detentionFacility = asylumCase.read(DETENTION_FACILITY, String.class);
+        if (detentionFacility.isEmpty() || detentionFacility.get().equals("other")) {
+            return Collections.emptySet();
+        }
+
+        return Collections.singleton(detEmailService.getDetentionEmailAddress(asylumCase));
     }
 
     @Override

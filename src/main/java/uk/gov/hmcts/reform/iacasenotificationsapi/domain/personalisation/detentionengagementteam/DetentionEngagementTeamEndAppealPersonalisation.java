@@ -6,17 +6,17 @@ import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.utils.AsylumCase
 import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.utils.AsylumCaseUtils.isAcceleratedDetainedAppeal;
 
 import java.io.IOException;
+import java.util.Collections;
 import java.util.Map;
 import java.util.Set;
 import com.google.common.collect.ImmutableMap;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.EmailWithLinkNotificationPersonalisation;
-import uk.gov.hmcts.reform.iacasenotificationsapi.domain.service.DetEmailService;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.service.DetentionEmailService;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.PersonalisationProvider;
 import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.clients.DocumentDownloadClient;
 import uk.gov.service.notify.NotificationClientException;
@@ -26,7 +26,7 @@ import uk.gov.service.notify.NotificationClientException;
 public class DetentionEngagementTeamEndAppealPersonalisation implements EmailWithLinkNotificationPersonalisation {
 
     private final String detentionEngagementTeamEndAppealTemplateId;
-    private final DetEmailService detEmailService;
+    private final DetentionEmailService detentionEmailService;
     private final PersonalisationProvider personalisationProvider;
     private final DocumentDownloadClient documentDownloadClient;
 
@@ -38,11 +38,11 @@ public class DetentionEngagementTeamEndAppealPersonalisation implements EmailWit
 
     public DetentionEngagementTeamEndAppealPersonalisation(
             @Value("${govnotify.template.endAppeal.detentionEngagementTeam.email}") String detentionEngagementTeamEndAppealTemplateId,
-            DetEmailService detEmailService,
+            DetentionEmailService detentionEmailService,
             PersonalisationProvider personalisationProvider, DocumentDownloadClient documentDownloadClient
     ) {
         this.detentionEngagementTeamEndAppealTemplateId = detentionEngagementTeamEndAppealTemplateId;
-        this.detEmailService = detEmailService;
+        this.detentionEmailService = detentionEmailService;
         this.personalisationProvider = personalisationProvider;
         this.documentDownloadClient = documentDownloadClient;
     }
@@ -59,7 +59,7 @@ public class DetentionEngagementTeamEndAppealPersonalisation implements EmailWit
 
     @Override
     public Set<String> getRecipientsList(AsylumCase asylumCase) {
-        return detEmailService.getRecipientsList(asylumCase);
+        return Collections.singleton(detentionEmailService.getDetentionEmailAddress(asylumCase));
     }
 
     @Override
@@ -69,23 +69,8 @@ public class DetentionEngagementTeamEndAppealPersonalisation implements EmailWit
         return ImmutableMap.<String, Object>builder()
                 .put("subjectPrefix", isAcceleratedDetainedAppeal(asylumCase) ? adaSubjectPrefix : nonAdaPrefix)
                 .putAll(personalisationProvider.getAppellantPersonalisation(asylumCase))
-                .put("formName", resolveFormNameAndLink(asylumCase).getLeft())
-                .put("formLinkText", resolveFormNameAndLink(asylumCase).getRight())
                 .put("documentLink", getAppealDecidedLetterJsonObject(asylumCase))
                 .build();
-    }
-
-    private ImmutablePair<String, String> resolveFormNameAndLink(AsylumCase asylumCase) {
-        final String adaFormName = "IAFT-ADA4: Make an application – Accelerated detained appeal (ADA)";
-        final String nonAdaFormName = "IAFT-DE4: Make an application – Detained appeal";
-        final String adaFormLink = "https://www.gov.uk/government/publications/make-an-application-accelerated-detained-appeal-form-iaft-ada4";
-        final String nonAdaFormLink = "https://www.gov.uk/government/publications/make-an-application-detained-appeal-form-iaft-de4";
-
-        if (isAcceleratedDetainedAppeal(asylumCase)) {
-            return new ImmutablePair<>(adaFormName, adaFormLink);
-        } else {
-            return new ImmutablePair<>(nonAdaFormName, nonAdaFormLink);
-        }
     }
 
     private JSONObject getAppealDecidedLetterJsonObject(AsylumCase asylumCase) {

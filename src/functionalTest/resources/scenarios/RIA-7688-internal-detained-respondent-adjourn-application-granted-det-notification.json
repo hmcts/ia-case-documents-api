@@ -19,7 +19,7 @@
             {
               "id": "1",
               "value": {
-                "tag": "internalDecideHomeOfficeApplicationLetter",
+                "tag": "homeOfficeApplicationDecidedLetter",
                 "document": {
                   "document_url": "{$FIXTURE_DOC1_PDF_URL}",
                   "document_binary_url": "{$FIXTURE_DOC1_PDF_URL_BINARY}",
@@ -70,12 +70,16 @@
       "replacements": {
         "detentionFacility": "immigrationRemovalCentre",
         "ircName": "Brookhouse",
-	"appellantInDetention": "Yes",
+	      "appellantInDetention": "Yes",
         "isAcceleratedDetainedAppeal": "No",
         "decideAnApplicationId": "1",
         "notificationsSent":[
           {
-            "id":"7688_DECIDE_A_RESPONDENT_APPLICATION_DET",
+            "id": "7688_DECIDE_AN_APPLICATION_HOME_OFFICE",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          },
+          {
+            "id":"7688_HOME_OFFICE_APPLICATION_DECIDED",
             "value":"$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
           }
         ],
@@ -83,7 +87,7 @@
           {
             "id": "1",
             "value": {
-              "tag": "internalDecideHomeOfficeApplicationLetter",
+              "tag": "homeOfficeApplicationDecidedLetter",
               "document": {
                 "document_url": "{$FIXTURE_DOC1_PDF_URL}",
                 "document_binary_url": "{$FIXTURE_DOC1_PDF_URL_BINARY}",

@@ -16,6 +16,7 @@
           "detentionFacility": "immigrationRemovalCentre",
           "ircName": "Brookhouse",
           "appellantInDetention": "Yes",
+          "appellantsRepresentation": "Yes",
           "isAcceleratedDetainedAppeal": "No",
           "ftpaApplicantType": "respondent",
           "ftpaRespondentRjDecisionOutcomeType": "granted",
@@ -77,6 +78,7 @@
         "detentionFacility": "immigrationRemovalCentre",
         "ircName": "Brookhouse",
         "appellantInDetention": "Yes",
+        "appellantsRepresentation": "Yes",
         "isAcceleratedDetainedAppeal": "No",
         "ftpaApplicantType": "respondent",
         "ftpaRespondentRjDecisionOutcomeType": "granted",
@@ -84,25 +86,9 @@
           {
             "id": "7678_FTPA_APPLICATION_DECISION_HOME_OFFICE_RESPONDENT",
             "value":"$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
-          },
-          {
-            "id": "7678_INTERNAL_DET_HO_FTPA_DECIDED_EMAIL",
-            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
           }
         ]
       }
-    },
-    "notifications": [
-      {
-        "reference": "7678_INTERNAL_DET_HO_FTPA_DECIDED_EMAIL",
-        "recipient": "det-irc-brookhouse@example.com",
-        "subject": "IAFT – SERVE IN PERSON: Respondent FTPA decided",
-        "body": [
-          "Home Office reference: A1234567",
-          "HMCTS reference: PA/12345/2019",
-          "Appellant name: Talha Awan"
-        ]
-      }
-    ]
+    }
   }
 }

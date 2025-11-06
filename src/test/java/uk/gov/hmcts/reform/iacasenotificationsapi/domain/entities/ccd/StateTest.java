@@ -39,10 +39,11 @@ public class StateTest {
         assertEquals("appealTakenOffline", State.APPEAL_TAKEN_OFFLINE.toString());
         assertEquals("remitted", State.REMITTED.toString());
         assertEquals("decisionConditionalBail", State.DECISION_CONDITIONAL_BAIL.toString());
+        assertEquals("migrated", State.MIGRATED.toString());
     }
 
     @Test
     public void if_this_test_fails_it_is_because_it_needs_updating_with_your_changes() {
-        assertEquals(33, State.values().length);
+        assertEquals(34, State.values().length);
     }
 }

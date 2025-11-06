@@ -14,7 +14,11 @@
           "appealType": "refusalOfHumanRights",
           "paymentStatus": "Paid",
           "currentCaseStateVisibleToHomeOfficeAll":"appealSubmitted",
+          "isAdmin": "Yes",
+          "appellantsRepresentation": "Yes",
           "appellantInDetention": "Yes",
+          "isAdmin": "Yes",
+          "appellantsRepresentation": "Yes",
           "isAcceleratedDetainedAppeal": "No",
           "detentionFacility": "immigrationRemovalCentre",
           "ircName": "Brookhouse",
@@ -50,10 +54,6 @@
         "paymentStatus": "Paid",
         "notificationsSent": [
           {
-            "id": "7947_INTERNAL_DET_MARK_APPEAL_AS_PAID_EMAIL",
-            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
-          },
-          {
             "id": "7947_PENDING_PAYMENT_PAID_CASE_OFFICER",
             "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
           },
@@ -65,16 +65,6 @@
       }
     },
     "notifications": [
-      {
-        "reference": "7947_INTERNAL_DET_MARK_APPEAL_AS_PAID_EMAIL",
-        "recipient": "det-irc-brookhouse@example.com",
-        "subject": "IAFT – SERVE BY POST: Fee payment confirmation",
-        "body": [
-          "Home Office reference: A1234567",
-          "HMCTS reference: PA/12345/2019",
-          "Appellant name: Talha Awan"
-        ]
-      },
       {
         "reference": "7947_PENDING_PAYMENT_PAID_CASE_OFFICER",
         "recipient": "{$hearingCentreEmailAddresses.taylorHouse}",
