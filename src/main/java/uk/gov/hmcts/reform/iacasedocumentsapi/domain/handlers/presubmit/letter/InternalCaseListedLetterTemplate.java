@@ -62,6 +62,7 @@ public class InternalCaseListedLetterTemplate implements DocumentTemplate<Asylum
         fieldValues.put("hearingDate", formatDateTimeForRendering(asylumCase.read(LIST_CASE_HEARING_DATE, String.class).orElse(""), DOCUMENT_DATE_FORMAT));
         fieldValues.put("hearingTime", formatDateTimeForRendering(asylumCase.read(LIST_CASE_HEARING_DATE, String.class).orElse(""), DOCUMENT_TIME_FORMAT));
         fieldValues.put("dateLetterSent", formatDateForRendering(LocalDate.now().toString(), DOCUMENT_DATE_FORMAT));
+        fieldValues.put("hearingChannel", getHearingChannel(asylumCase, "Unknown"));
 
         List<String> appellantAddress = isAppellantInUk(asylumCase) ?
             getAppellantAddressAsList(asylumCase) :

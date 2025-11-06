@@ -76,6 +76,12 @@ public class HearingNoticeUpdatedTemplateProvider {
             fieldValues.put("remoteVideoCallTribunalResponse", remoteVideoCallTribunalResponse);
         }
 
+        String referenceNumber = asylumCase.read(CCD_REFERENCE_NUMBER_FOR_DISPLAY, String.class).orElse("");
+        fieldValues.put("ccdReferenceNumberForDisplay", referenceNumber);
+
+        String legalRepReferenceNumber = asylumCase.read(LEGAL_REP_REFERENCE_NUMBER, String.class).orElse("");
+        fieldValues.put("legalRepReferenceNumber", legalRepReferenceNumber);
+
         return fieldValues;
     }
 }

@@ -113,6 +113,9 @@ public enum AsylumCaseDefinition {
     HEARING_CENTRE(
             "hearingCentre", new TypeReference<HearingCentre>(){}),
 
+    DATE_BEFORE_ADJOURN_WITHOUT_DATE(
+            "dateBeforeAdjournWithoutDate", new TypeReference<String>(){}),
+
     APPEAL_SUBMISSION_DATE(
         "appealSubmissionDate", new TypeReference<String>(){}),
 
@@ -132,6 +135,9 @@ public enum AsylumCaseDefinition {
 
     LEGAL_REP_REFERENCE_NUMBER(
         "legalRepReferenceNumber", new TypeReference<String>(){}),
+
+    LEGAL_REP_REF_NUMBER_PAPER_J(
+            "legalRepRefNumberPaperJ", new TypeReference<String>(){}),
 
     APPEAL_REFERENCE_NUMBER(
         "appealReferenceNumber", new TypeReference<String>(){}),
@@ -627,10 +633,16 @@ public enum AsylumCaseDefinition {
 
     UPDATED_APPEAL_DECISION(
             "updatedAppealDecision", new TypeReference<String>(){}),
+    APPEAL_DECISION(
+            "appealDecision", new TypeReference<String>(){}),
 
     APPELLANT_IN_DETENTION(
             "appellantInDetention", new TypeReference<YesOrNo>() {}
     ),
+
+    APPELLANTS_REPRESENTATION(
+            "appellantsRepresentation", new TypeReference<YesOrNo>(){}),
+
     DETENTION_FACILITY(
             "detentionFacility", new TypeReference<String>(){}),
 
@@ -686,6 +698,10 @@ public enum AsylumCaseDefinition {
     FEE_AMOUNT_GBP(
             "feeAmountGbp", new TypeReference<String>(){}),
 
+    AMOUNT_LEFT_TO_PAY(
+        "amountLeftToPay", new TypeReference<String>(){}),
+
+
     UPDATE_TRIBUNAL_DECISION_LIST(
             "updateTribunalDecisionList", new TypeReference<UpdateTribunalRules>(){}),
 
@@ -706,6 +722,9 @@ public enum AsylumCaseDefinition {
 
     LATEST_DECISION_AND_REASONS_DOCUMENTS(
             "latestDecisionAndReasonsDocuments", new TypeReference<List<IdValue<DocumentWithMetadata>>>(){}),
+
+    OUT_OF_TIME_DECISION_DOCUMENT(
+            "outOfTimeDecisionDocument", new TypeReference<Document>(){}),
 
     LATEST_REMITTAL_DOCUMENTS(
             "latestRemittalDocuments", new TypeReference<List<IdValue<DocumentWithMetadata>>>(){}),
@@ -738,12 +757,14 @@ public enum AsylumCaseDefinition {
             "ftpaAppellantRjDecisionOutcomeType", new TypeReference<FtpaDecisionOutcomeType>(){}),
 
     FTPA_APPLICANT_TYPE(
-            "ftpaApplicantType", new TypeReference<String>(){}),
+            "ftpaApplicantType", new TypeReference<ApplicantType>(){}),
+
     DIRECTION_EDIT_DATE_DUE(
             "directionEditDateDue", new TypeReference<String>(){}),
 
     DIRECTION_EDIT_EXPLANATION(
             "directionEditExplanation", new TypeReference<String>(){}),
+
     DIRECTION_EDIT_PARTIES(
             "directionEditParties", new TypeReference<Parties>(){}),
 
@@ -827,8 +848,72 @@ public enum AsylumCaseDefinition {
             "feeUpdateReason", new TypeReference<FeeUpdateReason>(){}),
 
     NOTIFICATIONS(
-            "notifications", new TypeReference<List<IdValue<StoredNotification>>>(){})
+            "notifications", new TypeReference<List<IdValue<StoredNotification>>>(){}),
+
+    DETENTION_BUILDING(
+            "detentionBuilding", new TypeReference<String>(){}),
+
+    DETENTION_ADDRESS_LINES(
+            "detentionAddressLines", new TypeReference<String>(){}),
+
+    DETENTION_POSTCODE(
+            "detentionPostcode", new TypeReference<String>(){}),
+
+    LAST_MODIFIED_DIRECTION(
+            "lastModifiedDirection", new TypeReference<Direction>(){}),
+
+    REMISSION_DECISION_REASON(
+        "remissionDecisionReason", new TypeReference<String>(){}),
+
+    LEGAL_REP_ADDRESS_U_K(
+            "legalRepAddressUK", new TypeReference<AddressUk>(){}),
+
+    OOC_ADDRESS_LINE_1(
+            "oocAddressLine1", new TypeReference<String>(){}),
+
+    OOC_ADDRESS_LINE_2(
+            "oocAddressLine2", new TypeReference<String>(){}),
+
+    OOC_ADDRESS_LINE_3(
+            "oocAddressLine3", new TypeReference<String>(){}),
+
+    OOC_ADDRESS_LINE_4(
+            "oocAddressLine4", new TypeReference<String>(){}),
+
+    OOC_COUNTRY_LINE(
+            "oocCountryLine", new TypeReference<String>(){}),
+
+    OOC_LR_COUNTRY_GOV_UK_ADMIN_J(
+            "oocLrCountryGovUkAdminJ", new TypeReference<NationalityFieldValue>(){}),
+
+    LEGAL_REP_HAS_ADDRESS(
+            "legalRepHasAddress", new TypeReference<YesOrNo>(){}),
+
+    HEARING_CHANNEL(
+        "hearingChannel", new TypeReference<DynamicList>(){}),
+
+    FTPA_APPELLANT_DECISION_REMADE_RULE_32_TEXT(
+        "ftpaAppellantDecisionRemadeRule32Text", new TypeReference<String>(){}),
+
+    FTPA_RESPONDENT_DECISION_REMADE_RULE_32_TEXT(
+        "ftpaRespondentDecisionRemadeRule32Text", new TypeReference<String>(){}),
+    UPDATE_TRIBUNAL_DECISION_DATE(
+            "updateTribunalDecisionDate", new TypeReference<String>(){}),
+
+    TRIBUNAL_RECEIVED_DATE(
+            "tribunalReceivedDate", new TypeReference<String>(){}),
+  
+    LATE_REMISSION_TYPE(
+            "lateRemissionType", new TypeReference<RemissionType>(){}),
+
+    LEGAL_REP_FAMILY_NAME_PAPER_J(
+            "legalRepFamilyNamePaperJ", new TypeReference<String>(){}),
+
+    LEGAL_REP_GIVEN_NAME(
+            "legalRepGivenName", new TypeReference<String>(){}),
+
     ;
+
 
     private final String value;
     private final TypeReference typeReference;

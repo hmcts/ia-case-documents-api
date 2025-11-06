@@ -242,7 +242,7 @@ decisionSignedDocumentFinalPdf.fileName: "decision-notice"
 hoReviewEvidenceLetter.contentType: application/pdf
 hoReviewEvidenceLetter.fileExtension: PDF
 hoReviewEvidenceLetter.fileName: "HO-Review-Evidence-Letter"
-hoReviewEvidenceLetter.templateName: ${IA_HO_REVIEW_EVIDENCE_TEMPLATE:TB-IAC-GNO-ENG-00240.docx}
+hoReviewEvidenceLetter.templateName: ${IA_HO_REVIEW_EVIDENCE_TEMPLATE:TB-IAC-GNO-ENG-Internal-Irc-Prison-Ho-To-Review-Appeal.docx}
 
 uploadAppealResponseMaintainedLetter.contentType: application/pdf
 uploadAppealResponseMaintainedLetter.fileExtension: PDF
@@ -270,6 +270,11 @@ internalAppealSubmissionDocument.fileExtension: PDF
 internalAppealSubmissionDocument.fileName: "appeal-form"
 internalAppealSubmissionDocument.templateName: ${IA_INTERNAL_APPEAL_SUBMISSION_TEMPLATE:TB-IAC-DEC-ENG-00010.docx}
 
+internalDetainedPrisonIrcAppealSubmissionDocument.contentType: application/pdf
+internalDetainedPrisonIrcAppealSubmissionDocument.fileExtension: PDF
+internalDetainedPrisonIrcAppealSubmissionDocument.fileName: "detained-prison-irc-appellant-appeal-submission-notice"
+internalDetainedPrisonIrcAppealSubmissionDocument.templateName: ${IA_INTERNAL_DETAINED_PRISON_IRC_APPEAL_SUBMISSION_TEMPLATE:TB-IAC-LET-ENG-Internal-Detained-Case-Submitted.docx}
+
 internalAppealCanProceedDocument.contentType: application/pdf
 internalAppealCanProceedDocument.fileExtension: PDF
 internalAppealCanProceedDocument.fileName: "appeal-form"
@@ -283,7 +288,8 @@ internalDetainedRequestRespondentEvidence.templateName: ${IA_INTERNAL_DETAINED_R
 internalDetainedEndAppealAutomatically.contentType:  application/pdf
 internalDetainedEndAppealAutomatically.fileExtension: PDF
 internalDetainedEndAppealAutomatically.fileName: "detained-appellant-end-appeal-automaticaly-notice"
-internalDetainedEndAppealAutomatically.templateName: ${IA_INTERNAL_DETAINED_END_APPEAL_AUTOMATICALLY_TEMPLATE:TB-IAC-LET-ENG-00003.docx}
+internalDetainedEndAppealAutomatically.templateName: ${IA_INTERNAL_DETAINED_END_APPEAL_AUTOMATICALLY_TEMPLATE:TB-IAC-LET-ENG-00003-v2.docx}
+#add new template 00003-v2.docx
 
 internalDetainedAppealFeeDue.contentType:  application/pdf
 internalDetainedAppealFeeDue.fileExtension: PDF
@@ -308,7 +314,7 @@ internalDetainedRequestHearingRequirements.templateName: ${IA_INTERNAL_DETAINED_
 internalDetainedEndAppeal.contentType:  application/pdf
 internalDetainedEndAppeal.fileExtension: PDF
 internalDetainedEndAppeal.fileName: "detained-appellant-end-appeal-notice"
-internalDetainedEndAppeal.templateName: ${IA_INTERNAL_DETAINED_END_APPEAL_TEMPLATE:TB-IAC-LET-ENG-00007.docx}
+internalDetainedEndAppeal.templateName: ${IA_INTERNAL_DETAINED_END_APPEAL_TEMPLATE:TB-IAC-LET-ENG-internal-appeal-ended.docx}
 
 internalDetainedEditCaseListingLetter.contentType: application/pdf
 internalDetainedEditCaseListingLetter.fileExtension: PDF
@@ -328,7 +334,7 @@ internalMarkAppealAsAda.templateName: ${IA_INTERNAL_MARK_APPEAL_AS_ADA_TEMPLATE:
 internalDecideAnAppellantApplicationDecisionGrantedLetter.contentType: application/pdf
 internalDecideAnAppellantApplicationDecisionGrantedLetter.fileExtension: PDF
 internalDecideAnAppellantApplicationDecisionGrantedLetter.fileName: "appellant-letter-application-granted"
-internalDecideAnAppellantApplicationDecisionGrantedLetter.templateName: ${IA_INTERNAL_DECIDE_AN_APPELLANT_APPLICATION_DECISION_GRANTED_LETTER_TEMPLATE:TB-IAC-LET-ENG-00015.docx}
+internalDecideAnAppellantApplicationDecisionGrantedLetter.templateName: ${IA_INTERNAL_DECIDE_AN_APPELLANT_APPLICATION_DECISION_GRANTED_LETTER_TEMPLATE:TB-IAC-LET-ENG-00015-granted.docx}
 
 internalDecideHomeOfficeApplicationDecisionGrantedLetter.contentType: application/pdf
 internalDecideHomeOfficeApplicationDecisionGrantedLetter.fileExtension: PDF
@@ -338,7 +344,7 @@ internalDecideHomeOfficeApplicationDecisionGrantedLetter.templateName: ${IA_INTE
 internalDecideAnAppellantApplicationDecisionRefusedLetter.contentType: application/pdf
 internalDecideAnAppellantApplicationDecisionRefusedLetter.fileExtension: PDF
 internalDecideAnAppellantApplicationDecisionRefusedLetter.fileName: "appellant-letter-application-refused"
-internalDecideAnAppellantApplicationDecisionRefusedLetter.templateName: ${IA_INTERNAL_DECIDE_AN_APPLICATION_DECISION_REFUSED_LETTER_TEMPLATE:TB-IAC-LET-ENG-00016.docx}
+internalDecideAnAppellantApplicationDecisionRefusedLetter.templateName: ${IA_INTERNAL_DECIDE_AN_APPLICATION_DECISION_REFUSED_LETTER_TEMPLATE:TB-IAC-LET-ENG-00016-refused.docx}
 
 internalDecideHomeOfficeApplicationDecisionRefusedLetter.contentType: application/pdf
 internalDecideHomeOfficeApplicationDecisionRefusedLetter.fileExtension: PDF
@@ -469,6 +475,96 @@ internalDetainedAdjournHearingWithoutDateLetter.fileExtension: PDF
 internalDetainedAdjournHearingWithoutDateLetter.fileName: "internal-detained-adjourn-hearing-without-date-letter"
 internalDetainedAdjournHearingWithoutDateLetter.templateName: ${INTERNAL_ADJOURN_HEARING_WITHOUT_DATE_LETTER_TEMPLATE:TB-IAC-LET-ENG-00040.docx}
 
+internalDetainedAppealSubmissionOutOfTimeWithExemptionLetter.contentType: application/pdf
+internalDetainedAppealSubmissionOutOfTimeWithExemptionLetter.fileExtension: PDF
+internalDetainedAppealSubmissionOutOfTimeWithExemptionLetter.fileName: "appeal-form"
+internalDetainedAppealSubmissionOutOfTimeWithExemptionLetter.templateName: ${IA_APPEAL_SUBMISSION_OUT_OF_TIME_WITH_EXEMPTION_TEMPLATE:TB-IAC-LET-ENG-00812.docx}
+
+internalDetainedAppealSubmissionInTimeWithFeeToPayLetter.contentType: application/pdf
+internalDetainedAppealSubmissionInTimeWithFeeToPayLetter.fileExtension: PDF
+internalDetainedAppealSubmissionInTimeWithFeeToPayLetter.fileName: "appeal-form"
+internalDetainedAppealSubmissionInTimeWithFeeToPayLetter.templateName: ${IA_APPEAL_SUBMISSION_IN_TIME_WITH_FEE_T_PAY_TEMPLATE:TB-IAC-LET-ENG-00816.docx}
+
+internalDetainedAppealRemissionGrantedInTimeLetter.contentType: application/pdf
+internalDetainedAppealRemissionGrantedInTimeLetter.fileExtension: PDF
+internalDetainedAppealRemissionGrantedInTimeLetter.fileName: "internal-detained-remission-granted-in-time-letter"
+internalDetainedAppealRemissionGrantedInTimeLetter.templateName: ${IA_INTERNAL_DETAINED_REMISSION_GRANTED_IN_TIME_LETTER:TB-IAC-LET-ENG-Internal-Case-Remission-Granted-In-Time.docx}
+
+internalDetainedOutOfTimeRemissionIrcPrisonLetter.contentType: application/pdf
+internalDetainedOutOfTimeRemissionIrcPrisonLetter.fileExtension: PDF
+internalDetainedOutOfTimeRemissionIrcPrisonLetter.fileName: "appeal-form"
+internalDetainedOutOfTimeRemissionIrcPrisonLetter.templateName: ${INTERNAL_DETAINED_OUT_OF_TIME_REMISSION_IRC_PRISON_TEMPLATE:TB-IAC-LET-ENG-Internal-Detained-late-with-remission-Submitted.docx}
+
+internalDetainedOutOfTimeRemissionGrantedIrcPrisonLetter.contentType: application/pdf
+internalDetainedOutOfTimeRemissionGrantedIrcPrisonLetter.fileExtension: PDF
+internalDetainedOutOfTimeRemissionGrantedIrcPrisonLetter.fileName: "appeal-form"
+internalDetainedOutOfTimeRemissionGrantedIrcPrisonLetter.templateName: ${INTERNAL_DETAINED_OUT_OF_TIME_REMISSION_GRANTED_IRC_PRISON_TEMPLATE:TB-IAC-LET-ENG-Internal-Case-Remission-Granted-Out-Of-Time.docx}
+
+internalDetainedOutOfTimeDecisionAllowedLetter.contentType: application/pdf
+internalDetainedOutOfTimeDecisionAllowedLetter.fileExtension: PDF
+internalDetainedOutOfTimeDecisionAllowedLetter.fileName: "appeal-form"
+internalDetainedOutOfTimeDecisionAllowedLetter.templateName: ${INTERNAL_DETAINED_OUT_OF_TIME_DECISION_ALLOWED_LETTER:TB-IAC-LET-ENG-00817.docx}
+
+internalDetainedAppealHoUploadBundleAppellantLetter.contentType: application/pdf
+internalDetainedAppealHoUploadBundleAppellantLetter.fileExtension: PDF
+internalDetainedAppealHoUploadBundleAppellantLetter.fileName: "internal-detained-ho-upload-bundle-appellant-letter"
+internalDetainedAppealHoUploadBundleAppellantLetter.templateName: ${IA_INTERNAL_DETAINED_HO_UPLOAD_BUNDLE_APPELLANT_LETTER:TB-IAC-LET-ENG-Internal-HO-Upload-Bundle-Appellant.docx}
+
+internalDetainedAppealSubmissionOutOfTimeWithFeeLetter.contentType: application/pdf
+internalDetainedAppealSubmissionOutOfTimeWithFeeLetter.fileExtension: PDF
+internalDetainedAppealSubmissionOutOfTimeWithFeeLetter.fileName: "appeal-form"
+internalDetainedAppealSubmissionOutOfTimeWithFeeLetter.templateName: ${IA_APPEAL_SUBMISSION_OUT_OF_TIME_WITH_FEE_TEMPLATE:TB-IAC-LET-ENG-00815.docx}
+
+detainedHearingAdjournedNoDateAppellantLetter.contentType: application/pdf
+detainedHearingAdjournedNoDateAppellantLetter.fileExtension: PDF
+detainedHearingAdjournedNoDateAppellantLetter.fileName: "detained-hearing-adjourned-no-date-appellant-letter"
+detainedHearingAdjournedNoDateAppellantLetter.templateName: ${IA_APPEAL_DETAINED_HEARING_ADJOURNED_NO_DATE_APPELLANT_LETTER:TB-IAC-LET-ENG-Detained-Hearing-Adjourned-No-Date-Appellant.docx}
+
+internalDetainedAppealRemissionPartiallyGrantedOrRefusedLetter.contentType: application/pdf
+internalDetainedAppealRemissionPartiallyGrantedOrRefusedLetter.fileExtension: PDF
+internalDetainedAppealRemissionPartiallyGrantedOrRefusedLetter.fileName: "appeal-form"
+internalDetainedAppealRemissionPartiallyGrantedOrRefusedLetter.templateName: ${IA_APPEAL_DETAINED_APPEAL_REMISSION_PARTIALLY_GRANTED_OR_REFUSED_TEMPLATE:TB-IAC-LET-ENG-00821.docx}
+
+internalDetainedLateRemissionPartiallyGrantedLetter.contentType: application/pdf
+internalDetainedLateRemissionPartiallyGrantedLetter.fileExtension: PDF
+internalDetainedLateRemissionPartiallyGrantedLetter.fileName: "appeal-form"
+internalDetainedLateRemissionPartiallyGrantedLetter.templateName: ${IA_APPEAL_DETAINED_LATE_REMISSION_PARTIALLY_GRANTED_TEMPLATE:TB-IAC-LET-ENG-Internal-Case-Late-Remission-Partially-Granted.docx}
+
+internalDetainedAppealUpdateTribunalDecisionRule31IrcPrisonLetter.contentType: application/pdf
+internalDetainedAppealUpdateTribunalDecisionRule31IrcPrisonLetter.fileExtension: PDF
+internalDetainedAppealUpdateTribunalDecisionRule31IrcPrisonLetter.fileName: "appeal-form"
+internalDetainedAppealUpdateTribunalDecisionRule31IrcPrisonLetter.templateName: ${INTERNAL_DETAINED_APPEAL_UPDATE_TRIBUNAL_DECISION_RULE_31_IRC_PRISON_LETTER:TB-IAC-LET-ENG-Internal-detained-update-tribunal-decision-rule-31-irc-prison.docx}
+
+internalDetainedLateRemissionGrantedLetter.contentType: application/pdf
+internalDetainedLateRemissionGrantedLetter.fileExtension: PDF
+internalDetainedLateRemissionGrantedLetter.fileName: "appeal-form"
+internalDetainedLateRemissionGrantedLetter.templateName: ${IA_APPEAL_DETAINED_LATE_REMISSION_GRANTED_TEMPLATE:TB-IAC-LET-ENG-Internal-Case-Late-Remission-Granted.docx}
+
+internalDetainedLateRemissionRefusedLetter.contentType: application/pdf
+internalDetainedLateRemissionRefusedLetter.fileExtension: PDF
+internalDetainedLateRemissionRefusedLetter.fileName: "late-remission-refused-letter"
+internalDetainedLateRemissionRefusedLetter.templateName: ${IA_APPEAL_DETAINED_LATE_REMISSION_REFUSED_TEMPLATE:TB-IAC-LET-ENG-Internal-Case-Late-Remission-Refused.docx}
+
+internalDetainedAppealSubmissionWithExemptionLetter.contentType: application/pdf
+internalDetainedAppealSubmissionWithExemptionLetter.fileExtension: PDF
+internalDetainedAppealSubmissionWithExemptionLetter.fileName: "appeal-form"
+internalDetainedAppealSubmissionWithExemptionLetter.templateName: ${IA_APPEAL_SUBMISSION_WITH_EXEMPTION_TEMPLATE:TB-IAC-LET-ENG-00818.docx}
+
+internalDetainedDecisionWithoutHearing.contentType: application/pdf
+internalDetainedDecisionWithoutHearing.fileExtension: PDF
+internalDetainedDecisionWithoutHearing.fileName: "internal-detained-decision-without-hearing-letter"
+internalDetainedDecisionWithoutHearing.templateName: ${IA_DECISION_WITHOUT_HEARING_TEMPLATE:TB-IAC-DEC-ENG-internal-decision-without-hearing.docx}
+
+internalDetainedIrcPrisonAppealDisposedUnderRule31Or32Ftpa.contentType: application/pdf
+internalDetainedIrcPrisonAppealDisposedUnderRule31Or32Ftpa.fileExtension: PDF
+internalDetainedIrcPrisonAppealDisposedUnderRule31Or32Ftpa.fileName: "ftp-disposed-of-under-rules-31-or-32-letter"
+internalDetainedIrcPrisonAppealDisposedUnderRule31Or32Ftpa.templateName: ${INTERNAL_DETAINED_IRC_PRISON_FTPA_DISPOSED_RULE_31_OR_32_LETTER:TB-IAC-LET-ENG-00825.docx}
+
+internalDetainedAppealRemittedAipIrcPrisonLetter.contentType: application/pdf
+internalDetainedAppealRemittedAipIrcPrisonLetter.fileExtension: PDF
+internalDetainedAppealRemittedAipIrcPrisonLetter.fileName: "appeal-form"
+internalDetainedAppealRemittedAipIrcPrisonLetter.templateName: ${IA_APPEAL_DETAINED_REMITTED_AIP_TEMPLATE:TB-IAC-LET-ENG-Internal-detained-mark-appeal-remitted-aip-manual-irc-prison.docx}
+
 internalEndAppealLetter.contentType:  application/pdf
 internalEndAppealLetter.fileExtension: PDF
 internalEndAppealLetter.fileName: "internal-end-appeal-letter"
@@ -477,10 +573,18 @@ internalEndAppealLetter.templateName: ${INTERNAL_END_APPEAL_LETTER_TEMPLATE:TB-I
 internalEndAppealLetterWithAttachment.fileExtension: PDF
 internalEndAppealLetterWithAttachment.fileName: "internal-end-appeal-letter-with-attachment"
 
+internalEndAppealDetWithAttachment.fileExtension: PDF
+internalEndAppealDetWithAttachment.fileName: "internal-end-appeal-det-with-attachment"
+
 internalEditCaseListingLetter.contentType:  application/pdf
 internalEditCaseListingLetter.fileExtension: PDF
 internalEditCaseListingLetter.fileName: "internal-edit-case-listing-letter"
 internalEditCaseListingLetter.templateName: ${INTERNAL_END_APPEAL_LETTER_TEMPLATE:TB-IAC-LET-ENG-Internal-Edit-Case-Listing.docx}
+
+internalEditCaseListingForIrcAndPrisonLetter.contentType:  application/pdf
+internalEditCaseListingForIrcAndPrisonLetter.fileExtension: PDF
+internalEditCaseListingForIrcAndPrisonLetter.fileName: "internal-edit-case-listing-for-prison-and-irc-letter"
+internalEditCaseListingForIrcAndPrisonLetter.templateName: ${INTERNAL_END_APPEAL_LETTER_TEMPLATE:TB-IAC-LET-ENG-00835.docx}
 
 internalEditCaseListingLetterWithAttachment.fileExtension: PDF
 internalEditCaseListingLetterWithAttachment.fileName: "internal-edit-case-listing-letter-with-attachment"
@@ -500,6 +604,21 @@ internalCaseListedLetter.templateName: ${INTERNAL_CASE_LISTED_LETTER_TEMPLATE:TB
 
 internalCaseListedLetterWithAttachment.fileExtension: PDF
 internalCaseListedLetterWithAttachment.fileName: "internal-case-listed-letter-with-attachment"
+
+detainedLegalRepRemovedIrcPrisonLetter.contentType: application/pdf
+detainedLegalRepRemovedIrcPrisonLetter.fileExtension: PDF
+detainedLegalRepRemovedIrcPrisonLetter.fileName: "appeal-form"
+detainedLegalRepRemovedIrcPrisonLetter.templateName: ${DETAINED_LEGAL_REP_REMOVED_IRC_PRISON_LETTER_TEMPLATE:TB-IAC-LET-ENG-legal-rep-removed.docx}
+
+homeOfficeApplicationDecidedLetter.contentType: application/pdf
+homeOfficeApplicationDecidedLetter.fileExtension: PDF
+homeOfficeApplicationDecidedLetter.fileName: "home-office-application-decided-letter"
+homeOfficeApplicationDecidedLetter.templateName: ${HOME_OFFICE_APPLICATION_DECIDED_LETTER_TEMPLATE:TB-IAC-LET-ENG-00828.docx}
+
+aipmPrisonIrcReinstateAppealLetter.contentType:  application/pdf
+aipmPrisonIrcReinstateAppealLetter.fileExtension: PDF
+aipmPrisonIrcReinstateAppealLetter.fileName: "aipm-detained-in-irc-prison-reinstate-appeal-letter"
+aipmPrisonIrcReinstateAppealLetter.templateName: ${AIPM_PRISON_IRC_REINSTATE_APPEAL:TB-IAC-LET-ENG-00831.docx}
 
 bailNoticeOfHearing.contentType: application/pdf
 bailNoticeOfHearing.fileExtension: PDF
@@ -544,6 +663,9 @@ security:
     - "caseworker-ia"
     - "citizen"
   roleEventAccess:
+    caseworker-approver:
+      - "removeRepresentation"
+      - "removeLegalRepresentative"
     caseworker-ia-legalrep-solicitor:
       - "startAppeal"
       - "editAppeal"
@@ -557,6 +679,7 @@ security:
       - "makeNewApplication"
       - "requestHearingRequirementsFeature"
       - "applyForFTPAAppellant"
+      - "removeRepresentation"
     tribunal-caseworker:
       - "sendDirection"
       - "changeDirectionDueDate"
@@ -582,6 +705,7 @@ security:
       - "asyncStitchingComplete"
       - "recordOutOfTimeDecision"
       - "markAppealPaid"
+      - "decisionWithoutHearing"
       - "requestResponseReview"
       - "requestHearingRequirementsFeature"
       - "markAppealAsAda"
@@ -599,6 +723,7 @@ security:
       - "draftHearingRequirements"
       - "manageFeeUpdate"
       - "updateTribunalDecision"
+      - "removeLegalRepresentative"
     challenged-access-legal-operations:
       - "sendDirection"
       - "changeDirectionDueDate"
@@ -624,6 +749,7 @@ security:
       - "asyncStitchingComplete"
       - "recordOutOfTimeDecision"
       - "markAppealPaid"
+      - "decisionWithoutHearing"
       - "requestResponseReview"
       - "requestHearingRequirementsFeature"
       - "markAppealAsAda"
@@ -641,6 +767,7 @@ security:
       - "draftHearingRequirements"
       - "manageFeeUpdate"
       - "updateTribunalDecision"
+      - "removeLegalRepresentative"
     senior-tribunal-caseworker:
       - "sendDirection"
       - "changeDirectionDueDate"
@@ -666,6 +793,7 @@ security:
       - "asyncStitchingComplete"
       - "recordOutOfTimeDecision"
       - "markAppealPaid"
+      - "decisionWithoutHearing"
       - "requestResponseReview"
       - "requestHearingRequirementsFeature"
       - "markAppealAsAda"
@@ -683,6 +811,7 @@ security:
       - "draftHearingRequirements"
       - "manageFeeUpdate"
       - "updateTribunalDecision"
+      - "removeLegalRepresentative"
     # These events are used by the bails service, they will need to be migrated to the admin access management roles - see DIAC-855
     caseworker-ia-admofficer:
       - "submitApplication"
@@ -692,6 +821,9 @@ security:
       - "editBailApplicationAfterSubmit"
       - "uploadSignedDecisionNotice"
       - "caseListing"
+      - "removeRepresentation"
+      - "removeLegalRepresentative"
+      - "markAppealAsRemitted"
     hearing-centre-admin:
       - "listCase"
       - "submitAppeal"
@@ -710,6 +842,7 @@ security:
       - "recordAdjournmentDetails"
       - "editAppealAfterSubmit"
       - "markAppealPaid"
+      - "decisionWithoutHearing"
       - "recordRemissionDecision"
       - "markAppealAsAda"
       - "applyForFTPAAppellant"
@@ -721,6 +854,7 @@ security:
       - "asyncStitchingComplete"
       - "saveNotificationsToData"
       - "manageFeeUpdate"
+      - "removeLegalRepresentative"
     ctsc:
       - "listCase"
       - "submitAppeal"
@@ -739,6 +873,7 @@ security:
       - "recordAdjournmentDetails"
       - "editAppealAfterSubmit"
       - "markAppealPaid"
+      - "decisionWithoutHearing"
       - "recordRemissionDecision"
       - "markAppealAsAda"
       - "applyForFTPAAppellant"
@@ -750,6 +885,7 @@ security:
       - "asyncStitchingComplete"
       - "saveNotificationsToData"
       - "manageFeeUpdate"
+      - "removeLegalRepresentative"
     ctsc-team-leader:
       - "listCase"
       - "submitAppeal"
@@ -768,6 +904,7 @@ security:
       - "recordAdjournmentDetails"
       - "editAppealAfterSubmit"
       - "markAppealPaid"
+      - "decisionWithoutHearing"
       - "recordRemissionDecision"
       - "markAppealAsAda"
       - "applyForFTPAAppellant"
@@ -779,6 +916,7 @@ security:
       - "asyncStitchingComplete"
       - "saveNotificationsToData"
       - "manageFeeUpdate"
+      - "removeLegalRepresentative"
     national-business-centre:
       - "listCase"
       - "submitAppeal"
@@ -797,6 +935,7 @@ security:
       - "recordAdjournmentDetails"
       - "editAppealAfterSubmit"
       - "markAppealPaid"
+      - "decisionWithoutHearing"
       - "recordRemissionDecision"
       - "markAppealAsAda"
       - "applyForFTPAAppellant"
@@ -808,6 +947,7 @@ security:
       - "asyncStitchingComplete"
       - "saveNotificationsToData"
       - "manageFeeUpdate"
+      - "removeLegalRepresentative"
     challenged-access-ctsc:
       - "listCase"
       - "submitAppeal"
@@ -826,6 +966,7 @@ security:
       - "recordAdjournmentDetails"
       - "editAppealAfterSubmit"
       - "markAppealPaid"
+      - "decisionWithoutHearing"
       - "recordRemissionDecision"
       - "markAppealAsAda"
       - "applyForFTPAAppellant"
@@ -837,6 +978,7 @@ security:
       - "asyncStitchingComplete"
       - "saveNotificationsToData"
       - "manageFeeUpdate"
+      - "removeLegalRepresentative"
     challenged-access-admin:
       - "listCase"
       - "submitAppeal"
@@ -855,6 +997,7 @@ security:
       - "recordAdjournmentDetails"
       - "editAppealAfterSubmit"
       - "markAppealPaid"
+      - "decisionWithoutHearing"
       - "recordRemissionDecision"
       - "markAppealAsAda"
       - "applyForFTPAAppellant"
@@ -866,6 +1009,7 @@ security:
       - "asyncStitchingComplete"
       - "saveNotificationsToData"
       - "manageFeeUpdate"
+      - "removeLegalRepresentative"
     citizen:
       - "startAppeal"
       - "editAppeal"
@@ -1157,8 +1301,15 @@ iaAipFrontendUrl: ${IA_AIP_FRONTEND_URL:https://localhost:3000/}
 
 appellantDaysToWait:
   letter:
+    afterRespondentApplicationDecided:
+      inCountry: 14
     afterSubmission: 28
     afterManageFeeUpdate: 14
+    afterSubmitAppeal: 10
+    afterSubmitAppealWithFeeToPay: 14
+    tribunalDocumentToSendTimeline: 4
+    afterRemissionDecision: 14
+    appealAfterTribunalDecision: 14
 
 
 ### Email addresses
