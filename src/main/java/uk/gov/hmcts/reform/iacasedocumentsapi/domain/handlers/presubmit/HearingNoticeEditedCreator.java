@@ -7,12 +7,15 @@ import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.Y
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo.YES;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.hasAppellantAddressInCountryOrOoc;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.isInternalNonDetainedCase;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.isRemoteHearing;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.isVirtualHearing;
 
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -96,11 +99,12 @@ public class HearingNoticeEditedCreator implements PreSubmitCallbackHandler<Asyl
 
         if (caseDetailsBefore.isPresent()) {
 
-            final String hearingCentreNameBefore =
-                hearingDetailsFinder.getHearingCentreName(caseDetailsBefore.get().getCaseData());
+            AsylumCase asylumCaseBefore = caseDetailsBefore.get().getCaseData();
 
-            final String oldHearingDate =
-                hearingDetailsFinder.getHearingDateTime(caseDetailsBefore.get().getCaseData());
+            final String hearingCentreNameBefore =
+                hearingDetailsFinder.getHearingCentreName(asylumCaseBefore);
+
+            final String oldHearingDate = asylumCaseBefore.read(LIST_CASE_HEARING_DATE, String.class).orElse(null);
 
             boolean isAda = asylumCase.read(IS_ACCELERATED_DETAINED_APPEAL, YesOrNo.class).orElse(NO) == YES;
             boolean isCaseUsingLocationRefData = asylumCase.read(IS_CASE_USING_LOCATION_REF_DATA, YesOrNo.class)
@@ -108,10 +112,13 @@ public class HearingNoticeEditedCreator implements PreSubmitCallbackHandler<Asyl
 
             //prevent the existing case with previous selected remote hearing when the ref data feature is on with different hearing centre
             //IS_REMOTE_HEARING is used for the case ref data
-            if ((!isCaseUsingLocationRefData && asylumCase.read(LIST_CASE_HEARING_CENTRE, HearingCentre.class).equals(Optional.of(HearingCentre.REMOTE_HEARING)))
-                || (isCaseUsingLocationRefData && asylumCase.read(IS_REMOTE_HEARING, YesOrNo.class).orElse(YesOrNo.NO).equals(YesOrNo.YES))) {
+            if ((!isCaseUsingLocationRefData && asylumCase.read(LIST_CASE_HEARING_CENTRE, HearingCentre.class)
+                .equals(Optional.of(HearingCentre.REMOTE_HEARING)))
+                    || (isCaseUsingLocationRefData && isRemoteHearing(asylumCase))
+                    || isVirtualHearing(asylumCase)
+            ) {
                 generateDocument(caseDetails, asylumCase, caseDetailsBefore, remoteHearingNoticeUpdatedDetailsDocumentCreator);
-            } else if (hearingCentreNameBefore.equals(listCaseHearingCentre) && oldHearingDate.equals(hearingDate)) {
+            } else if (hearingCentreNameBefore.equals(listCaseHearingCentre) && Objects.equals(oldHearingDate, hearingDate)) {
                 if (isAda) {
                     generateDocument(caseDetails, asylumCase, caseDetailsBefore, adaHearingNoticeUpdatedDetailsDocumentCreator);
                 } else {
