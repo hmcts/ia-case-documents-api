@@ -72,12 +72,12 @@ public class EndAppealNoticeCreator implements PreSubmitCallbackHandler<AsylumCa
             endAppealNotice = endAppealNoticeDocumentCreator.create(caseDetails);
         }
 
-        documentHandler.addWithMetadataWithoutReplacingExistingDocuments(
-            asylumCase,
-            endAppealNotice,
-            TRIBUNAL_DOCUMENTS,
-            DocumentTag.END_APPEAL
-        );
+        // documentHandler.addWithMetadataWithoutReplacingExistingDocuments(
+        //    asylumCase,
+        //    endAppealNotice,
+        //    TRIBUNAL_DOCUMENTS,
+        //    DocumentTag.END_APPEAL
+        //);
 
         if (isInternalNonDetainedCase(asylumCase)
             && hasAppellantAddressInCountryOrOoc(asylumCase)) {
