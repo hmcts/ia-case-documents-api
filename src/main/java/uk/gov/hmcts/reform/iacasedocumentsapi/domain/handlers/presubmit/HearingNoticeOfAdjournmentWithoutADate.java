@@ -26,8 +26,8 @@ public class HearingNoticeOfAdjournmentWithoutADate implements PreSubmitCallback
     private final DocumentHandler documentHandler;
 
     public HearingNoticeOfAdjournmentWithoutADate(
-        // @Qualifier("hearingNoticeAdjournedWithoutDate") DocumentCreator<AsylumCase> documentCreator,
-        @Qualifier("endAppealAppellantNotice") DocumentCreator<AsylumCase> documentCreator,
+        @Qualifier("hearingNoticeAdjournedWithoutDate") DocumentCreator<AsylumCase> documentCreator,
+        // @Qualifier("endAppealAppellantNotice") DocumentCreator<AsylumCase> documentCreator,
         DocumentHandler documentHandler) {
         this.documentCreator = documentCreator;
         this.documentHandler = documentHandler;
