@@ -21,10 +21,20 @@ public class RestTemplateConfiguration {
     public RestTemplate restTemplate(
         ObjectMapper objectMapper
     ) {
+        // HttpClient httpClient = HttpClients.custom()
+        //         .disableContentCompression()  // Optional: prevent double compression issues
+        //         .build();
+
+        // HttpComponentsClientHttpRequestFactory factory = new HttpComponentsClientHttpRequestFactory(httpClient);
+        // factory.setConnectTimeout(30_000);
+        // factory.setReadTimeout(30_000);
+        // factory.setBufferRequestBody(false);
+
+        // return new RestTemplate(factory);
+
         RestTemplate restTemplate = new RestTemplate();
-        restTemplate
-            .getMessageConverters()
-            .add(0, mappingJackson2HttpMessageConverter(objectMapper));
+        restTemplate.getMessageConverters().removeIf(converter -> converter instanceof MappingJackson2HttpMessageConverter);
+        restTemplate.getMessageConverters().add(mappingJackson2HttpMessageConverter(objectMapper));
 
         return restTemplate;
     }

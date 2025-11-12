@@ -3,6 +3,7 @@ package uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit;
 import static java.util.Objects.requireNonNull;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.HEARING_DOCUMENTS;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
@@ -18,6 +19,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentCreator;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentHandler;
 
 @Component
+@Slf4j
 public class HearingNoticeOfAdjournmentWithoutADate implements PreSubmitCallbackHandler<AsylumCase> {
 
     private final DocumentCreator<AsylumCase> documentCreator;
@@ -25,6 +27,7 @@ public class HearingNoticeOfAdjournmentWithoutADate implements PreSubmitCallback
 
     public HearingNoticeOfAdjournmentWithoutADate(
         @Qualifier("hearingNoticeAdjournedWithoutDate") DocumentCreator<AsylumCase> documentCreator,
+        // @Qualifier("endAppealAppellantNotice") DocumentCreator<AsylumCase> documentCreator,
         DocumentHandler documentHandler) {
         this.documentCreator = documentCreator;
         this.documentHandler = documentHandler;
@@ -49,9 +52,17 @@ public class HearingNoticeOfAdjournmentWithoutADate implements PreSubmitCallback
 
         Document hearingNotice = documentCreator.create(caseDetails);
 
+        log.info("------------url: {}", hearingNotice.getDocumentUrl());
+        log.info("------------binary: {}", hearingNotice.getDocumentBinaryUrl());
+        log.info("------------name: {}", hearingNotice.getDocumentFilename());
         documentHandler.addWithMetadataWithDateTimeWithoutReplacingExistingDocuments(
             asylumCase,
-            hearingNotice,
+            // hearingNotice,
+            new Document(
+                    "http://dm-store-aat.service.core-compute-aat.internal/documents/edbee23b-329d-4a1b-beb5-24b2583a98a0",
+                    "http://dm-store-aat.service.core-compute-aat.internal/documents/edbee23b-329d-4a1b-beb5-24b2583a98a0/binary",
+                    "PA 53511 2024-Raju-NoticeOfEndedAppeal.PDF"
+            ),
             HEARING_DOCUMENTS,
             DocumentTag.HEARING_NOTICE
         );
