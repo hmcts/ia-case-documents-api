@@ -26,27 +26,9 @@
       "replacements": {
         "isAdmin": "Yes",
         "hearingCentre": "taylorHouse",
-        "eaHuAppealTypePaymentOption":"payOffline",
-        "appealType":"refusalOfEu",
-        "notificationsSent": [
-          {
-            "id": "7031_APPEAL_SUBMITTED_PENDING_PAYMENT_ADMIN_OFFICER",
-            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
-          }
-        ]
+        "eaHuAppealTypePaymentOption": "payOffline",
+        "appealType": "refusalOfEu"
       }
-    },
-    "notifications": [
-      {
-        "reference": "7031_APPEAL_SUBMITTED_PENDING_PAYMENT_ADMIN_OFFICER",
-        "recipient": "{$FEES_ADMIN_OFFICER_EMAIL}",
-        "subject": "Immigration and Asylum appeal: appeal submitted pending payment",
-        "body": [
-          "PA/12345/2019",
-          "Talha Awan",
-          "{$iaExUiFrontendUrl}"
-        ]
-      }
-    ]
+    }
   }
 }

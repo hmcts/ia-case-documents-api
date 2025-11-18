@@ -32,10 +32,6 @@
           {
             "id": "7031_APPEAL_SUBMITTED_PENDING_PAYMENT_HOME_OFFICE",
             "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
-          },
-          {
-            "id": "7031_APPEAL_SUBMITTED_PENDING_PAYMENT_ADMIN_OFFICER",
-            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
           }
         ]
       }
@@ -51,16 +47,6 @@
           "{$iaExUiFrontendUrl}",
           "{$customerServices.telephoneNumber}",
           "{$customerServices.emailAddress}"
-        ]
-      },
-      {
-        "reference": "7031_APPEAL_SUBMITTED_PENDING_PAYMENT_ADMIN_OFFICER",
-        "recipient": "{$FEES_ADMIN_OFFICER_EMAIL}",
-        "subject": "Immigration and Asylum appeal: appeal submitted pending payment",
-        "body": [
-          "PA/12345/2019",
-          "Talha Awan",
-          "{$iaExUiFrontendUrl}"
         ]
       }
     ]
