@@ -2,6 +2,7 @@ package uk.gov.hmcts.reform.iacasedocumentsapi.domain.service;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -27,14 +28,14 @@ public class RoleAssignmentService {
 
     public List<String> getAmRolesFromUser(String actorId,
                                            String authorization) {
-        QueryRequest queryRequest = QueryRequest.builder()
-            .actorId(Collections.singletonList(actorId))
-            .roleType(Collections.singletonList(RoleType.ORGANISATION))
-            .build();
         RoleAssignmentResource roleAssignmentResource = roleAssignmentApi.queryRoleAssignments(
             authorization,
             serviceAuthTokenGenerator.generate(),
-            queryRequest
+            Map.of(
+                "actorId", Collections.singletonList(actorId),
+                "roleType", Collections.singletonList(RoleType.ORGANISATION),
+                "attributes", Collections.singletonMap("jurisdiction", Collections.singletonList("IA"))
+            )
         );
         return Optional.ofNullable(roleAssignmentResource.roleAssignmentResponse()).orElse(Collections.emptyList())
             .stream()

@@ -81,11 +81,15 @@ public class EventTest {
         assertEquals("payForAppeal", Event.PAY_FOR_APPEAL.toString());
         assertEquals("updatePaymentStatus", Event.UPDATE_PAYMENT_STATUS.toString());
         assertEquals("generateServiceRequest", Event.GENERATE_SERVICE_REQUEST.toString());
+        assertEquals("removeRepresentation", Event.REMOVE_REPRESENTATION.toString());
+        assertEquals("removeLegalRepresentative", Event.REMOVE_LEGAL_REPRESENTATIVE.toString());
+        assertEquals("decisionWithoutHearing", Event.DECISION_WITHOUT_HEARING.toString());
+        assertEquals("markAppealAsRemitted", Event.MARK_APPEAL_AS_REMITTED.toString());
         assertEquals("decideFtpaApplication", Event.DECIDE_FTPA_APPLICATION.toString());
     }
 
     @Test
-    public void if_this_test_fails_it_is_because_it_needs_updating_with_your_changes() {
-        assertEquals(77, Event.values().length);
+    public void if_this_test_fails_it_is_because_it_needs_updating_with_your_changes() {        
+        assertEquals(81, Event.values().length);
     }
 }

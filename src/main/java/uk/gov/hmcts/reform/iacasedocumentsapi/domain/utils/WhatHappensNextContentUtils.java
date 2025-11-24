@@ -2,6 +2,7 @@ package uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils;
 
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.MakeAnApplicationTypes;
 
+// TODO: combine this class with WhatHappensNextContentUtilsWithDecision.class
 public final class WhatHappensNextContentUtils {
 
     private WhatHappensNextContentUtils() {

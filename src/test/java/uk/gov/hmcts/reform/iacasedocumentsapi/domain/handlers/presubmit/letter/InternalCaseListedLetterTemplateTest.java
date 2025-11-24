@@ -17,7 +17,9 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DynamicList;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.HearingCentre;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.Value;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseDetails;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.Nationality;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.NationalityFieldValue;
@@ -41,6 +43,10 @@ class InternalCaseListedLetterTemplateTest {
     AddressUk address;
     @Mock
     private StringProvider stringProvider;
+    @Mock
+    private DynamicList hearingChannelDynamicList;
+    @Mock
+    private Value hearingChannelValue;
     private final String telephoneNumber = "0300 123 1711";
     private String appellantGivenNames = "John";
     private String appellantFamilyName = "Smith";
@@ -93,6 +99,7 @@ class InternalCaseListedLetterTemplateTest {
         assertEquals(addressLine3, fieldValuesMap.get("address_line_3"));
         assertEquals(postTown, fieldValuesMap.get("address_line_4"));
         assertEquals(postCode, fieldValuesMap.get("address_line_5"));
+        assertEquals("In Person", fieldValuesMap.get("hearingChannel"));
     }
 
     @Test
@@ -115,6 +122,7 @@ class InternalCaseListedLetterTemplateTest {
         assertEquals(addressLine3, fieldValuesMap.get("address_line_3"));
         assertEquals(postTown, fieldValuesMap.get("address_line_4"));
         assertEquals(Nationality.ES.toString(), fieldValuesMap.get("address_line_5"));
+        assertEquals("In Person", fieldValuesMap.get("hearingChannel"));
     }
 
     void dataSetup(boolean appellantInUk) {
@@ -127,6 +135,9 @@ class InternalCaseListedLetterTemplateTest {
         when(asylumCase.read(LIST_CASE_HEARING_DATE, String.class)).thenReturn(Optional.of(listCaseHearingDate));
         when(asylumCase.read(LIST_CASE_HEARING_CENTRE, HearingCentre.class)).thenReturn(Optional.of(HearingCentre.MANCHESTER));
         when(stringProvider.get("hearingCentreAddress", "manchester")).thenReturn(Optional.of(manchesterHearingCentreAddress));
+        when(asylumCase.read(HEARING_CHANNEL, DynamicList.class)).thenReturn(Optional.of(hearingChannelDynamicList));
+        when(hearingChannelDynamicList.getValue()).thenReturn(hearingChannelValue);
+        when(hearingChannelValue.getLabel()).thenReturn("In Person");
         if (appellantInUk) {
             when(asylumCase.read(APPELLANT_IN_UK, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
             when(asylumCase.read(APPELLANT_ADDRESS, AddressUk.class)).thenReturn(Optional.of(address));
