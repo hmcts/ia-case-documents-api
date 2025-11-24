@@ -1,0 +1,103 @@
+{
+  "description": "DIAC-1341 Hearing Cancelled - Cancellation of Production Notice - Detained ",
+  "launchDarklyKey": "tcw-notifications-feature:true",
+  "disabled": true,
+  "request": {
+    "uri": "/asylum/ccdSubmitted",
+    "credentials": "AdminOfficer",
+    "input": {
+      "id": 13411,
+      "eventId": "hearingCancelled",
+      "state": "preHearing",
+      "caseData": {
+        "template": "minimal-appeal-submitted.json",
+        "replacements": {
+          "adjournHearingWithoutDateReasons": "some reason",
+          "listCaseHearingCentre": "taylorHouse",
+          "ariaListingReference": "LP/12345/2019",
+          "appellantInDetention": "Yes",
+          "detentionFacility": "prison",
+          "prisonName": "Albany",
+          "hearingChannel": {
+            "value": {
+              "code": "INTER",
+              "label": "In Person"
+            },
+            "list_items": [
+              {
+                "code": "INTER",
+                "label": "In Person"
+              },
+              {
+                "code": "NA",
+                "label": "Not in Attendance"
+              },
+              {
+                "code": "TEL",
+                "label": "Telephone"
+              },
+              {
+                "code": "VID",
+                "label": "Video"
+              }
+            ]
+          }
+        }
+      }
+    }
+  },
+  "expectation": {
+    "status": 200,
+    "errors": [],
+    "caseData": {
+      "template": "minimal-appeal-submitted.json",
+      "replacements": {
+        "listCaseHearingCentre": "taylorHouse",
+        "notificationsSent": [
+          {
+            "id": "13411_END_APPEAL_HOME_OFFICE",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          },
+          {
+            "id": "13411_END_APPEAL_LEGAL_REPRESENTATIVE",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          },
+          {
+            "id": "13411_DETAINED_HEARING_CANCELLED_PRODUCTION_DET",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          }
+        ]
+      }
+    },
+    "notifications": [
+      {
+        "reference": "13411_END_APPEAL_HOME_OFFICE",
+        "recipient": "{$homeOfficeEmailAddresses.taylorHouse}",
+        "subject": "Immigration and Asylum appeal: appeal ended –",
+        "body": [
+          "PA/12345/2019",
+          "Talha Awan"
+        ]
+      },
+      {
+        "reference": "13411_END_APPEAL_LEGAL_REPRESENTATIVE",
+        "recipient": "{$TEST_LAW_FIRM_A_USERNAME}",
+        "subject": "Immigration and Asylum appeal: appeal ended –",
+        "body": [
+          "PA/12345/2019",
+          "Talha Awan"
+        ]
+      },
+      {
+        "reference": "13411_DETAINED_HEARING_CANCELLED_PRODUCTION_DET",
+        "recipient": "det-prison-albany@example.com",
+        "subject": "IAFT – SERVE IN PERSON: IAFT – Cancellation of Production Notice",
+        "body": [
+          "PA/12345/2019",
+          "A1234567",
+          "Talha Awan"
+        ]
+      }
+    ]
+  }
+}

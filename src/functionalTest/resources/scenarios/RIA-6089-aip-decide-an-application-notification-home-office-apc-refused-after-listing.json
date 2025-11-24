@@ -1,0 +1,121 @@
+{
+  "description": "RIA-6089 AIP Send make an application notification home office APC refused after listing",
+  "request": {
+    "uri": "/asylum/ccdAboutToSubmit",
+    "credentials": "Judge",
+    "input": {
+      "id": 608904,
+      "eventId": "decideAnApplication",
+      "state": "prepareForHearing",
+      "caseData": {
+        "template": "aip-minimal-appeal-submitted.json",
+        "replacements": {
+          "ariaListingReference": "PA/12345/2019",
+          "listCaseHearingCentre": "taylorHouse",
+          "hearingCentre": "taylorHouse",
+          "decideAnApplicationId": "1",
+          "subscriptions": [
+            {
+              "id": "1",
+              "value": {
+                "subscriber": "appellant",
+                "email": "{$TEST_CITIZEN_USERNAME}",
+                "wantsEmail": "Yes",
+                "mobileNumber": "{$TEST_CITIZEN_MOBILE}",
+                "wantsSms": "Yes"
+              }
+            }
+          ],
+          "makeAnApplications": [
+            {
+              "id": "1",
+              "value": {
+                "type":"Other",
+                "details":"",
+                "evidence":[],
+                "applicant":"",
+                "date":"{$TODAY}",
+                "decision":"Refused",
+                "state":"prepareForHearing",
+                "applicantRole":"caseworker-ia-homeofficeapc",
+                "decisionReason":"No Reason given",
+                "decisionDate":"{$TODAY}",
+                "decisionMaker": "Judge"
+              }
+            }
+          ]
+        }
+      }
+    }
+  },
+  "expectation": {
+    "status": 200,
+    "errors": [],
+    "caseData": {
+      "template": "aip-minimal-appeal-submitted.json",
+      "replacements": {
+        "ariaListingReference": "PA/12345/2019",
+        "listCaseHearingCentre": "taylorHouse",
+        "hearingCentre": "taylorHouse",
+        "subscriptions": [
+          {
+            "id": "1",
+            "value": {
+              "subscriber": "appellant",
+              "email": "{$TEST_CITIZEN_USERNAME}",
+              "wantsEmail": "Yes",
+              "mobileNumber": "{$TEST_CITIZEN_MOBILE}",
+              "wantsSms": "Yes"
+            }
+          }
+        ],
+        "notificationsSent": [
+          {
+            "id": "608904_DECIDE_AN_APPLICATION_HOME_OFFICE",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          },
+          {
+            "id": "608904_DECIDE_AN_APPLICATION_APPELLANT_AIP_EMAIL",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          },
+          {
+            "id": "608904_DECIDE_AN_APPLICATION_APPELLANT_AIP_SMS",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          }
+        ]
+      }
+    },
+    "notifications": [
+      {
+        "reference": "608904_DECIDE_AN_APPLICATION_HOME_OFFICE",
+        "recipient": "{$apcHomeOfficeEmailAddress}",
+        "subject": "Immigration and Asylum appeal: application for Other refused",
+        "body": [
+          "PA/12345/2019",
+          "A1234567",
+          "Pablo Jimenez"
+        ]
+      },
+      {
+        "reference": "608904_DECIDE_AN_APPLICATION_APPELLANT_AIP_EMAIL",
+        "recipient": "{$TEST_CITIZEN_USERNAME}",
+        "subject": "Immigration and Asylum appeal: The Home Office request has been Refused",
+        "body": [
+          "PA/12345/2019",
+          "A1234567",
+          "Pablo Jimenez",
+          "{$iaAipFrontendUrl}"
+        ]
+      },
+      {
+        "reference": "608904_DECIDE_AN_APPLICATION_APPELLANT_AIP_SMS",
+        "recipient": "{$TEST_CITIZEN_MOBILE}",
+        "subject": "",
+        "body": [
+          "PA/12345/2019",
+          "{$iaAipFrontendUrl}"
+        ]
+      }
+    ]
+  }
+}

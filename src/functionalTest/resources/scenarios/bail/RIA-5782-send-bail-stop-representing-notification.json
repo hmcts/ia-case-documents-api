@@ -1,0 +1,88 @@
+{
+  "description": "RIA-5782 NOC - Stop Representing a client notification",
+  "launchDarklyKey": "tcw-notifications-feature:true",
+  "request": {
+    "uri": "/bail/ccdAboutToSubmit",
+    "credentials": "LegalRepresentative",
+    "input": {
+      "id": 5782,
+      "eventId": "stopLegalRepresenting",
+      "state": "applicationSubmitted",
+      "caseData": {
+        "template": "minimal-bail-application-submitted.json",
+        "replacements": {
+          "bailHearingCentre": "newport",
+          "isLegallyRepresentedForFlag": "Yes"
+        }
+      }
+    }
+  },
+  "expectation": {
+    "status": 200,
+    "errors": [],
+    "confirmation": {
+      "header": "success",
+      "body": "contains([_BAIL_STOP_LEGAL_REPRESENTING_APPLICANT_SMS])"
+    },
+    "caseData": {
+      "template": "minimal-bail-application-submitted.json",
+      "replacements": {
+        "bailHearingCentre": "newport",
+        "notificationsSent": [
+          {
+            "id": "5782_BAIL_STOP_LEGAL_REPRESENTING_ADMIN_OFFICER",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          },
+          {
+            "id": "5782_BAIL_STOP_LEGAL_REPRESENTING_LEGAL_REP",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          },
+          {
+            "id": "5782_BAIL_STOP_LEGAL_REPRESENTING_HOME_OFFICE",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          },
+          {
+            "id": "5782_BAIL_STOP_LEGAL_REPRESENTING_APPLICANT_SMS",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          }
+        ]
+      }
+    },
+    "notifications": [
+      {
+        "reference": "5782_BAIL_STOP_LEGAL_REPRESENTING_ADMIN_OFFICER",
+        "recipient": "{bailHearingCentreEmailAddresses.newport}",
+        "subject": "Bail application: Applicant no longer represented",
+        "body": [
+          "1650-6221-2061-5101",
+          "John Smith",
+          "{$iaExUiFrontendUrl}",
+          "The applicant in this case no longer has a legal representative."
+        ]
+      },
+      {
+        "reference": "5782_BAIL_STOP_LEGAL_REPRESENTING_LEGAL_REP",
+        "recipient": "{$TEST_LAW_FIRM_A_USERNAME}",
+        "subject": "Bail application: You have stopped representing a client",
+        "body": [
+          "1650-6221-2061-5101",
+          "John Smith",
+          "{$iaExUiFrontendUrl}",
+          "You are no longer representing the client in this case.",
+          "The online case reference number for this case is: 1650-6221-2061-5101"
+        ]
+      },
+      {
+        "reference": "5782_BAIL_STOP_LEGAL_REPRESENTING_HOME_OFFICE",
+        "recipient": "{$bailHomeOfficeEmailAddress}",
+        "subject": "Bail application: Applicant no longer represented",
+        "body": [
+          "1650-6221-2061-5101",
+          "John Smith",
+          "{$iaExUiFrontendUrl}",
+          "The legal representative is no longer representing the applicant in this case and they no longer have access to this case."
+        ]
+      }
+    ]
+  }
+}

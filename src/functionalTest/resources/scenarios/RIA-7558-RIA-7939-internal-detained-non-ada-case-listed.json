@@ -1,0 +1,118 @@
+{
+  "description": "RIA-7558-RIA-7939 Internal Detained non ADA case listed direction notification",
+  "enabled": "{$featureFlag.homeOfficeGovNotifyEnabled}",
+  "request": {
+    "uri": "/asylum/ccdAboutToSubmit",
+    "credentials": "AdminOfficer",
+    "input": {
+      "id": 7558,
+      "eventId": "listCase",
+      "state": "awaitingRespondentEvidence",
+      "caseData": {
+        "template": "minimal-appeal-submitted.json",
+        "replacements": {
+          "detentionFacility": "immigrationRemovalCentre",
+          "ircName": "Brookhouse",
+          "isAdmin": "Yes",
+          "appellantInDetention": "Yes",
+          "isAcceleratedDetainedAppeal": "No",
+          "listCaseHearingCentre": "taylorHouse",
+          "ariaListingReference": "LP/12345/2019",
+          "listCaseHearingDate": "2019-05-03T14:25:15.000",
+          "notificationAttachmentDocuments": [
+            {
+              "id": "1",
+              "value": {
+                "tag": "internalCaseListedLetterBundle",
+                "document": {
+                  "document_url": "{$FIXTURE_DOC1_PDF_URL}",
+                  "document_binary_url": "{$FIXTURE_DOC1_PDF_URL_BINARY}",
+                  "document_filename": "{$FIXTURE_DOC1_PDF_FILENAME}"
+                },
+                "suppliedBy": "",
+                "description": "",
+                "dateUploaded": "{$TODAY}"
+              }
+            }
+          ]
+        }
+      }
+    }
+  },
+  "expectation": {
+    "status": 200,
+    "errors": [],
+    "caseData": {
+      "template": "minimal-appeal-submitted.json",
+      "replacements": {
+        "detentionFacility": "immigrationRemovalCentre",
+        "ircName": "Brookhouse",
+        "isAdmin": "Yes",
+        "appellantInDetention": "Yes",
+        "isAcceleratedDetainedAppeal": "No",
+        "listCaseHearingCentre": "taylorHouse",
+        "ariaListingReference": "LP/12345/2019",
+        "listCaseHearingDate": "2019-05-03T14:25:15.000",
+        "notificationsSent": [
+          {
+            "id": "7558_CASE_LISTED_HOME_OFFICE",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          },
+          {
+            "id": "7558_CASE_LISTED_CASE_OFFICER",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          },
+          {
+            "id": "7558_INTERNAL_DETAINED_CASE_LISTED_DET",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          }
+        ]
+      }
+    },
+    "notifications": [
+      {
+        "reference": "7558_INTERNAL_DETAINED_CASE_LISTED_DET",
+        "recipient": "det-irc-brookhouse@example.com",
+        "subject": "IAFT – SERVE IN PERSON",
+        "body": [
+          "Home Office reference: A1234567",
+          "HMCTS reference: PA/12345/2019",
+          "Appellant name: Talha Awan"
+        ]
+      },
+      {
+        "reference": "7558_CASE_LISTED_CASE_OFFICER",
+        "recipient": "{$hearingCentreEmailAddresses.taylorHouse}",
+        "subject": "Immigration and Asylum appeal: case listed",
+        "body": [
+          "PA/12345/2019",
+          "LP/12345/2019",
+          "3 May 2019",
+          "14:25",
+          "IAC Taylor House, 88 Rosebery Avenue, London, EC1R 4QU"
+        ]
+      },
+      {
+        "reference": "7558_CASE_LISTED_HOME_OFFICE",
+        "recipient": "{$homeOfficeEmailAddresses.taylorHouse}",
+        "subject": "Immigration and Asylum appeal: case listed",
+        "body": [
+          "PA/12345/2019",
+          "LP/12345/2019",
+          "A1234567",
+          "Talha Awan",
+          "{$iaExUiFrontendUrl}",
+          "3 May 2019",
+          "14:25",
+          "IAC Taylor House, 88 Rosebery Avenue, London, EC1R 4QU",
+          "No special adjustments are being made to accommodate vulnerabilities",
+          "No multimedia equipment is being provided",
+          "The court will not be single sex",
+          "The hearing will be held in public court",
+          "No other adjustments are being made"
+        ]
+      }
+    ]
+  }
+}
+

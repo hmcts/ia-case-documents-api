@@ -1,0 +1,120 @@
+{
+  "description": "RIA-3453 Send make an application notification home office GENERIC after listing",
+  "launchDarklyKey": "tcw-application-notifications-feature:true",
+  "request": {
+    "uri": "/asylum/ccdAboutToSubmit",
+    "credentials": "HomeOfficeGENERIC",
+    "input": {
+      "id": 345316,
+      "eventId": "makeAnApplication",
+      "state": "prepareForHearing",
+      "caseData": {
+        "template": "minimal-appeal-submitted.json",
+        "replacements": {
+          "currentCaseStateVisibleToHomeOfficeAll":"prepareForHearing",
+          "currentCaseStateVisibleToLegalRepresentative": "prepareForHearing",
+          "listCaseHearingCentre": "taylorHouse",
+          "ariaListingReference": "PA/12345/2019",
+          "makeAnApplications": [
+            {
+              "id": "1",
+              "value": {
+                "type":"withdraw",
+                "details":"",
+                "evidence":[],
+                "applicant":"",
+                "date":"{$TODAY}",
+                "decision":"Pending",
+                "state":"decision",
+                "applicantRole":"",
+                "decisionReason":"",
+                "decisionDate":"",
+                "decisionMaker": ""
+              }
+            }
+          ]
+        }
+      }
+    }
+  },
+  "expectation": {
+    "status": 200,
+    "errors": [],
+    "caseData": {
+      "template": "minimal-appeal-submitted.json",
+      "replacements": {
+        "currentCaseStateVisibleToHomeOfficeAll":"prepareForHearing",
+        "currentCaseStateVisibleToLegalRepresentative": "prepareForHearing",
+        "listCaseHearingCentre": "taylorHouse",
+        "ariaListingReference": "PA/12345/2019",
+        "makeAnApplications": [
+          {
+            "id": "1",
+            "value": {
+              "type":"withdraw",
+              "details":"",
+              "evidence":[],
+              "applicant":"",
+              "date":"{$TODAY}",
+              "decision":"Pending",
+              "state":"decision",
+              "applicantRole":"",
+              "decisionReason":"",
+              "decisionDate":"",
+              "decisionMaker": ""
+            }
+          }
+        ],
+        "notificationsSent": [
+          {
+            "id": "345316_MAKE_AN_APPLICATION_LEGAL_REPRESENTATIVE",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          },
+          {
+            "id": "345316_MAKE_AN_APPLICATION_HOME_OFFICE",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          },
+          {
+            "id": "345316_MAKE_AN_APPLICATION_CASE_OFFICER",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          }
+        ]
+      }
+    },
+    "notifications": [
+      {
+        "reference": "345316_MAKE_AN_APPLICATION_LEGAL_REPRESENTATIVE",
+        "recipient": "{$TEST_LAW_FIRM_A_USERNAME}",
+        "subject": "Immigration and Asylum appeal: A respondent application has been submitted",
+        "body": [
+          "PA/12345/2019",
+          "CASE001",
+          "Talha Awan",
+          "{$iaExUiFrontendUrl}",
+          "{$customerServices.telephoneNumber}",
+          "{$customerServices.emailAddress}"
+        ]
+      },
+      {
+        "reference": "345316_MAKE_AN_APPLICATION_HOME_OFFICE",
+        "recipient": "{$homeOfficeEmailAddresses.taylorHouse}",
+        "subject": "Immigration and Asylum appeal: Your application has been submitted",
+        "body": [
+          "PA/12345/2019",
+          "A1234567",
+          "Talha Awan"
+        ]
+      },
+      {
+        "reference": "345316_MAKE_AN_APPLICATION_CASE_OFFICER",
+        "recipient": "{$hearingCentreEmailAddresses.taylorHouse}",
+        "subject": "Immigration and Asylum appeal: An application has been submitted",
+        "body": [
+          "PA/12345/2019",
+          "Talha Awan",
+          "{$iaExUiFrontendUrl}"
+        ]
+      }
+    ]
+  }
+}

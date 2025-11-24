@@ -1,0 +1,72 @@
+{
+  "description": "RIA-9349 Send letter notification to appellant for late remission decision (partially approved) - In country (internal case creation)",
+  "request": {
+    "uri": "/asylum/ccdAboutToSubmit",
+    "credentials": "AdminOfficer",
+    "input": {
+      "id": 9349,
+      "eventId": "recordRemissionDecision",
+      "state": "appealSubmitted",
+      "caseData": {
+        "template": "minimal-appeal-submitted.json",
+        "replacements": {
+          "amountRemitted": "14000",
+          "appealType": "refusalOfHumanRights",
+          "isAdmin": "Yes",
+          "appellantInDetention": "No",
+          "appellantsRepresentation": "Yes",
+          "remissionDecision": "partiallyApproved",
+          "lateRemissionType": "hoWaiverRemission",
+          "remissionClaim": "legalAid",
+          "legalAidAccountNumber": "1A234B",
+          "remissionDecisionReason": "Some reason",
+          "appellantInUk": "Yes",
+          "appellantHasFixedAddress": "Yes",
+          "appellantAddress": {
+            "County": "",
+            "Country": "United Kingdom",
+            "PostCode": "NE21JX",
+            "PostTown": "Example Town",
+            "AddressLine1": "5",
+            "AddressLine2": "Example Street"
+          }
+        }
+      }
+    }
+  },
+  "expectation": {
+    "status": 200,
+    "errors": [],
+    "caseData": {
+      "template": "minimal-appeal-submitted.json",
+      "replacements": {
+        "amountRemitted": "14000",
+        "appealType": "refusalOfHumanRights",
+        "isAdmin": "Yes",
+        "appellantInDetention": "No",
+        "appellantsRepresentation": "Yes",
+        "remissionDecision": "partiallyApproved",
+        "lateRemissionType": "hoWaiverRemission",
+        "remissionClaim": "legalAid",
+        "legalAidAccountNumber": "1A234B",
+        "remissionDecisionReason": "Some reason",
+        "appellantInUk": "Yes",
+        "appellantHasFixedAddress": "Yes",
+        "appellantAddress": {
+          "County": "",
+          "Country": "United Kingdom",
+          "PostCode": "NE21JX",
+          "PostTown": "Example Town",
+          "AddressLine1": "5",
+          "AddressLine2": "Example Street"
+        },
+        "notificationsSent": [
+          {
+            "id": "9349_INTERNAL_LATE_REMISSION_PARTIALLY_OR_GRANTED_APPELLANT_LETTER",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          }
+        ]
+      }
+    }
+  }
+}

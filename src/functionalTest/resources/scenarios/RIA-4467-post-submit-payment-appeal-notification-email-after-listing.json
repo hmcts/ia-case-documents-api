@@ -1,0 +1,29 @@
+{
+  "description": "RIA-4467 Post-submit payment paid notifications to LR (PA / Pay by card after submitting the appeal) - after listing",
+  "request": {
+    "uri": "/asylum/ccdSubmitted",
+    "credentials": "LegalRepresentative",
+    "input": {
+      "id": 4467,
+      "eventId": "paymentAppeal",
+      "state": "prepareForHearing",
+      "caseData": {
+        "template": "minimal-appeal-submitted.json",
+        "replacements": {
+          "hearingCentre": "taylorHouse",
+          "appealType": "protection",
+          "paymentStatus": "Paid"
+        }
+      }
+    }
+  },
+  "expectation": {
+    "status": 200,
+    "errors": [],
+    "confirmation": {
+      "header": "success",
+      "body": "contains([_PAYMENT_PAID_LEGAL_REPRESENTATIVE])"
+    }
+  }
+}
+

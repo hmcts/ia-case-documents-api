@@ -1,0 +1,79 @@
+{
+  "description": "RIA-7697 internal detained change of HO direction due date (non-ADA)",
+  "request": {
+    "uri": "/asylum/ccdAboutToSubmit",
+    "credentials": "CaseOfficer",
+    "input": {
+      "id": 7697,
+      "eventId": "changeDirectionDueDate",
+      "state": "appealSubmitted",
+      "caseData": {
+        "template": "minimal-internal-appeal-submitted.json",
+        "replacements": {
+          "detentionFacility": "immigrationRemovalCentre",
+          "ircName": "Brookhouse",
+          "isAdmin": "Yes",
+          "appellantInDetention": "Yes",
+          "hearingCentre": "taylorHouse",
+          "ariaListingReference": "LP/12345/2019",
+          "directionEditExplanation": "Amending the direction due date.",
+          "directionEditDateDue": "{$TODAY+5}",
+          "directionEditParties": "respondent",
+          "currentCaseStateVisibleToLegalRepresentative": "appealSubmitted",
+          "currentCaseStateVisibleToHomeOfficeAll": "appealSubmitted",
+          "notificationAttachmentDocuments": [
+            {
+              "id": "1",
+              "value": {
+                "tag": "internalHoChangeDirectionDueDateLetter",
+                "document": {
+                  "document_url": "{$FIXTURE_DOC1_PDF_URL}",
+                  "document_binary_url": "{$FIXTURE_DOC1_PDF_URL_BINARY}",
+                  "document_filename": "{$FIXTURE_DOC1_PDF_FILENAME}"
+                },
+                "suppliedBy": "",
+                "description": "",
+                "dateUploaded": "{$TODAY}"
+              }
+            }
+          ]
+        }
+      }
+    }
+  },
+  "expectation": {
+    "status": 200,
+    "errors": [],
+    "caseData": {
+      "template": "minimal-internal-appeal-submitted.json",
+      "replacements": {
+        "detentionFacility": "immigrationRemovalCentre",
+        "ircName": "Brookhouse",
+        "isAdmin": "Yes",
+        "appellantInDetention": "Yes",
+        "ariaListingReference": "LP/12345/2019",
+        "directionEditExplanation": "Amending the direction due date.",
+        "directionEditDateDue": "{$TODAY+5}",
+        "directionEditParties": "respondent",
+        "notificationsSent": [
+          {
+            "id": "7697_INTERNAL_DET_CHANGE_HO_DIRECTION_DUE_DATE_EMAIL",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          }
+        ]
+      }
+    },
+    "notifications": [
+      {
+        "reference": "7697_INTERNAL_DET_CHANGE_HO_DIRECTION_DUE_DATE_EMAIL",
+        "recipient": "det-irc-brookhouse@example.com",
+        "subject": "IAFT – SERVE BY POST: Direction due date changed",
+        "body": [
+          "Home Office reference: A1234567",
+          "HMCTS reference: PA/12345/2019",
+          "Appellant name: Talha Awan"
+        ]
+      }
+    ]
+  }
+}

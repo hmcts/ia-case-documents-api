@@ -1,0 +1,39 @@
+{
+  "journeyType": "aip",
+  "homeOfficeReferenceNumber": "A1234567",
+  "appealReferenceNumber": "PA/12345/2019",
+  "homeOfficeDecisionDate": "{$TODAY}",
+  "appealType": "protection",
+  "appellantGivenNames": "Pablo",
+  "appellantFamilyName": "Jimenez",
+  "appellantDateOfBirth": "{$TODAY-7300}",
+  "submissionOutOfTime": "No",
+  "appellantNationalities": [
+    {
+      "id": "1",
+      "value": {
+        "Iceland": "IS"
+      }
+    }
+  ],
+  "appellantAddress": {
+    "County": "",
+    "Country": "United Kingdom",
+    "PostCode": "W1W 7RT",
+    "PostTown": "LONDON",
+    "AddressLine1": "60 GREAT PORTLAND STREET",
+    "AddressLine2": ""
+  },
+  "subscriptions": [
+    {
+      "id": "1",
+      "value": {
+        "subscriber": "appellant",
+        "email": "{$TEST_CITIZEN_USERNAME}",
+        "wantsEmail": "No",
+        "mobileNumber": "{$TEST_CITIZEN_MOBILE}",
+        "wantsSms": "No"
+      }
+    }
+  ]
+}

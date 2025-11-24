@@ -1,0 +1,29 @@
+{
+  "description": "RIA-5476 send bail application submitted notification SMS to applicant",
+  "launchDarklyKey": "tcw-notifications-feature:true",
+  "request": {
+    "uri": "/bail/ccdAboutToSubmit",
+    "credentials": "LegalRepresentative",
+    "input": {
+      "id": 5476,
+      "eventId": "submitApplication",
+      "state": "applicationSubmitted",
+      "caseData": {
+        "template": "minimal-bail-application-submitted.json",
+        "replacements": {
+          "bailHearingCentre": "newport",
+          "applicantHasMobile": "Yes",
+          "applicantMobileNumber1": "{$IA_TEST_APPLICANT_MOBILE}"
+        }
+      }
+    }
+  },
+  "expectation": {
+    "status": 200,
+    "errors": [],
+    "confirmation": {
+      "header": "success",
+      "body": "contains([_BAIL_APPLICATION_SUBMITTED_APPLICANT_SMS])"
+    }
+  }
+}

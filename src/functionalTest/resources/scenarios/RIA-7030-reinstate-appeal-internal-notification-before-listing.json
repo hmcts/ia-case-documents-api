@@ -1,0 +1,67 @@
+{
+  "description": "RIA-7030 Send reinstate appeal notification before listing to HO (unrepped case)",
+  "request": {
+    "uri": "/asylum/ccdAboutToSubmit",
+    "credentials": "AdminOfficer",
+    "input": {
+      "id": 7030,
+      "eventId": "reinstateAppeal",
+      "state": "appealSubmitted",
+      "caseData": {
+        "template": "minimal-internal-appeal-submitted.json",
+        "replacements": {
+          "stateBeforeEndAppeal": "appealSubmitted",
+          "reinstateAppealDate": "{$TODAY}",
+          "reinstateAppealReason": "Withdraw",
+          "reinstatedDecisionMaker": "Admin Officer",
+          "legalRepEmail": "ia-law-firm-a@fake.hmcts.net",
+          "appellantsRepresentation": "No",
+          "legalRepHasAddress": "Yes",
+          "legalRepAddressUK": {
+            "County": "",
+            "Country": "United Kingdom",
+            "PostCode": "NE21JX",
+            "PostTown": "Example Town",
+            "AddressLine1": "5",
+            "AddressLine2": "Example Street"
+          }
+        }
+      }
+    }
+  },
+  "expectation": {
+    "status": 200,
+    "errors": [],
+    "caseData": {
+      "template": "minimal-internal-appeal-submitted.json",
+      "replacements": {
+        "stateBeforeEndAppeal": "appealSubmitted",
+        "reinstateAppealDate": "{$TODAY}",
+        "reinstateAppealReason": "Withdraw",
+        "reinstatedDecisionMaker": "Admin Officer",
+        "notificationsSent": [
+          {
+            "id": "7030_REINSTATE_APPEAL_HOME_OFFICE",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          },
+          {
+            "id": "7030_INTERNAL_REINSTATE_APPEAL_APPELLANT_LETTER",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          }
+        ]
+      }
+    },
+    "notifications": [
+      {
+        "reference": "7030_REINSTATE_APPEAL_HOME_OFFICE",
+        "recipient": "{$apcHomeOfficeEmailAddress}",
+        "subject": "Immigration and Asylum appeal: appeal reinstated",
+        "body": [
+          "PA/12345/2019",
+          "Talha Awan",
+          "{$iaExUiFrontendUrl}"
+        ]
+      }
+    ]
+  }
+}

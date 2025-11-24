@@ -1,0 +1,39 @@
+{
+  "description": "RIA-5966 Send apply notice of change notification before listing (AIP to LR)",
+  "request": {
+    "uri": "/asylum/ccdSubmitted",
+    "credentials": "LegalRepresentative",
+    "input": {
+      "id": 5966,
+      "eventId": "nocRequest",
+      "state": "appealSubmitted",
+      "caseData": {
+        "template": "aip-minimal-appeal-submitted.json",
+        "replacements": {
+          "currentCaseStateVisibleToHomeOfficeAll":"appealSubmitted",
+          "hearingCentre": "manchester",
+          "subscriptions": [
+            {
+              "id": "1",
+              "value": {
+                "subscriber": "appellant",
+                "email": "{$TEST_CITIZEN_USERNAME}",
+                "wantsEmail": "Yes",
+                "mobileNumber": "{$TEST_CITIZEN_MOBILE}",
+                "wantsSms": "Yes"
+              }
+            }
+          ]
+        }
+      }
+    }
+  },
+  "expectation": {
+    "status": 200,
+    "errors": [],
+    "confirmation": {
+      "header": "success",
+      "body": "contains([_NOC_REQUEST_DECISION_APPELLANT_EMAIL,_NOC_REQUEST_DECISION_APPELLANT_SMS,_NOC_REQUEST_DECISION_HOME_OFFICE])"
+    }
+   }
+}

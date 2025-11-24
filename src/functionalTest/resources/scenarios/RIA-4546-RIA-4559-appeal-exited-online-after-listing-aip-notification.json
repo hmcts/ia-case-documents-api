@@ -1,0 +1,110 @@
+{
+  "description": "RIA-4546-RIA-4559 appeal exited online notification to Home Office - AIP Journey (After Listing)",
+  "request": {
+    "uri": "/asylum/ccdAboutToSubmit",
+    "credentials": "CaseOfficer",
+    "input": {
+      "id": 4546,
+      "eventId": "removeAppealFromOnline",
+      "state": "appealSubmitted",
+      "caseData": {
+        "template": "aip-minimal-appeal-submitted.json",
+        "replacements": {
+          "subscriptions": [
+            {
+              "id": "1",
+              "value": {
+                "subscriber": "appellant",
+                "email": "{$TEST_CITIZEN_USERNAME}",
+                "wantsEmail": "Yes",
+                "mobileNumber": "{$TEST_CITIZEN_MOBILE}",
+                "wantsSms": "Yes"
+              }
+            }
+          ],
+          "listCaseHearingCentre": "taylorHouse",
+          "ariaListingReference": "LP/12345/2019",
+          "removeAppealFromOnlineReason": "Some reason to take remove it from online",
+          "notificationsSent": []
+        }
+      }
+    }
+  },
+  "expectation": {
+    "status": 200,
+    "errors": [],
+    "caseData": {
+      "template": "aip-minimal-appeal-submitted.json",
+      "replacements": {
+        "subscriptions": [
+          {
+            "id": "1",
+            "value": {
+              "subscriber": "appellant",
+              "email": "{$TEST_CITIZEN_USERNAME}",
+              "wantsEmail": "Yes",
+              "mobileNumber": "{$TEST_CITIZEN_MOBILE}",
+              "wantsSms": "Yes"
+            }
+          }
+        ],
+        "listCaseHearingCentre": "taylorHouse",
+        "ariaListingReference": "LP/12345/2019",
+        "notificationsSent": [
+          {
+            "id": "4546_APPEAL_EXITED_ONLINE_HOME_OFFICE",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          },
+          {
+            "id": "4546_APPEAL_EXITED_ONLINE_AIP_APPELLANT_EMAIL",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          },
+          {
+            "id": "4546_APPEAL_EXITED_ONLINE_AIP_APPELLANT_SMS",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          }
+        ]
+      }
+    },
+    "notifications": [
+      {
+        "reference": "4546_APPEAL_EXITED_ONLINE_HOME_OFFICE",
+        "recipient": "{$hearingCentreEmailAddresses.taylorHouse}",
+        "subject": "Immigration and Asylum appeal: case removed from online service",
+        "body": [
+          "PA/12345/2019",
+          "A1234567",
+          "Pablo Jimenez",
+          "{$iaExUiFrontendUrl}",
+          "{$customerServices.telephoneNumber}",
+          "{$customerServices.emailAddress}"
+        ]
+      },
+      {
+        "reference": "4546_APPEAL_EXITED_ONLINE_AIP_APPELLANT_EMAIL",
+        "recipient": "{$TEST_CITIZEN_USERNAME}",
+        "subject": "Immigration and Asylum appeal: Your appeal was removed from the online service",
+        "body": [
+          "PA/12345/2019",
+          "LP/12345/2019",
+          "A1234567",
+          "Pablo Jimenez,",
+          "Your appeal was removed from the online service.",
+          "Some reason to take remove it from online",
+          "{$customerServices.telephoneNumber}",
+          "{$customerServices.emailAddress}"
+        ]
+      },
+      {
+        "reference": "4546_APPEAL_EXITED_ONLINE_AIP_APPELLANT_SMS",
+        "recipient": "{$TEST_CITIZEN_MOBILE}",
+        "subject": "",
+        "body": [
+          "PA/12345/2019",
+          "Your appeal was removed from the online service.",
+          "Some reason to take remove it from online"
+        ]
+      }
+    ]
+  }
+}

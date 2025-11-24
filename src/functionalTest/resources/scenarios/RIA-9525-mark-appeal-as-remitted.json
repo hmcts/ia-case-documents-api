@@ -1,0 +1,47 @@
+{
+  "description": "RIA-9525: Mark appeal as remitted for admin and represented cases",
+  "enabled": "dlrm-remitted-feature-flag:true",
+  "request": {
+    "uri": "/asylum/ccdAboutToSubmit",
+    "credentials": "AdminOfficer",
+    "input": {
+      "id": 952517,
+      "eventId": "markAppealAsRemitted",
+      "state": "ftpaDecided",
+      "caseData": {
+        "template": "minimal-appeal-submitted.json",
+        "replacements": {
+          "isAdmin": "Yes",
+          "appellantsRepresentation": "No",
+          "legalRepEmail": "{$TEST_LAW_FIRM_A_USERNAME}",
+          "listCaseHearingCentre": "taylorHouse",
+          "legalRepresentativeEmailAddress": "sample@mail.com",
+          "sourceOfRemittal": "Upper Tribunal"
+        }
+      }
+    }
+  },
+  "expectation": {
+    "status": 200,
+    "errors": [],
+    "caseData": {
+      "template": "minimal-appeal-submitted.json",
+      "replacements": {
+        "isAdmin": "Yes",
+        "appellantsRepresentation": "No",
+        "legalRepEmail": "{$TEST_LAW_FIRM_A_USERNAME}",
+        "legalRepresentativeEmailAddress": "sample@mail.com",
+        "notificationsSent": [
+          {
+            "id": "952517_LEGAL_REP_MARK_APPEAL_AS_REMITTED",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          },
+          {
+            "id": "952517_HOME_OFFICE_MARK_APPEAL_AS_REMITTED",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          }
+        ]
+      }
+    }
+  }
+}

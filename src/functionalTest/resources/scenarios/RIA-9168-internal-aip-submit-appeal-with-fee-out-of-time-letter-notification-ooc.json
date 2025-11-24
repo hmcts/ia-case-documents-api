@@ -1,0 +1,54 @@
+{
+  "description": "RIA-9168 Send letter notification to appellant for Submit Appeal out of time with fee",
+  "request": {
+    "uri": "/asylum/ccdAboutToSubmit",
+    "credentials": "LegalRepresentative",
+    "input": {
+      "id": 9168,
+      "eventId": "submitAppeal",
+      "state": "appealSubmitted",
+      "caseData": {
+        "template": "minimal-appeal-submitted.json",
+        "replacements": {
+          "appellantsRepresentation": "Yes",
+          "isAdmin": "Yes",
+          "appellantInUk": "No",
+          "appellantInDetention": "No",
+          "submissionOutOfTime": "Yes",
+          "paymentStatus": "Payment pending",
+          "appellantHasFixedAddressAdminJ": "Yes",
+          "addressLine1AdminJ": "Calle Toledo 32",
+          "addressLine2AdminJ": "Madrid",
+          "addressLine3AdminJ": "28003",
+          "countryGovUkOocAdminJ": "ES"
+        }
+      }
+    }
+  },
+  "expectation": {
+    "status": 200,
+    "errors": [],
+    "caseData": {
+      "template": "minimal-appeal-submitted.json",
+      "replacements": {
+        "appellantsRepresentation": "Yes",
+        "isAdmin": "Yes",
+        "appellantInUk": "No",
+        "appellantInDetention": "No",
+        "submissionOutOfTime": "Yes",
+        "paymentStatus": "Payment pending",
+        "appellantHasFixedAddressAdminJ": "Yes",
+        "addressLine1AdminJ": "Calle Toledo 32",
+        "addressLine2AdminJ": "Madrid",
+        "addressLine3AdminJ": "28003",
+        "countryGovUkOocAdminJ": "ES",
+        "notificationsSent": [
+          {
+            "id": "9168_INTERNAL_SUBMIT_APPEAL_WITH_FEE_OUT_OF_TIME_APPELLANT_LETTER",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          }
+        ]
+      }
+    }
+  }
+}

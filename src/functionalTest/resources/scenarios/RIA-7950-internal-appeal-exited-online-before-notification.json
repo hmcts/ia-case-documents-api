@@ -1,0 +1,52 @@
+{
+  "description": "RIA-7950 internal appeal exited online notification to Home Office",
+  "request": {
+    "uri": "/asylum/ccdAboutToSubmit",
+    "credentials": "CaseOfficer",
+    "input": {
+      "id": 7950,
+      "eventId": "removeAppealFromOnline",
+      "state": "*",
+      "caseData": {
+        "template": "minimal-appeal-submitted.json",
+        "replacements": {
+          "isAdmin": "Yes",
+          "endAppealOutcome": "appealTakenOffline",
+          "notificationsSent": []
+        }
+      }
+    }
+  },
+  "expectation": {
+    "status": 200,
+    "errors": [],
+    "caseData": {
+      "template": "minimal-appeal-submitted.json",
+      "replacements": {
+        "isAdmin": "Yes",
+        "endAppealOutcome": "appealTakenOffline",
+        "notificationsSent": [
+          {
+            "id": "7950_APPEAL_EXITED_ONLINE_HOME_OFFICE",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          }
+        ]
+      }
+    },
+    "notifications": [
+      {
+        "reference": "7950_APPEAL_EXITED_ONLINE_HOME_OFFICE",
+        "recipient": "{$endAppealHomeOfficeEmailAddress}",
+        "subject": "Immigration and Asylum appeal: case removed from online service",
+        "body": [
+          "PA/12345/2019",
+          "A1234567",
+          "Talha Awan",
+          "{$iaExUiFrontendUrl}",
+          "{$customerServices.telephoneNumber}",
+          "{$customerServices.emailAddress}"
+        ]
+      }
+    ]
+  }
+}

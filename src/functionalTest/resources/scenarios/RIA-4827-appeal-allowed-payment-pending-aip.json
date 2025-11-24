@@ -1,0 +1,86 @@
+{
+  "description": "RIA-4827 Payment outstanding notification to HO & CTSC (AIP journey) after decision allowed (payment pending) - Judge",
+  "enabled": "{$featureFlag.homeOfficeGovNotifyEnabled}",
+  "request": {
+    "uri": "/asylum/ccdAboutToSubmit",
+    "credentials": "Judge",
+    "input": {
+      "id": 4827,
+      "eventId": "sendDecisionAndReasons",
+      "state": "decided",
+      "caseData": {
+        "template": "aip-minimal-appeal-submitted.json",
+        "replacements": {
+          "hearingCentre": "taylorHouse",
+          "ariaListingReference": "LP/12345/2019",
+          "isDecisionAllowed": "allowed",
+          "paymentStatus": "Payment pending",
+          "notificationsSent": []
+        }
+      }
+    }
+  },
+  "expectation": {
+    "status": 200,
+    "errors": [],
+    "caseData": {
+      "template": "aip-minimal-appeal-submitted.json",
+      "replacements": {
+        "hearingCentre": "taylorHouse",
+        "isDecisionAllowed": "allowed",
+        "notificationsSent": [
+          {
+            "id": "4827_APPEAL_OUTCOME_HOME_OFFICE",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          },
+          {
+            "id": "4827_APPEAL_OUTCOME_ADMIN",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          },
+          {
+            "id": "4827_APPEAL_PENDING_PAYMENT_ADMIN_OFFICER",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          }
+        ]
+      }
+    },
+    "notifications": [
+      {
+        "reference": "4827_APPEAL_OUTCOME_HOME_OFFICE",
+        "recipient": "{$allowedAppealHomeOfficeEmailAddress}",
+        "subject": "Immigration and Asylum appeal: decision and reasons",
+        "body": [
+          "PA/12345/2019",
+          "LP/12345/2019",
+          "A1234567",
+          "Pablo Jimenez",
+          "{$iaExUiFrontendUrl}",
+          "{$customerServices.telephoneNumber}",
+          "{$customerServices.emailAddress}"
+        ]
+      },
+      {
+        "reference": "4827_APPEAL_OUTCOME_ADMIN",
+        "recipient": "{$adminEmailAddresses.taylorHouse}",
+        "subject": "Immigration and Asylum appeal: decision and reasons",
+        "body": [
+          "Pablo Jimenez",
+          "PA/12345/2019",
+          "LP/12345/2019",
+          "TAYLORHOUSE",
+          "ALLOWED"
+        ]
+      },
+      {
+        "reference": "4827_APPEAL_PENDING_PAYMENT_ADMIN_OFFICER",
+        "recipient": "{$ctscAdminPendingPaymentEmailAddress}",
+        "subject": "Immigration and Asylum appeal: An unpaid appeal has been decided or ended",
+        "body": [
+          "PA/12345/2019",
+          "Pablo Jimenez",
+          "{$iaExUiFrontendUrl}"
+        ]
+      }
+    ]
+  }
+}

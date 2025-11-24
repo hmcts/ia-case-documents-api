@@ -1,0 +1,74 @@
+{
+  "description": "RIA-9234 Adjourn hearing without date - (Home Office notification disabled) (List Assist non-integrated: Notifications including Admin) for admin and represented cases",
+  "launchDarklyKey": "tcw-notifications-feature:true",
+  "disabled": "{$featureFlag.homeOfficeGovNotifyEnabled}",
+  "request": {
+    "uri": "/asylum/ccdAboutToSubmit",
+    "credentials": "CaseOfficer",
+    "input": {
+      "id": 92341,
+      "eventId": "adjournHearingWithoutDate",
+      "state": "preHearing",
+      "caseData": {
+        "template": "minimal-appeal-submitted.json",
+        "replacements": {
+          "isAdmin": "Yes",
+          "appellantsRepresentation": "No",
+          "legalRepEmail": "{$TEST_LAW_FIRM_A_USERNAME}",
+          "adjournHearingWithoutDateReasons": "some reason",
+          "listCaseHearingCentre": "taylorHouse",
+          "ariaListingReference": "LP/12345/2019"
+        }
+      }
+    }
+  },
+  "expectation": {
+    "status": 200,
+    "errors": [],
+    "caseData": {
+      "template": "minimal-appeal-submitted.json",
+      "replacements": {
+        "isAdmin": "Yes",
+        "appellantsRepresentation": "No",
+        "legalRepEmail": "{$TEST_LAW_FIRM_A_USERNAME}",
+        "listCaseHearingCentre": "taylorHouse",
+        "notificationsSent": [
+          {
+            "id": "92341_INTERNAL_CASE_ADJOURN_WITHOUT_DATE_APPELLANT_LETTER",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          },
+          {
+            "id": "92341_CASE_OFFICER_ADJOURN_HEARING_WITHOUT_DATE",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          },
+          {
+            "id": "92341_ADJOURN_HEARING_WITHOUT_DATE_ADMIN_OFFICER",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          }
+        ]
+      }
+    },
+    "notifications": [
+      {
+        "reference": "92341_CASE_OFFICER_ADJOURN_HEARING_WITHOUT_DATE",
+        "recipient": "{$hearingCentreEmailAddresses.taylorHouse}",
+        "subject": "Immigration and Asylum appeal: Hearing adjourned",
+        "body": [
+          "PA/12345/2019",
+          "LP/12345/2019",
+          "Talha Awan"
+        ]
+      },
+      {
+        "reference": "92341_ADJOURN_HEARING_WITHOUT_DATE_ADMIN_OFFICER",
+        "recipient": "{$reviewHearingRequirementsAdminOfficerEmailAddress}",
+        "subject": "Immigration and Asylum appeal: Hearing adjourned",
+        "body": [
+          "PA/12345/2019",
+          "LP/12345/2019",
+          "Talha Awan"
+        ]
+      }
+    ]
+  }
+}

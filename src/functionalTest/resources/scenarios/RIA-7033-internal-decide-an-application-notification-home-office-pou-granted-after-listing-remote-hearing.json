@@ -1,0 +1,72 @@
+{
+  "description": "RIA-7033 Internal case Send decide an application notification home office POU granted after listing in remote hearing",
+  "launchDarklyKey": "tcw-notifications-feature:true",
+  "disabled": "true",
+  "request": {
+    "uri": "/asylum/ccdAboutToSubmit",
+    "credentials": "Judge",
+    "input": {
+      "id": 703326,
+      "eventId": "decideAnApplication",
+      "state": "prepareForHearing",
+      "caseData": {
+        "template": "minimal-internal-appeal-submitted.json",
+        "replacements": {
+          "ariaListingReference": "PA/12345/2019",
+          "listCaseHearingCentre": "remoteHearing",
+          "hearingCentre": "taylorHouse",
+          "decideAnApplicationId": "1",
+          "makeAnApplications": [
+              {
+              "id": "1",
+              "value": {
+                "type":"Other",
+                "details":"",
+                "evidence":[],
+                "applicant":"",
+                "date":"{$TODAY}",
+                "decision":"Granted",
+                "state":"listing",
+                "applicantRole":"caseworker-ia-homeofficepou",
+                "decisionReason":"No Reason given",
+                "decisionDate":"{$TODAY}",
+                "decisionMaker": "Judge"
+              }
+            }
+          ]
+        }
+      }
+    }
+  },
+  "expectation": {
+    "status": 200,
+    "errors": [],
+    "caseData": {
+      "template": "minimal-internal-appeal-submitted.json",
+      "replacements": {
+        "isAdmin": "Yes",
+        "ariaListingReference": "PA/12345/2019",
+        "listCaseHearingCentre": "remoteHearing",
+        "hearingCentre": "taylorHouse",
+        "notificationsSent": [
+          {
+            "id": "703326_DECIDE_AN_APPLICATION_HOME_OFFICE",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          }
+        ]
+      }
+    },
+    "notifications": [
+      {
+        "reference": "703326_DECIDE_AN_APPLICATION_HOME_OFFICE",
+        "recipient": "{$homeOfficeEmailAddresses.taylorHouse}",
+        "subject": "Immigration and Asylum appeal: Your application has been granted",
+        "body": [
+          "PA/12345/2019",
+          "A1234567",
+          "Talha Awan"
+        ]
+      }
+    ]
+  }
+}

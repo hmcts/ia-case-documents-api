@@ -1,0 +1,64 @@
+{
+  "description": "RIA-7373 Send mark appeal as ada notifications to DET",
+  "request": {
+    "uri": "/asylum/ccdAboutToSubmit",
+    "credentials": "CaseOfficer",
+    "input": {
+      "id": 7373,
+      "eventId": "markAppealAsAda",
+      "state": "appealSubmitted",
+      "caseData": {
+        "template": "minimal-appeal-submitted.json",
+        "replacements": {
+          "isAdmin": "Yes",
+          "appellantInDetention": "Yes",
+          "detentionFacility": "immigrationRemovalCentre",
+          "ircName": "Brookhouse",
+          "notificationAttachmentDocuments": [
+            {
+              "id": "1",
+              "value": {
+                "tag": "internalDetMarkAsAdaLetter",
+                "document": {
+                  "document_url": "{$FIXTURE_DOC1_PDF_URL}",
+                  "document_binary_url": "{$FIXTURE_DOC1_PDF_URL_BINARY}",
+                  "document_filename": "{$FIXTURE_DOC1_PDF_FILENAME}"
+                },
+                "suppliedBy": "",
+                "description": "",
+                "dateUploaded": "{$TODAY}"
+              }
+            }
+          ]
+        }
+      }
+    }
+  },
+  "expectation": {
+    "status": 200,
+    "errors": [],
+    "caseData": {
+      "template": "minimal-appeal-submitted.json",
+      "replacements": {
+        "notificationsSent": [
+          {
+            "id": "7373_INTERNAL_MARK_APPEAL_AS_ADA",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          }
+        ]
+      },
+      "notifications": [
+        {
+          "reference": "7373_INTERNAL_MARK_APPEAL_AS_ADA",
+          "recipient": "det-irc-brookhouse@example.com",
+          "subject": "ADA - SERVE BY POST: Appeal now ADA",
+          "body": [
+            "Home Office reference: A1234567",
+            "HMCTS reference: PA/12345/2019",
+            "Appellant name: Talha Awan"
+          ]
+        }
+      ]
+    }
+  }
+}

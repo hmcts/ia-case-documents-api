@@ -1,0 +1,79 @@
+{
+  "description": "RIA-2240-RIA-2694 Send respondent notification of change direction due date after respondent review",
+  "request": {
+    "uri": "/asylum/ccdAboutToSubmit",
+    "credentials": "Judge",
+    "input": {
+      "id": 2345,
+      "eventId": "changeDirectionDueDate",
+      "state": "finalBundling",
+      "caseData": {
+        "template": "minimal-appeal-submitted.json",
+        "replacements": {
+          "currentCaseStateVisibleToLegalRepresentative": "finalBundling",
+          "currentCaseStateVisibleToHomeOfficeAll": "finalBundling",
+          "directionEditExplanation": "Upload additional evidence",
+          "directionEditDateDue": "{$TODAY+14}",
+          "directionEditParties": "respondent",
+          "notificationsSent": [],
+          "listCaseHearingCentre": "birmingham",
+          "currentCaseStateVisibleToHomeOfficeAll": "finalBundling"
+        }
+      }
+    }
+  },
+  "expectation": {
+    "status": 200,
+    "errors": [],
+    "caseData": {
+      "template": "minimal-appeal-submitted.json",
+      "replacements": {
+        "directionEditExplanation": "Upload additional evidence",
+        "directionEditDateDue": "{$TODAY+14}",
+        "directionEditParties": "respondent",
+        "notificationsSent": [
+          {
+            "id": "2345_RESPONDENT_CHANGE_DIRECTION_DUE_DATE",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          },
+          {
+            "id": "2345_LEGAL_REP_CHANGE_DIRECTION_DUE_DATE_OF_HOME_OFFICE",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          }
+        ],
+        "listCaseHearingCentre": "birmingham",
+        "currentCaseStateVisibleToHomeOfficeAll": "finalBundling"
+      }
+    },
+    "notifications": [
+      {
+        "reference": "2345_RESPONDENT_CHANGE_DIRECTION_DUE_DATE",
+        "recipient": "{$homeOfficeEmailAddresses.birmingham}",
+        "subject": "Immigration and Asylum appeal: change to direction due date",
+        "body": [
+          "PA/12345/2019",
+          "A1234567",
+          "Talha Awan",
+          "{$iaExUiFrontendUrl}",
+          "{$TODAY+14|d MMM yyyy}",
+          "{$customerServices.telephoneNumber}",
+          "{$customerServices.emailAddress}"
+        ]
+      },
+      {
+        "reference": "2345_LEGAL_REP_CHANGE_DIRECTION_DUE_DATE_OF_HOME_OFFICE",
+        "recipient": "{$TEST_LAW_FIRM_A_USERNAME}",
+        "subject": "Immigration and Asylum appeal: revised direction",
+        "body": [
+          "PA/12345/2019",
+          "CASE001",
+          "Talha Awan",
+          "{$iaExUiFrontendUrl}",
+          "{$TODAY+14|d MMM yyyy}",
+          "{$customerServices.telephoneNumber}",
+          "{$customerServices.emailAddress}"
+        ]
+      }
+    ]
+  }
+}

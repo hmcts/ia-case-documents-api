@@ -1,0 +1,74 @@
+{
+  "description": "DIAC-1354 Internal aip detained other case listed letter - out of time",
+  "request": {
+    "uri": "/asylum/ccdAboutToSubmit",
+    "credentials": "AdminOfficer",
+    "input": {
+      "id": 13541,
+      "eventId": "adjournHearingWithoutDate",
+      "state": "*",
+      "caseData": {
+        "template": "minimal-appeal-submitted.json",
+        "replacements": {
+          "isAdmin": "Yes",
+          "appellantsRepresentation": "Yes",
+          "appellantInDetention": "Yes",
+          "detentionFacility": "other",
+          "appellantAddress": {
+            "County": "",
+            "Country": "United Kingdom",
+            "PostCode": "NE21JX",
+            "PostTown": "Example Town",
+            "AddressLine1": "5",
+            "AddressLine2": "Example Street"
+          },
+          "appellantInUk": "Yes",
+          "listCaseHearingCentre": "bradford",
+          "listCaseHearingLength": "60",
+          "listCaseHearingDate": "2018-12-31T12:34:56",
+          "listCaseRequirementsVulnerabilities": "something around Vulnerabilities",
+          "listCaseRequirementsMultimedia": "something around Multimedia",
+          "listCaseRequirementsSingleSexCourt": "something around SingleSexCourt",
+          "listCaseRequirementsInCameraCourt": "something around InCameraCourt",
+          "listCaseRequirementsOther": "something around Other"
+        }
+      }
+    }
+  },
+  "expectation": {
+    "status": 200,
+    "errors": [],
+    "caseData": {
+      "template": "minimal-appeal-submitted.json",
+      "replacements": {
+        "isAdmin": "Yes",
+        "appellantsRepresentation": "Yes",
+        "appellantInUk": "Yes",
+        "appellantInDetention": "Yes",
+        "listCaseHearingCentre": "bradford",
+        "listCaseHearingLength": "60",
+        "listCaseHearingDate": "2018-12-31T12:34:56",
+        "listCaseRequirementsVulnerabilities": "something around Vulnerabilities",
+        "listCaseRequirementsMultimedia": "something around Multimedia",
+        "listCaseRequirementsSingleSexCourt": "something around SingleSexCourt",
+        "listCaseRequirementsInCameraCourt": "something around InCameraCourt",
+        "listCaseRequirementsOther": "something around Other",
+
+        "notificationsSent": [
+          {
+            "id": "13541_ADJOURN_HEARING_WITHOUT_DATE_ADMIN_OFFICER",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          },
+          {
+            "id": "13541_ADJOURN_HEARING_WITHOUT_DATE_HO",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          },
+          {
+            "id": "13541_INTERNAL_CASE_ADJOURN_WITHOUT_DATE_APPELLANT_LETTER",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          }
+        ]
+      }
+    }
+  }
+}

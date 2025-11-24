@@ -1,0 +1,40 @@
+{
+  "description": "RIA-2536 Time extension record refused application notification no emails sent case under review",
+  "request": {
+    "uri": "/asylum/ccdAboutToSubmit",
+    "credentials": "CaseOfficer",
+    "input": {
+      "id": 25369,
+      "eventId": "recordApplication",
+      "state": "caseUnderReview",
+      "caseData": {
+        "template": "minimal-appeal-submitted.json",
+        "replacements": {
+          "applicationType": "Time extension",
+          "applicationDecisionReason": "Some decision reason",
+          "applicationSupplier": "The respondent",
+          "applicationDecision": "Refused",
+          "notificationsSent": [],
+          "currentCaseStateVisibleToHomeOfficeAll": "caseUnderReview"
+        }
+      }
+    }
+  },
+  "expectation": {
+    "status": 200,
+    "errors": [],
+    "caseData": {
+      "template": "minimal-appeal-submitted.json",
+      "replacements": {
+        "applicationType": "Time extension",
+        "applicationDecisionReason": "Some decision reason",
+        "applicationSupplier": "The respondent",
+        "applicationDecision": "Refused",
+        "notificationsSent": [
+        ]
+      }
+    },
+    "notifications": [
+    ]
+  }
+}

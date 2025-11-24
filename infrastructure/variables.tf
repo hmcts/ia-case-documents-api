@@ -19,7 +19,7 @@ variable "subscription" {
 }
 
 variable "ilbIp" {
-  default = ""
+ default = ""
 }
 
 variable "common_tags" {

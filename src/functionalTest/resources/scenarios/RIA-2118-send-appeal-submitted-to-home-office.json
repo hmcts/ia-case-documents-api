@@ -1,0 +1,64 @@
+{
+  "description": "RIA-2118 Send appeal submitted notification to Home Office",
+  "launchDarklyKey": "tcw-notifications-feature:true",
+  "enabled": "{$featureFlag.homeOfficeGovNotifyEnabled}",
+  "request": {
+    "uri": "/asylum/ccdAboutToSubmit",
+    "credentials": "LegalRepresentative",
+    "input": {
+      "id": 2118123,
+      "eventId": "submitAppeal",
+      "state": "appealSubmitted",
+      "caseData": {
+        "template": "minimal-appeal-submitted.json",
+        "replacements": {
+          "hearingCentre": "manchester",
+          "paAppealTypePaymentOption": "payLater"
+        }
+      }
+    }
+  },
+  "expectation": {
+    "status": 200,
+    "errors": [],
+    "caseData": {
+      "template": "minimal-appeal-submitted.json",
+      "replacements": {
+        "hearingCentre": "manchester",
+        "paAppealTypePaymentOption": "payLater",
+        "notificationsSent": [
+          {
+            "id": "2118123_APPEAL_SUBMITTED_CASE_OFFICER",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          },
+          {
+            "id": "2118123_APPEAL_SUBMITTED_HOME_OFFICE",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          }
+        ]
+      }
+    },
+    "notifications": [
+      {
+        "reference": "2118123_APPEAL_SUBMITTED_CASE_OFFICER",
+        "recipient": "{$hearingCentreEmailAddresses.manchester}",
+        "subject": "Immigration and Asylum appeal: appeal submitted",
+        "body": [
+          "PA/12345/2019",
+          "Talha Awan",
+          "{$iaExUiFrontendUrl}"
+        ]
+      },
+      {
+        "reference": "2118123_APPEAL_SUBMITTED_HOME_OFFICE",
+        "recipient": "{$apcPrivateHomeOfficeEmailAddress}",
+        "subject": "Immigration and Asylum appeal: appeal submitted",
+        "body": [
+          "PA/12345/2019",
+          "Talha Awan",
+          "{$iaExUiFrontendUrl}"
+        ]
+      }
+    ]
+  }
+}

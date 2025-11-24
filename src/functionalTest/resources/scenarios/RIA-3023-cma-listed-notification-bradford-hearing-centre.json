@@ -1,0 +1,129 @@
+{
+  "description": "RIA-3023 Send cma listed notification to case officer, appellant and home office (Bradford hearing centre)",
+  "launchDarklyKey": "tcw-notifications-feature:true",
+  "request": {
+    "uri": "/asylum/ccdAboutToSubmit",
+    "credentials": "AdminOfficer",
+    "input": {
+      "id": 1004,
+      "eventId": "listCma",
+      "state": "cmaAdjustmentsAgreed",
+      "caseData": {
+        "template": "aip-minimal-appeal-submitted.json",
+        "replacements": {
+          "ariaListingReference": "LP/12345/2019",
+          "listCaseHearingCentre": "bradford",
+          "hearingCentre": "bradford",
+          "listCaseHearingDate": "2019-05-03T14:25:15.000",
+          "subscriptions": [
+            {
+              "id": "1",
+              "value": {
+                "subscriber": "appellant",
+                "email": "{$TEST_CITIZEN_USERNAME}",
+                "wantsEmail": "Yes",
+                "mobileNumber": "{$TEST_CITIZEN_MOBILE}",
+                "wantsSms": "Yes"
+              }
+            }
+          ]
+        }
+      }
+    }
+  },
+  "expectation": {
+    "status": 200,
+    "errors": [],
+    "caseData": {
+      "template": "aip-minimal-appeal-submitted.json",
+      "replacements": {
+        "listCaseHearingCentre": "bradford",
+        "listCaseHearingDate": "2019-05-03T14:25:15.000",
+        "subscriptions": [
+          {
+            "id": "1",
+            "value": {
+              "subscriber": "appellant",
+              "email": "{$TEST_CITIZEN_USERNAME}",
+              "wantsEmail": "Yes",
+              "mobileNumber": "{$TEST_CITIZEN_MOBILE}",
+              "wantsSms": "Yes"
+            }
+          }
+        ],
+        "notificationsSent": [
+          {
+            "id": "1004_LIST_CMA_APPELLANT_AIP_EMAIL",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          },
+          {
+            "id": "1004_LIST_CMA_HOME_OFFICE_EMAIL",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          },
+          {
+            "id": "1004_LIST_CMA_CASE_OFFICER_EMAIL",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          },
+          {
+            "id": "1004_LIST_CMA_APPELLANT_AIP_SMS",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          }
+        ]
+      }
+    },
+    "notifications": [
+      {
+        "reference": "1004_LIST_CMA_APPELLANT_AIP_EMAIL",
+        "recipient": "{$TEST_CITIZEN_USERNAME}",
+        "subject": "Your case management appointment details",
+        "body": [
+          "PA/12345/2019",
+          "A1234567",
+          "Pablo Jimenez",
+          "3 May 2019",
+          "14:25",
+          "IAC Bradford, Phoenix House, Rushton Avenue, Thornbury, Bradford, BD3 7BH",
+          "{$iaAipFrontendUrl}"
+        ]
+      },
+      {
+        "reference": "1004_LIST_CMA_APPELLANT_AIP_SMS",
+        "recipient": "{$TEST_CITIZEN_MOBILE}",
+        "subject": "",
+        "body": [
+          "PA/12345/2019",
+          "3 May 2019",
+          "14:25",
+          "IAC Bradford, Phoenix House, Rushton Avenue, Thornbury, Bradford, BD3 7BH",
+          "{$iaAipFrontendUrl}"
+        ]
+      },
+      {
+        "reference": "1004_LIST_CMA_CASE_OFFICER_EMAIL",
+        "recipient": "{$hearingCentreEmailAddresses.bradford}",
+        "subject": "Immigration and Asylum appeal: Case Management Appointment listed",
+        "body": [
+          "PA/12345/2019",
+          "Pablo Jimenez",
+          "3 May 2019",
+          "14:25",
+          "IAC Bradford, Phoenix House, Rushton Avenue, Thornbury, Bradford, BD3 7BH",
+          "{$iaExUiFrontendUrl}"
+        ]
+      },
+      {
+        "reference": "1004_LIST_CMA_HOME_OFFICE_EMAIL",
+        "recipient": "{$homeOfficeEmailAddresses.bradford}",
+        "subject": "Immigration and Asylum appeal: Case Management Appointment date booked",
+        "body": [
+          "PA/12345/2019",
+          "Pablo Jimenez",
+          "3 May 2019",
+          "14:25",
+          "IAC Bradford, Phoenix House, Rushton Avenue, Thornbury, Bradford, BD3 7BH",
+          "{$iaExUiFrontendUrl}"
+        ]
+      }
+    ]
+  }
+}

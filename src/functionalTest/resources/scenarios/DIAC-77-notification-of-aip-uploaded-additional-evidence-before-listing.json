@@ -1,0 +1,104 @@
+{
+  "description": "DIAC-77 Notification of aip uploaded additional evidence (before listing)",
+  "launchDarklyKey": "tcw-notifications-feature:true",
+  "request": {
+      "uri": "/asylum/ccdAboutToSubmit",
+      "credentials": "Citizen",
+      "input": {
+        "id": 771,
+        "eventId": "uploadAdditionalEvidence",
+        "state": "caseUnderReview",
+        "caseData": {
+          "template": "aip-minimal-appeal-submitted.json",
+          "replacements": {
+            "subscriptions": [
+              {
+                "id": "1",
+                "value": {
+                  "subscriber": "appellant",
+                  "email": "{$TEST_CITIZEN_USERNAME}",
+                  "wantsEmail": "Yes",
+                  "mobileNumber": "{$TEST_CITIZEN_MOBILE}",
+                  "wantsSms": "Yes"
+                }
+              }
+            ]
+          }
+        }
+      }
+    },
+    "expectation": {
+      "status": 200,
+      "errors": [],
+      "caseData": {
+        "template": "aip-minimal-appeal-submitted.json",
+        "replacements": {
+          "subscriptions": [
+            {
+              "id": "1",
+              "value": {
+                "subscriber": "appellant",
+                "email": "{$TEST_CITIZEN_USERNAME}",
+                "wantsEmail": "Yes",
+                "mobileNumber": "{$TEST_CITIZEN_MOBILE}",
+                "wantsSms": "Yes"
+              }
+            }
+          ],
+          "notificationsSent": [
+            {
+              "id": "771_UPLOADED_ADDITIONAL_EVIDENCE_HOME_OFFICE",
+              "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+            },
+            {
+              "id": "771_UPLOADED_ADDITIONAL_EVIDENCE_AIP_APPELLANT_EMAIL",
+              "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+            },
+            {
+              "id": "771_UPLOADED_ADDITIONAL_EVIDENCE_AIP_APPELLANT_SMS",
+              "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+            }
+          ]
+        }
+      },
+      "notifications": [
+        {
+          "reference": "771_UPLOADED_ADDITIONAL_EVIDENCE_HOME_OFFICE",
+          "recipient": "{$respondentEmailAddresses.respondentReviewDirection}",
+          "subject": "Immigration and Asylum appeal: additional evidence uploaded",
+          "body": [
+            "PA/12345/2019",
+            "A1234567",
+            "Pablo Jimenez",
+            "{$iaExUiFrontendUrl}",
+            "{$customerServices.telephoneNumber}",
+            "{$customerServices.emailAddress}"
+          ]
+        },
+        {
+          "reference": "771_UPLOADED_ADDITIONAL_EVIDENCE_AIP_APPELLANT_EMAIL",
+          "recipient": "{$TEST_CITIZEN_USERNAME}",
+          "subject": "Immigration and Asylum appeal: You provided new evidence",
+          "body": [
+            "PA/12345/2019",
+            "A1234567",
+            "Pablo Jimenez,",
+            "You provided new evidence to the Tribunal",
+            "Sign in to your account to see the evidence you provided",
+            "{$iaAipFrontendUrl}"
+          ]
+        },
+        {
+          "reference": "771_UPLOADED_ADDITIONAL_EVIDENCE_AIP_APPELLANT_SMS",
+          "recipient": "{$TEST_CITIZEN_MOBILE}",
+          "subject": "",
+          "body": [
+            "PA/12345/2019",
+            "You provided new evidence to the Tribunal.",
+            "Sign in to your account to see the evidence you provided:",
+            "{$iaAipFrontendUrl}"
+          ]
+        }
+      ]
+    }
+  }

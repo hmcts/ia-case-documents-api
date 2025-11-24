@@ -1,9 +1,9 @@
 {
-  "homeOfficeReferenceNumber": "A123456",
+  "homeOfficeReferenceNumber": "A1234567",
   "homeOfficeDecisionDate": "{$TODAY}",
   "appellantTitle": "Mr",
-  "appellantGivenNames": "José",
-  "appellantFamilyName": "González",
+  "appellantGivenNames": "Talha",
+  "appellantFamilyName": "Awan",
   "appellantDateOfBirth": "{$TODAY-7300}",
   "legalRepName": "RS John",
   "legalRepCompany": "RS Consulting",
@@ -25,8 +25,10 @@
   "hasNewMatters": "No",
   "hasOtherAppeals": "No",
   "appellantNameForDisplay": "Talha Awan",
-  "appealReferenceNumber": "PA/11111/2019",
+  "legalRepReferenceNumber": "CASE001",
+  "appealReferenceNumber": "PA/12345/2019",
+  "sendDirectionActionAvailable": "Yes",
   "legalRepresentativeName": "A Test Legal Rep",
   "legalRepresentativeEmailAddress": "{$TEST_LAW_FIRM_A_USERNAME}",
-  "sendDirectionActionAvailable": "Yes"
+  "hearingCentre": "taylorHouse"
 }

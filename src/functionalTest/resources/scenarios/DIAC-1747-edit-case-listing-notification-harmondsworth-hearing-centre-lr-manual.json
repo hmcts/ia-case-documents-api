@@ -1,0 +1,146 @@
+{
+  "description": "DIAC-1747 Edit case listing LR Manual Letter",
+  "enabled": "{$featureFlag.homeOfficeGovNotifyEnabled}",
+  "request": {
+    "uri": "/asylum/ccdAboutToSubmit",
+    "credentials": "AdminOfficer",
+    "input": {
+      "id": 1747,
+      "eventId": "editCaseListing",
+      "state": "prepareForHearing",
+      "caseData": {
+        "template": "minimal-appeal-submitted.json",
+        "replacements": {
+          "isAdmin": "Yes",
+          "appellantsRepresentation": "No",
+          "appealReferenceNumber": "PA/12345/2023",
+          "ariaListingReference": "LP/12345/2023",
+          "listCaseHearingCentre": "harmondsworth",
+          "listCaseHearingDate": "2023-09-03T14:25:15.000",
+          "legalRepresentativeEmailAddress": "{$TEST_LAW_FIRM_A_USERNAME}",
+          "legalRepEmail": "{$TEST_LAW_FIRM_A_USERNAME}",
+          "appellantInDetention": "Yes",
+          "detentionFacility": "prison",
+          "prisonName": "Albany",
+          "hearingChannel": {
+            "value": {
+              "code": "INTER",
+              "label": "In Person"
+            },
+            "list_items": [
+              {
+                "code": "INTER",
+                "label": "In Person"
+              },
+              {
+                "code": "NA",
+                "label": "Not in Attendance"
+              },
+              {
+                "code": "TEL",
+                "label": "Telephone"
+              },
+              {
+                "code": "VID",
+                "label": "Video"
+              }
+            ]
+          },
+          "letterBundleDocuments": [
+            {
+              "id": "1",
+              "value": {
+                "tag": "internalEditCaseListingLetterBundle",
+                "document": {
+                  "document_url": "{$FIXTURE_DOC1_PDF_URL}",
+                  "document_binary_url": "{$FIXTURE_DOC1_PDF_URL_BINARY}",
+                  "document_filename": "{$FIXTURE_DOC1_PDF_FILENAME}"
+                },
+                "suppliedBy": "",
+                "description": "",
+                "dateUploaded": "{$TODAY}"
+              }
+            },
+            {
+              "id": "2",
+              "value": {
+                "tag": "internalEditCaseListingLrLetterBundle",
+                "document": {
+                  "document_url": "{$FIXTURE_DOC1_PDF_URL}",
+                  "document_binary_url": "{$FIXTURE_DOC1_PDF_URL_BINARY}",
+                  "document_filename": "{$FIXTURE_DOC1_PDF_FILENAME}"
+                },
+                "suppliedBy": "",
+                "description": "",
+                "dateUploaded": "{$TODAY}"
+              }
+            }
+          ]
+        }
+      },
+      "caseDataBefore": {
+        "template": "minimal-appeal-submitted.json",
+        "replacements": {
+          "ariaListingReference": "LP/12345/2019",
+          "listCaseHearingCentre": "taylorHouse",
+          "listCaseHearingDate": "2019-05-01T13:30:15.000",
+          "legalRepresentativeEmailAddress": "ia-law-firm-a@fake.hmcts.net"
+        }
+      }
+    }
+  },
+  "expectation": {
+    "status": 200,
+    "errors": [],
+    "caseData": {
+      "template": "minimal-appeal-submitted.json",
+      "replacements": {
+        "appealReferenceNumber": "PA/12345/2023",
+        "listCaseHearingCentre": "harmondsworth",
+        "listCaseHearingDate": "2023-09-03T14:25:15.000",
+        "legalRepresentativeEmailAddress": "{$TEST_LAW_FIRM_A_USERNAME}",
+        "legalRepEmail": "{$TEST_LAW_FIRM_A_USERNAME}",
+        "notificationsSent": [
+          {
+            "id": "1747_CASE_RE_LISTED_HOME_OFFICE",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          },
+          {
+            "id": "1747_INTERNAL_DETAINED_EDIT_CASE_LISTING_DET",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          },
+          {
+            "id": "1747_INTERNAL_EDIT_CASE_LISTING_LR_LETTER_BUNDLE",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          }
+        ]
+      }
+    },
+    "notifications": [
+      {
+        "reference": "1747_CASE_RE_LISTED_HOME_OFFICE",
+        "recipient": "ho-harmondsworth@example.com",
+        "subject": "Immigration and Asylum appeal: case re-listed",
+        "body": [
+          "PA/12345/2023",
+          "LP/12345/2023",
+          "3 Sep 2023",
+          "14:25",
+          "Talha Awan"
+        ]
+      },
+      {
+        "reference": "1747_DETAINED_EDIT_CASE_LISTING_PRODUCTION_DET",
+        "recipient": "det-prison-albany@example.com",
+        "subject": "IAFT – SERVE IN PERSON: Hearing details",
+        "body": [
+          "PA/12345/2023",
+          "Appellant name: Talha Awan",
+          "3 Sep 2023",
+          "14:25",
+          "Harmondsworth Tribunal Hearing Centre, Colnbrook Bypass, UB7 0HB"
+        ]
+      }
+    ]
+  }
+}

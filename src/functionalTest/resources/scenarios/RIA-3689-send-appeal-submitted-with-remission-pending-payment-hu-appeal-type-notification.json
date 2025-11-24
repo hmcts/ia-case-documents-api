@@ -1,0 +1,70 @@
+{
+  "description": "RIA-3689 send appeal submitted with remission and payment pending, for HU appeal notification",
+  "enabled": "{$featureFlag.homeOfficeGovNotifyEnabled}",
+  "request": {
+    "uri": "/asylum/ccdAboutToSubmit",
+    "credentials": "LegalRepresentative",
+    "input": {
+      "id": 3689,
+      "eventId": "submitAppeal",
+      "state": "pendingPayment",
+      "caseData": {
+        "template": "minimal-appeal-submitted.json",
+        "replacements": {
+          "isRemissionsEnabled": "Yes",
+          "remissionType":"hoWaiverRemission",
+          "appealType":"refusalOfHumanRights",
+          "eaHuAppealTypePaymentOption": "payLater"
+        }
+      }
+    }
+  },
+  "expectation": {
+    "status": 200,
+    "errors": [],
+    "caseData": {
+      "template": "minimal-appeal-submitted.json",
+      "replacements": {
+        "hearingCentre": "taylorHouse",
+        "isRemissionsEnabled": "Yes",
+        "remissionType":"hoWaiverRemission",
+        "appealType":"refusalOfHumanRights",
+        "eaHuAppealTypePaymentOption": "payLater",
+        "notificationsSent": [
+          {
+            "id": "3689_APPEAL_SUBMITTED_PENDING_PAYMENT_LEGAL_REP",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          },
+          {
+            "id": "3689_APPEAL_SUBMITTED_PENDING_PAYMENT_HOME_OFFICE",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          }
+        ]
+      }
+    },
+    "notifications": [
+      {
+        "reference": "3689_APPEAL_SUBMITTED_PENDING_PAYMENT_LEGAL_REP",
+        "recipient": "{$TEST_LAW_FIRM_A_USERNAME}",
+        "subject": "Immigration and Asylum appeal: appeal submitted with remission application",
+        "body": [
+          "PA/12345/2019",
+          "Talha Awan",
+          "{$iaExUiFrontendUrl}"
+        ]
+      },
+      {
+        "reference": "3689_APPEAL_SUBMITTED_PENDING_PAYMENT_HOME_OFFICE",
+        "recipient": "{$apcPrivateHomeOfficeEmailAddress}",
+        "subject": "Immigration and Asylum appeal: appeal submitted",
+        "body": [
+          "PA/12345/2019",
+          "Talha Awan",
+          "{$iaExUiFrontendUrl}",
+          "{$customerServices.telephoneNumber}",
+          "{$customerServices.emailAddress}"
+        ]
+      }
+    ]
+  }
+}

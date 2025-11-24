@@ -1,0 +1,75 @@
+{
+  "description": "RIA-9233 Send letter notification to LR for record remission decision (partially approved) - In country (internal case creation - represented)",
+  "enabled": "{$featureFlag.dlrmTelephonyFeatureFlag}",
+  "request": {
+    "uri": "/asylum/ccdAboutToSubmit",
+    "credentials": "AdminOfficer",
+    "input": {
+      "id": 9233,
+      "eventId": "recordRemissionDecision",
+      "state": "pendingPayment",
+      "caseData": {
+        "template": "minimal-appeal-submitted.json",
+        "replacements": {
+          "isAdmin": "Yes",
+          "appellantsRepresentation": "No",
+          "legalRepEmail": "{$TEST_LAW_FIRM_A_USERNAME}",
+          "appellantInDetention": "No",
+          "appellantInUk": "Yes",
+          "legalRepHasAddress": "Yes",
+          "legalRepAddressUK": {
+            "County": "",
+            "Country": "United Kingdom",
+            "PostCode": "NE21JX",
+            "PostTown": "Example Town",
+            "AddressLine1": "5",
+            "AddressLine2": "Example Street"
+          },
+          "remissionDecision": "partiallyApproved",
+          "remittedAmount": "10000",
+          "amountLeftToPay": "4000",
+          "remissionDecisionReason": "Remission decision reason example",
+          "ccdReferenceNumberForDisplay": "1111222233334444"
+        }
+      }
+    }
+  },
+  "expectation": {
+    "status": 200,
+    "errors": [],
+    "caseData": {
+      "template": "minimal-appeal-submitted.json",
+      "replacements": {
+        "isAdmin": "Yes",
+        "appellantsRepresentation": "No",
+        "legalRepEmail": "{$TEST_LAW_FIRM_A_USERNAME}",
+        "appellantInDetention": "No",
+        "appellantInUk": "Yes",
+        "legalRepHasAddress": "Yes",
+        "legalRepAddressUK": {
+          "County": "",
+          "Country": "United Kingdom",
+          "PostCode": "NE21JX",
+          "PostTown": "Example Town",
+          "AddressLine1": "5",
+          "AddressLine2": "Example Street"
+        },
+        "remissionDecision": "partiallyApproved",
+        "remittedAmount": "10000",
+        "amountLeftToPay": "4000",
+        "remissionDecisionReason": "Remission decision reason example",
+        "ccdReferenceNumberForDisplay": "1111222233334444",
+        "notificationsSent": [
+          {
+            "id": "9233_INTERNAL_REMISSION_PARTIALLY_GRANTED_REFUSED_APPELLANT_LETTER",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          },
+          {
+            "id": "9233_REMISSION_DECISION_PARTIALLY_APPROVED_LEGAL_REPRESENTATIVE",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          }
+        ]
+      }
+    }
+  }
+}

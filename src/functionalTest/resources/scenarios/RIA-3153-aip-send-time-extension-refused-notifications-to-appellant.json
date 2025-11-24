@@ -1,0 +1,119 @@
+{
+  "description": "RIA-3153 AIP - [CMA Requirements] Time extension Refused (Email and SMS) to appellant",
+  "request": {
+    "uri": "/asylum/ccdAboutToSubmit",
+    "credentials": "CaseOfficer",
+    "input": {
+      "id": 1032,
+      "eventId": "reviewTimeExtension",
+      "state": "awaitingCmaRequirements",
+      "caseData": {
+        "template": "aip-minimal-appeal-submitted.json",
+        "replacements": {
+          "hearingCentre": "manchester",
+          "subscriptions": [
+            {
+              "id": "1",
+              "value": {
+                "subscriber": "appellant",
+                "email": "{$TEST_CITIZEN_USERNAME}",
+                "wantsEmail": "Yes",
+                "mobileNumber": "{$TEST_CITIZEN_MOBILE}",
+                "wantsSms": "Yes"
+              }
+            }
+          ],
+          "timeExtensions": [
+            {
+              "id": "1",
+              "value": {
+                "requestDate": "{$TODAY}",
+                "state": "awaitingCmaRequirements",
+                "status": "refused",
+                "evidence":  null,
+                "decision": "refused",
+                "decisionReason": "Not enough information",
+                "decisionOutcomeDate": "{$TODAY}"
+              }
+            }
+          ],
+          "notificationsSent": []
+        }
+      }
+    }
+  },
+  "expectation": {
+    "status": 200,
+    "errors": [],
+    "caseData": {
+      "template": "aip-minimal-appeal-submitted.json",
+      "replacements": {
+        "hearingCentre": "manchester",
+        "submissionOutOfTime": "No",
+        "subscriptions": [
+          {
+            "id": "1",
+            "value": {
+              "subscriber": "appellant",
+              "email": "{$TEST_CITIZEN_USERNAME}",
+              "wantsEmail": "Yes",
+              "mobileNumber": "{$TEST_CITIZEN_MOBILE}",
+              "wantsSms": "Yes"
+            }
+          }
+        ],
+        "timeExtensions": [
+          {
+            "id": "1",
+            "value": {
+              "requestDate": "{$TODAY}",
+              "state": "awaitingCmaRequirements",
+              "status": "refused",
+              "evidence":  null,
+              "decision": "refused",
+              "decisionReason": "Not enough information",
+              "decisionOutcomeDate": "{$TODAY}"
+            }
+          }
+        ],
+        "notificationsSent": [
+          {
+            "id": "1032_REVIEW_TIME_EXTENSION_REFUSED_APPELLANT_AIP_EMAIL",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          },
+          {
+            "id": "1032_REVIEW_TIME_EXTENSION_REFUSED_APPELLANT_AIP_SMS",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          }
+        ]
+      }
+    },
+    "notifications": [
+      {
+        "reference": "1032_REVIEW_TIME_EXTENSION_REFUSED_APPELLANT_AIP_EMAIL",
+        "recipient": "{$TEST_CITIZEN_USERNAME}",
+        "subject": "Your request for more time has been refused",
+        "body": [
+          "PA/12345/2019",
+          "A1234567",
+          "Pablo Jimenez,",
+          "Not enough information",
+          "tell us if you will need anything at your appointment",
+          "{$TODAY|d MMM yyyy}",
+          "{$iaAipFrontendUrl}"
+        ]
+      },
+      {
+        "reference": "1032_REVIEW_TIME_EXTENSION_REFUSED_APPELLANT_AIP_SMS",
+        "recipient": "{$TEST_CITIZEN_MOBILE}",
+        "subject": "",
+        "body": [
+          "PA/12345/2019",
+          "tell us if you will need anything at your appointment",
+          "{$TODAY|d MMM yyyy}",
+          "{$iaAipFrontendUrl}"
+        ]
+      }
+    ]
+  }
+}

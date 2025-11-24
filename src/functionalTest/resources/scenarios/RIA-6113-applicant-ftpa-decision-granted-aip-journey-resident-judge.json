@@ -1,0 +1,109 @@
+{
+  "description": "RIA-61135 Applicant FTPA application decision granted (AIP journey) - Resident judge",
+  "enabled": "{$featureFlag.homeOfficeGovNotifyEnabled}",
+  "request": {
+    "uri": "/asylum/ccdAboutToSubmit",
+    "credentials": "Judge",
+    "input": {
+      "id": 61135,
+      "eventId": "residentJudgeFtpaDecision",
+      "state": "ftpaSubmitted",
+      "caseData": {
+        "template": "minimal-appeal-submitted.json",
+        "replacements": {
+          "journeyType": "aip",
+          "appellantInUk": "No",
+          "subscriptions": [
+            {
+              "id": "1",
+              "value": {
+                "subscriber": "appellant",
+                "email": "{$TEST_CITIZEN_USERNAME}",
+                "wantsEmail": "Yes",
+                "mobileNumber": "{$TEST_CITIZEN_MOBILE}",
+                "wantsSms": "Yes"
+              }
+            }
+          ],
+          "currentCaseStateVisibleToJudge": "ftpaSubmitted",
+          "ftpaAppellantRjDecisionOutcomeType": "granted",
+          "ftpaApplicantType": "appellant",
+          "ariaListingReference": "987654321",
+          "notificationsSent": []
+        }
+      }
+    }
+  },
+  "expectation": {
+    "status": 200,
+    "errors": [],
+    "caseData": {
+      "template": "minimal-appeal-submitted.json",
+      "replacements": {
+        "notificationsSent": [
+          {
+            "id": "61135_FTPA_APPLICATION_DECISION_HOME_OFFICE_APPELLANT",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          },
+          {
+            "id": "61135_FTPA_APPLICATION_DECISION_TO_APPELLANT_EMAIL",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          },
+          {
+            "id": "61135_FTPA_APPLICATION_DECISION_ADMIN_OFFICER_APPELLANT",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          },
+          {
+            "id": "61135_FTPA_APPLICATION_DECISION_TO_APPELLANT_SMS",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          }
+        ]
+      }
+    },
+    "notifications": [
+      {
+        "reference": "61135_FTPA_APPLICATION_DECISION_HOME_OFFICE_APPELLANT",
+        "recipient": "{$upperTribunalNoticesEmailAddress}",
+        "subject": "Immigration and Asylum appeal: application to appeal to Upper Tribunal granted",
+        "body": [
+          "PA/12345/2019",
+          "A1234567",
+          "987654321",
+          "Talha Awan"
+        ]
+      },
+      {
+        "reference": "61135_FTPA_APPLICATION_DECISION_TO_APPELLANT_EMAIL",
+        "recipient": "{$TEST_CITIZEN_USERNAME}",
+        "subject": "Immigration and Asylum appeal: Your application was granted",
+        "body": [
+          "PA/12345/2019",
+          "A1234567",
+          "Talha Awan",
+          "Your application for permission to appeal to the Upper Tribunal has been granted."
+        ]
+      },
+      {
+        "reference": "61135_FTPA_APPLICATION_DECISION_ADMIN_OFFICER_APPELLANT",
+        "recipient": "{$upperTribunalPermissionApplicationsEmailAddress}",
+        "subject": "Immigration and Asylum appeal: application to appeal to Upper Tribunal granted",
+        "body": [
+          "PA/12345/2019",
+          "987654321",
+          "Talha Awan",
+          "You must create a bundle for the Upper Tribunal. Follow these steps to do this:"
+        ]
+      },
+      {
+        "reference": "61135_FTPA_APPLICATION_DECISION_TO_APPELLANT_SMS",
+        "recipient": "{$TEST_CITIZEN_MOBILE}",
+        "subject": "",
+        "body": [
+          "PA/12345/2019",
+          "Your application for permission to appeal to the Upper Tribunal has been granted",
+          "{$iaAipFrontendUrl}"
+        ]
+      }
+    ]
+  }
+}

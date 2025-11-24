@@ -1,0 +1,80 @@
+{
+  "description": "RIA-7673 RIA-7940 Internal Detained non ADA edit case listing notification",
+  "enabled": "{$featureFlag.homeOfficeGovNotifyEnabled}",
+  "request": {
+    "uri": "/asylum/ccdAboutToSubmit",
+    "credentials": "AdminOfficer",
+    "input": {
+      "id": 7673,
+      "eventId": "editCaseListing",
+      "state": "prepareForHearing",
+      "caseData": {
+        "template": "minimal-appeal-submitted.json",
+        "replacements": {
+          "detentionFacility": "immigrationRemovalCentre",
+          "ircName": "Brookhouse",
+          "isAdmin": "Yes",
+          "appellantsRepresentation": "Yes",
+          "appellantInDetention": "Yes",
+          "isAcceleratedDetainedAppeal": "No",
+          "listCaseHearingCentre": "bradford",
+          "listCaseHearingDate": "2023-05-03T14:25:15.000",
+          "ariaListingReference" : "LP/12345/2019",
+          "remoteVideoCallTribunalResponse": "Some tribunal response",
+          "letterBundleDocuments": [
+            {
+              "id": "1",
+              "value": {
+                "tag": "internalEditCaseListingLetterBundle",
+                "document": {
+                  "document_url": "{$FIXTURE_DOC1_PDF_URL}",
+                  "document_binary_url": "{$FIXTURE_DOC1_PDF_URL_BINARY}",
+                  "document_filename": "{$FIXTURE_DOC1_PDF_FILENAME}"
+                },
+                "suppliedBy": "",
+                "description": "",
+                "dateUploaded": "{$TODAY}"
+              }
+            }
+          ]
+        }
+      },
+      "caseDataBefore": {
+        "template": "minimal-appeal-submitted.json",
+        "replacements": {
+          "ariaListingReference": "LP/12345/2019",
+          "listCaseHearingCentre": "taylorHouse",
+          "listCaseHearingDate": "2023-02-03T13:30:15.000"
+        }
+      }
+    }
+  },
+  "expectation": {
+    "status": 200,
+    "errors": [],
+    "caseData": {
+      "template": "minimal-appeal-submitted.json",
+      "replacements": {
+        "detentionFacility": "immigrationRemovalCentre",
+        "ircName": "Brookhouse",
+        "isAdmin": "Yes",
+        "appellantInDetention": "Yes",
+        "isAcceleratedDetainedAppeal": "No",
+        "listCaseHearingCentre": "bradford",
+        "listCaseHearingDate": "2023-05-03T14:25:15.000",
+        "ariaListingReference" : "LP/12345/2019",
+        "remoteVideoCallTribunalResponse": "Some tribunal response",
+        "notificationsSent": [
+          {
+            "id": "7673_CASE_RE_LISTED_HOME_OFFICE",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          },
+          {
+            "id": "7673_INTERNAL_DETAINED_EDIT_CASE_LISTING_DET",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          }
+        ]
+      }
+    }
+  }
+}

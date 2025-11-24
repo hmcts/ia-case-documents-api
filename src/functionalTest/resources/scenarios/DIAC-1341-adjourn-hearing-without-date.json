@@ -1,0 +1,143 @@
+{
+  "description": "DIAC-1341 Adjourn hearing without date - Cancellation of Production Notice - Detained ",
+  "launchDarklyKey": "tcw-notifications-feature:true",
+  "disabled": true,
+  "request": {
+    "uri": "/asylum/ccdAboutToSubmit",
+    "credentials": "CaseOfficer",
+    "input": {
+      "id": 2959123,
+      "eventId": "adjournHearingWithoutDate",
+      "state": "preHearing",
+      "caseData": {
+        "template": "minimal-appeal-submitted.json",
+        "replacements": {
+          "adjournHearingWithoutDateReasons": "some reason",
+          "listCaseHearingCentre": "taylorHouse",
+          "ariaListingReference": "LP/12345/2019",
+          "appellantInDetention": "Yes",
+          "detentionFacility": "prison",
+          "prisonName": "Albany"
+        }
+      },
+      "caseDataBefore": {
+        "template": "minimal-appeal-submitted.json",
+        "replacements": {
+          "listCaseHearingCentre": "taylorHouse",
+          "listCaseHearingLength": "60",
+          "listCaseHearingDate": "2018-12-31T12:34:56",
+          "listCaseRequirementsVulnerabilities": "something around Vulnerabilities",
+          "listCaseRequirementsMultimedia": "something around Multimedia",
+          "listCaseRequirementsSingleSexCourt": "something around SingleSexCourt",
+          "listCaseRequirementsInCameraCourt": "something around InCameraCourt",
+          "listCaseRequirementsOther": "something around Other",
+          "ariaListingReference": "AA/12345/1234",
+          "customerServicesTelephone": "{$customerServices.telephoneNumber}",
+          "customerServicesEmail": "{$customerServices.emailAddress}",
+          "hearingDocuments": [
+            {
+              "id": "1",
+              "value": {
+                "document": {
+                  "document_url": "old-hearing-notice",
+                  "document_binary_url": "old-hearing-notice",
+                  "document_filename": "old-hearing-notice"
+                },
+                "description": "OLD HEARING NOTICE",
+                "dateUploaded": "2019-01-01",
+                "tag": "hearingNotice"
+              }
+            }
+          ]
+        }
+      }
+    }
+  },
+  "expectation": {
+    "status": 200,
+    "errors": [],
+    "caseData": {
+      "template": "minimal-appeal-submitted.json",
+      "replacements": {
+        "listCaseHearingCentre": "taylorHouse",
+        "notificationsSent": [
+          {
+            "id": "2959123_LEGAL_REPRESENTATIVE_ADJOURN_HEARING_WITHOUT_DATE",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          },
+          {
+            "id": "2959123_RESPONDENT_ADJOURN_HEARING_WITHOUT_DATE",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          },
+          {
+            "id": "2959123_ADJOURN_HEARING_WITHOUT_DATE_ADMIN_OFFICER",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          },
+          {
+            "id": "2959123_CASE_OFFICER_ADJOURN_HEARING_WITHOUT_DATE",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          },
+          {
+            "id": "2959123_DETAINED_CASE_ADJOURNED_HEARING_WITHOUT_DATE_PRODUCTION_DET",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          }
+        ]
+      }
+    },
+    "notifications": [
+      {
+        "reference": "2959123_LEGAL_REPRESENTATIVE_ADJOURN_HEARING_WITHOUT_DATE",
+        "recipient": "{$TEST_LAW_FIRM_A_USERNAME}",
+        "subject": "Immigration and Asylum appeal: Hearing adjourned",
+        "body": [
+          "PA/12345/2019",
+          "LP/12345/2019",
+          "CASE001",
+          "Talha Awan",
+          "some reason"
+        ]
+      },
+      {
+        "reference": "2959123_RESPONDENT_ADJOURN_HEARING_WITHOUT_DATE",
+        "recipient": "{$homeOfficeEmailAddresses.taylorHouse}",
+        "subject": "Immigration and Asylum appeal: Hearing adjourned",
+        "body": [
+          "PA/12345/2019",
+          "LP/12345/2019",
+          "A1234567",
+          "Talha Awan"
+        ]
+      },
+      {
+        "reference": "2959123_ADJOURN_HEARING_WITHOUT_DATE_ADMIN_OFFICER",
+        "recipient": "{$reviewHearingRequirementsAdminOfficerEmailAddress}",
+        "subject": "Immigration and Asylum appeal: Hearing adjourned",
+        "body": [
+          "PA/12345/2019",
+          "LP/12345/2019",
+          "Talha Awan"
+        ]
+      },
+      {
+        "reference": "2959123_CASE_OFFICER_ADJOURN_HEARING_WITHOUT_DATE",
+        "recipient": "{$hearingCentreEmailAddresses.taylorHouse}",
+        "subject": "Immigration and Asylum appeal: Hearing adjourned",
+        "body": [
+          "PA/12345/2019",
+          "LP/12345/2019",
+          "Talha Awan"
+        ]
+      },
+      {
+        "reference": "2959123_DETAINED_CASE_ADJOURNED_HEARING_WITHOUT_DATE_PRODUCTION_DET",
+        "recipient": "det-prison-albany@example.com",
+        "subject": "IAFT – SERVE IN PERSON: Hearing adjourned",
+        "body": [
+          "PA/12345/2019",
+          "A1234567",
+          "Talha Awan"
+        ]
+      }
+    ]
+  }
+}

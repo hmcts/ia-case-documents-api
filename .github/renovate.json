@@ -1,7 +1,11 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": ["local>hmcts/.github:renovate-config"],
-  "labels": ["dependencies"],
+  "extends": [
+    "local>hmcts/.github:renovate-config"
+  ],
+  "labels": [
+    "dependencies"
+  ],
   "ignoreDeps": [
     "ch.qos.logback:logback-core",
     "ch.qos.logback:logback-classic",
@@ -9,7 +13,28 @@
     "org.apache.logging.log4j:log4j-api",
     "checkstyle",
     "io.rest-assured:rest-assured",
-    "io.rest-assured:rest-assured-all"
+    "io.rest-assured:rest-assured-all",
+    "hashicorp/terraform",
+    "io.freefair.lombok",
+    "launchdarkly",
+    "info.solidsoft.pitest"
+  ],
+  "timezone": "Europe/London",
+  "schedule": [
+    "before 3am every weekday"
+  ],
+  "helmv3": {
+    "bumpVersion": "patch"
+  },
+  "regexManagers": [
+    {
+      "fileMatch": [
+        "^Dockerfile$"
+      ],
+      "matchStrings": [
+        "datasource=(?<datasource>.*?) depName=(?<depName>.*?)( versioning=(?<versioning>.*?))?\\sARG .*?_VERSION=(?<currentValue>.*)\\s"
+      ]
+    }
   ],
   "packageRules": [
     {
@@ -41,8 +66,5 @@
       "enabled": false
     }
   ],
-  "timezone": "Europe/London",
-  "schedule": [
-    "before 3am every weekday"
-  ]
+  "prConcurrentLimit": 3
 }

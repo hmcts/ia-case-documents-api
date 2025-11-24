@@ -1,0 +1,69 @@
+{
+  "description": "RIA-7698 Internal Detained transferred out of ADA notification",
+  "enabled": "{$featureFlag.homeOfficeGovNotifyEnabled}",
+  "request": {
+    "uri": "/asylum/ccdAboutToSubmit",
+    "credentials": "CaseOfficer",
+    "input": {
+      "id": 7698,
+      "eventId": "transferOutOfAda",
+      "state": "appealSubmitted",
+      "caseData": {
+        "template": "minimal-appeal-submitted.json",
+        "replacements": {
+          "detentionFacility": "immigrationRemovalCentre",
+          "ircName": "Brookhouse",
+          "isAdmin": "Yes",
+          "appellantInDetention": "Yes",
+          "notificationAttachmentDocuments": [
+            {
+              "id": "1",
+              "value": {
+                "tag": "internalDetainedTransferOutOfAdaLetter",
+                "document": {
+                  "document_url": "{$FIXTURE_DOC1_PDF_URL}",
+                  "document_binary_url": "{$FIXTURE_DOC1_PDF_URL_BINARY}",
+                  "document_filename": "{$FIXTURE_DOC1_PDF_FILENAME}"
+                },
+                "suppliedBy": "",
+                "description": "",
+                "dateUploaded": "{$TODAY}"
+              }
+            }
+          ]
+        }
+      }
+    }
+  },
+  "expectation": {
+    "status": 200,
+    "errors": [],
+    "caseData": {
+      "template": "minimal-appeal-submitted.json",
+      "replacements": {
+        "detentionFacility": "immigrationRemovalCentre",
+        "ircName": "Brookhouse",
+        "isAdmin": "Yes",
+        "appellantInDetention": "Yes",
+        "notificationsSent": [
+          {
+            "id": "7698_INTERNAL_DETAINED_TRANSFERRED_OUT_OF_ADA_DET",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          }
+        ]
+      }
+    },
+    "notifications": [
+      {
+        "reference": "7698_INTERNAL_DETAINED_TRANSFERRED_OUT_OF_ADA_DET",
+        "recipient": "det-irc-brookhouse@example.com",
+        "subject": "IAFT – SERVE BY POST: Appeal transferred out of ADA",
+        "body": [
+          "Home Office reference: A1234567",
+          "HMCTS reference: PA/12345/2019",
+          "Appellant name: Talha Awan"
+        ]
+      }
+    ]
+  }
+}

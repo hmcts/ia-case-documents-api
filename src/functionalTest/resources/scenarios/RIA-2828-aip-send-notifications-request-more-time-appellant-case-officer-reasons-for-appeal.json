@@ -1,0 +1,123 @@
+{
+  "description": "RIA-2828 AIP - [Reasons for appeal] Request Time extension notifications (Email and SMS) to appellant and Email to Case Officer",
+  "launchDarklyKey": "tcw-application-notifications-feature:true",
+  "disabled": true,
+  "request": {
+    "uri": "/asylum/ccdAboutToSubmit",
+    "credentials": "Citizen",
+    "input": {
+      "id": 1010,
+      "eventId": "makeAnApplication",
+      "state": "awaitingReasonsForAppeal",
+      "caseData": {
+        "template": "aip-minimal-appeal-submitted.json",
+        "replacements": {
+          "hearingCentre": "manchester",
+          "makeAnApplications": [
+            {
+              "id": "1",
+              "value": {
+                "type":"time extension",
+                "details":"",
+                "evidence":[],
+                "applicant":"",
+                "date":"{$TODAY}",
+                "decision":"Pending",
+                "state":"decision",
+                "applicantRole":"",
+                "decisionReason":"",
+                "decisionDate":"",
+                "decisionMaker": ""
+              }
+            }
+          ],
+          "submissionOutOfTime": "Yes",
+          "subscriptions": [
+            {
+              "id": "1",
+              "value": {
+                "subscriber": "appellant",
+                "email": "{$TEST_CITIZEN_USERNAME}",
+                "wantsEmail": "Yes",
+                "mobileNumber": "{$TEST_CITIZEN_MOBILE}",
+                "wantsSms": "Yes"
+              }
+            }
+          ],
+          "notificationsSent": []
+        }
+      }
+    }
+  },
+  "expectation": {
+    "status": 200,
+    "errors": [],
+    "caseData": {
+      "template": "aip-minimal-appeal-submitted.json",
+      "replacements": {
+        "hearingCentre": "manchester",
+        "submissionOutOfTime": "Yes",
+        "subscriptions": [
+          {
+            "id": "1",
+            "value": {
+              "subscriber": "appellant",
+              "email": "{$TEST_CITIZEN_USERNAME}",
+              "wantsEmail": "Yes",
+              "mobileNumber": "{$TEST_CITIZEN_MOBILE}",
+              "wantsSms": "Yes"
+            }
+          }
+        ],
+        "notificationsSent": [
+          {
+            "id": "1010_MAKE_AN_APPLICATION_APPELLANT_AIP_EMAIL",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          },
+          {
+            "id": "1010_SUBMIT_TIME_EXTENSION_CASE_OFFICER",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          },
+          {
+            "id": "1010_MAKE_AN_APPLICATION_APPELLANT_AIP_SMS",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          }
+        ]
+      }
+    },
+    "notifications": [
+      {
+        "reference": "1010_MAKE_AN_APPLICATION_APPELLANT_AIP_EMAIL",
+        "recipient": "{$TEST_CITIZEN_USERNAME}",
+        "subject": "Immigration and Asylum appeal: You sent the Tribunal a request",
+        "body": [
+          "PA/12345/2019",
+          "A1234567",
+          "Pablo Jimenez",
+          "time extension",
+          "{$iaAipFrontendUrl}"
+        ]
+      },
+      {
+        "reference": "1010_SUBMIT_TIME_EXTENSION_CASE_OFFICER",
+        "recipient": "{$hearingCentreEmailAddresses.manchester}",
+        "subject": "Immigration and Asylum appeal: Request for more time submitted",
+        "body": [
+          "PA/12345/2019",
+          "Pablo Jimenez",
+          "{$iaExUiFrontendUrl}"
+        ]
+      },
+      {
+        "reference": "1010_MAKE_AN_APPLICATION_APPELLANT_AIP_SMS",
+        "recipient": "{$TEST_CITIZEN_MOBILE}",
+        "subject": "",
+        "body": [
+          "PA/12345/2019",
+          "time extension",
+          "{$iaAipFrontendUrl}"
+        ]
+      }
+    ]
+  }
+}

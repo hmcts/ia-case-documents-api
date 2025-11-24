@@ -1,0 +1,81 @@
+{
+  "description": "DIAC-1397: internal detained edit appeal notification to DET",
+  "request": {
+    "uri": "/asylum/ccdAboutToSubmit",
+    "credentials": "CaseOfficer",
+    "input": {
+      "id": 1397,
+      "eventId": "editAppealAfterSubmit",
+      "state": "*",
+      "caseData": {
+        "template": "minimal-internal-appeal-submitted.json",
+        "replacements": {
+          "currentCaseStateVisibleToHomeOfficeAll": "prepareForHearing",
+          "listCaseHearingCentre": "taylorHouse",
+          "ariaListingReference": "LP/12345/2019",
+          "detentionFacility": "immigrationRemovalCentre",
+          "ircName": "Brookhouse",
+          "appellantInDetention": "Yes",
+          "isAcceleratedDetainedAppeal": "No",
+          "legalRepEmail": "ia-law-firm-a@fake.hmcts.net",
+          "appellantsRepresentation": "Yes",
+          "notificationAttachmentDocuments": [
+            {
+              "id": "1",
+              "value": {
+                "tag": "internalEditAppealLetter",
+                "document": {
+                  "document_url": "{$FIXTURE_DOC1_PDF_URL}",
+                  "document_binary_url": "{$FIXTURE_DOC1_PDF_URL_BINARY}",
+                  "document_filename": "{$FIXTURE_DOC1_PDF_FILENAME}"
+                },
+                "suppliedBy": "",
+                "description": "",
+                "dateUploaded": "{$TODAY}"
+              }
+            }
+          ]
+        }
+      }
+    }
+  },
+  "expectation": {
+    "status": 200,
+    "errors": [],
+    "caseData": {
+      "template": "minimal-internal-appeal-submitted.json",
+      "replacements": {
+        "detentionFacility": "immigrationRemovalCentre",
+        "ircName": "Brookhouse",
+        "appellantInDetention": "Yes",
+        "isAcceleratedDetainedAppeal": "No",
+        "notificationsSent": [
+          {
+            "id": "1397_EDIT_APPEAL_AFTER_SUBMIT_RESPONDENT",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          },
+          {
+            "id": "1397_INTERNAL_DET_EDIT_APPEAL_EMAIL",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          }
+        ],
+        "notificationAttachmentDocuments": [
+          {
+            "id": "1",
+            "value": {
+              "tag": "internalEditAppealLetter",
+              "document": {
+                "document_url": "{$FIXTURE_DOC1_PDF_URL}",
+                "document_binary_url": "{$FIXTURE_DOC1_PDF_URL_BINARY}",
+                "document_filename": "{$FIXTURE_DOC1_PDF_FILENAME}"
+              },
+              "suppliedBy": "",
+              "description": "",
+              "dateUploaded": "{$TODAY}"
+            }
+          }
+        ]
+      }
+    }
+  }
+}

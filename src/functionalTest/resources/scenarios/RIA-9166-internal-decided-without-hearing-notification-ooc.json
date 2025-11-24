@@ -1,0 +1,52 @@
+{
+  "description": "RIA-8340 Decision without hearing letter notification - Out of country",
+  "request": {
+    "uri": "/asylum/ccdAboutToSubmit",
+    "credentials": "AdminOfficer",
+    "input": {
+      "id": 9166,
+      "eventId": "decisionWithoutHearing",
+      "state": "respondentReview",
+      "caseData": {
+        "template": "minimal-appeal-submitted.json",
+        "replacements": {
+          "isAdmin": "Yes",
+          "appellantHasFixedAddressAdminJ": "Yes",
+          "appellantInUk": "No",
+          "addressLine1AdminJ": "Calle Toledo 32",
+          "addressLine2AdminJ": "Madrid",
+          "addressLine3AdminJ": "28003",
+          "countryGovUkOocAdminJ": "ES",
+          "appellantInDetention": "No"
+        }
+      }
+    }
+  },
+  "expectation": {
+    "status": 200,
+    "errors": [],
+    "caseData": {
+      "template": "minimal-appeal-submitted.json",
+      "replacements": {
+        "isAdmin": "Yes",
+        "appellantHasFixedAddressAdminJ": "Yes",
+        "appellantInUk": "No",
+        "addressLine1AdminJ": "Calle Toledo 32",
+        "addressLine2AdminJ": "Madrid",
+        "addressLine3AdminJ": "28003",
+        "countryGovUkOocAdminJ": "ES",
+        "appellantInDetention": "No"
+      },
+      "notificationsSent": [
+        {
+          "id": "9166_DECISION_WITHOUT_HEARING_HOME_OFFICE",
+          "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+        },
+        {
+          "id": "9166_INTERNAL_DECISION_WITHOUT_HEARING_APPELLANT_LETTER",
+          "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+        }
+      ]
+    }
+  }
+}

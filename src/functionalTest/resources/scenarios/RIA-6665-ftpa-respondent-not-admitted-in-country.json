@@ -1,0 +1,58 @@
+{
+  "description": "RIA-6665  Respondent FTPA Application is not admitted (in country)",
+  "enabled": "{$featureFlag.homeOfficeGovNotifyEnabled}",
+  "request": {
+    "uri": "/asylum/ccdAboutToSubmit",
+    "credentials": "Judge",
+    "input": {
+      "id": 66654,
+      "eventId": "residentJudgeFtpaDecision",
+      "state": "ftpaSubmitted",
+      "caseData": {
+        "template": "minimal-appeal-submitted.json",
+        "replacements": {
+          "currentCaseStateVisibleToJudge": "ftpaSubmitted",
+          "ftpaRespondentDecisionOutcomeType": "notAdmitted",
+          "ftpaApplicantType": "respondent",
+          "ariaListingReference": "987654321",
+          "appellantInUk": "Yes"
+        }
+      }
+    }
+  },
+  "expectation": {
+    "status": 200,
+    "errors": [],
+    "caseData": {
+      "template": "minimal-appeal-submitted.json",
+      "replacements": {
+        "notificationsSent": []
+      }
+    },
+    "notifications": [
+      {
+        "reference": "66654_FTPA_APPLICATION_DECISION_HOME_OFFICE_RESPONDENT",
+        "recipient": "{$upperTribunalNoticesEmailAddress}",
+        "subject": "Immigration and Asylum appeal: application to appeal to Upper Tribunal",
+        "body": [
+          "PA/12345/2019",
+          "A1234567",
+          "987654321",
+          "Talha Awan",
+          "{$TODAY+14|d MMMM yyyy}"
+        ]
+      },
+      {
+        "reference": "66654_FTPA_APPLICATION_DECISION_LEGAL_REPRESENTATIVE_RESPONDENT",
+        "recipient": "{$TEST_LAW_FIRM_A_USERNAME}",
+        "subject": "Immigration and Asylum appeal: application to appeal to Upper Tribunal",
+        "body": [
+          "PA/12345/2019",
+          "CASE001",
+          "987654321",
+          "Talha Awan"
+        ]
+      }
+    ]
+  }
+}

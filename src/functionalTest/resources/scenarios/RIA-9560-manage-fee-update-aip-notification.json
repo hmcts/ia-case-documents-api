@@ -1,0 +1,69 @@
+{
+  "description": "RIA-9560 Manage fee update AIP Notification should not be sent",
+  "launchDarklyKey": "dlrm-telephony-feature-flag:false",
+  "request": {
+    "uri": "/asylum/ccdAboutToSubmit",
+    "credentials": "AdminOfficer",
+    "input": {
+      "id": 8247,
+      "eventId": "manageFeeUpdate",
+      "state": "*",
+      "caseData": {
+        "template": "minimal-appeal-submitted.json",
+        "replacements": {
+          "journeyType": "aip",
+          "isDlrmSetAsideEnabled": "Yes",
+          "feeUpdateTribunalAction": "additionalPayment",
+          "feeAmountGbp": "1000",
+          "previousFeeAmountGbp": "1000",
+          "manageFeeRequestedAmount": "1000",
+          "ccdReferenceNumberForDisplay": "test",
+          "feeUpdateReason": "appealNotValid",
+          "subscriptions": [
+            {
+              "id": "1",
+              "value": {
+                "subscriber": "appellant",
+                "email": "{$TEST_CITIZEN_USERNAME}",
+                "wantsEmail": "Yes",
+                "mobileNumber": "{$TEST_CITIZEN_MOBILE}",
+                "wantsSms": "Yes"
+              }
+            }
+          ]
+        }
+      }
+    }
+  },
+  "expectation": {
+    "status": 200,
+    "errors": [],
+    "caseData": {
+      "template": "minimal-appeal-submitted.json",
+      "replacements": {
+        "journeyType": "aip",
+        "isDlrmSetAsideEnabled": "Yes",
+        "feeUpdateTribunalAction": "additionalPayment",
+        "feeAmountGbp": "1000",
+        "previousFeeAmountGbp": "1000",
+        "manageFeeRequestedAmount": "1000",
+        "ccdReferenceNumberForDisplay": "test",
+        "feeUpdateReason": "appealNotValid",
+        "subscriptions": [
+          {
+            "id": "1",
+            "value": {
+              "subscriber": "appellant",
+              "email": "{$TEST_CITIZEN_USERNAME}",
+              "wantsEmail": "Yes",
+              "mobileNumber": "{$TEST_CITIZEN_MOBILE}",
+              "wantsSms": "Yes"
+            }
+          }
+        ],
+        "notificationsSent": [
+        ]
+      }
+    }
+  }
+}

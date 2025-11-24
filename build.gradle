@@ -3,7 +3,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath("net.serenity-bdd:serenity-gradle-plugin:3.6.22")
+        classpath("net.serenity-bdd:serenity-gradle-plugin:4.2.16")
         classpath("au.com.dius.pact:au.com.dius.pact.gradle.plugin:4.4.0-beta.1")
     }
 }
@@ -17,11 +17,13 @@ plugins {
     id 'info.solidsoft.pitest' version '1.15.0'
     id 'io.spring.dependency-management' version '1.1.7'
     id 'org.owasp.dependencycheck' version '10.0.4'
-    id 'org.sonarqube' version '4.4.1.3373'
+    id 'org.sonarqube' version '6.2.0.5505'
     id 'org.springframework.boot' version '2.7.18'
     id 'uk.gov.hmcts.java' version '0.12.67'
     id 'au.com.dius.pact' version '4.6.17'
     id "io.freefair.lombok" version "6.6.3"
+    id "name.remal.randomize-test-classes" version "1.5.0"
+    id 'org.gradle.test-retry' version '1.6.2'
 }
 
 apply plugin: 'java'
@@ -32,11 +34,15 @@ apply plugin: 'idea'
 def versions = [
     junit              : '5.13.4',
     junitPlatform      : '1.13.4',
+    gradlePitest       : '1.15.0',
+    pact_version       : '4.4.9',
+    pitest             : '1.15.3',
     reformLogging      : '6.1.9',
     reformHealthStarter: '0.0.5',
     restAssured        : '5.4.0',
     serenity           : '4.2.31',
-    pact_version       : '4.1.38',
+    sonarPitest        : '0.5',
+    springHystrix      : '2.2.10.RELEASE',
     springDoc          : '1.8.0',
     springCloud        : '3.1.9'
 ]
@@ -54,15 +60,15 @@ java {
 }
 
 compileJava {
-    options.compilerArgs << '-parameters' << '-Xlint:deprecation' << "-Xlint:unchecked"
+    options.compilerArgs << '-parameters' << '-Xlint:deprecation' << "-Xlint:unchecked" << "-Werror"
 }
 
 compileTestJava {
-    options.compilerArgs << '-Xlint:deprecation' << "-Xlint:unchecked"
+    options.compilerArgs << '-Xlint:deprecation' << "-Xlint:unchecked" << "-Werror"
 }
 
 tasks.withType(Test) {
-    useJUnitPlatform {}
+    useJUnitPlatform()
 
     testLogging {
         exceptionFormat = 'full'
@@ -108,13 +114,14 @@ sourceSets {
         }
         resources.srcDir file('src/smokeTest/resources')
     }
+
     contractTest {
         java {
             compileClasspath += main.output
             runtimeClasspath += main.output
             srcDir file('src/contractTest/java')
         }
-        resources.srcDir file('src/contactTest/resources')
+        resources.srcDir file('src/contractTest/resources')
     }
 }
 
@@ -139,6 +146,7 @@ idea {
 }
 
 configurations {
+    integrationTestImplementation.extendsFrom testImplementation
     integrationTestCompile.extendsFrom testImplementation
     integrationTestRuntime.extendsFrom testRuntime
     functionalTestImplementation.extendsFrom testImplementation
@@ -159,8 +167,8 @@ pmd {
     sourceSets = [sourceSets.main, sourceSets.test, sourceSets.integrationTest, sourceSets.functionalTest, sourceSets.smokeTest]
     reportsDir = file("$project.buildDir/reports/pmd")
     ruleSets = [
-        'category/java/errorprone.xml',
-        'category/java/bestpractices.xml'
+            'category/java/errorprone.xml',
+            'category/java/bestpractices.xml'
     ]
 }
 
@@ -229,6 +237,7 @@ pitest {
     excludedClasses = [
         'uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.config.*',
         'uk.gov.hmcts.reform.iacasedocumentsapi.Application',
+        'uk.gov.hmcts.reform.iacasedocumentsapi.CcdScenarioRunnerTest',
         'uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.TsvStringProvider'
     ]
     threads = 10
@@ -240,6 +249,60 @@ pitest {
 }
 
 project.tasks['pitest'].group = "Verification"
+
+project.ext {
+    pacticipant = 'ia_caseNotificationsApi'
+    if (System.env.GIT_COMMIT) {
+        pacticipantVersion = System.env.GIT_COMMIT.substring(0,9)
+    } else {
+        pacticipantVersion = getCheckedOutGitCommitHash()
+    }
+}
+
+def getCheckedOutGitCommitHash() {
+    'git rev-parse --verify --short HEAD'.execute().text.trim()
+}
+
+task runContractTests(type: Test, description: 'Runs contract tests.', group: 'Verification') {
+    onlyIf {
+        return System.env.SKIP_CONTRACT_TESTS == null || System.env.SKIP_CONTRACT_TESTS == 'false'
+    }
+    useJUnitPlatform()
+    testClassesDirs = sourceSets.contractTest.output.classesDirs
+    classpath = sourceSets.contractTest.runtimeClasspath
+    systemProperty 'pact.rootDir', "pacts"
+    testLogging.showStandardStreams = true
+
+}
+
+task runAndPublishConsumerPactTests(type: Test, description: 'Publish pact test to broker.', group: 'Verification') {
+    logger.lifecycle("Runs pact consumer Tests")
+    onlyIf {
+        return System.env.SKIP_CONTRACT_TESTS == null || System.env.SKIP_CONTRACT_TESTS == 'false'
+    }
+    useJUnitPlatform()
+    testClassesDirs = sourceSets.contractTest.output.classesDirs
+    classpath = sourceSets.contractTest.runtimeClasspath
+    systemProperty 'pact.rootDir', "pacts"
+    testLogging.showStandardStreams = true
+}
+
+pact {
+    broker {
+        pactBrokerUrl = System.getenv("PACT_BROKER_FULL_URL") ?: 'http://localhost:80'
+    }
+    publish {
+        pactDirectory = 'pacts'
+        tags = [System.getenv("PACT_BRANCH_NAME") ?: 'Dev']
+        version = project.pacticipantVersion
+    }
+}
+
+pactPublish {
+    pactPublish = project.pact.publish
+}
+
+runAndPublishConsumerPactTests.finalizedBy pactPublish
 
 sonarqube {
     properties {
@@ -253,7 +316,8 @@ sonarqube {
                                      "src/main/java/uk/gov/hmcts/reform/iacasedocumentsapi/Application.java"
         property "sonar.cpd.exclusions", "src/main/java/uk/gov/hmcts/reform/iacasedocumentsapi/domain/entities/AsylumCase.java," +
                                          "src/main/java/uk/gov/hmcts/reform/iacasedocumentsapi/domain/entities/AsylumCaseBuilder.java," +
-                                         "src/main/java/uk/gov/hmcts/reform/iacasedocumentsapi/domain/templates/**"
+                                         "src/main/java/uk/gov/hmcts/reform/iacasedocumentsapi/domain/templates/**" +
+                                         "src/main/java/uk/gov/hmcts/reform/iacasedocumentsapi/domain/personalisation/**"
     }
 }
 
@@ -295,6 +359,7 @@ dependencyManagement {
             entry 'jackson-datatype-jsr310'
             entry 'jackson-datatype-jdk8'
         }
+
     }
 }
 
@@ -333,6 +398,8 @@ dependencies {
     implementation group: 'net.minidev', name: 'json-smart', version: '2.5.2'
 
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-cache'
+    implementation group: 'com.github.ben-manes.caffeine', name: 'caffeine', version: '2.9.3'
+
     implementation group: 'com.fasterxml.jackson.core', name: 'jackson-core'
     implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind'
     implementation group: 'com.fasterxml.jackson.core', name: 'jackson-annotations'
@@ -345,21 +412,41 @@ dependencies {
     implementation group: 'ch.qos.logback', name: 'logback-core', version: '1.2.13'
     implementation group: 'net.logstash.logback', name: 'logstash-logback-encoder', version: '8.1'
 
+    implementation group: 'org.apache.tomcat.embed', name: 'tomcat-embed-core', version: '9.0.110'
+    implementation group: 'org.apache.tomcat.embed', name: 'tomcat-embed-websocket', version: '9.0.110'
+
     implementation group: 'com.sun.xml.bind', name: 'jaxb-osgi', version: '2.3.9'
+    implementation (group: 'com.github.hmcts', name: 'document-management-client', version: '7.0.1'){
+        exclude group: "org.bouncycastle", module: "bcprov-jdk15on"
+    }
 
     implementation group: 'com.github.hmcts', name: 'document-management-client', version: '7.0.1'
     implementation group: 'com.github.hmcts.java-logging', name: 'logging', version: versions.reformLogging
     implementation group: 'com.github.hmcts.java-logging', name: 'logging-appinsights', version: versions.reformLogging
-    implementation group: 'com.github.hmcts', name: 'service-auth-provider-java-client', version: '4.1.2'
+    implementation(group: 'com.github.hmcts', name: 'service-auth-provider-java-client', version: '4.1.2') {
+        exclude group: "org.bouncycastle", module: "bcprov-jdk15on"
+    }
 
     implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.18.0'
     implementation group: 'commons-io', name: 'commons-io', version: '2.20.0'
 
     implementation group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.14'
+    implementation(group: 'org.springframework.cloud', name: 'spring-cloud-starter-openfeign', version: '3.1.9') {
+        exclude group: "org.bouncycastle", module: "bcprov-jdk15on"
+    }
+    implementation(group: 'org.springframework.cloud', name: 'spring-cloud-starter-bootstrap' , version: '3.1.9') {
+        exclude group: "org.bouncycastle", module: "bcprov-jdk15on"
+    }
+    implementation group: 'org.bouncycastle', name: 'bcprov-jdk18on', version: '1.81'
 
     implementation group: 'com.github.hmcts', name: 'ccd-case-document-am-client', version: '1.7.3'
     implementation group: 'org.apache.tomcat.embed', name: 'tomcat-embed-core', version: '9.0.110'
     implementation group: 'org.apache.tomcat.embed', name: 'tomcat-embed-websocket', version: '9.0.110'
+    implementation 'ch.qos.logback:logback-classic:1.2.13'
+    implementation 'ch.qos.logback:logback-core:1.2.13'
+    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-cache'
+
+    implementation group: 'uk.gov.service.notify', name: 'notifications-java-client', version: '5.2.1-RELEASE'
 
     implementation group: 'com.launchdarkly', name: 'launchdarkly-java-server-sdk', version: '6.3.0'
     implementation group: 'com.github.hmcts', name: 'ccd-case-document-am-client', version: '1.7.3'
@@ -367,16 +454,32 @@ dependencies {
 
     annotationProcessor 'org.projectlombok:lombok:1.18.38'
     compileOnly 'org.projectlombok:lombok:1.18.38'
+    implementation group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.14'
+
+    implementation group: 'com.launchdarkly', name: 'launchdarkly-java-server-sdk', version: '6.3.0'
 
     testImplementation group: 'org.mockito', name: 'mockito-junit-jupiter', version: '3.12.4'
     testImplementation group: 'org.mockito', name: 'mockito-inline', version: '3.12.4'
+    testImplementation group: 'org.assertj', name: 'assertj-core', version: '3.16.1'
+    testImplementation group: 'org.powermock', name: 'powermock-api-mockito2', version: '2.0.9'
+    testImplementation(group: 'org.springframework.boot', name: 'spring-boot-starter-test') {
+        exclude group: "com.vaadin.external.google", module: "android-json"
+    }
+
+    testImplementation group: 'org.pitest', name: 'pitest', version: versions.pitest
+    testImplementation "info.solidsoft.gradle.pitest:gradle-pitest-plugin:${versions.gradlePitest}"
+    testImplementation "org.codehaus.sonar-plugins:sonar-pitest-plugin:${versions.sonarPitest}"
+
     testImplementation group: 'org.springframework.boot', name: 'spring-boot-starter-test'
     testImplementation group: 'org.springframework.security', name: 'spring-security-test', version: versions.springSecurity
+    testImplementation group: 'org.springframework.security', name: 'spring-security-test'
 
     testImplementation "org.codehaus.sonar-plugins:sonar-pitest-plugin:0.5"
     testImplementation group: 'org.pitest', name: 'pitest', version: '1.16.2'
     testImplementation group: 'io.rest-assured', name: 'rest-assured-all', version: versions.restAssured
+    testImplementation(group: 'io.rest-assured', name: 'rest-assured-all', version: versions.restAssured)
     testImplementation group: 'io.rest-assured', name: 'rest-assured', version: versions.restAssured
+
     testImplementation group: 'net.serenity-bdd', name: 'serenity-core', version: versions.serenity
     testImplementation group: 'net.serenity-bdd', name: 'serenity-junit', version: versions.serenity
     testImplementation group: 'net.serenity-bdd', name: 'serenity-rest-assured', version: versions.serenity
@@ -384,6 +487,7 @@ dependencies {
 
     testImplementation group: 'com.github.hmcts', name: 'ccd-case-document-am-client', version: '1.7.3'
 
+    testImplementation group: 'org.apiguardian', name: 'apiguardian-api', version: '1.1.2'
     testImplementation group: 'com.github.hmcts', name: 'fortify-client', version: '1.4.9', classifier: 'all', {
         exclude group: 'commons-io', module: 'commons-io'
         exclude group: 'org.apache.commons', module: 'commons-lang3'
@@ -411,6 +515,13 @@ dependencies {
     smokeTestImplementation sourceSets.main.runtimeClasspath
     smokeTestImplementation sourceSets.test.runtimeClasspath
 
+    contractTestImplementation group: 'au.com.dius.pact.consumer', name: 'junit5', version: versions.pact_version
+//    contractTestImplementation group: 'au.com.dius.pact.provider', name: 'junit5', version: versions.pact_version
+//    contractTestImplementation group: 'au.com.dius.pact.provider', name: 'spring', version: versions.pact_version
+//    contractTestImplementation group: 'au.com.dius.pact.provider', name: 'junit5spring', version: versions.pact_version
+    contractTestImplementation group: 'org.springframework.boot', name: 'spring-boot-starter-test'
+    contractTestImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: versions.junit
+    contractTestRuntimeOnly group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version : versions.junit
     contractTestImplementation sourceSets.main.runtimeClasspath
     contractTestImplementation sourceSets.test.runtimeClasspath
 
@@ -442,10 +553,6 @@ dependencyUpdates.resolutionStrategy = {
     }
 }
 
-def getCheckedOutGitCommitHash() {
-    'git rev-parse --verify --short HEAD'.execute().text.trim()
-}
-
 gradle.startParameter.continueOnFailure = true
 
 bootJar {
@@ -459,7 +566,7 @@ bootJar {
 // UTF-8 as the default character set instead of windows-1252 which causes issues.
 // this setting only applies when running via gradle bootRun -- see web.config for the
 // java flag that configures the deployed appllications
-applicationDefaultJvmArgs = ["-Dfile.encoding=UTF-8"]
+applicationDefaultJvmArgs = ["-Dfile.encoding=UTF-8", "-Dhttps.protocols=TLSv1.2"]
 
 wrapper {
     distributionType = Wrapper.DistributionType.ALL

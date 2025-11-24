@@ -1,0 +1,75 @@
+{
+  "description": "DIAC-1356 internal case disposed under rule 32 detained in other letter",
+  "request": {
+    "uri": "/asylum/ccdAboutToSubmit",
+    "credentials": "Judge",
+    "input": {
+      "id": 1356,
+      "eventId": "decideFtpaApplication",
+      "state": "ftpaDecided",
+      "caseData": {
+        "template": "minimal-appeal-submitted.json",
+        "replacements": {
+          "isAdmin": "Yes",
+          "currentCaseStateVisibleToJudge": "ftpaDecided",
+          "appellantsRepresentation": "Yes",
+          "appellantInDetention": "Yes",
+          "detentionFacility": "other",
+          "appellantInUk": "Yes",
+          "appellantAddress": {
+            "County": "",
+            "Country": "United Kingdom",
+            "PostCode": "NE21JX",
+            "PostTown": "Example Town",
+            "AddressLine1": "5",
+            "AddressLine2": "Example Street"
+          },
+          "ftpaApplicantType": "appellant",
+          "ftpaAppellantSubmitted": "Yes",
+          "ftpaAppellantRjDecisionOutcomeType": "remadeRule32",
+          "ftpaAppellantDecisionRemadeRule32": "remadeRule32",
+          "ftpaAppellantDecisionRemadeRule32Text": "Rule 32 decision text",
+          "ccdReferenceNumberForDisplay": "1111222233334444"
+        }
+      }
+    }
+  },
+  "expectation": {
+    "status": 200,
+    "errors": [],
+    "caseData": {
+      "template": "minimal-appeal-submitted.json",
+      "replacements": {
+        "isAdmin": "Yes",
+        "appellantsRepresentation": "Yes",
+        "appellantInDetention": "Yes",
+        "detentionFacility": "other",
+        "appellantInUk": "Yes",
+        "appellantAddress": {
+          "County": "",
+          "Country": "United Kingdom",
+          "PostCode": "NE21JX",
+          "PostTown": "Example Town",
+          "AddressLine1": "5",
+          "AddressLine2": "Example Street"
+        },
+        "ftpaApplicantType": "appellant",
+        "ftpaAppellantSubmitted": "Yes",
+        "ftpaAppellantRjDecisionOutcomeType": "remadeRule32",
+        "ftpaAppellantDecisionRemadeRule32": "remadeRule32",
+        "ftpaAppellantDecisionRemadeRule32Text": "Rule 32 decision text",
+        "ccdReferenceNumberForDisplay": "1111222233334444",
+        "notificationsSent": [
+          {
+            "id": "1356_FTPA_APPLICATION_DECISION_HOME_OFFICE_APPELLANT",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          },
+          {
+            "id": "1356_INTERNAL_CASE_DISPOSE_UNDER_RULE_31_OR_32_APPELLANT_LETTER",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          }
+        ]
+      }
+    }
+  }
+}

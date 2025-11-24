@@ -1,0 +1,63 @@
+{
+  "description": "RIA-9525: Remove detention status for admin and represented cases",
+  "request": {
+    "uri": "/asylum/ccdAboutToSubmit",
+    "credentials": "AdminOfficer",
+    "input": {
+      "id": 952528,
+      "eventId": "removeDetainedStatus",
+      "state": "respondentReview",
+      "caseData": {
+        "template": "minimal-appeal-submitted.json",
+        "replacements": {
+          "isAdmin": "Yes",
+          "appellantsRepresentation": "No",
+          "legalRepEmail": "{$TEST_LAW_FIRM_A_USERNAME}",
+          "ariaListingReference": "LR/1234/2345",
+          "appellantGivenNames": "Test",
+          "appellantFamilyName": "User",
+          "listCaseHearingDate": "2023-05-01T13:30:15.000",
+          "listCaseHearingCentre": "harmondsworth",
+          "currentCaseStateVisibleToHomeOfficeAll": "awaitingRespondentEvidence",
+          "legalRepHasAddress": "Yes",
+          "legalRepAddressUK": {
+            "County": "",
+            "Country": "United Kingdom",
+            "PostCode": "NW7 1BJ",
+            "PostTown": "London",
+            "AddressLine1": "Flat 1",
+            "AddressLine2": "Tamarind Court",
+            "AddressLine3": "1 Sanders Lane"
+          }
+        }
+      }
+    }
+  },
+  "expectation": {
+    "status": 200,
+    "errors": [],
+    "caseData": {
+      "template": "minimal-appeal-submitted.json",
+      "replacements": {
+        "isAdmin": "Yes",
+        "appellantsRepresentation": "No",
+        "legalRepEmail": "{$TEST_LAW_FIRM_A_USERNAME}",
+        "ariaListingReference": "LR/1234/2345",
+        "appellantGivenNames": "Test",
+        "appellantFamilyName": "User",
+        "listCaseHearingDate": "2023-05-01T13:30:15.000",
+        "notificationsSent":[
+          {
+            "id":"952528_REMOVE_DETENTION_STATUS_HOME_OFFICE",
+            "value":"$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          },
+          {
+            "id":"952528_REMOVE_DETENTION_STATUS_LEGAL_REP_LETTER",
+            "value":"$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          }
+        ]
+      }
+    }
+  }
+}
+

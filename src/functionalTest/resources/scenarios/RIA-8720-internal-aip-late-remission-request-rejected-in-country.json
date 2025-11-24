@@ -1,0 +1,71 @@
+{
+  "description": "RIA-8720: Late remission request rejected in country",
+  "request": {
+    "uri": "/asylum/ccdAboutToSubmit",
+    "credentials": "AdminOfficer",
+    "input": {
+      "id": 8720,
+      "eventId": "recordRemissionDecision",
+      "state": "appealSubmitted",
+      "caseData": {
+        "template": "minimal-appeal-submitted.json",
+        "replacements": {
+          "appealType": "refusalOfHumanRights",
+          "isAdmin": "Yes",
+          "appellantsRepresentation": "Yes",
+          "appellantInDetention": "No",
+          "remissionDecision": "rejected",
+          "lateRemissionType": "hoWaiverRemission",
+          "remissionClaim": "legalAid",
+          "legalAidAccountNumber": "1A234B",
+          "remissionDecisionReason": "Some reason",
+          "appellantInUk": "Yes",
+          "appellantHasFixedAddress": "Yes",
+          "appellantAddress": {
+            "County": "",
+            "Country": "United Kingdom",
+            "PostCode": "NE21JX",
+            "PostTown": "Example Town",
+            "AddressLine1": "5",
+            "AddressLine2": "Example Street"
+          }
+        }
+      }
+    }
+  },
+  "expectation": {
+    "status": 200,
+    "errors": [],
+    "caseData": {
+      "template": "minimal-appeal-submitted.json",
+      "replacements": {
+        "appealType": "refusalOfHumanRights",
+        "isAdmin": "Yes",
+        "appellantsRepresentation": "Yes",
+        "appellantInDetention": "No",
+        "remissionDecision": "rejected",
+        "lateRemissionType": "hoWaiverRemission",
+        "remissionClaim": "legalAid",
+        "legalAidAccountNumber": "1A234B",
+        "remissionDecisionReason": "Some reason",
+        "appellantInUk": "Yes",
+        "appellantHasFixedAddress": "Yes",
+        "appellantAddress": {
+          "County": "",
+          "Country": "United Kingdom",
+          "PostCode": "NE21JX",
+          "PostTown": "Example Town",
+          "AddressLine1": "5",
+          "AddressLine2": "Example Street"
+        },
+        "notificationsSent": [
+          {
+            "id": "8720_INTERNAL_LATE_REMISSION_REQUEST_APPELLANT_LETTER",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          }
+        ]
+      }
+    }
+  }
+}
+

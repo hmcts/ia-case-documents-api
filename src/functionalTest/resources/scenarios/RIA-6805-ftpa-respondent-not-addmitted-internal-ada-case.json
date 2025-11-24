@@ -1,0 +1,79 @@
+{
+  "description": "RIA-6805  Respondent FTPA Application is not admitted for internal ADA case",
+  "request": {
+    "uri": "/asylum/ccdAboutToSubmit",
+    "credentials": "Judge",
+    "input": {
+      "id": 68051,
+      "eventId": "leadershipJudgeFtpaDecision",
+      "state": "ftpaSubmitted",
+      "caseData": {
+        "template": "minimal-appeal-submitted.json",
+        "replacements": {
+          "detentionFacility": "immigrationRemovalCentre",
+          "ircName": "Brookhouse",
+          "currentCaseStateVisibleToJudge": "ftpaSubmitted",
+          "listCaseHearingCentre": "birmingham",
+          "ariaListingReference": "LR/1234/2345",
+          "appealType": "refusalOfEu",
+          "isAdmin": "Yes",
+          "appellantInDetention": "Yes",
+          "isAcceleratedDetainedAppeal": "Yes",
+          "ftpaRespondentRjDecisionOutcomeType": "notAdmitted",
+          "ftpaApplicantType": "respondent",
+          "ftpaRespondentDecisionDocument": [
+            {
+              "id": "docId",
+              "value": {
+                "document": {
+                  "document_url": "{$FIXTURE_DOC1_PDF_URL}",
+                  "document_binary_url": "{$FIXTURE_DOC1_PDF_URL_BINARY}",
+                  "document_filename": "{$FIXTURE_DOC1_PDF_FILENAME}"
+                },
+                "description": "description"
+              }
+            }
+          ],
+          "ftpaRespondentGroundsDocuments": [
+            {
+              "id": "docId",
+              "value": {
+                "document": {
+                  "document_url": "{$FIXTURE_DOC1_PDF_URL}",
+                  "document_binary_url": "{$FIXTURE_DOC1_PDF_URL_BINARY}",
+                  "document_filename": "{$FIXTURE_DOC1_PDF_FILENAME}"
+                },
+                "description": "description"
+              }
+            }
+          ]
+        }
+      }
+    }
+  },
+  "expectation": {
+    "status": 200,
+    "errors": [],
+    "caseData": {
+      "template": "minimal-appeal-submitted.json",
+      "replacements": {
+        "detentionFacility": "immigrationRemovalCentre",
+        "ircName": "Brookhouse",
+        "currentCaseStateVisibleToJudge": "ftpaSubmitted",
+        "listCaseHearingCentre": "birmingham",
+        "ariaListingReference": "LR/1234/2345",
+        "appealType": "refusalOfEu",
+        "isAdmin": "Yes",
+        "isAcceleratedDetainedAppeal": "Yes",
+        "ftpaRespondentRjDecisionOutcomeType": "notAdmitted",
+        "ftpaApplicantType": "respondent",
+        "notificationsSent": [
+          {
+            "id": "68051_FTPA_APPLICATION_DECISION_HOME_OFFICE_RESPONDENT",
+            "value":"$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          }
+        ]
+      }
+    }
+  }
+}

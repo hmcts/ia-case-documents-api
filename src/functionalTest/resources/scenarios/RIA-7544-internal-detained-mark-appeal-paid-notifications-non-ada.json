@@ -1,0 +1,91 @@
+{
+  "description": "RIA-7947 Send mark appeal paid notification Internal Non-ADA to DET",
+  "launchDarklyKey": "tcw-notifications-feature:true",
+  "request": {
+    "uri": "/asylum/ccdAboutToSubmit",
+    "credentials": "AdminOfficer",
+    "input": {
+      "id": 7947,
+      "eventId": "markAppealPaid",
+      "state": "appealSubmitted",
+      "caseData": {
+        "template": "minimal-internal-appeal-submitted.json",
+        "replacements": {
+          "appealType": "refusalOfHumanRights",
+          "paymentStatus": "Paid",
+          "currentCaseStateVisibleToHomeOfficeAll":"appealSubmitted",
+          "isAdmin": "Yes",
+          "appellantsRepresentation": "Yes",
+          "appellantInDetention": "Yes",
+          "isAdmin": "Yes",
+          "appellantsRepresentation": "Yes",
+          "isAcceleratedDetainedAppeal": "No",
+          "detentionFacility": "immigrationRemovalCentre",
+          "ircName": "Brookhouse",
+          "notificationAttachmentDocuments": [
+            {
+              "id": "1",
+              "value": {
+                "tag": "internalDetMarkAsPaidLetter",
+                "document": {
+                  "document_url": "{$FIXTURE_DOC1_PDF_URL}",
+                  "document_binary_url": "{$FIXTURE_DOC1_PDF_URL_BINARY}",
+                  "document_filename": "{$FIXTURE_DOC1_PDF_FILENAME}"
+                },
+                "suppliedBy": "",
+                "description": "",
+                "dateUploaded": "{$TODAY}"
+              }
+            }
+          ]
+        }
+      }
+    }
+  },
+  "expectation": {
+    "status": 200,
+    "errors": [],
+    "caseData": {
+      "template": "minimal-internal-appeal-submitted.json",
+      "replacements": {
+        "appealType": "refusalOfHumanRights",
+        "detentionFacility": "immigrationRemovalCentre",
+        "ircName": "Brookhouse",
+        "paymentStatus": "Paid",
+        "notificationsSent": [
+          {
+            "id": "7947_PENDING_PAYMENT_PAID_CASE_OFFICER",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          },
+          {
+            "id": "7947_APPEAL_SUBMITTED_HOME_OFFICE",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          }
+        ]
+      }
+    },
+    "notifications": [
+      {
+        "reference": "7947_PENDING_PAYMENT_PAID_CASE_OFFICER",
+        "recipient": "{$hearingCentreEmailAddresses.taylorHouse}",
+        "subject": "Immigration and Asylum appeal: A fee has been paid",
+        "body": [
+          "PA/12345/2019",
+          "Talha Awan",
+          "{$iaExUiFrontendUrl}"
+        ]
+      },
+      {
+        "reference": "7947_APPEAL_SUBMITTED_HOME_OFFICE",
+        "recipient": "apc_privatebetainbox@example.com",
+        "subject": "Immigration and Asylum appeal: appeal submitted",
+        "body": [
+          "HMCTS reference: PA/12345/2019",
+          "Home Office reference: A1234567",
+          "Appellant name: Talha Awan",
+          "The online service: {$iaExUiFrontendUrl}"
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,91 @@
+{
+  "description": "RIA-8218 Update Tribunal Decision Rule 31 AIP Notification (document)",
+  "launchDarklyKey": "dlrm-setaside-feature-flag:true",
+  "request": {
+    "uri": "/asylum/ccdAboutToSubmit",
+    "credentials": "Judge",
+    "input": {
+      "id": 8218,
+      "eventId": "updateTribunalDecision",
+      "state": "ftpaDecided",
+      "caseData": {
+        "template": "minimal-appeal-submitted.json",
+        "replacements": {
+          "journeyType": "aip",
+          "isDlrmSetAsideEnabled": "Yes",
+          "updateTribunalDecisionList": "underRule31",
+          "listCaseHearingCentre": "taylorHouse",
+          "typesOfUpdateTribunalDecision": {
+            "value": {
+              "code": "allowed",
+              "label": "No"
+            },
+            "list_items": [
+              {
+                "code": "dismissed",
+                "label": "Yes, change decision to Dismissed"
+              },
+              {
+                "code": "allowed",
+                "label": "No"
+              }
+            ]
+          },
+          "updateTribunalDecisionAndReasonsFinalCheck": "Yes",
+          "updatedAppealDecision": "Allowed",
+          "subscriptions": [
+            {
+              "id": "1",
+              "value": {
+                "subscriber": "appellant",
+                "email": "{$TEST_CITIZEN_USERNAME}",
+                "wantsEmail": "Yes",
+                "mobileNumber": "{$TEST_CITIZEN_MOBILE}",
+                "wantsSms": "Yes"
+              }
+            }
+          ]
+        }
+      }
+    }
+  },
+  "expectation": {
+    "status": 200,
+    "errors": [],
+    "caseData": {
+      "template": "minimal-appeal-submitted.json",
+      "replacements": {
+        "journeyType": "aip",
+        "isDlrmSetAsideEnabled": "Yes",
+        "updateTribunalDecisionList": "underRule31",
+        "listCaseHearingCentre": "taylorHouse",
+        "subscriptions": [
+          {
+            "id": "1",
+            "value": {
+              "subscriber": "appellant",
+              "email": "{$TEST_CITIZEN_USERNAME}",
+              "wantsEmail": "Yes",
+              "mobileNumber": "{$TEST_CITIZEN_MOBILE}",
+              "wantsSms": "Yes"
+            }
+          }
+        ],
+        "notificationsSent": [
+          {
+            "id": "8218_RESPONDENT_UPDATE_TRIBUNAL_DECISION_RULE_31_EMAIL",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          },
+          {
+            "id": "8218_APPELLANT_UPDATE_TRIBUNAL_DECISION_RULE_31_EMAIL",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          },
+          {
+            "id": "8218_APPELLANT_UPDATE_TRIBUNAL_DECISION_RULE_31_SMS",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          }
+        ]
+      }
+    }
+  }
+}

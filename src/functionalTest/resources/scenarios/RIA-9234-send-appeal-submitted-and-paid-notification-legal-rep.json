@@ -1,0 +1,33 @@
+{
+  "description": "RIA-9234 Post-submit pay for appeal notifications to LR, CO and HO for admin and represented cases",
+  "launchDarklyKey": "tcw-notifications-feature:true",
+  "request": {
+    "uri": "/asylum/ccdSubmitted",
+    "credentials": "LegalRepresentative",
+    "input": {
+      "id": 923419,
+      "eventId": "payForAppeal",
+      "state": "pendingPayment",
+      "caseData": {
+        "template": "minimal-appeal-submitted.json",
+        "replacements": {
+          "isAdmin": "Yes",
+          "appellantsRepresentation": "No",
+          "legalRepEmail": "{$TEST_LAW_FIRM_A_USERNAME}",
+          "hearingCentre": "taylorHouse",
+          "appealType": "refusalOfEu",
+          "paymentStatus": "Paid"
+        }
+      }
+    }
+  },
+  "expectation": {
+    "status": 200,
+    "errors": [],
+    "confirmation": {
+      "header": "success",
+      "body": "contains([_APPEAL_SUBMITTED_HOME_OFFICE,_APPEAL_SUBMITTED_PAID_LEGAL_REPRESENTATIVE,_APPEAL_SUBMITTED_CASE_OFFICER])"
+    }
+  }
+}
+

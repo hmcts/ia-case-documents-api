@@ -1,0 +1,82 @@
+{
+  "description": "RIA-9233 Internal detained remission granted in time decision - letter notification - in country - represented",
+  "request": {
+    "uri": "/asylum/ccdAboutToSubmit",
+    "credentials": "AdminOfficer",
+    "input": {
+      "id": 9233,
+      "eventId": "recordRemissionDecision",
+      "state": "pendingPayment",
+      "caseData": {
+        "template": "minimal-appeal-submitted.json",
+        "replacements": {
+          "appealType":"refusalOfHumanRights",
+          "isRemissionsEnabled": "Yes",
+          "remissionType": "hoWaiverRemission",
+          "remissionDecision": "approved",
+          "remissionClaim": "asylumSupport",
+          "feeRemissionType": "Asylum support",
+          "asylumSupportReference": "20/02/1234",
+          "remittedAmount": "140.00",
+          "amountLeftToPay": "00.00",
+          "amountRemitted": "14000",
+          "submissionOutOfTime": "No",
+          "isAdmin": "Yes",
+          "appellantsRepresentation": "No",
+          "legalRepEmail": "{$TEST_LAW_FIRM_A_USERNAME}",
+          "appellantInDetention": "No",
+          "appellantInUk": "Yes",
+          "legalRepHasAddress": "Yes",
+          "legalRepAddressUK": {
+            "County": "",
+            "Country": "United Kingdom",
+            "PostCode": "NE21JX",
+            "PostTown": "Example Town",
+            "AddressLine1": "5",
+            "AddressLine2": "Example Street"
+          }
+        }
+      }
+    }
+  },
+  "expectation": {
+    "status": 200,
+    "errors": [],
+    "caseData": {
+      "template": "minimal-appeal-submitted.json",
+      "replacements": {
+        "appealType":"refusalOfHumanRights",
+        "isRemissionsEnabled": "Yes",
+        "remissionType": "hoWaiverRemission",
+        "remissionDecision": "approved",
+        "remissionClaim": "asylumSupport",
+        "feeRemissionType": "Asylum support",
+        "asylumSupportReference": "20/02/1234",
+        "remittedAmount": "140.00",
+        "amountLeftToPay": "00.00",
+        "amountRemitted": "14000",
+        "submissionOutOfTime": "No",
+        "isAdmin": "Yes",
+        "appellantsRepresentation": "No",
+        "appellantInDetention": "No",
+        "legalRepEmail": "{$TEST_LAW_FIRM_A_USERNAME}",
+        "appellantInUk": "Yes",
+        "legalRepHasAddress": "Yes",
+        "legalRepAddressUK": {
+          "County": "",
+          "Country": "United Kingdom",
+          "PostCode": "NE21JX",
+          "PostTown": "Example Town",
+          "AddressLine1": "5",
+          "AddressLine2": "Example Street"
+        },
+        "notificationsSent": [
+          {
+            "id": "9233_INTERNAL_REMISSION_GRANTED_IN_TIME_APPELLANT_LETTER",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          }
+        ]
+      }
+    }
+  }
+}

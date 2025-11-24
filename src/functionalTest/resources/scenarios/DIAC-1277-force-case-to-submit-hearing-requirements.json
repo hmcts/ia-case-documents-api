@@ -1,0 +1,43 @@
+{
+  "description": "DIAC-1277 Case Officer forced case progression to submit hearing requirements for detained appeal",
+  "request": {
+    "uri": "/asylum/ccdAboutToSubmit",
+    "credentials": "CaseOfficer",
+    "input": {
+      "id": 1234,
+      "eventId": "forceCaseToSubmitHearingRequirements",
+      "state": "respondentReview",
+      "appellantInDetention": "Yes",
+      "caseData": {
+        "template": "minimal-appeal-submitted.json"
+      }
+    }
+  },
+  "expectation": {
+    "status": 200,
+    "errors": [],
+    "caseData": {
+      "template": "minimal-appeal-submitted.json",
+      "replacements": {
+        "notificationsSent": [
+          {
+            "id": "1234_FORCE_CASE_TO_SUBMIT_HEARING_REQUIREMENTS_RESPONDENT",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          }
+        ]
+      }
+    },
+    "notifications": [
+      {
+        "reference": "1234_FORCE_CASE_TO_SUBMIT_HEARING_REQUIREMENTS_RESPONDENT",
+        "recipient": "{$respondentEmailAddresses.respondentReviewDirection}",
+        "subject": "Immigration and Asylum appeal: Case progressed to Submit Hearing Requirements",
+        "body": [
+          "PA/12345/2019",
+          "A1234567",
+          "Talha Awan"
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,72 @@
+{
+  "description": "RIA-7812: Judge consider making a costs and notifies both parties",
+  "request": {
+    "uri": "/asylum/ccdAboutToSubmit",
+    "credentials": "Judge",
+    "input": {
+      "id": 7812,
+      "eventId": "considerMakingCostsOrder",
+      "state": "appealSubmitted",
+      "caseData": {
+        "template": "minimal-appeal-submitted.json",
+        "replacements": {
+          "legalRepReferenceNumber": "A1234567",
+          "homeOfficeReferenceNumber": "A1234567",
+          "legalRepresentativeEmailAddress": "{$TEST_LAW_FIRM_A_USERNAME}",
+          "journeyType": "rep",
+          "appealType": "revocationOfProtection",
+          "appealGroundsRevocation": {
+            "values": [
+              "revocationRefugeeConvention",
+              "revocationHumanitarianProtection"
+            ]
+          },
+        "legalRepName": "Fake Org Ltd"
+        }
+      }
+    }
+  },
+  "expectation": {
+    "status": 200,
+    "errors": [],
+    "caseData": {
+      "template": "minimal-appeal-submitted.json",
+      "replacements": {
+        "legalRepReferenceNumber": "A1234567",
+        "appealType": "revocationOfProtection",
+        "appealGroundsRevocation": {
+          "values": [
+            "revocationRefugeeConvention",
+            "revocationHumanitarianProtection"
+          ]
+        },
+      "legalRepName": "Fake Org Ltd"
+      }
+    },
+    "notifications": [
+      {
+        "reference": "7812_CONSIDER_MAKING_A_COST_ORDER_LEGAL_REP_EMAIL",
+        "recipient": "{$TEST_LAW_FIRM_A_USERNAME}",
+        "subject": "Immigration and Asylum appeal: Costs order under consideration",
+        "body": [
+          "HMCTS reference: PA/12345/2019",
+          "Your reference: A1234567",
+          "Appellant name: Talha Awan",
+          "The online service: {$iaExUiFrontendUrl}"
+        ]
+      },
+      {
+        "reference": "7812_CONSIDER_MAKING_A_COST_ORDER_HOME_OFFICE_EMAIL",
+        "recipient": "{$applyForCostsHomeOfficeEmailAddress}",
+        "subject": "Immigration and Asylum appeal: Costs order under consideration",
+        "body": [
+          "HMCTS reference: PA/12345/2019",
+          "Home Office reference: A1234567",
+          "Appellant name: Talha Awan",
+          "The online service: {$iaExUiFrontendUrl}"
+        ]
+      }
+    ]
+  }
+}
+

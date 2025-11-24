@@ -1,0 +1,71 @@
+{
+  "description": "RIA-7671: internal ada case decide an application by Home office (Refused)",
+  "request": {
+    "uri": "/asylum/ccdAboutToSubmit",
+    "credentials": "CaseOfficer",
+    "input": {
+      "id": 68122,
+      "eventId": "decideAnApplication",
+      "state": "appealSubmitted",
+      "caseData": {
+        "template": "minimal-appeal-submitted.json",
+        "replacements": {
+          "detentionFacility": "immigrationRemovalCentre",
+          "ircName": "Brookhouse",
+          "appellantGivenNames": "Test",
+          "appellantFamilyName": "User",
+          "appealType": "refusalOfEu",
+          "isAdmin": "Yes",
+          "appellantInDetention": "Yes",
+          "isAcceleratedDetainedAppeal": "Yes",
+          "decideAnApplicationId": "1",
+          "makeAnApplications": [
+            {
+              "id": "1",
+              "value": {
+                "type":"Judge's review of Legal Officer decision",
+                "details":"",
+                "evidence":[
+                  {
+                    "id": "1",
+                    "value": {
+                      "document_url": "http://document-store/AAA",
+                      "document_filename": "Annexure-E.pdf",
+                      "document_binary_url": "http://document-store/AAA/binary"
+                    }
+                  }
+                ],
+                "applicant":"",
+                "date":"",
+                "decision":"Refused",
+                "state":"appealSubmitted",
+                "applicantRole":"caseworker-ia-homeofficeapc",
+                "decisionReason":"Other reason for refusing the appeal",
+                "decisionDate":"{$TODAY}",
+                "decisionMaker": "Tribunal Caseworker"
+              }
+            }
+          ]
+        }
+      }
+    }
+  },
+  "expectation": {
+    "status": 200,
+    "errors": [],
+    "caseData": {
+      "template": "minimal-appeal-submitted.json",
+      "replacements": {
+        "detentionFacility": "immigrationRemovalCentre",
+        "ircName": "Brookhouse",
+        "appellantGivenNames": "Test",
+        "appellantFamilyName": "User",
+        "appealType": "refusalOfEu",
+        "isAdmin": "Yes",
+        "isAcceleratedDetainedAppeal": "Yes",
+        "decideAnApplicationId": "1"
+      }
+    }
+  }
+}
+

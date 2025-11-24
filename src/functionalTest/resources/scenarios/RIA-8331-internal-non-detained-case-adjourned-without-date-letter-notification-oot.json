@@ -1,0 +1,77 @@
+{
+  "description": "RIA-8331 Internal non-detained case listed letter - out of time",
+  "request": {
+    "uri": "/asylum/ccdAboutToSubmit",
+    "credentials": "AdminOfficer",
+    "input": {
+      "id": 83311,
+      "eventId": "adjournHearingWithoutDate",
+      "state": "*",
+      "caseData": {
+        "template": "minimal-appeal-submitted.json",
+        "replacements": {
+          "isAdmin": "Yes",
+          "appellantsRepresentation": "Yes",
+          "appellantInDetention": "No",
+          "appellantInUk": "No",
+          "listCaseHearingCentre": "bradford",
+          "listCaseHearingLength": "60",
+          "listCaseHearingDate": "2018-12-31T12:34:56",
+          "listCaseRequirementsVulnerabilities": "something around Vulnerabilities",
+          "listCaseRequirementsMultimedia": "something around Multimedia",
+          "listCaseRequirementsSingleSexCourt": "something around SingleSexCourt",
+          "listCaseRequirementsInCameraCourt": "something around InCameraCourt",
+          "listCaseRequirementsOther": "something around Other",
+          "appellantHasFixedAddress": "Yes",
+          "appellantHasFixedAddressAdminJ": "Yes",
+          "addressLine1AdminJ": "Calle Toledo 32",
+          "addressLine2AdminJ": "Madrid",
+          "addressLine3AdminJ": "28003",
+          "countryGovUkOocAdminJ": "ES"
+        }
+      }
+    }
+  },
+  "expectation": {
+    "status": 200,
+    "errors": [],
+    "caseData": {
+      "template": "minimal-appeal-submitted.json",
+      "replacements": {
+        "isAdmin": "Yes",
+        "appellantsRepresentation": "Yes",
+        "appellantInUk": "No",
+        "appellantInDetention": "No",
+        "listCaseHearingCentre": "bradford",
+        "listCaseHearingLength": "60",
+        "listCaseHearingDate": "2018-12-31T12:34:56",
+        "listCaseRequirementsVulnerabilities": "something around Vulnerabilities",
+        "listCaseRequirementsMultimedia": "something around Multimedia",
+        "listCaseRequirementsSingleSexCourt": "something around SingleSexCourt",
+        "listCaseRequirementsInCameraCourt": "something around InCameraCourt",
+        "listCaseRequirementsOther": "something around Other",
+        "appellantHasFixedAddress": "Yes",
+        "appellantHasFixedAddressAdminJ": "Yes",
+        "addressLine1AdminJ": "Calle Toledo 32",
+        "addressLine2AdminJ": "Madrid",
+        "addressLine3AdminJ": "28003",
+        "countryGovUkOocAdminJ": "ES",
+
+        "notificationsSent": [
+          {
+            "id": "83311_ADJOURN_HEARING_WITHOUT_DATE_ADMIN_OFFICER",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          },
+          {
+            "id": "83311_ADJOURN_HEARING_WITHOUT_DATE_HO",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          },
+          {
+            "id": "83311_INTERNAL_CASE_ADJOURN_WITHOUT_DATE_APPELLANT_LETTER",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          }
+        ]
+      }
+    }
+  }
+}

@@ -1,0 +1,97 @@
+{
+  "description": "RIA-7218: internal non-ada request respondent evidence (DET)",
+  "request": {
+    "uri": "/asylum/ccdAboutToSubmit",
+    "credentials": "CaseOfficer",
+    "input": {
+      "id": 7218,
+      "eventId": "requestRespondentReview",
+      "state": "caseUnderReview",
+      "caseData": {
+        "template": "minimal-internal-appeal-submitted.json",
+        "replacements": {
+          "detentionFacility": "immigrationRemovalCentre",
+          "ircName": "Brookhouse",
+          "directions": [
+            {
+              "id": "1",
+              "value": {
+                "tag": "respondentReview",
+                "parties": "respondent",
+                "uniqueId": "eba53f77-a98e-47ed-af30-f0f4d3372f01",
+                "explanation": "You have until the date indicated below to review the appellant's argument and evidence. You must explain whether the appellant makes a valid case for overturning the original decision.\n\nYou must respond to the Tribunal and tell them:\n\n- whether you oppose all or parts of the appellant's case\n- what your grounds are for opposing the case\n- which of the issues are agreed or not agreed\n- whether there are any further issues you wish to raise\n- whether you are prepared to withdraw to grant\n- whether the appeal can be resolved without a hearing\n\nNext steps\n\nIf you do not respond in time the Tribunal will decide how the case should proceed.",
+                "directionType": "requestRespondentReview",
+                "dateDue": "{$TODAY+13}",
+                "dateSent": "{$TODAY}",
+                "previousDates": []
+              }
+            }
+          ],
+          "notificationAttachmentDocuments": [
+            {
+              "id": "1",
+              "value": {
+                "tag": "requestRespondentReview",
+                "document": {
+                  "document_url": "{$FIXTURE_DOC1_PDF_URL}",
+                  "document_binary_url": "{$FIXTURE_DOC1_PDF_URL_BINARY}",
+                  "document_filename": "{$FIXTURE_DOC1_PDF_FILENAME}"
+                },
+                "suppliedBy": "",
+                "description": "",
+                "dateUploaded": "{$TODAY}"
+              }
+            }
+          ],
+          "appealReferenceNumber": "Test",
+          "homeOfficeReferenceNumber": "Test",
+          "ariaListingReference": "Test",
+          "appellantGivenNames": "Test",
+          "appellantFamilyName": "User",
+          "isAdmin": "Yes",
+          "appellantInDetention": "Yes",
+          "appellantsRepresentation": "Yes"
+        }
+      }
+    }
+  },
+  "expectation": {
+    "status": 200,
+    "errors": [],
+    "caseData": {
+      "template": "minimal-internal-appeal-submitted.json",
+      "replacements": {
+        "detentionFacility": "immigrationRemovalCentre",
+        "ircName": "Brookhouse",
+        "directions": [
+          {
+            "id": "1",
+            "value": {
+              "tag": "respondentReview",
+              "parties": "respondent",
+              "uniqueId": "eba53f77-a98e-47ed-af30-f0f4d3372f01",
+              "explanation": "You have until the date indicated below to review the appellant's argument and evidence. You must explain whether the appellant makes a valid case for overturning the original decision.\n\nYou must respond to the Tribunal and tell them:\n\n- whether you oppose all or parts of the appellant's case\n- what your grounds are for opposing the case\n- which of the issues are agreed or not agreed\n- whether there are any further issues you wish to raise\n- whether you are prepared to withdraw to grant\n- whether the appeal can be resolved without a hearing\n\nNext steps\n\nIf you do not respond in time the Tribunal will decide how the case should proceed.",
+              "directionType": "requestRespondentReview",
+              "dateDue": "{$TODAY+13}",
+              "dateSent": "{$TODAY}",
+              "previousDates": []
+            }
+          }
+        ],
+        "appealReferenceNumber": "Test",
+        "homeOfficeReferenceNumber": "Test",
+        "ariaListingReference": "Test",
+        "appellantGivenNames": "Test",
+        "appellantFamilyName": "User",
+        "isAdmin": "Yes",
+        "appellantInDetention": "Yes",
+        "notificationsSent":[
+          {
+            "id":"7218_RESPONDENT_REVIEW_DIRECTION",
+            "value":"$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          }
+        ]
+      }
+    }
+  }
+}

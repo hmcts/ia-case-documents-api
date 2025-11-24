@@ -1,0 +1,33 @@
+{
+  "description": "RIA-9234 Send apply notice of change notification to appellant SMS for admin and represented cases",
+  "request": {
+    "uri": "/asylum/ccdSubmitted",
+    "credentials": "LegalRepresentative",
+    "input": {
+      "id": 923421,
+      "eventId": "nocRequest",
+      "state": "appealSubmitted",
+      "caseData": {
+        "template": "minimal-appeal-submitted.json",
+        "replacements": {
+          "isAdmin": "Yes",
+          "appellantsRepresentation": "No",
+          "legalRepEmail": "{$TEST_LAW_FIRM_A_USERNAME}",
+          "journeyType": "rep",
+          "currentCaseStateVisibleToHomeOfficeAll":"appealSubmitted",
+          "contactPreference": "wantsSms",
+          "mobileNumber": "{$TEST_CITIZEN_MOBILE}",
+          "hearingCentre": "manchester"
+        }
+      }
+    }
+  },
+  "expectation": {
+    "status": 200,
+    "errors": [],
+    "confirmation": {
+      "header": "success",
+      "body": "contains([_NOC_REQUEST_DECISION_APPELLANT_SMS,_NOC_REQUEST_DECISION_HOME_OFFICE,_NOC_REQUEST_DECISION_LEGAL_REP])"
+    }
+   }
+}

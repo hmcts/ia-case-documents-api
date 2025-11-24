@@ -1,0 +1,86 @@
+{
+  "description": "RIA-9525 edit case listing notification with remote hearing (Ref data enabled) for admin and represented cases",
+  "enabled": "{$featureFlag.appealsLocationReferenceData}",
+  "request": {
+    "uri": "/asylum/ccdAboutToSubmit",
+    "credentials": "AdminOfficer",
+    "input": {
+      "id": 952510,
+      "eventId": "editCaseListing",
+      "state": "prepareForHearing",
+      "caseData": {
+        "template": "minimal-appeal-submitted.json",
+        "replacements": {
+          "isAdmin": "Yes",
+          "appellantsRepresentation": "No",
+          "legalRepEmail": "{$TEST_LAW_FIRM_A_USERNAME}",
+          "appealReferenceNumber": "PA/12345/2023",
+          "ariaListingReference": "LP/12345/2023",
+          "listCaseHearingCentre": "harmondsworth",
+          "listCaseHearingDate": "2023-09-03T14:25:15.000",
+          "legalRepresentativeEmailAddress": "{$TEST_LAW_FIRM_A_USERNAME}",
+          "isCaseUsingLocationRefData": "Yes",
+          "isRemoteHearing": "Yes"
+        }
+      },
+      "caseDataBefore": {
+        "template": "minimal-appeal-submitted.json",
+        "replacements": {
+          "isAdmin": "Yes",
+          "appellantsRepresentation": "No",
+          "legalRepEmail": "{$TEST_LAW_FIRM_A_USERNAME}",
+          "listCaseHearingCentre": "harmondsworth",
+          "listCaseHearingDate": "2023-09-02T14:25:15.000",
+          "legalRepresentativeEmailAddress": "{$TEST_LAW_FIRM_A_USERNAME}"
+        }
+      }
+    }
+  },
+  "expectation": {
+    "status": 200,
+    "errors": [],
+    "caseData": {
+      "template": "minimal-appeal-submitted.json",
+      "replacements": {
+        "appealReferenceNumber": "PA/12345/2023",
+        "listCaseHearingCentre": "harmondsworth",
+        "listCaseHearingDate": "2023-09-03T14:25:15.000",
+        "legalRepresentativeEmailAddress": "{$TEST_LAW_FIRM_A_USERNAME}",
+        "notificationsSent": [
+          {
+            "id": "952510_CASE_RE_LISTED_HOME_OFFICE",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          },
+          {
+            "id": "952510_RE_LIST_CASE_ADMIN_OFFICER",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          }
+        ]
+      }
+    },
+    "notifications": [
+      {
+        "reference": "952510_CASE_RE_LISTED_HOME_OFFICE",
+        "recipient": "{$homeOfficeEmailAddresses.harmondsworth}",
+        "subject": "Immigration and Asylum appeal: case re-listed",
+        "body": [
+          "PA/12345/2023",
+          "3 Sep 2023",
+          "14:25",
+          "Remote hearing"
+        ]
+      },
+      {
+        "reference": "952510_RE_LIST_CASE_ADMIN_OFFICER",
+        "recipient": "{$reviewHearingRequirementsAdminOfficerEmailAddress}",
+        "subject": "Immigration and Asylum appeal: re-list case",
+        "body": [
+          "PA/12345/2023",
+          "LP/12345/2023",
+          "Talha Awan",
+          "{$iaExUiFrontendUrl}"
+        ]
+      }
+    ]
+  }
+}

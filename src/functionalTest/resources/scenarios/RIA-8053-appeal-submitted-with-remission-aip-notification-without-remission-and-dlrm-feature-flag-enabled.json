@@ -1,0 +1,53 @@
+{
+  "description": "RIA-8053 Appeal submitted without remission and dlrm fee remission feature flag enabled - AiP notification",
+  "request": {
+    "uri": "/asylum/ccdAboutToSubmit",
+    "credentials": "Citizen",
+    "input": {
+      "id": 3689,
+      "eventId": "submitAppeal",
+      "state": "pendingPayment",
+      "caseData": {
+        "template": "minimal-appeal-submitted.json",
+        "replacements": {
+          "isDlrmFeeRemissionEnabled": "Yes",
+          "isRemissionsEnabled": "Yes",
+          "journeyType": "aip",
+          "remissionType":"noRemission",
+          "remissionOption":"noneOfTheseStatements",
+          "appealType":"refusalOfEu",
+          "eaHuAppealTypePaymentOption": "payLater",
+          "subscriptions": [
+            {
+              "id": "1",
+              "value": {
+                "subscriber": "appellant",
+                "email": "{$TEST_CITIZEN_USERNAME}",
+                "wantsEmail": "Yes",
+                "mobileNumber": "{$TEST_CITIZEN_MOBILE}",
+                "wantsSms": "Yes"
+              }
+            }
+          ],
+          "notificationsSent": []
+        }
+      }
+    }
+  },
+  "expectation": {
+    "status": 200,
+    "errors": [],
+    "caseData": {
+      "template": "minimal-appeal-submitted.json",
+      "replacements": {
+        "hearingCentre": "taylorHouse",
+        "isRemissionsEnabled": "Yes",
+        "remissionType":"noRemission",
+        "remissionOption":"noneOfTheseStatements",
+        "appealType":"refusalOfEu",
+        "eaHuAppealTypePaymentOption": "payLater",
+        "notificationsSent": []
+      }
+    }
+  }
+}

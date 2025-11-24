@@ -1,0 +1,91 @@
+{
+  "description": "DIAC-1354 Digital lr detained other case adjourned without date letter sent to Legal Rep (represented)",
+  "request": {
+    "uri": "/asylum/ccdAboutToSubmit",
+    "credentials": "AdminOfficer",
+    "input": {
+      "id": 13542,
+      "eventId": "adjournHearingWithoutDate",
+      "state": "*",
+      "caseData": {
+        "template": "minimal-appeal-submitted.json",
+        "replacements": {
+          "isAdmin": "No",
+          "appellantsRepresentation": "No",
+          "appellantInDetention": "Yes",
+          "detentionFacility": "other",
+          "appellantAddress": {
+            "County": "",
+            "Country": "United Kingdom",
+            "PostCode": "NE21JX",
+            "PostTown": "Example Town",
+            "AddressLine1": "5",
+            "AddressLine2": "Example Street"
+          },
+          "appellantInUk": "Yes",
+          "listCaseHearingCentre": "bradford",
+          "listCaseHearingLength": "60",
+          "listCaseHearingDate": "2018-12-31T12:34:56",
+          "listCaseRequirementsVulnerabilities": "something around Vulnerabilities",
+          "listCaseRequirementsMultimedia": "something around Multimedia",
+          "listCaseRequirementsSingleSexCourt": "something around SingleSexCourt",
+          "listCaseRequirementsInCameraCourt": "something around InCameraCourt",
+          "listCaseRequirementsOther": "something around Other",
+          "legalRepHasAddress": "Yes",
+          "legalRepAddressUK": {
+            "County": "",
+            "Country": "United Kingdom",
+            "PostCode": "NE21JX",
+            "PostTown": "Example Town",
+            "AddressLine1": "5",
+            "AddressLine2": "Example Street"
+          }
+        }
+      }
+    }
+  },
+  "expectation": {
+    "status": 200,
+    "errors": [],
+    "caseData": {
+      "template": "minimal-appeal-submitted.json",
+      "replacements": {
+        "isAdmin": "No",
+        "appellantsRepresentation": "No",
+        "appellantInDetention": "Yes",
+        "appellantInUk": "Yes",
+        "listCaseHearingCentre": "bradford",
+        "listCaseHearingLength": "60",
+        "listCaseHearingDate": "2018-12-31T12:34:56",
+        "listCaseRequirementsVulnerabilities": "something around Vulnerabilities",
+        "listCaseRequirementsMultimedia": "something around Multimedia",
+        "listCaseRequirementsSingleSexCourt": "something around SingleSexCourt",
+        "listCaseRequirementsInCameraCourt": "something around InCameraCourt",
+        "listCaseRequirementsOther": "something around Other",
+        "legalRepHasAddress": "Yes",
+        "legalRepAddressUK": {
+          "County": "",
+          "Country": "United Kingdom",
+          "PostCode": "NE21JX",
+          "PostTown": "Example Town",
+          "AddressLine1": "5",
+          "AddressLine2": "Example Street"
+        },
+        "notificationsSent": [
+          {
+            "id": "13542_LEGAL_REPRESENTATIVE_ADJOURN_HEARING_WITHOUT_DATE",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          },
+          {
+            "id": "13542_RESPONDENT_ADJOURN_HEARING_WITHOUT_DATE",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          },
+          {
+            "id": "13542_ADJOURN_HEARING_WITHOUT_DATE_ADMIN_OFFICER",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          }
+        ]
+      }
+    }
+  }
+}

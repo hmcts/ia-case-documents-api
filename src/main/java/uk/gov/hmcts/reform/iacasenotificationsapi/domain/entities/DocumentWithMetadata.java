@@ -1,0 +1,91 @@
+package uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities;
+
+import static java.util.Objects.requireNonNull;
+
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field.Document;
+
+@EqualsAndHashCode
+@ToString
+public class DocumentWithMetadata implements HasDocument {
+
+    private Document document;
+    private String description;
+    private String dateUploaded;
+    private DocumentTag tag;
+    private String suppliedBy;
+    private String uploadedBy;
+
+    private DocumentWithMetadata() {
+        // noop -- for deserializer
+    }
+
+    public DocumentWithMetadata(
+        Document document,
+        String description,
+        String dateUploaded,
+        DocumentTag tag
+    ) {
+        this(document, description, dateUploaded, tag, null);
+    }
+
+    public DocumentWithMetadata(
+        Document document,
+        String description,
+        String dateUploaded,
+        DocumentTag tag,
+        String suppliedBy
+    ) {
+        this.document = document;
+        this.description = description;
+        this.dateUploaded = dateUploaded;
+        this.tag = tag;
+        this.suppliedBy = suppliedBy;
+    }
+
+    public DocumentWithMetadata(
+            Document document,
+            String description,
+            String dateUploaded,
+            DocumentTag tag,
+            String suppliedBy,
+            String uploadedBy
+    ) {
+        this.document = document;
+        this.description = description;
+        this.dateUploaded = dateUploaded;
+        this.tag = tag;
+        this.suppliedBy = suppliedBy;
+        this.uploadedBy = uploadedBy;
+    }
+
+    @Override
+    public Document getDocument() {
+        requireNonNull(document);
+        return document;
+    }
+
+    @Override
+    public String getDescription() {
+        return description;
+    }
+
+    public String getDateUploaded() {
+        requireNonNull(dateUploaded);
+        return dateUploaded;
+    }
+
+    public DocumentTag getTag() {
+        requireNonNull(tag);
+        return tag;
+    }
+
+    public String getSuppliedBy() {
+        return suppliedBy;
+    }
+
+    public String getUploadedBy() {
+        return uploadedBy;
+    }
+}
