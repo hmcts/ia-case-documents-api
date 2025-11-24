@@ -1,0 +1,128 @@
+{
+  "description": "RIA-3722 Send case re-listed notification to TCW, HO and LR (Transfer: Remote hearing to Bradford)",
+  "request": {
+    "uri": "/asylum/ccdAboutToSubmit",
+    "credentials": "CaseOfficer",
+    "input": {
+      "id": 37222,
+      "eventId": "editCaseListing",
+      "state": "prepareForHearing",
+      "caseData": {
+        "template": "minimal-appeal-submitted.json",
+        "replacements": {
+          "ariaListingReference": "LP/12345/2019",
+          "hearingCentre": "bradford",
+          "listCaseHearingCentre": "bradford",
+          "listCaseHearingDate": "2019-05-03T14:25:15.000",
+          "legalRepresentativeEmailAddress": "{$TEST_LAW_FIRM_A_USERNAME}",
+          "remoteVideoCallTribunalResponse": "Some tribunal response"
+        }
+      },
+      "caseDataBefore": {
+        "template": "minimal-appeal-submitted.json",
+        "replacements": {
+          "ariaListingReference": "LP/12345/2019",
+          "hearingCentre": "bradford",
+          "listCaseHearingCentre": "remoteHearing",
+          "listCaseHearingDate": "2019-05-01T13:30:15.000",
+          "legalRepresentativeEmailAddress": "{$TEST_LAW_FIRM_A_USERNAME}"
+        }
+      }
+    }
+  },
+  "expectation": {
+    "status": 200,
+    "errors": [],
+    "caseData": {
+      "template": "minimal-appeal-submitted.json",
+      "replacements": {
+        "hearingCentre": "bradford",
+        "listCaseHearingCentre": "bradford",
+        "listCaseHearingDate": "2019-05-03T14:25:15.000",
+        "legalRepresentativeEmailAddress": "{$TEST_LAW_FIRM_A_USERNAME}",
+        "notificationsSent": [
+          {
+            "id": "37222_CASE_RE_LISTED_HOME_OFFICE",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          },
+          {
+            "id": "37222_CASE_RE_LISTED_LEGAL_REPRESENTATIVE",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          },
+          {
+            "id": "37222_CASE_RE_LISTED_CASE_OFFICER",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          }
+        ]
+      }
+    },
+    "notifications": [
+      {
+        "reference": "37222_CASE_RE_LISTED_HOME_OFFICE",
+        "recipient": "{$homeOfficeEmailAddresses.bradford}",
+        "subject": "Immigration and Asylum appeal: case re-listed",
+        "body": [
+          "PA/12345/2019",
+          "LP/12345/2019",
+          "A1234567",
+          "Talha Awan",
+          "{$iaExUiFrontendUrl}",
+          "Remote hearing",
+          "1 May 2019",
+          "3 May 2019",
+          "14:25",
+          "Bradford",
+          "Some tribunal response",
+          "No special adjustments are being made to accommodate vulnerabilities",
+          "No multimedia equipment is being provided",
+          "The court will not be single sex",
+          "The hearing will be held in public court",
+          "No other adjustments are being made",
+          "{$customerServices.telephoneNumber}",
+          "{$customerServices.emailAddress}"
+        ]
+      },
+      {
+        "reference": "37222_CASE_RE_LISTED_LEGAL_REPRESENTATIVE",
+        "recipient": "{$TEST_LAW_FIRM_A_USERNAME}",
+        "subject": "Immigration and Asylum appeal: case re-listed",
+        "body": [
+          "PA/12345/2019",
+          "LP/12345/2019",
+          "CASE001",
+          "Talha Awan",
+          "{$iaExUiFrontendUrl}",
+          "Remote hearing",
+          "1 May 2019",
+          "3 May 2019",
+          "14:25",
+          "Bradford",
+          "Some tribunal response",
+          "No special adjustments are being made to accommodate vulnerabilities",
+          "No multimedia equipment is being provided",
+          "The court will not be single sex",
+          "The hearing will be held in public court",
+          "No other adjustments are being made",
+          "{$customerServices.telephoneNumber}",
+          "{$customerServices.emailAddress}"
+        ]
+      },
+      {
+        "reference": "37222_CASE_RE_LISTED_CASE_OFFICER",
+        "recipient": "{$hearingCentreEmailAddresses.bradford}",
+        "subject": "Immigration and Asylum appeal: case re-listed",
+        "body": [
+          "PA/12345/2019",
+          "LP/12345/2019",
+          "Talha Awan",
+          "{$iaExUiFrontendUrl}",
+          "Remote hearing",
+          "1 May 2019",
+          "3 May 2019",
+          "14:25",
+          "Bradford"
+        ]
+      }
+    ]
+  }
+}

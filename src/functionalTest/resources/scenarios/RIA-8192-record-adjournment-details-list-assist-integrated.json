@@ -1,0 +1,77 @@
+{
+  "description": "RIA-8192 Record adjournment details (List Assist integrated: Notification excluding Admin)",
+  "launchDarklyKey": "tcw-notifications-feature:true",
+  "enabled": "{$featureFlag.homeOfficeGovNotifyEnabled}",
+  "request": {
+    "uri": "/asylum/ccdAboutToSubmit",
+    "credentials": "CaseOfficer",
+    "input": {
+      "id": 34536,
+      "eventId": "recordAdjournmentDetails",
+      "state": "prepareForHearing",
+      "caseData": {
+        "template": "minimal-appeal-submitted.json",
+        "replacements": {
+          "listCaseHearingCentre": "taylorHouse",
+          "relistCaseImmediately": "No",
+          "isIntegrated": "Yes"
+        }
+      }
+    }
+  },
+  "expectation": {
+    "status": 200,
+    "errors": [],
+    "caseData": {
+      "template": "minimal-appeal-submitted.json",
+      "replacements": {
+        "listCaseHearingCentre": "taylorHouse",
+        "notificationsSent": [
+          {
+            "id": "34536_LEGAL_REPRESENTATIVE_RECORD_ADJOURNMENT_DETAILS",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          },
+          {
+            "id": "34536_RESPONDENT_RECORD_ADJOURNMENT_DETAILS",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          },
+          {
+            "id": "34536_CASE_OFFICER_RECORD_ADJOURNMENT_DETAILS",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          }
+        ]
+      }
+    },
+    "notifications": [
+      {
+        "reference": "34536_LEGAL_REPRESENTATIVE_RECORD_ADJOURNMENT_DETAILS",
+        "recipient": "{$TEST_LAW_FIRM_A_USERNAME}",
+        "subject": "Immigration and Asylum appeal: Hearing adjourned",
+        "body": [
+          "PA/12345/2019",
+          "CASE001",
+          "Talha Awan"
+        ]
+      },
+      {
+        "reference": "34536_RESPONDENT_RECORD_ADJOURNMENT_DETAILS",
+        "recipient": "{$homeOfficeEmailAddresses.taylorHouse}",
+        "subject": "Immigration and Asylum appeal: Hearing adjourned",
+        "body": [
+          "PA/12345/2019",
+          "A1234567",
+          "Talha Awan"
+        ]
+      },
+      {
+        "reference": "34536_CASE_OFFICER_RECORD_ADJOURNMENT_DETAILS",
+        "recipient": "{$hearingCentreEmailAddresses.taylorHouse}",
+        "subject": "Immigration and Asylum appeal: Hearing adjourned",
+        "body": [
+          "PA/12345/2019",
+          "Talha Awan"
+        ]
+      }
+    ]
+  }
+}

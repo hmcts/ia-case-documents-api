@@ -1,0 +1,97 @@
+{
+  "description": "RIA-8803 Send bail relisting case listing notification to HO, LR and Applicant with ref data location",
+  "launchDarklyKey": "tcw-notifications-feature:true",
+  "request": {
+    "uri": "/bail/ccdAboutToSubmit",
+    "credentials": "AdminOfficer",
+    "input": {
+      "id": 8355,
+      "eventId": "caseListing",
+      "state": "applicationSubmitted",
+      "caseData": {
+        "template": "minimal-bail-application-submitted.json",
+        "replacements": {
+          "applicantHasMobile": "Yes",
+          "applicantMobileNumber1": "{$TEST_CITIZEN_MOBILE}",
+          "listingEvent": "relisting",
+          "listingHearingDate": "2024-04-25T10:29:00.000",
+          "listingLocation": "taylorHouse",
+          "isBailsLocationReferenceDataEnabled": "Yes",
+          "isRemoteHearing": "No",
+          "refDataListingLocationDetail": {
+            "postcode": "EC1R 4QU",
+            "epimms_id": "765324",
+            "site_name": "Taylor House Tribunal Hearing Centre",
+            "court_name": "Taylor House Tribunal Hearing Centre",
+            "court_status": "Open",
+            "court_address": "Rosebery Avenue",
+            "is_hearing_location": "Y",
+            "is_case_management_location": "Y"
+          }
+        }
+      }
+    }
+  },
+  "expectation": {
+    "status": 200,
+    "errors": [],
+    "caseData": {
+      "template": "minimal-bail-application-submitted.json",
+      "replacements": {
+        "applicantHasMobile": "Yes",
+        "applicantMobileNumber1": "{$TEST_CITIZEN_MOBILE}",
+        "listingEvent": "relisting",
+        "listingHearingDate": "2024-04-25T10:29:00.000",
+        "listingLocation": "taylorHouse",
+        "notificationsSent": [
+          {
+            "id": "8355_BAIL_APPLICATION_CASE_LISTING_HOME_OFFICE",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          },
+          {
+            "id": "8355_BAIL_APPLICATION_CASE_LISTING_LEGAL_REPRESENTATIVE",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          },
+          {
+            "id": "8355_BAIL_APPLICATION_CASE_LISTING_APPLICANT_SMS",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          }
+        ]
+      },
+      "notifications": [
+        {
+          "reference": "8355_BAIL_APPLICATION_CASE_LISTING_HOME_OFFICE",
+          "recipient": "{$bailHomeOfficeEmailAddress}",
+          "subject": "Bail application: Updated Bail hearing",
+          "body": [
+            "1650-6221-2061-5101",
+            "John Smith",
+            "{$iaExUiFrontendUrl}",
+            "Taylor House Tribunal Hearing Centre, Rosebery Avenue, EC1R 4QU"
+          ]
+        },
+        {
+          "reference": "8355_BAIL_APPLICATION_CASE_LISTING_LEGAL_REPRESENTATIVE",
+          "recipient": "{$TEST_LAW_FIRM_A_USERNAME}",
+          "subject": "Bail application: Updated Bail hearing",
+          "body": [
+            "1650-6221-2061-5101",
+            "John Smith",
+            "{$iaExUiFrontendUrl}",
+            "Taylor House Tribunal Hearing Centre, Rosebery Avenue, EC1R 4QU"
+          ]
+        },
+        {
+          "reference": "8355_BAIL_UPLOAD_BAIL_SUMMARY_DIRECTION_HOME_OFFICE",
+          "recipient": "{$TEST_CITIZEN_MOBILE}",
+          "subject": "Bail application: Updated Bail hearing",
+          "body": [
+            "1650-6221-2061-5101",
+            "John Smith",
+            "Taylor House Tribunal Hearing Centre, Rosebery Avenue, EC1R 4QU"
+          ]
+        }
+      ]
+    }
+  }
+}

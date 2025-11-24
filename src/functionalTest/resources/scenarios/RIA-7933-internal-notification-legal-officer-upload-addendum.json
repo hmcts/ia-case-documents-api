@@ -1,0 +1,44 @@
+{
+  "description": "RIA-7933 Internal notification of legal officer uploaded addendum evidence",
+  "request": {
+    "uri": "/asylum/ccdAboutToSubmit",
+    "credentials": "CaseOfficer",
+    "input": {
+      "id": 7933,
+      "eventId": "uploadAddendumEvidence",
+      "state": "preHearing",
+      "caseData": {
+        "template": "minimal-internal-appeal-submitted.json",
+        "replacements": {
+          "ariaListingReference": "LP/12345/2019",
+          "listCaseHearingCentre": "taylorHouse",
+          "detentionFacility": "immigrationRemovalCentre",
+          "ircName": "Brookhouse",
+          "appellantInDetention": "Yes",
+          "isAcceleratedDetainedAppeal": "Yes"
+        }
+      }
+    }
+  },
+  "expectation": {
+    "status": 200,
+    "errors": [],
+    "caseData": {
+      "template": "minimal-internal-appeal-submitted.json",
+      "replacements": {
+        "ariaListingReference": "LP/12345/2019",
+        "listCaseHearingCentre": "taylorHouse",
+        "detentionFacility": "immigrationRemovalCentre",
+        "ircName": "Brookhouse",
+        "appellantInDetention": "Yes",
+        "isAcceleratedDetainedAppeal": "Yes",
+        "notificationsSent": [
+          {
+            "id": "7933_UPLOADED_ADDENDUM_EVIDENCE_HOME_OFFICE",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          }
+        ]
+      }
+    }
+  }
+}

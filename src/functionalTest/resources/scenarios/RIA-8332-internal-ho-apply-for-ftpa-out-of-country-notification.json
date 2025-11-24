@@ -1,0 +1,76 @@
+{
+  "description": "RIA-8332 - HO apply for FTPA - Out of country letter notification",
+  "request": {
+    "uri": "/asylum/ccdAboutToSubmit",
+    "credentials": "HomeOfficeGeneric",
+    "input": {
+      "id": 8332,
+      "eventId": "applyForFTPARespondent",
+      "state": "decided",
+      "caseData": {
+        "template": "minimal-appeal-submitted.json",
+        "replacements": {
+          "isAdmin": "Yes",
+          "appellantsRepresentation": "Yes",
+          "appellantHasFixedAddressAdminJ": "Yes",
+          "listCaseHearingCentre": "taylorHouse",
+          "ariaListingReference": "LP/12345/2019",
+          "appellantInUk": "No",
+          "addressLine1AdminJ": "example 1",
+          "addressLine2AdminJ": "United Kingdom",
+          "addressLine3AdminJ": "NE21JX",
+          "addressLine4AdminJ": "Example Town",
+          "countryAdminJ": "5",
+          "directions": [
+            {
+              "id": "1",
+              "value": {
+                "explanation": "Test direction",
+                "parties": "legalRepresentative",
+                "dateDue": "{$TODAY+28}",
+                "dateSent": "{$TODAY}",
+                "tag": "requestResponseReview"
+              }
+            }
+          ]
+        }
+      }
+    }
+  },
+  "expectation": {
+    "status": 200,
+    "errors": [],
+    "caseData": {
+      "template": "minimal-appeal-submitted.json",
+      "replacements": {
+        "isAdmin": "Yes",
+        "appellantsRepresentation": "Yes",
+        "appellantInUk": "No",
+        "appellantHasFixedAddressAdminJ": "Yes",
+        "addressLine1AdminJ": "example 1",
+        "addressLine2AdminJ": "United Kingdom",
+        "addressLine3AdminJ": "NE21JX",
+        "addressLine4AdminJ": "Example Town",
+        "countryAdminJ": "5",
+        "directions": [
+          {
+            "id": "1",
+            "value": {
+              "explanation": "Test direction",
+              "parties": "legalRepresentative",
+              "dateDue": "{$TODAY+28}",
+              "dateSent": "{$TODAY}",
+              "tag": "requestResponseReview"
+            }
+          }
+        ]
+      },
+      "notificationsSent": [
+          {
+            "id": "8332_INTERNAL_HO_APPLY_FOR_FTPA_NON_DETAINED_OR_OOC_OR_DETAINED_OTHER_APPELLANT_LETTER",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          }
+        ]
+      }
+    }
+  }

@@ -1,0 +1,48 @@
+{
+  "description": "RIA-3386 case submitted without hearing requirements notification (Admin Officer) - caseFlagSetAsideReheardExists no",
+  "request": {
+    "uri": "/asylum/ccdAboutToSubmit",
+    "credentials": "CaseOfficer",
+    "input": {
+      "id": 33862,
+      "eventId": "listCaseWithoutHearingRequirements",
+      "state": "listing",
+      "caseData": {
+        "template": "minimal-appeal-submitted.json",
+        "replacements": {
+          "isReheardAppealEnabled": "Yes",
+          "caseFlagSetAsideReheardExists": "No"
+        }
+      }
+    }
+  },
+  "expectation": {
+    "status": 200,
+    "errors": [],
+    "caseData": {
+      "template": "minimal-appeal-submitted.json",
+      "replacements": {
+        "isReheardAppealEnabled": "Yes",
+        "caseFlagSetAsideReheardExists": "No",
+        "notificationsSent": [
+          {
+            "id": "33862_WITHOUT_HEARING_REQUIREMENTS_ADMIN_OFFICER",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          }
+        ]
+      }
+    },
+    "notifications": [
+      {
+        "reference": "33862_WITHOUT_HEARING_REQUIREMENTS_ADMIN_OFFICER",
+        "recipient": "{$reviewHearingRequirementsAdminOfficerEmailAddress}",
+        "subject": "Immigration and Asylum appeal: list case",
+        "body": [
+          "PA/12345/2019",
+          "Talha Awan",
+          "{$iaExUiFrontendUrl}"
+        ]
+      }
+    ]
+  }
+}

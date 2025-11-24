@@ -1,0 +1,143 @@
+{
+  "description": "RIA-4975 Send case listed notification to case officer, appellant and home office (IAC Birmingham) - AIP journey",
+  "request": {
+    "uri": "/asylum/ccdAboutToSubmit",
+    "credentials": "AdminOfficer",
+    "input": {
+      "id": 4975,
+      "eventId": "listCase",
+      "state": "prepareForHearing",
+      "caseData": {
+        "template": "aip-minimal-appeal-submitted.json",
+        "replacements": {
+          "hearingCentre": "birmingham",
+          "ariaListingReference": "LP/12345/2019",
+          "listCaseHearingCentre": "remoteHearing",
+          "listCaseHearingDate": "2019-05-03T14:25:15.000",
+          "homeOfficeReferenceNumber": "1212-0099-0062-8083",
+          "subscriptions": [
+            {
+              "id": "1",
+              "value": {
+                "subscriber": "appellant",
+                "email": "{$TEST_CITIZEN_USERNAME}",
+                "wantsEmail": "Yes",
+                "mobileNumber": "{$TEST_CITIZEN_MOBILE}",
+                "wantsSms": "Yes"
+              }
+            }
+          ]
+        }
+      }
+    }
+  },
+  "expectation": {
+    "status": 200,
+    "errors": [],
+    "caseData": {
+      "template": "aip-minimal-appeal-submitted.json",
+      "replacements": {
+        "listCaseHearingCentre": "remoteHearing",
+        "hearingCentre": "birmingham",
+        "listCaseHearingDate": "2019-05-03T14:25:15.000",
+        "homeOfficeReferenceNumber": "1212-0099-0062-8083",
+        "subscriptions": [
+          {
+            "id": "1",
+            "value": {
+              "subscriber": "appellant",
+              "email": "{$TEST_CITIZEN_USERNAME}",
+              "wantsEmail": "Yes",
+              "mobileNumber": "{$TEST_CITIZEN_MOBILE}",
+              "wantsSms": "Yes"
+            }
+          }
+        ],
+        "notificationsSent": [
+          {
+            "id": "4975_CASE_LISTED_CASE_OFFICER",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          },
+          {
+            "id": "4975_CASE_LISTED_AIP_APPELLANT_EMAIL",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          },
+          {
+            "id": "4975_CASE_LISTED_HOME_OFFICE",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          },
+          {
+            "id": "4975_CASE_LISTED_AIP_APPELLANT_SMS",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          }
+        ]
+      }
+    },
+    "notifications": [
+      {
+        "reference": "4975_CASE_LISTED_CASE_OFFICER",
+        "recipient": "{$hearingCentreEmailAddresses.birmingham}",
+        "subject": "Immigration and Asylum appeal: case listed",
+        "body": [
+          "PA/12345/2019",
+          "LP/12345/2019",
+          "Pablo Jimenez",
+          "3 May 2019",
+          "14:25",
+          "Remote hearing"
+        ]
+      },
+      {
+        "reference": "4975_CASE_LISTED_AIP_APPELLANT_EMAIL",
+        "recipient": "{$TEST_CITIZEN_USERNAME}",
+        "subject": "Immigration and Asylum appeal: Your hearing details",
+        "body": [
+          "PA/12345/2019",
+          "LP/12345/2019",
+          "1212-0099-0062-8083",
+          "Pablo Jimenez",
+          "{$iaAipFrontendUrl}",
+          "3 May 2019",
+          "14:25",
+          "Remote hearing",
+          "{$customerServices.telephoneNumber}",
+          "{$customerServices.emailAddress}"
+        ]
+      },
+      {
+        "reference": "4975_CASE_LISTED_AIP_APPELLANT_SMS",
+        "recipient": "{$TEST_CITIZEN_MOBILE}",
+        "subject": "",
+        "body": [
+          "PA/12345/2019",
+          "{$iaAipFrontendUrl}",
+          "3 May 2019",
+          "14:25",
+          "Remote hearing"
+        ]
+      },
+      {
+        "reference": "4975_CASE_LISTED_HOME_OFFICE",
+        "recipient": "{$homeOfficeEmailAddresses.birmingham}",
+        "subject": "Immigration and Asylum appeal: case listed",
+        "body": [
+          "PA/12345/2019",
+          "LP/12345/2019",
+          "1212-0099-0062-8083",
+          "Pablo Jimenez",
+          "{$iaExUiFrontendUrl}",
+          "3 May 2019",
+          "14:25",
+          "Remote hearing",
+          "No special adjustments are being made to accommodate vulnerabilities",
+          "No multimedia equipment is being provided",
+          "The court will not be single sex",
+          "The hearing will be held in public court",
+          "No other adjustments are being made",
+          "{$customerServices.telephoneNumber}",
+          "{$customerServices.emailAddress}"
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,87 @@
+{
+  "description": "RIA-6781 RIA-7173: Send ADA suitability review notification to DET (Internal ADA) - Suitable",
+  "request": {
+    "uri": "/asylum/ccdAboutToSubmit",
+    "credentials": "Judge",
+    "input": {
+      "id": 6781,
+      "eventId": "adaSuitabilityReview",
+      "state": "respondentReview",
+      "caseData": {
+        "template": "minimal-internal-appeal-submitted.json",
+        "replacements": {
+          "detentionFacility": "immigrationRemovalCentre",
+          "ircName": "Brookhouse",
+          "appellantInDetention": "Yes",
+          "isAcceleratedDetainedAppeal": "Yes",
+          "ariaListingReference": "LR/1234/2345",
+          "appellantGivenNames": "Test",
+          "appellantFamilyName": "User",
+          "suitabilityReviewDecision": "suitable",
+          "listCaseHearingDate": "2023-05-01T13:30:15.000",
+          "listCaseHearingCentre": "harmondsworth",
+          "tribunalDocuments": [
+            {
+              "id": "docId",
+              "value": {
+                "document": {
+                  "document_url": "{$FIXTURE_DOC1_PDF_URL}",
+                  "document_binary_url": "{$FIXTURE_DOC1_PDF_URL_BINARY}",
+                  "document_filename": "{$FIXTURE_DOC1_PDF_FILENAME}"
+                },
+                "description": "description",
+                "dateUploaded": "{$TODAY}",
+                "tag": "adaSuitability"
+              }
+            }
+          ],
+          "notificationAttachmentDocuments": [
+            {
+              "id": "1",
+              "value": {
+                "tag": "internalAdaSuitability",
+                "document": {
+                  "document_url": "{$FIXTURE_DOC1_PDF_URL}",
+                  "document_binary_url": "{$FIXTURE_DOC1_PDF_URL_BINARY}",
+                  "document_filename": "{$FIXTURE_DOC1_PDF_FILENAME}"
+                },
+                "suppliedBy": "",
+                "description": "",
+                "dateUploaded": "{$TODAY}"
+              }
+            }
+          ]
+        }
+      }
+    }
+  },
+  "expectation": {
+    "status": 200,
+    "errors": [],
+    "caseData": {
+      "template": "minimal-internal-appeal-submitted.json",
+      "replacements": {
+        "detentionFacility": "immigrationRemovalCentre",
+        "ircName": "Brookhouse",
+        "ariaListingReference": "LR/1234/2345",
+        "appellantGivenNames": "Test",
+        "appellantFamilyName": "User",
+        "isAdmin": "Yes",
+        "isAcceleratedDetainedAppeal": "Yes",
+        "suitabilityReviewDecision": "suitable",
+        "listCaseHearingDate": "2023-05-01T13:30:15.000",
+        "notificationsSent":[
+          {
+            "id": "6781_ADA_SUITABILITY_DETERMINED_INTERNAL_ADA_DET",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          },
+          {
+            "id":"6781_ADA_SUITABILITY_DETERMINED_HOME_OFFICE",
+            "value":"$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          }
+        ]
+      }
+    }
+  }
+}
+

@@ -1,0 +1,69 @@
+{
+  "description": "RIA-8302 Send letter notification to appellant for Submit Appeal out of time with remission (internal case creation)",
+  "request": {
+    "uri": "/asylum/ccdAboutToSubmit",
+    "credentials": "LegalRepresentative",
+    "input": {
+      "id": 8302,
+      "eventId": "submitAppeal",
+      "state": "appealSubmitted",
+      "caseData": {
+        "template": "minimal-appeal-submitted.json",
+        "replacements": {
+          "isAdmin": "Yes",
+          "appellantsRepresentation": "Yes",
+          "appellantInUk": "Yes",
+          "appellantInDetention": "No",
+          "submissionOutOfTime": "Yes",
+          "appellantHasFixedAddress": "Yes",
+          "isRemissionsEnabled": "Yes",
+          "remissionType":"hoWaiverRemission",
+          "remissionOption": "feeWaiverFromHo",
+          "appealType":"refusalOfEu",
+          "eaHuAppealTypePaymentOption": "payLater",
+          "appellantAddress": {
+            "County": "",
+            "Country": "United Kingdom",
+            "PostCode": "NE21JX",
+            "PostTown": "Example Town",
+            "AddressLine1": "5",
+            "AddressLine2": "Example Street"
+          }
+        }
+      }
+    }
+  },
+  "expectation": {
+    "status": 200,
+    "errors": [],
+    "caseData": {
+      "template": "minimal-appeal-submitted.json",
+      "replacements": {
+        "isAdmin": "Yes",
+        "appellantsRepresentation": "Yes",
+        "appellantInUk": "Yes",
+        "appellantInDetention": "No",
+        "submissionOutOfTime": "Yes",
+        "appellantHasFixedAddress": "Yes",
+        "isRemissionsEnabled": "Yes",
+        "remissionType":"hoWaiverRemission",
+        "remissionOption": "feeWaiverFromHo",
+        "appealType":"refusalOfEu",
+        "appellantAddress": {
+          "County": "",
+          "Country": "United Kingdom",
+          "PostCode": "NE21JX",
+          "PostTown": "Example Town",
+          "AddressLine1": "5",
+          "AddressLine2": "Example Street"
+        },
+        "notificationsSent": [
+          {
+            "id": "8302_INTERNAL_SUBMIT_APPEAL_OUT_OF_TIME_WITH_REMISSION_APPELLANT_LETTER",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          }
+        ]
+      }
+    }
+  }
+}

@@ -1,0 +1,44 @@
+{
+  "description": "RIA-9234 decide FTPA application Judge decision under 32 rule (Applicant type respondent) for admin and represented cases",
+  "launchDarklyKey": "dlrm-setaside-feature-flag:true",
+  "request": {
+    "uri": "/asylum/ccdAboutToSubmit",
+    "credentials": "Judge",
+    "input": {
+      "id": 92345,
+      "eventId": "decideFtpaApplication",
+      "state": "ftpaSubmitted",
+      "caseData": {
+        "template": "minimal-appeal-submitted.json",
+        "replacements": {
+          "isAdmin": "Yes",
+          "appellantsRepresentation": "No",
+          "legalRepEmail": "{$TEST_LAW_FIRM_A_USERNAME}",
+          "currentCaseStateVisibleToJudge": "ftpaSubmitted",
+          "ftpaRespondentRjDecisionOutcomeType": "remadeRule32",
+          "ftpaApplicantType": "respondent",
+          "isDlrmSetAsideEnabled": "Yes",
+          "notificationsSent": []
+        }
+      }
+    }
+  },
+  "expectation": {
+    "status": 200,
+    "errors": [],
+    "caseData": {
+      "template": "minimal-appeal-submitted.json",
+      "replacements": {
+        "isAdmin": "Yes",
+        "appellantsRepresentation": "No",
+        "legalRepEmail": "{$TEST_LAW_FIRM_A_USERNAME}",
+        "notificationsSent": [
+          {
+            "id": "92345_FTPA_APPLICATION_DECISION_RULE31_RULE32_HOME_OFFICE",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          }
+        ]
+      }
+    }
+  }
+}

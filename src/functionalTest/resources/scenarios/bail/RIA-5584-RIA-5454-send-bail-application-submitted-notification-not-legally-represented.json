@@ -1,0 +1,61 @@
+{
+  "description": "RIA-5584 RIA-5454 send bail application submitted notification not legally represented",
+  "launchDarklyKey": "tcw-notifications-feature:true",
+  "request": {
+    "uri": "/bail/ccdAboutToSubmit",
+    "credentials": "AdminOfficer",
+    "input": {
+      "id": 2002,
+      "eventId": "submitApplication",
+      "state": "applicationSubmitted",
+      "caseData": {
+        "template": "minimal-bail-application-submitted-not-legally-represented.json",
+        "replacements": {
+          "bailHearingCentre": "birmingham"
+        }
+      }
+    }
+  },
+  "expectation": {
+    "status": 200,
+    "errors": [],
+    "caseData": {
+      "template": "minimal-bail-application-submitted-not-legally-represented.json",
+      "replacements": {
+        "bailHearingCentre": "birmingham",
+        "notificationsSent": [
+          {
+            "id": "2002_BAIL_APPLICATION_SUBMITTED_HEARING_CENTRE",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          },
+          {
+            "id": "2002_BAIL_APPLICATION_SUBMITTED_HOME_OFFICE",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          }
+        ]
+      }
+    },
+    "notifications": [
+      {
+        "reference": "2002_BAIL_APPLICATION_SUBMITTED_HEARING_CENTRE",
+        "recipient": "{$bailHearingCentreEmailAddresses.birmingham}",
+        "subject": "Bail application: Application submitted",
+        "body": [
+          "1650-9687-2604-3754",
+          "John Doe",
+          "{$iaExUiFrontendUrl}"
+        ]
+      },
+      {
+        "reference": "2002_BAIL_APPLICATION_SUBMITTED_HOME_OFFICE",
+        "recipient": "{$bailHomeOfficeEmailAddress}",
+        "subject": "Bail application: Application submitted",
+        "body": [
+          "1650-9687-2604-3754",
+          "John Doe",
+          "{$iaExUiFrontendUrl}"
+        ]
+      }
+    ]
+  }
+}

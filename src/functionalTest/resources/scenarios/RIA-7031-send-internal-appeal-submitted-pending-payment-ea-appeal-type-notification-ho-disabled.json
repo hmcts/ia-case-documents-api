@@ -1,0 +1,34 @@
+{
+  "description": "RIA-7031 send appeal submitted and payment pending notification - Home Office notifications disabled Unrepped",
+  "launchDarklyKey": "tcw-notifications-feature:true",
+  "disabled": "{$featureFlag.homeOfficeGovNotifyEnabled}",
+  "request": {
+    "uri": "/asylum/ccdAboutToSubmit",
+    "credentials": "AdminOfficer",
+    "input": {
+      "id": 7031,
+      "eventId": "submitAppeal",
+      "state": "pendingPayment",
+      "caseData": {
+        "template": "minimal-internal-appeal-submitted.json",
+        "replacements": {
+          "eaHuAppealTypePaymentOption":"payOffline",
+          "appealType":"refusalOfEu"
+        }
+      }
+    }
+  },
+  "expectation": {
+    "status": 200,
+    "errors": [],
+    "caseData": {
+      "template": "minimal-internal-appeal-submitted.json",
+      "replacements": {
+        "isAdmin": "Yes",
+        "hearingCentre": "taylorHouse",
+        "eaHuAppealTypePaymentOption": "payOffline",
+        "appealType": "refusalOfEu"
+      }
+    }
+  }
+}

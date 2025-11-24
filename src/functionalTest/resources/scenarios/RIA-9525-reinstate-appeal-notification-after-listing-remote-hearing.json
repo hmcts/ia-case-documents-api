@@ -1,0 +1,81 @@
+{
+  "description": "RIA-9525 Send reinstate appeal notification after listing remote hearing for admin and represented cases",
+  "request": {
+    "uri": "/asylum/ccdAboutToSubmit",
+    "credentials": "AdminOfficer",
+    "input": {
+      "id": 952525,
+      "eventId": "reinstateAppeal",
+      "state": "submitHearingRequirements",
+      "caseData": {
+        "template": "minimal-appeal-submitted.json",
+        "replacements": {
+          "isAdmin": "Yes",
+          "appellantsRepresentation": "No",
+          "legalRepEmail": "{$TEST_LAW_FIRM_A_USERNAME}",
+          "listCaseHearingCentre": "remoteHearing",
+          "hearingCentre": "taylorHouse",
+          "ariaListingReference": "LP/12345/2019",
+          "stateBeforeEndAppeal": "prepareForHearing",
+          "reinstateAppealDate": "{$TODAY}",
+          "reinstateAppealReason": "Withdraw",
+          "reinstatedDecisionMaker": "Admin Officer",
+          "legalRepHasAddress": "Yes",
+          "legalRepAddressUK": {
+            "County": "",
+            "Country": "United Kingdom",
+            "PostCode": "NE21JX",
+            "PostTown": "Example Town",
+            "AddressLine1": "5",
+            "AddressLine2": "Example Street"
+          },
+          "letterBundleDocuments": [
+            {
+              "id": "1",
+              "value": {
+                "tag": "internalOutOfTimeDecisionLetter",
+                "document": {
+                  "document_url": "{$FIXTURE_DOC1_PDF_URL}",
+                  "document_binary_url": "{$FIXTURE_DOC1_PDF_URL_BINARY}",
+                  "document_filename": "{$FIXTURE_DOC1_PDF_FILENAME}"
+                },
+                "suppliedBy": "",
+                "description": "",
+                "dateUploaded": "{$TODAY}"
+              }
+            }
+          ]
+        }
+      }
+    }
+  },
+  "expectation": {
+    "status": 200,
+    "errors": [],
+    "caseData": {
+      "template": "minimal-appeal-submitted.json",
+      "replacements": {
+        "isAdmin": "Yes",
+        "appellantsRepresentation": "No",
+        "legalRepEmail": "{$TEST_LAW_FIRM_A_USERNAME}",
+        "listCaseHearingCentre": "remoteHearing",
+        "hearingCentre": "taylorHouse",
+        "ariaListingReference": "LP/12345/2019",
+        "stateBeforeEndAppeal": "prepareForHearing",
+        "reinstateAppealDate": "{$TODAY}",
+        "reinstateAppealReason": "Withdraw",
+        "reinstatedDecisionMaker": "Admin Officer",
+        "notificationsSent": [
+          {
+            "id": "952525_REINSTATE_APPEAL_HOME_OFFICE",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          },
+          {
+            "id": "952525_INTERNAL_REINSTATE_APPEAL_APPELLANT_LETTER",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          }
+        ]
+      }
+    }
+  }
+}

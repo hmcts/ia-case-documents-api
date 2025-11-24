@@ -1,0 +1,49 @@
+{
+  "description": "RIA-3488 Send appeal submitted notification to Home Office",
+  "enabled": "{$featureFlag.homeOfficeGovNotifyEnabled}",
+    "request": {
+      "uri": "/asylum/ccdAboutToSubmit",
+      "credentials": "LegalRepresentative",
+      "input": {
+        "id": 348816,
+        "eventId": "submitAppeal",
+        "state": "pendingPayment",
+        "caseData": {
+          "template": "minimal-appeal-submitted.json",
+          "replacements": {
+            "hearingCentre": "manchester",
+            "paymentStatus": "Paid"
+          }
+        }
+      }
+    },
+    "expectation": {
+      "status": 200,
+      "errors": [],
+      "caseData": {
+        "template": "minimal-appeal-submitted.json",
+        "replacements": {
+          "hearingCentre": "manchester",
+          "paymentStatus": "Paid",
+          "notificationsSent": [
+            {
+              "id": "348816_APPEAL_SUBMITTED_HOME_OFFICE",
+              "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+            }
+          ]
+        }
+      },
+      "notifications": [
+        {
+          "reference": "348816_APPEAL_SUBMITTED_HOME_OFFICE",
+          "recipient": "{$apcPrivateHomeOfficeEmailAddress}",
+          "subject": "Immigration and Asylum appeal: appeal submitted",
+          "body": [
+            "PA/12345/2019",
+            "Talha Awan",
+            "{$iaExUiFrontendUrl}"
+          ]
+        }
+      ]
+    }
+  }

@@ -1,0 +1,76 @@
+{
+  "description": "RIA-1976-RIA-2694 Send respondent review direction (IAC Hatton Cross)",
+  "enabled": "{$featureFlag.homeOfficeGovNotifyEnabled}",
+  "request": {
+    "uri": "/asylum/ccdAboutToSubmit",
+    "credentials": "CaseOfficer",
+    "input": {
+      "id": 1008,
+      "eventId": "requestRespondentReview",
+      "state": "caseBuilding",
+      "caseData": {
+        "template": "minimal-appeal-submitted.json",
+        "replacements": {
+          "directions": [
+            {
+              "id": "1",
+              "value": {
+                "explanation": "Review the built case",
+                "parties": "respondent",
+                "dateDue": "{$TODAY+14}",
+                "dateSent": "{$TODAY}",
+                "tag": "respondentReview"
+              }
+            }
+          ],
+          "notificationsSent": [],
+          "hearingCentre": "hattonCross"
+        }
+      }
+    }
+  },
+  "expectation": {
+    "status": 200,
+    "errors": [],
+    "caseData": {
+      "template": "minimal-appeal-submitted.json",
+      "replacements": {
+        "directions": [
+          {
+            "id": "1",
+            "value": {
+              "explanation": "Review the built case",
+              "parties": "respondent",
+              "dateDue": "{$TODAY+14}",
+              "dateSent": "{$TODAY}",
+              "tag": "respondentReview"
+            }
+          }
+        ],
+        "notificationsSent": [
+          {
+            "id": "1008_RESPONDENT_REVIEW_DIRECTION",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          }
+        ],
+        "hearingCentre": "hattonCross"
+      }
+    },
+    "notifications": [
+      {
+        "reference": "1008_RESPONDENT_REVIEW_DIRECTION",
+        "recipient": "{$respondentEmailAddresses.respondentReviewDirection}",
+        "subject": "Immigration and Asylum appeal: review Appeal Skeleton Argument direction",
+        "body": [
+          "PA/12345/2019",
+          "A1234567",
+          "Talha Awan",
+          "{$iaExUiFrontendUrl}",
+          "{$TODAY+14|d MMM yyyy}",
+          "{$customerServices.telephoneNumber}",
+          "{$customerServices.emailAddress}"
+        ]
+      }
+    ]
+  }
+}

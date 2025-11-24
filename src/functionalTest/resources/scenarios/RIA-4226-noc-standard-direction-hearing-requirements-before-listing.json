@@ -1,0 +1,83 @@
+{
+  "description": "RIA-4226 notice of change case - Send a standard direction for request respondent evidence",
+  "request": {
+    "uri": "/asylum/ccdAboutToSubmit",
+    "credentials": "CaseOfficer",
+    "input": {
+      "id": 4226,
+      "eventId": "requestRespondentEvidence",
+      "state": "appealSubmitted",
+      "caseData": {
+        "template": "minimal-appeal-submitted.json",
+        "replacements": {
+          "currentCaseStateVisibleToHomeOfficeAll": "appealSubmitted",
+          "directions": [
+            {
+              "id": "1",
+              "value": {
+                "explanation": "Send your evidence",
+                "parties": "respondent",
+                "dateDue": "{$TODAY+14}",
+                "dateSent": "{$TODAY}",
+                "tag": "respondentEvidence"
+              }
+            }
+          ],
+          "notificationsSent": [],
+          "legalRepresentativeEmailAddress": "RIA-4226-test-case-1@example.com",
+          "changeOrganisationRequestField": {
+            "DynamicList":["caseRole", "caseRoleList"],
+            "RequestTimestamp": "now",
+            "ApprovalStatus": "1"
+          }
+        }
+      }
+    }
+  },
+  "expectation": {
+    "status": 200,
+    "errors": [],
+    "caseData": {
+      "template": "minimal-appeal-submitted.json",
+      "replacements": {
+        "currentCaseStateVisibleToHomeOfficeAll": "appealSubmitted",
+        "directions": [
+          {
+            "id": "1",
+            "value": {
+              "explanation": "Send your evidence",
+              "parties": "respondent",
+              "dateDue": "{$TODAY+14}",
+              "dateSent": "{$TODAY}",
+              "tag": "respondentEvidence"
+            }
+          }
+        ],
+        "notificationsSent": [
+          {
+            "id": "4226_RESPONDENT_EVIDENCE_DIRECTION",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          }
+        ],
+        "legalRepresentativeEmailAddress": "RIA-4226-test-case-1@example.com"
+      }
+    },
+    "notifications": [
+      {
+        "reference": "4226_RESPONDENT_EVIDENCE_DIRECTION",
+        "recipient": "{$respondentEmailAddresses.respondentEvidenceDirection}",
+        "subject": "Immigration and Asylum appeal: submit bundle direction",
+        "body": [
+          "PA/12345/2019",
+          "Talha Awan",
+          "{$iaExUiFrontendUrl}",
+          "{$TODAY+14|d MMM yyyy}",
+          "{$customerServices.telephoneNumber}",
+          "The legal representative details for this appeal are:",
+          "Legal representative name: ",
+          "{$customerServices.emailAddress}"
+        ]
+      }
+    ]
+  }
+}

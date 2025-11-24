@@ -1,0 +1,93 @@
+{
+  "description": "DIAC-1405: Late remission request refused - Appellant detained in IRC",
+  "request": {
+    "uri": "/asylum/ccdAboutToSubmit",
+    "credentials": "AdminOfficer",
+    "input": {
+      "id": 1405,
+      "eventId": "recordRemissionDecision",
+      "state": "appealSubmitted",
+      "caseData": {
+        "template": "minimal-appeal-submitted.json",
+        "replacements": {
+          "appealType": "refusalOfHumanRights",
+          "isAdmin": "Yes",
+          "appellantsRepresentation": "Yes",
+          "appellantInDetention": "Yes",
+          "detentionFacility": "immigrationRemovalCentre",
+          "ircName": "Harmondsworth",
+          "remissionDecision": "rejected",
+          "lateRemissionType": "hoWaiverRemission",
+          "paymentStatus": "Paid",
+          "remissionClaim": "legalAid",
+          "legalAidAccountNumber": "1A234B",
+          "remissionDecisionReason": "The evidence provided does not support the remission request. The legal aid documentation submitted is incomplete and does not meet the required criteria.",
+          "appellantInUk": "Yes",
+          "appellantHasFixedAddress": "Yes",
+          "appellantAddress": {
+            "County": "",
+            "Country": "United Kingdom",
+            "PostCode": "NE21JX",
+            "PostTown": "Example Town",
+            "AddressLine1": "5",
+            "AddressLine2": "Example Street"
+          },
+          "notificationAttachmentDocuments": [
+            {
+              "id": "1",
+              "value": {
+                "tag": "internalDetainedLateRemissionRefusedTemplateLetter",
+                "document": {
+                  "document_url": "{$FIXTURE_DOC1_PDF_URL}",
+                  "document_binary_url": "{$FIXTURE_DOC1_PDF_URL_BINARY}",
+                  "document_filename": "{$FIXTURE_DOC1_PDF_FILENAME}"
+                },
+                "suppliedBy": "",
+                "description": "",
+                "dateUploaded": "{$TODAY}"
+              }
+            }
+          ]
+        }
+      }
+    }
+  },
+  "expectation": {
+    "status": 200,
+    "errors": [],
+    "caseData": {
+      "template": "minimal-appeal-submitted.json",
+      "replacements": {
+        "appealType": "refusalOfHumanRights",
+        "isAdmin": "Yes",
+        "appellantsRepresentation": "Yes",
+        "appellantInDetention": "Yes",
+        "detentionFacility": "immigrationRemovalCentre",
+        "ircName": "Harmondsworth",
+        "remissionDecision": "rejected",
+        "lateRemissionType": "hoWaiverRemission",
+        "paymentStatus": "Paid",
+        "remissionClaim": "legalAid",
+        "legalAidAccountNumber": "1A234B",
+        "remissionDecisionReason": "The evidence provided does not support the remission request. The legal aid documentation submitted is incomplete and does not meet the required criteria.",
+        "appellantInUk": "Yes",
+        "appellantHasFixedAddress": "Yes",
+        "appellantAddress": {
+          "County": "",
+          "Country": "United Kingdom",
+          "PostCode": "NE21JX",
+          "PostTown": "Example Town",
+          "AddressLine1": "5",
+          "AddressLine2": "Example Street"
+        },
+        "notificationsSent": [
+          {
+            "id": "1405_INTERNAL_DETAINED_LATE_REMISSION_REFUSED_IN_PRISON_OR_IRC",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          }
+        ]
+      }
+    }
+  }
+}
+

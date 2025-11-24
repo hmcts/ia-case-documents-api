@@ -1,0 +1,69 @@
+{
+  "description": "RIA-8061 payment reminder to aip - Partially approved",
+  "request": {
+    "uri": "/asylum/ccdAboutToSubmit",
+    "credentials": "SystemUser",
+    "input": {
+      "id": 8061,
+      "eventId": "recordRemissionReminder",
+      "state": "appealSubmitted",
+      "caseData": {
+        "template": "aip-minimal-appeal-submitted.json",
+        "replacements": {
+          "remissionDecision": "partiallyApproved",
+          "amountRemitted": "140",
+          "isDlrmFeeRefundEnabled": "Yes",
+          "isLateRemissionRequest": "Yes",
+          "subscriptions": [
+            {
+              "id": "1",
+              "value": {
+                "subscriber": "appellant",
+                "email": "{$TEST_CITIZEN_USERNAME}",
+                "wantsEmail": "Yes",
+                "mobileNumber": "{$TEST_CITIZEN_MOBILE}",
+                "wantsSms": "Yes"
+              }
+            }
+          ],
+          "notificationsSent": []
+        }
+      }
+    }
+  },
+  "expectation": {
+    "status": 200,
+    "errors": [],
+    "caseData": {
+      "template": "aip-minimal-appeal-submitted.json",
+      "replacements": {
+        "remissionDecision": "partiallyApproved",
+        "amountRemitted": "140",
+        "isDlrmFeeRefundEnabled": "Yes",
+        "isLateRemissionRequest": "Yes",
+        "subscriptions": [
+          {
+            "id": "1",
+            "value": {
+              "subscriber": "appellant",
+              "email": "{$TEST_CITIZEN_USERNAME}",
+              "wantsEmail": "Yes",
+              "mobileNumber": "{$TEST_CITIZEN_MOBILE}",
+              "wantsSms": "Yes"
+            }
+          }
+        ],
+        "notificationsSent": [
+        {
+          "id": "8061_AIP_REMISSION_REMINDER_DECISION_EMAIL",
+          "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+        },
+        {
+          "id": "8061_AIP_REMISSION_REMINDER_DECISION_SMS",
+          "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+        }
+      ]
+      }
+    }
+  }
+}

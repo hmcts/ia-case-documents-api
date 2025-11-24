@@ -1,0 +1,61 @@
+{
+  "description": "DIAC-1341 Hearing Cancelled - No Cancellation of Production Notice - Detained - Video",
+  "launchDarklyKey": "tcw-notifications-feature:true",
+  "disabled": true,
+  "request": {
+    "uri": "/asylum/ccdSubmitted",
+    "credentials": "AdminOfficer",
+    "input": {
+      "id": 13412,
+      "eventId": "hearingCancelled",
+      "state": "preHearing",
+      "caseData": {
+        "template": "minimal-appeal-submitted.json",
+        "replacements": {
+          "adjournHearingWithoutDateReasons": "some reason",
+          "listCaseHearingCentre": "taylorHouse",
+          "ariaListingReference": "LP/12345/2019",
+          "appellantInDetention": "Yes",
+          "detentionFacility": "prison",
+          "prisonName": "Albany",
+          "hearingChannel": {
+            "value": {
+              "code": "VID",
+              "label": "Video"
+            },
+            "list_items": [
+              {
+                "code": "INTER",
+                "label": "In Person"
+              },
+              {
+                "code": "NA",
+                "label": "Not in Attendance"
+              },
+              {
+                "code": "TEL",
+                "label": "Telephone"
+              },
+              {
+                "code": "VID",
+                "label": "Video"
+              }
+            ]
+          }
+        }
+      }
+    }
+  },
+  "expectation": {
+    "status": 200,
+    "errors": [],
+    "caseData": {
+      "template": "minimal-appeal-submitted.json",
+      "replacements": {
+        "listCaseHearingCentre": "taylorHouse",
+        "notificationsSent": []
+      }
+    },
+    "notifications": []
+  }
+}

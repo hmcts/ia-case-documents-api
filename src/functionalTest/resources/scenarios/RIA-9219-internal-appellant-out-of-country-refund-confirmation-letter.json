@@ -1,0 +1,61 @@
+{
+  "description": "RIA-9219 Internal appellant Refund confirmation letter - Out of country",
+  "enabled": "{$featureFlag.dlrmTelephonyFeatureFlag}",
+  "request": {
+    "uri": "/asylum/ccdAboutToSubmit",
+    "credentials": "AdminOfficer",
+    "input": {
+      "id": 92192,
+      "eventId": "refundConfirmation",
+      "state": "*",
+      "caseData": {
+        "template": "minimal-internal-appeal-submitted.json",
+        "replacements": {
+          "appellantInUk": "No",
+          "homeOfficeReferenceNumber": null,
+          "previousDecisionHearingFeeOption": "decisionWithHearing",
+          "decisionHearingFeeOption": "decisionWithoutHearing",
+          "newFeeAmount": "8000",
+          "isAdmin": "Yes",
+          "appellantsRepresentation": "Yes",
+          "appellantInDetention": "No",
+          "sourceOfRemittal": "Upper Tribunal",
+          "appellantHasFixedAddressAdminJ": "Yes",
+          "addressLine1AdminJ": "Calle Toledo 32",
+          "addressLine2AdminJ": "Madrid",
+          "addressLine3AdminJ": "28003",
+          "countryGovUkOocAdminJ": "ES"
+        }
+      }
+    }
+  },
+  "expectation": {
+    "status": 200,
+    "errors": [],
+    "caseData": {
+      "template": "minimal-internal-appeal-submitted.json",
+      "replacements": {
+        "appellantInUk": "No",
+        "homeOfficeReferenceNumber": null,
+        "previousDecisionHearingFeeOption": "decisionWithHearing",
+        "decisionHearingFeeOption": "decisionWithoutHearing",
+        "newFeeAmount": "8000",
+        "isAdmin": "Yes",
+        "appellantsRepresentation": "Yes",
+        "appellantInDetention": "No",
+        "sourceOfRemittal": "Upper Tribunal",
+        "appellantHasFixedAddressAdminJ": "Yes",
+        "addressLine1AdminJ": "Calle Toledo 32",
+        "addressLine2AdminJ": "Madrid",
+        "addressLine3AdminJ": "28003",
+        "countryGovUkOocAdminJ": "ES",
+        "notificationsSent": [
+          {
+            "id": "92192_INTERNAL_REFUND_CONFIRMATION_APPELLANT_LETTER",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          }
+        ]
+      }
+    }
+  }
+}

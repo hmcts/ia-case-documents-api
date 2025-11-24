@@ -1,0 +1,59 @@
+{
+  "description": "RIA-739 Request case edit legal representative",
+  "request": {
+    "uri": "/asylum/ccdAboutToSubmit",
+    "credentials": "CaseOfficer",
+    "input": {
+      "id": 1011,
+      "eventId": "requestCaseEdit",
+      "state": "caseUnderReview",
+      "caseData": {
+        "template": "minimal-appeal-submitted.json",
+        "replacements": {
+          "directions": [
+            {
+              "id": "1",
+              "value": {
+                "explanation": "some explanation to request case edit",
+                "parties": "legalRepresentative",
+                "dateDue": "2020-05-03",
+                "dateSent": "2020-05-02",
+                "tag": "caseEdit"
+              }
+            }
+          ]
+        }
+
+      }
+    }
+  },
+  "expectation": {
+    "status": 200,
+    "errors": [],
+    "caseData": {
+      "template": "minimal-appeal-submitted.json",
+      "replacements": {
+        "notificationsSent": [
+          {
+            "id": "1011_LEGAL_REPRESENTATIVE_REQUEST_CASE_EDIT",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          }
+        ]
+      }
+    },
+    "notifications": [
+      {
+        "reference": "1011_LEGAL_REPRESENTATIVE_REQUEST_CASE_EDIT",
+        "recipient": "{$TEST_LAW_FIRM_A_USERNAME}",
+        "subject": "Immigration and Asylum appeal: edit your case direction",
+        "body": [
+          "PA/12345/2019",
+          "CASE001",
+          "Talha Awan",
+          "some explanation to request case edit",
+          "3 May 2020"
+        ]
+      }
+    ]
+  }
+}

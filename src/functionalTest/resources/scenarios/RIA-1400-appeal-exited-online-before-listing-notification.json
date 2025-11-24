@@ -1,0 +1,69 @@
+{
+  "description": "RIA-1400 appeal exited online notification to Home Office and legal representative (before listing)",
+  "request": {
+    "uri": "/asylum/ccdAboutToSubmit",
+    "credentials": "CaseOfficer",
+    "input": {
+      "id": 1400456,
+      "eventId": "removeAppealFromOnline",
+      "state": "appealSubmitted",
+      "caseData": {
+        "template": "minimal-appeal-submitted.json",
+        "replacements": {
+          "endAppealOutcome": "appealTakenOffline",
+          "legalRepReferenceNumber": "REF54321",
+          "notificationsSent": []
+        }
+      }
+    }
+  },
+  "expectation": {
+    "status": 200,
+    "errors": [],
+    "caseData": {
+      "template": "minimal-appeal-submitted.json",
+      "replacements": {
+        "endAppealOutcome": "appealTakenOffline",
+        "legalRepReferenceNumber": "REF54321",
+        "notificationsSent": [
+          {
+            "id": "1400456_APPEAL_EXITED_ONLINE_HOME_OFFICE",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          },
+          {
+            "id": "1400456_APPEAL_EXITED_ONLINE_LEGAL_REPRESENTATIVE",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          }
+        ]
+      }
+    },
+    "notifications": [
+      {
+        "reference": "1400456_APPEAL_EXITED_ONLINE_HOME_OFFICE",
+        "recipient": "{$endAppealHomeOfficeEmailAddress}",
+        "subject": "Immigration and Asylum appeal: case removed from online service",
+        "body": [
+          "PA/12345/2019",
+          "A1234567",
+          "Talha Awan",
+          "{$iaExUiFrontendUrl}",
+          "{$customerServices.telephoneNumber}",
+          "{$customerServices.emailAddress}"
+        ]
+      },
+      {
+        "reference": "1400456_APPEAL_EXITED_ONLINE_LEGAL_REPRESENTATIVE",
+        "recipient": "{$TEST_LAW_FIRM_A_USERNAME}",
+        "subject": "Immigration and Asylum appeal: case removed from online service",
+        "body": [
+          "PA/12345/2019",
+          "REF54321",
+          "Talha Awan",
+          "{$iaExUiFrontendUrl}",
+          "{$customerServices.telephoneNumber}",
+          "{$customerServices.emailAddress}"
+        ]
+      }
+    ]
+  }
+}

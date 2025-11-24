@@ -1,0 +1,94 @@
+{
+  "description": "RIA-6558 Send hearing requirements agreed notification to legal rep and home office (Bradford hearing centre) with LO reviewed hearing requirements",
+  "enabled": "{$featureFlag.homeOfficeGovNotifyEnabled}",
+  "request": {
+    "uri": "/asylum/ccdAboutToSubmit",
+    "credentials": "CaseOfficer",
+    "input": {
+      "id": 1333,
+      "eventId": "reviewHearingRequirements",
+      "state": "awaitingRespondentEvidence",
+      "caseData": {
+        "template": "minimal-appeal-submitted.json",
+        "replacements": {
+          "ariaListingReference": "LP/12345/2019",
+          "listCaseHearingCentre": "bradford",
+          "listCaseHearingDate": "2019-05-03T14:25:15.000",
+          "legalRepresentativeEmailAddress": "{$TEST_LAW_FIRM_A_USERNAME}",
+          "vulnerabilitiesTribunalResponse": "LO reviewed vulnerabilities response",
+          "multimediaTribunalResponse": "LO reviewed multimedia response",
+          "singleSexCourtTribunalResponse": "LO reviewed single sex court response",
+          "inCameraCourtTribunalResponse": "LO reviewed in camera court response",
+          "submitHearingRequirementsAvailable": "Yes",
+          "isAcceleratedDetainedAppeal":"Yes"
+        }
+      }
+    }
+  },
+  "expectation": {
+    "status": 200,
+    "errors": [],
+    "caseData": {
+      "template": "minimal-appeal-submitted.json",
+      "replacements": {
+        "listCaseHearingCentre": "bradford",
+        "listCaseHearingDate": "2019-05-03T14:25:15.000",
+        "legalRepresentativeEmailAddress": "{$TEST_LAW_FIRM_A_USERNAME}",
+        "notificationsSent": [
+          {
+            "id": "1333_HEARING_REQUIREMENTS_AGREED_LEGAL_REPRESENTATIVE",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          },
+          {
+            "id": "1333_HEARING_REQUIREMENTS_AGREED_HOME_OFFICE",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          }
+        ],
+        "vulnerabilitiesTribunalResponse": "LO reviewed vulnerabilities response",
+        "multimediaTribunalResponse": "LO reviewed multimedia response",
+        "singleSexCourtTribunalResponse": "LO reviewed single sex court response",
+        "inCameraCourtTribunalResponse": "LO reviewed in camera court response",
+        "submitHearingRequirementsAvailable": "Yes",
+        "isAcceleratedDetainedAppeal":"Yes"
+      }
+    },
+    "notifications": [
+      {
+        "reference": "1333_HEARING_REQUIREMENTS_AGREED_LEGAL_REPRESENTATIVE",
+        "recipient": "{$TEST_LAW_FIRM_A_USERNAME}",
+        "subject": "Accelerated detained appeal: hearing requirements agreed",
+        "body": [
+          "PA/12345/2019",
+          "LP/12345/2019",
+          "CASE001",
+          "Talha Awan",
+          "3 May 2019",
+          "IAC Bradford, Phoenix House, Rushton Avenue, Thornbury, Bradford, BD3 7BH",
+          "LO reviewed vulnerabilities response",
+          "LO reviewed multimedia response",
+          "LO reviewed single sex court response",
+          "LO reviewed in camera court response",
+          "No other adjustments are being made"
+        ]
+      },
+      {
+        "reference": "1333_HEARING_REQUIREMENTS_AGREED_HOME_OFFICE",
+        "recipient": "{$homeOfficeEmailAddresses.bradford}",
+        "subject": "Accelerated detained appeal: hearing requirements agreed",
+        "body": [
+          "PA/12345/2019",
+          "LP/12345/2019",
+          "A1234567",
+          "Talha Awan",
+          "3 May 2019",
+          "IAC Bradford, Phoenix House, Rushton Avenue, Thornbury, Bradford, BD3 7BH",
+          "LO reviewed vulnerabilities response",
+          "LO reviewed multimedia response",
+          "LO reviewed single sex court response",
+          "LO reviewed in camera court response",
+          "No other adjustments are being made"
+        ]
+      }
+    ]
+  }
+}

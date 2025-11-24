@@ -1,0 +1,44 @@
+{
+  "description": "RIA-8221 Update Tribunal Decision Rule 32 Notification",
+  "request": {
+    "uri": "/asylum/ccdAboutToSubmit",
+    "credentials": "Judge",
+    "input": {
+      "id": 8221,
+      "eventId": "updateTribunalDecision",
+      "state": "ftpaDecided",
+      "caseData": {
+        "template": "minimal-appeal-submitted.json",
+        "replacements": {
+          "isDlrmSetAsideEnabled": "Yes",
+          "listCaseHearingCentre": "taylorHouse",
+          "legalRepresentativeEmailAddress": "sample@mail.com",
+          "updateTribunalDecisionList": "underRule32"
+        }
+      }
+    }
+  },
+  "expectation": {
+    "status": 200,
+    "errors": [],
+    "caseData": {
+      "template": "minimal-appeal-submitted.json",
+      "replacements": {
+        "isDlrmSetAsideEnabled": "Yes",
+        "listCaseHearingCentre": "taylorHouse",
+        "legalRepresentativeEmailAddress": "sample@mail.com",
+        "updateTribunalDecisionList": "underRule32",
+        "notificationsSent": [
+          {
+            "id": "8221_RESPONDENT_UPDATE_TRIBUNAL_DECISION_RULE_32_EMAIL",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          },
+          {
+            "id": "8221_LEGAL_REPRESENTATIVE_UPDATE_TRIBUNAL_DECISION_RULE_32_EMAIL",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          }
+        ]
+      }
+    }
+  }
+}

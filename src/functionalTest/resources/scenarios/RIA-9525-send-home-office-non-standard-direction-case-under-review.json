@@ -1,0 +1,85 @@
+{
+  "description": "RIA-9525 Send Home Office non-standard direction caseUnderReview state for admin and represented cases",
+  "request": {
+    "uri": "/asylum/ccdAboutToSubmit",
+    "credentials": "CaseOfficer",
+    "input": {
+      "id": 952535,
+      "eventId": "sendDirection",
+      "state": "caseUnderReview",
+      "caseData": {
+        "template": "minimal-appeal-submitted.json",
+        "replacements": {
+          "isAdmin": "Yes",
+          "appellantsRepresentation": "No",
+          "legalRepEmail": "{$TEST_LAW_FIRM_A_USERNAME}",
+          "currentCaseStateVisibleToLegalRepresentative": "caseUnderReview",
+          "currentCaseStateVisibleToHomeOfficeAll": "caseUnderReview",
+          "directions": [
+            {
+              "id": "1",
+              "value": {
+                "explanation": "Do the non standard thing",
+                "parties": "respondent",
+                "dateDue": "{$TODAY+14}",
+                "dateSent": "{$TODAY}",
+                "tag": ""
+              }
+            }
+          ],
+          "notificationsSent": [],
+          "legalRepresentativeEmailAddress": "RIA-952535-test-case-1@example.com"
+        }
+      }
+    }
+  },
+  "expectation": {
+    "status": 200,
+    "errors": [],
+    "caseData": {
+      "template": "minimal-appeal-submitted.json",
+      "replacements": {
+        "isAdmin": "Yes",
+        "appellantsRepresentation": "No",
+        "legalRepEmail": "{$TEST_LAW_FIRM_A_USERNAME}",
+        "currentCaseStateVisibleToHomeOfficeAll": "caseUnderReview",
+        "directions": [
+          {
+            "id": "1",
+            "value": {
+              "explanation": "Do the non standard thing",
+              "parties": "respondent",
+              "dateDue": "{$TODAY+14}",
+              "dateSent": "{$TODAY}",
+              "tag": ""
+            }
+          }
+        ],
+        "notificationsSent": [
+          {
+            "id": "952535_RESPONDENT_NON_STANDARD_DIRECTION",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          }
+        ],
+        "legalRepresentativeEmailAddress": "RIA-952535-test-case-1@example.com"
+      }
+    },
+    "notifications": [
+      {
+        "reference": "952535_RESPONDENT_NON_STANDARD_DIRECTION",
+        "recipient": "{$lartHomeOfficeEmailAddress}",
+        "subject": "Immigration and Asylum appeal: direction",
+        "body": [
+          "PA/12345/2019",
+          "A1234567",
+          "Talha Awan",
+          "{$iaExUiFrontendUrl}",
+          "Do the non standard thing",
+          "{$TODAY+14|d MMM yyyy}",
+          "{$customerServices.telephoneNumber}",
+          "{$customerServices.emailAddress}"
+        ]
+      }
+    ]
+  }
+}

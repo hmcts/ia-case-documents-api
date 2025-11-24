@@ -1,0 +1,91 @@
+{
+  "description": "RIA-6949 appeal outcome notification Admin Officer manchester",
+  "request": {
+    "uri": "/asylum/ccdAboutToSubmit",
+    "credentials": "judge",
+    "input": {
+      "id": 6949,
+      "eventId": "sendDecisionAndReasons",
+      "state": "decided",
+      "caseData": {
+        "template": "minimal-appeal-submitted.json",
+        "replacements": {
+          "ariaListingReference": "LP/12345/2019",
+          "isDecisionAllowed": "allowed",
+          "hearingCentre": "manchester"
+        }
+      }
+    }
+  },
+  "expectation": {
+    "status": 200,
+    "errors": [],
+    "caseData": {
+      "template": "minimal-appeal-submitted.json",
+      "replacements": {
+        "ariaListingReference": "LP/12345/2019",
+        "isDecisionAllowed": "allowed",
+        "hearingCentre": "manchester",
+        "notificationsSent": [
+          {
+            "id": "6949_APPEAL_OUTCOME_HOME_OFFICE",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          },
+          {
+            "id": "6949_APPEAL_OUTCOME_ADMIN",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          },
+          {
+            "id": "6949_APPEAL_OUTCOME_LEGAL_REPRESENTATIVE",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          }
+
+        ]
+      }
+    },
+    "notifications": [
+      {
+        "reference": "6949_APPEAL_OUTCOME_HOME_OFFICE",
+        "recipient": "{$allowedAppealHomeOfficeEmailAddress}",
+        "subject": "Immigration and Asylum appeal: decision and reasons",
+        "body": [
+          "LP/12345/2019",
+          "PA/12345/2019",
+          "A1234567",
+          "Talha Awan",
+          "{$iaExUiFrontendUrl}",
+          "{$customerServices.telephoneNumber}",
+          "{$customerServices.emailAddress}"
+        ]
+      },
+
+      {
+        "reference": "6949_APPEAL_OUTCOME_ADMIN",
+        "recipient": "{$adminEmailAddresses.manchester}",
+        "subject": "Immigration and Asylum appeal: decision and reasons",
+        "body": [
+          "Talha Awan",
+          "PA/12345/2019",
+          "LP/12345/2019",
+          "MANCHESTER",
+          "ALLOWED"
+        ]
+      },
+      {
+        "reference": "6949_APPEAL_OUTCOME_LEGAL_REPRESENTATIVE",
+        "recipient": "{$TEST_LAW_FIRM_A_USERNAME}",
+        "subject": "Immigration and Asylum appeal: decision and reasons",
+        "body": [
+          "PA/12345/2019",
+          "LP/12345/2019",
+          "CASE001",
+          "Talha Awan",
+          "{$iaExUiFrontendUrl}",
+          "{$customerServices.telephoneNumber}",
+          "{$customerServices.emailAddress}"
+        ]
+      }
+
+    ]
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "description": "RIA-4774 Edit payment method no notification in appeal started state",
+  "request": {
+    "uri": "/asylum/ccdAboutToSubmit",
+    "credentials": "LegalRepresentative",
+    "input": {
+      "id": 4774,
+      "eventId": "editPaymentMethod",
+      "state": "appealStarted",
+      "caseData": {
+        "template": "minimal-appeal-started.json",
+        "replacements": {
+          "appealType": "refusalOfHumanRights",
+          "hearingCentre": "manchester"
+        }
+      }
+    }
+  },
+  "expectation": {
+    "status": 200,
+    "errors": [],
+    "caseData": {
+      "template": "minimal-appeal-started.json",
+      "replacements": {
+        "appealType": "refusalOfHumanRights",
+        "hearingCentre": "manchester",
+        "notificationsSent": null
+      }
+    },
+    "notifications": null
+  }
+}

@@ -3,7 +3,7 @@
   "prisonName": "Channings Wood",
   "legalRepName": "Legal Rep",
   "hearingCentre": "newport",
-  "legalRepEmail": "ia-law-firm-org-sc@fake.hmcts.net",
+  "legalRepEmail": "{$TEST_LAW_FIRM_A_USERNAME}",
   "legalRepPhone": "07896541236",
   "videoHearing1": "Yes",
   "applicantGender": "MALE",

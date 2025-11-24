@@ -1,0 +1,58 @@
+{
+  "description": "RIA-9525 Notification of appellant ftpa application submitted for admin and represented cases",
+  "enabled": "{$featureFlag.homeOfficeGovNotifyEnabled}",
+  "request": {
+    "uri": "/asylum/ccdAboutToSubmit",
+    "credentials": "LegalRepresentative",
+    "input": {
+      "id": 952521,
+      "eventId": "applyForFTPAAppellant",
+      "state": "ftpaSubmitted",
+      "caseData": {
+        "template": "minimal-appeal-submitted.json",
+        "replacements": {
+          "isAdmin": "Yes",
+          "appellantsRepresentation": "No",
+          "legalRepEmail": "{$TEST_LAW_FIRM_A_USERNAME}",
+          "isAcceleratedDetained": "Yes",
+          "listCaseHearingCentre": "harmondsworth",
+          "ariaListingReference": "LP/12345/2019"
+        }
+      }
+    }
+  },
+  "expectation": {
+    "status": 200,
+    "errors": [],
+    "caseData": {
+      "template": "minimal-appeal-submitted.json",
+      "replacements": {
+        "isAdmin": "Yes",
+        "appellantsRepresentation": "No",
+        "legalRepEmail": "{$TEST_LAW_FIRM_A_USERNAME}",
+        "notificationsSent": [
+          {
+            "id": "952521_RESPONDENT_APPELLANT_FTPA_SUBMITTED",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          }
+        ]
+      }
+    },
+    "notifications": [
+      {
+        "reference": "952521_RESPONDENT_APPELLANT_FTPA_SUBMITTED",
+        "recipient": "{$homeOfficeFtpaEmailAddresses.harmondsworth}",
+        "subject": "Immigration and Asylum appeal: application to appeal to Upper Tribunal",
+        "body": [
+          "PA/12345/2019",
+          "LP/12345/2019",
+          "A1234567",
+          "Talha Awan",
+          "{$iaExUiFrontendUrl}",
+          "{$customerServices.telephoneNumber}",
+          "{$customerServices.emailAddress}"
+        ]
+      }
+    ]
+  }
+}

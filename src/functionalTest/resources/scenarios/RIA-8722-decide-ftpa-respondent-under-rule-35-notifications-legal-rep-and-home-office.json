@@ -1,0 +1,71 @@
+{
+  "description": "RIA-8722 decide FTPA Respondent application decision under 35 rule - Notifications to HO and LR",
+  "launchDarklyKey": "dlrm-setaside-feature-flag:true",
+  "request": {
+    "uri": "/asylum/ccdAboutToSubmit",
+    "credentials": "Judge",
+    "input": {
+      "id": 8722,
+      "eventId": "decideFtpaApplication",
+      "state": "ftpaSubmitted",
+      "caseData": {
+        "template": "minimal-appeal-submitted.json",
+        "replacements": {
+          "currentCaseStateVisibleToJudge": "ftpaSubmitted",
+          "ftpaRespondentRjDecisionOutcomeType": "reheardRule35",
+          "listCaseHearingCentre": "glasgow",
+          "ftpaApplicantType": "respondent",
+          "isDlrmSetAsideEnabled": "Yes",
+          "notificationsSent": []
+        }
+      }
+    }
+  },
+  "expectation": {
+    "status": 200,
+    "errors": [],
+    "caseData": {
+      "template": "minimal-appeal-submitted.json",
+      "replacements": {
+        "notificationsSent": [
+          {
+            "id": "8722_RESPONDENT_REHEARD_UNDER_RULE_35_EMAIL",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          },
+          {
+            "id": "8722_LEGAL_REP_REHEARD_UNDER_RULE_35_EMAIL",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          }
+        ]
+      }
+    },
+    "notifications": [
+      {
+        "reference": "8722_RESPONDENT_REHEARD_UNDER_RULE_35_EMAIL",
+        "recipient": "{$homeOfficeFtpaEmailAddresses.glasgow}",
+        "subject": "Immigration and Asylum appeal: Application decided",
+        "body": [
+          "PA/12345/2019",
+          "A1234567",
+          "Talha Awan",
+          "{$iaExUiFrontendUrl}",
+          "{$customerServices.telephoneNumber}",
+          "{$customerServices.emailAddress}"
+        ]
+      },
+      {
+        "reference": "8722_LEGAL_REP_REHEARD_UNDER_RULE_35_EMAIL",
+        "recipient": "{$TEST_LAW_FIRM_A_USERNAME}",
+        "subject": "Immigration and Asylum appeal: Application decided",
+        "body": [
+          "PA/12345/2019",
+          "CASE001",
+          "Talha Awan",
+          "{$iaExUiFrontendUrl}",
+          "{$customerServices.telephoneNumber}",
+          "{$customerServices.emailAddress}"
+        ]
+      }
+    ]
+  }
+}

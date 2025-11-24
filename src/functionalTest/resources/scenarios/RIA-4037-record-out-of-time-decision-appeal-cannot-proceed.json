@@ -1,0 +1,49 @@
+{
+  "description": "RIA-4037 CaseOfficer record out of time decision and appeal cannot proceed",
+  "request": {
+    "uri": "/asylum/ccdAboutToSubmit",
+    "credentials": "CaseOfficer",
+    "input": {
+      "id": 4037,
+      "eventId": "recordOutOfTimeDecision",
+      "state": "appealSubmitted",
+      "caseData": {
+        "template": "minimal-appeal-submitted.json",
+        "replacements": {
+          "appealType":"protection",
+          "outOfTimeDecisionType": "rejected",
+          "notificationsSent": []
+        }
+      }
+    }
+  },
+  "expectation": {
+    "status": 200,
+    "errors": [],
+    "caseData": {
+      "template": "minimal-appeal-submitted.json",
+      "replacements": {
+        "appealType": "protection",
+        "outOfTimeDecisionType": "rejected",
+        "notificationsSent": [
+          {
+            "id": "4037_RECORD_OUT_OF_TIME_DECISION_CANNOT_PROCEED_LEGAL_REP",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          }
+        ]
+      }
+    },
+    "notifications": [
+      {
+        "reference": "4037_RECORD_OUT_OF_TIME_DECISION_CANNOT_PROCEED_LEGAL_REP",
+        "recipient": "{$TEST_LAW_FIRM_A_USERNAME}",
+        "subject": "Immigration and Asylum appeal: Appeal is out of time and cannot proceed",
+        "body": [
+          "PA/12345/2019",
+          "Talha Awan",
+          "{$iaExUiFrontendUrl}"
+        ]
+      }
+    ]
+  }
+}

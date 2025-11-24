@@ -1,0 +1,46 @@
+{
+  "description": "RIA-3582 Send hearing requirements adjustments submitted notification (Admin Officer) - caseFlagSetAsideReheardExists missing",
+  "request": {
+    "uri": "/asylum/ccdAboutToSubmit",
+    "credentials": "CaseOfficer",
+    "input": {
+      "id": 35821,
+      "eventId": "reviewHearingRequirements",
+      "state": "listing",
+      "caseData": {
+        "template": "minimal-appeal-submitted.json",
+        "replacements": {
+          "isReheardAppealEnabled": "Yes"
+        }
+      }
+    }
+  },
+  "expectation": {
+    "status": 200,
+    "errors": [],
+    "caseData": {
+      "template": "minimal-appeal-submitted.json",
+      "replacements": {
+        "isReheardAppealEnabled": "Yes",
+        "notificationsSent": [
+          {
+            "id": "35821_REVIEW_HEARING_REQUIREMENTS_ADMIN_OFFICER",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          }
+        ]
+      }
+    },
+    "notifications": [
+      {
+        "reference": "35821_REVIEW_HEARING_REQUIREMENTS_ADMIN_OFFICER",
+        "recipient": "{$reviewHearingRequirementsAdminOfficerEmailAddress}",
+        "subject": "Immigration and Asylum appeal: list case",
+        "body": [
+          "PA/12345/2019",
+          "Talha Awan",
+          "{$iaExUiFrontendUrl}"
+        ]
+      }
+    ]
+  }
+}

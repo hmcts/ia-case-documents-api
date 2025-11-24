@@ -1,0 +1,41 @@
+{
+  "description": "RIA-3951-RIA-4467 Remove legal representative notification to legal rep, case officer and home office - by TCW",
+  "request": {
+    "uri": "/asylum/ccdSubmitted",
+    "credentials": "CaseOfficer",
+    "input": {
+      "id": 3951,
+      "eventId": "removeLegalRepresentative",
+      "state": "appealSubmitted",
+      "caseData": {
+        "template": "minimal-appeal-submitted.json",
+        "replacements": {
+          "hearingCentre": "manchester",
+          "currentCaseStateVisibleToHomeOfficeAll": "appealSubmitted",
+          "appellantHasFixedAddress": "Yes",
+          "appellantAddress": {
+            "County": "",
+            "Country": "United Kingdom",
+            "PostCode": "X1X 0XX",
+            "PostTown": "LONDON",
+            "AddressLine1": "60 XXY STREET",
+            "AddressLine2": ""
+          },
+          "appellantPinInPost": {
+            "accessCode": "AI123BX",
+            "expiryDate": "01/01/2022",
+            "pinUsed": "No"
+          }
+        }
+      }
+    }
+  },
+  "expectation": {
+    "status": 200,
+    "errors": [],
+    "confirmation": {
+      "header": "success",
+      "body": "contains([_REMOVE_REPRESENTATION_HOME_OFFICE,_REMOVE_REPRESENTATION_LEGAL_REP,_REMOVE_REPRESENTATION_CASE_OFFICER])"
+    }
+  }
+}

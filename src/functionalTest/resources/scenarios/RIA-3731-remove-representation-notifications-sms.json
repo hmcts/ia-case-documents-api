@@ -1,0 +1,45 @@
+{
+  "description": "RIA-3731-RIA-4467 Send remove representation notification to legal rep, case officer and home office and appellant (sms)",
+  "request": {
+    "uri": "/asylum/ccdSubmitted",
+    "credentials": "LegalRepresentative",
+    "input": {
+      "id": 3731,
+      "eventId": "removeRepresentation",
+      "state": "appealSubmitted",
+      "caseData": {
+        "template": "minimal-appeal-submitted.json",
+        "replacements": {
+          "hearingCentre": "manchester",
+          "currentCaseStateVisibleToHomeOfficeAll": "appealSubmitted",
+          "contactPreference": "wantsSms",
+          "mobileNumber": "{$TEST_CITIZEN_MOBILE}",
+          "changeOrganisationRequestField": {
+            "CaseRoleId": null,
+            "ApprovalStatus": null,
+            "RequestTimestamp": null,
+            "OrganisationToAdd": {
+              "OrganisationID": null
+            },
+            "OrganisationToRemove": {
+              "OrganisationID": null
+            }
+          },
+          "appellantPinInPost": {
+            "accessCode": "AI123BX",
+            "expiryDate": "01/01/2022",
+            "pinUsed": "No"
+          }
+        }
+      }
+    }
+  },
+  "expectation": {
+    "status": 200,
+    "errors": [],
+    "confirmation": {
+      "header": "success",
+      "body": "contains([_REMOVE_REPRESENTATION_APPELLANT_SMS,_REMOVE_REPRESENTATION_HOME_OFFICE,_REMOVE_REPRESENTATION_LEGAL_REP,_REMOVE_REPRESENTATION_CASE_OFFICER])"
+    }
+  }
+}

@@ -1,0 +1,31 @@
+{
+  "description": "RIA-3631 Notification of respondent ftpa application submitted - Home Office notifications disabled",
+  "disabled": "true",
+  "request": {
+    "uri": "/asylum/ccdAboutToSubmit",
+    "credentials": "HomeOfficePOU",
+    "input": {
+      "id": 1373,
+      "eventId": "applyForFTPARespondent",
+      "state": "ftpaSubmitted",
+      "caseData": {
+        "template": "minimal-appeal-submitted.json",
+        "replacements": {
+          "listCaseHearingCentre": "taylorHouse",
+          "ariaListingReference": "LP/12345/2019"
+        }
+      }
+    }
+  },
+  "expectation": {
+    "status": 200,
+    "errors": [],
+    "caseData": {
+      "template": "minimal-appeal-submitted.json",
+      "replacements": {
+        "notificationsSent": []
+      }
+    },
+    "notifications": []
+  }
+}

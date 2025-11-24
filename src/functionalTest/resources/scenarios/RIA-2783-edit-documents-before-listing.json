@@ -1,0 +1,110 @@
+{
+  "description": "RIA-2783 Immigration and Asylum appeal: document deleted before listing",
+  "launchDarklyKey": "tcw-notifications-feature:true",
+  "request": {
+    "uri": "/asylum/ccdAboutToSubmit",
+    "credentials": "CaseOfficer",
+    "input": {
+      "id": 1234,
+      "eventId": "editDocuments",
+      "state": "awaitingRespondentEvidence",
+      "caseData": {
+        "template": "minimal-appeal-submitted.json",
+        "replacements": {
+          "caseNotes": [
+            {
+              "id": "1",
+              "value": {
+                "caseNoteSubject": "Edit documents audit note",
+                "user": "Case Officer",
+                "dateAdded": "{$TODAY}",
+                "caseNoteDescription": "Document names: [new evidence.pdf, new other evidence.pdf]\nreason: some reasons to update the documents"
+              }
+            }
+          ],
+          "additionalEvidenceDocuments": [
+            {
+              "id": "1",
+              "value": {
+                "document": {
+                  "document_url": "http://document-store/d209e64c-b8fe-4ffa-8f8b-c7ae922c6b65",
+                  "document_binary_url": "http://document-store/d209e64c-b8fe-4ffa-8f8b-c7ae922c6b65/binary",
+                  "document_filename": "new evidence.pdf"
+                },
+                "description": "some updated description",
+                "dateUploaded": "2018-12-25",
+                "tag": ""
+              }
+            }
+          ]
+        }
+      },
+      "caseDataBefore": {
+        "template": "minimal-appeal-submitted.json",
+        "replacements": {
+          "additionalEvidenceDocuments": [
+            {
+              "id": "1",
+              "value": {
+                "document": {
+                  "document_url": "http://document-store/d209e64c-b8fe-4ffa-8f8b-c7ae922c6b65",
+                  "document_binary_url": "http://document-store/d209e64c-b8fe-4ffa-8f8b-c7ae922c6b65/binary",
+                  "document_filename": "new evidence.pdf"
+                },
+                "description": "some original description",
+                "dateUploaded": "2018-12-25",
+                "tag": ""
+              }
+            },
+            {
+              "id": "2",
+              "value": {
+                "document": {
+                  "document_url": "http://document-store/e1c202b3-099c-452b-a7f0-b1ad7a231a36",
+                  "document_binary_url": "http://document-store/e1c202b3-099c-452b-a7f0-b1ad7a231a36/binary",
+                  "document_filename": "new other evidence.pdf"
+                },
+                "description": "some other original description",
+                "dateUploaded": "2018-12-26",
+                "tag": ""
+              }
+            }
+          ]
+        }
+      }
+    }
+  },
+  "expectation": {
+    "status": 200,
+    "errors": [
+    ],
+    "caseData": {
+      "template": "minimal-appeal-submitted.json",
+      "replacements": {
+        "notificationsSent": [
+          {
+            "id": "1234_APPEAL_DOCUMENT_DELETED_CASE_OFFICER",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          }
+        ]
+      }
+    },
+    "notifications": [
+      {
+        "reference": "1234_APPEAL_DOCUMENT_DELETED_CASE_OFFICER",
+        "recipient": "{$hearingCentreEmailAddresses.taylorHouse}",
+        "subject": "Immigration and Asylum appeal: document deleted",
+        "body": [
+          "PA/12345/2019",
+          "Talha Awan",
+          "new evidence.pdf",
+          "some original description",
+          "new other evidence.pdf",
+          "some other original description",
+          "some reasons to update the documents",
+          "{$iaExUiFrontendUrl}"
+        ]
+      }
+    ]
+  }
+}

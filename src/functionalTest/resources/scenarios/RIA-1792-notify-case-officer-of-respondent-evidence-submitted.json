@@ -1,0 +1,43 @@
+{
+  "description": "RIA-1792 Notify case officer of respondent evidence submitted",
+  "launchDarklyKey": "tcw-notifications-feature:true",
+  "request": {
+    "uri": "/asylum/ccdAboutToSubmit",
+    "credentials": "HomeOfficeApc",
+    "input": {
+      "id": 1792,
+      "eventId": "uploadHomeOfficeBundle",
+      "state": "awaitingRespondentEvidence",
+      "caseData": {
+        "template": "minimal-appeal-submitted.json"
+      }
+    }
+  },
+  "expectation": {
+    "status": 200,
+    "errors": [],
+    "caseData": {
+      "template": "minimal-appeal-submitted.json",
+      "replacements": {
+        "notificationsSent": [
+          {
+            "id": "1792_RESPONDENT_EVIDENCE_SUBMITTED_CASE_OFFICER",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          }
+        ]
+      }
+    },
+    "notifications": [
+      {
+        "reference": "1792_RESPONDENT_EVIDENCE_SUBMITTED_CASE_OFFICER",
+        "recipient": "{$hearingCentreEmailAddresses.taylorHouse}",
+        "subject": "Immigration and Asylum appeal: Home Office evidence uploaded",
+        "body": [
+          "PA/12345/2019",
+          "Talha Awan",
+          "{$iaExUiFrontendUrl}"
+        ]
+      }
+    ]
+  }
+}

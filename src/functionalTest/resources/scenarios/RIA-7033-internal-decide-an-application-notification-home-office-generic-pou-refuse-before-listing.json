@@ -1,0 +1,66 @@
+{
+  "description": "RIA-7033 Internal case Send decide an application notification home office POU refused before listing",
+  "disabled": "true",
+  "request": {
+    "uri": "/asylum/ccdAboutToSubmit",
+    "credentials": "Judge",
+    "input": {
+      "id": 703319,
+      "eventId": "decideAnApplication",
+      "state": "appealSubmitted",
+      "caseData": {
+        "template": "minimal-internal-appeal-submitted.json",
+        "replacements": {
+          "listCaseHearingCentre": "taylorHouse",
+          "decideAnApplicationId": "1",
+          "makeAnApplications": [
+              {
+              "id": "1",
+              "value": {
+                "type":"Other",
+                "details":"",
+                "evidence":[],
+                "applicant":"",
+                "date":"",
+                "decision":"Refused",
+                "state":"appealSubmitted",
+                "applicantRole":"caseworker-ia-respondentofficer",
+                "decisionReason":"No Reason given",
+                "decisionDate":"{$TODAY}",
+                "decisionMaker": "Judge"
+              }
+            }
+          ]
+        }
+      }
+    }
+  },
+  "expectation": {
+    "status": 200,
+    "errors": [],
+    "caseData": {
+      "template": "minimal-internal-appeal-submitted.json",
+      "replacements": {
+        "isAdmin": "Yes",
+        "notificationsSent": [
+          {
+            "id": "703319_DECIDE_AN_APPLICATION_HOME_OFFICE",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          }
+        ]
+      }
+    },
+    "notifications": [
+      {
+        "reference": "703319_DECIDE_AN_APPLICATION_HOME_OFFICE",
+        "recipient": "{$apcHomeOfficeEmailAddress}",
+        "subject": "Immigration and Asylum appeal: application for Other refused",
+        "body": [
+          "PA/12345/2019",
+          "A123456",
+          "Talha Awan"
+        ]
+      }
+    ]
+  }
+}

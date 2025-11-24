@@ -1,0 +1,42 @@
+{
+  "description": "RIA-8160 decide FTPA application Judge decision under 31 rule (Applicant type appellant)",
+  "launchDarklyKey": "dlrm-setaside-feature-flag:true",
+  "request": {
+    "uri": "/asylum/ccdAboutToSubmit",
+    "credentials": "Judge",
+    "input": {
+      "id": 8160,
+      "eventId": "decideFtpaApplication",
+      "state": "ftpaSubmitted",
+      "caseData": {
+        "template": "minimal-appeal-submitted.json",
+        "replacements": {
+          "currentCaseStateVisibleToJudge": "ftpaSubmitted",
+          "ftpaAppellantRjDecisionOutcomeType": "remadeRule31",
+          "ftpaApplicantType": "appellant",
+          "isDlrmSetAsideEnabled": "Yes",
+          "notificationsSent": []
+        }
+      }
+    }
+  },
+  "expectation": {
+    "status": 200,
+    "errors": [],
+    "caseData": {
+      "template": "minimal-appeal-submitted.json",
+      "replacements": {
+        "notificationsSent": [
+          {
+            "id": "8160_FTPA_APPLICATION_DECISION_RULE31_RULE32_LEGAL_REPRESENTATIVE",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          },
+          {
+            "id": "8160_FTPA_APPLICATION_DECISION_RULE31_RULE32_HOME_OFFICE",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          }
+        ]
+      }
+    }
+  }
+}

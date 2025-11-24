@@ -1,0 +1,114 @@
+{
+  "description": "RIA-7795-RIA-7796: Legal rep responds to costs and notifies home office and receives notification as well",
+  "request": {
+    "uri": "/asylum/ccdAboutToSubmit",
+    "credentials": "LegalRepresentative",
+    "input": {
+      "id": 7796,
+      "eventId": "respondToCosts",
+      "state": "appealSubmitted",
+      "caseData": {
+        "template": "minimal-appeal-submitted.json",
+        "replacements": {
+          "journeyType": "rep",
+          "appealType": "revocationOfProtection",
+          "legalRepresentativeEmailAddress": "{$TEST_LAW_FIRM_A_USERNAME}",
+          "legalRepReferenceNumber": "A1234567",
+          "appealGroundsRevocation": {
+            "values": [
+              "revocationRefugeeConvention",
+              "revocationHumanitarianProtection"
+            ]
+          },
+          "appliesForCosts": [
+            {
+              "id": "11",
+              "value": {
+                "applyForCostsRespondentRole": "Legal representative",
+                "appliedCostsType": "Wasted costs",
+                "appliedCostsType": "Unreasonable costs",
+                "respondentToCostsOrder": "Legal representative",
+                "applyForCostsHearingType": "No",
+                "scheduleOfCostsDocuments": [],
+                "applyForCostsCreationDate": "{$TODAY}",
+                "applyForCostsApplicantType": "Home office",
+                "argumentsAndEvidenceDetails": "",
+                "argumentsAndEvidenceDocuments": [
+                  {
+                    "id": "2f352b16-0ed9-4c2e-88c2-4bc091485504",
+                    "value": {
+                      "document_url": "http://dm-store:8080/documents/45ec3a85-8fad-4caa-81a5-6b3b5c3b3bb8",
+                      "document_filename": "test.pdf",
+                      "document_binary_url": "http://dm-store:8080/documents/45ec3a85-8fad-4caa-81a5-6b3b5c3b3bb8/binary"
+                    }
+                  }
+                ],
+                "applyForCostsHearingTypeExplanation": ""
+              }
+            }
+          ],
+          "legalRepName": "Fake Org Ltd",
+          "respondToCostsList": {
+            "value": {
+              "code": "11",
+              "label": "Costs 5, Wasted costs, 22 Nov 2023"
+            },
+            "list_items": [
+              {
+                "code": "11",
+                "label": "Costs 1, Wasted costs, 22 Nov 2023"
+              }
+            ]
+          }
+        }
+      }
+    }
+  },
+  "expectation": {
+    "status": 200,
+    "errors": [],
+    "caseData": {
+      "template": "minimal-appeal-submitted.json",
+      "replacements": {
+        "appealType": "revocationOfProtection",
+        "legalRepReferenceNumber": "A1234567",
+        "appealGroundsRevocation": {
+          "values": [
+            "revocationRefugeeConvention",
+            "revocationHumanitarianProtection"
+          ]
+        },
+        "legalRepName": "Fake Org Ltd"
+      }
+    },
+    "notifications": [
+      {
+        "reference": "7796_RESPOND_TO_COSTS_APPLICANT_EMAIL",
+        "recipient": "{$applyForCostsHomeOfficeEmailAddress}",
+        "subject": "Immigration and Asylum appeal: Costs application response received",
+        "body": [
+          "HMCTS reference: PA/12345/2019",
+          "Home Office reference: A1234567",
+          "Appellant name: Talha Awan",
+          "The online service: {$iaExUiFrontendUrl}",
+          "Application name: Costs application 5",
+          "Application type: Unreasonable Costs application"
+        ]
+      },
+      {
+        "reference": "7796_RESPOND_TO_COSTS_RESPONDENT_EMAIL",
+        "recipient": "{$TEST_LAW_FIRM_A_USERNAME}",
+        "subject": "Immigration and Asylum appeal: Costs application response submitted",
+        "body": [
+          "HMCTS reference: PA/12345/2019",
+          "Your reference: A1234567",
+          "Appellant name: Talha Awan",
+          "The online service: {$iaExUiFrontendUrl}",
+          "Application name: Costs application 5",
+          "Application type: Unreasonable Costs application"
+        ]
+      }
+    ]
+  }
+}
+

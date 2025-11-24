@@ -1,0 +1,53 @@
+{
+  "description": "RIA-9180 FTPA Internal Out of Country Applicant Application Decision Partially Granted Respondent",
+  "enabled": "{$featureFlag.homeOfficeGovNotifyEnabled}",
+  "request": {
+    "uri": "/asylum/ccdAboutToSubmit",
+    "credentials": "Judge",
+    "input": {
+      "id": 91802,
+      "eventId": "decideFtpaApplication",
+      "state": "ftpaSubmitted",
+      "caseData": {
+        "template": "minimal-appeal-submitted.json",
+        "replacements": {
+          "isAdmin": "Yes",
+          "appellantInUk": "No",
+          "currentCaseStateVisibleToJudge": "ftpaSubmitted",
+          "ftpaRespondentDecisionOutcomeType": "partiallyGranted",
+          "ftpaApplicantType": "respondent",
+          "ariaListingReference": "987654321",
+          "notificationsSent": []
+        }
+      }
+    }
+  },
+  "expectation": {
+    "status": 200,
+    "errors": [],
+    "caseData": {
+      "template": "minimal-appeal-submitted.json",
+      "replacements": {
+        "isAdmin": "Yes",
+        "notificationsSent": [
+          {
+            "id": "91802_FTPA_APPLICATION_DECISION_ADMIN_OFFICER_RESPONDENT",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          }
+        ]
+      }
+    },
+    "notifications": [
+      {
+        "reference": "91802_FTPA_APPLICATION_DECISION_ADMIN_OFFICER_RESPONDENT",
+        "recipient": "{$upperTribunalPermissionApplicationsEmailAddress}",
+        "subject": "Immigration and Asylum appeal: application to appeal to Upper Tribunal partially granted",
+        "body": [
+          "PA/12345/2019",
+          "Talha Awan",
+          "You must create a bundle for the Upper Tribunal. Follow these steps to do this:"
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,101 @@
+{
+  "description": "RIA-2895 Send clarifying question answers submitted to appellant and caseworker",
+  "launchDarklyKey": "tcw-notifications-feature:true",
+  "request": {
+    "uri": "/asylum/ccdAboutToSubmit",
+    "credentials": "Citizen",
+    "input": {
+      "id": 1008,
+      "eventId": "submitClarifyingQuestionAnswers",
+      "state": "awaitingClarifyingQuestionsAnswers",
+      "caseData": {
+        "template": "aip-minimal-appeal-submitted.json",
+        "replacements": {
+          "hearingCentre": "manchester",
+          "subscriptions": [
+            {
+              "id": "1",
+              "value": {
+                "subscriber": "appellant",
+                "email": "{$TEST_CITIZEN_USERNAME}",
+                "wantsEmail": "Yes",
+                "mobileNumber": "{$TEST_CITIZEN_MOBILE}",
+                "wantsSms": "Yes"
+              }
+            }
+          ]
+        }
+      }
+    }
+  },
+  "expectation": {
+    "status": 200,
+    "errors": [],
+    "caseData": {
+      "template": "aip-minimal-appeal-submitted.json",
+      "replacements": {
+        "hearingCentre": "manchester",
+        "subscriptions": [
+          {
+            "id": "1",
+            "value": {
+              "subscriber": "appellant",
+              "email": "{$TEST_CITIZEN_USERNAME}",
+              "wantsEmail": "Yes",
+              "mobileNumber": "{$TEST_CITIZEN_MOBILE}",
+              "wantsSms": "Yes"
+            }
+          }
+        ],
+        "notificationsSent": [
+          {
+            "id": "1008_SUBMIT_CLARIFYING_QUESTION_ANSWERS_APPELLANT_AIP_EMAIL",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          },
+          {
+            "id": "1008_CLARIFYING_QUESTION_ANSWERS_SUBMITTED_CASE_OFFICER_EMAIL",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          },
+          {
+            "id": "1008_SUBMIT_CLARIFYING_QUESTION_ANSWERS_APPELLANT_AIP_SMS",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          }
+        ]
+      }
+    },
+    "notifications": [
+      {
+        "reference": "1008_CLARIFYING_QUESTION_ANSWERS_SUBMITTED_CASE_OFFICER_EMAIL",
+        "recipient": "{$hearingCentreEmailAddresses.manchester}",
+        "subject": "Immigration and Asylum appeal: Answers to clarifying questions submitted",
+        "body": [
+          "PA/12345/2019",
+          "Pablo Jimenez",
+          "{$iaExUiFrontendUrl}"
+        ]
+      },
+      {
+        "reference": "1008_SUBMIT_CLARIFYING_QUESTION_ANSWERS_APPELLANT_AIP_EMAIL",
+        "recipient": "{$TEST_CITIZEN_USERNAME}",
+        "subject": "You have answered the Tribunal’s questions",
+        "body": [
+          "PA/12345/2019",
+          "A1234567",
+          "Pablo Jimenez",
+          "{$TODAY+5|d MMM yyyy}",
+          "{$iaAipFrontendUrl}"
+        ]
+      },
+      {
+        "reference": "1008_SUBMIT_CLARIFYING_QUESTION_ANSWERS_APPELLANT_AIP_SMS",
+        "recipient": "{$TEST_CITIZEN_MOBILE}",
+        "subject": "",
+        "body": [
+          "PA/12345/2019",
+          "{$TODAY+5|d MMM yyyy}",
+          "{$iaAipFrontendUrl}"
+        ]
+      }
+    ]
+  }
+}

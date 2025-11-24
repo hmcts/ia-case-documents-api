@@ -1,0 +1,49 @@
+{
+  "description": "RIA-4471 Edit payment method (pending payment) notification to AO (PA appeal type) ",
+  "enabled": "{$featureFlag.homeOfficeGovNotifyEnabled}",
+  "request": {
+    "uri": "/asylum/ccdAboutToSubmit",
+    "credentials": "LegalRepresentative",
+    "input": {
+      "id": 4471,
+      "eventId": "editPaymentMethod",
+      "state": "pendingPayment",
+      "caseData": {
+        "template": "minimal-appeal-submitted.json",
+        "replacements": {
+          "appealType": "protection",
+          "hearingCentre": "manchester"
+        }
+      }
+    }
+  },
+  "expectation": {
+    "status": 200,
+    "errors": [],
+    "caseData": {
+      "template": "minimal-appeal-submitted.json",
+      "replacements": {
+        "appealType": "protection",
+        "hearingCentre": "manchester",
+        "notificationsSent": [
+          {
+            "id": "4471_EDIT_PAYMENT_METHOD_PENDING_PAYMENT_ADMIN_OFFICER",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          }
+        ]
+      }
+    },
+    "notifications": [
+      {
+        "reference": "4471_EDIT_PAYMENT_METHOD_PENDING_PAYMENT_ADMIN_OFFICER",
+        "recipient": "{$feesAdminOfficerEmailAddress}",
+        "subject": "Immigration and Asylum appeal: appeal submitted pending payment",
+        "body": [
+          "PA/12345/2019",
+          "Talha Awan",
+          "{$iaExUiFrontendUrl}"
+        ]
+      }
+    ]
+  }
+}

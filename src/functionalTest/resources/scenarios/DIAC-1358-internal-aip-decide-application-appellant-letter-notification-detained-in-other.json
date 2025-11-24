@@ -1,0 +1,99 @@
+{
+  "description": "DIAC-1358 Send letter notification to appellant, Decide application - detained in other (internal case creation)",
+  "request": {
+    "uri": "/asylum/ccdAboutToSubmit",
+    "credentials": "Judge",
+    "input": {
+      "id": 1358,
+      "eventId": "decideAnApplication",
+      "state": "appealSubmitted",
+      "caseData": {
+        "template": "minimal-appeal-submitted.json",
+        "replacements": {
+          "isAdmin": "Yes",
+          "appellantsRepresentation": "Yes",
+          "decideAnApplicationId": "1",
+          "makeAnApplications": [
+            {
+              "id": "1",
+              "value": {
+                "type":"Other",
+                "details":"",
+                "evidence":[],
+                "applicant": "",
+                "date":"",
+                "decision":"Granted",
+                "state":"appealSubmitted",
+                "applicantRole": "caseworker-ia-admofficer",
+                "decisionReason":"No Reason given",
+                "decisionDate":"{$TODAY}",
+                "decisionMaker": "Judge"
+              }
+            }
+          ],
+          "appellantInDetention": "Yes",
+          "detentionFacility": "other",
+          "appellantInUk": "Yes",
+          "appellantAddress": {
+            "County": "",
+            "Country": "United Kingdom",
+            "PostCode": "NE21JX",
+            "PostTown": "Example Town",
+            "AddressLine1": "5",
+            "AddressLine2": "Example Street"
+          }
+        }
+      }
+    }
+  },
+  "expectation": {
+    "status": 200,
+    "errors": [],
+    "caseData": {
+      "template": "minimal-appeal-submitted.json",
+      "replacements": {
+        "isAdmin": "Yes",
+        "appellantsRepresentation": "Yes",
+        "decideAnApplicationId": "1",
+        "makeAnApplications": [
+          {
+            "id": "1",
+            "value": {
+              "type":"Other",
+              "details":"",
+              "evidence":[],
+              "applicant":"",
+              "date":"",
+              "decision":"Granted",
+              "state":"appealSubmitted",
+              "applicantRole":"caseworker-ia-admofficer",
+              "decisionReason":"No Reason given",
+              "decisionDate":"{$TODAY}",
+              "decisionMaker": "Judge"
+            }
+          }
+        ],
+        "appellantInDetention": "Yes",
+        "detentionFacility": "other",
+        "appellantAddress": {
+          "County": "",
+          "Country": "United Kingdom",
+          "PostCode": "NE21JX",
+          "PostTown": "Example Town",
+          "AddressLine1": "5",
+          "AddressLine2": "Example Street"
+        },
+        "notificationsSent": [
+          {
+            "id": "1358_DECIDE_AN_APPLICATION_HOME_OFFICE",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          },
+          {
+            "id": "1358_INTERNAL_DECIDE_APPLICATION_LETTER",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          }
+        ]
+      }
+    }
+  }
+}

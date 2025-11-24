@@ -1,0 +1,58 @@
+{
+  "description": "RIA-7325 Detention engagement team Notification of appellant's ftpa application submitted (detained)",
+  "enabled": "{$featureFlag.homeOfficeGovNotifyEnabled}",
+  "request": {
+    "uri": "/asylum/ccdAboutToSubmit",
+    "credentials": "AdminOfficer",
+    "input": {
+      "id": 7325,
+      "eventId": "applyForFTPAAppellant",
+      "state": "ftpaSubmitted",
+      "caseData": {
+        "template": "minimal-appeal-submitted.json",
+        "replacements": {
+          "detentionFacility": "immigrationRemovalCentre",
+          "ircName": "Brookhouse",
+          "isAdmin": "Yes",
+          "appellantsRepresentation": "Yes",
+          "listCaseHearingCentre": "taylorHouse",
+          "ariaListingReference": "LP/12345/2019",
+          "appellantInDetention": "Yes",
+          "notificationAttachmentDocuments": [
+            {
+              "id": "1",
+              "value": {
+                "tag": "internalFtpaSubmittedAppellantLetter",
+                "document": {
+                  "document_url": "{$FIXTURE_DOC1_PDF_URL}",
+                  "document_binary_url": "{$FIXTURE_DOC1_PDF_URL_BINARY}",
+                  "document_filename": "{$FIXTURE_DOC1_PDF_FILENAME}"
+                },
+                "suppliedBy": "",
+                "description": "",
+                "dateUploaded": "{$TODAY}"
+              }
+            }
+          ]
+        }
+      }
+    }
+  },
+  "expectation": {
+    "status": 200,
+    "errors": [],
+    "caseData": {
+      "template": "minimal-appeal-submitted.json",
+      "replacements": {
+        "detentionFacility": "immigrationRemovalCentre",
+        "ircName": "Brookhouse",
+        "notificationsSent": [
+          {
+            "id": "7325_RESPONDENT_APPELLANT_FTPA_SUBMITTED",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          }
+        ]
+      }
+    }
+  }
+}

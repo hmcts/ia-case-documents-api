@@ -1,0 +1,54 @@
+{
+  "description": "RIA-6043 Send remove representation notification to legal rep, case officer and home office and appellant (email and letter)",
+  "request": {
+    "uri": "/asylum/ccdSubmitted",
+    "credentials": "LegalRepresentative",
+    "input": {
+      "id": 6043,
+      "eventId": "removeRepresentation",
+      "state": "appealSubmitted",
+      "caseData": {
+        "template": "minimal-appeal-submitted.json",
+        "replacements": {
+          "hearingCentre": "manchester",
+          "currentCaseStateVisibleToHomeOfficeAll": "appealSubmitted",
+          "contactPreference": "wantsEmail",
+          "email": "{$TEST_CITIZEN_USERNAME}",
+          "appellantHasFixedAddress": "Yes",
+          "appellantAddress": {
+            "County": "",
+            "Country": "United Kingdom",
+            "PostCode": "X1X 0XX",
+            "PostTown": "LONDON",
+            "AddressLine1": "60",
+            "AddressLine2": "XXY STREET"
+          },
+          "appellantPinInPost": {
+            "accessCode": "AI123BX",
+            "expiryDate": "01/01/2022",
+            "pinUsed": "No"
+          },
+          "changeOrganisationRequestField": {
+            "CaseRoleId": null,
+            "ApprovalStatus": null,
+            "RequestTimestamp": null,
+            "OrganisationToAdd": {
+              "OrganisationID": null
+            },
+            "OrganisationToRemove": {
+              "OrganisationID": null
+            }
+          }
+        }
+      }
+    }
+  },
+  "expectation": {
+    "status": 200,
+    "errors": [],
+    "confirmation": {
+      "header": "success",
+      "body": "contains([_REMOVE_REPRESENTATION_APPELLANT_EMAIL,_REMOVE_REPRESENTATION_HOME_OFFICE,_REMOVE_REPRESENTATION_LEGAL_REP,_REMOVE_REPRESENTATION_CASE_OFFICER])"
+    }
+  }
+}

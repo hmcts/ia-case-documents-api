@@ -1,0 +1,63 @@
+{
+  "description": "RIA-8258: Mark appeal as remitted",
+  "enabled": "true",
+  "request": {
+    "uri": "/asylum/ccdAboutToSubmit",
+    "credentials": "AdminOfficer",
+    "input": {
+      "id": 8260,
+      "eventId": "markAppealAsRemitted",
+      "state": "ftpaDecided",
+      "caseData": {
+        "template": "minimal-appeal-submitted.json",
+        "replacements": {
+          "listCaseHearingCentre": "taylorHouse",
+          "legalRepresentativeEmailAddress": "sample@mail.com",
+          "sourceOfRemittal": "Upper Tribunal",
+          "journeyType": "aip",
+          "appellantInUk": "No",
+          "subscriptions": [
+            {
+              "id": "1",
+              "value": {
+                "subscriber": "appellant",
+                "email": "{$TEST_CITIZEN_USERNAME}",
+                "wantsEmail": "Yes",
+                "mobileNumber": "{$TEST_CITIZEN_MOBILE}",
+                "wantsSms": "Yes"
+              }
+            }
+          ],
+          "currentCaseStateVisibleToJudge": "ftpaSubmitted",
+          "ftpaAppellantRjDecisionOutcomeType": "remadeRule32",
+          "ftpaApplicantType": "appellant",
+          "ariaListingReference": "987654321"
+        }
+      }
+    }
+  },
+  "expectation": {
+    "status": 200,
+    "errors": [],
+    "caseData": {
+      "template": "minimal-appeal-submitted.json",
+      "replacements": {
+        "legalRepresentativeEmailAddress": "sample@mail.com",
+        "notificationsSent": [
+          {
+            "id": "8260_HOME_OFFICE_MARK_APPEAL_AS_REMITTED",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          },
+          {
+            "id": "8260_APPELLANT_MARK_APPEAL_AS_REMITTED_NOTIFICATION",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          },
+          {
+            "id": "8260_APPELLANT_MARK_APPEAL_AS_REMITTED_SMS",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          }
+        ]
+      }
+    }
+  }
+}

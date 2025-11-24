@@ -1,0 +1,78 @@
+{
+  "description": "RIA-5308 Send respondent non-standard direction for AIP journey in awaitingRespondentEvidence state",
+  "enabled": "{$featureFlag.homeOfficeGovNotifyEnabled}",
+  "request": {
+    "uri": "/asylum/ccdAboutToSubmit",
+    "credentials": "CaseOfficer",
+    "input": {
+      "id": 102222,
+      "eventId": "sendDirection",
+      "state": "awaitingRespondentEvidence",
+      "caseData": {
+        "template": "aip-minimal-appeal-submitted.json",
+        "replacements": {
+          "currentCaseStateVisibleToLegalRepresentative": "awaitingRespondentEvidence",
+          "currentCaseStateVisibleToHomeOfficeAll": "awaitingRespondentEvidence",
+          "directions": [
+            {
+              "id": "1",
+              "value": {
+                "explanation": "Do the non standard thing",
+                "parties": "respondent",
+                "dateDue": "{$TODAY+14}",
+                "dateSent": "{$TODAY}",
+                "tag": ""
+              }
+            }
+          ],
+          "notificationsSent": []
+        }
+      }
+    }
+  },
+  "expectation": {
+    "status": 200,
+    "errors": [],
+    "caseData": {
+      "template": "aip-minimal-appeal-submitted.json",
+      "replacements": {
+        "currentCaseStateVisibleToHomeOfficeAll": "awaitingRespondentEvidence",
+        "directions": [
+          {
+            "id": "1",
+            "value": {
+              "explanation": "Do the non standard thing",
+              "parties": "respondent",
+              "dateDue": "{$TODAY+14}",
+              "dateSent": "{$TODAY}",
+              "tag": ""
+            }
+          }
+        ],
+        "notificationsSent": [
+          {
+            "id": "102222_RESPONDENT_NON_STANDARD_DIRECTION",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          }
+        ]
+      }
+    },
+    "notifications": [
+      {
+        "reference": "102222_RESPONDENT_NON_STANDARD_DIRECTION",
+        "recipient": "{$apcHomeOfficeEmailAddress}",
+        "subject": "Immigration and Asylum appeal: direction",
+        "body": [
+          "PA/12345/2019",
+          "A1234567",
+          "Pablo Jimenez",
+          "{$iaExUiFrontendUrl}",
+          "Do the non standard thing",
+          "{$TODAY+14|d MMM yyyy}",
+          "{$customerServices.telephoneNumber}",
+          "{$customerServices.emailAddress}"
+        ]
+      }
+    ]
+  }
+}

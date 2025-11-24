@@ -1,0 +1,84 @@
+{
+  "description": "RIA-9233 - HO directed to review the appeal - Non Detained letter notification - represented",
+  "request": {
+    "uri": "/asylum/ccdAboutToSubmit",
+    "credentials": "CaseOfficer",
+    "input": {
+      "id": 9233,
+      "eventId": "requestRespondentEvidence",
+      "state": "appealSubmitted",
+      "caseData": {
+        "template": "minimal-appeal-submitted.json",
+        "replacements": {
+          "isAdmin": "Yes",
+          "appellantsRepresentation": "No",
+          "legalRepEmail": "{$TEST_LAW_FIRM_A_USERNAME}",
+          "appellantInUk": "Yes",
+          "appellantInDetention": "No",
+          "legalRepHasAddress": "Yes",
+          "legalRepAddressUK": {
+            "County": "",
+            "Country": "United Kingdom",
+            "PostCode": "NE21JX",
+            "PostTown": "Example Town",
+            "AddressLine1": "5",
+            "AddressLine2": "Example Street"
+          },
+          "directions": [
+            {
+              "id": "1",
+              "value": {
+                "explanation": "Send your evidence",
+                "parties": "respondent",
+                "dateDue": "{$TODAY+28}",
+                "dateSent": "{$TODAY}",
+                "tag": "respondentEvidence"
+              }
+            }
+          ]
+        }
+      }
+    }
+  },
+  "expectation": {
+    "status": 200,
+    "errors": [],
+    "caseData": {
+      "template": "minimal-appeal-submitted.json",
+      "replacements": {
+        "isAdmin": "Yes",
+        "appellantsRepresentation": "No",
+        "legalRepEmail": "{$TEST_LAW_FIRM_A_USERNAME}",
+        "appellantInUk": "Yes",
+        "appellantInDetention": "No",
+        "legalRepHasAddress": "Yes",
+        "legalRepAddressUK": {
+          "County": "",
+          "Country": "United Kingdom",
+          "PostCode": "NE21JX",
+          "PostTown": "Example Town",
+          "AddressLine1": "5",
+          "AddressLine2": "Example Street"
+        },
+        "directions": [
+          {
+            "id": "1",
+            "value": {
+              "explanation": "Send your evidence",
+              "parties": "respondent",
+              "dateDue": "{$TODAY+28}",
+              "dateSent": "{$TODAY}",
+              "tag": "respondentEvidence"
+            }
+          }
+        ]
+      },
+      "notificationsSent": [
+        {
+          "id": "9233_INTERNAL_HO_UPLOAD_BUNDLE_APPELLANT_LETTER",
+          "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+        }
+      ]
+    }
+  }
+}

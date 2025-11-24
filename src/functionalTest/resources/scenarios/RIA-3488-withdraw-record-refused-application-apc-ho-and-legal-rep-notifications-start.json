@@ -1,0 +1,82 @@
+{
+    "description": "RIA-3488 Withdrawn record refused application notification to Home Office APC and Legal Representative at start",
+    "request": {
+      "uri": "/asylum/ccdAboutToSubmit",
+      "credentials": "CaseOfficer",
+      "input": {
+        "id": 348818,
+        "eventId": "recordApplication",
+        "state": "pendingPayment",
+        "caseData": {
+          "template": "minimal-appeal-submitted.json",
+          "replacements": {
+            "applicationType": "Withdraw",
+            "applicationDecisionReason": "Some decision reason",
+            "applicationSupplier": "The respondent",
+            "applicationDecision": "Refused",
+            "notificationsSent": [],
+            "currentCaseStateVisibleToHomeOfficeAll": "appealSubmitted"
+          }
+        }
+      }
+    },
+    "expectation": {
+      "status": 200,
+      "errors": [],
+      "caseData": {
+        "template": "minimal-appeal-submitted.json",
+        "replacements": {
+          "applicationType": "Withdraw",
+          "applicationDecisionReason": "Some decision reason",
+          "applicationSupplier": "The respondent",
+          "applicationDecision": "Refused",
+          "notificationsSent": [
+            {
+              "id": "348818_RECORD_APPLICATION_HOME_OFFICE",
+              "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+            },
+            {
+              "id": "348818_RECORD_APPLICATION_LEGAL_REPRESENTATIVE",
+              "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+            }
+          ]
+        }
+      },
+      "notifications": [
+        {
+          "reference": "348818_RECORD_APPLICATION_HOME_OFFICE",
+          "recipient": "{$endAppealHomeOfficeEmailAddress}",
+          "subject": "Immigration and Asylum appeal: application for withdraw refused",
+          "body": [
+            "PA/12345/2019",
+            "A1234567",
+            "Talha Awan",
+            "{$iaExUiFrontendUrl}",
+            "withdraw",
+            "respondent",
+            "refused",
+            "Some decision reason",
+            "{$customerServices.telephoneNumber}",
+            "{$customerServices.emailAddress}"
+          ]
+        },
+        {
+          "reference": "348818_RECORD_APPLICATION_LEGAL_REPRESENTATIVE",
+          "recipient": "{$TEST_LAW_FIRM_A_USERNAME}",
+          "subject": "Immigration and Asylum appeal: application for withdraw refused",
+          "body": [
+            "PA/12345/2019",
+            "CASE001",
+            "Talha Awan",
+            "{$iaExUiFrontendUrl}",
+            "withdraw",
+            "respondent",
+            "refused",
+            "Some decision reason",
+            "{$customerServices.telephoneNumber}",
+            "{$customerServices.emailAddress}"
+          ]
+        }
+      ]
+    }
+  }
