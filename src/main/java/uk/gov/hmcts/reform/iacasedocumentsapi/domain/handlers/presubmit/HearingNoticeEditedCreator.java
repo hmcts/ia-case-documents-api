@@ -3,12 +3,10 @@ package uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit;
 import static java.util.Collections.emptyList;
 import static java.util.Objects.requireNonNull;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.*;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DetentionFacility.*;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo.NO;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo.YES;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.hasAppellantAddressInCountryOrOoc;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.isInternalNonDetainedCase;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.isRemoteHearing;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.isVirtualHearing;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.*;
 
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
@@ -24,6 +22,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.*;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseDetails;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.Event;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.Callback;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.DispatchPriority;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.PreSubmitCallbackResponse;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.PreSubmitCallbackStage;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.Document;
@@ -69,6 +68,11 @@ public class HearingNoticeEditedCreator implements PreSubmitCallbackHandler<Asyl
         this.documentReceiver = documentReceiver;
         this.documentsAppender = documentsAppender;
         this.reheardHearingAppender = reheardHearingAppender;
+    }
+
+    @Override
+    public DispatchPriority getDispatchPriority() {
+        return  DispatchPriority.EARLIEST;
     }
 
     public boolean canHandle(
@@ -170,13 +174,30 @@ public class HearingNoticeEditedCreator implements PreSubmitCallbackHandler<Asyl
             );
         }
 
-        if (isInternalNonDetainedCase(asylumCase)
-            && hasAppellantAddressInCountryOrOoc(asylumCase)) {
+        if (isInternalNonDetainedCase(asylumCase) || isDetainedInFacilityType(asylumCase, OTHER)) {
             documentHandler.addWithMetadataWithoutReplacingExistingDocuments(
                 asylumCase,
                 hearingNoticeEdited,
                 LETTER_NOTIFICATION_DOCUMENTS,
                 DocumentTag.INTERNAL_EDIT_CASE_LISTING_LETTER
+            );
+        }
+
+        if (isDetainedInOneOfFacilityTypes(asylumCase, IRC, PRISON)) {
+            documentHandler.addWithMetadataWithoutReplacingExistingDocuments(
+                asylumCase,
+                hearingNoticeEdited,
+                NOTIFICATION_ATTACHMENT_DOCUMENTS,
+                DocumentTag.INTERNAL_EDIT_CASE_LISTING_LETTER
+            );
+        }
+
+        if (hasBeenSubmittedAsLegalRepresentedInternalCase(asylumCase)) {
+            documentHandler.addWithMetadataWithoutReplacingExistingDocuments(
+                asylumCase,
+                hearingNoticeEdited,
+                LETTER_NOTIFICATION_DOCUMENTS,
+                DocumentTag.INTERNAL_EDIT_CASE_LISTING_LR_LETTER
             );
         }
     }

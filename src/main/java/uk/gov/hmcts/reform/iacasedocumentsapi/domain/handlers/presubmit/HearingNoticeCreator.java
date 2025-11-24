@@ -8,20 +8,19 @@ import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseD
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.IS_CASE_USING_LOCATION_REF_DATA;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.LETTER_NOTIFICATION_DOCUMENTS;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.LIST_CASE_HEARING_CENTRE;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.NOTIFICATION_ATTACHMENT_DOCUMENTS;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.REHEARD_HEARING_DOCUMENTS;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.REHEARD_HEARING_DOCUMENTS_COLLECTION;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DetentionFacility.*;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo.NO;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo.YES;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.isInternalNonDetainedCase;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.isRemoteHearing;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.isVirtualHearing;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.*;
 
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
-
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
@@ -33,6 +32,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ReheardHearingDocu
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseDetails;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.Event;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.Callback;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.DispatchPriority;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.PreSubmitCallbackResponse;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.PreSubmitCallbackStage;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.Document;
@@ -76,6 +76,11 @@ public class HearingNoticeCreator implements PreSubmitCallbackHandler<AsylumCase
         this.documentReceiver = documentReceiver;
         this.documentsAppender = documentsAppender;
         this.reheardHearingAppender = reheardHearingAppender;
+    }
+
+    @Override
+    public DispatchPriority getDispatchPriority() {
+        return  DispatchPriority.EARLIEST;
     }
 
     public boolean canHandle(
@@ -131,12 +136,30 @@ public class HearingNoticeCreator implements PreSubmitCallbackHandler<AsylumCase
                 DocumentTag.HEARING_NOTICE
             );
 
-            if (isInternalNonDetainedCase(asylumCase)) {
+            if (isInternalNonDetainedCase(asylumCase) || isDetainedInFacilityType(asylumCase, OTHER)) {
                 documentHandler.addWithMetadataWithoutReplacingExistingDocuments(
                     asylumCase,
                     hearingNotice,
                     LETTER_NOTIFICATION_DOCUMENTS,
                     DocumentTag.INTERNAL_CASE_LISTED_LETTER
+                );
+            }
+
+            if (isDetainedInOneOfFacilityTypes(asylumCase, IRC, PRISON)) {
+                documentHandler.addWithMetadataWithoutReplacingExistingDocuments(
+                    asylumCase,
+                    hearingNotice,
+                    NOTIFICATION_ATTACHMENT_DOCUMENTS,
+                    DocumentTag.INTERNAL_CASE_LISTED_LETTER
+                );
+            }
+
+            if (hasBeenSubmittedAsLegalRepresentedInternalCase(asylumCase)) {
+                documentHandler.addWithMetadataWithoutReplacingExistingDocuments(
+                    asylumCase,
+                    hearingNotice,
+                    LETTER_NOTIFICATION_DOCUMENTS,
+                    DocumentTag.INTERNAL_CASE_LISTED_LR_LETTER
                 );
             }
         }
@@ -177,8 +200,10 @@ public class HearingNoticeCreator implements PreSubmitCallbackHandler<AsylumCase
 
         Optional<List<IdValue<ReheardHearingDocuments>>> maybeExistingReheardDocuments =
             asylumCase.read(REHEARD_HEARING_DOCUMENTS_COLLECTION);
+
         List<IdValue<ReheardHearingDocuments>> allReheardDocuments =
             reheardHearingAppender.append(newReheardDocuments, maybeExistingReheardDocuments.orElse(emptyList()));
+
         asylumCase.write(REHEARD_HEARING_DOCUMENTS_COLLECTION, allReheardDocuments);
     }
 }

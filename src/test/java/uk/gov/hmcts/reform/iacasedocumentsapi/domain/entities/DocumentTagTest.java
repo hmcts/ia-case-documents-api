@@ -63,8 +63,8 @@ class DocumentTagTest {
         assertEquals("internalDetDecisionAndReasonsLetter", DocumentTag.INTERNAL_DET_DECISION_AND_REASONS_LETTER.toString());
         assertEquals("internalAppealSubmission", DocumentTag.INTERNAL_APPEAL_SUBMISSION.toString());
         assertEquals("internalRequestRespondentEvidenceLetter", DocumentTag.INTERNAL_REQUEST_RESPONDENT_EVIDENCE_LETTER.toString());
+        assertEquals("internalDetainedPrisonIrcAppealSubmission", DocumentTag.INTERNAL_DETAINED_PRISON_IRC_APPEAL_SUBMISSION.toString());
         assertEquals("internalEndAppealAutomatically", DocumentTag.INTERNAL_END_APPEAL_AUTOMATICALLY.toString());
-        assertEquals("internalAppealFeeDueLetter", DocumentTag.INTERNAL_APPEAL_FEE_DUE_LETTER.toString());
         assertEquals("internalDetMarkAsPaidLetter", DocumentTag.INTERNAL_DET_MARK_AS_PAID_LETTER.toString());
         assertEquals("internalListCaseLetter", DocumentTag.INTERNAL_LIST_CASE_LETTER.toString());
         assertEquals("internalRequestHearingRequirementsLetter", DocumentTag.INTERNAL_REQUEST_HEARING_REQUIREMENTS_LETTER.toString());
@@ -73,6 +73,8 @@ class DocumentTagTest {
         assertEquals("internalDecideHomeOfficeApplicationLetter", DocumentTag.INTERNAL_DECIDE_HOME_OFFICE_APPLICATION_LETTER.toString());
         assertEquals("internalDetMarkAsAdaLetter", DocumentTag.INTERNAL_DET_MARK_AS_ADA_LETTER.toString());
         assertEquals("internalDetainedEditCaseListingLetter", DocumentTag.INTERNAL_DETAINED_EDIT_CASE_LISTING_LETTER.toString());
+        assertEquals("internalEditCaseListingLrLetter", DocumentTag.INTERNAL_EDIT_CASE_LISTING_LR_LETTER.toString());
+        assertEquals("internalEditCaseListingLrLetterBundle", DocumentTag.INTERNAL_EDIT_CASE_LISTING_LR_LETTER_BUNDLE.toString());
         assertEquals("internalDetainedManageFeeUpdateLetter", DocumentTag.INTERNAL_DETAINED_MANAGE_FEE_UPDATE_LETTER.toString());
         assertEquals("internalDetMarkAsAdaLetter", DocumentTag.INTERNAL_DET_MARK_AS_ADA_LETTER.toString());
         assertEquals("internalDecideAnAppellantApplicationLetter", DocumentTag.INTERNAL_DECIDE_AN_APPELLANT_APPLICATION_LETTER.toString());
@@ -100,12 +102,13 @@ class DocumentTagTest {
         assertEquals("internalHoChangeDirectionDueDateLetter", DocumentTag.INTERNAL_HO_CHANGE_DIRECTION_DUE_DATE_LETTER.toString());
         assertEquals("homeOfficeNonStandardDirectionToHOLetter", DocumentTag.HOME_OFFICE_NON_STANDARD_DIRECTION_LETTER.toString());
         assertEquals("internalReinstateAppealLetter", DocumentTag.INTERNAL_REINSTATE_APPEAL_LETTER.toString());
-        assertEquals("internalAdjournHearingWithoutDate", DocumentTag.INTERNAL_ADJOURN_HEARING_WITHOUT_DATE.toString());
         assertEquals("upperTribunalTransferOrderDocument", DocumentTag.UPPER_TRIBUNAL_TRANSFER_ORDER_DOCUMENT.toString());
         assertEquals("internalEndAppealLetter", DocumentTag.INTERNAL_END_APPEAL_LETTER.toString());
         assertEquals("internalEndAppealLetterBundle", DocumentTag.INTERNAL_END_APPEAL_LETTER_BUNDLE.toString());
         assertEquals("internalCaseListedLetter", DocumentTag.INTERNAL_CASE_LISTED_LETTER.toString());
         assertEquals("internalCaseListedLetterBundle", DocumentTag.INTERNAL_CASE_LISTED_LETTER_BUNDLE.toString());
+        assertEquals("internalCaseListedLrLetter", DocumentTag.INTERNAL_CASE_LISTED_LR_LETTER.toString());
+        assertEquals("internalCaseListedLrLetterBundle", DocumentTag.INTERNAL_CASE_LISTED_LR_LETTER_BUNDLE.toString());
         assertEquals("iAUT2Form", DocumentTag.IAUT_2_FORM.toString());
         assertEquals("", DocumentTag.NONE.toString());
         assertEquals("internalOutOfTimeDecisionLetter", DocumentTag.INTERNAL_OUT_OF_TIME_DECISION_LETTER.toString());
@@ -114,11 +117,31 @@ class DocumentTagTest {
         assertEquals("internalEditCaseListingLetterBundle", DocumentTag.INTERNAL_EDIT_CASE_LISTING_LETTER_BUNDLE.toString());
         assertEquals("internalOutOfTimeDecisionLetter", DocumentTag.INTERNAL_OUT_OF_TIME_DECISION_LETTER_BUNDLE.toString());
         assertEquals("internalDetainedManageFeeUpdateLetter", DocumentTag.INTERNAL_DETAINED_MANAGE_FEE_UPDATE_LETTER.toString());
+        assertEquals("internalDetainedAppealSubmittedOutOfTimeWithExemptionLetter", DocumentTag.INTERNAL_DETAINED_APPEAL_SUBMITTED_OUT_OF_TIME_WITH_EXEMPTION_LETTER.toString());
+        assertEquals("internalDetainedAppealSubmittedInTimeWithFeeToPayLetter", DocumentTag.INTERNAL_DETAINED_APPEAL_SUBMITTED_IN_TIME_WITH_FEE_TO_PAY_LETTER.toString());
+        assertEquals("internalDetainedAppealRemissionGrantedInTimeLetter", DocumentTag.INTERNAL_DETAINED_APPEAL_REMISSION_GRANTED_IN_TIME_LETTER.toString());
+        assertEquals("internalDetainedOutOfTimeDecisionAllowedLetter", DocumentTag.INTERNAL_DETAINED_OUT_OF_TIME_DECISION_ALLOWED_LETTER.toString());
+        assertEquals("internalDetainedAppealHOUploadBundleAppellantLetter", DocumentTag.INTERNAL_DETAINED_APPEAL_HO_UPLOAD_BUNDLE_APPELLANT_LETTER.toString());
+        assertEquals("internalDetainedAppealSubmittedOutOfTimeWithFeeLetter", DocumentTag.INTERNAL_DETAINED_APPEAL_SUBMITTED_OUT_OF_TIME_WITH_FEE_LETTER.toString());
+        assertEquals("detainedAppealAdjournHearingWithoutDateIrcPrisonLetter", DocumentTag.DETAINED_APPEAL_ADJOURN_HEARING_WITHOUT_DATE_IRC_PRISON_LETTER.toString());
+        assertEquals("internalDetainedOutOfTimeRemissionIrcPrisonLetter", DocumentTag.INTERNAL_DETAINED_OUT_OF_TIME_REMISSION_IRC_PRISON_LETTER.toString());
+        assertEquals("internalDetainedOutOfTimeRemissionGrantedIrcPrisonLetter", DocumentTag.INTERNAL_DETAINED_OUT_OF_TIME_REMISSION_GRANTED_IRC_PRISON_LETTER.toString());
+        assertEquals("internalDetainedAppealRemissionPartiallyGrantedOrRefusedTemplateLetter", DocumentTag.INTERNAL_DETAINED_APPEAL_REMISSION_PARTIALLY_GRANTED_OR_REFUSED_TEMPLATE_LETTER.toString());
+        assertEquals("internalDetainedLateRemissionPartiallyGrantedOrRefusedTemplateLetter", DocumentTag.INTERNAL_DETAINED_LATE_REMISSION_PARTIALLY_GRANTED_OR_REFUSED_TEMPLATE_LETTER.toString());
+        assertEquals("internalDetainedAppealUpdateTribunalDecisionRule31IrcPrisonLetter", DocumentTag.INTERNAL_DETAINED_APPEAL_UPDATE_TRIBUNAL_DECISION_RULE_31_IRC_PRISON_LETTER.toString());
+        assertEquals("internalDetainedLateRemissionGrantedTemplateLetter", DocumentTag.INTERNAL_DETAINED_LATE_REMISSION_GRANTED_TEMPLATE_LETTER.toString());
+        assertEquals("internalDetainedAppealSubmittedWithExemptionLetter", DocumentTag.INTERNAL_DETAINED_APPEAL_SUBMITTED_WITH_EXEMPTION_LETTER.toString());
+        assertEquals("internalDetainedDecisionWithoutHearing", DocumentTag.INTERNAL_DETAINED_DECISION_WITHOUT_HEARING.toString());
+        assertEquals("internalDetainedLateRemissionRefusedTemplateLetter", DocumentTag.INTERNAL_DETAINED_LATE_REMISSION_REFUSED_TEMPLATE_LETTER.toString());
+        assertEquals("internalDetainedIrcPrisonFtpaDisposedRules31Or32Letter", DocumentTag.INTERNAL_DETAINED_IRC_PRISON_FTPA_DISPOSED_RULES_31_OR_32_LETTER.toString());
+        assertEquals("internalDetainedAppealRemittedAipIrcPrisonLetter", DocumentTag.INTERNAL_DETAINED_APPEAL_REMITTED_AIP_IRC_PRISON_LETTER.toString());
+        assertEquals("homeOfficeApplicationDecidedLetter", DocumentTag.HOME_OFFICE_APPLICATION_DECIDED_LETTER.toString());
+        assertEquals("aipmDetainedInPrisonOrIrcReinstateAppealLetter", DocumentTag.AIPM_DETAINED_IN_PRISON_IRC_REINSTATE_APPEAL_LETTER.toString());
 
     }
 
     @Test
     public void if_this_test_fails_it_is_because_it_needs_updating_with_your_changes() {
-        assertEquals(105, DocumentTag.values().length);
+        assertEquals(126, DocumentTag.values().length);
     }
 }

@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.*;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.DispatchPriority.EARLY;
 
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
@@ -47,6 +48,11 @@ class InternalCaseListedLetterGeneratorTest {
     void setUp() {
         internalCaseListedLetterGenerator =
             new InternalCaseListedLetterGenerator(documentCreator, documentHandler);
+    }
+
+    @Test
+    void should_have_early_dispatch_priority() {
+        assertEquals(EARLY, internalCaseListedLetterGenerator.getDispatchPriority());
     }
 
     @Test

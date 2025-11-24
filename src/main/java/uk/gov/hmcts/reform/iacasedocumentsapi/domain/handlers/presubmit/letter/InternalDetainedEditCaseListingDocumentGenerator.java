@@ -25,7 +25,7 @@ public class InternalDetainedEditCaseListingDocumentGenerator implements PreSubm
     private final DocumentHandler documentHandler;
 
     public InternalDetainedEditCaseListingDocumentGenerator(
-            @Qualifier("internalDetEditCaseListingLetter") DocumentCreator<AsylumCase> internalDetainedEditCaseListingLetterCreator,
+            @Qualifier("internalEditCaseListingLetter") DocumentCreator<AsylumCase> internalDetainedEditCaseListingLetterCreator,
             DocumentHandler documentHandler
     ) {
         this.internalDetainedEditCaseListingLetterCreator = internalDetainedEditCaseListingLetterCreator;
@@ -43,8 +43,7 @@ public class InternalDetainedEditCaseListingDocumentGenerator implements PreSubm
 
         return callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
             && callback.getEvent() == Event.EDIT_CASE_LISTING
-            && isInternalCase(asylumCase)
-            && isAppellantInDetention(asylumCase);
+            && isInternalNonDetainedCase(asylumCase);
     }
 
     public PreSubmitCallbackResponse<AsylumCase> handle(
@@ -67,7 +66,7 @@ public class InternalDetainedEditCaseListingDocumentGenerator implements PreSubm
                 asylumCase,
                 internalEditCaseListingDocument,
                 NOTIFICATION_ATTACHMENT_DOCUMENTS,
-                DocumentTag.INTERNAL_DETAINED_EDIT_CASE_LISTING_LETTER
+                DocumentTag.INTERNAL_EDIT_CASE_LISTING_LETTER
         );
 
         return new PreSubmitCallbackResponse<>(asylumCase);
