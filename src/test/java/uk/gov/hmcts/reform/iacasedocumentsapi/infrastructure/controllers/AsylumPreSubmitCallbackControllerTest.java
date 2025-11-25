@@ -1,7 +1,8 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.controllers;
 
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -20,10 +21,14 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.AsylumPreSubmitCall
 @ExtendWith(MockitoExtension.class)
 public class AsylumPreSubmitCallbackControllerTest {
 
-    @Mock private AsylumPreSubmitCallbackDispatcher callbackDispatcher;
-    @Mock private PreSubmitCallbackResponse<AsylumCase> callbackResponse;
-    @Mock private Callback<AsylumCase> callback;
-    @Mock private CaseDetails<AsylumCase> caseDetails;
+    @Mock
+    private AsylumPreSubmitCallbackDispatcher callbackDispatcher;
+    @Mock
+    private PreSubmitCallbackResponse<AsylumCase> callbackResponse;
+    @Mock
+    private Callback<AsylumCase> callback;
+    @Mock
+    private CaseDetails<AsylumCase> caseDetails;
 
     private AsylumPreSubmitCallbackController asylumPreSubmitCallbackController;
 
@@ -77,9 +82,10 @@ public class AsylumPreSubmitCallbackControllerTest {
 
     @Test
     public void should_not_allow_null_constructor_arguments() {
-
-        assertThatThrownBy(() -> new AsylumPreSubmitCallbackController(null))
-            .hasMessage("callbackDispatcher must not be null")
-            .isExactlyInstanceOf(NullPointerException.class);
+        NullPointerException response = assertThrows(
+            NullPointerException.class,
+            () -> new AsylumPreSubmitCallbackController(null)
+        );
+        assertEquals("callbackDispatcher must not be null", response.getMessage());
     }
 }

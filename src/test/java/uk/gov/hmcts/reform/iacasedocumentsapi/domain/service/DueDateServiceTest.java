@@ -31,40 +31,60 @@ class DueDateServiceTest {
     @Test
     void should_return_next_working_day_4_pm_when_calculated_due_date_matches_holiday() {
         ZonedDateTime eventDateTime =
-                ZonedDateTime.of(
-                        2022, 7, 19,
-                        9, 0, 0, 0,
-                        ZoneId.systemDefault()
-                );
+            ZonedDateTime.of(
+                2022, 7, 19,
+                9, 0, 0, 0,
+                ZoneId.systemDefault()
+            );
 
         int workingDaysAllowed = 2;
 
         when(holidayService.isHoliday(eventDateTime.plusDays(1)))
-                .thenReturn(true);
+            .thenReturn(true);
 
         ZonedDateTime expectedDueDate = eventDateTime.plusDays(workingDaysAllowed + 1);
         ZonedDateTime expectedDueDateTime = expectedDueDate.with(
-                LocalTime.of(16, 0, 0, 0)
+            LocalTime.of(16, 0, 0, 0)
         );
-        ZonedDateTime actualDateTime = dueDateService.calculateDueDate(eventDateTime, workingDaysAllowed);
+        ZonedDateTime actualDateTime = dueDateService.calculateWorkingDaysDueDate(eventDateTime, workingDaysAllowed);
 
         assertThat(actualDateTime, is(expectedDueDateTime));
         verify(holidayService, times(3)).isHoliday(any(ZonedDateTime.class));
     }
 
     @Test
+    void should_return_next_calendar_day_4_pm_when_calculated() {
+        ZonedDateTime eventDateTime =
+            ZonedDateTime.of(
+                2022, 7, 19,
+                9, 0, 0, 0,
+                ZoneId.systemDefault()
+            );
+
+        int calendarDaysAllowed = 2;
+
+        ZonedDateTime expectedDueDate = eventDateTime.plusDays(calendarDaysAllowed);
+        ZonedDateTime expectedDueDateTime = expectedDueDate.with(
+            LocalTime.of(16, 0, 0, 0)
+        );
+        ZonedDateTime actualDateTime = dueDateService.calculateCalendarDaysDueDate(eventDateTime, calendarDaysAllowed);
+
+        assertThat(actualDateTime, is(expectedDueDateTime));
+    }
+
+    @Test
     void should_return_next_working_day_4_pm_when_delay_date_matches_holiday() {
         ZonedDateTime eventDateTime =
-                ZonedDateTime.of(
-                        2022, 7, 19,
-                        9, 0, 0, 0,
-                        ZoneId.systemDefault()
-                );
+            ZonedDateTime.of(
+                2022, 7, 19,
+                9, 0, 0, 0,
+                ZoneId.systemDefault()
+            );
 
         int delayDuration = 2;
 
         when(holidayService.isHoliday(eventDateTime.plusDays(delayDuration)))
-                .thenReturn(true);
+            .thenReturn(true);
 
         ZonedDateTime expectedDelayDate = eventDateTime.plusDays(delayDuration + 1);
         ZonedDateTime expectedDelayDateTime = expectedDelayDate.with(LocalTime.of(16, 0, 0, 0));

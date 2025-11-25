@@ -1,4 +1,4 @@
-package uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure;
+package uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
-import uk.gov.hmcts.reform.iacasenotificationsapi.Application;
+import uk.gov.hmcts.reform.iacasedocumentsapi.Application;
 
 @SpringBootTest(classes = Application.class)
 @ActiveProfiles("integration")

@@ -1,4 +1,4 @@
-package uk.gov.hmcts.reform.iacasenotificationsapi.component.testutils;
+package uk.gov.hmcts.reform.iacasedocumentsapi.component.testutils;
 
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppContextSetup;
 
@@ -16,7 +16,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.context.WebApplicationContext;
-import uk.gov.hmcts.reform.iacasenotificationsapi.Application;
+import uk.gov.hmcts.reform.iacasedocumentsapi.Application;
 
 @SpringBootTest(classes = {
     TestConfiguration.class,

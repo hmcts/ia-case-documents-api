@@ -1,4 +1,4 @@
-package uk.gov.hmcts.reform.iacasenotificationsapi.verifiers;
+package uk.gov.hmcts.reform.iacasedocumentsapi.verifiers;
 
 import java.util.Map;
 

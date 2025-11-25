@@ -1,4 +1,4 @@
-package uk.gov.hmcts.reform.iacasenotificationsapi.fixtures;
+package uk.gov.hmcts.reform.iacasedocumentsapi.fixtures;
 
 import java.io.IOException;
 import java.util.Collections;

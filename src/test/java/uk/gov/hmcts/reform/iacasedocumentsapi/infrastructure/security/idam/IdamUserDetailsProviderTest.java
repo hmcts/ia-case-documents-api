@@ -5,7 +5,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
 import feign.FeignException;
-import java.util.Arrays;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -20,7 +19,8 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.security.AccessToke
 @ExtendWith(MockitoExtension.class)
 public class IdamUserDetailsProviderTest {
 
-    @Mock private AccessTokenProvider accessTokenProvider;
+    @Mock
+    private AccessTokenProvider accessTokenProvider;
     @Mock
     private IdamService idamService;
     private IdamUserDetailsProvider idamUserDetailsProvider;
@@ -40,7 +40,7 @@ public class IdamUserDetailsProviderTest {
 
         String expectedAccessToken = "ABCDEFG";
         String expectedId = "1234";
-        List<String> expectedRoles = Arrays.asList("role-1", "role-2");
+        List<String> expectedRoles = List.of("role-1", "role-2");
         String expectedEmailAddress = "john.doe@example.com";
         String expectedForename = "John";
         String expectedSurname = "Doe";
@@ -78,7 +78,7 @@ public class IdamUserDetailsProviderTest {
         UserInfo userInfo = new UserInfo(
             "john.doe@example.com",
             null,
-            Arrays.asList("role"),
+            List.of("role"),
             "John Doe",
             "John",
             "Doe"
@@ -124,7 +124,7 @@ public class IdamUserDetailsProviderTest {
         UserInfo userInfo = new UserInfo(
             null,
             "some-id",
-            Arrays.asList("role"),
+            List.of("role"),
             "John Doe",
             "John",
             "Doe"
@@ -147,7 +147,7 @@ public class IdamUserDetailsProviderTest {
         UserInfo userInfo = new UserInfo(
             "john.doe@example.com",
             "some-id",
-            Arrays.asList("role"),
+            List.of("role"),
             "John Doe",
             null,
             "Doe"
@@ -170,7 +170,7 @@ public class IdamUserDetailsProviderTest {
         UserInfo userInfo = new UserInfo(
             "john.doe@example.com",
             "some-id",
-            Arrays.asList("role"),
+            List.of("role"),
             "John Doe",
             "John",
             null

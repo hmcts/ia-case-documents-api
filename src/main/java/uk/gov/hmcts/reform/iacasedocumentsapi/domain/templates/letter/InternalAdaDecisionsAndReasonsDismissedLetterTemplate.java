@@ -78,7 +78,7 @@ public class InternalAdaDecisionsAndReasonsDismissedLetterTemplate implements Do
         fieldValues.putAll(getAppellantPersonalisation(asylumCase));
 
         fieldValues.put("ftpaDueDate", formatDateForNotificationAttachmentDocument(dueDateService
-                .calculateDueDate(ZonedDateTime.now(), ftpaDueInWorkingDays)
+                .calculateWorkingDaysDueDate(ZonedDateTime.now(), ftpaDueInWorkingDays)
                 .toLocalDate()));
 
         fieldValues.put("responseDueDate", formatDateForNotificationAttachmentDocument(LocalDate.parse(getDirectionDueDate(asylumCase, DirectionTag.REQUEST_CASE_BUILDING))));

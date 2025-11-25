@@ -25,16 +25,16 @@ public class MakeAnApplicationTest {
     private final String applicantRole = UserRole.LEGAL_REPRESENTATIVE.toString();
 
     public MakeAnApplication makeAnApplication =
-            new MakeAnApplication(
-                    applicant,
-                    type,
-                    details,
-                    evidence,
-                    date,
-                    decision,
-                    state,
-                    applicantRole
-            );
+        new MakeAnApplication(
+            applicant,
+            type,
+            details,
+            evidence,
+            date,
+            decision,
+            state,
+            applicantRole
+        );
 
     @Test
     public void should_hold_onto_values() {
@@ -52,44 +52,52 @@ public class MakeAnApplicationTest {
     public void should_not_allow_null_arguments() {
 
         assertThatThrownBy(() -> new MakeAnApplication(
-                null, type, details, evidence,
-                date, decision, state, applicantRole))
-                .isExactlyInstanceOf(NullPointerException.class);
+            null, type, details, evidence,
+            date, decision, state, applicantRole
+        ))
+            .isExactlyInstanceOf(NullPointerException.class);
 
         assertThatThrownBy(() -> new MakeAnApplication(
-                applicant, null, details, evidence,
-                date, decision, state, applicantRole))
-                .isExactlyInstanceOf(NullPointerException.class);
+            applicant, null, details, evidence,
+            date, decision, state, applicantRole
+        ))
+            .isExactlyInstanceOf(NullPointerException.class);
 
         assertThatThrownBy(() -> new MakeAnApplication(
-                applicant, type, null, evidence,
-                date, decision, state, applicantRole))
-                .isExactlyInstanceOf(NullPointerException.class);
+            applicant, type, null, evidence,
+            date, decision, state, applicantRole
+        ))
+            .isExactlyInstanceOf(NullPointerException.class);
 
         assertThatThrownBy(() -> new MakeAnApplication(
-                applicant, type, details, null,
-                date, decision, state, applicantRole))
-                .isExactlyInstanceOf(NullPointerException.class);
+            applicant, type, details, null,
+            date, decision, state, applicantRole
+        ))
+            .isExactlyInstanceOf(NullPointerException.class);
 
         assertThatThrownBy(() -> new MakeAnApplication(
-                applicant, type, details, evidence,
-                null, decision, state, applicantRole))
-                .isExactlyInstanceOf(NullPointerException.class);
+            applicant, type, details, evidence,
+            null, decision, state, applicantRole
+        ))
+            .isExactlyInstanceOf(NullPointerException.class);
 
         assertThatThrownBy(() -> new MakeAnApplication(
-                applicant, type, details, evidence,
-                date, null, state, applicantRole))
-                .isExactlyInstanceOf(NullPointerException.class);
+            applicant, type, details, evidence,
+            date, null, state, applicantRole
+        ))
+            .isExactlyInstanceOf(NullPointerException.class);
 
         assertThatThrownBy(() -> new MakeAnApplication(
-                applicant, type, details, evidence,
-                date, decision, null, applicantRole))
-                .isExactlyInstanceOf(NullPointerException.class);
+            applicant, type, details, evidence,
+            date, decision, null, applicantRole
+        ))
+            .isExactlyInstanceOf(NullPointerException.class);
 
         assertThatThrownBy(() -> new MakeAnApplication(
-                applicant, type, details, evidence,
-                date, decision, state, null))
-                .isExactlyInstanceOf(NullPointerException.class);
+            applicant, type, details, evidence,
+            date, decision, state, null
+        ))
+            .isExactlyInstanceOf(NullPointerException.class);
 
     }
 }

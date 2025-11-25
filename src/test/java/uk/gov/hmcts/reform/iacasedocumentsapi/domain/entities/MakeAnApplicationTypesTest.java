@@ -19,8 +19,10 @@ class MakeAnApplicationTypesTest {
         assertEquals("Update hearing requirements", MakeAnApplicationTypes.UPDATE_HEARING_REQUIREMENTS.toString());
         assertEquals("Update appeal details", MakeAnApplicationTypes.UPDATE_APPEAL_DETAILS.toString());
         assertEquals("Reinstate an ended appeal", MakeAnApplicationTypes.REINSTATE.toString());
-        assertEquals("Transfer out of accelerated detained appeals process",
-                MakeAnApplicationTypes.TRANSFER_OUT_OF_ACCELERATED_DETAINED_APPEALS_PROCESS.toString());
+        assertEquals(
+            "Transfer out of accelerated detained appeals process",
+            MakeAnApplicationTypes.TRANSFER_OUT_OF_ACCELERATED_DETAINED_APPEALS_PROCESS.toString()
+        );
         assertEquals("Other", MakeAnApplicationTypes.OTHER.toString());
     }
 

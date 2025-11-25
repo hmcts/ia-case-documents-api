@@ -94,7 +94,7 @@ public class InternalDetainedDecisionsAndReasonsAllowedLetterTemplateTest {
     void should_return_7_working_days() {
         dataSetUp();
         when(asylumCase.read(IS_ACCELERATED_DETAINED_APPEAL, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
-        when(dueDateService.calculateDueDate(any(), eq(FTPA_DUE_IN_WORKING_DAYS))).thenReturn(nowZonedDateTime.plusDays(FTPA_DUE_IN_WORKING_DAYS));
+        when(dueDateService.calculateWorkingDaysDueDate(any(), eq(FTPA_DUE_IN_WORKING_DAYS))).thenReturn(nowZonedDateTime.plusDays(FTPA_DUE_IN_WORKING_DAYS));
         Map<String, Object> templateFieldValues = internalDetainedDecisionsAndReasonsAllowedLetterTemplate.mapFieldValues(caseDetails);
         assertEquals(formatDateForNotificationAttachmentDocument(now.plusDays(FTPA_DUE_IN_WORKING_DAYS)), templateFieldValues.get("ftpaDueDate"));
     }

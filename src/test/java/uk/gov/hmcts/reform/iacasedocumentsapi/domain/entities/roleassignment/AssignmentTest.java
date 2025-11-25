@@ -30,7 +30,7 @@ class AssignmentTest {
 
         assertEquals(
             "Assignment(id=id, "
-            + "created=" + now.toString() + ","
+            + "created=" + now + ","
             + " authorisations=[],"
             + " actorIdType=IDAM,"
             + " actorId=actorId,"

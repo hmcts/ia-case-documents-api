@@ -81,8 +81,8 @@ class InternalDetainedMarkAsAdaLetterTemplateTest {
         when(customerServicesProvider.getInternalCustomerServicesTelephone(asylumCase)).thenReturn(customerServicesTelephone);
         when(customerServicesProvider.getInternalCustomerServicesEmail(asylumCase)).thenReturn(customerServicesEmail);
 
-        when(dueDateService.calculateDueDate(any(), eq(responseToTribunalDueInWorkingDays))).thenReturn(zonedDueDateTime.plusDays(13));
-        when(dueDateService.calculateDueDate(any(), eq(homeOfficeResponseDueInWorkingDays))).thenReturn(zonedDueDateTime.plusDays(15));
+        when(dueDateService.calculateWorkingDaysDueDate(any(), eq(responseToTribunalDueInWorkingDays))).thenReturn(zonedDueDateTime.plusDays(13));
+        when(dueDateService.calculateWorkingDaysDueDate(any(), eq(homeOfficeResponseDueInWorkingDays))).thenReturn(zonedDueDateTime.plusDays(15));
 
     }
 

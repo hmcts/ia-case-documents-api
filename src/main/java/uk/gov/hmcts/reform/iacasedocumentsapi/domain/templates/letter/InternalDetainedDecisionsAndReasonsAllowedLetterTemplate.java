@@ -57,7 +57,7 @@ public class InternalDetainedDecisionsAndReasonsAllowedLetterTemplate implements
         fieldValues.putAll(getAppellantPersonalisation(asylumCase));
         fieldValues.put("dateLetterSent", formatDateForNotificationAttachmentDocument(LocalDate.now()));
         LocalDate dueDate = isAcceleratedDetainedAppeal(asylumCase)
-                ? dueDateService.calculateDueDate(ZonedDateTime.now(), ftpaDueInWorkingDays).toLocalDate()
+                ? dueDateService.calculateWorkingDaysDueDate(ZonedDateTime.now(), ftpaDueInWorkingDays).toLocalDate()
                 : LocalDate.now().plusDays(ftpaDueInCalendarDays);
         fieldValues.put("ftpaDueDate", formatDateForNotificationAttachmentDocument(dueDate));
 

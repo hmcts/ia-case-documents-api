@@ -1,4 +1,4 @@
-package uk.gov.hmcts.reform.iacasenotificationsapi.config;
+package uk.gov.hmcts.reform.iacasedocumentsapi.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Value;

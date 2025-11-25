@@ -1,4 +1,4 @@
-package uk.gov.hmcts.reform.iacasenotificationsapi.util;
+package uk.gov.hmcts.reform.iacasedocumentsapi.util;
 
 import com.google.common.io.ByteStreams;
 import java.io.IOException;
@@ -9,7 +9,7 @@ import org.springframework.web.multipart.MultipartFile;
 import uk.gov.hmcts.reform.document.DocumentUploadClientApi;
 import uk.gov.hmcts.reform.document.domain.UploadResponse;
 import uk.gov.hmcts.reform.document.utils.InMemoryMultipartFile;
-import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field.Document;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.Document;
 
 @Service
 public class SystemDocumentManagementUploader {

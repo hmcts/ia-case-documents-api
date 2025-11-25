@@ -74,5 +74,4 @@ public class CallbackTest {
             .isExactlyInstanceOf(NullPointerException.class);
 
     }
-
 }

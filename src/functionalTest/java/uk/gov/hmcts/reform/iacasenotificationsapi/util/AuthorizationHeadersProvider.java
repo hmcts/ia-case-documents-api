@@ -1,4 +1,4 @@
-package uk.gov.hmcts.reform.iacasenotificationsapi.util;
+package uk.gov.hmcts.reform.iacasedocumentsapi.util;
 
 import io.restassured.http.Header;
 import io.restassured.http.Headers;

@@ -1,4 +1,4 @@
-package uk.gov.hmcts.reform.iacasenotificationsapi.consumer;
+package uk.gov.hmcts.reform.iacasedocumentsapi.consumer;
 
 import au.com.dius.pact.consumer.dsl.PactDslJsonBody;
 import au.com.dius.pact.consumer.dsl.PactDslJsonRootValue;
@@ -25,10 +25,10 @@ import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
-import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.clients.IdamApi;
-import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.clients.model.idam.Token;
-import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.clients.model.idam.UserInfo;
-import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.config.RestTemplateConfiguration;
+import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.clients.IdamApi;
+import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.clients.model.idam.Token;
+import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.clients.model.idam.UserInfo;
+import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.config.RestTemplateConfiguration;
 
 @ExtendWith(SpringExtension.class)
 @ExtendWith(PactConsumerTestExt.class)

@@ -1,8 +1,10 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.health;
 
-import static org.assertj.core.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.when;
 
 import com.google.common.collect.ImmutableMap;
 import java.util.HashMap;
@@ -18,8 +20,10 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.config.HealthCheckC
 @SuppressWarnings("unchecked")
 public class DownStreamHealthIndicatorTest {
 
-    @Mock RestTemplate restTemplate;
-    @Mock HealthCheckConfiguration healthCheckConfiguration;
+    @Mock
+    RestTemplate restTemplate;
+    @Mock
+    HealthCheckConfiguration healthCheckConfiguration;
 
     private DownStreamHealthIndicator downStreamHealthIndicator;
 
@@ -42,9 +46,11 @@ public class DownStreamHealthIndicatorTest {
     public void should_throw_exception_when_services_list_is_null_or_empty() {
         when(healthCheckConfiguration.getServices()).thenReturn(null);
 
-        assertThatThrownBy(() -> new DownStreamHealthIndicator(restTemplate, healthCheckConfiguration))
-            .hasMessage("HealthCheckConfiguration cannot be null or empty")
-            .isExactlyInstanceOf(NullPointerException.class);
+        NullPointerException response = assertThrows(
+            NullPointerException.class,
+            () -> new DownStreamHealthIndicator(restTemplate, healthCheckConfiguration)
+        );
+        assertEquals("HealthCheckConfiguration cannot be null or empty", response.getMessage());
     }
 
 

@@ -1,9 +1,9 @@
-package uk.gov.hmcts.reform.iacasenotificationsapi.verifiers;
+package uk.gov.hmcts.reform.iacasedocumentsapi.verifiers;
 
 import java.util.Map;
 import org.springframework.stereotype.Component;
-import uk.gov.hmcts.reform.iacasenotificationsapi.util.MapFieldAssertor;
-import uk.gov.hmcts.reform.iacasenotificationsapi.util.MapValueExtractor;
+import uk.gov.hmcts.reform.iacasedocumentsapi.util.MapFieldAssertor;
+import uk.gov.hmcts.reform.iacasedocumentsapi.util.MapValueExtractor;
 
 @Component
 @SuppressWarnings("unchecked")

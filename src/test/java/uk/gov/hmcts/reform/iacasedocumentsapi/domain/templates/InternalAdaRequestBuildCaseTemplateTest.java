@@ -131,7 +131,7 @@ public class InternalAdaRequestBuildCaseTemplateTest {
         directionList.add(requestCaseBuildingDirection);
         when(asylumCase.read(DIRECTIONS)).thenReturn(Optional.of(directionList));
 
-        when(dueDateService.calculateDueDate(any(), eq(hearingSupportRequirementsDueInWorkingDays))).thenReturn(zonedDueDateTime);
+        when(dueDateService.calculateWorkingDaysDueDate(any(), eq(hearingSupportRequirementsDueInWorkingDays))).thenReturn(zonedDueDateTime);
 
     }
 

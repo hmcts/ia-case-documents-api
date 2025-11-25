@@ -1,10 +1,10 @@
-package uk.gov.hmcts.reform.iacasenotificationsapi.component.testutils.fixtures;
+package uk.gov.hmcts.reform.iacasedocumentsapi.component.testutils.fixtures;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.time.LocalDateTime;
 import lombok.Data;
-import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
-import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.State;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.State;
 
 @Data
 public class CaseDetailsForTest {

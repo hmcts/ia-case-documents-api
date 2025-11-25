@@ -3530,6 +3530,7 @@ launchDarkly:
 customerServices:
   emailAddress: ${IA_CUSTOMER_SERVICES_EMAIL:contactia@example.com}
   telephoneNumber: ${IA_CUSTOMER_SERVICES_TELEPHONE:0300 777 7777}
+  appealIaEmailAddress: ${IA_CUSTOMER_SERVICES_APPEAL_EMAIL:AppealIA@Justice.gov.uk}
   internal:
     telephoneNumber:
       ada: ${IA_INTERNAL_ADA_CUSTOMER_SERVICES_TELEPHONE:0300 123 1711}
@@ -3708,12 +3709,6 @@ detentionEngagementTeamEmailAddress: ${DET_EMAIL_ADDRESS:dummyDetentionEngagemen
 judgesReviewDeadlineDateDelay: ${JUDGES_REVIEW_DEADLINE_DATE_DELAY:14}
 
 makeAnApplicationFormLink: ${MAKE_AN_APPLICATION_FORM_LINK:https://www.gov.uk/government/publications/make-an-application-accelerated-detained-appeal-form-iaftada4}
-
-customerServices:
-  emailAddress: ${IA_CUSTOMER_SERVICES_EMAIL:contactia@justice.gov.uk}
-  internalCaseEmailAddress: ${IA_CUSTOMER_SERVICES_UNREPRESENTED_EMAIL:IAC-ADA-HW@justice.gov.uk}
-  telephoneNumber: ${IA_CUSTOMER_SERVICES_TELEPHONE:0300 123 1711}
-  appealIaEmailAddress: ${IA_CUSTOMER_SERVICES_APPEAL_EMAIL:AppealIA@Justice.gov.uk}
 
 appellantDaysToWait:
   afterSubmission: 28

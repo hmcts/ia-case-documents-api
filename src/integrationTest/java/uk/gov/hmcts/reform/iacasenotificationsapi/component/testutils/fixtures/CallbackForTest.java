@@ -1,7 +1,7 @@
-package uk.gov.hmcts.reform.iacasenotificationsapi.component.testutils.fixtures;
+package uk.gov.hmcts.reform.iacasedocumentsapi.component.testutils.fixtures;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.Event;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.Event;
 
 public class CallbackForTest {
 

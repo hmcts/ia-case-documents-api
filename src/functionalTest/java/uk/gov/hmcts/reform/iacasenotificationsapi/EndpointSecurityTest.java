@@ -1,4 +1,4 @@
-package uk.gov.hmcts.reform.iacasenotificationsapi;
+package uk.gov.hmcts.reform.iacasedocumentsapi;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -13,7 +13,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.context.ActiveProfiles;
-import uk.gov.hmcts.reform.iacasenotificationsapi.util.AuthorizationHeadersProvider;
+import uk.gov.hmcts.reform.iacasedocumentsapi.util.AuthorizationHeadersProvider;
 
 @SpringBootTest
 @ActiveProfiles("functional")

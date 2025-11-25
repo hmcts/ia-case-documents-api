@@ -1,5 +1,7 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.security;
 
+import static com.google.common.collect.Lists.newArrayList;
+import static com.google.common.collect.Sets.newHashSet;
 import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -29,7 +31,14 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.Event;
 @ExtendWith(MockitoExtension.class)
 public class CcdEventAuthorizorTest {
 
-    @Mock private AuthorizedRolesProvider authorizedRolesProvider;
+    @Mock
+    private AuthorizedRolesProvider authorizedRolesProvider;
+
+    private String role = "caseworker-ia";
+    private Map<String, List<Event>> roleEventAccess = new ImmutableMap.Builder<String, List<Event>>()
+        .put(role, newArrayList(Event.UNKNOWN))
+        .build();
+
     private CcdEventAuthorizor ccdEventAuthorizor;
     private static final String EVENT_NOT_ALLOWED = "Event 'unknown' not allowed";
     private final String role = "caseworker-ia";
@@ -142,7 +151,67 @@ public class CcdEventAuthorizorTest {
     private static Stream<Arguments> provideScenariosForDeniedAccess() {
         return Stream.of(
             Arguments.of(new ImmutableMap.Builder<String, List<Event>>().build(), EVENT_NOT_ALLOWED),
-            Arguments.of(new ImmutableMap.Builder<String, List<Event>>().put("caseworker-ia", Collections.emptyList()).build(), EVENT_NOT_ALLOWED)
+            Arguments.of(
+                new ImmutableMap.Builder<String, List<Event>>().put(
+                    "caseworker-ia",
+                    Collections.emptyList()
+                ).build(), EVENT_NOT_ALLOWED
+            )
         );
+    }
+
+
+    @Test
+    public void should_not_throw_exception_when_event_is_allowed() {
+
+        ccdEventAuthorizor = new CcdEventAuthorizor(roleEventAccess, authorizedRolesProvider);
+
+        when(authorizedRolesProvider.getRoles()).thenReturn(newHashSet(role));
+
+        ccdEventAuthorizor.throwIfNotAuthorized(Event.UNKNOWN);
+    }
+
+    @Test
+    public void should_throw_exception_when_provider_returns_empty_list() {
+
+        ccdEventAuthorizor = new CcdEventAuthorizor(roleEventAccess, authorizedRolesProvider);
+
+        when(authorizedRolesProvider.getRoles()).thenReturn(newHashSet());
+
+        AccessDeniedException thrown = assertThrows(
+            AccessDeniedException.class,
+            () -> ccdEventAuthorizor.throwIfNotAuthorized(Event.UNKNOWN)
+        );
+        assertEquals("Event 'unknown' not allowed", thrown.getMessage());
+    }
+
+    @Test
+    public void should_throw_exception_when_access_map_is_empty() {
+
+        Map<String, List<Event>> roleEventAccess = new ImmutableMap.Builder<String, List<Event>>().build();
+
+        ccdEventAuthorizor = new CcdEventAuthorizor(roleEventAccess, authorizedRolesProvider);
+
+        AccessDeniedException thrown = assertThrows(
+            AccessDeniedException.class,
+            () -> ccdEventAuthorizor.throwIfNotAuthorized(Event.UNKNOWN)
+        );
+        assertEquals("Event 'unknown' not allowed", thrown.getMessage());
+    }
+
+    @Test
+    public void should_throw_exception_when_access_map_for_role_is_empty() {
+
+        Map<String, List<Event>> roleEventAccess = new ImmutableMap.Builder<String, List<Event>>()
+            .put(role, newArrayList())
+            .build();
+
+        ccdEventAuthorizor = new CcdEventAuthorizor(roleEventAccess, authorizedRolesProvider);
+
+        AccessDeniedException thrown = assertThrows(
+            AccessDeniedException.class,
+            () -> ccdEventAuthorizor.throwIfNotAuthorized(Event.UNKNOWN)
+        );
+        assertEquals("Event 'unknown' not allowed", thrown.getMessage());
     }
 }

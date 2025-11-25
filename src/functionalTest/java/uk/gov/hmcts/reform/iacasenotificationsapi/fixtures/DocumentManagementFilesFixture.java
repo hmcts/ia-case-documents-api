@@ -1,4 +1,4 @@
-package uk.gov.hmcts.reform.iacasenotificationsapi.fixtures;
+package uk.gov.hmcts.reform.iacasedocumentsapi.fixtures;
 
 import java.io.IOException;
 import java.util.Collection;
@@ -7,9 +7,9 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Component;
-import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field.Document;
-import uk.gov.hmcts.reform.iacasenotificationsapi.util.BinaryResourceLoader;
-import uk.gov.hmcts.reform.iacasenotificationsapi.util.SystemDocumentManagementUploader;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.Document;
+import uk.gov.hmcts.reform.iacasedocumentsapi.util.BinaryResourceLoader;
+import uk.gov.hmcts.reform.iacasedocumentsapi.util.SystemDocumentManagementUploader;
 
 @Component
 public class DocumentManagementFilesFixture implements Fixture {

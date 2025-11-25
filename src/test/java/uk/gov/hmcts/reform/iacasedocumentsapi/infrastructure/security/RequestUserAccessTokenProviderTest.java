@@ -1,7 +1,9 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.security;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
 
 import java.util.Optional;
@@ -17,7 +19,8 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 @ExtendWith(MockitoExtension.class)
 public class RequestUserAccessTokenProviderTest {
 
-    @Mock private HttpServletRequest httpServletRequest;
+    @Mock
+    private HttpServletRequest httpServletRequest;
 
     private RequestUserAccessTokenProvider requestUserAccessTokenProvider =
         new RequestUserAccessTokenProvider();

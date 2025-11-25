@@ -16,38 +16,37 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
 @Service
 public class CustomerServicesProvider {
 
-    private final String customerServicesTelephone;
     private String customerServicesEmail;
-    @Value("${customerServices.internal.telephoneNumber.ada}")
-    private String internalAdaCustomerServicesTelephone;
-    @Value("${customerServices.internal.emailAddress.ada}")
-    private String internalAdaCustomerServicesEmail;
+    private final String customerServicesTelephone;
+    private final String internalAdaCustomerServicesTelephone;
+    private final String internalAdaCustomerServicesEmail;
     private final String standardCustomerServicesEmail;
-    private final String internalCaseCustomerServicesEmail;
-
-    private String appealIaCustomerServicesEmail;
+    private final String appealIaCustomerServicesEmail;
 
     public CustomerServicesProvider(
         @Value("${customerServices.telephoneNumber}") String customerServicesTelephone,
         @Value("${customerServices.emailAddress}") String standardCustomerServicesEmail,
-        @Value("${customerServices.internalCaseEmailAddress}") String internalCaseCustomerServicesEmail,
-        @Value("${customerServices.appealIaEmailAddress}") String appealIaCustomerServicesEmail
+        @Value("${customerServices.appealIaEmailAddress}") String appealIaCustomerServicesEmail,
+        @Value("${customerServices.internal.emailAddress.ada}") String internalAdaCustomerServicesEmail,
+        @Value("${customerServices.internal.telephoneNumber.ada}") String internalAdaCustomerServicesTelephone
     ) {
         requireNonNull(customerServicesTelephone);
         requireNonNull(standardCustomerServicesEmail);
-        requireNonNull(internalCaseCustomerServicesEmail);
         requireNonNull(appealIaCustomerServicesEmail);
+        requireNonNull(internalAdaCustomerServicesEmail);
+        requireNonNull(internalAdaCustomerServicesTelephone);
 
         this.customerServicesTelephone = customerServicesTelephone;
         this.standardCustomerServicesEmail = standardCustomerServicesEmail;
-        this.internalCaseCustomerServicesEmail = internalCaseCustomerServicesEmail;
         this.customerServicesEmail = standardCustomerServicesEmail;
         this.appealIaCustomerServicesEmail = appealIaCustomerServicesEmail;
+        this.internalAdaCustomerServicesEmail = internalAdaCustomerServicesEmail;
+        this.internalAdaCustomerServicesTelephone = internalAdaCustomerServicesTelephone;
     }
 
     public void setCorrectEmail(AsylumCase asylumCase) {
         this.customerServicesEmail = isInternalCase(asylumCase) && isAcceleratedDetainedAppeal(asylumCase)
-            ? internalCaseCustomerServicesEmail
+            ? internalAdaCustomerServicesEmail
             : standardCustomerServicesEmail;
     }
 

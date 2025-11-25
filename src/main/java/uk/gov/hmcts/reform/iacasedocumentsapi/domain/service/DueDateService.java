@@ -24,12 +24,6 @@ public class DueDateService {
         return resetTo4PmTime(zonedDateTime);
     }
 
-    public ZonedDateTime calculateDueDate(ZonedDateTime delayUntil, int workingDaysAllowed) {
-        final ZonedDateTime zonedDateTime = addWorkingDays(delayUntil, workingDaysAllowed);
-
-        return resetTo4PmTime(zonedDateTime);
-    }
-
     public ZonedDateTime calculateWorkingDaysDueDate(ZonedDateTime delayUntil, int workingDaysAllowed) {
         final ZonedDateTime zonedDateTime = addWorkingDays(delayUntil, workingDaysAllowed);
 

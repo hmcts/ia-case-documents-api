@@ -1,4 +1,4 @@
-package uk.gov.hmcts.reform.iacasenotificationsapi;
+package uk.gov.hmcts.reform.iacasedocumentsapi;
 
 import static io.restassured.RestAssured.given;
 import static org.assertj.core.api.Assertions.assertThat;

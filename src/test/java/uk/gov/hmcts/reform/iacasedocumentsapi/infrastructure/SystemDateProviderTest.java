@@ -23,6 +23,14 @@ public class SystemDateProviderTest {
     }
 
     @Test
+    public void returns_now_date_plus_days_offset() {
+        String actualDate = systemDateProvider.dueDate(28);
+        assertNotNull(actualDate);
+        assertEquals(actualDate, LocalDate.now().plusDays(28)
+            .format(DateTimeFormatter.ofPattern("d MMM yyyy")));
+    }
+
+    @Test
     public void returns_now_date_with_time() {
         LocalDateTime actualDateTime = systemDateProvider.nowWithTime();
         assertNotNull(actualDateTime);
@@ -80,7 +88,7 @@ public class SystemDateProviderTest {
         // Then - Verify the format matches the expected pattern "d MMM yyyy"
         // The format should have single digit day (no leading zero), abbreviated month, and 4-digit year
         assertNotNull(actualResult);
-        assertTrue(actualResult.matches("\\d{1,2} [A-Za-z]{3,4} \\d{4}"), 
+        assertTrue(actualResult.matches("\\d{1,2} [A-Za-z]{3,4} \\d{4}"),
                    "Date format should match 'd MMM yyyy' pattern, but was: " + actualResult);
     }
 

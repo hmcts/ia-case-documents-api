@@ -53,7 +53,7 @@ public class InternalAppellantFtpaDecidedPartiallyGrantedTemplate implements Doc
         final Map<String, Object> fieldValues = new HashMap<>();
 
         LocalDate dueDate = isAcceleratedDetainedAppeal(asylumCase)
-            ? dueDateService.calculateDueDate(ZonedDateTime.now(), adaDueWorkingDays).toLocalDate()
+            ? dueDateService.calculateWorkingDaysDueDate(ZonedDateTime.now(), adaDueWorkingDays).toLocalDate()
             : LocalDate.now().plusDays(nonAdaDueInCalendarDays);
 
         fieldValues.putAll(getAppellantPersonalisation(asylumCase));

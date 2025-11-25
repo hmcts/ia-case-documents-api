@@ -1,4 +1,4 @@
-package uk.gov.hmcts.reform.iacasenotificationsapi.component.testutils;
+package uk.gov.hmcts.reform.iacasedocumentsapi.component.testutils;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
 import static com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo;

@@ -233,11 +233,11 @@ jacocoTestReport {
 pitest {
 //    print('./gradlew --version'.execute().text.trim())
   junit5PluginVersion = '1.1.2'
-  targetClasses = ['uk.gov.hmcts.reform.iacasenotificationsapi.*']
+  targetClasses = ['uk.gov.hmcts.reform.iacasedocumentsapi.*']
   excludedClasses = [
-    'uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.config.*',
-    'uk.gov.hmcts.reform.iacasenotificationsapi.Application',
-    'uk.gov.hmcts.reform.iacasenotificationsapi.CcdScenarioRunnerTest'
+    'uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.config.*',
+    'uk.gov.hmcts.reform.iacasedocumentsapi.Application',
+    'uk.gov.hmcts.reform.iacasedocumentsapi.CcdScenarioRunnerTest'
   ]
   threads = 10
   outputFormats = ['XML', 'HTML']

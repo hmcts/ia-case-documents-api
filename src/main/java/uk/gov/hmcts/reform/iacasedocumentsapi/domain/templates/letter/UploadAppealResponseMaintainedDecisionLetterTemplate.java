@@ -74,7 +74,7 @@ public class UploadAppealResponseMaintainedDecisionLetterTemplate implements Doc
 
     private LocalDate getSaHearingDate(AsylumCase asylumCase) {
         LocalDate appealSubmissionDate = LocalDate.parse(asylumCase.read(AsylumCaseDefinition.APPEAL_SUBMISSION_DATE, String.class).orElseThrow(() -> new RequiredFieldMissingException("Appeal Submission Date is missing")));
-        return dueDateService.calculateDueDate(appealSubmissionDate.atStartOfDay(ZoneOffset.UTC), 16).toLocalDate();
+        return dueDateService.calculateWorkingDaysDueDate(appealSubmissionDate.atStartOfDay(ZoneOffset.UTC), 16).toLocalDate();
     }
 
 }

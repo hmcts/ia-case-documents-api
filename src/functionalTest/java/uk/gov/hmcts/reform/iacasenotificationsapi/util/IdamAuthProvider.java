@@ -1,4 +1,4 @@
-package uk.gov.hmcts.reform.iacasenotificationsapi.util;
+package uk.gov.hmcts.reform.iacasedocumentsapi.util;
 
 import feign.FeignException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,9 +7,9 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
-import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.clients.IdamApi;
-import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.clients.model.idam.Token;
-import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.security.idam.IdentityManagerResponseException;
+import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.clients.IdamApi;
+import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.clients.model.idam.Token;
+import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.security.idam.IdentityManagerResponseException;
 
 @Service
 public class IdamAuthProvider {

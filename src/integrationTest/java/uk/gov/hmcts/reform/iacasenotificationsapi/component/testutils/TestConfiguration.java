@@ -1,6 +1,6 @@
-package uk.gov.hmcts.reform.iacasenotificationsapi.component.testutils;
+package uk.gov.hmcts.reform.iacasedocumentsapi.component.testutils;
 
-import static uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.security.idam.IdamAuthoritiesConverter.REGISTRATION_ID;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.security.idam.IdamAuthoritiesConverter.REGISTRATION_ID;
 
 import org.springframework.boot.autoconfigure.security.oauth2.client.OAuth2ClientProperties;
 import org.springframework.boot.autoconfigure.security.oauth2.client.OAuth2ClientPropertiesRegistrationAdapter;

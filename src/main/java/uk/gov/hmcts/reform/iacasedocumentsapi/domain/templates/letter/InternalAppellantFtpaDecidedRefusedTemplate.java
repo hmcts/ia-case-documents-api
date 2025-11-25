@@ -54,7 +54,7 @@ public class InternalAppellantFtpaDecidedRefusedTemplate implements DocumentTemp
         final Map<String, Object> fieldValues = new HashMap<>();
 
         LocalDate dueDate = isAcceleratedDetainedAppeal(asylumCase)
-            ? dueDateService.calculateDueDate(ZonedDateTime.now(), adaDueInWorkingDays).toLocalDate()
+            ? dueDateService.calculateWorkingDaysDueDate(ZonedDateTime.now(), adaDueInWorkingDays).toLocalDate()
             : LocalDate.now().plusDays(nonAdaDueInCalendarDays);
 
         fieldValues.putAll(getAppellantPersonalisation(asylumCase));

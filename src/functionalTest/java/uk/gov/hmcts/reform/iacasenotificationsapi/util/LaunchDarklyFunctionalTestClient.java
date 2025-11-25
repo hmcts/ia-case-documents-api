@@ -1,4 +1,4 @@
-package uk.gov.hmcts.reform.iacasenotificationsapi.util;
+package uk.gov.hmcts.reform.iacasedocumentsapi.util;
 
 
 import com.launchdarkly.sdk.LDContext;
@@ -7,11 +7,11 @@ import com.launchdarkly.sdk.server.interfaces.LDClientInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClientResponseException;
-import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.UserDetails;
-import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.clients.IdamApi;
-import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.clients.model.idam.UserInfo;
-import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.security.idam.IdamUserDetails;
-import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.security.idam.IdentityManagerResponseException;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.UserDetails;
+import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.clients.IdamApi;
+import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.clients.model.idam.UserInfo;
+import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.security.idam.IdamUserDetails;
+import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.security.idam.IdentityManagerResponseException;
 
 @Component
 public class LaunchDarklyFunctionalTestClient {

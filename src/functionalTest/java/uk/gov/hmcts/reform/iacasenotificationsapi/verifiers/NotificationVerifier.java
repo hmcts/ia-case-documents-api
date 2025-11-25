@@ -1,4 +1,4 @@
-package uk.gov.hmcts.reform.iacasenotificationsapi.verifiers;
+package uk.gov.hmcts.reform.iacasedocumentsapi.verifiers;
 
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.equalTo;
@@ -16,8 +16,8 @@ import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.clients.RetryableNotificationClient;
-import uk.gov.hmcts.reform.iacasenotificationsapi.util.MapValueExtractor;
+import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.clients.RetryableNotificationClient;
+import uk.gov.hmcts.reform.iacasedocumentsapi.util.MapValueExtractor;
 import uk.gov.service.notify.Notification;
 import uk.gov.service.notify.NotificationClientException;
 

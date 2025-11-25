@@ -1,4 +1,4 @@
-package uk.gov.hmcts.reform.iacasenotificationsapi.config;
+package uk.gov.hmcts.reform.iacasedocumentsapi.config;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;

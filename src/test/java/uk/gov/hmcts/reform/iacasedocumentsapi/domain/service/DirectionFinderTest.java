@@ -1,6 +1,9 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.service;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.DIRECTIONS;
@@ -20,7 +23,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.DirectionFinder;
 
 @ExtendWith(MockitoExtension.class)
 @SuppressWarnings("unchecked")
-public class DirectionFinderTest {
+class DirectionFinderTest {
 
     private final DirectionFinder directionFinder = new DirectionFinder();
     @Mock private AsylumCase asylumCase;
@@ -30,7 +33,7 @@ public class DirectionFinderTest {
     @Mock private Direction existingDirection2 = mock(Direction.class);
 
     @Test
-    public void should_find_first_tagged_direction() {
+    void should_find_first_tagged_direction() {
 
         List<IdValue<Direction>> directions =
             Arrays.asList(
@@ -55,7 +58,7 @@ public class DirectionFinderTest {
     }
 
     @Test
-    public void should_return_empty_optional_if_not_found() {
+    void should_return_empty_optional_if_not_found() {
 
         List<IdValue<Direction>> directions =
             Arrays.asList(

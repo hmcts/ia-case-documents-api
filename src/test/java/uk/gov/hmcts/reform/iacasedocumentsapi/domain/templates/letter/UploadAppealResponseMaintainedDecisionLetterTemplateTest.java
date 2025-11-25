@@ -113,7 +113,7 @@ public class UploadAppealResponseMaintainedDecisionLetterTemplateTest {
         when(asylumCase.read(LIST_CASE_HEARING_DATE, String.class)).thenReturn(Optional.of("2023-08-22T09:00:00.000"));
         when(dateProvider.now()).thenReturn(LocalDate.parse("2023-06-27"));
         when(asylumCase.read(DIRECTIONS)).thenReturn(Optional.of(directionList));
-        when(dueDateService.calculateDueDate(zonedDate, 16)).thenReturn(zonedSaHEaringDate);
+        when(dueDateService.calculateWorkingDaysDueDate(zonedDate, 16)).thenReturn(zonedSaHEaringDate);
     }
 
     @Test

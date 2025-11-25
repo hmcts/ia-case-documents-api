@@ -1,8 +1,8 @@
-package uk.gov.hmcts.reform.iacasenotificationsapi.component.testutils.fixtures;
+package uk.gov.hmcts.reform.iacasedocumentsapi.component.testutils.fixtures;
 
 import java.util.ArrayList;
 import java.util.List;
-import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field.IdValue;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.IdValue;
 
 public class AsylumCaseCollectionForTest<T> implements Builder<List<IdValue<T>>> {
 

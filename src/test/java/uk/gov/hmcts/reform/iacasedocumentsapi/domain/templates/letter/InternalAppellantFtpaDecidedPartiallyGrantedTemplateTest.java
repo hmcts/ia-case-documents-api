@@ -82,7 +82,7 @@ class InternalAppellantFtpaDecidedPartiallyGrantedTemplateTest {
             .thenReturn(customerServicesEmail);
 
         when(dateProvider.now()).thenReturn(LocalDate.now());
-        when(dueDateService.calculateDueDate(any(), eq(adaDueInWorkingDays))).thenReturn(zonedDueDateTime);
+        when(dueDateService.calculateWorkingDaysDueDate(any(), eq(adaDueInWorkingDays))).thenReturn(zonedDueDateTime);
     }
 
     @Test

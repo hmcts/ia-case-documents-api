@@ -53,7 +53,7 @@ public class InternalAdaRequestBuildCaseTemplate implements DocumentTemplate<Asy
         fieldValues.put("responseDueDate", formatDateForNotificationAttachmentDocument(LocalDate.parse(getDirectionDueDate(asylumCase, DirectionTag.REQUEST_CASE_BUILDING))));
 
         fieldValues.put("hearingSupportRequirementsDueDate", formatDateForNotificationAttachmentDocument(dueDateService
-                .calculateDueDate(ZonedDateTime.now(), hearingSupportResponseDueInWorkingDays)
+                .calculateWorkingDaysDueDate(ZonedDateTime.now(), hearingSupportResponseDueInWorkingDays)
                 .toLocalDate()));
 
         return fieldValues;

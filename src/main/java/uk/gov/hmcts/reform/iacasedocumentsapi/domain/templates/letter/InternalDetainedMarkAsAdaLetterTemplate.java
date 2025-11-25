@@ -63,7 +63,7 @@ public class InternalDetainedMarkAsAdaLetterTemplate implements DocumentTemplate
                 .orElseThrow(() -> new IllegalStateException("Appeal submission date is missing")));
 
         return formatDateForNotificationAttachmentDocument(dueDateService
-                .calculateDueDate(appealSubmissionDate.atStartOfDay(ZoneOffset.UTC), dueDays)
+                .calculateWorkingDaysDueDate(appealSubmissionDate.atStartOfDay(ZoneOffset.UTC), dueDays)
                 .toLocalDate());
     }
 }

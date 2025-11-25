@@ -1,7 +1,8 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.controllers;
 
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -23,10 +24,14 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.BailPreSubmitCallba
 @ExtendWith({MockitoExtension.class})
 public class BailPreSubmitCallbackControllerTest {
 
-    @Mock private BailPreSubmitCallbackDispatcher callbackDispatcher;
-    @Mock private PreSubmitCallbackResponse<BailCase> callbackResponse;
-    @Mock private Callback<BailCase> callback;
-    @Mock private CaseDetails<BailCase> caseDetails;
+    @Mock
+    private BailPreSubmitCallbackDispatcher callbackDispatcher;
+    @Mock
+    private PreSubmitCallbackResponse<BailCase> callbackResponse;
+    @Mock
+    private Callback<BailCase> callback;
+    @Mock
+    private CaseDetails<BailCase> caseDetails;
 
     private BailPreSubmitCallbackController bailPreSubmitCallbackController;
 
@@ -37,9 +42,11 @@ public class BailPreSubmitCallbackControllerTest {
 
     @Test
     public void should_not_allow_null_args_in_constructor() {
-        assertThatThrownBy(() -> new BailPreSubmitCallbackController(null))
-            .isExactlyInstanceOf(NullPointerException.class)
-            .hasMessage("callbackDispatcher must not be null");
+        NullPointerException response = assertThrows(
+            NullPointerException.class,
+            () -> new BailPreSubmitCallbackController(null)
+        );
+        assertEquals("callbackDispatcher must not be null", response.getMessage());
     }
 
     @Test
@@ -49,7 +56,8 @@ public class BailPreSubmitCallbackControllerTest {
             .when(callbackDispatcher)
             .handle(PreSubmitCallbackStage.ABOUT_TO_START, callback);
 
-        ResponseEntity<PreSubmitCallbackResponse<BailCase>> actualResponse = bailPreSubmitCallbackController.ccdAboutToStart(callback);
+        ResponseEntity<PreSubmitCallbackResponse<BailCase>> actualResponse = bailPreSubmitCallbackController.ccdAboutToStart(
+            callback);
 
         assertNotNull(actualResponse);
         verify(callbackDispatcher, times(1)).handle(PreSubmitCallbackStage.ABOUT_TO_START, callback);
@@ -62,7 +70,8 @@ public class BailPreSubmitCallbackControllerTest {
             .when(callbackDispatcher)
             .handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
 
-        ResponseEntity<PreSubmitCallbackResponse<BailCase>> actualResponse = bailPreSubmitCallbackController.ccdAboutToSubmit(callback);
+        ResponseEntity<PreSubmitCallbackResponse<BailCase>> actualResponse = bailPreSubmitCallbackController.ccdAboutToSubmit(
+            callback);
 
         assertNotNull(actualResponse);
         verify(callbackDispatcher, times(1)).handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);

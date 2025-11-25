@@ -1,4 +1,4 @@
-package uk.gov.hmcts.reform.iacasenotificationsapi.config;
+package uk.gov.hmcts.reform.iacasedocumentsapi.config;
 
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.support.NoOpCacheManager;

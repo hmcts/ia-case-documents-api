@@ -1,4 +1,4 @@
-package uk.gov.hmcts.reform.iacasenotificationsapi;
+package uk.gov.hmcts.reform.iacasedocumentsapi;
 
 
 import static org.junit.Assert.assertFalse;
@@ -33,17 +33,17 @@ import org.springframework.core.env.Environment;
 import org.springframework.core.env.MutablePropertySources;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
-import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
-import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.callback.PreSubmitCallbackResponse;
-import uk.gov.hmcts.reform.iacasenotificationsapi.fixtures.Fixture;
-import uk.gov.hmcts.reform.iacasenotificationsapi.util.AuthorizationHeadersProvider;
-import uk.gov.hmcts.reform.iacasenotificationsapi.util.LaunchDarklyFunctionalTestClient;
-import uk.gov.hmcts.reform.iacasenotificationsapi.util.MapMerger;
-import uk.gov.hmcts.reform.iacasenotificationsapi.util.MapSerializer;
-import uk.gov.hmcts.reform.iacasenotificationsapi.util.MapValueExpander;
-import uk.gov.hmcts.reform.iacasenotificationsapi.util.MapValueExtractor;
-import uk.gov.hmcts.reform.iacasenotificationsapi.util.StringResourceLoader;
-import uk.gov.hmcts.reform.iacasenotificationsapi.verifiers.Verifier;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.PreSubmitCallbackResponse;
+import uk.gov.hmcts.reform.iacasedocumentsapi.fixtures.Fixture;
+import uk.gov.hmcts.reform.iacasedocumentsapi.util.AuthorizationHeadersProvider;
+import uk.gov.hmcts.reform.iacasedocumentsapi.util.LaunchDarklyFunctionalTestClient;
+import uk.gov.hmcts.reform.iacasedocumentsapi.util.MapMerger;
+import uk.gov.hmcts.reform.iacasedocumentsapi.util.MapSerializer;
+import uk.gov.hmcts.reform.iacasedocumentsapi.util.MapValueExpander;
+import uk.gov.hmcts.reform.iacasedocumentsapi.util.MapValueExtractor;
+import uk.gov.hmcts.reform.iacasedocumentsapi.util.StringResourceLoader;
+import uk.gov.hmcts.reform.iacasedocumentsapi.verifiers.Verifier;
 
 @RunWith(SpringIntegrationSerenityRunner.class)
 @SpringBootTest

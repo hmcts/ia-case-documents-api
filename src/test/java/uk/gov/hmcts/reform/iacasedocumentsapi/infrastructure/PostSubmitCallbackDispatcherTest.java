@@ -55,6 +55,16 @@ class PostSubmitCallbackDispatcherTest {
     private CaseData caseData;
 
 
+    private String header1 = "Some header 1";
+    private String body1 = "Some body 1";
+
+    private String header2 = "Some header 2";
+    private String body2 = "Some body 2";
+
+    private String header3 = "Some header 3";
+    private String body3 = "Some body 3";
+
+
     @Mock
     private PostSubmitCallbackResponse response1;
     @Mock
@@ -85,19 +95,13 @@ class PostSubmitCallbackDispatcherTest {
             when(callback.getCaseDetails()).thenReturn(caseDetails);
             when(caseDetails.getCaseData()).thenReturn(caseData);
 
-            String header1 = "Some header 1";
             when(response1.getConfirmationHeader()).thenReturn(Optional.of(header1));
-            String body1 = "Some body 1";
             when(response1.getConfirmationBody()).thenReturn(Optional.of(body1));
 
-            String header2 = "Some header 2";
             when(response2.getConfirmationHeader()).thenReturn(Optional.of(header2));
-            String body2 = "Some body 2";
             when(response2.getConfirmationBody()).thenReturn(Optional.of(body2));
 
-            String header3 = "Some header 3";
             when(response3.getConfirmationHeader()).thenReturn(Optional.of(header3));
-            String body3 = "Some body 3";
             when(response3.getConfirmationBody()).thenReturn(Optional.of(body3));
 
             when(handler1.canHandle(eq(callbackStage), any(Callback.class))).thenReturn(false);

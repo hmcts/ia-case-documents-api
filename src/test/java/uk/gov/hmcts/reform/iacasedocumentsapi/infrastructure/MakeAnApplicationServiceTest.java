@@ -1,6 +1,5 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure;
 
-import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.DECIDE_AN_APPLICATION_ID;
@@ -147,9 +146,9 @@ class MakeAnApplicationServiceTest {
 
     @Test
     void should_throw_exception_if_application_type_cannot_be_parsed() {
-        assertThatThrownBy(() -> makeAnApplicationService.getApplicationTypes("test"))
-                .hasMessage("Application type could not be parsed")
-                .isExactlyInstanceOf(IllegalStateException.class);
+        IllegalStateException error = assertThrows(IllegalStateException.class,
+                     () -> makeAnApplicationService.getApplicationTypes("test"));
+        assertEquals("Application type could not be parsed", error.getMessage());
     }
 
     @Test

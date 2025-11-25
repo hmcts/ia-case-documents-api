@@ -18,8 +18,10 @@ import org.springframework.web.client.RestTemplate;
 @SuppressWarnings("unchecked")
 public class ServiceHealthIndicatorTest {
 
-    @Mock RestTemplate restTemplate;
-    @Mock ResponseEntity responseEntity;
+    @Mock
+    RestTemplate restTemplate;
+    @Mock
+    ResponseEntity responseEntity;
 
     private String uri = "http://docmosis/health";
     private String matcher = "\"status\":\"UP\"";
@@ -66,6 +68,9 @@ public class ServiceHealthIndicatorTest {
     public void health_should_throw_exception_rest_error() {
         when(restTemplate.getForEntity(uri, String.class)).thenThrow(new RestClientException("Internal server error"));
 
-        assertEquals(Health.down(new RestClientException("Internal server error")).build(), serviceHealthIndicator.health());
+        assertEquals(
+            Health.down(new RestClientException("Internal server error")).build(),
+            serviceHealthIndicator.health()
+        );
     }
 }

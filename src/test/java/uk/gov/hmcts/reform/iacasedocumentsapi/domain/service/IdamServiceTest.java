@@ -89,7 +89,6 @@ class IdamServiceTest {
             expectedForename,
             expectedSurname
         );
-        when(idamApi.userInfo(anyString())).thenReturn(expectedUserInfo);
 
         when(idamApi.userInfo(anyString())).thenReturn(expectedUserInfo);
         when(roleAssignmentService.getAmRolesFromUser(expectedId, expectedAccessToken))

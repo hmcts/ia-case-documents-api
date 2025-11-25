@@ -1,4 +1,4 @@
-package uk.gov.hmcts.reform.iacasenotificationsapi.util;
+package uk.gov.hmcts.reform.iacasedocumentsapi.util;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -10,7 +10,7 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import uk.gov.hmcts.reform.iacasenotificationsapi.fixtures.DocumentManagementFilesFixture;
+import uk.gov.hmcts.reform.iacasedocumentsapi.fixtures.DocumentManagementFilesFixture;
 
 @Component
 @SuppressWarnings("unchecked")

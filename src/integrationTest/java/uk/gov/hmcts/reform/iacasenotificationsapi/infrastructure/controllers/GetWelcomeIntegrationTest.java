@@ -1,4 +1,4 @@
-package uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.controllers;
+package uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.controllers;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -6,7 +6,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import org.junit.jupiter.api.Test;
 import org.springframework.test.web.servlet.MvcResult;
-import uk.gov.hmcts.reform.iacasenotificationsapi.component.testutils.SpringBootIntegrationTest;
+import uk.gov.hmcts.reform.iacasedocumentsapi.component.testutils.SpringBootIntegrationTest;
 
 
 class GetWelcomeIntegrationTest extends SpringBootIntegrationTest {
