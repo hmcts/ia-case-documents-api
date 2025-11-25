@@ -6,6 +6,7 @@ import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtil
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.isInternalCase;
 
 import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.ImmutableMap.Builder;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -16,30 +17,47 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
 public class CustomerServicesProvider {
 
     private final String customerServicesTelephone;
-    private final String customerServicesEmail;
+    private String customerServicesEmail;
     @Value("${customerServices.internal.telephoneNumber.ada}")
     private String internalAdaCustomerServicesTelephone;
     @Value("${customerServices.internal.emailAddress.ada}")
     private String internalAdaCustomerServicesEmail;
+    private final String standardCustomerServicesEmail;
+    private final String internalCaseCustomerServicesEmail;
 
+    private String appealIaCustomerServicesEmail;
 
     public CustomerServicesProvider(
         @Value("${customerServices.telephoneNumber}") String customerServicesTelephone,
-        @Value("${customerServices.emailAddress}") String customerServicesEmail
+        @Value("${customerServices.emailAddress}") String standardCustomerServicesEmail,
+        @Value("${customerServices.internalCaseEmailAddress}") String internalCaseCustomerServicesEmail,
+        @Value("${customerServices.appealIaEmailAddress}") String appealIaCustomerServicesEmail
     ) {
         requireNonNull(customerServicesTelephone);
-        requireNonNull(customerServicesEmail);
+        requireNonNull(standardCustomerServicesEmail);
+        requireNonNull(internalCaseCustomerServicesEmail);
+        requireNonNull(appealIaCustomerServicesEmail);
 
         this.customerServicesTelephone = customerServicesTelephone;
-        this.customerServicesEmail = customerServicesEmail;
+        this.standardCustomerServicesEmail = standardCustomerServicesEmail;
+        this.internalCaseCustomerServicesEmail = internalCaseCustomerServicesEmail;
+        this.customerServicesEmail = standardCustomerServicesEmail;
+        this.appealIaCustomerServicesEmail = appealIaCustomerServicesEmail;
+    }
+
+    public void setCorrectEmail(AsylumCase asylumCase) {
+        this.customerServicesEmail = isInternalCase(asylumCase) && isAcceleratedDetainedAppeal(asylumCase)
+            ? internalCaseCustomerServicesEmail
+            : standardCustomerServicesEmail;
     }
 
     public Map<String, String> getCustomerServicesPersonalisation() {
 
-        final ImmutableMap.Builder<String, String> customerServicesValues = ImmutableMap
+        final Builder<String, String> customerServicesValues = ImmutableMap
             .<String, String>builder()
             .put("customerServicesTelephone", customerServicesTelephone)
-            .put("customerServicesEmail", customerServicesEmail);
+            .put("customerServicesEmail", customerServicesEmail)
+            .put("AppealIAEmail", appealIaCustomerServicesEmail);
 
         return customerServicesValues.build();
     }

@@ -1,4 +1,4 @@
-package uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.callback;
+package uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback;
 
 public enum DispatchPriority {
 

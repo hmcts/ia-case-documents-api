@@ -1,4 +1,4 @@
-package uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.controllers.advice;
+package uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.controllers.advice;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
@@ -15,10 +15,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
-import uk.gov.hmcts.reform.iacasenotificationsapi.domain.RequiredFieldMissingException;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.RequiredFieldMissingException;
 
 @Slf4j
-@ControllerAdvice(basePackages = "uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.controllers")
+@ControllerAdvice(basePackages = "uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.controllers")
 @RequestMapping(produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
 public class CallbackControllerAdvice extends ResponseEntityExceptionHandler {
 

@@ -1,4 +1,4 @@
-package uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure;
+package uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure;
 
 import static java.util.Objects.requireNonNull;
 
@@ -13,7 +13,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StreamUtils;
-import uk.gov.hmcts.reform.iacasenotificationsapi.domain.service.StringProvider;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.StringProvider;
 
 @Service
 public class TsvStringProvider implements StringProvider {

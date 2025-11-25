@@ -1,10 +1,10 @@
-package uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities;
+package uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
 import java.util.HashMap;
 import java.util.Optional;
-import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.CaseData;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseData;
 
 public class BailCase extends HashMap<String, Object> implements CaseData {
 

@@ -1,4 +1,4 @@
-package uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.controllers;
+package uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.controllers;
 
 import static org.slf4j.LoggerFactory.getLogger;
 

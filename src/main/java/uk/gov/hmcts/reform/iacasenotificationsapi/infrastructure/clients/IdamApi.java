@@ -1,4 +1,4 @@
-package uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.clients;
+package uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.clients;
 
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 
@@ -8,9 +8,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
-import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.clients.model.idam.Token;
-import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.clients.model.idam.UserInfo;
-import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.config.FeignConfiguration;
+import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.clients.model.idam.Token;
+import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.clients.model.idam.UserInfo;
+import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.config.FeignConfiguration;
 
 @FeignClient(
     name = "idam-api",

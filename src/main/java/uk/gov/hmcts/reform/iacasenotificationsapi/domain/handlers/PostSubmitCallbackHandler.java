@@ -1,9 +1,9 @@
-package uk.gov.hmcts.reform.iacasenotificationsapi.domain.handlers;
+package uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers;
 
-import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.CaseData;
-import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.callback.Callback;
-import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.callback.PostSubmitCallbackResponse;
-import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.callback.PostSubmitCallbackStage;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseData;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.Callback;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.PostSubmitCallbackResponse;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.PostSubmitCallbackStage;
 
 public interface PostSubmitCallbackHandler<T extends CaseData> {
 

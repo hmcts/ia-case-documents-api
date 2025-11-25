@@ -1,4 +1,4 @@
-package uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.health;
+package uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.health;
 
 import java.util.HashMap;
 import java.util.Iterator;
@@ -9,7 +9,7 @@ import org.springframework.boot.actuate.health.HealthContributor;
 import org.springframework.boot.actuate.health.NamedContributor;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
-import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.config.HealthCheckConfiguration;
+import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.config.HealthCheckConfiguration;
 
 @Slf4j
 @Component

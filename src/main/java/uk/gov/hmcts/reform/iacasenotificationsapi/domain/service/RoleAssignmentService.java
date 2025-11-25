@@ -1,4 +1,4 @@
-package uk.gov.hmcts.reform.iacasenotificationsapi.domain.service;
+package uk.gov.hmcts.reform.iacasedocumentsapi.domain.service;
 
 import java.util.Collections;
 import java.util.List;
@@ -7,11 +7,11 @@ import java.util.Optional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import uk.gov.hmcts.reform.authorisation.generators.AuthTokenGenerator;
-import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.roleassignment.Assignment;
-import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.roleassignment.RoleAssignmentResource;
-import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.roleassignment.RoleName;
-import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.roleassignment.RoleType;
-import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.clients.roleassignment.RoleAssignmentApi;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.roleassignment.Assignment;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.roleassignment.RoleAssignmentResource;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.roleassignment.RoleName;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.roleassignment.RoleType;
+import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.clients.roleassignment.RoleAssignmentApi;
 
 @Component
 @Slf4j

@@ -1,4 +1,4 @@
-package uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.health;
+package uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.health;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.actuate.health.Health;

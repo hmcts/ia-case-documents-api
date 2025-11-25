@@ -1,4 +1,4 @@
-package uk.gov.hmcts.reform.iacasenotificationsapi.domain.service.holidaydates;
+package uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.holidaydates;
 
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.MediaType;

@@ -1,4 +1,4 @@
-package uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field;
+package uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field;
 
 public class NationalityFieldValue {
     private String code;

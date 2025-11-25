@@ -1,5 +1,7 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities;
 
+import static java.util.Objects.requireNonNull;
+
 public class ClarifyingQuestion {
     private String question;
 
@@ -7,6 +9,7 @@ public class ClarifyingQuestion {
     }
 
     public ClarifyingQuestion(String question) {
+        requireNonNull(question);
         this.question = question;
     }
 

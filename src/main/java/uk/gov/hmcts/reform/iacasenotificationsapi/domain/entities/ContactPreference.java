@@ -1,4 +1,4 @@
-package uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities;
+package uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities;
 
 
 import static java.util.Arrays.stream;

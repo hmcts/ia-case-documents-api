@@ -7,7 +7,6 @@ import lombok.Getter;
 
 @Getter
 public enum UserRole {
-
     // caseworker-ia-caseofficer
     CASE_OFFICER("caseworker-ia-caseofficer"),
     TRIBUNAL_CASEWORKER("tribunal-caseworker"),
@@ -80,5 +79,27 @@ public enum UserRole {
             HEARING_PANEL_JUDGE.getId(),
             CHALLENGED_ACCESS_JUDICIARY.getId()
         );
+    }
+
+
+    public static List<UserRole> getAdminOfficerRoles() {
+        return List.of(
+            ADMIN_OFFICER,
+            HEARING_CENTRE_ADMIN,
+            CTSC,
+            CTSC_TEAM_LEADER,
+            NATIONAL_BUSINESS_CENTRE,
+            CHALLENGED_ACCESS_CTSC,
+            CHALLENGED_ACCESS_ADMIN
+        );
+    }
+
+    public static UserRole getById(String id) {
+        for (UserRole role : UserRole.values()) {
+            if (role.id.equals(id)) {
+                return role;
+            }
+        }
+        return UNKNOWN;
     }
 }

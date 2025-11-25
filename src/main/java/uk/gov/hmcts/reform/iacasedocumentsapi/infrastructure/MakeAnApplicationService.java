@@ -60,7 +60,8 @@ public class MakeAnApplicationService {
                 State.DECISION,
                 State.DECIDED,
                 State.FTPA_SUBMITTED,
-                State.FTPA_DECIDED
+                State.FTPA_DECIDED,
+                State.REMITTED
         ).contains(state);
     }
 

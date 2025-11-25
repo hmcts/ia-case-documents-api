@@ -1,4 +1,4 @@
-package uk.gov.hmcts.reform.iacasenotificationsapi.domain.utils;
+package uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;

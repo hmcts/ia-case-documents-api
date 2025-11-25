@@ -1,4 +1,4 @@
-package uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.security;
+package uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.security;
 
 import java.util.Optional;
 

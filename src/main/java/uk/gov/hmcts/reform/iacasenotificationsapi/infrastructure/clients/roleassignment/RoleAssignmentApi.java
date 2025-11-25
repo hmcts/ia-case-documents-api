@@ -1,4 +1,4 @@
-package uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.clients.roleassignment;
+package uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.clients.roleassignment;
 
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 
@@ -7,7 +7,7 @@ import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
-import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.roleassignment.RoleAssignmentResource;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.roleassignment.RoleAssignmentResource;
 
 @FeignClient(
     name = "role-assignment-service-api",

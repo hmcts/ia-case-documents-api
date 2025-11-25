@@ -2,9 +2,11 @@ package uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.config;
 
 import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
 
+import com.google.common.collect.ImmutableMap;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import lombok.Getter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -19,6 +21,7 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.preauth.AbstractPreAuthenticatedProcessingFilter;
 import uk.gov.hmcts.reform.authorisation.filters.ServiceAuthFilter;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.security.AuthorizedRolesProvider;
+import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.security.CcdEventAuthorizor;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.security.SpringAuthorizedRolesProvider;
 
 @Configuration
@@ -26,7 +29,10 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.security.SpringAuth
 @EnableWebSecurity
 public class SecurityConfiguration {
 
+    @Getter
     private final List<String> anonymousPaths = new ArrayList<>();
+    @Getter
+    private final Map<String, List<Event>> roleEventAccess = new HashMap<>();
 
     private final Converter<Jwt, Collection<GrantedAuthority>> authoritiesConverter;
     private final ServiceAuthFilter serviceAuthFiler;
@@ -80,7 +86,12 @@ public class SecurityConfiguration {
         return new SpringAuthorizedRolesProvider();
     }
 
-    public List<String> getAnonymousPaths() {
-        return anonymousPaths;
+    @Bean
+    public CcdEventAuthorizor getCcdEventAuthorizor(AuthorizedRolesProvider authorizedRolesProvider) {
+
+        return new CcdEventAuthorizor(
+            ImmutableMap.copyOf(roleEventAccess),
+            authorizedRolesProvider
+        );
     }
 }

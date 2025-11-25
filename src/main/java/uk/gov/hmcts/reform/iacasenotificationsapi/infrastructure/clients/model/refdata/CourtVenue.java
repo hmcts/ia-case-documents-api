@@ -1,4 +1,4 @@
-package uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.clients.model.refdata;
+package uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.clients.model.refdata;
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;

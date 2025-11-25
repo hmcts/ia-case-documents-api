@@ -8,4 +8,6 @@ public interface DateProvider {
     LocalDate now();
 
     LocalDateTime nowWithTime();
+
+    String dueDate(int plusDays);
 }

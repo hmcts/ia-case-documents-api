@@ -1,18 +1,18 @@
-package uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure;
+package uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure;
 
 
-import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.DECIDE_AN_APPLICATION_ID;
-import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.MakeAnApplicationTypes.ADJOURN;
-import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.MakeAnApplicationTypes.EXPEDITE;
-import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.MakeAnApplicationTypes.JUDGE_REVIEW;
-import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.MakeAnApplicationTypes.LINK_OR_UNLINK;
-import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.MakeAnApplicationTypes.OTHER;
-import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.MakeAnApplicationTypes.REINSTATE;
-import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.MakeAnApplicationTypes.TIME_EXTENSION;
-import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.MakeAnApplicationTypes.TRANSFER;
-import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.MakeAnApplicationTypes.UPDATE_APPEAL_DETAILS;
-import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.MakeAnApplicationTypes.UPDATE_HEARING_REQUIREMENTS;
-import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.MakeAnApplicationTypes.WITHDRAW;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.DECIDE_AN_APPLICATION_ID;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.MakeAnApplicationTypes.ADJOURN;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.MakeAnApplicationTypes.EXPEDITE;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.MakeAnApplicationTypes.JUDGE_REVIEW;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.MakeAnApplicationTypes.LINK_OR_UNLINK;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.MakeAnApplicationTypes.OTHER;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.MakeAnApplicationTypes.REINSTATE;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.MakeAnApplicationTypes.TIME_EXTENSION;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.MakeAnApplicationTypes.TRANSFER;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.MakeAnApplicationTypes.UPDATE_APPEAL_DETAILS;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.MakeAnApplicationTypes.UPDATE_HEARING_REQUIREMENTS;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.MakeAnApplicationTypes.WITHDRAW;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -21,11 +21,11 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
-import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
-import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition;
-import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.MakeAnApplication;
-import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.State;
-import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field.IdValue;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.MakeAnApplication;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.State;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.IdValue;
 
 @Service
 public class MakeAnApplicationService {
@@ -64,21 +64,17 @@ public class MakeAnApplicationService {
     }
 
     public boolean isApplicationListed(State state) {
-        if (Arrays.asList(
-                State.ADJOURNED,
-                State.PREPARE_FOR_HEARING,
-                State.FINAL_BUNDLING,
-                State.PRE_HEARING,
-                State.DECISION,
-                State.DECIDED,
-                State.FTPA_SUBMITTED,
-                State.FTPA_DECIDED,
-                State.REMITTED
-        ).contains(state)) {
-            return true;
-        } else {
-            return false;
-        }
+        return Arrays.asList(
+            State.ADJOURNED,
+            State.PREPARE_FOR_HEARING,
+            State.FINAL_BUNDLING,
+            State.PRE_HEARING,
+            State.DECISION,
+            State.DECIDED,
+            State.FTPA_SUBMITTED,
+            State.FTPA_DECIDED,
+            State.REMITTED
+        ).contains(state);
     }
 
     public String mapApplicationTypeToPhrase(MakeAnApplication application) {

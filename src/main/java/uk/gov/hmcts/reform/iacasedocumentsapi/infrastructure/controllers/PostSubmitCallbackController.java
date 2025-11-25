@@ -1,6 +1,7 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.controllers;
 
 import static java.util.Objects.requireNonNull;
+import static org.slf4j.LoggerFactory.getLogger;
 import static org.springframework.http.ResponseEntity.ok;
 
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
@@ -37,6 +38,8 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.PostSubmitCallbackD
 @RestController
 @Slf4j
 public class PostSubmitCallbackController {
+
+    private static final org.slf4j.Logger LOG = getLogger(PostSubmitCallbackController.class);
 
     private final PostSubmitCallbackDispatcher<AsylumCase> callbackDispatcher;
 
@@ -86,8 +89,8 @@ public class PostSubmitCallbackController {
         Callback<AsylumCase> callback
     ) {
 
-        log.info(
-            "Asylum Case Payments API `ccdSubmitted` event `{}` received for Case ID `{}`",
+        LOG.info(
+            "Asylum Case Documents API `ccdSubmitted` event `{}` received for Case ID `{}`",
             callback.getEvent(),
             callback.getCaseDetails().getId()
         );
@@ -95,8 +98,8 @@ public class PostSubmitCallbackController {
         PostSubmitCallbackResponse callbackResponse =
             callbackDispatcher.handle(callbackStage, callback);
 
-        log.info(
-            "Asylum Case Payments API `ccdSubmitted` event `{}` handled for Case ID `{}`",
+        LOG.info(
+            "Asylum Case Documents API `ccdSubmitted` event `{}` handled for Case ID `{}`",
             callback.getEvent(),
             callback.getCaseDetails().getId()
         );

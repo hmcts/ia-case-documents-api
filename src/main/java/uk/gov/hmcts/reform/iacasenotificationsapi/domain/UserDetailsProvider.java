@@ -1,6 +1,6 @@
-package uk.gov.hmcts.reform.iacasenotificationsapi.domain;
+package uk.gov.hmcts.reform.iacasedocumentsapi.domain;
 
-import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.UserDetails;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.UserDetails;
 
 public interface UserDetailsProvider {
 

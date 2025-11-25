@@ -1,4 +1,4 @@
-package uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd;
+package uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd;
 
 public interface CaseData {
     // marker interface

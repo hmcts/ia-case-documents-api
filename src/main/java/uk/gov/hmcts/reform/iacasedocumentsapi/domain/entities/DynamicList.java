@@ -16,7 +16,9 @@ import java.util.List;
 public class DynamicList {
 
     @Setter
+    @Getter
     private Value value;
+    @Getter
     private List<Value> listItems;
 
     public DynamicList(String value) {

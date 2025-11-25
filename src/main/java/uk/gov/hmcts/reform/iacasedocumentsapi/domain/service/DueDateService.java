@@ -30,6 +30,18 @@ public class DueDateService {
         return resetTo4PmTime(zonedDateTime);
     }
 
+    public ZonedDateTime calculateWorkingDaysDueDate(ZonedDateTime delayUntil, int workingDaysAllowed) {
+        final ZonedDateTime zonedDateTime = addWorkingDays(delayUntil, workingDaysAllowed);
+
+        return resetTo4PmTime(zonedDateTime);
+    }
+
+    public ZonedDateTime calculateCalendarDaysDueDate(ZonedDateTime delayUntil, int calendarDaysAllowed) {
+        final ZonedDateTime zonedDateTime = delayUntil.plusDays(calendarDaysAllowed);
+
+        return resetTo4PmTime(zonedDateTime);
+    }
+
     private ZonedDateTime addWorkingDays(ZonedDateTime dueDate, int numberOfDays) {
         if (numberOfDays == 0) {
             return dueDate;

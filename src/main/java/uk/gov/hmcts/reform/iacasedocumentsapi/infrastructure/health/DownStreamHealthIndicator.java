@@ -35,7 +35,7 @@ public class DownStreamHealthIndicator implements CompositeHealthContributor {
                         .put(s.getKey(), new ServiceHealthIndicator(
                             s.getValue().get("uri"),
                             s.getValue().get("response"),
-                            new RestTemplate()));
+                            restTemplate));
                 });
         } catch (NullPointerException ex) {
 
@@ -54,5 +54,4 @@ public class DownStreamHealthIndicator implements CompositeHealthContributor {
         return contributors.entrySet().stream()
             .map((entry) -> NamedContributor.of(entry.getKey(), entry.getValue())).iterator();
     }
-
 }

@@ -1,4 +1,4 @@
-package uk.gov.hmcts.reform.iacasenotificationsapi.domain.service;
+package uk.gov.hmcts.reform.iacasedocumentsapi.domain.service;
 
 public interface FeatureToggler {
 

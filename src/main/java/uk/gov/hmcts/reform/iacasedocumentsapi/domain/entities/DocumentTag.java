@@ -132,6 +132,13 @@ public enum DocumentTag {
     B1_DOCUMENT("b1Document", CaseType.BAIL),
     BAIL_NOTICE_OF_HEARING("bailNoticeOfHearing", CaseType.BAIL),
 
+
+
+    APPLICATION_SUBMISSION("applicationSubmission", CaseType.BAIL),
+    HOME_OFFICE_NON_STANDARD_DIRECTION_LETTER("homeOfficeNonStandardDirectionToHOLetter", CaseType.ASYLUM),
+    INTERNAL_ADJOURN_HEARING_WITHOUT_DATE("internalAdjournHearingWithoutDate", CaseType.ASYLUM),
+    INTERNAL_APPEAL_DETAINED_UPDATE_TRIBUNAL_DECISION_RULE_31_IRC_PRISON_LETTER("internalDetainedAppealUpdateTribunalDecisionRule31IrcPrisonLetter", CaseType.ASYLUM),
+
     @JsonEnumDefaultValue
     NONE("", CaseType.UNKNOWN);
 

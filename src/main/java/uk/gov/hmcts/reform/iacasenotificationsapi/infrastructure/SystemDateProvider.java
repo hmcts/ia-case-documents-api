@@ -1,9 +1,9 @@
-package uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure;
+package uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import org.springframework.stereotype.Service;
-import uk.gov.hmcts.reform.iacasenotificationsapi.domain.DateProvider;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.DateProvider;
 
 @Service
 public class SystemDateProvider implements DateProvider {

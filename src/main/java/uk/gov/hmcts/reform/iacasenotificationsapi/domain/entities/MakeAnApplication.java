@@ -1,12 +1,12 @@
-package uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities;
+package uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities;
 
 import static java.util.Objects.requireNonNull;
 
 import java.util.List;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
-import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field.Document;
-import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.field.IdValue;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.Document;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.IdValue;
 
 @EqualsAndHashCode
 @ToString

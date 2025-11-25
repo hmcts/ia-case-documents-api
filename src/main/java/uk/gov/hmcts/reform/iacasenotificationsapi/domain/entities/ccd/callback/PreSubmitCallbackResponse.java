@@ -1,4 +1,4 @@
-package uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.callback;
+package uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback;
 
 import static java.util.Objects.requireNonNull;
 
@@ -6,7 +6,7 @@ import com.google.common.collect.ImmutableSet;
 import java.util.Collection;
 import java.util.LinkedHashSet;
 import java.util.Set;
-import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.ccd.CaseData;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseData;
 
 public class PreSubmitCallbackResponse<T extends CaseData> {
 
