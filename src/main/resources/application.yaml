@@ -137,6 +137,9 @@ govnotify:
         remission:
           email: a052fbe6-232d-4815-9032-6d4e6f36c4c4
           sms: 188b659f-49d6-4bf2-ab7d-ce08a9724836
+          paPayLater:
+            email: 0023652f-6abf-48dd-98e7-562270dc6d46
+            sms: fd26acb0-d425-4e62-adee-617c9d1889e2
         paid:
           email: 4d2ef4b6-86bf-4c4c-ac87-d505a00ca93d
           sms: e0a89f69-df00-4ab0-88d2-f6a4c619946a
@@ -1158,6 +1161,9 @@ govnotify:
       appellant:
         email: 8ff8227a-82c2-4a36-8469-2e948ed50c50
         sms: e2a60fc6-da83-4d39-94fc-2fc7c3a610a2
+        paPayLater:
+          email: 0023652f-6abf-48dd-98e7-562270dc6d46
+          sms: fd26acb0-d425-4e62-adee-617c9d1889e2
     nocRequestDecision:
       legalRep:
         beforeListing:

@@ -1,10 +1,13 @@
 package uk.gov.hmcts.reform.iacasenotificationsapi.domain.personalisation.appellant.email;
 
 import static java.util.Objects.requireNonNull;
+import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AppealType;
+import static uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCaseDefinition.*;
 
 import com.google.common.collect.ImmutableMap;
 import java.util.Map;
 import java.util.Set;
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import uk.gov.hmcts.reform.iacasenotificationsapi.domain.entities.AsylumCase;
@@ -17,6 +20,7 @@ import uk.gov.hmcts.reform.iacasenotificationsapi.infrastructure.SystemDateProvi
 @Service
 public class AiPAppellantRefundRequestedNotificationEmail implements EmailNotificationPersonalisation {
     private final String refundRequestedAipEmailTemplateId;
+    private final String refundRequestedAipPaPayLaterEmailTemplateId;
     private final RecipientsFinder recipientsFinder;
     private final String iaAipFrontendUrl;
     private final SystemDateProvider systemDateProvider;
@@ -24,12 +28,14 @@ public class AiPAppellantRefundRequestedNotificationEmail implements EmailNotifi
 
     public AiPAppellantRefundRequestedNotificationEmail(
         @Value("${govnotify.template.requestFeeRemission.appellant.email}") String refundRequestedAipEmailTemplateId,
+        @Value("${govnotify.template.requestFeeRemission.appellant.paPayLater.email}") String refundRequestedAipPaPayLaterEmailTemplateId,
         @Value("${iaAipFrontendUrl}") String iaAipFrontendUrl,
         @Value("${appellantDaysToWait.afterSubmittingAppealRemission}") int daysToWaitAfterSubmittingAppealRemission,
         RecipientsFinder recipientsFinder,
         SystemDateProvider systemDateProvider
     ) {
         this.refundRequestedAipEmailTemplateId = refundRequestedAipEmailTemplateId;
+        this.refundRequestedAipPaPayLaterEmailTemplateId = refundRequestedAipPaPayLaterEmailTemplateId;
         this.recipientsFinder = recipientsFinder;
         this.iaAipFrontendUrl = iaAipFrontendUrl;
         this.daysToWaitAfterSubmittingAppealRemission = daysToWaitAfterSubmittingAppealRemission;
@@ -39,7 +45,20 @@ public class AiPAppellantRefundRequestedNotificationEmail implements EmailNotifi
 
 
     @Override
-    public String getTemplateId() {
+    public String getTemplateId(AsylumCase asylumCase) {
+        Optional<AppealType> maybeAppealType = asylumCase.read(APPEAL_TYPE, AppealType.class);
+
+        if (maybeAppealType.isPresent() && maybeAppealType.get() == AppealType.PA) {
+            Optional<String> maybePaymentOption = asylumCase.read(PA_APPEAL_TYPE_AIP_PAYMENT_OPTION, String.class);
+
+            if (maybePaymentOption.isPresent()) {
+                String paymentOption = maybePaymentOption.get();
+                if ("payLater".equals(paymentOption) || "payOffline".equals(paymentOption)) {
+                    return refundRequestedAipPaPayLaterEmailTemplateId;
+                }
+            }
+        }
+
         return refundRequestedAipEmailTemplateId;
     }
 
@@ -58,6 +77,9 @@ public class AiPAppellantRefundRequestedNotificationEmail implements EmailNotifi
         requireNonNull(asylumCase, "asylumCase must not be null");
 
         final String refundRequestDueDate = systemDateProvider.dueDate(daysToWaitAfterSubmittingAppealRemission);
+        final String correctDateKey = getTemplateId(asylumCase).equals(refundRequestedAipPaPayLaterEmailTemplateId)
+                ? "14 days after remission request sent"
+                : "14 days after refund request sent";
 
         return
             ImmutableMap
@@ -67,7 +89,7 @@ public class AiPAppellantRefundRequestedNotificationEmail implements EmailNotifi
                 .put("appellantGivenNames", asylumCase.read(AsylumCaseDefinition.APPELLANT_GIVEN_NAMES, String.class).orElse(""))
                 .put("appellantFamilyName", asylumCase.read(AsylumCaseDefinition.APPELLANT_FAMILY_NAME, String.class).orElse(""))
                 .put("Hyperlink to service", iaAipFrontendUrl)
-                .put("14 days after refund request sent", refundRequestDueDate)
+                .put(correctDateKey, refundRequestDueDate)
                 .build();
     }
 }
