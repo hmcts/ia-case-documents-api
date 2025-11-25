@@ -24,7 +24,7 @@ import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseD
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.PREVIOUS_DETENTION_LOCATION;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.getAppellantOrLegalRepAddressLetterPersonalisation;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.getDetentionFacilityName;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.getLegalRepAddressInCountryOrOoc;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.getLegalRepAddressInCountryOrOocAsSet;
 
 @Service
 @Slf4j
@@ -50,7 +50,7 @@ public class LegalRepresentativeLetterUpdateDetentionLocationPersonalisation imp
 
     @Override
     public Set<String> getRecipientsList(final AsylumCase asylumCase) {
-        return getLegalRepAddressInCountryOrOoc(asylumCase);
+        return getLegalRepAddressInCountryOrOocAsSet(asylumCase);
     }
 
     @Override

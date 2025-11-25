@@ -57,7 +57,7 @@ public class InternalRecordOutOfTimeDecisionLetterTemplate implements DocumentTe
 
         List<String> appellantAddress = new ArrayList<>(
             hasAppealBeenSubmittedByAppellantInternalCase(asylumCase) ?
-                getAppellantAddressInCountryOrOoc(asylumCase) : getLegalRepAddressInCountryOrOoc(asylumCase));
+                getAppellantAddressInCountryOrOocAsList(asylumCase) : getLegalRepAddressInCountryOrOocAsList(asylumCase));
 
         for (int i = 0; i < appellantAddress.size(); i++) {
             fieldValues.put("address_line_" + (i + 1), appellantAddress.get(i));

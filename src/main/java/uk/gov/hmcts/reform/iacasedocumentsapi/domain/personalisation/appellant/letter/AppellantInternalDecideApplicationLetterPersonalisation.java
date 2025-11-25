@@ -4,7 +4,7 @@ import static java.util.Objects.requireNonNull;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.DECIDE_AN_APPLICATION_ID;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.MAKE_AN_APPLICATIONS;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.*;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.getLegalRepAddressInCountryOrOoc;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.getLegalRepAddressInCountryOrOocAsSet;
 
 import com.google.common.collect.ImmutableMap;
 import java.util.List;
@@ -44,7 +44,7 @@ public class AppellantInternalDecideApplicationLetterPersonalisation implements 
     @Override
     public Set<String> getRecipientsList(final AsylumCase asylumCase) {
         return hasBeenSubmittedByAppellantInternalCase(asylumCase) ?
-            getAppellantAddressInCountryOrOoc(asylumCase) : getLegalRepAddressInCountryOrOoc(asylumCase);
+            getAppellantAddressInCountryOrOocAsSet(asylumCase) : getLegalRepAddressInCountryOrOocAsSet(asylumCase);
     }
 
     @Override

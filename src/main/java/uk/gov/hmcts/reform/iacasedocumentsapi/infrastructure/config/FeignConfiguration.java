@@ -29,7 +29,6 @@ public class FeignConfiguration {
         return new SpringFormEncoder(new SpringEncoder(messageConverters));
     }
 
-    @SuppressWarnings("deprecation")
     @Bean
     public Decoder decoder() {
         HttpMessageConverter jacksonConverter = new MappingJackson2HttpMessageConverter(objectMapper());

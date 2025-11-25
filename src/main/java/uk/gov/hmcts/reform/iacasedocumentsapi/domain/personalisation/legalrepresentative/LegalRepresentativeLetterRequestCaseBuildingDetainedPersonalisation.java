@@ -6,7 +6,7 @@ import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseD
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.APPELLANT_GIVEN_NAMES;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.LEGAL_REP_REFERENCE_NUMBER;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.*;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.getLegalRepAddressInCountryOrOoc;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.getLegalRepAddressInCountryOrOocAsSet;
 
 import com.google.common.collect.ImmutableMap;
 import java.time.LocalDate;
@@ -48,7 +48,7 @@ public class LegalRepresentativeLetterRequestCaseBuildingDetainedPersonalisation
 
     @Override
     public Set<String> getRecipientsList(final AsylumCase asylumCase) {
-        return getLegalRepAddressInCountryOrOoc(asylumCase);
+        return getLegalRepAddressInCountryOrOocAsSet(asylumCase);
     }
 
     @Override

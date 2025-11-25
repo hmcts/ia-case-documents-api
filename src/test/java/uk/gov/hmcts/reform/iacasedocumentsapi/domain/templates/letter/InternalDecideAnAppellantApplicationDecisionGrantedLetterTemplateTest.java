@@ -127,7 +127,7 @@ public class InternalDecideAnAppellantApplicationDecisionGrantedLetterTemplateTe
                 APPLICATION_DECISION, testApplication.getDecision(),
                 APPLICATION_DECISION_REASON, testApplication.getDecisionReason()
         );
-        
+
         when(asylumCase.read(MAKE_AN_APPLICATIONS)).thenReturn(Optional.of(makeAnApplications));
         when(asylumCase.read(DECIDE_AN_APPLICATION_ID)).thenReturn(Optional.of("1"));
 

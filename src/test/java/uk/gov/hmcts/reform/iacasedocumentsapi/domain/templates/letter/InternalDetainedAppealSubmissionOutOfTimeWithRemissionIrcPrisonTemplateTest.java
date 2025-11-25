@@ -154,7 +154,7 @@ class InternalDetainedAppealSubmissionOutOfTimeWithRemissionIrcPrisonTemplateTes
         when(systemDateProvider.dueDate(daysAfterSubmitAppeal)).thenReturn(formatDateForNotificationAttachmentDocument(dueDate));
 
         dataSetUpPersonalisation();
-        
+
         // Mock blank fee amount
         when(asylumCase.read(FEE_AMOUNT_GBP, String.class)).thenReturn(Optional.of(""));
         when(asylumCase.read(CCD_REFERENCE_NUMBER_FOR_DISPLAY)).thenReturn(Optional.of(onlineCaseRefNumber));
@@ -173,7 +173,7 @@ class InternalDetainedAppealSubmissionOutOfTimeWithRemissionIrcPrisonTemplateTes
         when(systemDateProvider.dueDate(daysAfterSubmitAppeal)).thenReturn(formatDateForNotificationAttachmentDocument(dueDate));
 
         dataSetUpPersonalisation();
-        
+
         // Mock zero fee amount
         when(asylumCase.read(FEE_AMOUNT_GBP, String.class)).thenReturn(Optional.of("0"));
         when(asylumCase.read(CCD_REFERENCE_NUMBER_FOR_DISPLAY)).thenReturn(Optional.of(onlineCaseRefNumber));

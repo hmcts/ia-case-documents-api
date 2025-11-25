@@ -56,11 +56,11 @@ public class DetainedLegalRepRemovedIrcPrisonTemplate implements DocumentTemplat
         fieldValues.put("firstName", asylumCase.read(APPELLANT_GIVEN_NAMES, String.class).orElse(""));
         fieldValues.put("lastName", asylumCase.read(AsylumCaseDefinition.APPELLANT_FAMILY_NAME, String.class).orElse(""));
         fieldValues.put("onlineReferenceNumber", asylumCase.read(CCD_REFERENCE_NUMBER_FOR_DISPLAY));
-        
+
         // Try to get legal rep reference number from primary field, fallback to paper J field if null/empty
         Optional<String> primaryRef = asylumCase.read(LEGAL_REP_REFERENCE_NUMBER, String.class);
         Optional<String> legalRepReferenceNumber;
-        
+
         if (primaryRef.isPresent() && primaryRef.get() != null && !primaryRef.get().trim().isEmpty()) {
             // Primary field has a valid non-empty value
             legalRepReferenceNumber = primaryRef;
@@ -74,7 +74,7 @@ public class DetainedLegalRepRemovedIrcPrisonTemplate implements DocumentTemplat
                 legalRepReferenceNumber = primaryRef;
             }
         }
-        
+
         fieldValues.put("legalRepReferenceNumber", legalRepReferenceNumber);
         fieldValues.put("customerServicesTelephone", customerServicesProvider.getInternalCustomerServicesTelephone(asylumCase));
         fieldValues.put("customerServicesEmail", customerServicesProvider.getInternalCustomerServicesEmail(asylumCase));

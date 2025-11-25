@@ -24,6 +24,11 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.*;
+import uk.gov.service.notify.LetterResponse;
+import uk.gov.service.notify.NotificationClientException;
+import uk.gov.service.notify.SendEmailResponse;
+import uk.gov.service.notify.SendLetterResponse;
+import uk.gov.service.notify.SendSmsResponse;
 
 import static java.util.Collections.emptyList;
 import static java.util.Objects.requireNonNull;

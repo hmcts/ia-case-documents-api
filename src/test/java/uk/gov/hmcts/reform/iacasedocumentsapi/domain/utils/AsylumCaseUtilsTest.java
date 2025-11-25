@@ -389,7 +389,7 @@ public class AsylumCaseUtilsTest {
             when(asylumCase.read(OUT_OF_TIME_DECISION_DOCUMENT)).thenReturn(Optional.of(document));
 
             Optional<Document> result = AsylumCaseUtils.getDecisionOfNoticeDocuments(asylumCase);
-            
+
             assertTrue(result.isPresent());
             assertEquals(document, result.get());
         }
@@ -399,7 +399,7 @@ public class AsylumCaseUtilsTest {
             when(asylumCase.read(OUT_OF_TIME_DECISION_DOCUMENT)).thenReturn(Optional.empty());
 
             Optional<Document> result = AsylumCaseUtils.getDecisionOfNoticeDocuments(asylumCase);
-            
+
             assertFalse(result.isPresent());
         }
     }
@@ -649,18 +649,18 @@ public class AsylumCaseUtilsTest {
 
         assertTrue(AsylumCaseUtils.isDetainedInFacilityType(asylumCase, facilityType));
     }
-   
+
 
     @Test
     void should_return_due_date_plus_weeks() {
         AsylumCase asylumCase = mock(AsylumCase.class);
         when(asylumCase.read(AsylumCaseDefinition.APPEAL_SUBMISSION_DATE, String.class)).thenReturn(Optional.of("2023-08-01"));
-      
+
         String result = AsylumCaseUtils.dueDatePlusNumberOfWeeks(asylumCase, 2);
 
         // 2023-08-01 + 2 weeks = 2023-08-15
         assertThat(result).isEqualTo(DateUtils.formatDateForNotificationAttachmentDocument(LocalDate.of(2023, 8, 15)));
-    }      
+    }
 
     @Test
     void should_return_due_date_plus_days() {
@@ -823,7 +823,7 @@ public class AsylumCaseUtilsTest {
 
         assertTrue(isRepJourney(asylumCase));
     }
-  
+
     @ParameterizedTest
     @ValueSource(strings = {"PARTIALLY_APPROVED", "REJECTED"})
     void should_return_true_for_remission_decision_partially_granted_or_refused(String remissionDecisionValue) {

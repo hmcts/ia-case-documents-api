@@ -83,7 +83,7 @@ class HomeOfficeBailCaseListingPersonalisationTest {
 
     @Test
     public void should_return_initial_template_ids() {
-        when(bailCase.read(LISTING_EVENT, ListingEvent.class)).thenReturn(Optional.of(ListingEvent.INITIAL));
+        when(bailCase.read(LISTING_EVENT, ListingEvent.class)).thenReturn(Optional.of(ListingEvent.INITIAL_LISTING));
         assertEquals(initialTemplateId, homeOfficeBailCaseListingPersonalisation.getTemplateId(bailCase));
 
         when(bailCase.read(IS_LEGALLY_REPRESENTED_FOR_FLAG, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO));

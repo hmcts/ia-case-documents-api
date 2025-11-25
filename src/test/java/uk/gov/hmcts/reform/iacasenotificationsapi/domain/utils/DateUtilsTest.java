@@ -17,7 +17,7 @@ public class DateUtilsTest {
 
     @Test
     void should_format_and_return_date_correctly_from_date() {
-        assertEquals(formattedExampleDate, DateUtils.formatDateForNotification(exampleDateToFormat));
+        assertEquals(formattedExampleDate, DateUtils.formatDateForNotificationAttachmentDocument(exampleDateToFormat));
     }
 
 }

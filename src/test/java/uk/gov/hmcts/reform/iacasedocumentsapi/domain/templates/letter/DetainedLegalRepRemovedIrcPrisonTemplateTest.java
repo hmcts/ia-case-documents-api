@@ -207,7 +207,7 @@ class DetainedLegalRepRemovedIrcPrisonTemplateTest {
 
         // Verify all expected fields are present
         assertEquals(13, templateFieldValues.size());
-        
+
         // Verify each field has the expected value
         assertEquals(formatDateForNotificationAttachmentDocument(LocalDate.now()), templateFieldValues.get("dateLetterSent"));
         assertEquals(formatDateForNotificationAttachmentDocument(LocalDate.parse(appellantDateOfBirth)), templateFieldValues.get("dateOfBirth"));
@@ -291,7 +291,7 @@ class DetainedLegalRepRemovedIrcPrisonTemplateTest {
         when(asylumCase.read(APPELLANT_DATE_OF_BIRTH, String.class)).thenReturn(Optional.of(appellantDateOfBirth));
 
         dataSetUpPersonalisation();
-        
+
         // Mock primary field as empty and paper J field with value
         String paperJRefNumber = "PJ123456";
         when(asylumCase.read(CCD_REFERENCE_NUMBER_FOR_DISPLAY)).thenReturn(Optional.of(onlineCaseRefNumber));
@@ -311,7 +311,7 @@ class DetainedLegalRepRemovedIrcPrisonTemplateTest {
         when(asylumCase.read(APPELLANT_DATE_OF_BIRTH, String.class)).thenReturn(Optional.of(appellantDateOfBirth));
 
         dataSetUpPersonalisation();
-        
+
         // Mock primary field as null and paper J field with value
         String paperJRefNumber = "PJ789012";
         when(asylumCase.read(CCD_REFERENCE_NUMBER_FOR_DISPLAY)).thenReturn(Optional.of(onlineCaseRefNumber));
@@ -331,7 +331,7 @@ class DetainedLegalRepRemovedIrcPrisonTemplateTest {
         when(asylumCase.read(APPELLANT_DATE_OF_BIRTH, String.class)).thenReturn(Optional.of(appellantDateOfBirth));
 
         dataSetUpPersonalisation();
-        
+
         // Mock both fields as empty
         when(asylumCase.read(CCD_REFERENCE_NUMBER_FOR_DISPLAY)).thenReturn(Optional.of(onlineCaseRefNumber));
         when(asylumCase.read(LEGAL_REP_REFERENCE_NUMBER, String.class)).thenReturn(Optional.empty());
@@ -350,7 +350,7 @@ class DetainedLegalRepRemovedIrcPrisonTemplateTest {
         when(asylumCase.read(APPELLANT_DATE_OF_BIRTH, String.class)).thenReturn(Optional.of(appellantDateOfBirth));
 
         dataSetUpPersonalisation();
-        
+
         // Mock both fields with values
         String paperJRefNumber = "PJ999999";
         when(asylumCase.read(CCD_REFERENCE_NUMBER_FOR_DISPLAY)).thenReturn(Optional.of(onlineCaseRefNumber));

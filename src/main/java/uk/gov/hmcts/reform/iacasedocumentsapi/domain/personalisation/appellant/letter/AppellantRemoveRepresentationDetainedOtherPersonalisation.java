@@ -38,7 +38,7 @@ public class AppellantRemoveRepresentationDetainedOtherPersonalisation implement
 
     @Override
     public Set<String> getRecipientsList(final AsylumCase asylumCase) {
-        return getAppellantAddressInCountryOrOoc(asylumCase);
+        return getAppellantAddressInCountryOrOocAsSet(asylumCase);
     }
 
     @Override

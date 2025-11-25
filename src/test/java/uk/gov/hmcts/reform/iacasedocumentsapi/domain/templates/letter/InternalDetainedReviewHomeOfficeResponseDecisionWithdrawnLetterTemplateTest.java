@@ -41,7 +41,7 @@ public class InternalDetainedReviewHomeOfficeResponseDecisionWithdrawnLetterTemp
     private final String appellantFamilyName = "Doe";
     private final LocalDate now = LocalDate.now();
     private InternalDetainedReviewHomeOfficeResponseDecisionWithdrawnLetterTemplate internalDetainedReviewHomeOfficeResponseDecisionWithdrawnLetterTemplate;
-    
+
     @BeforeEach
     void setUp() {
         internalDetainedReviewHomeOfficeResponseDecisionWithdrawnLetterTemplate =

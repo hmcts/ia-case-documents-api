@@ -15,665 +15,616 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo;
 
 public enum BailCaseFieldDefinition {
     SENT_BY_CHECKLIST(
-        "sentByChecklist", new TypeReference<String>() {}),
+        "sentByChecklist", new TypeReference<String>(){}),
+
     IS_ADMIN(
-        "isAdmin", new TypeReference<YesOrNo>() {}),
+        "isAdmin", new TypeReference<YesOrNo>(){}),
+
     IS_LEGAL_REP(
-        "isLegalRep", new TypeReference<YesOrNo>() {}),
+        "isLegalRep", new TypeReference<YesOrNo>(){}),
+
     IS_HOME_OFFICE(
-        "isHomeOffice", new TypeReference<YesOrNo>() {}),
+        "isHomeOffice", new TypeReference<YesOrNo>(){}),
+
     APPLICANT_GIVEN_NAMES(
-        "applicantGivenNames", new TypeReference<String>() {}),
+        "applicantGivenNames", new TypeReference<String>(){}),
+
     APPLICANT_FAMILY_NAME(
-        "applicantFamilyName", new TypeReference<String>() {}),
+        "applicantFamilyName", new TypeReference<String>(){}),
+
     APPLICANT_DATE_OF_BIRTH(
-        "applicantDateOfBirth", new TypeReference<String>() {}),
+        "applicantDateOfBirth", new TypeReference<String>(){}),
+
     APPLICANT_GENDER(
-        "applicantGender", new TypeReference<String>() {}),
+        "applicantGender", new TypeReference<String>(){}),
+
     APPLICANT_GENDER_ENTER_DETAILS(
-        "applicantGenderEnterDetails", new TypeReference<String>() {}),
+        "applicantGenderEnterDetails", new TypeReference<String>(){}),
+
     APPLICANT_NATIONALITY(
-        "applicantNationality", new TypeReference<String>() {}),
+        "applicantNationality", new TypeReference<String>(){}),
+
     APPLICANT_NATIONALITIES(
         "applicantNationalities", new TypeReference<List<IdValue<NationalityFieldValue>>>(){}),
+
     HOME_OFFICE_REFERENCE_NUMBER(
         "homeOfficeReferenceNumber", new TypeReference<String>(){}),
+
     APPLICANT_DETAINED_LOC(
         "applicantDetainedLoc", new TypeReference<String>(){}),
+
     APPLICANT_PRISON_DETAILS(
         "applicantPrisonDetails", new TypeReference<String>(){}),
+
     IRC_NAME(
         "ircName", new TypeReference<String>(){}),
+
     PRISON_NAME(
         "prisonName", new TypeReference<String>(){}),
+
     APPLICANT_ARRIVAL_IN_UK(
         "applicantArrivalInUKDate", new TypeReference<String>(){}),
+
     APPLICANT_HAS_MOBILE(
         "applicantHasMobile", new TypeReference<YesOrNo>(){}),
+
     APPLICANT_MOBILE_NUMBER_1(
         "applicantMobileNumber1", new TypeReference<String>(){}),
+
     HAS_APPEAL_HEARING_PENDING(
         "hasAppealHearingPending", new TypeReference<String>(){}),
+
     APPEAL_REFERENCE_NUMBER(
         "appealReferenceNumber", new TypeReference<String>(){}),
+
     HAS_APPEAL_HEARING_PENDING_UT(
-            "hasAppealHearingPendingUt", new TypeReference<String>(){}),
+        "hasAppealHearingPendingUt", new TypeReference<String>(){}),
+
     UT_APPEAL_REFERENCE_NUMBER(
-            "utAppealReferenceNumber", new TypeReference<String>(){}),
+        "utAppealReferenceNumber", new TypeReference<String>(){}),
+
     HAS_PREVIOUS_BAIL_APPLICATION(
         "hasPreviousBailApplication", new TypeReference<String>(){}),
+
     PREVIOUS_BAIL_APPLICATION_NUMBER(
         "previousBailApplicationNumber", new TypeReference<String>(){}),
+
     APPLICANT_BEEN_REFUSED_BAIL(
         "applicantBeenRefusedBail", new TypeReference<YesOrNo>(){}),
+
     BAIL_HEARING_DATE(
         "bailHearingDate", new TypeReference<String>(){}),
+
     APPLICANT_HAS_ADDRESS(
         "applicantHasAddress", new TypeReference<YesOrNo>(){}),
+
     APPLICANT_ADDRESS(
         "applicantAddress", new TypeReference<AddressUk>(){}),
+
     AGREES_TO_BOUND_BY_FINANCIAL_COND(
         "agreesToBoundByFinancialCond", new TypeReference<YesOrNo>(){}),
+
     FINANCIAL_COND_AMOUNT_1(
         "financialCondAmount1", new TypeReference<String>(){}),
+
     HAS_FINANCIAL_COND_SUPPORTER(
         "hasFinancialCondSupporter", new TypeReference<YesOrNo>(){}),
+
     SUPPORTER_GIVEN_NAMES(
         "supporterGivenNames", new TypeReference<String>(){}),
+
     SUPPORTER_FAMILY_NAMES(
         "supporterFamilyNames", new TypeReference<String>(){}),
+
     SUPPORTER_ADDRESS_DETAILS(
         "supporterAddressDetails", new TypeReference<AddressUk>(){}),
+
     SUPPORTER_CONTACT_DETAILS(
         "supporterContactDetails", new TypeReference<String>(){}),
+
     SUPPORTER_TELEPHONE_NUMBER_1(
         "supporterTelephoneNumber1", new TypeReference<String>(){}),
+
     SUPPORTER_MOBILE_NUMBER_1(
         "supporterMobileNumber1", new TypeReference<String>(){}),
+
     SUPPORTER_EMAIL_ADDRESS_1(
         "supporterEmailAddress1", new TypeReference<String>(){}),
+
     SUPPORTER_DOB(
         "supporterDOB", new TypeReference<String>(){}),
+
     SUPPORTER_RELATION(
         "supporterRelation", new TypeReference<String>(){}),
+
     SUPPORTER_OCCUPATION(
         "supporterOccupation", new TypeReference<String>(){}),
+
     SUPPORTER_IMMIGRATION(
         "supporterImmigration", new TypeReference<String>(){}),
+
     SUPPORTER_NATIONALITY(
         "supporterNationality", new TypeReference<List<IdValue<NationalityFieldValue>>>(){}),
+
     SUPPORTER_HAS_PASSPORT(
         "supporterHasPassport", new TypeReference<YesOrNo>(){}),
+
     SUPPORTER_PASSPORT(
         "supporterPassport", new TypeReference<String>(){}),
+
     FINANCIAL_AMOUNT_SUPPORTER_UNDERTAKES_1(
         "financialAmountSupporterUndertakes1", new TypeReference<String>(){}),
+
     HAS_FINANCIAL_COND_SUPPORTER_2(
         "hasFinancialCondSupporter2", new TypeReference<YesOrNo>(){}),
+
     SUPPORTER_2_GIVEN_NAMES(
         "supporter2GivenNames", new TypeReference<String>(){}),
+
     SUPPORTER_2_FAMILY_NAMES(
         "supporter2FamilyNames", new TypeReference<String>(){}),
+
     SUPPORTER_2_ADDRESS_DETAILS(
         "supporter2AddressDetails", new TypeReference<AddressUk>(){}),
+
     SUPPORTER_2_CONTACT_DETAILS(
         "supporter2ContactDetails", new TypeReference<String>(){}),
+
     SUPPORTER_2_TELEPHONE_NUMBER_1(
         "supporter2TelephoneNumber1", new TypeReference<String>(){}),
+
     SUPPORTER_2_MOBILE_NUMBER_1(
         "supporter2MobileNumber1", new TypeReference<String>(){}),
+
     SUPPORTER_2_EMAIL_ADDRESS_1(
         "supporter2EmailAddress1", new TypeReference<String>(){}),
+
     SUPPORTER_2_DOB(
         "supporter2DOB", new TypeReference<String>(){}),
+
     SUPPORTER_2_RELATION(
         "supporter2Relation", new TypeReference<String>(){}),
+
     SUPPORTER_2_OCCUPATION(
         "supporter2Occupation", new TypeReference<String>(){}),
+
     SUPPORTER_2_IMMIGRATION(
         "supporter2Immigration", new TypeReference<String>(){}),
+
     SUPPORTER_2_NATIONALITY(
         "supporter2Nationality", new TypeReference<List<IdValue<NationalityFieldValue>>>(){}),
+
     SUPPORTER_2_HAS_PASSPORT(
         "supporter2HasPassport", new TypeReference<YesOrNo>(){}),
+
     SUPPORTER_2_PASSPORT(
         "supporter2Passport", new TypeReference<String>(){}),
+
     FINANCIAL_AMOUNT_SUPPORTER_2_UNDERTAKES_1(
         "financialAmountSupporter2Undertakes1", new TypeReference<String>(){}),
+
     HAS_FINANCIAL_COND_SUPPORTER_3(
         "hasFinancialCondSupporter3", new TypeReference<YesOrNo>(){}),
+
     SUPPORTER_3_GIVEN_NAMES(
         "supporter3GivenNames", new TypeReference<String>(){}),
+
     SUPPORTER_3_FAMILY_NAMES(
         "supporter3FamilyNames", new TypeReference<String>(){}),
+
     SUPPORTER_3_ADDRESS_DETAILS(
         "supporter3AddressDetails", new TypeReference<AddressUk>(){}),
+
     SUPPORTER_3_CONTACT_DETAILS(
         "supporter3ContactDetails", new TypeReference<String>(){}),
+
     SUPPORTER_3_TELEPHONE_NUMBER_1(
         "supporter3TelephoneNumber1", new TypeReference<String>(){}),
+
     SUPPORTER_3_MOBILE_NUMBER_1(
         "supporter3MobileNumber1", new TypeReference<String>(){}),
+
     SUPPORTER_3_EMAIL_ADDRESS_1(
         "supporter3EmailAddress1", new TypeReference<String>(){}),
+
     SUPPORTER_3_DOB(
         "supporter3DOB", new TypeReference<String>(){}),
+
     SUPPORTER_3_RELATION(
         "supporter3Relation", new TypeReference<String>(){}),
+
     SUPPORTER_3_OCCUPATION(
         "supporter3Occupation", new TypeReference<String>(){}),
+
     SUPPORTER_3_IMMIGRATION(
         "supporter3Immigration", new TypeReference<String>(){}),
+
     SUPPORTER_3_NATIONALITY(
         "supporter3Nationality", new TypeReference<List<IdValue<NationalityFieldValue>>>(){}),
+
     SUPPORTER_3_HAS_PASSPORT(
         "supporter3HasPassport", new TypeReference<YesOrNo>(){}),
+
     SUPPORTER_3_PASSPORT(
         "supporter3Passport", new TypeReference<String>(){}),
+
     FINANCIAL_AMOUNT_SUPPORTER_3_UNDERTAKES_1(
         "financialAmountSupporter3Undertakes1", new TypeReference<String>(){}),
+
     HAS_FINANCIAL_COND_SUPPORTER_4(
         "hasFinancialCondSupporter4", new TypeReference<YesOrNo>(){}),
+
     SUPPORTER_4_GIVEN_NAMES(
         "supporter4GivenNames", new TypeReference<String>(){}),
+
     SUPPORTER_4_FAMILY_NAMES(
         "supporter4FamilyNames", new TypeReference<String>(){}),
+
     SUPPORTER_4_ADDRESS_DETAILS(
         "supporter4AddressDetails", new TypeReference<AddressUk>(){}),
+
     SUPPORTER_4_CONTACT_DETAILS(
         "supporter4ContactDetails", new TypeReference<String>(){}),
+
     SUPPORTER_4_TELEPHONE_NUMBER_1(
         "supporter4TelephoneNumber1", new TypeReference<String>(){}),
+
     SUPPORTER_4_MOBILE_NUMBER_1(
         "supporter4MobileNumber1", new TypeReference<String>(){}),
+
     SUPPORTER_4_EMAIL_ADDRESS_1(
         "supporter4EmailAddress1", new TypeReference<String>(){}),
+
     SUPPORTER_4_DOB(
         "supporter4DOB", new TypeReference<String>(){}),
+
     SUPPORTER_4_RELATION(
         "supporter4Relation", new TypeReference<String>(){}),
+
     SUPPORTER_4_OCCUPATION(
         "supporter4Occupation", new TypeReference<String>(){}),
+
     SUPPORTER_4_IMMIGRATION(
         "supporter4Immigration", new TypeReference<String>(){}),
+
     SUPPORTER_4_NATIONALITY(
         "supporter4Nationality", new TypeReference<List<IdValue<NationalityFieldValue>>>(){}),
+
     SUPPORTER_4_HAS_PASSPORT(
         "supporter4HasPassport", new TypeReference<YesOrNo>(){}),
+
     SUPPORTER_4_PASSPORT(
         "supporter4Passport", new TypeReference<String>(){}),
+
     FINANCIAL_AMOUNT_SUPPORTER_4_UNDERTAKES_1(
         "financialAmountSupporter4Undertakes1", new TypeReference<String>(){}),
+
     INTERPRETER_YES_NO(
         "interpreterYesNo", new TypeReference<YesOrNo>(){}),
+
     INTERPRETER_LANGUAGES(
         "interpreterLanguages", new TypeReference<List<IdValue<InterpreterLanguage>>>(){}),
+
     APPLICANT_DISABILITY1(
         "applicantDisability1", new TypeReference<YesOrNo>(){}),
+
     APPLICANT_DISABILITY_DETAILS(
         "applicantDisabilityDetails", new TypeReference<String>(){}),
+
     VIDEO_HEARING1(
         "videoHearing1", new TypeReference<YesOrNo>(){}),
+
     VIDEO_HEARING_DETAILS(
         "videoHearingDetails", new TypeReference<String>(){}),
+
     LEGAL_REP_COMPANY(
         "legalRepCompany", new TypeReference<String>(){}),
+
     LEGAL_REP_EMAIL(
         "legalRepEmail", new TypeReference<String>(){}),
+
     LEGAL_REP_NAME(
         "legalRepName", new TypeReference<String>(){}),
+
     LEGAL_REP_FAMILY_NAME(
-            "legalRepFamilyName", new TypeReference<String>(){}),
+        "legalRepFamilyName", new TypeReference<String>(){}),
+
     LEGAL_REP_PHONE(
         "legalRepPhone", new TypeReference<String>(){}),
+
     LEGAL_REP_REFERENCE(
         "legalRepReference", new TypeReference<String>(){}),
+
     GROUNDS_FOR_BAIL_REASONS(
         "groundsForBailReasons", new TypeReference<String>(){}),
+
     GROUNDS_FOR_BAIL_PROVIDE_EVIDENCE_OPTION(
         "groundsForBailProvideEvidenceOption", new TypeReference<YesOrNo>(){}),
+
     UPLOAD_THE_BAIL_EVIDENCE_DOCS(
         "uploadTheBailEvidenceDocs", new TypeReference<List<IdValue<DocumentWithDescription>>>(){}),
+
     APPLICANT_DOCUMENTS_WITH_METADATA(
         "applicantDocumentsWithMetadata", new TypeReference<List<IdValue<DocumentWithMetadata>>>(){}),
+
     TRANSFER_BAIL_MANAGEMENT_YES_OR_NO(
         "transferBailManagementYesOrNo", new TypeReference<YesOrNo>(){}),
+
     NO_TRANSFER_BAIL_MANAGEMENT_REASONS(
         "noTransferBailManagementReasons", new TypeReference<String>(){}),
+
     APPLICATION_SUBMITTED_BY(
         "applicationSubmittedBy", new TypeReference<String>(){}),
+
     BAIL_REFERENCE_NUMBER(
         "bailReferenceNumber", new TypeReference<String>(){}),
+
     APPLICANT_FULL_NAME(
         "applicantFullName", new TypeReference<String>(){}),
+
     IS_LEGALLY_REPRESENTED_FOR_FLAG(
-        "isLegallyRepresentedForFlag", new TypeReference<YesOrNo>() {}),
+        "isLegallyRepresentedForFlag", new TypeReference<YesOrNo>(){}),
+
     HAS_LEGAL_REP(
         "hasLegalRep", new TypeReference<YesOrNo>(){}),
+
     DECISION_UNSIGNED_DOCUMENT(
         "decisionUnsignedDocument", new TypeReference<Document>(){}),
+
     TRIBUNAL_DOCUMENTS_WITH_METADATA(
         "tribunalDocumentsWithMetadata", new TypeReference<List<IdValue<DocumentWithMetadata>>>(){}),
+
     REASONS_JUDGE_IS_MINDED_DETAILS(
         "reasonsJudgeIsMindedDetails", new TypeReference<String>(){}),
+
     JUDGE_DETAILS_NAME(
         "judgeDetailsName", new TypeReference<String>(){}),
+
     CONDITIONS_FOR_BAIL_OTHER(
         "conditionsForBailOther", new TypeReference<String>(){}),
+
     CONDITIONS_FOR_BAIL_APPEARANCE(
         "conditionsForBailAppearance", new TypeReference<String>(){}),
+
     CONDITIONS_FOR_BAIL_ACTIVITIES(
         "conditionsForBailActivities", new TypeReference<String>(){}),
+
     CONDITIONS_FOR_BAIL_RESIDENCE(
         "conditionsForBailResidence", new TypeReference<String>(){}),
+
     CONDITIONS_FOR_BAIL_ELECTRONIC_MONITORING(
-        "conditionsForBailElectronicMonitoring",  new TypeReference<String>(){}),
+        "conditionsForBailElectronicMonitoring", new TypeReference<String>(){}),
+
     CONDITIONS_FOR_BAIL_REPORTING(
         "conditionsForBailReporting", new TypeReference<String>(){}),
+
     SECRETARY_OF_STATE_REFUSAL_REASONS(
         "secretaryOfStateRefusalReasons", new TypeReference<String>(){}),
+
     BAIL_TRANSFER_YES_OR_NO(
         "bailTransferYesOrNo", new TypeReference<YesOrNo>(){}),
+
     JUDGE_HAS_AGREED_TO_SUPPORTER1(
         "judgeHasAgreedToSupporter1", new TypeReference<YesOrNo>(){}),
+
     JUDGE_HAS_AGREED_TO_SUPPORTER2(
         "judgeHasAgreedToSupporter2", new TypeReference<YesOrNo>(){}),
+
     JUDGE_HAS_AGREED_TO_SUPPORTER3(
         "judgeHasAgreedToSupporter3", new TypeReference<YesOrNo>(){}),
+
     JUDGE_HAS_AGREED_TO_SUPPORTER4(
         "judgeHasAgreedToSupporter4", new TypeReference<YesOrNo>(){}),
+
     RECORD_FINANCIAL_CONDITION_YES_OR_NO(
         "recordFinancialConditionYesOrNo", new TypeReference<YesOrNo>(){}),
+
     RECORD_DECISION_TYPE(
         "recordDecisionType", new TypeReference<String>(){}),
+
     RECORD_THE_DECISION_LIST(
         "recordTheDecisionList", new TypeReference<String>(){}),
+
     //Once we switch the IMA feature on, we will be using this case field instead of the one above
     RECORD_THE_DECISION_LIST_IMA(
         "recordTheDecisionListIma", new TypeReference<String>(){}),
+
     BAIL_TRANSFER_DIRECTIONS(
         "bailTransferDirections", new TypeReference<String>(){}),
+
     REASON_FOR_REFUSAL_DETAILS(
         "reasonForRefusalDetails", new TypeReference<String>(){}),
+
     TRIBUNAL_REFUSAL_REASON(
         "tribunalRefusalReason", new TypeReference<String>(){}),
+
     CONDITIONS_FOR_BAIL(
-            "conditionsForBail", new TypeReference<List<String>>(){}),
+        "conditionsForBail", new TypeReference<List<String>>(){}),
+
     END_APPLICATION_DATE(
         "endApplicationDate", new TypeReference<String>(){}),
+
     END_APPLICATION_OUTCOME(
         "endApplicationOutcome", new TypeReference<String>(){}),
+
     END_APPLICATION_REASONS(
         "endApplicationReasons", new TypeReference<String>(){}),
+
     PRIOR_APPLICATIONS(
-            "priorApplications1", new TypeReference<List<IdValue<PriorApplication>>>(){}),
+        "priorApplications1", new TypeReference<List<IdValue<PriorApplication>>>(){}),
+
     UNSIGNED_DECISION_DOCUMENTS_WITH_METADATA(
         "unsgnDecisionDocumentWithMetadata", new TypeReference<List<IdValue<DocumentWithMetadata>>>(){}),
+
     UPLOAD_SIGNED_DECISION_NOTICE_DOCUMENT(
         "uploadSignedDecisionNoticeDocument", new TypeReference<Document>(){}),
+
     PREVIOUS_DECISION_DETAILS(
-        "previousDecisionDetails", new TypeReference<List<IdValue<PreviousDecisionDetails>>>() {}),
+        "previousDecisionDetails", new TypeReference<List<IdValue<PreviousDecisionDetails>>>(){}),
+
     SIGNED_DECISION_DOCUMENT_WITH_METADATA(
         "signDecisionDocumentWithMetadata", new TypeReference<List<IdValue<DocumentWithMetadata>>>(){}),
+
     APPLICANT_INTERPRETER_SPOKEN_LANGUAGE(
-        "applicantInterpreterSpokenLanguage", new TypeReference<BailInterpreterLanguageRefData>() {}),
+        "applicantInterpreterSpokenLanguage", new TypeReference<BailInterpreterLanguageRefData>(){}),
+
     APPLICANT_INTERPRETER_SIGN_LANGUAGE(
-        "applicantInterpreterSignLanguage", new TypeReference<BailInterpreterLanguageRefData>() {}),
+        "applicantInterpreterSignLanguage", new TypeReference<BailInterpreterLanguageRefData>(){}),
+
     APPLICANT_INTERPRETER_LANGUAGE_CATEGORY(
-        "applicantInterpreterLanguageCategory", new TypeReference<List<String>>() {}),
+        "applicantInterpreterLanguageCategory", new TypeReference<List<String>>(){}),
+
     FCS_INTERPRETER_YES_NO(
         "fcsInterpreterYesNo", new TypeReference<YesOrNo>(){}),
-    FCS1_INTERPRETER_LANGUAGE_CATEGORY(
-        "fcs1InterpreterLanguageCategory", new TypeReference<List<String>>() {}),
-    FCS1_INTERPRETER_SPOKEN_LANGUAGE(
-        "fcs1InterpreterSpokenLanguage", new TypeReference<BailInterpreterLanguageRefData>() {}),
-    FCS1_INTERPRETER_SIGN_LANGUAGE(
-        "fcs1InterpreterSignLanguage", new TypeReference<BailInterpreterLanguageRefData>() {}),
-    FCS2_INTERPRETER_LANGUAGE_CATEGORY(
-        "fcs2InterpreterLanguageCategory", new TypeReference<List<String>>() {}),
-    FCS2_INTERPRETER_SPOKEN_LANGUAGE(
-        "fcs2InterpreterSpokenLanguage", new TypeReference<BailInterpreterLanguageRefData>() {}),
-    FCS2_INTERPRETER_SIGN_LANGUAGE(
-        "fcs2InterpreterSignLanguage", new TypeReference<BailInterpreterLanguageRefData>() {}),
-    FCS3_INTERPRETER_LANGUAGE_CATEGORY(
-        "fcs3InterpreterLanguageCategory", new TypeReference<List<String>>() {}),
-    FCS3_INTERPRETER_SPOKEN_LANGUAGE(
-        "fcs3InterpreterSpokenLanguage", new TypeReference<BailInterpreterLanguageRefData>() {}),
-    FCS3_INTERPRETER_SIGN_LANGUAGE(
-        "fcs3InterpreterSignLanguage", new TypeReference<BailInterpreterLanguageRefData>() {}),
-    FCS4_INTERPRETER_LANGUAGE_CATEGORY(
-        "fcs4InterpreterLanguageCategory", new TypeReference<List<String>>() {}),
-    FCS4_INTERPRETER_SPOKEN_LANGUAGE(
-        "fcs4InterpreterSpokenLanguage", new TypeReference<BailInterpreterLanguageRefData>() {}),
-    FCS4_INTERPRETER_SIGN_LANGUAGE(
-        "fcs4InterpreterSignLanguage", new TypeReference<BailInterpreterLanguageRefData>() {}),
 
-    LISTING_EVENT("listingEvent", new TypeReference<ListingEvent>(){}),
-    LISTING_LOCATION("listingLocation", new TypeReference<String>(){}),
-    LISTING_HEARING_DATE("listingHearingDate", new TypeReference<String>(){}),
-    HEARING_DOCUMENTS(
-        "hearingDocuments", new TypeReference<List<IdValue<DocumentWithMetadata>>>(){}),
-    IS_IMA_ENABLED(
-        "isImaEnabled", new TypeReference<YesOrNo>() {}),
-    IS_BAILS_LOCATION_REFERENCE_DATA_ENABLED(
-            "isBailsLocationReferenceDataEnabled", new TypeReference<YesOrNo>() {}),
-    REF_DATA_LISTING_LOCATION_DETAIL(
-            "refDataListingLocationDetail", new TypeReference<CourtVenue>() {}),
-    IS_REMOTE_HEARING(
-            "isRemoteHearing", new TypeReference<YesOrNo>() {}),
-    CURRENT_CASE_STATE_VISIBLE_TO_ALL_USERS(
-        "currentCaseStateVisibleToAllUsers", new TypeReference<String>() {}),
-    HAS_PROBATION_OFFENDER_MANAGER("hasProbationOffenderManager", new TypeReference<YesOrNo>() {}),
-    PROBATION_OFFENDER_MANAGER_GIVEN_NAME(
-            "probationOffenderManagerGivenName", new TypeReference<String>(){}),
-    PROBATION_OFFENDER_MANAGER_FAMILY_NAME(
-            "probationOffenderManagerFamilyName", new TypeReference<String>(){}),
-    PROBATION_OFFENDER_MANAGER_TELEPHONE_NUMBER(
-            "probationOffenderManagerTelephoneNumber", new TypeReference<String>(){}),
-    PROBATION_OFFENDER_MANAGER_MOBILE_NUMBER(
-            "probationOffenderManagerMobileNumber", new TypeReference<String>(){}),
-    PROBATION_OFFENDER_MANAGER_EMAIL_ADDRESS(
-            "probationOffenderManagerEmailAddress", new TypeReference<String>(){}),
-    SENT_BY_CHECKLIST(
-        "sentByChecklist", new TypeReference<String>() {}),
-    IS_ADMIN(
-        "isAdmin", new TypeReference<YesOrNo>() {}),
-    IS_LEGAL_REP(
-        "isLegalRep", new TypeReference<YesOrNo>() {}),
-    IS_HOME_OFFICE(
-        "isHomeOffice", new TypeReference<YesOrNo>() {}),
-    APPLICANT_GIVEN_NAMES(
-        "applicantGivenNames", new TypeReference<String>() {}),
-    APPLICANT_FAMILY_NAME(
-        "applicantFamilyName", new TypeReference<String>() {}),
-    APPLICANT_DATE_OF_BIRTH(
-        "applicantDateOfBirth", new TypeReference<String>() {}),
-    APPLICANT_GENDER(
-        "applicantGender", new TypeReference<String>() {}),
-    APPLICANT_GENDER_ENTER_DETAILS(
-        "applicantGenderEnterDetails", new TypeReference<String>() {}),
-    APPLICANT_NATIONALITY(
-        "applicantNationality", new TypeReference<String>() {}),
-    APPLICANT_NATIONALITIES(
-        "applicantNationalities", new TypeReference<List<IdValue<NationalityFieldValue>>>(){}),
-    HOME_OFFICE_REFERENCE_NUMBER(
-        "homeOfficeReferenceNumber", new TypeReference<String>(){}),
-    APPLICANT_DETAINED_LOC(
-        "applicantDetainedLoc", new TypeReference<String>(){}),
-    APPLICANT_PRISON_DETAILS(
-        "applicantPrisonDetails", new TypeReference<String>(){}),
-    IRC_NAME(
-        "ircName", new TypeReference<String>(){}),
-    PRISON_NAME(
-        "prisonName", new TypeReference<String>(){}),
-    APPLICANT_ARRIVAL_IN_UK(
-        "applicantArrivalInUk", new TypeReference<String>(){}),
-    APPLICANT_HAS_MOBILE(
-        "applicantHasMobile", new TypeReference<YesOrNo>(){}),
-    APPLICANT_MOBILE_NUMBER_1(
-        "applicantMobileNumber1", new TypeReference<String>(){}),
-    HAS_APPEAL_HEARING_PENDING(
-        "hasAppealHearingPending", new TypeReference<String>(){}),
-    APPEAL_REFERENCE_NUMBER(
-        "appealReferenceNumber", new TypeReference<String>(){}),
-    HAS_PREVIOUS_BAIL_APPLICATION(
-        "hasPreviousBailApplication", new TypeReference<String>(){}),
-    PREVIOUS_BAIL_APPLICATION_NUMBER(
-        "previousBailApplicationNumber", new TypeReference<String>(){}),
-    APPLICANT_BEEN_REFUSED_BAIL(
-        "applicantBeenRefusedBail", new TypeReference<YesOrNo>(){}),
-    BAIL_HEARING_DATE(
-        "bailHearingDate", new TypeReference<String>(){}),
-    APPLICANT_HAS_ADDRESS(
-        "applicantHasAddress", new TypeReference<YesOrNo>(){}),
-    APPLICANT_ADDRESS(
-        "applicantAddress", new TypeReference<AddressUk>(){}),
-    AGREES_TO_BOUND_BY_FINANCIAL_COND(
-        "agreesToBoundByFinancialCond", new TypeReference<YesOrNo>(){}),
-    FINANCIAL_COND_AMOUNT_1(
-        "financialCondAmount1", new TypeReference<String>(){}),
-    HAS_FINANCIAL_COND_SUPPORTER(
-        "hasFinancialCondSupporter", new TypeReference<YesOrNo>(){}),
-    SUPPORTER_GIVEN_NAMES(
-        "supporterGivenNames", new TypeReference<String>(){}),
-    SUPPORTER_FAMILY_NAMES(
-        "supporterFamilyNames", new TypeReference<String>(){}),
-    SUPPORTER_ADDRESS_DETAILS(
-        "supporterAddressDetails", new TypeReference<AddressUk>(){}),
-    SUPPORTER_CONTACT_DETAILS(
-        "supporterContactDetails", new TypeReference<String>(){}),
-    SUPPORTER_TELEPHONE_NUMBER_1(
-        "supporterTelephoneNumber1", new TypeReference<String>(){}),
-    SUPPORTER_MOBILE_NUMBER_1(
-        "supporterMobileNumber1", new TypeReference<String>(){}),
-    SUPPORTER_EMAIL_ADDRESS_1(
-        "supporterEmailAddress1", new TypeReference<String>(){}),
-    SUPPORTER_DOB(
-        "supporterDOB", new TypeReference<String>(){}),
-    SUPPORTER_RELATION(
-        "supporterRelation", new TypeReference<String>(){}),
-    SUPPORTER_OCCUPATION(
-        "supporterOccupation", new TypeReference<String>(){}),
-    SUPPORTER_IMMIGRATION(
-        "supporterImmigration", new TypeReference<String>(){}),
-    SUPPORTER_NATIONALITY(
-        "supporterNationality", new TypeReference<List<IdValue<NationalityFieldValue>>>(){}),
-    SUPPORTER_HAS_PASSPORT(
-        "supporterHasPassport", new TypeReference<YesOrNo>(){}),
-    SUPPORTER_PASSPORT(
-        "supporterPassport", new TypeReference<String>(){}),
-    FINANCIAL_AMOUNT_SUPPORTER_UNDERTAKES_1(
-        "financialAmountSupporterUndertakes1", new TypeReference<String>(){}),
-    HAS_FINANCIAL_COND_SUPPORTER_2(
-        "hasFinancialCondSupporter2", new TypeReference<String>(){}),
-    SUPPORTER_2_GIVEN_NAMES(
-        "supporter2GivenNames", new TypeReference<String>(){}),
-    SUPPORTER_2_FAMILY_NAMES(
-        "supporter2FamilyNames", new TypeReference<String>(){}),
-    SUPPORTER_2_ADDRESS_DETAILS(
-        "supporter2AddressDetails", new TypeReference<AddressUk>(){}),
-    SUPPORTER_2_CONTACT_DETAILS(
-        "supporter2ContactDetails", new TypeReference<String>(){}),
-    SUPPORTER_2_TELEPHONE_NUMBER_1(
-        "supporter2TelephoneNumber1", new TypeReference<String>(){}),
-    SUPPORTER_2_MOBILE_NUMBER_1(
-        "supporter2MobileNumber1", new TypeReference<String>(){}),
-    SUPPORTER_2_EMAIL_ADDRESS_1(
-        "supporter2EmailAddress1", new TypeReference<String>(){}),
-    SUPPORTER_2_DOB(
-        "supporter2DOB", new TypeReference<String>(){}),
-    SUPPORTER_2_RELATION(
-        "supporter2Relation", new TypeReference<String>(){}),
-    SUPPORTER_2_OCCUPATION(
-        "supporter2Occupation", new TypeReference<String>(){}),
-    SUPPORTER_2_IMMIGRATION(
-        "supporter2Immigration", new TypeReference<String>(){}),
-    SUPPORTER_2_NATIONALITY(
-        "supporter2Nationality", new TypeReference<List<IdValue<NationalityFieldValue>>>(){}),
-    SUPPORTER_2_HAS_PASSPORT(
-        "supporter2HasPassport", new TypeReference<YesOrNo>(){}),
-    SUPPORTER_2_PASSPORT(
-        "supporter2Passport", new TypeReference<String>(){}),
-    FINANCIAL_AMOUNT_SUPPORTER_2_UNDERTAKES_1(
-        "financialAmountSupporter2Undertakes1", new TypeReference<String>(){}),
-    HAS_FINANCIAL_COND_SUPPORTER_3(
-        "hasFinancialCondSupporter3", new TypeReference<String>(){}),
-    SUPPORTER_3_GIVEN_NAMES(
-        "supporter3GivenNames", new TypeReference<String>(){}),
-    SUPPORTER_3_FAMILY_NAMES(
-        "supporter3FamilyNames", new TypeReference<String>(){}),
-    SUPPORTER_3_ADDRESS_DETAILS(
-        "supporter3AddressDetails", new TypeReference<AddressUk>(){}),
-    SUPPORTER_3_CONTACT_DETAILS(
-        "supporter3ContactDetails", new TypeReference<String>(){}),
-    SUPPORTER_3_TELEPHONE_NUMBER_1(
-        "supporter3TelephoneNumber1", new TypeReference<String>(){}),
-    SUPPORTER_3_MOBILE_NUMBER_1(
-        "supporter3MobileNumber1", new TypeReference<String>(){}),
-    SUPPORTER_3_EMAIL_ADDRESS_1(
-        "supporter3EmailAddress1", new TypeReference<String>(){}),
-    SUPPORTER_3_DOB(
-        "supporter3DOB", new TypeReference<String>(){}),
-    SUPPORTER_3_RELATION(
-        "supporter3Relation", new TypeReference<String>(){}),
-    SUPPORTER_3_OCCUPATION(
-        "supporter3Occupation", new TypeReference<String>(){}),
-    SUPPORTER_3_IMMIGRATION(
-        "supporter3Immigration", new TypeReference<String>(){}),
-    SUPPORTER_3_NATIONALITY(
-        "supporter3Nationality", new TypeReference<List<IdValue<NationalityFieldValue>>>(){}),
-    SUPPORTER_3_HAS_PASSPORT(
-        "supporter3HasPassport", new TypeReference<YesOrNo>(){}),
-    SUPPORTER_3_PASSPORT(
-        "supporter3Passport", new TypeReference<String>(){}),
-    FINANCIAL_AMOUNT_SUPPORTER_3_UNDERTAKES_1(
-        "financialAmountSupporter3Undertakes1", new TypeReference<String>(){}),
-    HAS_FINANCIAL_COND_SUPPORTER_4(
-        "hasFinancialCondSupporter4", new TypeReference<String>(){}),
-    SUPPORTER_4_GIVEN_NAMES(
-        "supporter4GivenNames", new TypeReference<String>(){}),
-    SUPPORTER_4_FAMILY_NAMES(
-        "supporter4FamilyNames", new TypeReference<String>(){}),
-    SUPPORTER_4_ADDRESS_DETAILS(
-        "supporter4AddressDetails", new TypeReference<AddressUk>(){}),
-    SUPPORTER_4_CONTACT_DETAILS(
-        "supporter4ContactDetails", new TypeReference<String>(){}),
-    SUPPORTER_4_TELEPHONE_NUMBER_1(
-        "supporter4TelephoneNumber1", new TypeReference<String>(){}),
-    SUPPORTER_4_MOBILE_NUMBER_1(
-        "supporter4MobileNumber1", new TypeReference<String>(){}),
-    SUPPORTER_4_EMAIL_ADDRESS_1(
-        "supporter4EmailAddress1", new TypeReference<String>(){}),
-    SUPPORTER_4_DOB(
-        "supporter4DOB", new TypeReference<String>(){}),
-    SUPPORTER_4_RELATION(
-        "supporter4Relation", new TypeReference<String>(){}),
-    SUPPORTER_4_OCCUPATION(
-        "supporter4Occupation", new TypeReference<String>(){}),
-    SUPPORTER_4_IMMIGRATION(
-        "supporter4Immigration", new TypeReference<String>(){}),
-    SUPPORTER_4_NATIONALITY(
-        "supporter4Nationality", new TypeReference<List<IdValue<NationalityFieldValue>>>(){}),
-    SUPPORTER_4_HAS_PASSPORT(
-        "supporter4HasPassport", new TypeReference<YesOrNo>(){}),
-    SUPPORTER_4_PASSPORT(
-        "supporter4Passport", new TypeReference<String>(){}),
-    FINANCIAL_AMOUNT_SUPPORTER_4_UNDERTAKES_1(
-        "financialAmountSupporter4Undertakes1", new TypeReference<String>(){}),
-    INTERPRETER_YES_NO(
-        "interpreterYesNo", new TypeReference<YesOrNo>(){}),
-    INTERPRETER_LANGUAGES(
-        "interpreterLanguages", new TypeReference<List<IdValue<InterpreterLanguage>>>(){}),
-    APPLICANT_DISABILITY1(
-        "applicantDisability1", new TypeReference<YesOrNo>(){}),
-    APPLICANT_DISABILITY_DETAILS(
-        "applicantDisabilityDetails", new TypeReference<String>(){}),
-    VIDEO_HEARING1(
-        "videoHearing1", new TypeReference<YesOrNo>(){}),
-    VIDEO_HEARING_DETAILS(
-        "videoHearingDetails", new TypeReference<String>(){}),
-    LEGAL_REP_COMPANY(
-        "legalRepCompany", new TypeReference<String>(){}),
-    LEGAL_REP_EMAIL(
-        "legalRepEmail", new TypeReference<String>(){}),
-    LEGAL_REP_NAME(
-        "legalRepName", new TypeReference<String>(){}),
-    LEGAL_REP_FAMILY_NAME(
-        "legalRepFamilyName", new TypeReference<String>(){}),
-    LEGAL_REP_PHONE(
-        "legalRepPhone", new TypeReference<String>(){}),
-    LEGAL_REP_REFERENCE(
-        "legalRepReference", new TypeReference<String>(){}),
-    LEGAL_REP_COMPANY_ADDRESS(
-        "legalRepCompanyAddress", new TypeReference<AddressUk>(){}),
-    GROUNDS_FOR_BAIL_REASONS(
-        "groundsForBailReasons", new TypeReference<String>(){}),
-    GROUNDS_FOR_BAIL_PROVIDE_EVIDENCE_OPTION(
-        "groundsForBailProvideEvidenceOption", new TypeReference<YesOrNo>(){}),
-    UPLOAD_THE_BAIL_EVIDENCE_DOCS(
-        "uploadTheBailEvidenceDocs", new TypeReference<List<IdValue<DocumentWithDescription>>>(){}),
-    TRANSFER_BAIL_MANAGEMENT_YES_OR_NO(
-        "transferBailManagementYesOrNo", new TypeReference<YesOrNo>(){}),
-    NO_TRANSFER_BAIL_MANAGEMENT_REASONS(
-        "noTransferBailManagementReasons", new TypeReference<String>(){}),
-    APPLICATION_SUBMITTED_BY(
-        "applicationSubmittedBy", new TypeReference<String>(){}),
-    BAIL_REFERENCE_NUMBER(
-        "bailReferenceNumber", new TypeReference<String>(){}),
-    APPLICANT_FULL_NAME(
-        "applicantFullName", new TypeReference<String>(){}),
-    IS_LEGALLY_REPRESENTED_FOR_FLAG(
-        "isLegallyRepresentedForFlag", new TypeReference<YesOrNo>() {}),
-    HAS_LEGAL_REP(
-        "hasLegalRep", new TypeReference<YesOrNo>(){}),
-    HEARING_CENTRE(
-        "hearingCentre", new TypeReference<BailHearingCentre>() {}),
-    DETENTION_FACILITY(
-        "detentionFacility", new TypeReference<String>() {}),
-    NOTIFICATIONS_SENT(
-        "notificationsSent", new TypeReference<List<IdValue<String>>>() {}),
-    SUBMIT_NOTIFICATION_STATUS(
-        "submitNotificationStatus", new TypeReference<String>() {}),
-    RECORD_DECISION_TYPE(
-        "recordDecisionType", new TypeReference<RecordDecisionType>() {}),
-    END_APPLICATION_REASONS(
-        "endApplicationReasons", new TypeReference<String>() {}),
-    END_APPLICATION_DATE(
-        "endApplicationDate", new TypeReference<String>() {}),
-    END_APPLICATION_OUTCOME(
-        "endApplicationOutcome", new TypeReference<String>() {}),
-    SEND_DIRECTION_LIST(
-        "sendDirectionList", new TypeReference<String>() {}),
-    SEND_DIRECTION_DESCRIPTION(
-        "sendDirectionDescription", new TypeReference<String>() {}),
-    DATE_OF_COMPLIANCE(
-        "dateOfCompliance", new TypeReference<String>() {}),
-    DIRECTIONS(
-        "directions", new TypeReference<List<IdValue<BailDirection>>>() {}),
-    LATEST_MODIFIED_DOCUMENTS(
-        "latestModifiedDocuments", new TypeReference<List<String>>() {}),
-    EDIT_DOCUMENTS_REASON(
-        "editDocumentsReason", new TypeReference<String>(){}),
-    TRIBUNAL_DOCUMENTS_WITH_METADATA(
-        "tribunalDocumentsWithMetadata", new TypeReference<List<IdValue<DocumentWithMetadata>>>() {}),
-    HOME_OFFICE_DOCUMENTS_WITH_METADATA(
-        "homeOfficeDocumentsWithMetadata", new TypeReference<List<IdValue<DocumentWithMetadata>>>() {}),
-    APPLICANT_DOCUMENTS_WITH_METADATA(
-        "applicantDocumentsWithMetadata", new TypeReference<List<IdValue<DocumentWithMetadata>>>() {}),
-    CASE_NOTES(
-        "caseNotes", new TypeReference<List<IdValue<CaseNote>>>(){}),
-    BAIL_DIRECTION_LIST(
-        "bailDirectionList", new TypeReference<DynamicList>(){}),
-    BAIL_DIRECTION_EDIT_EXPLANATION(
-        "bailDirectionEditExplanation", new TypeReference<String>(){}),
-    BAIL_DIRECTION_EDIT_PARTIES(
-        "bailDirectionEditParties", new TypeReference<String>(){}),
-    BAIL_DIRECTION_EDIT_DATE_SENT(
-        "bailDirectionEditDateSent", new TypeReference<String>(){}),
-    BAIL_DIRECTION_EDIT_DATE_DUE(
-        "bailDirectionEditDateDue", new TypeReference<String>(){}),
-    LAST_MODIFIED_DIRECTION(
-        "lastModifiedDirection", new TypeReference<Direction>(){}),
+    FCS1_INTERPRETER_LANGUAGE_CATEGORY(
+        "fcs1InterpreterLanguageCategory", new TypeReference<List<String>>(){}),
+
+    FCS1_INTERPRETER_SPOKEN_LANGUAGE(
+        "fcs1InterpreterSpokenLanguage", new TypeReference<BailInterpreterLanguageRefData>(){}),
+
+    FCS1_INTERPRETER_SIGN_LANGUAGE(
+        "fcs1InterpreterSignLanguage", new TypeReference<BailInterpreterLanguageRefData>(){}),
+
+    FCS2_INTERPRETER_LANGUAGE_CATEGORY(
+        "fcs2InterpreterLanguageCategory", new TypeReference<List<String>>(){}),
+
+    FCS2_INTERPRETER_SPOKEN_LANGUAGE(
+        "fcs2InterpreterSpokenLanguage", new TypeReference<BailInterpreterLanguageRefData>(){}),
+
+    FCS2_INTERPRETER_SIGN_LANGUAGE(
+        "fcs2InterpreterSignLanguage", new TypeReference<BailInterpreterLanguageRefData>(){}),
+
+    FCS3_INTERPRETER_LANGUAGE_CATEGORY(
+        "fcs3InterpreterLanguageCategory", new TypeReference<List<String>>(){}),
+
+    FCS3_INTERPRETER_SPOKEN_LANGUAGE(
+        "fcs3InterpreterSpokenLanguage", new TypeReference<BailInterpreterLanguageRefData>(){}),
+
+    FCS3_INTERPRETER_SIGN_LANGUAGE(
+        "fcs3InterpreterSignLanguage", new TypeReference<BailInterpreterLanguageRefData>(){}),
+
+    FCS4_INTERPRETER_LANGUAGE_CATEGORY(
+        "fcs4InterpreterLanguageCategory", new TypeReference<List<String>>(){}),
+
+    FCS4_INTERPRETER_SPOKEN_LANGUAGE(
+        "fcs4InterpreterSpokenLanguage", new TypeReference<BailInterpreterLanguageRefData>(){}),
+
+    FCS4_INTERPRETER_SIGN_LANGUAGE(
+        "fcs4InterpreterSignLanguage", new TypeReference<BailInterpreterLanguageRefData>(){}),
+
+
     LISTING_EVENT(
         "listingEvent", new TypeReference<ListingEvent>(){}),
+
+    LISTING_LOCATION(
+        "listingLocation", new TypeReference<String>(){}),
+
     LISTING_HEARING_DATE(
         "listingHearingDate", new TypeReference<String>(){}),
-    LISTING_LOCATION(
-        "listingLocation", new TypeReference<BailHearingLocation>(){}),
+
+    HEARING_DOCUMENTS(
+        "hearingDocuments", new TypeReference<List<IdValue<DocumentWithMetadata>>>(){}),
+
+    IS_IMA_ENABLED(
+        "isImaEnabled", new TypeReference<YesOrNo>(){}),
+
+    IS_BAILS_LOCATION_REFERENCE_DATA_ENABLED(
+        "isBailsLocationReferenceDataEnabled", new TypeReference<YesOrNo>(){}),
+
+    REF_DATA_LISTING_LOCATION_DETAIL(
+        "refDataListingLocationDetail", new TypeReference<CourtVenue>(){}),
+
+    IS_REMOTE_HEARING(
+        "isRemoteHearing", new TypeReference<YesOrNo>(){}),
+
+    CURRENT_CASE_STATE_VISIBLE_TO_ALL_USERS(
+        "currentCaseStateVisibleToAllUsers", new TypeReference<String>(){}),
+
+    HAS_PROBATION_OFFENDER_MANAGER(
+        "hasProbationOffenderManager", new TypeReference<YesOrNo>(){}),
+
+    PROBATION_OFFENDER_MANAGER_GIVEN_NAME(
+        "probationOffenderManagerGivenName", new TypeReference<String>(){}),
+
+    PROBATION_OFFENDER_MANAGER_FAMILY_NAME(
+        "probationOffenderManagerFamilyName", new TypeReference<String>(){}),
+
+    PROBATION_OFFENDER_MANAGER_TELEPHONE_NUMBER(
+        "probationOffenderManagerTelephoneNumber", new TypeReference<String>(){}),
+
+    PROBATION_OFFENDER_MANAGER_MOBILE_NUMBER(
+        "probationOffenderManagerMobileNumber", new TypeReference<String>(){}),
+
+    PROBATION_OFFENDER_MANAGER_EMAIL_ADDRESS(
+        "probationOffenderManagerEmailAddress", new TypeReference<String>(){}),
+
+    LEGAL_REP_COMPANY_ADDRESS(
+        "legalRepCompanyAddress", new TypeReference<AddressUk>(){}),
+
+    HEARING_CENTRE(
+        "hearingCentre", new TypeReference<BailHearingCentre>(){}),
+
+    DETENTION_FACILITY(
+        "detentionFacility", new TypeReference<String>(){}),
+
+    NOTIFICATIONS_SENT(
+        "notificationsSent", new TypeReference<List<IdValue<String>>>(){}),
+
+    SUBMIT_NOTIFICATION_STATUS(
+        "submitNotificationStatus", new TypeReference<String>(){}),
+
+    SEND_DIRECTION_LIST(
+        "sendDirectionList", new TypeReference<String>(){}),
+
+    SEND_DIRECTION_DESCRIPTION(
+        "sendDirectionDescription", new TypeReference<String>(){}),
+
+    DATE_OF_COMPLIANCE(
+        "dateOfCompliance", new TypeReference<String>(){}),
+
+    DIRECTIONS(
+        "directions", new TypeReference<List<IdValue<BailDirection>>>(){}),
+
+    LATEST_MODIFIED_DOCUMENTS(
+        "latestModifiedDocuments", new TypeReference<List<String>>(){}),
+
+    EDIT_DOCUMENTS_REASON(
+        "editDocumentsReason", new TypeReference<String>(){}),
+
+    HOME_OFFICE_DOCUMENTS_WITH_METADATA(
+        "homeOfficeDocumentsWithMetadata", new TypeReference<List<IdValue<DocumentWithMetadata>>>(){}),
+
+    CASE_NOTES(
+        "caseNotes", new TypeReference<List<IdValue<CaseNote>>>(){}),
+
+    BAIL_DIRECTION_LIST(
+        "bailDirectionList", new TypeReference<DynamicList>(){}),
+
+    BAIL_DIRECTION_EDIT_EXPLANATION(
+        "bailDirectionEditExplanation", new TypeReference<String>(){}),
+
+    BAIL_DIRECTION_EDIT_PARTIES(
+        "bailDirectionEditParties", new TypeReference<String>(){}),
+
+    BAIL_DIRECTION_EDIT_DATE_SENT(
+        "bailDirectionEditDateSent", new TypeReference<String>(){}),
+
+    BAIL_DIRECTION_EDIT_DATE_DUE(
+        "bailDirectionEditDateDue", new TypeReference<String>(){}),
+
+    LAST_MODIFIED_DIRECTION(
+        "lastModifiedDirection", new TypeReference<Direction>(){}),
+
     DECISION_GRANTED_OR_REFUSED(
         "decisionGrantedOrRefused", new TypeReference<String>(){}),
+
     ADMIN_SELECT_IMA_STATUS(
-        "adminSelectImaStatus", new TypeReference<YesOrNo>() {}),
+        "adminSelectImaStatus", new TypeReference<YesOrNo>(){}),
+
     HO_SELECT_IMA_STATUS(
-        "hoSelectImaStatus", new TypeReference<YesOrNo>() {}),
-    IS_BAILS_LOCATION_REFERENCE_DATA_ENABLED(
-        "isBailsLocationReferenceDataEnabled", new TypeReference<YesOrNo>() {}),
-    REF_DATA_LISTING_LOCATION_DETAIL(
-        "refDataListingLocationDetail", new TypeReference<CourtVenue>() {}),
-    IS_REMOTE_HEARING(
-        "isRemoteHearing", new TypeReference<YesOrNo>() {}),
-    CURRENT_CASE_STATE_VISIBLE_TO_ALL_USERS(
-        "currentCaseStateVisibleToAllUsers", new TypeReference<String>() {}),
+        "hoSelectImaStatus", new TypeReference<YesOrNo>(){}),
+
     TTL(
         "TTL", new TypeReference<TtlCcdObject>(){}),
     ;

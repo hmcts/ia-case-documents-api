@@ -78,7 +78,7 @@ class LegalRepresentativeBailCaseListingPersonalisationTest {
 
     @Test
     public void should_return_initial_template_id() {
-        when(bailCase.read(LISTING_EVENT, ListingEvent.class)).thenReturn(Optional.of(ListingEvent.INITIAL));
+        when(bailCase.read(LISTING_EVENT, ListingEvent.class)).thenReturn(Optional.of(ListingEvent.INITIAL_LISTING));
         assertEquals(initialTemplateId, legalRepresentativeBailCaseListingPersonalisation.getTemplateId(bailCase));
     }
 

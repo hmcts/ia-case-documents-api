@@ -6,12 +6,12 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.personalisation.LetterNotif
 
 import java.util.Set;
 
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.getLegalRepAddressInCountryOrOoc;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.getLegalRepAddressInCountryOrOocAsSet;
 
 public interface LegalRepresentativeLetterNotificationPersonalisation extends LetterNotificationPersonalisation {
 
     @Override
     default Set<String> getRecipientsList(AsylumCase asylumCase) {
-        return getLegalRepAddressInCountryOrOoc(asylumCase);
+        return getLegalRepAddressInCountryOrOocAsSet(asylumCase);
     }
 }

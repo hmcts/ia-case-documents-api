@@ -38,50 +38,31 @@ public class HearingDetailsFinder {
         this.stringProvider = stringProvider;
     }
 
-    public String getHearingCentreAddress(AsylumCase asylumCase) {
-
-        return stringProvider
-            .get(HEARING_CENTRE_ADDRESS, getHearingCentre(asylumCase).toString())
-            .orElseThrow(() -> new IllegalStateException("hearingCentreAddress is not present"));
-    }
-
-
-    public String getHearingCentreName(AsylumCase asylumCase) {
-        if (isDecisionWithoutHearingAppeal(asylumCase)) {
-            return DECISION_WITHOUT_HEARING;
-        }
-
-        return stringProvider.get("hearingCentreName", getHearingCentre(asylumCase).toString())
-            .orElseThrow(() -> new IllegalStateException("listCaseHearingCentreName is not present"));
-    }
-
     public String getHearingDateTime(AsylumCase asylumCase) {
-
         return asylumCase
             .read(LIST_CASE_HEARING_DATE, String.class)
             .orElseThrow(() -> new IllegalStateException("listCaseHearingDate is not present"));
-    }
-
-    private HearingCentre getHearingCentre(AsylumCase asylumCase) {
-
-        return asylumCase
-            .read(LIST_CASE_HEARING_CENTRE, HearingCentre.class)
-            .orElseThrow(() -> new IllegalStateException("listCaseHearingCentre is not present"));
     }
 
     public String getHearingCentreUrl(HearingCentre hearingCentre) {
 
         return switch (hearingCentre) {
             case BELFAST -> "https://www.nidirect.gov.uk/contacts/contacts-az/belfast-laganside-courts";
-            case BIRMINGHAM -> "https://courttribunalfinder.service.gov.uk/courts/birmingham-immigration-and-asylum-chamber-first-tier-tribunal";
+            case BIRMINGHAM ->
+                "https://courttribunalfinder.service.gov.uk/courts/birmingham-immigration-and-asylum-chamber-first-tier-tribunal";
             case BRADFORD -> "https://courttribunalfinder.service.gov.uk/courts/bradford-tribunal-hearing-centre";
-            case GLASGOW -> "https://courttribunalfinder.service.gov.uk/courts/glasgow-employment-and-immigration-tribunals-eagle-building";
-            case HATTON_CROSS -> "https://courttribunalfinder.service.gov.uk/courts/hatton-cross-tribunal-hearing-centre";
-            case TAYLOR_HOUSE -> "https://courttribunalfinder.service.gov.uk/courts/taylor-house-tribunal-hearing-centre";
+            case GLASGOW ->
+                "https://courttribunalfinder.service.gov.uk/courts/glasgow-employment-and-immigration-tribunals-eagle-building";
+            case HATTON_CROSS ->
+                "https://courttribunalfinder.service.gov.uk/courts/hatton-cross-tribunal-hearing-centre";
+            case TAYLOR_HOUSE ->
+                "https://courttribunalfinder.service.gov.uk/courts/taylor-house-tribunal-hearing-centre";
             case MANCHESTER -> "https://courttribunalfinder.service.gov.uk/courts/manchester-tribunal-hearing-centre";
-            case NEWPORT -> "https://courttribunalfinder.service.gov.uk/courts/newport-south-wales-immigration-and-asylum-tribunal";
+            case NEWPORT ->
+                "https://courttribunalfinder.service.gov.uk/courts/newport-south-wales-immigration-and-asylum-tribunal";
             case NOTTINGHAM -> "https://courttribunalfinder.service.gov.uk/courts/nottingham-magistrates-court";
-            case NORTH_SHIELDS -> "https://courttribunalfinder.service.gov.uk/courts/newcastle-civil-family-courts-and-tribunals-centre";
+            case NORTH_SHIELDS ->
+                "https://courttribunalfinder.service.gov.uk/courts/newcastle-civil-family-courts-and-tribunals-centre";
             default -> "Hearing centre url not available";
         };
     }
@@ -93,7 +74,7 @@ public class HearingDetailsFinder {
         Optional<String> refDataAddress = asylumCase
             .read(AsylumCaseDefinition.LIST_CASE_HEARING_CENTRE_ADDRESS, String.class);
 
-        if (isCaseUsingLocationRefData(asylumCase) && refDataAddress.isPresent())  {
+        if (isCaseUsingLocationRefData(asylumCase) && refDataAddress.isPresent()) {
             return refDataAddress.get();
         }
         return stringProvider.get(HEARING_CENTRE_ADDRESS, listCaseHearingCentre.toString())
@@ -101,6 +82,10 @@ public class HearingDetailsFinder {
     }
 
     public String getHearingCentreName(AsylumCase asylumCase) {
+        if (isDecisionWithoutHearingAppeal(asylumCase)) {
+            return DECISION_WITHOUT_HEARING;
+        }
+
         if (isCaseUsingLocationRefData(asylumCase)) {
             return getRefDataLocationAddress(asylumCase);
         }
@@ -126,12 +111,6 @@ public class HearingDetailsFinder {
 
         return stringProvider.get("hearingCentreName", hearingCentre.toString())
             .orElseThrow(() -> new IllegalStateException("listCaseHearingCentreName is not present"));
-    }
-
-    public String getHearingDateTime(AsylumCase asylumCase) {
-        return asylumCase
-            .read(AsylumCaseDefinition.LIST_CASE_HEARING_DATE, String.class)
-            .orElseThrow(() -> new IllegalStateException("listCaseHearingDate is not present"));
     }
 
     public String getBailHearingDateTime(BailCase bailCase) {
@@ -232,7 +211,10 @@ public class HearingDetailsFinder {
                 .get(HEARING_CENTRE_ADDRESS, listCaseHearingCentre.getValue())
                 .orElseThrow(() -> new IllegalStateException("hearingCentreAddress is not present"));
 
-        boolean isRemote = Stream.of("remoteHearing", "decisionWithoutHearing").anyMatch(listCaseHearingCentre.getValue()::equalsIgnoreCase);
+        boolean isRemote = Stream.of(
+            "remoteHearing",
+            "decisionWithoutHearing"
+        ).anyMatch(listCaseHearingCentre.getValue()::equalsIgnoreCase);
         return listCaseHearingCentre.getDescription() + (isRemote ? "" : "\n" + hearingCentreAddress);
     }
 
@@ -251,7 +233,10 @@ public class HearingDetailsFinder {
             if (bailCase.read(IS_REMOTE_HEARING, YesOrNo.class).orElse(NO) == YES) {
                 return REMOTE_HEARING_LOCATION;
             } else {
-                Optional<CourtVenue> refDataListingLocationDetail = bailCase.read(REF_DATA_LISTING_LOCATION_DETAIL, CourtVenue.class);
+                Optional<CourtVenue> refDataListingLocationDetail = bailCase.read(
+                    REF_DATA_LISTING_LOCATION_DETAIL,
+                    CourtVenue.class
+                );
 
                 if (refDataListingLocationDetail.isPresent()) {
                     hearingLocationAddress = (refDataListingLocationDetail.get().getCourtName() + ", " +

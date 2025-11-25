@@ -38,7 +38,7 @@ public class AppellantInternalRemissionGrantedInTimeLetterPersonalisation implem
     @Override
     public Set<String> getRecipientsList(final AsylumCase asylumCase) {
         return hasBeenSubmittedByAppellantInternalCase(asylumCase) ?
-            getAppellantAddressInCountryOrOoc(asylumCase) : getLegalRepAddressInCountryOrOoc(asylumCase);
+            getAppellantAddressInCountryOrOocAsSet(asylumCase) : getLegalRepAddressInCountryOrOocAsSet(asylumCase);
     }
 
     @Override

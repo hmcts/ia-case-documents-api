@@ -44,7 +44,7 @@ public class AppellantInternalCaseSubmittedOutOfTimeWithFeePersonalisation imple
     @Override
     public Set<String> getRecipientsList(final AsylumCase asylumCase) {
         return hasBeenSubmittedByAppellantInternalCase(asylumCase) ?
-            getAppellantAddressInCountryOrOoc(asylumCase) : getLegalRepAddressInCountryOrOoc(asylumCase);
+            getAppellantAddressInCountryOrOocAsSet(asylumCase) : getLegalRepAddressInCountryOrOocAsSet(asylumCase);
     }
 
     @Override

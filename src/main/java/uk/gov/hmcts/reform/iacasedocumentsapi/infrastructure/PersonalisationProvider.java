@@ -5,7 +5,7 @@ import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseD
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.Event.*;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.getApplicationById;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.retrieveLatestApplyForCosts;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.DateUtils.formatDateForNotification;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.DateUtils.formatDateForNotificationAttachmentDocument;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -396,7 +396,7 @@ public class PersonalisationProvider {
 
         return ImmutableMap
             .<String, String>builder()
-            .put("creationDate", formatDateForNotification(LocalDate.parse(latestApplyForCostsCreationDate)))
+            .put("creationDate", formatDateForNotificationAttachmentDocument(LocalDate.parse(latestApplyForCostsCreationDate)))
             .build();
     }
 

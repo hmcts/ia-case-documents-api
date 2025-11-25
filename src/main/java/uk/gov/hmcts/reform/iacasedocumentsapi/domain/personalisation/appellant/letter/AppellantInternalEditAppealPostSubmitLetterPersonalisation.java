@@ -2,7 +2,6 @@ package uk.gov.hmcts.reform.iacasedocumentsapi.domain.personalisation.appellant.
 
 import static java.util.Objects.requireNonNull;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.*;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.getLegalRepAddressInCountryOrOoc;
 
 import com.google.common.collect.ImmutableMap;
 import java.util.List;
@@ -37,7 +36,7 @@ public class AppellantInternalEditAppealPostSubmitLetterPersonalisation implemen
     @Override
     public Set<String> getRecipientsList(final AsylumCase asylumCase) {
         return hasBeenSubmittedByAppellantInternalCase(asylumCase) ?
-            getAppellantAddressInCountryOrOoc(asylumCase) : getLegalRepAddressInCountryOrOoc(asylumCase);
+            getAppellantAddressInCountryOrOocAsSet(asylumCase) : getLegalRepAddressInCountryOrOocAsSet(asylumCase);
     }
 
     @Override

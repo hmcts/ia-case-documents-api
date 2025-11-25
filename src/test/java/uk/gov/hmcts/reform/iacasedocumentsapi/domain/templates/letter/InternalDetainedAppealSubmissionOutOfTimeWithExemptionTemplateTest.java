@@ -88,7 +88,7 @@ class InternalDetainedAppealSubmissionOutOfTimeWithExemptionTemplateTest {
         when(customerServicesProvider.getInternalCustomerServicesEmail(asylumCase)).thenReturn(internalCustomerServicesEmail);
         when(customerServicesProvider.getInternalCustomerServicesTelephone(asylumCase)).thenReturn(internalCustomerServicesTelephone);
         when(systemDateProvider.dueDate(daysAfterSubmitAppeal)).thenReturn(formatDateForNotificationAttachmentDocument(dueDate));
-        
+
         // Mock empty values for optional fields
         when(asylumCase.read(APPEAL_REFERENCE_NUMBER, String.class)).thenReturn(Optional.empty());
         when(asylumCase.read(HOME_OFFICE_REFERENCE_NUMBER, String.class)).thenReturn(Optional.empty());
@@ -115,7 +115,7 @@ class InternalDetainedAppealSubmissionOutOfTimeWithExemptionTemplateTest {
         when(customerServicesProvider.getInternalCustomerServicesEmail(asylumCase)).thenReturn(null);
         when(customerServicesProvider.getInternalCustomerServicesTelephone(asylumCase)).thenReturn(null);
         when(systemDateProvider.dueDate(daysAfterSubmitAppeal)).thenReturn(null);
-        
+
         dataSetUpPersonalisation();
 
         Map<String, Object> templateFieldValues = template.mapFieldValues(caseDetails);
@@ -137,7 +137,7 @@ class InternalDetainedAppealSubmissionOutOfTimeWithExemptionTemplateTest {
         when(customerServicesProvider.getInternalCustomerServicesEmail(asylumCase)).thenReturn(internalCustomerServicesEmail);
         when(customerServicesProvider.getInternalCustomerServicesTelephone(asylumCase)).thenReturn(internalCustomerServicesTelephone);
         when(systemDateProvider.dueDate(daysAfterSubmitAppeal)).thenReturn(formatDateForNotificationAttachmentDocument(dueDate));
-        
+
         dataSetUpPersonalisation();
     }
 

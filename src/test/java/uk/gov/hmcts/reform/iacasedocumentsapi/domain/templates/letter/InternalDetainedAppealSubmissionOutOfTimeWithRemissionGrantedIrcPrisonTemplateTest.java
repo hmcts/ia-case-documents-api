@@ -190,7 +190,7 @@ class InternalDetainedAppealSubmissionOutOfTimeWithRemissionGrantedIrcPrisonTemp
 
         // Verify all expected fields are present
         assertEquals(10, templateFieldValues.size());
-        
+
         // Verify each field has the expected value
         assertEquals(formatDateForNotificationAttachmentDocument(LocalDate.now()), templateFieldValues.get("dateLetterSent"));
         assertEquals("[userImage:hmcts.png]", templateFieldValues.get("hmcts"));

@@ -73,13 +73,13 @@ public class HomeOfficeBailCaseListingPersonalisation implements BailEmailNotifi
 
         return switch (isLegallyRepresented) {
             case YES -> switch (listingEvent) {
-                case INITIAL -> homeOfficeCaseListingInitialWithLegalRepPersonalisationTemplateId;
+                case INITIAL_LISTING -> homeOfficeCaseListingInitialWithLegalRepPersonalisationTemplateId;
                 case RELISTING -> isBailConditionalGrant(bailCase) ?
                     homeOfficeCaseListingConditionalBailRelistingWithLegalRepPersonalisationTemplateId :
                     homeOfficeCaseListingRelistingWithLegalRepPersonalisationTemplateId;
             };
             case NO -> switch (listingEvent) {
-                case INITIAL -> homeOfficeCaseListingInitialWithoutLegalRepPersonalisationTemplateId;
+                case INITIAL_LISTING -> homeOfficeCaseListingInitialWithoutLegalRepPersonalisationTemplateId;
                 case RELISTING -> isBailConditionalGrant(bailCase) ?
                     homeOfficeCaseListingConditionalBailRelistingWithoutLegalRepPersonalisationTemplateId :
                     homeOfficeCaseListingRelistingWithoutLegalRepPersonalisationTemplateId;

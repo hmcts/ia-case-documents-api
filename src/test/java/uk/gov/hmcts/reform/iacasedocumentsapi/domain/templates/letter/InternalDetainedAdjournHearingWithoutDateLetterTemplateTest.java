@@ -53,7 +53,7 @@ public class InternalDetainedAdjournHearingWithoutDateLetterTemplateTest {
     private final String hearingDateBefore = "2023-08-10T10:15:00";
     private final String formattedListCaseHearingDateBefore = "10082023";
     private final String hearingWithoutDateReasons = "Sample reasons";
-    
+
     @BeforeEach
     void setUp() {
         internalDetainedAdjournHearingWithoutDateLetterTemplate = new InternalDetainedAdjournHearingWithoutDateLetterTemplate(templateName, customerServicesProvider, stringProvider);

@@ -734,6 +734,6 @@ public class BailNotificationHandlerConfiguration {
     }
 
     private boolean isInitialListing(BailCase bailCase) {
-        return (bailCase.read(LISTING_EVENT, ListingEvent.class).orElse(ListingEvent.INITIAL)) == ListingEvent.INITIAL;
+        return (bailCase.read(LISTING_EVENT, ListingEvent.class).orElse(ListingEvent.INITIAL_LISTING)) == ListingEvent.INITIAL_LISTING;
     }
 }

@@ -162,7 +162,7 @@ class InternalDetainedAppealUpdateTribunalDecisionRule31IrcPrisonLetterTemplateT
         when(customerServicesProvider.getInternalCustomerServicesEmail(asylumCase)).thenReturn(null);
         when(customerServicesProvider.getInternalCustomerServicesTelephone(asylumCase)).thenReturn(null);
         when(systemDateProvider.dueDate(daysAfterSubmitAppeal)).thenReturn(null);
-        
+
         dataSetUpPersonalisation();
 
         Map<String, Object> templateFieldValues = template.mapFieldValues(caseDetails, caseDetailsBefore);
@@ -185,7 +185,7 @@ class InternalDetainedAppealUpdateTribunalDecisionRule31IrcPrisonLetterTemplateT
         when(customerServicesProvider.getInternalCustomerServicesEmail(asylumCase)).thenReturn(internalCustomerServicesEmail);
         when(customerServicesProvider.getInternalCustomerServicesTelephone(asylumCase)).thenReturn(internalCustomerServicesTelephone);
         when(systemDateProvider.dueDate(daysAfterSubmitAppeal)).thenReturn(formatDateForNotificationAttachmentDocument(dueDate));
-        
+
         dataSetUpPersonalisation();
     }
 

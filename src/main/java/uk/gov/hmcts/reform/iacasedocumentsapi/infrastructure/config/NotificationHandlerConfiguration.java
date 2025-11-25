@@ -27,6 +27,7 @@ import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.RemissionTy
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.UserRole.getAdminOfficerRoles;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.Event.*;
 
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.Event.DECISION_WITHOUT_HEARING;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.PaymentStatus.FAILED;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.PaymentStatus.PAID;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.PaymentStatus.PAYMENT_PENDING;
@@ -2738,7 +2739,7 @@ public class NotificationHandlerConfiguration {
         return new NotificationHandler(
             (callbackStage, callback) ->
                 callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
-                    && callback.getEvent() == Event.DECISION_WITHOUT_HEARING
+                    && callback.getEvent() == DECISION_WITHOUT_HEARING
                     && isAipJourney(callback.getCaseDetails().getCaseData()),
             notificationGenerator
         );
@@ -2755,7 +2756,7 @@ public class NotificationHandlerConfiguration {
                 final AsylumCase asylumCase = callback.getCaseDetails().getCaseData();
 
                 return callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
-                    && callback.getEvent() == Event.DECISION_WITHOUT_HEARING
+                    && callback.getEvent() == DECISION_WITHOUT_HEARING
                     && isInternalCase(asylumCase);
             },
             notificationGenerator
@@ -2773,7 +2774,7 @@ public class NotificationHandlerConfiguration {
                     final AsylumCase asylumCase = callback.getCaseDetails().getCaseData();
 
                     return callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
-                            && callback.getEvent() == Event.DECISION_WITHOUT_HEARING
+                            && callback.getEvent() == DECISION_WITHOUT_HEARING
                             && isInternalCase(asylumCase)
                             && hasBeenSubmittedByAppellantInternalCase(asylumCase)
                             && isDetainedInOneOfFacilityTypes(asylumCase, IRC, PRISON);

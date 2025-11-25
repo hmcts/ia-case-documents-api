@@ -9,7 +9,7 @@ class ListingEventTest {
 
     @Test
     void has_correct_bail_listing_event() {
-        assertThat(ListingEvent.from("initialListing").get()).isEqualByComparingTo(ListingEvent.INITIAL);
+        assertThat(ListingEvent.from("initialListing").get()).isEqualByComparingTo(ListingEvent.INITIAL_LISTING);
         assertThat(ListingEvent.from("relisting").get()).isEqualByComparingTo(ListingEvent.RELISTING);
     }
 

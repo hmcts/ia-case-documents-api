@@ -37,38 +37,38 @@ public class BailPostSubmitCallbackController extends PostSubmitCallbackControll
     @Operation(
         summary = "Handles 'SubmittedEvent' callbacks from CCD",
         security =
-        {
-            @SecurityRequirement(name = "Authorization"),
-            @SecurityRequirement(name = "ServiceAuthorization")
-        },
+            {
+                @SecurityRequirement(name = "Authorization"),
+                @SecurityRequirement(name = "ServiceAuthorization")
+            },
         responses =
-        {
-            @ApiResponse(
+            {
+                @ApiResponse(
                     responseCode = "200",
                     description = "Transformed Asylum case data, with any identified error or warning messages",
                     content = @Content(schema = @Schema(implementation = PostSubmitCallbackResponse.class))
                 ),
-            @ApiResponse(
+                @ApiResponse(
                     responseCode = "400",
                     description = "Bad Request",
                     content = @Content(schema = @Schema(implementation = PostSubmitCallbackResponse.class))
                 ),
-            @ApiResponse(
+                @ApiResponse(
                     responseCode = "403",
                     description = "Forbidden",
                     content = @Content(schema = @Schema(implementation = PostSubmitCallbackResponse.class))
                 ),
-            @ApiResponse(
+                @ApiResponse(
                     responseCode = "415",
                     description = "Unsupported Media Type",
                     content = @Content(schema = @Schema(implementation = PostSubmitCallbackResponse.class))
                 ),
-            @ApiResponse(
+                @ApiResponse(
                     responseCode = "500",
                     description = "Internal Server Error",
                     content = @Content(schema = @Schema(implementation = PostSubmitCallbackResponse.class))
                 )
-        }
+            }
     )
     @PostMapping(path = "/ccdSubmitted")
     public ResponseEntity<PostSubmitCallbackResponse> ccdSubmitted(

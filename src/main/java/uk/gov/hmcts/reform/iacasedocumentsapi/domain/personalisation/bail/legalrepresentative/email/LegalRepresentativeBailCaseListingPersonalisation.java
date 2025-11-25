@@ -47,7 +47,7 @@ public class LegalRepresentativeBailCaseListingPersonalisation implements LegalR
             .orElseThrow(() -> new IllegalStateException("Listing Event is not present"));
 
         return switch (listingEvent) {
-            case INITIAL -> caseListingInitialWithLegalRepPersonalisationTemplateId;
+            case INITIAL_LISTING -> caseListingInitialWithLegalRepPersonalisationTemplateId;
             case RELISTING -> isBailConditionalGrant(bailCase) ?
                 caseListingConditionalBailRelistingWithLegalRepPersonalisationTemplateId :
                 caseListingRelistingWithLegalRepPersonalisationTemplateId;

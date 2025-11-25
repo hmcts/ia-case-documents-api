@@ -49,7 +49,7 @@ public class InternalChangeHearingCentreLetterTemplateTest {
     private final String homeOfficeReferenceNumber = "A1234567/001";
     private final String appellantGivenNames = "John";
     private final String appellantFamilyName = "Doe";
-    
+
     @BeforeEach
     void setUp() {
         internalChangeHearingCentreLetterTemplate = new InternalChangeHearingCentreLetterTemplate(templateName, customerServicesProvider, stringProvider);

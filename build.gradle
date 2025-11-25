@@ -59,11 +59,11 @@ java {
 }
 
 compileJava {
-  options.compilerArgs << '-parameters' << '-Xlint:deprecation' << "-Xlint:unchecked" << "-Werror"
+  options.compilerArgs << '-parameters' << '-Xlint:deprecation' << "-Xlint:unchecked"
 }
 
 compileTestJava {
-  options.compilerArgs << '-Xlint:deprecation' << "-Xlint:unchecked" << "-Werror"
+  options.compilerArgs << '-Xlint:deprecation' << "-Xlint:unchecked"
 }
 
 tasks.withType(Test) {

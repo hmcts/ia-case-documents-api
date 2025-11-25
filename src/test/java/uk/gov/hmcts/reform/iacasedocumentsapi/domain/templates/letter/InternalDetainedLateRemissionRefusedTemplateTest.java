@@ -217,7 +217,7 @@ class InternalDetainedLateRemissionRefusedTemplateTest {
 
         // Verify all expected fields are present
         assertEquals(9, templateFieldValues.size());
-        
+
         // Verify each field has the expected value
         assertEquals(formatDateForNotificationAttachmentDocument(now), templateFieldValues.get("dateLetterSent"));
         assertEquals(Optional.of(remissionDecisionReason), templateFieldValues.get("remissionDecisionReason"));

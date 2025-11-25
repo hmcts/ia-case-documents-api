@@ -44,7 +44,7 @@ public class ApplicantBailCaseListingPersonalisationSms implements ApplicantBail
             .orElseThrow(() -> new IllegalStateException("Listing Event is not present"));
 
         return switch (listingEvent) {
-            case INITIAL -> caseListingInitialApplicantSmsTemplateId;
+            case INITIAL_LISTING -> caseListingInitialApplicantSmsTemplateId;
             case RELISTING -> isBailConditionalGrant(bailCase) ?
                 caseListingConditionalBailRelistingApplicantSmsTemplateId :
                 caseListingRelistingApplicantSmsTemplateId;
