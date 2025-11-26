@@ -10,8 +10,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CheckValues;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.State;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.*;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.caselinking.CaseLink;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.HelpWithFeesOption;
-import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.enties.em.Bundle;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.em.Bundle;
 
 public enum AsylumCaseDefinition {
 
@@ -103,7 +102,7 @@ public enum AsylumCaseDefinition {
         "appellantAddress", new TypeReference<AddressUk>(){}),
 
     APPEAL_TYPE(
-        "appealType", new TypeReference<AsylumAppealType>(){}),
+        "appealType", new TypeReference<AppealType>(){}),
 
     REASONS_FOR_APPEAL_DECISION(
         "reasonsForAppealDecision", new TypeReference<String>(){}),

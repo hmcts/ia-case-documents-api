@@ -1,7 +1,6 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.security;
 
 import static com.google.common.collect.Lists.newArrayList;
-import static com.google.common.collect.Sets.newHashSet;
 import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -34,14 +33,10 @@ public class CcdEventAuthorizorTest {
     @Mock
     private AuthorizedRolesProvider authorizedRolesProvider;
 
-    private String role = "caseworker-ia";
-    private Map<String, List<Event>> roleEventAccess = new ImmutableMap.Builder<String, List<Event>>()
-        .put(role, newArrayList(Event.UNKNOWN))
-        .build();
+    private final String role = "caseworker-ia";
 
     private CcdEventAuthorizor ccdEventAuthorizor;
     private static final String EVENT_NOT_ALLOWED = "Event 'unknown' not allowed";
-    private final String role = "caseworker-ia";
 
     @BeforeEach
     public void setUp() {
@@ -158,31 +153,6 @@ public class CcdEventAuthorizorTest {
                 ).build(), EVENT_NOT_ALLOWED
             )
         );
-    }
-
-
-    @Test
-    public void should_not_throw_exception_when_event_is_allowed() {
-
-        ccdEventAuthorizor = new CcdEventAuthorizor(roleEventAccess, authorizedRolesProvider);
-
-        when(authorizedRolesProvider.getRoles()).thenReturn(newHashSet(role));
-
-        ccdEventAuthorizor.throwIfNotAuthorized(Event.UNKNOWN);
-    }
-
-    @Test
-    public void should_throw_exception_when_provider_returns_empty_list() {
-
-        ccdEventAuthorizor = new CcdEventAuthorizor(roleEventAccess, authorizedRolesProvider);
-
-        when(authorizedRolesProvider.getRoles()).thenReturn(newHashSet());
-
-        AccessDeniedException thrown = assertThrows(
-            AccessDeniedException.class,
-            () -> ccdEventAuthorizor.throwIfNotAuthorized(Event.UNKNOWN)
-        );
-        assertEquals("Event 'unknown' not allowed", thrown.getMessage());
     }
 
     @Test

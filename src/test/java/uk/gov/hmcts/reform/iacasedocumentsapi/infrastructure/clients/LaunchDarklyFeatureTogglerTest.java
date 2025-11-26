@@ -2,11 +2,15 @@ package uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.clients;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
 
 import com.google.common.collect.Lists;
+import com.launchdarkly.sdk.LDContext;
 import com.launchdarkly.sdk.LDUser;
 import com.launchdarkly.sdk.server.interfaces.LDClientInterface;
+import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -29,10 +33,10 @@ public class LaunchDarklyFeatureTogglerTest {
     @InjectMocks
     private LaunchDarklyFeatureToggler launchDarklyFeatureToggler;
 
-    private UserDetails userDetails = new IdamUserDetails(
+    private final UserDetails userDetails = new IdamUserDetails(
         "accessToken",
         "id",
-        Lists.newArrayList("role1", "role2"),
+        List.of("role1", "role2"),
         "emailAddress",
         "forname",
         "surname"
@@ -43,13 +47,10 @@ public class LaunchDarklyFeatureTogglerTest {
         String notExistingKey = "not-existing-key";
         when(userDetailsProvider.getUserDetails()).thenReturn(userDetails);
         when(ldClient.boolVariation(
-            notExistingKey,
-            new LDUser.Builder(userDetails.getId())
-                .firstName(userDetails.getForename())
-                .lastName(userDetails.getSurname())
-                .email(userDetails.getEmailAddress())
-                .build(),
-            false)
+                 eq(notExistingKey),
+                 any(LDContext.class),
+                 eq(false)
+             )
         ).thenReturn(false);
 
         assertFalse(launchDarklyFeatureToggler.getValue(notExistingKey, false));
@@ -60,13 +61,10 @@ public class LaunchDarklyFeatureTogglerTest {
         String existingKey = "existing-key";
         when(userDetailsProvider.getUserDetails()).thenReturn(userDetails);
         when(ldClient.boolVariation(
-            existingKey,
-            new LDUser.Builder(userDetails.getId())
-                .firstName(userDetails.getForename())
-                .lastName(userDetails.getSurname())
-                .email(userDetails.getEmailAddress())
-                .build(),
-            false)
+                 eq(existingKey),
+                 any(LDContext.class),
+                 eq(false)
+             )
         ).thenReturn(true);
 
         assertTrue(launchDarklyFeatureToggler.getValue(existingKey, false));

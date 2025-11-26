@@ -1,4 +1,4 @@
-package uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.enties.em;
+package uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.em;
 
 import java.util.List;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseData;

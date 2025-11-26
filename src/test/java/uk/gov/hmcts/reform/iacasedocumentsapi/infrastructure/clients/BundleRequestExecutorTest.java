@@ -1,6 +1,6 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.clients;
 
-import static org.apache.commons.lang3.RandomStringUtils.randomAlphabetic;
+import static org.apache.commons.lang3.RandomStringUtils.secure;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.*;
@@ -25,7 +25,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.UserDetails;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.Callback;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.PreSubmitCallbackResponse;
-import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.enties.em.BundleCaseData;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.em.BundleCaseData;
 
 @ExtendWith(MockitoExtension.class)
 @SuppressWarnings("unchecked")
@@ -33,8 +33,8 @@ public class BundleRequestExecutorTest {
 
     private static final String SERVICE_AUTHORIZATION = "ServiceAuthorization";
     private static final String ENDPOINT = "http://endpoint";
-    private static final String SERVICE_TOKEN = randomAlphabetic(32);
-    private static final String ACCESS_TOKEN = randomAlphabetic(32);
+    private static final String SERVICE_TOKEN = secure().nextAlphabetic(32);
+    private static final String ACCESS_TOKEN = secure().nextAlphabetic(32);
 
     @Mock private AuthTokenGenerator serviceAuthTokenGenerator;
     @Mock private RestTemplate restTemplate;

@@ -15,7 +15,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumAppealType;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AppealType;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DocumentTag;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseDetails;
@@ -58,7 +58,7 @@ class InternalDetMarkAsPaidLetterGeneratorTest {
         when(callback.getCaseDetails()).thenReturn(caseDetails);
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
         when(caseDetails.getState()).thenReturn(State.APPEAL_SUBMITTED);
-        when(callback.getCaseDetails().getCaseData().read(APPEAL_TYPE, AsylumAppealType.class)).thenReturn(Optional.of(AsylumAppealType.EA));
+        when(callback.getCaseDetails().getCaseData().read(APPEAL_TYPE, AppealType.class)).thenReturn(Optional.of(AppealType.EA));
         when(callback.getCaseDetails().getCaseData().read(PAYMENT_STATUS, PaymentStatus.class)).thenReturn(Optional.of(PaymentStatus.PAID));
     }
 
@@ -91,7 +91,7 @@ class InternalDetMarkAsPaidLetterGeneratorTest {
             when(caseDetails.getCaseData()).thenReturn(asylumCase);
             when(callback.getEvent()).thenReturn(Event.MARK_APPEAL_PAID);
             when(caseDetails.getState()).thenReturn(state);
-            when(callback.getCaseDetails().getCaseData().read(APPEAL_TYPE, AsylumAppealType.class)).thenReturn(Optional.of(AsylumAppealType.PA));
+            when(callback.getCaseDetails().getCaseData().read(APPEAL_TYPE, AppealType.class)).thenReturn(Optional.of(AppealType.PA));
             when(callback.getCaseDetails().getCaseData().read(PAYMENT_STATUS, PaymentStatus.class)).thenReturn(Optional.of(PaymentStatus.PAID));
             when(callback.getCaseDetails().getCaseData().read(IS_ADMIN, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
             when(callback.getCaseDetails().getCaseData().read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
@@ -107,10 +107,10 @@ class InternalDetMarkAsPaidLetterGeneratorTest {
     }
 
     @ParameterizedTest
-    @EnumSource(value = AsylumAppealType.class, names = {"EA", "HU", "EU"})
-    public void should_handle_if_ea_hu_eu_and_appeal_submitted_state(AsylumAppealType appealType) {
+    @EnumSource(value = AppealType.class, names = {"EA", "HU", "EU"})
+    public void should_handle_if_ea_hu_eu_and_appeal_submitted_state(AppealType appealType) {
         when(callback.getEvent()).thenReturn(Event.MARK_APPEAL_PAID);
-        when(callback.getCaseDetails().getCaseData().read(APPEAL_TYPE, AsylumAppealType.class)).thenReturn(Optional.of(appealType));
+        when(callback.getCaseDetails().getCaseData().read(APPEAL_TYPE, AppealType.class)).thenReturn(Optional.of(appealType));
         when(callback.getCaseDetails().getCaseData().read(IS_ADMIN, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
         when(callback.getCaseDetails().getCaseData().read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
         when(callback.getCaseDetails().getCaseData().read(IS_ACCELERATED_DETAINED_APPEAL, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO));
@@ -131,7 +131,7 @@ class InternalDetMarkAsPaidLetterGeneratorTest {
     }
 
     @ParameterizedTest
-    @EnumSource(value = AsylumAppealType.class, names = {"EA", "HU", "EU"})
+    @EnumSource(value = AppealType.class, names = {"EA", "HU", "EU"})
     public void handling_should_throw_if_ea_hu_eu_and_not_appeal_submitted_state() {
         when(callback.getEvent()).thenReturn(Event.MARK_APPEAL_PAID);
         when(caseDetails.getState()).thenReturn(State.LISTING);
@@ -169,7 +169,7 @@ class InternalDetMarkAsPaidLetterGeneratorTest {
             when(callback.getCaseDetails()).thenReturn(caseDetails);
             when(caseDetails.getCaseData()).thenReturn(asylumCase);
             when(caseDetails.getState()).thenReturn(State.APPEAL_SUBMITTED);
-            when(callback.getCaseDetails().getCaseData().read(APPEAL_TYPE, AsylumAppealType.class)).thenReturn(Optional.of(AsylumAppealType.EA));
+            when(callback.getCaseDetails().getCaseData().read(APPEAL_TYPE, AppealType.class)).thenReturn(Optional.of(AppealType.EA));
             when(callback.getCaseDetails().getCaseData().read(PAYMENT_STATUS, PaymentStatus.class)).thenReturn(Optional.of(PaymentStatus.PAID));
             when(callback.getCaseDetails().getCaseData().read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
             when(callback.getCaseDetails().getCaseData().read(IS_ACCELERATED_DETAINED_APPEAL, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO));
@@ -190,7 +190,7 @@ class InternalDetMarkAsPaidLetterGeneratorTest {
             when(callback.getCaseDetails()).thenReturn(caseDetails);
             when(caseDetails.getCaseData()).thenReturn(asylumCase);
             when(caseDetails.getState()).thenReturn(State.APPEAL_SUBMITTED);
-            when(callback.getCaseDetails().getCaseData().read(APPEAL_TYPE, AsylumAppealType.class)).thenReturn(Optional.of(AsylumAppealType.EA));
+            when(callback.getCaseDetails().getCaseData().read(APPEAL_TYPE, AppealType.class)).thenReturn(Optional.of(AppealType.EA));
             when(callback.getCaseDetails().getCaseData().read(PAYMENT_STATUS, PaymentStatus.class)).thenReturn(Optional.of(PaymentStatus.PAID));
             when(callback.getCaseDetails().getCaseData().read(IS_ADMIN, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
             when(callback.getCaseDetails().getCaseData().read(IS_ACCELERATED_DETAINED_APPEAL, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO));

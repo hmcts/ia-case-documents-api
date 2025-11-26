@@ -18,7 +18,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.BailCase;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.BailHearingLocation;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ListingEvent;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.State;
-import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.DateTimeExtractor;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DateTimeExtractor;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.HearingDetailsFinder;
 
 @ExtendWith(MockitoExtension.class)

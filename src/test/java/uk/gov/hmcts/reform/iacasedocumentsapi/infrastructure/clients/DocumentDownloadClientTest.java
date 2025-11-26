@@ -16,125 +16,80 @@ import uk.gov.hmcts.reform.authorisation.generators.AuthTokenGenerator;
 import uk.gov.hmcts.reform.document.DocumentDownloadClientApi;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.UserDetailsProvider;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.UserDetails;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.FeatureToggler;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.security.AccessTokenProvider;
 
 @ExtendWith(MockitoExtension.class)
 public class DocumentDownloadClientTest {
-
-    private final String someAccessToken = "some-access-token";
-    private final String someServiceAuthToken = "some-service-auth-token";
-
     @Mock
-    private DocumentDownloadClientApi documentDownloadClientApi;
-    @Mock private AccessTokenProvider accessTokenProvider;
-    @Mock private AuthTokenGenerator serviceAuthTokenGenerator;
-    @Mock private UserDetailsProvider userDetailsProvider;
-    @Mock private UserDetails userDetails;
-    @Mock private ResponseEntity<Resource> responseEntity;
-    @Mock private Resource downloadedResource;
-
+    private Resource downloadedResource;
+    @Mock
+    private FeatureToggler featureToggler;
+    @Mock
+    private DmDocumentDownloadClient dmDocumentDownloadClient;
+    @Mock
+    private CdamDocumentDownloadClient cdamDocumentDownloadClient;
     private DocumentDownloadClient documentDownloadClient;
-    private String someWellFormattedDocumentBinaryDownloadUrl = "http://host:8080/a/b/c";
-    private String someUserRolesString = "some-role,some-other-role";
-    private String someUserId = "some-user-id";
+    private final String someWellFormattedDocumentBinaryDownloadUrl = "http://host:8080/a/b/c";
 
     @BeforeEach
     public void setUp() {
         documentDownloadClient = new DocumentDownloadClient(
-            documentDownloadClientApi,
-            serviceAuthTokenGenerator,
-            accessTokenProvider,
-            userDetailsProvider);
+            featureToggler,
+            dmDocumentDownloadClient,
+            cdamDocumentDownloadClient
+        );
     }
 
     @Test
-    public void downloads_resource() {
-
-        when(documentDownloadClientApi.downloadBinary(
-                someAccessToken,
-                someServiceAuthToken,
-                someUserRolesString,
-                someUserId,
-                "a/b/c")).thenReturn(responseEntity);
-
-        when(responseEntity.getBody())
-                .thenReturn(downloadedResource);
-
-        when(accessTokenProvider.getAccessToken())
-                .thenReturn(someAccessToken);
-
-        when(serviceAuthTokenGenerator.generate())
-                .thenReturn(someServiceAuthToken);
-
-        when(userDetailsProvider.getUserDetails())
-                .thenReturn(userDetails);
-
-        when(userDetails.getRoles())
-                .thenReturn(asList(someUserRolesString));
-
-        when(userDetails.getId())
-                .thenReturn(someUserId);
+    public void usesCdamIfFlagOn() {
+        when(featureToggler.getValue("use-ccd-document-am", false)).thenReturn(true);
+        when(cdamDocumentDownloadClient.download(anyString()))
+            .thenReturn(downloadedResource);
 
         Resource resource = documentDownloadClient.download(someWellFormattedDocumentBinaryDownloadUrl);
 
-        verify(documentDownloadClientApi, times(1))
-            .downloadBinary(
-                eq(someAccessToken),
-                eq(someServiceAuthToken),
-                eq(someUserRolesString),
-                eq(someUserId),
-                eq("a/b/c")
-            );
+        verify(cdamDocumentDownloadClient, times(1))
+            .download(someWellFormattedDocumentBinaryDownloadUrl);
+
+        verify(dmDocumentDownloadClient, never())
+            .download(someWellFormattedDocumentBinaryDownloadUrl);
 
         assertEquals(resource, downloadedResource);
     }
 
     @Test
-    public void throws_if_document_binary_url_bad() {
+    public void usesDmIfFlagOff() {
+        when(featureToggler.getValue("use-ccd-document-am", false)).thenReturn(false);
+        when(dmDocumentDownloadClient.download(anyString()))
+            .thenReturn(downloadedResource);
 
-        assertThatThrownBy(() -> documentDownloadClient.download("bad-url"))
-            .isExactlyInstanceOf(IllegalArgumentException.class)
-            .hasMessage("Invalid url for DocumentDownloadClientApi");
+        Resource resource = documentDownloadClient.download(someWellFormattedDocumentBinaryDownloadUrl);
 
-        verifyNoInteractions(documentDownloadClientApi);
-        verifyNoInteractions(serviceAuthTokenGenerator);
-        verifyNoInteractions(accessTokenProvider);
+        verify(dmDocumentDownloadClient, times(1))
+            .download(someWellFormattedDocumentBinaryDownloadUrl);
+
+        verify(cdamDocumentDownloadClient, never())
+            .download(someWellFormattedDocumentBinaryDownloadUrl);
+
+        assertEquals(resource, downloadedResource);
     }
 
     @Test
-    public void throws_if_document_api_returns_empty_body() {
+    public void usesDmIfNoFlag() {
+        when(dmDocumentDownloadClient.download(anyString()))
+            .thenReturn(downloadedResource);
 
-        when(documentDownloadClientApi.downloadBinary(
-                someAccessToken,
-                someServiceAuthToken,
-                someUserRolesString,
-                someUserId,
-                "a/b/c")).thenReturn(responseEntity);
+        Resource resource = documentDownloadClient.download(someWellFormattedDocumentBinaryDownloadUrl);
 
-        when(responseEntity.getBody())
-                .thenReturn(downloadedResource);
+        verify(dmDocumentDownloadClient, times(1))
+            .download(someWellFormattedDocumentBinaryDownloadUrl);
 
-        when(accessTokenProvider.getAccessToken())
-                .thenReturn(someAccessToken);
+        verify(cdamDocumentDownloadClient, never())
+            .download(someWellFormattedDocumentBinaryDownloadUrl);
 
-        when(serviceAuthTokenGenerator.generate())
-                .thenReturn(someServiceAuthToken);
-
-        when(userDetailsProvider.getUserDetails())
-                .thenReturn(userDetails);
-
-        when(userDetails.getRoles())
-                .thenReturn(asList(someUserRolesString));
-
-        when(userDetails.getId())
-                .thenReturn(someUserId);
-
-        when(responseEntity.getBody())
-            .thenReturn(null);
-
-        assertThatThrownBy(() -> documentDownloadClient.download(someWellFormattedDocumentBinaryDownloadUrl))
-            .isExactlyInstanceOf(IllegalStateException.class)
-            .hasMessage("Document could not be downloaded");
+        assertEquals(resource, downloadedResource);
     }
+
 
 }

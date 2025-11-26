@@ -20,7 +20,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.Document
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.PreSubmitCallbackHandler;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentCreator;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentHandler;
-import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.DirectionFinder;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DirectionFinder;
 /*
 This class is to generate letter when a Non Standard Direction is sent to respondent or appellant and respondent.
  */

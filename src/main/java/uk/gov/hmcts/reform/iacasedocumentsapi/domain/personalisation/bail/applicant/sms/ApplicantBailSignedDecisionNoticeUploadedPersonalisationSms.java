@@ -1,7 +1,7 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.personalisation.bail.applicant.sms;
 
 import static java.util.Objects.requireNonNull;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.BailCaseUtils.isBailGranted;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.BailCaseUtils.isBailGranted;
 
 import com.google.common.collect.ImmutableMap;
 import java.util.Map;

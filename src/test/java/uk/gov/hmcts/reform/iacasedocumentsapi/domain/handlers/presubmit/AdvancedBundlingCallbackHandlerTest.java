@@ -14,7 +14,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
-import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -36,7 +35,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentsAppender;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.FeatureToggler;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.clients.EmBundleRequestExecutor;
-import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.enties.em.Bundle;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.em.Bundle;
 
 
 @ExtendWith(MockitoExtension.class)
@@ -218,7 +217,7 @@ class AdvancedBundlingCallbackHandlerTest {
                         new DocumentWithMetadata(document, "test","2020-12-12",
                                 DocumentTag.FTPA_DECISION_AND_REASONS, "The appellant"));
         final List<IdValue<DocumentWithMetadata>> finalDecisionsAndReasonsDocs =
-                Lists.newArrayList(finalDecisionsAndReasonsDoc);
+                List.of(finalDecisionsAndReasonsDoc);
 
         when(asylumCase.read(CASE_FLAG_SET_ASIDE_REHEARD_EXISTS, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
         when(asylumCase.read(ADDENDUM_EVIDENCE_DOCUMENTS)).thenReturn(Optional.empty());
@@ -359,10 +358,10 @@ class AdvancedBundlingCallbackHandlerTest {
                 new IdValue<>("2", decisionDocumentWithMetadata);
         IdValue<DocumentWithMetadata> coverLetterDocWithMetadata =
                 new IdValue<>("1", coverLetterDocumentWithMetadata);
-        final List<IdValue<DocumentWithMetadata>> listOfDocumentsWithMetadata = Lists.newArrayList(decisionDocWithMetadata, coverLetterDocWithMetadata);
+        final List<IdValue<DocumentWithMetadata>> listOfDocumentsWithMetadata = List.of(decisionDocWithMetadata, coverLetterDocWithMetadata);
         IdValue<ReheardHearingDocuments> reheardHearingDocuments =
                 new IdValue<>("1", new ReheardHearingDocuments(listOfDocumentsWithMetadata));
-        return Lists.newArrayList(reheardHearingDocuments);
+        return List.of(reheardHearingDocuments);
     }
 
     private List<IdValue<RemittalDocument>> buildRemittalDocuments() {
@@ -378,9 +377,9 @@ class AdvancedBundlingCallbackHandlerTest {
         IdValue<DocumentWithMetadata> coverLetterDocWithMetadata =
                 new IdValue<>("12", remittalOtherDoc2);
 
-        final List<IdValue<DocumentWithMetadata>> listOfDocumentsWithMetadata = Lists.newArrayList(decisionDocWithMetadata, coverLetterDocWithMetadata);
+        final List<IdValue<DocumentWithMetadata>> listOfDocumentsWithMetadata = List.of(decisionDocWithMetadata, coverLetterDocWithMetadata);
         IdValue<RemittalDocument> remittalDocuments =
                 new IdValue<>("1", new RemittalDocument(remittalDec, listOfDocumentsWithMetadata));
-        return Lists.newArrayList(remittalDocuments);
+        return List.of(remittalDocuments);
     }
 }

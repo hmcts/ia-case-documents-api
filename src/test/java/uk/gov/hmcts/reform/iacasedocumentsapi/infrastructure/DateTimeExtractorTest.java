@@ -7,6 +7,7 @@ import java.time.format.DateTimeParseException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DateTimeExtractor;
 
 public class DateTimeExtractorTest {
 

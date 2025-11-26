@@ -48,23 +48,25 @@ public class NotificationHandler implements PreSubmitCallbackHandler<AsylumCase>
         return canHandleFunction.test(callbackStage, callback);
     }
 
-    private List<Event> getEventsToSkip() {
-        return Lists.newArrayList(
+    public static List<Event> getEventsToSkip() {
+        return List.of(
             Event.SUBMIT_APPLICATION,
-            Event.UPLOAD_BAIL_SUMMARY,
-            Event.UPLOAD_SIGNED_DECISION_NOTICE,
+            Event.RECORD_THE_DECISION,
             Event.END_APPLICATION,
+            Event.MAKE_NEW_APPLICATION,
+            Event.EDIT_BAIL_APPLICATION_AFTER_SUBMIT,
+            Event.UPLOAD_SIGNED_DECISION_NOTICE,
+            Event.CASE_LISTING,
+            Event.UPLOAD_BAIL_SUMMARY,
             Event.UPLOAD_DOCUMENTS,
             Event.SEND_BAIL_DIRECTION,
             Event.EDIT_BAIL_DOCUMENTS,
             Event.CHANGE_BAIL_DIRECTION_DUE_DATE,
-            Event.MAKE_NEW_APPLICATION,
-            Event.EDIT_BAIL_APPLICATION_AFTER_SUBMIT,
+            Event.STOP_LEGAL_REPRESENTING,
+            Event.NOC_REQUEST_BAIL,
             Event.CREATE_BAIL_CASE_LINK,
             Event.MAINTAIN_BAIL_CASE_LINKS,
-            Event.RECORD_THE_DECISION,
             Event.SEND_UPLOAD_BAIL_SUMMARY_DIRECTION,
-            Event.CASE_LISTING,
             Event.FORCE_CASE_TO_HEARING,
             Event.CHANGE_TRIBUNAL_CENTRE,
             Event.START_APPLICATION,

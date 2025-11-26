@@ -31,7 +31,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseDetails;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.Document;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.IdValue;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.CustomerServicesProvider;
-import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.DirectionFinder;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DirectionFinder;
 
 @ExtendWith(MockitoExtension.class)
 class ClarifyingQuestionsAnswersTemplateTest {

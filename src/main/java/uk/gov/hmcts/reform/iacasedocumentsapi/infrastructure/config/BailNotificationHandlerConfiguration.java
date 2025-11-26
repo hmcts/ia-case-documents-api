@@ -1,6 +1,6 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.config;
 
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.BailCaseUtils.isInternalCase;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.BailCaseUtils.isInternalCase;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.BailCaseFieldDefinition.*;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.Event.EDIT_BAIL_APPLICATION;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.Event.START_APPLICATION;

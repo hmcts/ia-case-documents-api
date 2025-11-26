@@ -11,7 +11,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumAppealType;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AppealType;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DocumentTag;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.UpdateTribunalRules;
@@ -172,19 +172,19 @@ class InternalDetainedAppealUpdateTribunalDecisionRule31IrcPrisonLetterGenerator
 
     @ParameterizedTest
     @MethodSource("provideAllAppealTypes")
-    void should_handle_callback_for_all_appeal_types(AsylumAppealType appealType) {
+    void should_handle_callback_for_all_appeal_types(AppealType appealType) {
         when(callback.getCaseDetails()).thenReturn(caseDetails);
         when(callback.getEvent()).thenReturn(Event.UPDATE_TRIBUNAL_DECISION);
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
 
         setUpValidCase();
-        when(asylumCase.read(APPEAL_TYPE, AsylumAppealType.class)).thenReturn(Optional.of(appealType));
+        when(asylumCase.read(APPEAL_TYPE, AppealType.class)).thenReturn(Optional.of(appealType));
 
         assertTrue(letterGenerator.canHandle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback));
     }
 
-    private static Stream<AsylumAppealType> provideAllAppealTypes() {
-        return Stream.of(AsylumAppealType.PA, AsylumAppealType.EA, AsylumAppealType.HU, AsylumAppealType.EU, AsylumAppealType.DC, AsylumAppealType.RP);
+    private static Stream<AppealType> provideAllAppealTypes() {
+        return Stream.of(AppealType.PA, AppealType.EA, AppealType.HU, AppealType.EU, AppealType.DC, AppealType.RP);
     }
 
     @Test

@@ -1,8 +1,7 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.*;
@@ -18,6 +17,7 @@ import org.junit.jupiter.params.provider.CsvSource;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.powermock.api.mockito.PowerMockito;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.test.util.ReflectionTestUtils;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo;
@@ -26,21 +26,26 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo;
 @ExtendWith(MockitoExtension.class)
 public class CustomerServicesProviderTest {
 
-    @Mock CustomerServicesProvider customerServicesProvider;
-
     @Mock
+    CustomerServicesProvider customerServicesProvider;
+
+    @Mock(lenient = true)
     private AsylumCase asylumCase;
 
-    private String customerServicesTelephone = "555 555";
-    private String customerServicesEmail = "some.email@example.com";
-    private String internalAdaCustomerServicesTelephone = "111 111";
-    private String internalAdaCustomerServicesEmail = "some.email@example.com";
+    private final String customerServicesTelephone = "555 555";
+    private final String internalAdaCustomerServicesTelephone = "111 111";
+    private final String internalAdaCustomerServicesEmail = "some.internal.email@example.com";
+    private final String standardCustomerServicesEmail = "some.standard.email@example.com";
+    private final String appealIaCustomerServicesEmail = "some.appeal.ia.email@example.com";
 
     @BeforeEach
     public void setUp() {
         customerServicesProvider = new CustomerServicesProvider(
             customerServicesTelephone,
-            customerServicesEmail
+            standardCustomerServicesEmail,
+            appealIaCustomerServicesEmail,
+            internalAdaCustomerServicesEmail,
+            internalAdaCustomerServicesTelephone
         );
     }
 
@@ -50,123 +55,136 @@ public class CustomerServicesProviderTest {
         Map<String, String> customerServicesPersonalisation = customerServicesProvider.getCustomerServicesPersonalisation();
 
         assertEquals(customerServicesPersonalisation.get("customerServicesTelephone"), customerServicesTelephone);
-
-        assertEquals(customerServicesPersonalisation.get("customerServicesEmail"), customerServicesEmail);
+        assertEquals(customerServicesPersonalisation.get("customerServicesEmail"), standardCustomerServicesEmail);
+        assertEquals(customerServicesPersonalisation.get("AppealIAEmail"), appealIaCustomerServicesEmail);
     }
 
     @Test
     public void should_not_allow_null_arguments() {
 
-        assertThatThrownBy(() -> new CustomerServicesProvider(null, customerServicesEmail))
-            .isExactlyInstanceOf(NullPointerException.class);
+        assertThrows(
+            NullPointerException.class, () -> new CustomerServicesProvider(
+                null,
+                standardCustomerServicesEmail,
+                appealIaCustomerServicesEmail,
+                internalAdaCustomerServicesEmail,
+                internalAdaCustomerServicesTelephone
+            )
+        );
 
-        assertThatThrownBy(() -> new CustomerServicesProvider(customerServicesTelephone, null))
-            .isExactlyInstanceOf(NullPointerException.class);
+        assertThrows(
+            NullPointerException.class, () -> new CustomerServicesProvider(
+                customerServicesTelephone,
+                null,
+                appealIaCustomerServicesEmail,
+                internalAdaCustomerServicesEmail,
+                internalAdaCustomerServicesTelephone
+            )
+        );
+
+        assertThrows(
+            NullPointerException.class, () -> new CustomerServicesProvider(
+                customerServicesTelephone,
+                standardCustomerServicesEmail,
+                null,
+                internalAdaCustomerServicesEmail,
+                internalAdaCustomerServicesTelephone
+            )
+        );
+
+        assertThrows(
+            NullPointerException.class, () -> new CustomerServicesProvider(
+                customerServicesTelephone,
+                standardCustomerServicesEmail,
+                appealIaCustomerServicesEmail,
+                null,
+                internalAdaCustomerServicesTelephone
+            )
+        );
+
+        assertThrows(
+            NullPointerException.class, () -> new CustomerServicesProvider(
+                customerServicesTelephone,
+                standardCustomerServicesEmail,
+                appealIaCustomerServicesEmail,
+                internalAdaCustomerServicesEmail,
+                null
+            )
+        );
+
     }
 
     @Test
     public void should_return_customer_services_telephone_number_and_email() {
-
         assertEquals(customerServicesTelephone, customerServicesProvider.getCustomerServicesTelephone());
-
-        assertEquals(customerServicesEmail, customerServicesProvider.getCustomerServicesEmail());
+        assertEquals(standardCustomerServicesEmail, customerServicesProvider.getCustomerServicesEmail());
     }
 
     @Test
     public void should_return_internal_ada_customer_services_telephone_number_and_email() {
-        ReflectionTestUtils.setField(customerServicesProvider, "internalAdaCustomerServicesTelephone", internalAdaCustomerServicesTelephone);
-        ReflectionTestUtils.setField(customerServicesProvider, "internalAdaCustomerServicesEmail", internalAdaCustomerServicesEmail);
+        ReflectionTestUtils.setField(
+            customerServicesProvider,
+            "internalAdaCustomerServicesTelephone",
+            internalAdaCustomerServicesTelephone
+        );
+        ReflectionTestUtils.setField(
+            customerServicesProvider,
+            "internalAdaCustomerServicesEmail",
+            internalAdaCustomerServicesEmail
+        );
 
         when(asylumCase.read(IS_ADMIN, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
         when(asylumCase.read(IS_ACCELERATED_DETAINED_APPEAL, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
         when(asylumCase.read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
 
-        assertEquals(internalAdaCustomerServicesTelephone,
-                customerServicesProvider.getInternalCustomerServicesTelephone(asylumCase));
+        assertEquals(
+            internalAdaCustomerServicesTelephone,
+            customerServicesProvider.getInternalCustomerServicesTelephone(asylumCase)
+        );
 
-        assertEquals(internalAdaCustomerServicesEmail,
-                customerServicesProvider.getInternalCustomerServicesEmail(asylumCase));
+        assertEquals(
+            internalAdaCustomerServicesEmail,
+            customerServicesProvider.getInternalCustomerServicesEmail(asylumCase)
+        );
     }
 
     @Test
     public void should_return_internal_non_ada_customer_services_telephone_number_and_email() {
-        ReflectionTestUtils.setField(customerServicesProvider, "internalAdaCustomerServicesTelephone", internalAdaCustomerServicesTelephone);
-        ReflectionTestUtils.setField(customerServicesProvider, "internalAdaCustomerServicesEmail", internalAdaCustomerServicesEmail);
+        ReflectionTestUtils.setField(
+            customerServicesProvider,
+            "internalAdaCustomerServicesTelephone",
+            internalAdaCustomerServicesTelephone
+        );
+        ReflectionTestUtils.setField(
+            customerServicesProvider,
+            "internalAdaCustomerServicesEmail",
+            internalAdaCustomerServicesEmail
+        );
 
         when(asylumCase.read(IS_ADMIN, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
         when(asylumCase.read(IS_ACCELERATED_DETAINED_APPEAL, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO));
         when(asylumCase.read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO));
 
-        assertEquals(customerServicesTelephone,
-                customerServicesProvider.getInternalCustomerServicesTelephone(asylumCase));
-
-        assertEquals(customerServicesEmail,
-                customerServicesProvider.getInternalCustomerServicesEmail(asylumCase));
-    }
-
-    @Test
-    public void should_return_customer_services_personalisation() {
-
-        Map<String, String> customerServicesPersonalisation =
-            customerServicesProvider.getCustomerServicesPersonalisation();
-
-        assertThat(customerServicesPersonalisation.get("customerServicesTelephone"))
-            .isEqualTo(customerServicesTelephone);
-        assertThat(customerServicesPersonalisation.get("customerServicesEmail")).isEqualTo(standardCustomerServicesEmail);
-        assertThat(customerServicesPersonalisation.get("AppealIAEmail"))
-            .isEqualTo(appealIaCustomerServicesEmail);
-    }
-
-    @Test
-    public void should_not_allow_null_arguments() {
-
-        assertThatThrownBy(() -> new CustomerServicesProvider(
-            null,
-            standardCustomerServicesEmail,
-            internalCaseCustomerServicesEmail,
-            appealIaCustomerServicesEmail))
-            .isExactlyInstanceOf(NullPointerException.class);
-
-        assertThatThrownBy(() -> new CustomerServicesProvider(
+        assertEquals(
             customerServicesTelephone,
-            null,
-            internalCaseCustomerServicesEmail,
-            appealIaCustomerServicesEmail))
-            .isExactlyInstanceOf(NullPointerException.class);
+            customerServicesProvider.getInternalCustomerServicesTelephone(asylumCase)
+        );
 
-        assertThatThrownBy(() -> new CustomerServicesProvider(
-            customerServicesTelephone,
+        assertEquals(
             standardCustomerServicesEmail,
-            null,
-            appealIaCustomerServicesEmail))
-            .isExactlyInstanceOf(NullPointerException.class);
-
-        assertThatThrownBy(() -> new CustomerServicesProvider(
-            customerServicesTelephone,
-            standardCustomerServicesEmail,
-            internalCaseCustomerServicesEmail,
-            null))
-            .isExactlyInstanceOf(NullPointerException.class);
-    }
-
-    @Test
-    public void should_return_customer_services_telephone_number_and_email() {
-
-        assertEquals(customerServicesTelephone, customerServicesProvider.getCustomerServicesTelephone());
-
-        assertEquals(standardCustomerServicesEmail, customerServicesProvider.getCustomerServicesEmail());
+            customerServicesProvider.getInternalCustomerServicesEmail(asylumCase)
+        );
     }
 
     @ParameterizedTest
-    @CsvSource({ "YES, YES", "NO, YES", "YES, NO", "NO, NO" })
+    @CsvSource({"YES, YES", "NO, YES", "YES, NO", "NO, NO"})
     public void should_set_correct_email_based_on_asylum_case(YesOrNo isAdmin, YesOrNo isAda) {
-        AsylumCase asylumCase = mock(AsylumCase.class);
-        PowerMockito.when(asylumCase.read(IS_ADMIN, YesOrNo.class)).thenReturn(Optional.of(isAdmin));
-        PowerMockito.when(asylumCase.read(IS_ACCELERATED_DETAINED_APPEAL, YesOrNo.class)).thenReturn(Optional.of(isAda));
+        when(asylumCase.read(IS_ADMIN, YesOrNo.class)).thenReturn(Optional.of(isAdmin));
+        when(asylumCase.read(IS_ACCELERATED_DETAINED_APPEAL, YesOrNo.class)).thenReturn(Optional.of(isAda));
         customerServicesProvider.setCorrectEmail(asylumCase);
 
         if (isAdmin.equals(YES) && isAda.equals(YES)) {
-            assertEquals(internalCaseCustomerServicesEmail, customerServicesProvider.getCustomerServicesEmail());
+            assertEquals(internalAdaCustomerServicesEmail, customerServicesProvider.getCustomerServicesEmail());
         } else {
             assertEquals(standardCustomerServicesEmail, customerServicesProvider.getCustomerServicesEmail());
         }

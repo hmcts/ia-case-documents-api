@@ -2,7 +2,7 @@ package uk.gov.hmcts.reform.iacasedocumentsapi.domain.personalisation;
 
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.BailCaseFieldDefinition.*;
 
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.BailCaseUtils;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.BailCaseUtils;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.BailCase;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo;
 

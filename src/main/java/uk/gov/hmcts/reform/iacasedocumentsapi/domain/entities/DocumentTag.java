@@ -45,9 +45,7 @@ public enum DocumentTag {
     UPPER_TRIBUNAL_BUNDLE("upperTribunalBundle", CaseType.ASYLUM),
     APPEAL_REASONS("appealReasons", CaseType.ASYLUM),
     CLARIFYING_QUESTIONS("clarifyingQuestions", CaseType.ASYLUM),
-
     NOTICE_OF_ADJOURNED_HEARING("noticeOfAdjournedHearing", CaseType.ASYLUM),
-
     APPEAL_FORM("appealForm", CaseType.ASYLUM),
     NOTICE_OF_DECISION_UT_TRANSFER("noticeOfDecisionUtTransfer", CaseType.ASYLUM),
     REQUEST_CASE_BUILDING("requestCaseBuilding", CaseType.ASYLUM),
@@ -121,7 +119,6 @@ public enum DocumentTag {
     DETAINED_APPEAL_ADJOURN_HEARING_WITHOUT_DATE_IRC_PRISON_LETTER("detainedAppealAdjournHearingWithoutDateIrcPrisonLetter", CaseType.ASYLUM),
     HOME_OFFICE_APPLICATION_DECIDED_LETTER("homeOfficeApplicationDecidedLetter", CaseType.ASYLUM),
     AIPM_DETAINED_IN_PRISON_IRC_REINSTATE_APPEAL_LETTER("aipmDetainedInPrisonOrIrcReinstateAppealLetter", CaseType.ASYLUM),
-
     BAIL_SUBMISSION("bailSubmission", CaseType.BAIL),
     BAIL_EVIDENCE("uploadTheBailEvidenceDocs", CaseType.BAIL),
     BAIL_DECISION_UNSIGNED("bailDecisionUnsigned", CaseType.BAIL),
@@ -131,9 +128,6 @@ public enum DocumentTag {
     BAIL_SUMMARY("uploadBailSummary", CaseType.BAIL),
     B1_DOCUMENT("b1Document", CaseType.BAIL),
     BAIL_NOTICE_OF_HEARING("bailNoticeOfHearing", CaseType.BAIL),
-
-
-
     APPLICATION_SUBMISSION("applicationSubmission", CaseType.BAIL),
     HOME_OFFICE_NON_STANDARD_DIRECTION_LETTER("homeOfficeNonStandardDirectionToHOLetter", CaseType.ASYLUM),
     INTERNAL_ADJOURN_HEARING_WITHOUT_DATE("internalAdjournHearingWithoutDate", CaseType.ASYLUM),

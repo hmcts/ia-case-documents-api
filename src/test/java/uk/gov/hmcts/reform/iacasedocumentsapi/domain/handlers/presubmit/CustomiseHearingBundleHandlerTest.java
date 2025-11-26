@@ -47,7 +47,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.Appender;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.FeatureToggler;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.SystemDateProvider;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.clients.EmBundleRequestExecutor;
-import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.enties.em.Bundle;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.em.Bundle;
 
 
 @ExtendWith(MockitoExtension.class)
@@ -950,7 +950,7 @@ class CustomiseHearingBundleHandlerTest {
         return
             new DocumentWithDescription(new Document("some-url",
                 "some-binary-url",
-                RandomStringUtils.randomAlphabetic(20)), "test");
+                RandomStringUtils.secure().next(20)), "test");
     }
 
     private Document createDocument() {

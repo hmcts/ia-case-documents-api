@@ -22,7 +22,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.HearingCentre;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.NotificationType;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.RecipientsFinder;
-import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.DateTimeExtractor;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DateTimeExtractor;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.HearingDetailsFinder;
 
 @ExtendWith(MockitoExtension.class)

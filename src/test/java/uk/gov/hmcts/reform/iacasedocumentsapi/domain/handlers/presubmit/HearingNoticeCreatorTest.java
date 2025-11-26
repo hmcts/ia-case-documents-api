@@ -259,10 +259,10 @@ class HearingNoticeCreatorTest {
 
         IdValue<DocumentWithMetadata> hearingDocWithMetadata =
             new IdValue<>("1", documentWithMetadata);
-        final List<IdValue<DocumentWithMetadata>> listOfDocumentsWithMetadata = Lists.newArrayList(hearingDocWithMetadata);
+        final List<IdValue<DocumentWithMetadata>> listOfDocumentsWithMetadata = List.of(hearingDocWithMetadata);
         IdValue<ReheardHearingDocuments> reheardHearingDocuments =
             new IdValue<>("1", new ReheardHearingDocuments(listOfDocumentsWithMetadata));
-        final List<IdValue<ReheardHearingDocuments>> listOfReheardDocs = Lists.newArrayList(reheardHearingDocuments);
+        final List<IdValue<ReheardHearingDocuments>> listOfReheardDocs = List.of(reheardHearingDocuments);
 
         when(callback.getCaseDetails()).thenReturn(caseDetails);
         when(callback.getEvent()).thenReturn(Event.LIST_CASE);

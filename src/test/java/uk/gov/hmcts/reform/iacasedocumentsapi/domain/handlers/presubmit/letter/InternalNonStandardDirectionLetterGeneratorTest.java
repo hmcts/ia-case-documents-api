@@ -41,7 +41,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.Document
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentCreator;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentHandler;
-import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.DirectionFinder;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DirectionFinder;
 
 @ExtendWith(MockitoExtension.class)
 @SuppressWarnings("unchecked")

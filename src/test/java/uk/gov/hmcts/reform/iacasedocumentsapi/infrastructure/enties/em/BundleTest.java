@@ -1,7 +1,7 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.enties.em;
 
 import static java.util.Collections.singletonList;
-import static org.apache.commons.lang3.RandomStringUtils.randomAlphabetic;
+import static org.apache.commons.lang3.RandomStringUtils.secure;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 
@@ -15,6 +15,8 @@ import org.junit.jupiter.api.Test;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.Document;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.IdValue;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.em.Bundle;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.em.BundleDocument;
 
 @SuppressWarnings("unchecked")
 public class BundleTest {
@@ -123,7 +125,7 @@ public class BundleTest {
 
 
     private String someRandomString() {
-        return randomAlphabetic(8);
+        return secure().nextAlphabetic(8);
     }
 
 }

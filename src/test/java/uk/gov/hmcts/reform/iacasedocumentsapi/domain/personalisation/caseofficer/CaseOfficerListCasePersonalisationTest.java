@@ -29,7 +29,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.HearingCentre;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.StringProvider;
-import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.DateTimeExtractor;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DateTimeExtractor;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.EmailAddressFinder;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.HearingDetailsFinder;
 

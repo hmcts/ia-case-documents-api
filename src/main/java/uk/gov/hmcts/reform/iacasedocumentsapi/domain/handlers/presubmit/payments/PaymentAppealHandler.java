@@ -28,7 +28,7 @@ import java.util.Arrays;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumAppealType;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AppealType;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DynamicList;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.JourneyType;
@@ -110,7 +110,7 @@ public class PaymentAppealHandler implements PreSubmitCallbackHandler<AsylumCase
         final AsylumCase asylumCase = callback.getCaseDetails().getCaseData();
         long caseId = callback.getCaseDetails().getId();
 
-        asylumCase.read(APPEAL_TYPE, AsylumAppealType.class)
+        asylumCase.read(APPEAL_TYPE, AppealType.class)
             .orElseThrow(
                 () -> new IllegalStateException("AppealType is not present for caseId: " + caseId)
             );

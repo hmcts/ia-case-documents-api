@@ -2,11 +2,11 @@ package uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit.payment
 
 import static java.util.Objects.isNull;
 import static java.util.Objects.requireNonNull;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumAppealType.AG;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumAppealType.EA;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumAppealType.EU;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumAppealType.HU;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumAppealType.PA;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AppealType.AG;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AppealType.EA;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AppealType.EU;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AppealType.HU;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AppealType.PA;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.APPEAL_TYPE;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.HAS_PBA_ACCOUNTS;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.HAS_SERVICE_REQUEST_ALREADY;
@@ -33,7 +33,7 @@ import java.util.Optional;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.stereotype.Component;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumAppealType;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AppealType;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DynamicList;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.HelpWithFeesOption;
@@ -189,9 +189,9 @@ public class PaymentAppealPreparer implements PreSubmitCallbackHandler<AsylumCas
     }
 
     private boolean isHuEaEuPaAgAda(AsylumCase asylumCase) {
-        Optional<AsylumAppealType> optionalAppealType = asylumCase.read(APPEAL_TYPE, AsylumAppealType.class);
+        Optional<AppealType> optionalAppealType = asylumCase.read(APPEAL_TYPE, AppealType.class);
         if (optionalAppealType.isPresent()) {
-            AsylumAppealType appealType = optionalAppealType.get();
+            AppealType appealType = optionalAppealType.get();
             boolean isNonAda = asylumCase.read(IS_ACCELERATED_DETAINED_APPEAL, YesOrNo.class)
                 .orElse(YesOrNo.NO).equals(YesOrNo.NO);
             return isNonAda && (List.of(HU, EA, EU, PA, AG).contains(appealType));

@@ -33,12 +33,12 @@ class PostSubmitCallbackControllerTest {
     private CaseDetails<AsylumCase> caseDetails;
     private final PostSubmitCallbackStage callbackStage = PostSubmitCallbackStage.CCD_SUBMITTED;
 
-    private PostSubmitCallbackController postSubmitCallbackController;
+    private PostSubmitCallbackController<AsylumCase> postSubmitCallbackController;
 
     @BeforeEach
     public void setUp() {
         postSubmitCallbackController =
-            new PostSubmitCallbackController(
+            new PostSubmitCallbackController<>(
                 callbackDispatcher
             );
     }
@@ -63,7 +63,7 @@ class PostSubmitCallbackControllerTest {
     @Test
     void should_not_allow_null_constructor_arguments() {
 
-        assertThatThrownBy(() -> new PostSubmitCallbackController(null))
+        assertThatThrownBy(() -> new PostSubmitCallbackController<AsylumCase>(null))
             .hasMessage("callbackDispatcher must not be null")
             .isExactlyInstanceOf(NullPointerException.class);
     }

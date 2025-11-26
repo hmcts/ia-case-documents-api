@@ -9,6 +9,7 @@ import org.mockito.junit.jupiter.MockitoSettings;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.BailCase;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.BailCaseFieldDefinition;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.BailCaseUtils;
 
 @MockitoSettings(strictness = org.mockito.quality.Strictness.LENIENT)
 public class BailCaseUtilsTest {

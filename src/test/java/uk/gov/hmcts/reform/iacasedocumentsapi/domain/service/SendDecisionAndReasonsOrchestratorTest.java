@@ -275,10 +275,10 @@ class SendDecisionAndReasonsOrchestratorTest {
                 new IdValue<>("2", decisionDocumentWithMetadata);
         IdValue<DocumentWithMetadata> coverLetterDocWithMetadata =
                 new IdValue<>("1", coverLetterDocumentWithMetadata);
-        final List<IdValue<DocumentWithMetadata>> listOfDocumentsWithMetadata = Lists.newArrayList(decisionDocWithMetadata, coverLetterDocWithMetadata);
+        final List<IdValue<DocumentWithMetadata>> listOfDocumentsWithMetadata = List.of(decisionDocWithMetadata, coverLetterDocWithMetadata);
         IdValue<ReheardHearingDocuments> reheardHearingDocuments =
                 new IdValue<>("1", new ReheardHearingDocuments(listOfDocumentsWithMetadata));
-        final List<IdValue<ReheardHearingDocuments>> listOfReheardDocs = Lists.newArrayList(reheardHearingDocuments);
+        final List<IdValue<ReheardHearingDocuments>> listOfReheardDocs = List.of(reheardHearingDocuments);
 
         when(asylumCase.read(IS_REHEARD_APPEAL_ENABLED, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
         when(asylumCase.read(CASE_FLAG_SET_ASIDE_REHEARD_EXISTS, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));

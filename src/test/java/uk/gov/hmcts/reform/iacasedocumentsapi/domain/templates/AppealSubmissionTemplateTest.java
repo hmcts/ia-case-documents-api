@@ -27,7 +27,7 @@ import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.OutOfCountryCircumstances;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.OutOfCountryDecisionType;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumAppealType;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AppealType;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ContactPreference;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.HasOtherAppeals;
@@ -83,7 +83,7 @@ public class AppealSubmissionTemplateTest {
     private YesOrNo isAcceleratedDetainedAppeal = YesOrNo.YES;
     private BailApplicationStatus hasPendingBailApplication = BailApplicationStatus.YES;
     private String bailApplicationNumber = "BailRef1234";
-    private AsylumAppealType appealType = AsylumAppealType.RP;
+    private AppealType appealType = AppealType.RP;
     private YesOrNo removalOrderOption = YesOrNo.YES;
     private String removalOrderDate = "01-01-2023T16:03:002";
     private String newMatters = "Some new matters";
@@ -169,7 +169,7 @@ public class AppealSubmissionTemplateTest {
 
         when(asylumCase.read(EMAIL, String.class)).thenReturn(Optional.of(email));
         when(asylumCase.read(APPELLANT_ADDRESS)).thenReturn(Optional.of(addressUk));
-        when(asylumCase.read(APPEAL_TYPE, AsylumAppealType.class)).thenReturn(Optional.of(appealType));
+        when(asylumCase.read(APPEAL_TYPE, AppealType.class)).thenReturn(Optional.of(appealType));
         when(asylumCase.read(APPEAL_OUT_OF_COUNTRY, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO));
         when(asylumCase.read(REMOVAL_ORDER_OPTIONS, YesOrNo.class)).thenReturn(Optional.of(removalOrderOption));
         when(asylumCase.read(REMOVAL_ORDER_DATE, String.class)).thenReturn(Optional.of(removalOrderDate));
@@ -286,7 +286,7 @@ public class AppealSubmissionTemplateTest {
     void should_not_add_appeal_type_if_not_present() {
 
         dataSetUp();
-        when(asylumCase.read(APPEAL_TYPE, AsylumAppealType.class)).thenReturn(Optional.empty());
+        when(asylumCase.read(APPEAL_TYPE, AppealType.class)).thenReturn(Optional.empty());
 
         when(asylumCase.read(REMOVAL_ORDER_OPTIONS, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO));
         when(asylumCase.read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO));
@@ -310,7 +310,7 @@ public class AppealSubmissionTemplateTest {
         when(asylumCase.read(APPELLANT_GIVEN_NAMES, String.class)).thenReturn(Optional.of(appellantGivenNames));
         when(asylumCase.read(APPELLANT_FAMILY_NAME, String.class)).thenReturn(Optional.of(appellantFamilyName));
         when(asylumCase.read(APPELLANT_DATE_OF_BIRTH, String.class)).thenReturn(Optional.of(appellantDateOfBirth));
-        when(asylumCase.read(APPEAL_TYPE, AsylumAppealType.class)).thenReturn(Optional.of(appealType));
+        when(asylumCase.read(APPEAL_TYPE, AppealType.class)).thenReturn(Optional.of(appealType));
         when(asylumCase.read(APPEAL_OUT_OF_COUNTRY, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO));
 
         when(asylumCase.read(REMOVAL_ORDER_OPTIONS, YesOrNo.class)).thenReturn(Optional.of(removalOrderOption));
@@ -362,7 +362,7 @@ public class AppealSubmissionTemplateTest {
         when(asylumCase.read(LEGAL_REP_COMPANY, String.class)).thenReturn(Optional.empty());
         when(asylumCase.read(APPELLANT_FAMILY_NAME, String.class)).thenReturn(Optional.empty());
         when(asylumCase.read(APPELLANT_DATE_OF_BIRTH, String.class)).thenReturn(Optional.empty());
-        when(asylumCase.read(APPEAL_TYPE, AsylumAppealType.class)).thenReturn(Optional.empty());
+        when(asylumCase.read(APPEAL_TYPE, AppealType.class)).thenReturn(Optional.empty());
         when(asylumCase.read(NEW_MATTERS, String.class)).thenReturn(Optional.empty());
         when(asylumCase.read(APPELLANT_HAS_FIXED_ADDRESS, YesOrNo.class)).thenReturn(Optional.empty());
         when(asylumCase.read(APPELLANT_NATIONALITIES)).thenReturn(Optional.empty());
@@ -541,7 +541,7 @@ public class AppealSubmissionTemplateTest {
         when(asylumCase.read(APPELLANT_GIVEN_NAMES, String.class)).thenReturn(Optional.of(appellantGivenNames));
         when(asylumCase.read(APPELLANT_FAMILY_NAME, String.class)).thenReturn(Optional.of(appellantFamilyName));
         when(asylumCase.read(APPELLANT_DATE_OF_BIRTH, String.class)).thenReturn(Optional.of(appellantDateOfBirth));
-        when(asylumCase.read(APPEAL_TYPE, AsylumAppealType.class)).thenReturn(Optional.of(appealType));
+        when(asylumCase.read(APPEAL_TYPE, AppealType.class)).thenReturn(Optional.of(appealType));
         when(asylumCase.read(APPEAL_OUT_OF_COUNTRY, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO));
         when(asylumCase.read(NEW_MATTERS, String.class)).thenReturn(Optional.of(newMatters));
         when(asylumCase.read(CONTACT_PREFERENCE, ContactPreference.class)).thenReturn(Optional.of(ContactPreference.WANTS_EMAIL));
@@ -572,7 +572,7 @@ public class AppealSubmissionTemplateTest {
         when(asylumCase.read(LEGAL_REP_COMPANY, String.class)).thenReturn(Optional.empty());
         when(asylumCase.read(APPELLANT_FAMILY_NAME, String.class)).thenReturn(Optional.empty());
         when(asylumCase.read(APPELLANT_DATE_OF_BIRTH, String.class)).thenReturn(Optional.empty());
-        when(asylumCase.read(APPEAL_TYPE, AsylumAppealType.class)).thenReturn(Optional.empty());
+        when(asylumCase.read(APPEAL_TYPE, AppealType.class)).thenReturn(Optional.empty());
         when(asylumCase.read(REMOVAL_ORDER_OPTIONS, YesOrNo.class)).thenReturn(Optional.of(removalOrderOption));
         when(asylumCase.read(REMOVAL_ORDER_DATE, String.class)).thenReturn(Optional.of(removalOrderDate));
         when(asylumCase.read(NEW_MATTERS, String.class)).thenReturn(Optional.empty());
@@ -609,7 +609,7 @@ public class AppealSubmissionTemplateTest {
 
         when(asylumCase.read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.empty());
 
-        when(asylumCase.read(APPEAL_TYPE, AsylumAppealType.class)).thenReturn(Optional.of(appealType));
+        when(asylumCase.read(APPEAL_TYPE, AppealType.class)).thenReturn(Optional.of(appealType));
         when(asylumCase.read(APPEAL_OUT_OF_COUNTRY, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO));
         when(asylumCase.read(NEW_MATTERS, String.class)).thenReturn(Optional.of(newMatters));
         when(asylumCase.read(CONTACT_PREFERENCE, ContactPreference.class)).thenReturn(Optional.of(ContactPreference.WANTS_EMAIL));
@@ -639,7 +639,7 @@ public class AppealSubmissionTemplateTest {
         when(asylumCase.read(LEGAL_REP_COMPANY, String.class)).thenReturn(Optional.empty());
         when(asylumCase.read(APPELLANT_FAMILY_NAME, String.class)).thenReturn(Optional.empty());
         when(asylumCase.read(APPELLANT_DATE_OF_BIRTH, String.class)).thenReturn(Optional.empty());
-        when(asylumCase.read(APPEAL_TYPE, AsylumAppealType.class)).thenReturn(Optional.empty());
+        when(asylumCase.read(APPEAL_TYPE, AppealType.class)).thenReturn(Optional.empty());
         when(asylumCase.read(NEW_MATTERS, String.class)).thenReturn(Optional.empty());
         when(asylumCase.read(APPELLANT_HAS_FIXED_ADDRESS, YesOrNo.class)).thenReturn(Optional.empty());
         when(asylumCase.read(APPELLANT_NATIONALITIES)).thenReturn(Optional.empty());

@@ -81,7 +81,7 @@ public class AppealSubmissionDocFieldMapper {
 
         Optional<ContactPreference> contactPreference = asylumCase.read(CONTACT_PREFERENCE, ContactPreference.class);
         if (contactPreference.isPresent()
-                && contactPreference.get().toString().equals(ContactPreference.WANTS_EMAIL.toString())) {
+                && contactPreference.get().getValue().equals(ContactPreference.WANTS_EMAIL.getValue())) {
             fieldValues.put("wantsEmail", YesOrNo.YES);
             fieldValues.put("email", asylumCase.read(EMAIL, String.class).orElse(""));
         } else {
@@ -93,7 +93,7 @@ public class AppealSubmissionDocFieldMapper {
 
         addAppealOocFields(asylumCase, fieldValues);
 
-        Optional<AsylumAppealType> optionalAppealType = asylumCase.read(APPEAL_TYPE, AsylumAppealType.class);
+        Optional<AppealType> optionalAppealType = asylumCase.read(APPEAL_TYPE, AppealType.class);
 
         if (optionalAppealType.isPresent()) {
             String appealType = optionalAppealType.get().getValue();
@@ -241,7 +241,7 @@ public class AppealSubmissionDocFieldMapper {
             fieldValues.put("sponsorAddress", asylumCase.read(SPONSOR_ADDRESS_FOR_DISPLAY, String.class).orElse(null));
             Optional<ContactPreference> sponsorContactPreference = asylumCase.read(SPONSOR_CONTACT_PREFERENCE, ContactPreference.class);
             if (sponsorContactPreference.isPresent()
-                    && sponsorContactPreference.get().toString().equals(ContactPreference.WANTS_EMAIL.toString())) {
+                    && sponsorContactPreference.get().getValue().equals(ContactPreference.WANTS_EMAIL.getValue())) {
                 fieldValues.put("wantsSponsorEmail", YesOrNo.YES);
                 fieldValues.put("sponsorEmail", asylumCase.read(SPONSOR_EMAIL, String.class).orElse(null));
             } else {

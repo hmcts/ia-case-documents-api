@@ -26,7 +26,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.PreSubmitCallbackH
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentsAppender;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.FeatureToggler;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.clients.EmBundleRequestExecutor;
-import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.enties.em.Bundle;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.em.Bundle;
 
 
 @Component

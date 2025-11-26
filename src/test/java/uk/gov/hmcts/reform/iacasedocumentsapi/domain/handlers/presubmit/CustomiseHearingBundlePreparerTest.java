@@ -748,7 +748,7 @@ class CustomiseHearingBundlePreparerTest {
         return
             new DocumentWithDescription(new Document("some-url",
                 "some-binary-url",
-                RandomStringUtils.randomAlphabetic(20)), "test");
+                RandomStringUtils.secure().nextAlphabetic(20)), "test");
     }
 
     private Document createDocument() {
@@ -780,10 +780,10 @@ class CustomiseHearingBundlePreparerTest {
         IdValue<DocumentWithMetadata> coverLetterDocWithMetadata =
             new IdValue<>("12", remittalOtherDoc2);
 
-        final List<IdValue<DocumentWithMetadata>> listOfDocumentsWithMetadata = Lists.newArrayList(decisionDocWithMetadata, coverLetterDocWithMetadata);
+        final List<IdValue<DocumentWithMetadata>> listOfDocumentsWithMetadata = List.of(decisionDocWithMetadata, coverLetterDocWithMetadata);
         IdValue<RemittalDocument> remittalDocuments =
             new IdValue<>("1", new RemittalDocument(remittalDec, listOfDocumentsWithMetadata));
-        return Lists.newArrayList(remittalDocuments);
+        return List.of(remittalDocuments);
     }
 
     private List<IdValue<ReheardHearingDocuments>> buildReheardDocuments() {
@@ -798,9 +798,9 @@ class CustomiseHearingBundlePreparerTest {
             new IdValue<>("2", decisionDocumentWithMetadata);
         IdValue<DocumentWithMetadata> coverLetterDocWithMetadata =
             new IdValue<>("1", coverLetterDocumentWithMetadata);
-        final List<IdValue<DocumentWithMetadata>> listOfDocumentsWithMetadata = Lists.newArrayList(decisionDocWithMetadata, coverLetterDocWithMetadata);
+        final List<IdValue<DocumentWithMetadata>> listOfDocumentsWithMetadata = List.of(decisionDocWithMetadata, coverLetterDocWithMetadata);
         IdValue<ReheardHearingDocuments> reheardHearingDocuments =
             new IdValue<>("1", new ReheardHearingDocuments(listOfDocumentsWithMetadata));
-        return Lists.newArrayList(reheardHearingDocuments);
+        return List.of(reheardHearingDocuments);
     }
 }

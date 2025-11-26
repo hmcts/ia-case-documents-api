@@ -1,9 +1,10 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.em;
 
-
+import lombok.Getter;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseData;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.Document;
 
+@Getter
 public class BundleDocument implements CaseData {
 
     private String name;
@@ -27,19 +28,4 @@ public class BundleDocument implements CaseData {
         this.sourceDocument = sourceDocument;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public int getSortIndex() {
-        return sortIndex;
-    }
-
-    public Document getSourceDocument() {
-        return sourceDocument;
-    }
 }

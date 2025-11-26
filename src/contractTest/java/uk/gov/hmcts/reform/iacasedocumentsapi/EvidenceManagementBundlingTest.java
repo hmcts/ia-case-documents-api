@@ -34,7 +34,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo;
-import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.enties.em.Bundle;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.em.Bundle;
 
 @Slf4j
 @ExtendWith(PactConsumerTestExt.class)

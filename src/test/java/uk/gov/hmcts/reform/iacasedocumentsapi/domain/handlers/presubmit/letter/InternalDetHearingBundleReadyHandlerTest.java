@@ -1,7 +1,7 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit.letter;
 
 import static java.util.Collections.singletonList;
-import static org.apache.commons.lang3.RandomStringUtils.randomAlphabetic;
+import static org.apache.commons.lang3.RandomStringUtils.secure;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -34,8 +34,8 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.IdValue;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentCreator;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentHandler;
-import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.enties.em.Bundle;
-import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.enties.em.BundleDocument;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.em.Bundle;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.em.BundleDocument;
 
 @ExtendWith(MockitoExtension.class)
 @SuppressWarnings("unchecked")
@@ -276,7 +276,7 @@ public class InternalDetHearingBundleReadyHandlerTest {
     }
 
     private String someRandomString() {
-        return randomAlphabetic(8);
+        return secure().nextAlphabetic(8);
     }
 
 }

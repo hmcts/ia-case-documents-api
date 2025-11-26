@@ -51,7 +51,7 @@ class MultipleNotificationsTest extends SpringBootIntegrationTest implements Wit
     private GovNotifyNotificationSender notificationSender;
 
     private final List<Map.Entry<Event, String>> eventAndNotificationSuffixPair =
-        Lists.newArrayList(
+        List.of(
             new HashMap.SimpleImmutableEntry<>(Event.SUBMIT_APPEAL, "_APPEAL_SUBMITTED_CASE_OFFICER"),
             new HashMap.SimpleImmutableEntry<>(Event.UPLOAD_RESPONDENT_EVIDENCE, "_BUILD_CASE_DIRECTION"),
             new HashMap.SimpleImmutableEntry<>(Event.REQUEST_HEARING_REQUIREMENTS,
@@ -91,7 +91,7 @@ class MultipleNotificationsTest extends SpringBootIntegrationTest implements Wit
                 + eventWithSuffixPair.getValue();
 
         List<IdValue<String>> existingNotifications =
-            Lists.newArrayList(new IdValue<>(existingReference, notificationId));
+            List.of(new IdValue<>(existingReference, notificationId));
 
         when(notificationSender.sendEmail(anyString(), anyString(), anyMap(), anyString(), any(Callback.class))).thenReturn(notificationId);
 

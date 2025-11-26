@@ -14,7 +14,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.PreSu
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.PreSubmitCallbackStage;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.Document;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.PreSubmitCallbackHandler;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.BailCaseUtils;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.BailCaseUtils;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.BailDocumentHandler;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentCreator;
 
@@ -70,7 +70,7 @@ public class BailDecisionUnsignedMindedRefusalCreator implements PreSubmitCallba
 
         bailDocumentHandler.addWithMetadata(
             bailCase,
-            bailDocument,            
+            bailDocument,
             UNSIGNED_DECISION_DOCUMENTS_WITH_METADATA,
             DocumentTag.BAIL_DECISION_UNSIGNED
         );

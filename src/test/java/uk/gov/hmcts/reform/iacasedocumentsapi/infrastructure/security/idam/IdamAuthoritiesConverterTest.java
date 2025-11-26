@@ -48,12 +48,12 @@ public class IdamAuthoritiesConverterTest {
         when(jwt.getClaim(TOKEN_NAME)).thenReturn(ACCESS_TOKEN);
         when(jwt.getTokenValue()).thenReturn(tokenValue);
 
-        when(userInfo.getRoles()).thenReturn(Lists.newArrayList("caseworker-ia", "tribunal-caseworker"));
+        when(userInfo.getRoles()).thenReturn(List.of("caseworker-ia", "tribunal-caseworker"));
         when(idamService.getUserInfo("Bearer " + tokenValue)).thenReturn(userInfo);
 
         idamAuthoritiesConverter = new IdamAuthoritiesConverter(idamService);
 
-        List<GrantedAuthority> expectedGrantedAuthorities = Lists.newArrayList(
+        List<GrantedAuthority> expectedGrantedAuthorities = List.of(
             new SimpleGrantedAuthority("caseworker-ia"),
             new SimpleGrantedAuthority("tribunal-caseworker")
         );
@@ -76,7 +76,7 @@ public class IdamAuthoritiesConverterTest {
     @Test
     public void should_return_empty_list_when_user_info_does_not_contain_roles() {
 
-        when(userInfo.getRoles()).thenReturn(Lists.newArrayList());
+        when(userInfo.getRoles()).thenReturn(List.of());
         when(idamService.getUserInfo("Bearer " + tokenValue)).thenReturn(userInfo);
 
         idamAuthoritiesConverter = new IdamAuthoritiesConverter(idamService);

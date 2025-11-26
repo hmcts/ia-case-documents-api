@@ -1,7 +1,7 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.clients;
 
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.PreSubmitCallbackResponse;
-import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.enties.em.BundleCaseData;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.em.BundleCaseData;
 
 public class DocumentStitchingErrorResponseException extends DocumentServiceResponseException {
 

@@ -9,7 +9,7 @@ import java.util.Optional;
 import org.springframework.stereotype.Service;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.HasDocument;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.HasDocument;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.IdValue;
 
 @Service

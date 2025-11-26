@@ -1,4 +1,4 @@
-package uk.gov.hmcts.reform.iacasedocumentsapi.domain;
+package uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils;
 
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.BailCaseFieldDefinition.CURRENT_CASE_STATE_VISIBLE_TO_ALL_USERS;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.BailCaseFieldDefinition.IS_ADMIN;
@@ -12,6 +12,7 @@ import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.Y
 
 import com.launchdarkly.shaded.com.google.common.base.Objects;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.BailCase;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.BailCaseFieldDefinition;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.RecordDecisionType;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo;
 
@@ -46,5 +47,9 @@ public class BailCaseUtils {
 
     public static boolean isInternalCase(BailCase bailCase) {
         return bailCase.read(IS_ADMIN, YesOrNo.class).map(isAdmin -> YES == isAdmin).orElse(false);
+    }
+
+    public static boolean isImaEnabled(BailCase bailCase) {
+        return bailCase.read(BailCaseFieldDefinition.IS_IMA_ENABLED, YesOrNo.class).orElse(YesOrNo.NO).equals(YesOrNo.YES);
     }
 }

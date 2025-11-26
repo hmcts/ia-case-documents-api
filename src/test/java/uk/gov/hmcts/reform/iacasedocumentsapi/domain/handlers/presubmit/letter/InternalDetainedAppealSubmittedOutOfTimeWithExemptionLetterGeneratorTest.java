@@ -40,7 +40,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.Callb
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.PreSubmitCallbackResponse;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.PreSubmitCallbackStage;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.Document;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumAppealType;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AppealType;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentCreator;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentHandler;
@@ -144,28 +144,28 @@ class InternalDetainedAppealSubmittedOutOfTimeWithExemptionLetterGeneratorTest {
 
     private static Stream<Arguments> provideInvalidCaseScenarios() {
         return Stream.of(
-            Arguments.of("not internal case", 
+            Arguments.of("not internal case",
                 (Consumer<AsylumCase>) asylumCase -> when(asylumCase.read(IS_ADMIN, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO))
             ),
-            Arguments.of("submission not out of time", 
+            Arguments.of("submission not out of time",
                 (Consumer<AsylumCase>) asylumCase -> when(asylumCase.read(SUBMISSION_OUT_OF_TIME, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO))
             ),
-            Arguments.of("submission out of time is missing", 
+            Arguments.of("submission out of time is missing",
                 (Consumer<AsylumCase>) asylumCase -> when(asylumCase.read(SUBMISSION_OUT_OF_TIME, YesOrNo.class)).thenReturn(Optional.empty())
             ),
-            Arguments.of("not fee exempt appeal", 
+            Arguments.of("not fee exempt appeal",
                 (Consumer<AsylumCase>) asylumCase -> {
-                    when(asylumCase.read(APPEAL_TYPE, AsylumAppealType.class)).thenReturn(Optional.of(AsylumAppealType.PA));
+                    when(asylumCase.read(APPEAL_TYPE, AppealType.class)).thenReturn(Optional.of(AppealType.PA));
                     when(asylumCase.read(PA_APPEAL_TYPE_PAYMENT_OPTION, String.class)).thenReturn(Optional.of("payNow"));
                 }
             ),
-            Arguments.of("not detained", 
+            Arguments.of("not detained",
                 (Consumer<AsylumCase>) asylumCase -> when(asylumCase.read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO))
             ),
-            Arguments.of("in other detention facility", 
+            Arguments.of("in other detention facility",
                 (Consumer<AsylumCase>) asylumCase -> when(asylumCase.read(DETENTION_FACILITY, String.class)).thenReturn(Optional.of("other"))
             ),
-            Arguments.of("is ada appeal", 
+            Arguments.of("is ada appeal",
                 (Consumer<AsylumCase>) asylumCase -> when(asylumCase.read(IS_ACCELERATED_DETAINED_APPEAL, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES))
             )
         );
@@ -186,19 +186,19 @@ class InternalDetainedAppealSubmittedOutOfTimeWithExemptionLetterGeneratorTest {
 
     @ParameterizedTest
     @MethodSource("provideFeeExemptAppealTypes")
-    void should_handle_callback_for_fee_exempt_appeal_types(AsylumAppealType appealType) {
+    void should_handle_callback_for_fee_exempt_appeal_types(AppealType appealType) {
         when(callback.getCaseDetails()).thenReturn(caseDetails);
         when(callback.getEvent()).thenReturn(Event.SUBMIT_APPEAL);
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
 
         setUpValidCaseExcept();
-        when(asylumCase.read(APPEAL_TYPE, AsylumAppealType.class)).thenReturn(Optional.of(appealType));
+        when(asylumCase.read(APPEAL_TYPE, AppealType.class)).thenReturn(Optional.of(appealType));
 
         assertTrue(letterGenerator.canHandle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback));
     }
 
-    private static Stream<AsylumAppealType> provideFeeExemptAppealTypes() {
-        return Stream.of(AsylumAppealType.RP, AsylumAppealType.DC);
+    private static Stream<AppealType> provideFeeExemptAppealTypes() {
+        return Stream.of(AppealType.RP, AppealType.DC);
     }
 
     @Test
@@ -257,7 +257,7 @@ class InternalDetainedAppealSubmittedOutOfTimeWithExemptionLetterGeneratorTest {
         when(asylumCase.read(IS_ADMIN, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
         when(asylumCase.read(SUBMISSION_OUT_OF_TIME, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
         // Set up fee exempt appeal type (RP is always fee exempt)
-        when(asylumCase.read(APPEAL_TYPE, AsylumAppealType.class)).thenReturn(Optional.of(AsylumAppealType.RP));
+        when(asylumCase.read(APPEAL_TYPE, AppealType.class)).thenReturn(Optional.of(AppealType.RP));
         when(asylumCase.read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
         when(asylumCase.read(DETENTION_FACILITY, String.class)).thenReturn(Optional.of("immigrationRemovalCentre"));
         when(asylumCase.read(IS_ACCELERATED_DETAINED_APPEAL, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO));
@@ -267,7 +267,7 @@ class InternalDetainedAppealSubmittedOutOfTimeWithExemptionLetterGeneratorTest {
         when(asylumCase.read(IS_ADMIN, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
         when(asylumCase.read(SUBMISSION_OUT_OF_TIME, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
         // Set up fee exempt appeal type (RP is always fee exempt) by default
-        when(asylumCase.read(APPEAL_TYPE, AsylumAppealType.class)).thenReturn(Optional.of(AsylumAppealType.RP));
+        when(asylumCase.read(APPEAL_TYPE, AppealType.class)).thenReturn(Optional.of(AppealType.RP));
         when(asylumCase.read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
         when(asylumCase.read(DETENTION_FACILITY, String.class)).thenReturn(Optional.of("immigrationRemovalCentre"));
         when(asylumCase.read(IS_ACCELERATED_DETAINED_APPEAL, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO));

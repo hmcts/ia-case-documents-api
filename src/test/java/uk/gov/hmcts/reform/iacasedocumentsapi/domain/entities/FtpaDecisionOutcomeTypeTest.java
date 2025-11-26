@@ -17,6 +17,8 @@ public class FtpaDecisionOutcomeTypeTest {
         assertEquals("reheardRule32", FtpaDecisionOutcomeType.FTPA_REHEARD32.toString());
         assertEquals("remadeRule32", FtpaDecisionOutcomeType.FTPA_REMADE32.toString());
         assertEquals("remadeRule31", FtpaDecisionOutcomeType.FTPA_REMADE31.toString());
+        assertEquals("allowed", FtpaDecisionOutcomeType.FTPA_ALLOWED.toString());
+        assertEquals("dismissed", FtpaDecisionOutcomeType.FTPA_DISMISSED.toString());
     }
 
     @Test
@@ -29,12 +31,14 @@ public class FtpaDecisionOutcomeTypeTest {
             FtpaDecisionOutcomeType.FTPA_REHEARD35,
             FtpaDecisionOutcomeType.FTPA_REHEARD32,
             FtpaDecisionOutcomeType.FTPA_REMADE32,
-            FtpaDecisionOutcomeType.FTPA_REMADE31
+            FtpaDecisionOutcomeType.FTPA_REMADE31,
+            FtpaDecisionOutcomeType.FTPA_ALLOWED,
+            FtpaDecisionOutcomeType.FTPA_DISMISSED
         );
     }
 
     @Test
     public void if_this_test_fails_it_is_because_it_needs_updating_with_your_changes() {
-        assertEquals(8, FtpaDecisionOutcomeType.values().length);
+        assertEquals(10, FtpaDecisionOutcomeType.values().length);
     }
 }

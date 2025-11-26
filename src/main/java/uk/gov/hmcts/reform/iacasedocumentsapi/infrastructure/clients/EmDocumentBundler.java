@@ -18,9 +18,9 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.Document
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.IdValue;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentBundler;
-import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.enties.em.Bundle;
-import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.enties.em.BundleCaseData;
-import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.enties.em.BundleDocument;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.em.Bundle;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.em.BundleCaseData;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.em.BundleDocument;
 
 @Slf4j
 @Service

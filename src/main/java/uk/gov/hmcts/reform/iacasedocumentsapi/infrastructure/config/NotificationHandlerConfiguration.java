@@ -12,8 +12,8 @@ import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.FeeTribunal
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.FtpaDecisionOutcomeType.FTPA_GRANTED;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.FtpaDecisionOutcomeType.FTPA_PARTIALLY_GRANTED;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.FtpaDecisionOutcomeType.FTPA_REFUSED;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.JourneyType.AIP;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.JourneyType.REP;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.JourneyType.AIP;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.JourneyType.REP;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.OutOfTimeDecisionType.IN_TIME;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.OutOfTimeDecisionType.UNKNOWN;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.RemissionDecision.APPROVED;
@@ -82,7 +82,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DocumentWithMetada
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.FeeTribunalAction;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.FtpaDecisionOutcomeType;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.HearingCentre;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.JourneyType;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.JourneyType;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.MakeAnApplication;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.OutOfTimeDecisionType;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.Parties;

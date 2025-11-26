@@ -14,7 +14,7 @@ public class BailCaseFieldDefinitionTest {
 
     List<BailCaseFieldDefinition> fieldsNamesWithDifferentNaming =
         Arrays.asList(SUPPORTER_DOB, SUPPORTER_2_DOB, SUPPORTER_3_DOB, SUPPORTER_4_DOB, APPLICANT_ARRIVAL_IN_UK,
-                PRIOR_APPLICATIONS, UNSIGNED_DECISION_DOCUMENTS_WITH_METADATA, SIGNED_DECISION_DOCUMENT_WITH_METADATA);
+                PRIOR_APPLICATIONS, UNSIGNED_DECISION_DOCUMENTS_WITH_METADATA, SIGNED_DECISION_DOCUMENT_WITH_METADATA, TTL);
 
     @Test
     public void mapped_to_equivalent_field_name() {
@@ -22,16 +22,19 @@ public class BailCaseFieldDefinitionTest {
             .filter(v -> !fieldsNamesWithDifferentNaming.contains(v))
             .forEach(v -> assertEquals(UPPER_UNDERSCORE.to(LOWER_CAMEL, v.name()), v.value()));
 
-        assertEquals(SUPPORTER_DOB.value(), "supporterDOB");
-        assertEquals(SUPPORTER_2_DOB.value(), "supporter2DOB");
-        assertEquals(SUPPORTER_3_DOB.value(), "supporter3DOB");
-        assertEquals(SUPPORTER_4_DOB.value(), "supporter4DOB");
-        assertEquals(APPLICANT_ARRIVAL_IN_UK.value(), "applicantArrivalInUKDate");
-        assertEquals(SIGNED_DECISION_DOCUMENT_WITH_METADATA.value(), "signDecisionDocumentWithMetadata");
+        assertEquals("supporterDOB", SUPPORTER_DOB.value());
+        assertEquals("supporter2DOB", SUPPORTER_2_DOB.value());
+        assertEquals("supporter3DOB", SUPPORTER_3_DOB.value());
+        assertEquals("supporter4DOB", SUPPORTER_4_DOB.value());
+        assertEquals("applicantArrivalInUKDate", APPLICANT_ARRIVAL_IN_UK.value());
+        assertEquals("priorApplications1", PRIOR_APPLICATIONS.value());
+        assertEquals("unsgnDecisionDocumentWithMetadata", UNSIGNED_DECISION_DOCUMENTS_WITH_METADATA.value());
+        assertEquals("signDecisionDocumentWithMetadata", SIGNED_DECISION_DOCUMENT_WITH_METADATA.value());
+        assertEquals("TTL", TTL.value());
     }
 
     @Test
     public void should_fail_if_new_fields_added_in_class() {
-        assertEquals(181, values().length);
+        assertEquals(204, values().length);
     }
 }

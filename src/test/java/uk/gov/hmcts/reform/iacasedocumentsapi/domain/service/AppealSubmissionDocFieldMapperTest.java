@@ -162,6 +162,7 @@ class AppealSubmissionDocFieldMapperTest {
         log.info("Mapped field values as JSON: {}", objectMapper.writeValueAsString(result));
 
         // Then
+        @SuppressWarnings("unchecked")
         Map<String, String> addressMap = (Map<String, String>) result.get("appellantAddress");
         assertEquals("Apartment 1", addressMap.get("appellantAddressLine1"));
         assertEquals("Westside One", addressMap.get("appellantAddressLine2"));
@@ -179,6 +180,7 @@ class AppealSubmissionDocFieldMapperTest {
         log.info("Mapped field values as JSON: {}", objectMapper.writeValueAsString(result));
 
         // Then
+        @SuppressWarnings("unchecked")
         List<Map<String, String>> nationalityList = (List<Map<String, String>>) result.get("appellantNationalities");
         assertEquals(1, nationalityList.size());
         assertEquals("Unknown Country", nationalityList.get(0).get("nationality"));
@@ -217,4 +219,4 @@ class AppealSubmissionDocFieldMapperTest {
         assertEquals("EU/50003/2025", result.get("otherAppeals"));
         assertEquals(YesOrNo.YES, result.get("hasOtherAppeals"));
     }
-} 
+}

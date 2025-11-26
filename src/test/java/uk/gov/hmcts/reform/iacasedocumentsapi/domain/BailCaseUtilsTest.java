@@ -8,6 +8,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.BailCase;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo;
 
 import java.util.Optional;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.BailCaseUtils;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;

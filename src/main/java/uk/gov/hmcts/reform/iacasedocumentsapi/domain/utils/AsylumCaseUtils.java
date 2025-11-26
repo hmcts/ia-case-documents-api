@@ -5,12 +5,12 @@ import static java.util.Collections.singleton;
 import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.joining;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ApplicantType.APPELLANT;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumAppealType.EA;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumAppealType.EU;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumAppealType.HU;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AppealType.EA;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AppealType.EU;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AppealType.HU;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.*;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DetentionFacility.OTHER;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.JourneyType.AIP;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.JourneyType.AIP;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.RemissionDecision.APPROVED;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.RemissionDecision.PARTIALLY_APPROVED;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.RemissionDecision.REJECTED;
@@ -35,7 +35,6 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.RequiredFieldMissingExcepti
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AppealType;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ApplicantType;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ApplyForCosts;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumAppealType;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DetentionFacility;
@@ -232,7 +231,7 @@ public class AsylumCaseUtils {
     public static boolean isAipJourney(AsylumCase asylumCase) {
 
         return asylumCase
-            .read(JOURNEY_TYPE, uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.JourneyType.class)
+            .read(JOURNEY_TYPE, JourneyType.class)
             .map(type -> type == AIP).orElse(false);
     }
 
@@ -315,7 +314,7 @@ public class AsylumCaseUtils {
 
     public static boolean isEaHuEuAppeal(AsylumCase asylumCase) {
         return asylumCase
-            .read(APPEAL_TYPE, AsylumAppealType.class)
+            .read(APPEAL_TYPE, AppealType.class)
             .map(type -> type == EA || type == HU || type == EU).orElse(false);
     }
 

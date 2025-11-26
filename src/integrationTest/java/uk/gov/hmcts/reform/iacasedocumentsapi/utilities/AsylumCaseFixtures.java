@@ -45,7 +45,7 @@ public class AsylumCaseFixtures {
         asylumCase.write(SCHEDULE_OF_ISSUES_DISAGREEMENT_DESCRIPTION, someString());
 
         asylumCase.write(HEARING_DOCUMENTS,
-            Lists.newArrayList(
+            List.of(
                 new IdValue<>("1", someDocumentWithMetadataWithDefaults(DocumentTag.CASE_SUMMARY)),
                 new IdValue<>("2", someDocumentWithMetadataWithDefaults(DocumentTag.HEARING_NOTICE))
             )
@@ -72,7 +72,7 @@ public class AsylumCaseFixtures {
     }
 
     private static String someString() {
-        return RandomStringUtils.randomAlphabetic(8);
+        return RandomStringUtils.secure().nextAlphabetic(8);
     }
 
     public static String someUploadResponse() {

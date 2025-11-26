@@ -123,7 +123,7 @@ public class BailDocumentHandlerTest {
     private DocumentWithMetadata createDocumentWithMetaData() {
         return new DocumentWithMetadata(
             document,
-            RandomStringUtils.random(20),
+            RandomStringUtils.secure().next(20),
             "31-01-1987",
             tag, "test"
         );

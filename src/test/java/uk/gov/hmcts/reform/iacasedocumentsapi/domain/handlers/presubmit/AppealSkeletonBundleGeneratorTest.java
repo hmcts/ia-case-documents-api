@@ -154,7 +154,7 @@ public class AppealSkeletonBundleGeneratorTest {
 
         IdValue<DocumentWithMetadata> existingBundle = new IdValue<>("3", createDocumentWithMetadata(DocumentTag.APPEAL_SKELETON_BUNDLE));
 
-        when(asylumCase.read(LEGAL_REPRESENTATIVE_DOCUMENTS)).thenReturn(Optional.of(Lists.newArrayList(legalRepDoc1, legalRepDoc2, existingBundle)));
+        when(asylumCase.read(LEGAL_REPRESENTATIVE_DOCUMENTS)).thenReturn(Optional.of(List.of(legalRepDoc1, legalRepDoc2, existingBundle)));
 
         when(documentBundler.bundle(
             anyList(),
@@ -234,14 +234,14 @@ public class AppealSkeletonBundleGeneratorTest {
         return
             new Document("some-url",
                 "some-binary-url",
-                RandomStringUtils.randomAlphabetic(20));
+                RandomStringUtils.secure().nextAlphabetic(20));
     }
 
     private DocumentWithMetadata createDocumentWithMetadata(DocumentTag documentTag) {
 
         return
             new DocumentWithMetadata(createDocumentWithDescription(),
-                RandomStringUtils.randomAlphabetic(20),
+                RandomStringUtils.secure().nextAlphabetic(20),
                 new SystemDateProvider().now().toString(), documentTag,"test");
 
     }
