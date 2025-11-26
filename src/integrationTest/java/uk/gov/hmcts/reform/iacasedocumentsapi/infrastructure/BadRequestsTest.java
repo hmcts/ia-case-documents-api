@@ -10,53 +10,72 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.component.testutils.SpringBootInte
 
 class BadRequestsTest extends SpringBootIntegrationTest {
 
+    private static final String ABOUT_TO_START_PATH = "/asylum/ccdAboutToStart";
     private static final String ABOUT_TO_SUBMIT_PATH = "/asylum/ccdAboutToSubmit";
-    private static final String SUBMITTED_PATH = "/asylum/ccdAboutToStart";
 
     @Test
     void shouldRequestUnsupportedMediaTypeToServerAndReceiveHttp415() throws Exception {
-        runClientRequest(ABOUT_TO_SUBMIT_PATH,
+        runClientRequest(
+            ABOUT_TO_SUBMIT_PATH,
             MediaType.APPLICATION_XML,
             "<xml></xml>",
-            HttpStatus.UNSUPPORTED_MEDIA_TYPE.value());
+            HttpStatus.UNSUPPORTED_MEDIA_TYPE.value()
+        );
 
-        runClientRequest(SUBMITTED_PATH,
+        runClientRequest(
+            ABOUT_TO_START_PATH,
             MediaType.APPLICATION_XML,
             "<xml></xml>",
-            HttpStatus.UNSUPPORTED_MEDIA_TYPE.value());
+            HttpStatus.UNSUPPORTED_MEDIA_TYPE.value()
+        );
 
-        runClientRequest(SUBMITTED_PATH,
+        runClientRequest(
+            ABOUT_TO_START_PATH,
             MediaType.TEXT_PLAIN,
             "random text",
-            HttpStatus.UNSUPPORTED_MEDIA_TYPE.value());
+            HttpStatus.UNSUPPORTED_MEDIA_TYPE.value()
+        );
     }
 
     @Test
     void shouldMakeBadRequestsToServerAndReceiveHttp4xx() throws Exception {
-        runClientRequest(ABOUT_TO_SUBMIT_PATH,
+        runClientRequest(
+            ABOUT_TO_SUBMIT_PATH,
             MediaType.APPLICATION_JSON,
             "random string",
-            HttpStatus.BAD_REQUEST.value());
+            HttpStatus.BAD_REQUEST.value()
+        );
 
-        runClientRequest(ABOUT_TO_SUBMIT_PATH,
+        runClientRequest(
+            ABOUT_TO_SUBMIT_PATH,
+            MediaType.APPLICATION_JSON,
+            "random string",
+            HttpStatus.BAD_REQUEST.value()
+        );
+
+        runClientRequest(
+            ABOUT_TO_SUBMIT_PATH,
             MediaType.APPLICATION_JSON,
             "{  \"foo\": \"bar\"}",
-            HttpStatus.BAD_REQUEST.value());
+            HttpStatus.BAD_REQUEST.value()
+        );
 
-        runClientRequest(ABOUT_TO_SUBMIT_PATH,
+        runClientRequest(
+            ABOUT_TO_SUBMIT_PATH,
             MediaType.APPLICATION_JSON,
             "<xml> </xml>",
-            HttpStatus.BAD_REQUEST.value());
+            HttpStatus.BAD_REQUEST.value()
+        );
     }
 
     private void runClientRequest(
-            final String path,
-            final MediaType mediaType,
-            final String content,
-            final int expectedHttpStatus
+        final String path,
+        final MediaType mediaType,
+        final String content,
+        final int expectedHttpStatus
     ) throws Exception {
         mockMvc.perform(post(path)
-            .contentType(mediaType).content(content))
+                            .contentType(mediaType).content(content))
             .andExpect(status().is(expectedHttpStatus)).andReturn();
     }
 }

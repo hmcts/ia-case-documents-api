@@ -1,6 +1,7 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.clients;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.io.Resource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
@@ -18,7 +19,7 @@ public class CdamDocumentDownloadClient {
     public CdamDocumentDownloadClient(
         CaseDocumentClient caseDocumentClient,
         AuthTokenGenerator serviceAuthTokenGenerator,
-        AccessTokenProvider accessTokenProvider
+        @Qualifier("requestUser") AccessTokenProvider accessTokenProvider
     ) {
 
         this.caseDocumentClient = caseDocumentClient;

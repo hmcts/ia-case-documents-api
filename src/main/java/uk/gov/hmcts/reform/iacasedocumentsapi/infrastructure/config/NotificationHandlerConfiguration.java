@@ -4620,7 +4620,7 @@ public class NotificationHandlerConfiguration {
 
     @Bean
     public PreSubmitCallbackHandler<AsylumCase> internalDetainedAppealRemissionGrantedInTimeEmailNotificationHandler(
-        @Qualifier("internalDetainedAppealRemissionGrantedInTimeLetter")
+        @Qualifier("internalDetainedAppealRemissionGrantedInTimeLetterNotification")
         List<NotificationGenerator> notificationGenerators) {
 
         return new NotificationHandler(

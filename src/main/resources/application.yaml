@@ -2286,6 +2286,8 @@ security:
       - "uploadAddendumEvidenceLegalRep"
       - "applyForFTPAAppellant"
       - "requestFeeRemission"
+      - "refundConfirmation"
+      - "hearingCancelled"
     caseworker-ia-legalrep-solicitor:
       - "startAppeal"
       - "editAppeal"
@@ -2672,9 +2674,7 @@ security:
       - "uploadAddendumEvidenceAdminOfficer"
       - "createCaseLink"
       - "reinstateAppeal"
-      - "buildCase"
       - "sendDecisionAndReasons"
-      - "markAppealAsAda"
       - "restoreStateFromAdjourn"
       - "editCaseListing"
       - "asyncStitchingComplete"
@@ -2684,42 +2684,26 @@ security:
       - "recordOutOfTimeDecision"
       - "makeAnApplication"
       - "manageFeeUpdate"
-      - "removeLegalRepresentative"
-    ctsc:
-      - "maintainCaseLinks"
-      - "applyForFTPAAppellant"
       - "unlinkAppeal"
       - "editDocuments"
       - "submitCase"
       - "markAsReadyForUtTransfer"
       - "removeDetainedStatus"
       - "linkAppeal"
-      - "reinstateAppeal"
       - "markAppealAsDetained"
       - "updateDetentionLocation"
       - "listCase"
       - "submitAppeal"
       - "editAppeal"
       - "draftHearingRequirements"
-      - "buildCase"
-      - "submitCase"
       - "generateHearingBundle"
       - "uploadAdditionalEvidence"
-      - "editCaseListing"
-      - "sendDecisionAndReasons"
-      - "adjournHearingWithoutDate"
-      - "listCma"
       - "endAppeal"
       - "generateUpperTribunalBundle"
       - "recordAdjournmentDetails"
-      - "createCaseLink"
       - "editAppealAfterSubmit"
-      - "recordRemissionDecision"
-      - "draftHearingRequirements"
       - "markAppealAsRemitted"
-      - "submitAppeal"
       - "turnOnNotifications"
-      - "editAppeal"
       - "startAppeal"
       - "refundConfirmation"
       - "hearingCancelled"
@@ -2744,8 +2728,6 @@ security:
       - "manageFeeUpdate"
       - "maintainCaseLinks"
       - "applyForFTPAAppellant"
-      - "maintainCaseLinks"
-      - "uploadAddendumEvidenceAdminOfficer"
       - "createCaseLink"
       - "unlinkAppeal"
       - "submitCase"
@@ -2753,45 +2735,19 @@ security:
       - "removeDetainedStatus"
       - "linkAppeal"
       - "reinstateAppeal"
-      - "buildCase"
-      - "asyncStitchingComplete"
       - "saveNotificationsToData"
-      - "manageFeeUpdate"
-      - "removeLegalRepresentative"
-    ctsc-team-leader:
       - "markAppealAsDetained"
       - "updateDetentionLocation"
       - "listCase"
       - "submitAppeal"
       - "editAppeal"
       - "draftHearingRequirements"
-      - "buildCase"
-      - "submitCase"
       - "generateHearingBundle"
       - "uploadAdditionalEvidence"
-      - "editCaseListing"
-      - "sendDecisionAndReasons"
-      - "adjournHearingWithoutDate"
-      - "listCma"
       - "endAppeal"
       - "generateUpperTribunalBundle"
       - "recordAdjournmentDetails"
-      - "createCaseLink"
       - "editAppealAfterSubmit"
-      - "markAppealPaid"
-      - "decisionWithoutHearing"
-      - "recordRemissionDecision"
-      - "markAppealAsAda"
-      - "applyForFTPAAppellant"
-      - "maintainCaseLinks"
-      - "uploadAddendumEvidenceAdminOfficer"
-      - "createCaseLink"
-      - "reinstateAppeal"
-      - "buildCase"
-      - "asyncStitchingComplete"
-      - "saveNotificationsToData"
-      - "manageFeeUpdate"
-      - "removeLegalRepresentative"
     national-business-centre:
       - "listCase"
       - "draftHearingRequirements"
@@ -2799,12 +2755,10 @@ security:
       - "submitAppeal"
       - "turnOnNotifications"
       - "editAppeal"
-      - "draftHearingRequirements"
       - "startAppeal"
       - "refundConfirmation"
       - "editDocuments"
       - "hearingCancelled"
-    national-business-centre:
       - "progressMigratedCase"
       - "requestFeeRemission"
       - "buildCase"
@@ -2819,7 +2773,6 @@ security:
       - "markAppealAsAda"
       - "restoreStateFromAdjourn"
       - "editCaseListing"
-      - "sendDecisionAndReasons"
       - "asyncStitchingComplete"
       - "adjournHearingWithoutDate"
       - "listCma"
@@ -2829,30 +2782,18 @@ security:
       - "maintainCaseLinks"
       - "applyForFTPAAppellant"
       - "unlinkAppeal"
-      - "submitCase"
       - "markAsReadyForUtTransfer"
       - "removeDetainedStatus"
       - "linkAppeal"
       - "reinstateAppeal"
       - "markAppealAsDetained"
       - "updateDetentionLocation"
-      - "listCase"
-      - "editDocuments"
-      - "uploadAdditionalEvidence"
       - "endAppeal"
       - "generateUpperTribunalBundle"
       - "recordAdjournmentDetails"
       - "createCaseLink"
       - "editAppealAfterSubmit"
       - "recordRemissionDecision"
-      - "draftHearingRequirements"
-      - "markAppealAsRemitted"
-      - "submitAppeal"
-      - "turnOnNotifications"
-      - "editAppeal"
-      - "startAppeal"
-      - "refundConfirmation"
-      - "hearingCancelled"
     challenged-access-ctsc:
       - "progressMigratedCase"
       - "requestFeeRemission"
@@ -2874,8 +2815,6 @@ security:
       - "manageFeeUpdate"
       - "maintainCaseLinks"
       - "applyForFTPAAppellant"
-      - "maintainCaseLinks"
-      - "uploadAddendumEvidenceAdminOfficer"
       - "createCaseLink"
       - "unlinkAppeal"
       - "submitCase"
@@ -2883,46 +2822,20 @@ security:
       - "removeDetainedStatus"
       - "linkAppeal"
       - "reinstateAppeal"
-      - "buildCase"
-      - "asyncStitchingComplete"
       - "saveNotificationsToData"
-      - "manageFeeUpdate"
-      - "removeLegalRepresentative"
-    challenged-access-ctsc:
       - "markAppealAsDetained"
       - "updateDetentionLocation"
       - "listCase"
       - "submitAppeal"
       - "editAppeal"
       - "draftHearingRequirements"
-      - "buildCase"
-      - "submitCase"
       - "generateHearingBundle"
       - "editDocuments"
       - "uploadAdditionalEvidence"
-      - "editCaseListing"
-      - "sendDecisionAndReasons"
-      - "adjournHearingWithoutDate"
-      - "listCma"
       - "endAppeal"
       - "generateUpperTribunalBundle"
       - "recordAdjournmentDetails"
-      - "createCaseLink"
       - "editAppealAfterSubmit"
-      - "markAppealPaid"
-      - "decisionWithoutHearing"
-      - "recordRemissionDecision"
-      - "markAppealAsAda"
-      - "applyForFTPAAppellant"
-      - "maintainCaseLinks"
-      - "uploadAddendumEvidenceAdminOfficer"
-      - "createCaseLink"
-      - "reinstateAppeal"
-      - "buildCase"
-      - "asyncStitchingComplete"
-      - "saveNotificationsToData"
-      - "manageFeeUpdate"
-      - "removeLegalRepresentative"
     challenged-access-admin:
       - "listCase"
       - "draftHearingRequirements"
@@ -2930,11 +2843,9 @@ security:
       - "submitAppeal"
       - "turnOnNotifications"
       - "editAppeal"
-      - "draftHearingRequirements"
       - "startAppeal"
       - "refundConfirmation"
       - "hearingCancelled"
-    challenged-access-admin:
       - "progressMigratedCase"
       - "requestFeeRemission"
       - "buildCase"
@@ -2949,7 +2860,6 @@ security:
       - "sendDecisionAndReasons"
       - "markAppealAsAda"
       - "restoreStateFromAdjourn"
-      - "editCaseListing"
       - "asyncStitchingComplete"
       - "adjournHearingWithoutDate"
       - "listCma"
@@ -2959,55 +2869,21 @@ security:
       - "maintainCaseLinks"
       - "applyForFTPAAppellant"
       - "unlinkAppeal"
-      - "submitCase"
       - "markAsReadyForUtTransfer"
       - "removeDetainedStatus"
       - "linkAppeal"
       - "reinstateAppeal"
       - "markAppealAsDetained"
       - "updateDetentionLocation"
-      - "listCase"
       - "editDocuments"
-      - "uploadAdditionalEvidence"
       - "endAppeal"
       - "generateUpperTribunalBundle"
       - "recordAdjournmentDetails"
       - "createCaseLink"
       - "editAppealAfterSubmit"
-      - "markAppealPaid"
-      - "decisionWithoutHearing"
       - "recordRemissionDecision"
-      - "markAppealAsAda"
-      - "applyForFTPAAppellant"
-      - "maintainCaseLinks"
-      - "uploadAddendumEvidenceAdminOfficer"
-      - "createCaseLink"
-      - "reinstateAppeal"
-      - "buildCase"
-      - "asyncStitchingComplete"
       - "saveNotificationsToData"
-      - "manageFeeUpdate"
-      - "draftHearingRequirements"
-      - "markAppealAsRemitted"
-      - "submitAppeal"
-      - "turnOnNotifications"
-      - "editAppeal"
-      - "startAppeal"
       - "generateServiceRequest"
-      - "removeLegalRepresentative"
-    citizen:
-      - "startAppeal"
-      - "editAppeal"
-      - "paymentAppeal"
-      - "uploadAdditionalEvidence"
-      - "submitAppeal"
-      - "submitCmaRequirements"
-      - "submitReasonsForAppeal"
-      - "submitClarifyingQuestionAnswers"
-      - "draftHearingRequirements"
-      - "applyForFTPAAppellant"
-      - "refundConfirmation"
-      - "hearingCancelled"
     caseworker-ia-homeofficeapc:
       - "startApplication"
       - "editBailApplication"
@@ -3042,6 +2918,9 @@ security:
       - "uploadBailSummary"
       - "uploadDocuments"
       - "makeNewApplication"
+      - "sendPaymentReminderNotification"
+      - "recordRemissionReminder"
+      - "hearingCancelled"
     caseworker-ia-respondentofficer:
       - "uploadHomeOfficeBundle"
       - "addAppealResponse"
@@ -3150,23 +3029,15 @@ security:
       - "leadershipJudgeFtpaDecision"
       - "editAppeal"
       - "decideCostsApplication"
-    senior-judge:
       - "adaSuitabilityReview"
       - "generateHearingBundle"
-      - "decideAnApplication"
-      - "sendDirection"
       - "reviewHearingRequirements"
-      - "sendDecisionAndReasons"
       - "transferOutOfAda"
       - "asyncStitchingComplete"
       - "maintainCaseLinks"
       - "residentJudgeFtpaDecision"
-      - "maintainCaseLinks"
-      - "createCaseLink"
-      - "changeDirectionDueDate"
       - "reinstateAppeal"
       - "UpdateHearingAdjustments"
-      - "asyncStitchingComplete"
       - "unlinkAppeal"
       - "decideFtpaApplication"
     leadership-judge:
@@ -3189,38 +3060,16 @@ security:
       - "leadershipJudgeFtpaDecision"
       - "editAppeal"
       - "decideCostsApplication"
-    leadership-judge:
       - "adaSuitabilityReview"
       - "generateHearingBundle"
-      - "decideAnApplication"
-      - "sendDirection"
       - "reviewHearingRequirements"
-      - "sendDecisionAndReasons"
       - "transferOutOfAda"
       - "asyncStitchingComplete"
       - "maintainCaseLinks"
       - "residentJudgeFtpaDecision"
-      - "maintainCaseLinks"
       - "unlinkAppeal"
       - "decideFtpaApplication"
-      - "linkAppeal"
-      - "updateHearingAdjustments"
-      - "reinstateAppeal"
-      - "requestNewHearingRequirements"
-      - "endAppeal"
-      - "considerMakingCostsOrder"
-      - "decideAnApplication"
-      - "createCaseLink"
-      - "editAppealAfterSubmit"
-      - "changeDirectionDueDate"
-      - "reinstateAppeal"
       - "UpdateHearingAdjustments"
-      - "asyncStitchingComplete"
-      - "decideFtpaApplication"
-      - "updateTribunalDecision"
-      - "leadershipJudgeFtpaDecision"
-      - "editAppeal"
-      - "decideCostsApplication"
     fee-paid-judge:
       - "adaSuitabilityReview"
       - "sendDirection"
@@ -3267,23 +3116,15 @@ security:
       - "leadershipJudgeFtpaDecision"
       - "editAppeal"
       - "decideCostsApplication"
-    lead-judge:
       - "adaSuitabilityReview"
       - "generateHearingBundle"
-      - "decideAnApplication"
-      - "sendDirection"
       - "reviewHearingRequirements"
-      - "sendDecisionAndReasons"
       - "transferOutOfAda"
       - "residentJudgeFtpaDecision"
       - "maintainCaseLinks"
-      - "createCaseLink"
-      - "changeDirectionDueDate"
       - "reinstateAppeal"
       - "UpdateHearingAdjustments"
       - "asyncStitchingComplete"
-      - "maintainCaseLinks"
-      - "residentJudgeFtpaDecision"
       - "unlinkAppeal"
       - "decideFtpaApplication"
     hearing-judge:
@@ -3306,38 +3147,16 @@ security:
       - "leadershipJudgeFtpaDecision"
       - "editAppeal"
       - "decideCostsApplication"
-    hearing-judge:
       - "adaSuitabilityReview"
       - "generateHearingBundle"
-      - "decideAnApplication"
-      - "sendDirection"
       - "reviewHearingRequirements"
-      - "sendDecisionAndReasons"
       - "transferOutOfAda"
       - "asyncStitchingComplete"
       - "maintainCaseLinks"
       - "residentJudgeFtpaDecision"
-      - "maintainCaseLinks"
       - "unlinkAppeal"
       - "decideFtpaApplication"
-      - "linkAppeal"
-      - "updateHearingAdjustments"
-      - "reinstateAppeal"
-      - "requestNewHearingRequirements"
-      - "endAppeal"
-      - "considerMakingCostsOrder"
-      - "decideAnApplication"
-      - "createCaseLink"
-      - "editAppealAfterSubmit"
-      - "changeDirectionDueDate"
-      - "reinstateAppeal"
       - "UpdateHearingAdjustments"
-      - "asyncStitchingComplete"
-      - "decideFtpaApplication"
-      - "updateTribunalDecision"
-      - "leadershipJudgeFtpaDecision"
-      - "editAppeal"
-      - "decideCostsApplication"
     ftpa-judge:
       - "adaSuitabilityReview"
       - "sendDirection"
@@ -3451,13 +3270,6 @@ security:
       - "UpdateHearingAdjustments"
       - "asyncStitchingComplete"
       - "decideFtpaApplication"
-    caseworker-ia-homeofficebail:
-      - "submitApplication"
-      - "makeNewApplication"
-      - "updateTribunalDecision"
-      - "leadershipJudgeFtpaDecision"
-      - "editAppeal"
-      - "decideCostsApplication"
     caseworker-ia-system:
       - "submitReasonsForAppeal"
       - "requestHearingRequirementsFeature"
@@ -3471,35 +3283,20 @@ security:
       - "requestHearingRequirementsFeature"
       - "saveNotificationsToData"
       - "updatePaymentStatus"
-    caseworker-ia-homeofficelart:
-      - "uploadHomeOfficeAppealResponse"
-      - "uploadAdditionalEvidenceHomeOffice"
-      - "uploadAddendumEvidenceHomeOffice"
-    caseworker-ia-homeofficepou:
-      - "applyForFTPARespondent"
-      - "uploadAdditionalEvidenceHomeOffice"
-      - "uploadAddendumEvidenceHomeOffice"
-      - "sendPaymentReminderNotification"
-      - "recordRemissionReminder"
-      - "hearingCancelled"
     caseworker-ia-homeofficebail:
+      - "submitApplication"
+      - "makeNewApplication"
+      - "updateTribunalDecision"
+      - "leadershipJudgeFtpaDecision"
+      - "editAppeal"
+      - "decideCostsApplication"
       - "startApplication"
       - "editBailApplication"
-      - "submitApplication"
       - "uploadBailSummary"
       - "uploadDocuments"
-      - "makeNewApplication"
-    caseworker-ia-respondentofficer:
-      - "applyForFTPARespondent"
-      - "uploadAdditionalEvidenceHomeOffice"
-      - "uploadAddendumEvidenceHomeOffice"
-      - "uploadHomeOfficeAppealResponse"
-    caseworker-ia-homeofficeapc:
-      - "uploadAdditionalEvidenceHomeOffice"
-      - "uploadAddendumEvidenceHomeOffice"
+
 
 ### dependency configuration
-ccdGatewayUrl: ${CCD_GW_URL:http://localhost:3453}
 core_case_data_api_url: ${CCD_URL:http://127.0.0.1:4452}
 document_management.url: ${DM_URL:http://127.0.0.1:4506}
 case_document_am.url: ${CASE_DOCUMENT_AM_URL:http://127.0.0.1:4455}
@@ -3539,12 +3336,18 @@ customerServices:
 
 govCallChargesUrl: ${IA_BAIL_GOV_CALL_CHARGES_URL:Find out about call charges|https://www.gov.uk/call-charges}
 
-iaAipFrontendUrl: ${IA_AIP_FRONTEND_URL:https://localhost:3000/}
-
 appellantDaysToWait:
+  afterSubmission: 28
+  afterOutOfTimeSubmission: 5
+  afterReasonsForAppeal: 14
+  afterClarifyingQuestionsAnswers: 5
+  afterCmaRequirements: 14
+  afterHearingRequirementsSubmitted: 14
+  afterRemissionDecision: 14
+  afterSubmittingAppealRemission: 14
+  afterNotificationSent: 14
+  afterPaymentReminder: 7
   letter:
-    afterRespondentApplicationDecided:
-      inCountry: 14
     afterSubmission: 28
     afterManageFeeUpdate: 14
     afterSubmitAppeal: 10
@@ -3552,7 +3355,12 @@ appellantDaysToWait:
     tribunalDocumentToSendTimeline: 4
     afterRemissionDecision: 14
     appealAfterTribunalDecision: 14
-
+    afterSubmitAppealWithFee: 14
+    afterManageFeeEvent: 14
+    toReinstateAppeal: 14
+    afterRespondentApplicationDecided:
+      inCountry: 14
+      outOfCountry: 28
 
 ### Email addresses
 
@@ -3710,26 +3518,6 @@ judgesReviewDeadlineDateDelay: ${JUDGES_REVIEW_DEADLINE_DATE_DELAY:14}
 
 makeAnApplicationFormLink: ${MAKE_AN_APPLICATION_FORM_LINK:https://www.gov.uk/government/publications/make-an-application-accelerated-detained-appeal-form-iaftada4}
 
-appellantDaysToWait:
-  afterSubmission: 28
-  afterOutOfTimeSubmission: 5
-  afterReasonsForAppeal: 14
-  afterClarifyingQuestionsAnswers: 5
-  afterCmaRequirements: 14
-  afterHearingRequirementsSubmitted: 14
-  afterRemissionDecision: 14
-  afterSubmittingAppealRemission: 14
-  afterNotificationSent: 14
-  afterPaymentReminder: 7
-  letter:
-    afterSubmitAppeal: 10
-    afterSubmitAppealWithFee: 14
-    afterManageFeeEvent: 14
-    toReinstateAppeal: 14
-    afterRespondentApplicationDecided:
-      inCountry: 14
-      outOfCountry: 28
-
 appellantDaysToAskReinstate: 14
 
 legalRepDaysToWait:
@@ -3748,11 +3536,6 @@ ftpaApplicationDecidedDaysToWait:
   inCountry: 14
   outOfCountry: 28
   ada: 7
-
-launchDarkly:
-  sdkKey: ${LAUNCH_DARKLY_SDK_KEY:sdk-key}
-  connectionTimeout: 5000
-  socketTimeout: 5000
 
 govUkHolidays:
   url: https://www.gov.uk/

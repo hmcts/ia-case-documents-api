@@ -3,6 +3,7 @@ package uk.gov.hmcts.reform.iacasedocumentsapi.utilities;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.assertj.core.util.Lists;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
@@ -44,7 +45,8 @@ public class AsylumCaseFixtures {
         asylumCase.write(APPELLANTS_DISPUTED_SCHEDULE_OF_ISSUES_DESCRIPTION, someString());
         asylumCase.write(SCHEDULE_OF_ISSUES_DISAGREEMENT_DESCRIPTION, someString());
 
-        asylumCase.write(HEARING_DOCUMENTS,
+        asylumCase.write(
+            HEARING_DOCUMENTS,
             List.of(
                 new IdValue<>("1", someDocumentWithMetadataWithDefaults(DocumentTag.CASE_SUMMARY)),
                 new IdValue<>("2", someDocumentWithMetadataWithDefaults(DocumentTag.HEARING_NOTICE))
@@ -55,16 +57,20 @@ public class AsylumCaseFixtures {
     }
 
     public static DocumentWithMetadata someDocumentWithMetadataWithDefaults(DocumentTag documentTag) {
-        return new DocumentWithMetadata(someDocumentWithDefaults(),
+        return new DocumentWithMetadata(
+            someDocumentWithDefaults(),
             "some-description",
             "",
-            documentTag,"test");
+            documentTag, "test"
+        );
     }
 
     public static Document someDocumentWithDefaults() {
-        return new Document("some-doc-url",
+        return new Document(
+            "some-doc-url",
             "some-doc-bin-url",
-            "some-filename");
+            "some-filename"
+        );
     }
 
     private static String someDate() {
@@ -77,84 +83,84 @@ public class AsylumCaseFixtures {
 
     public static String someUploadResponse() {
         return "{\n"
-               +
-               "  \"_embedded\": {\n"
-               +
-               "    \"documents\": [\n"
-               +
-               "      {\n"
-               +
-               "        \"originalDocumentName\": \"some-document-name\",\n"
-               +
-               "        \"_links\": {\n"
-               +
-               "          \"self\": {\n"
-               +
-               "            \"href\": \"\"\n"
-               +
-               "          },\n"
-               +
-               "          \"binary\": {\n"
-               +
-               "            \"href\": \"\"\n"
-               +
-               "          }\n"
-               +
-               "      }\n"
-               +
-               "    }\n"
-               +
-               "    ]\n"
-               +
-               "  }\n"
-               +
-               "}\n";
+            +
+            "  \"_embedded\": {\n"
+            +
+            "    \"documents\": [\n"
+            +
+            "      {\n"
+            +
+            "        \"originalDocumentName\": \"some-document-name\",\n"
+            +
+            "        \"_links\": {\n"
+            +
+            "          \"self\": {\n"
+            +
+            "            \"href\": \"\"\n"
+            +
+            "          },\n"
+            +
+            "          \"binary\": {\n"
+            +
+            "            \"href\": \"\"\n"
+            +
+            "          }\n"
+            +
+            "      }\n"
+            +
+            "    }\n"
+            +
+            "    ]\n"
+            +
+            "  }\n"
+            +
+            "}\n";
     }
 
     public static String someAmUploadResponse() {
         return "{\n"
-                +
-                "    \"documents\": [\n"
-                +
-                "      {\n"
-                +
-                "        \"originalDocumentName\": \"some-appeal-reference-number-some-fname-decision-and-reasons-draft.docx\",\n"
-                +
-                "        \"links\": {\n"
-                +
-                "          \"self\": {\n"
-                +
-                "            \"href\": \"\"\n"
-                +
-                "          },\n"
-                +
-                "          \"binary\": {\n"
-                +
-                "            \"href\": \"\"\n"
-                +
-                "          }\n"
-                +
-                "      }\n"
-                +
-                "    }\n"
-                +
-                "    ]\n"
-                +
-                "}\n";
+            +
+            "    \"documents\": [\n"
+            +
+            "      {\n"
+            +
+            "        \"originalDocumentName\": \"some-appeal-reference-number-some-fname-decision-and-reasons-draft.docx\",\n"
+            +
+            "        \"links\": {\n"
+            +
+            "          \"self\": {\n"
+            +
+            "            \"href\": \"\"\n"
+            +
+            "          },\n"
+            +
+            "          \"binary\": {\n"
+            +
+            "            \"href\": \"\"\n"
+            +
+            "          }\n"
+            +
+            "      }\n"
+            +
+            "    }\n"
+            +
+            "    ]\n"
+            +
+            "}\n";
     }
 
     public static String someUserDetails() {
         return "{\n"
-               + "  \"sub\": \"ia-caseofficer@fake.hmcts.net\",\n"
-               + "  \"uid\": \"27ff8bb2-8bd3-4577-8ee1-33099acd50a5\",\n"
-               + "  \"roles\": [\n"
-               + "    \"caseworker-ia\",\n"
-               + "    \"tribunal-caseworker\"\n"
-               + "  ],\n"
-               + "  \"name\": \"Officer\",\n"
-               + "  \"given_name\": \"Case\",\n"
-               + "  \"family_name\": \"Case Worker\"\n"
-               + "}";
+            + "  \"sub\": \"ia-caseofficer@fake.hmcts.net\",\n"
+            + "  \"uid\": \"27ff8bb2-8bd3-4577-8ee1-33099acd50a5\",\n"
+            + "  \"roles\": [\n"
+            + "    \"caseworker-ia\",\n"
+            + "    \"tribunal-caseworker\"\n"
+            + "  ],\n"
+            + "  \"name\": \"Officer\",\n"
+            + "  \"given_name\": \"Case\",\n"
+            + "  \"family_name\": \"Case Worker\"\n"
+            + "}";
     }
 
     private AsylumCaseFixtures() {

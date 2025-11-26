@@ -21,19 +21,19 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DocumentWithMetada
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.Event;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.IdValue;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo;
-import uk.gov.hmcts.reform.iacasedocumentsapi.utilities.DocmosisStub;
+import uk.gov.hmcts.reform.iacasedocumentsapi.component.testutils.WithDocmosisStub;
 
 class GenerateDecisionAndReasonsTestWiremock extends SpringBootIntegrationTest implements WithServiceAuthStub,
-        WithDocumentUploadStub, DocmosisStub, WithIdamStub, GivensBuilder, WithRoleAssignmentStub {
+        WithDocumentUploadStub, WithDocmosisStub, WithIdamStub, GivensBuilder, WithRoleAssignmentStub {
 
     @Test
     @WithMockUser(authorities = {"caseworker-ia", "tribunal-caseworker"})
     void generates_decision_and_reasons() {
-
         addServiceAuthStub(server);
         addDocumentUploadStub(server);
         addDocumentUploadStub(server);
-        withDefaults(server);
+        addDocmosisStub(server);
+        addRoleAssignmentActorStub(server);
 
         someLoggedIn(userWith()
             .roles(newHashSet("caseworker-ia", "tribunal-caseworker"))
@@ -43,13 +43,14 @@ class GenerateDecisionAndReasonsTestWiremock extends SpringBootIntegrationTest i
         docmosisWillReturnSomeDocument(server);
         theDocoumentsManagementApiIsAvailable(server);
         theCaseDocumentAmIsAvailable(server);
-        addRoleAssignmentActorStub(server);
 
         PreSubmitCallbackResponseForTest response = iaCaseDocumentsApiClient.aboutToSubmit(callback()
             .event(Event.GENERATE_DECISION_AND_REASONS)
             .caseDetails(someCaseDetailsWith()
-                .state(DECISION)
-                .caseData(anAsylumCase()
+                 .jurisdiction("IA")
+                 .id(1L)
+                 .state(DECISION)
+                 .caseData(anAsylumCase()
                     .with(APPEAL_REFERENCE_NUMBER, "some-appeal-reference-number")
                     .with(APPELLANT_FAMILY_NAME, "some-fname")
                     .with(APPELLANT_GIVEN_NAMES, "some-gname")
@@ -66,7 +67,6 @@ class GenerateDecisionAndReasonsTestWiremock extends SpringBootIntegrationTest i
                     .with(RESPONDENT_REPRESENTATIVE, "bill")
                     .with(LIST_CASE_HEARING_CENTRE, "taylorHouse")
                     .with(APPEAL_TYPE, AppealType.HU.getValue())
-
                 )));
 
         Optional<List<IdValue<DocumentWithMetadata>>> draftDecisionAndReasonsDocuments =

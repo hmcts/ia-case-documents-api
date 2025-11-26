@@ -10,18 +10,19 @@ import com.github.tomakehurst.wiremock.stubbing.StubMapping;
 
 public interface WithServiceAuthStub {
     String SERVICE_TOKEN =
-            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwiaWF0IjoxNTE2MjM5MDIyfQ.L8i6g3PfcHlioHCCPURC9pmXT7gdJpx3kOoyAfNUwCc";
+        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwiaWF0IjoxNTE2MjM5MDIyfQ.L8i6g3PfcHlioHCCPURC9pmXT7gdJpx3kOoyAfNUwCc";
 
     default void addServiceAuthStub(WireMockServer server) {
 
         server.addStubMapping(
-                new StubMapping(
-                        newRequestPattern(RequestMethod.POST, urlEqualTo("/serviceAuth/lease"))
-                                .build(),
-                        aResponse()
-                                .withStatus(200)
-                                .withBody(SERVICE_TOKEN)
-                                .build()));
+            new StubMapping(
+                newRequestPattern(RequestMethod.POST, urlEqualTo("/serviceAuth/lease"))
+                    .build(),
+                aResponse()
+                    .withStatus(200)
+                    .withBody(SERVICE_TOKEN)
+                    .build()
+            ));
     }
 
     default void addServiceAuthStub(WireMockServer server, String serviceName) {
@@ -34,7 +35,8 @@ public interface WithServiceAuthStub {
                     .withStatus(200)
                     .withHeader("Content-Type", "application/json")
                     .withBody(serviceName)
-                    .build()));
+                    .build()
+            ));
 
         server.addStubMapping(
             new StubMapping(
@@ -43,6 +45,7 @@ public interface WithServiceAuthStub {
                 aResponse()
                     .withStatus(200)
                     .withBody(SERVICE_TOKEN)
-                    .build()));
+                    .build()
+            ));
     }
 }

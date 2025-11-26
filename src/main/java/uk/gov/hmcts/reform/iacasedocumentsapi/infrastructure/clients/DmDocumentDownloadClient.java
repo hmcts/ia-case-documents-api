@@ -32,7 +32,7 @@ public class DmDocumentDownloadClient {
     public DmDocumentDownloadClient(
         DocumentDownloadClientApi documentDownloadClientApi,
         AuthTokenGenerator serviceAuthTokenGenerator,
-        AccessTokenProvider accessTokenProvider,
+        @Qualifier("requestUser") AccessTokenProvider accessTokenProvider,
         @Qualifier("requestUser") UserDetailsProvider userDetailsProvider
     ) {
         this.documentDownloadClientApi = documentDownloadClientApi;

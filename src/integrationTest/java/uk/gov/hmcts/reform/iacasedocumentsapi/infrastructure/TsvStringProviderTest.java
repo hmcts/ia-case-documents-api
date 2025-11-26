@@ -10,10 +10,76 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.component.testutils.SpringBootInte
 
 class TsvStringProviderTest extends SpringBootIntegrationTest {
 
-    @Autowired private TsvStringProvider tsvStringProvider;
+    @Autowired
+    private TsvStringProvider tsvStringProvider;
 
     @Test
     void should_load_strings_from_resources_and_return() {
+
+        assertEquals(
+            Optional.of("Birmingham"),
+            tsvStringProvider.get("hearingCentre", "birmingham")
+        );
+
+        assertEquals(
+            Optional.of("Bradford"),
+            tsvStringProvider.get("hearingCentre", "bradford")
+        );
+
+        assertEquals(
+            Optional.of("Coventry Magistrates Court"),
+            tsvStringProvider.get("hearingCentre", "coventry")
+        );
+
+        assertEquals(
+            Optional.of("Glasgow (Eagle Building)"),
+            tsvStringProvider.get("hearingCentre", "glasgow")
+        );
+
+        assertEquals(
+            Optional.of("Glasgow Tribunals Centre"),
+            tsvStringProvider.get("hearingCentre", "glasgowTribunalsCentre")
+        );
+
+        assertEquals(
+            Optional.of("Hatton Cross"),
+            tsvStringProvider.get("hearingCentre", "hattonCross")
+        );
+
+        assertEquals(
+            Optional.of("Manchester"),
+            tsvStringProvider.get("hearingCentre", "manchester")
+        );
+
+        assertEquals(
+            Optional.of("Newcastle Civil & Family Courts and Tribunals Centre"),
+            tsvStringProvider.get("hearingCentre", "newcastle")
+        );
+
+        assertEquals(
+            Optional.of("Newport"),
+            tsvStringProvider.get("hearingCentre", "newport")
+        );
+
+        assertEquals(
+            Optional.of("North Shields"),
+            tsvStringProvider.get("hearingCentre", "northShields")
+        );
+
+        assertEquals(
+            Optional.of("Nottingham Justice Centre"),
+            tsvStringProvider.get("hearingCentre", "nottingham")
+        );
+
+        assertEquals(
+            Optional.of("Taylor House"),
+            tsvStringProvider.get("hearingCentre", "taylorHouse")
+        );
+
+        assertEquals(
+            Optional.of("Remote hearing"),
+            tsvStringProvider.get("hearingCentre", "remoteHearing")
+        );
 
         assertEquals(
             Optional.of("Birmingham"),
@@ -76,87 +142,97 @@ class TsvStringProviderTest extends SpringBootIntegrationTest {
         );
 
         assertEquals(
-                Optional.of("Harmondsworth"),
-                tsvStringProvider.get("hearingCentreName", "harmondsworth")
+            Optional.of("Harmondsworth"),
+            tsvStringProvider.get("hearingCentreName", "harmondsworth")
         );
 
         assertEquals(
-                Optional.of("Hendon"),
-                tsvStringProvider.get("hearingCentreName", "hendon")
+            Optional.of("Hendon"),
+            tsvStringProvider.get("hearingCentreName", "hendon")
         );
 
         assertEquals(
-                Optional.of("Yarl's Wood"),
-                tsvStringProvider.get("hearingCentreName", "yarlsWood")
+            Optional.of("Yarl's Wood"),
+            tsvStringProvider.get("hearingCentreName", "yarlsWood")
         );
 
         assertEquals(
-                Optional.of("Bradford & Keighley"),
-                tsvStringProvider.get("hearingCentreName", "bradfordKeighley")
+            Optional.of("Bradford & Keighley"),
+            tsvStringProvider.get("hearingCentreName", "bradfordKeighley")
         );
 
         assertEquals(
-                Optional.of("MCC Minshull st"),
-                tsvStringProvider.get("hearingCentreName", "mccMinshull")
+            Optional.of("MCC Minshull st"),
+            tsvStringProvider.get("hearingCentreName", "mccMinshull")
         );
 
         assertEquals(
-                Optional.of("MCC Crown Square"),
-                tsvStringProvider.get("hearingCentreName", "mccCrownSquare")
+            Optional.of("MCC Crown Square"),
+            tsvStringProvider.get("hearingCentreName", "mccCrownSquare")
         );
 
         assertEquals(
-                Optional.of("Manchester Mags"),
-                tsvStringProvider.get("hearingCentreName", "manchesterMags")
+            Optional.of("Manchester Mags"),
+            tsvStringProvider.get("hearingCentreName", "manchesterMags")
         );
 
         assertEquals(
-                Optional.of("NTH Tyne Mags"),
-                tsvStringProvider.get("hearingCentreName", "nthTyneMags")
+            Optional.of("NTH Tyne Mags"),
+            tsvStringProvider.get("hearingCentreName", "nthTyneMags")
         );
 
         assertEquals(
-                Optional.of("Leeds Mags"),
-                tsvStringProvider.get("hearingCentreName", "leedsMags")
+            Optional.of("Leeds Mags"),
+            tsvStringProvider.get("hearingCentreName", "leedsMags")
         );
 
         assertEquals(
-                Optional.of("Alloa Sherrif Court"),
-                tsvStringProvider.get("hearingCentreName", "alloaSherrif")
+            Optional.of("Alloa Sherrif Court"),
+            tsvStringProvider.get("hearingCentreName", "alloaSherrif")
         );
 
         assertEquals(
-                Optional.of("IAC National (Virtual)"),
-                tsvStringProvider.get("hearingCentreName", "iacNationalVirtual")
+            Optional.of("Remote hearing"),
+            tsvStringProvider.get("hearingCentreName", "remoteHearing")
         );
 
         assertEquals(
-            Optional.of("Removing the appellant from the UK would breach the UK's obligation under the Refugee Convention"),
+            Optional.of("IAC National (Virtual)"),
+            tsvStringProvider.get("hearingCentreName", "iacNationalVirtual")
+        );
+
+        assertEquals(
+            Optional.of(
+                "Removing the appellant from the UK would breach the UK's obligation under the Refugee Convention"),
             tsvStringProvider.get("appealGrounds", "protectionRefugeeConvention")
         );
 
         assertEquals(
-            Optional.of("Removing the appellant from the UK would breach the UK's obligation in relation to persons eligible for a grant of humanitarian protection"),
+            Optional.of(
+                "Removing the appellant from the UK would breach the UK's obligation in relation to persons eligible for a grant of humanitarian protection"),
             tsvStringProvider.get("appealGrounds", "protectionHumanitarianProtection")
         );
 
         assertEquals(
-            Optional.of("Removing the appellant from the UK would be unlawful under section 6 of the Human Rights Act 1998"),
+            Optional.of(
+                "Removing the appellant from the UK would be unlawful under section 6 of the Human Rights Act 1998"),
             tsvStringProvider.get("appealGrounds", "protectionHumanRights")
         );
 
         assertEquals(
-                Optional.of("The decision is unlawful under section 6 of the Human Rights Act 1998"),
-                tsvStringProvider.get("appealGrounds", "humanRightsRefusal")
+            Optional.of("The decision is unlawful under section 6 of the Human Rights Act 1998"),
+            tsvStringProvider.get("appealGrounds", "humanRightsRefusal")
         );
 
         assertEquals(
-            Optional.of("Revocation of the appellant's protection status breaches the United Kingdom's obligations under the Refugee Convention"),
+            Optional.of(
+                "Revocation of the appellant's protection status breaches the United Kingdom's obligations under the Refugee Convention"),
             tsvStringProvider.get("appealGrounds", "revocationRefugeeConvention")
         );
 
         assertEquals(
-            Optional.of("Revocation of the appellant's protection status breaches the United Kingdom's obligations in relation to persons eligible for humanitarian protection"),
+            Optional.of(
+                "Revocation of the appellant's protection status breaches the United Kingdom's obligations in relation to persons eligible for humanitarian protection"),
             tsvStringProvider.get("appealGrounds", "revocationHumanitarianProtection")
         );
 
@@ -196,7 +272,8 @@ class TsvStringProviderTest extends SpringBootIntegrationTest {
         );
 
         assertEquals(
-            Optional.of("IAC Glasgow, 1st Floor, The Glasgow Tribunals Centre, Atlantic Quay, 20 York Street, Glasgow, G2 8GT"),
+            Optional.of(
+                "IAC Glasgow, 1st Floor, The Glasgow Tribunals Centre, Atlantic Quay, 20 York Street, Glasgow, G2 8GT"),
             tsvStringProvider.get("hearingCentreAddress", "glasgowTribunalsCentre")
         );
 
@@ -206,7 +283,8 @@ class TsvStringProviderTest extends SpringBootIntegrationTest {
         );
 
         assertEquals(
-            Optional.of("IAC Manchester, 1st Floor Piccadilly Exchange, 2 Piccadilly Plaza, Mosley Street, Manchester, M1 4AH"),
+            Optional.of(
+                "IAC Manchester, 1st Floor Piccadilly Exchange, 2 Piccadilly Plaza, Mosley Street, Manchester, M1 4AH"),
             tsvStringProvider.get("hearingCentreAddress", "manchester")
         );
 
@@ -226,7 +304,8 @@ class TsvStringProviderTest extends SpringBootIntegrationTest {
         );
 
         assertEquals(
-            Optional.of("Newcastle Civil & Family Courts and Tribunals Centre, Barras Bridge, Newcastle upon Tyne, NE1 8QF"),
+            Optional.of(
+                "Newcastle Civil & Family Courts and Tribunals Centre, Barras Bridge, Newcastle upon Tyne, NE1 8QF"),
             tsvStringProvider.get("hearingCentreAddress", "newcastle")
         );
 
@@ -236,58 +315,63 @@ class TsvStringProviderTest extends SpringBootIntegrationTest {
         );
 
         assertEquals(
-                Optional.of("Harmondsworth Tribunal Hearing Centre, Colnbrook Bypass, UB7 0HB"),
-                tsvStringProvider.get("hearingCentreAddress", "harmondsworth")
+            Optional.of("Harmondsworth Tribunal Hearing Centre, Colnbrook Bypass, UB7 0HB"),
+            tsvStringProvider.get("hearingCentreAddress", "harmondsworth")
         );
 
         assertEquals(
-                Optional.of("Hendon Magistrates' Court, The Court House, The Hyde, NW9 7BY"),
-                tsvStringProvider.get("hearingCentreAddress", "hendon")
+            Optional.of("Hendon Magistrates' Court, The Court House, The Hyde, NW9 7BY"),
+            tsvStringProvider.get("hearingCentreAddress", "hendon")
         );
 
         assertEquals(
-                Optional.of("Yarl's Wood Immigration and Asylum Hearing Centre, Twinwood Road, MK44 1FD"),
-                tsvStringProvider.get("hearingCentreAddress", "yarlsWood")
+            Optional.of("Yarl's Wood Immigration and Asylum Hearing Centre, Twinwood Road, MK44 1FD"),
+            tsvStringProvider.get("hearingCentreAddress", "yarlsWood")
         );
 
         assertEquals(
-                Optional.of("Bradford and Keighley Magistrates' Court and Family Court, The Tyrls, PO Box 187, BD1 1JL"),
-                tsvStringProvider.get("hearingCentreAddress", "bradfordKeighley")
+            Optional.of("Bradford and Keighley Magistrates' Court and Family Court, The Tyrls, PO Box 187, BD1 1JL"),
+            tsvStringProvider.get("hearingCentreAddress", "bradfordKeighley")
         );
 
         assertEquals(
-                Optional.of("Manchester Crown Court (Minshull St), The Court House, Minshull Street, M1 3FS"),
-                tsvStringProvider.get("hearingCentreAddress", "mccMinshull")
+            Optional.of("Manchester Crown Court (Minshull St), The Court House, Minshull Street, M1 3FS"),
+            tsvStringProvider.get("hearingCentreAddress", "mccMinshull")
         );
 
         assertEquals(
-                Optional.of("Manchester Crown Court (Crown Square), Courts of Justice, Crown Square, M3 3FL"),
-                tsvStringProvider.get("hearingCentreAddress", "mccCrownSquare")
+            Optional.of("Manchester Crown Court (Crown Square), Courts of Justice, Crown Square, M3 3FL"),
+            tsvStringProvider.get("hearingCentreAddress", "mccCrownSquare")
         );
 
         assertEquals(
-                Optional.of("Manchester Magistrates' Court, Crown Square, Manchester, Greater Manchester M60 1PR"),
-                tsvStringProvider.get("hearingCentreAddress", "manchesterMags")
+            Optional.of("Manchester Magistrates' Court, Crown Square, Manchester, Greater Manchester M60 1PR"),
+            tsvStringProvider.get("hearingCentreAddress", "manchesterMags")
         );
 
         assertEquals(
-                Optional.of("North Tyneside Magistrates' Court, Tynemouth Road, The Court House, NE30 1AG"),
-                tsvStringProvider.get("hearingCentreAddress", "nthTyneMags")
+            Optional.of("North Tyneside Magistrates' Court, Tynemouth Road, The Court House, NE30 1AG"),
+            tsvStringProvider.get("hearingCentreAddress", "nthTyneMags")
         );
 
         assertEquals(
-                Optional.of("Leeds Magistrates' Court and Family Court, Westgate, LS1 3BY"),
-                tsvStringProvider.get("hearingCentreAddress", "leedsMags")
+            Optional.of("Leeds Magistrates' Court and Family Court, Westgate, LS1 3BY"),
+            tsvStringProvider.get("hearingCentreAddress", "leedsMags")
         );
 
         assertEquals(
-                Optional.of("Alloa Sheriff Court, 47 Drysdale Street, Alloa, FK10 1JA"),
-                tsvStringProvider.get("hearingCentreAddress", "alloaSherrif")
+            Optional.of("Alloa Sheriff Court, 47 Drysdale Street, Alloa, FK10 1JA"),
+            tsvStringProvider.get("hearingCentreAddress", "alloaSherrif")
         );
 
         assertEquals(
-                Optional.of("Piccadilly Plaza, Mosley Street, Manchester, M1 4AH"),
-                tsvStringProvider.get("hearingCentreAddress", "iacNationalVirtual")
+            Optional.of("Cloud Video Platform (CVP)"),
+            tsvStringProvider.get("hearingCentreAddress", "remoteHearing")
+        );
+
+        assertEquals(
+            Optional.of("Piccadilly Plaza, Mosley Street, Manchester, M1 4AH"),
+            tsvStringProvider.get("hearingCentreAddress", "iacNationalVirtual")
         );
 
         assertEquals(
@@ -306,8 +390,8 @@ class TsvStringProviderTest extends SpringBootIntegrationTest {
         );
 
         assertEquals(
-                Optional.of("Stateless"),
-                tsvStringProvider.get("isoCountries", "ZZ")
+            Optional.of("Stateless"),
+            tsvStringProvider.get("isoCountries", "ZZ")
         );
     }
 

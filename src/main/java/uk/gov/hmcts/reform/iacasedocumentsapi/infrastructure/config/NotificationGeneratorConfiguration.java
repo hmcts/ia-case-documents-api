@@ -4180,8 +4180,8 @@ public class NotificationGeneratorConfiguration {
         );
     }
 
-    @Bean("internalDetainedAppealRemissionGrantedInTimeLetter")
-    public List<NotificationGenerator> internalDetainedAppealRemissionGrantedInTimeLetter(
+    @Bean("internalDetainedAppealRemissionGrantedInTimeLetterNotification")
+    public List<NotificationGenerator> internalDetainedAppealRemissionGrantedInTimeLetterNotification(
         DetentionEngagementTeamRemissionGrantedInTimePersonalisation internalDetainedAppealRemissionGrantedInTimeLetter,
         GovNotifyNotificationSender notificationSender,
         NotificationIdAppender notificationIdAppender) {
