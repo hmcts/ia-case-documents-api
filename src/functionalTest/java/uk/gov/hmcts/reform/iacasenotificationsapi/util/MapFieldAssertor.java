@@ -81,9 +81,9 @@ public final class MapFieldAssertor {
 
                 if (isPathContainsNotificationsSentReference(path)) {
                     assertThat(
-                            "Expected field matches (" + path + ")",
-                            removeTimestampFromNotificationReference((String) actualValue),
-                            equalTo(expectedValue)
+                        "Expected field matches (" + path + ")",
+                        removeTimestampFromNotificationReference((String) actualValue),
+                        equalTo(expectedValue)
                     );
                     return;
                 }
@@ -109,7 +109,7 @@ public final class MapFieldAssertor {
 
                     Stream
                         .of(expectedValueString.substring(10, expectedValueString.length() - 2)
-                            .split(","))
+                                .split(","))
                         .forEach(expectedValueItem -> {
                             assertThat(
                                 "Expected field contains (" + path + ")",

@@ -1,28 +1,48 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.em;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.mock;
 
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.Document;
 
 public class BundleDocumentTest {
+    private final String name = "caseApplication";
 
-    private static final String NAME = "name";
-    private static final String DESCRIPTION = "description";
-    private static final int SORT_INDEX = 1;
-    private static final Document SOURCE_DOCUMENT = mock(Document.class);
+    private final String description = "Case Application Document";
 
-    private BundleDocument bundleDocument = new BundleDocument(NAME, DESCRIPTION, SORT_INDEX, SOURCE_DOCUMENT);
+    private final int sortIndex = 1;
+    @Mock
+    private Document document;
 
+    private final BundleDocument bundleDocument = new BundleDocument(name, description, sortIndex, document);
+
+    @Test
+    void should_return_name() {
+        assertEquals(name, bundleDocument.getName());
+    }
+
+    @Test
+    void should_return_description() {
+        assertEquals(description, bundleDocument.getDescription());
+    }
+
+    @Test
+    void should_return_index() {
+        assertEquals(sortIndex, bundleDocument.getSortIndex());
+    }
+
+    @Test
+    void should_return_document() {
+        assertEquals(document, bundleDocument.getSourceDocument());
+    }
 
     @Test
     public void should_hold_onto_values() {
 
-        assertEquals(SOURCE_DOCUMENT, bundleDocument.getSourceDocument());
-        assertEquals(DESCRIPTION, bundleDocument.getDescription());
-        assertEquals(SORT_INDEX, bundleDocument.getSortIndex());
-        assertEquals(NAME, bundleDocument.getName());
+        assertEquals(document, bundleDocument.getSourceDocument());
+        assertEquals(description, bundleDocument.getDescription());
+        assertEquals(sortIndex, bundleDocument.getSortIndex());
+        assertEquals(name, bundleDocument.getName());
     }
-
 }

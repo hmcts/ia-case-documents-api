@@ -16,7 +16,8 @@ public class DocumentManagementFilesFixture implements Fixture {
 
     private static Map<String, String> metadata = new HashMap<>();
 
-    @Autowired private SystemDocumentManagementUploader documentManagementUploader;
+    @Autowired
+    private SystemDocumentManagementUploader documentManagementUploader;
 
     public void prepare() throws IOException {
 

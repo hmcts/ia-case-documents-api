@@ -14,10 +14,14 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.security.idam.Ident
 @Service
 public class IdamAuthProvider {
 
-    @Value("${idam.redirectUrl}") protected String idamRedirectUrl;
-    @Value("${idam.scope}") protected String userScope;
-    @Value("${spring.security.oauth2.client.registration.oidc.client-id}") protected String idamClientId;
-    @Value("${spring.security.oauth2.client.registration.oidc.client-secret}") protected String idamClientSecret;
+    @Value("${idam.redirectUrl}")
+    protected String idamRedirectUrl;
+    @Value("${idam.scope}")
+    protected String userScope;
+    @Value("${spring.security.oauth2.client.registration.oidc.client-id}")
+    protected String idamClientId;
+    @Value("${spring.security.oauth2.client.registration.oidc.client-secret}")
+    protected String idamClientSecret;
 
     @Autowired
     private IdamApi idamApi;

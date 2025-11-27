@@ -73,12 +73,12 @@ public class EndpointSecurityTest {
 
         callbackEndpoints.forEach(callbackEndpoint ->
 
-            SerenityRest
-                .given()
-                .when()
-                .post(callbackEndpoint)
-                .then()
-                .statusCode(HttpStatus.UNAUTHORIZED.value())
+                                      SerenityRest
+                                          .given()
+                                          .when()
+                                          .post(callbackEndpoint)
+                                          .then()
+                                          .statusCode(HttpStatus.UNAUTHORIZED.value())
         );
     }
 
@@ -94,14 +94,14 @@ public class EndpointSecurityTest {
 
         callbackEndpoints.forEach(callbackEndpoint ->
 
-            SerenityRest
-                .given()
-                .header("ServiceAuthorization", invalidServiceToken)
-                .header("Authorization", accessToken)
-                .when()
-                .post(callbackEndpoint)
-                .then()
-                .statusCode(HttpStatus.UNAUTHORIZED.value())
+                                      SerenityRest
+                                          .given()
+                                          .header("ServiceAuthorization", invalidServiceToken)
+                                          .header("Authorization", accessToken)
+                                          .when()
+                                          .post(callbackEndpoint)
+                                          .then()
+                                          .statusCode(HttpStatus.UNAUTHORIZED.value())
         );
 
     }
@@ -118,14 +118,14 @@ public class EndpointSecurityTest {
 
         callbackEndpoints.forEach(callbackEndpoint ->
 
-            SerenityRest
-                .given()
-                .header("ServiceAuthorization", serviceToken)
-                .header("Authorization", invalidAccessToken)
-                .when()
-                .post(callbackEndpoint)
-                .then()
-                .statusCode(HttpStatus.UNAUTHORIZED.value())
+                                      SerenityRest
+                                          .given()
+                                          .header("ServiceAuthorization", serviceToken)
+                                          .header("Authorization", invalidAccessToken)
+                                          .when()
+                                          .post(callbackEndpoint)
+                                          .then()
+                                          .statusCode(HttpStatus.UNAUTHORIZED.value())
         );
     }
 }

@@ -2,15 +2,12 @@ package uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure;
 
 import static com.google.common.collect.Sets.newHashSet;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.anyMap;
 import static org.mockito.Mockito.anyString;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.component.testutils.fixtures.AsylumCaseForTest.anAsylumCase;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.component.testutils.fixtures.CallbackForTest.CallbackForTestBuilder.callback;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.component.testutils.fixtures.CaseDetailsForTest.CaseDetailsForTestBuilder.someCaseDetailsWith;
@@ -25,7 +22,6 @@ import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseD
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.OUT_OF_TIME_DECISION_TYPE;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -33,24 +29,18 @@ import java.util.*;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
-import org.springframework.test.web.servlet.MvcResult;
 import uk.gov.hmcts.reform.iacasedocumentsapi.component.testutils.SpringBootIntegrationTest;
 import uk.gov.hmcts.reform.iacasedocumentsapi.component.testutils.WithDocumentUploadStub;
 import uk.gov.hmcts.reform.iacasedocumentsapi.component.testutils.WithIdamStub;
 import uk.gov.hmcts.reform.iacasedocumentsapi.component.testutils.WithRoleAssignmentStub;
 import uk.gov.hmcts.reform.iacasedocumentsapi.component.testutils.WithServiceAuthStub;
 import uk.gov.hmcts.reform.iacasedocumentsapi.component.testutils.WithDocmosisStub;
-import uk.gov.hmcts.reform.iacasedocumentsapi.component.testutils.fixtures.AsylumCaseForTest;
 import uk.gov.hmcts.reform.iacasedocumentsapi.component.testutils.fixtures.PreSubmitCallbackResponseForTest;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.*;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseDetails;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.Event;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.State;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.Callback;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.PreSubmitCallbackResponse;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.IdValue;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.clients.GovNotifyNotificationSender;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.security.CcdEventAuthorizor;
@@ -99,14 +89,13 @@ class MultipleNotificationsTest extends SpringBootIntegrationTest implements Wit
 
         eventAndNotificationSuffixPair
             .forEach(eventPair -> {
-                         try {
-                             runTestScenario(notificationId, eventPair);
-                         } catch (Exception e) {
-                             e.printStackTrace();
-                             assert false;
-                         }
-                     }
-            );
+                try {
+                    runTestScenario(notificationId, eventPair);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    assert false;
+                }
+            });
     }
 
     private void runTestScenario(String notificationId, Map.Entry<Event, String> eventWithSuffixPair) {

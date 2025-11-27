@@ -7,7 +7,6 @@ import static org.mockito.Mockito.when;
 import static org.springframework.security.oauth2.core.endpoint.OAuth2ParameterNames.ACCESS_TOKEN;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.security.idam.IdamAuthoritiesConverter.TOKEN_NAME;
 
-import com.google.common.collect.Lists;
 import feign.FeignException;
 import java.util.Collection;
 import java.util.Collections;

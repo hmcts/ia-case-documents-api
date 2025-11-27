@@ -1,11 +1,16 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.em;
 
+import static org.apache.commons.lang3.RandomStringUtils.secure;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.mock;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Modifier;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.Document;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.IdValue;
@@ -26,10 +31,15 @@ public class BundleTest {
     private static final YesOrNo HAS_TABLE_OF_CONTENTS = YesOrNo.YES;
     private static final String FILE_NAME = "bundle file name";
 
-    private Bundle bundle =
-        new Bundle(ID, TITLE, DESCRIPTION, ELIGIBLE_FOR_STITCHING, DOCUMENTS, STITCH_STATUS, STITCHED_DOCUMENT,
-            HAS_COVER_SHEETS, HAS_TABLE_OF_CONTENTS, FILE_NAME);
+    private Bundle bundle;
 
+    @BeforeEach
+    public void setUp() {
+        bundle = new Bundle(
+            ID, TITLE, DESCRIPTION, ELIGIBLE_FOR_STITCHING, DOCUMENTS, STITCH_STATUS, STITCHED_DOCUMENT,
+            HAS_COVER_SHEETS, HAS_TABLE_OF_CONTENTS, FILE_NAME
+        );
+    }
 
     @Test
     public void should_hold_onto_values() {
@@ -62,6 +72,70 @@ public class BundleTest {
         assertEquals(YesOrNo.YES, bundle.getHasCoversheets());
         assertEquals(YesOrNo.YES, bundle.getHasTableOfContents());
         assertEquals(FILE_NAME, bundle.getFilename());
+    }
+
+    @Test
+    public void shouldConvertNullValuesToOptionalEmpty() {
+        bundle = new Bundle(
+            ID,
+            TITLE,
+            DESCRIPTION,
+            ELIGIBLE_FOR_STITCHING,
+            DOCUMENTS,
+            null,
+            null,
+            HAS_COVER_SHEETS,
+            HAS_TABLE_OF_CONTENTS,
+            FILE_NAME
+        );
+
+        assertEquals(bundle.getStitchStatus(), Optional.empty());
+        assertEquals(bundle.getStitchedDocument(), Optional.empty());
+
+    }
+
+    @Test
+    public void shouldConvertNullValuesToOptionalEmptyCoverSheetContentsConstructor() {
+        bundle = new Bundle(
+            ID,
+            TITLE,
+            DESCRIPTION,
+            ELIGIBLE_FOR_STITCHING,
+            DOCUMENTS,
+            HAS_COVER_SHEETS,
+            HAS_TABLE_OF_CONTENTS,
+            FILE_NAME
+        );
+
+        assertEquals(bundle.getStitchStatus(), Optional.empty());
+        assertEquals(bundle.getStitchedDocument(), Optional.empty());
+
+    }
+
+    @Test
+    public void shouldConvertNullValuesToOptionalEmptyWhenUsingEmptyConstructor() throws Exception {
+
+        bundle = findPrivateNoArgsConstructor(Bundle.class).newInstance();
+
+        assertEquals(bundle.getStitchStatus(), Optional.empty());
+        assertEquals(bundle.getStitchedDocument(), Optional.empty());
+
+    }
+
+    private <T> Constructor<T> findPrivateNoArgsConstructor(Class<T> clazz) {
+
+        return (Constructor<T>)
+            Arrays.stream(clazz.getDeclaredConstructors())
+                .filter(constructor ->
+                            Modifier.isPrivate(constructor.getModifiers()) && constructor.getParameterCount() == 0)
+                .peek(constructor -> constructor.setAccessible(true))
+                .findFirst()
+                .orElseThrow(() -> new AssertionError("Could not find private no-args constructor"));
+    }
+
+
+    private String someRandomString() {
+        return secure().nextAlphabetic(8);
     }
 
 }

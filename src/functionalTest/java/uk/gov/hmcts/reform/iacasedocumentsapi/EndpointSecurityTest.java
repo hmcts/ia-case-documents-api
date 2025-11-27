@@ -29,9 +29,10 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.util.AuthorizationHeadersProvider;
 @RunWith(SpringIntegrationSerenityRunner.class)
 @SpringBootTest
 @ActiveProfiles("functional")
- class EndpointSecurityTest {
+class EndpointSecurityTest {
 
-    @Value("${targetInstance}") private String targetInstance;
+    @Value("${targetInstance}")
+    private String targetInstance;
 
     private final List<String> callbackEndpoints =
         Arrays.asList(
@@ -43,13 +44,13 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.util.AuthorizationHeadersProvider;
     private AuthorizationHeadersProvider authorizationHeadersProvider;
 
     @BeforeEach
-     void setUp() {
+    void setUp() {
         RestAssured.baseURI = targetInstance;
         RestAssured.useRelaxedHTTPSValidation();
     }
 
     @Test
-     void should_allow_unauthenticated_requests_to_welcome_message_and_return_200_response_code() {
+    void should_allow_unauthenticated_requests_to_welcome_message_and_return_200_response_code() {
 
         String response =
             SerenityRest
@@ -66,7 +67,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.util.AuthorizationHeadersProvider;
     }
 
     @Test
-     void should_allow_unauthenticated_requests_to_health_check_and_return_200_response_code() {
+    void should_allow_unauthenticated_requests_to_health_check_and_return_200_response_code() {
 
         String response =
             SerenityRest
@@ -84,23 +85,23 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.util.AuthorizationHeadersProvider;
     }
 
     @Test
-     void should_not_allow_unauthenticated_requests_and_return_401_response_code() {
+    void should_not_allow_unauthenticated_requests_and_return_401_response_code() {
 
         callbackEndpoints.forEach(callbackEndpoint ->
 
-            SerenityRest
-                .given()
-                .header("Content-Type", MediaType.APPLICATION_JSON_VALUE)
-                .body(someCallback())
-                .when()
-                .post(callbackEndpoint)
-                .then()
-                .statusCode(HttpStatus.UNAUTHORIZED.value())
+                                      SerenityRest
+                                          .given()
+                                          .header("Content-Type", MediaType.APPLICATION_JSON_VALUE)
+                                          .body(someCallback())
+                                          .when()
+                                          .post(callbackEndpoint)
+                                          .then()
+                                          .statusCode(HttpStatus.UNAUTHORIZED.value())
         );
     }
 
     @Test
-     void should_not_allow_requests_without_valid_service_authorisation_and_return_401_response_code() {
+    void should_not_allow_requests_without_valid_service_authorisation_and_return_401_response_code() {
 
         String invalidServiceToken = "invalid";
 
@@ -111,20 +112,20 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.util.AuthorizationHeadersProvider;
 
         callbackEndpoints.forEach(callbackEndpoint ->
 
-            SerenityRest
-                .given()
-                .header("Content-Type", MediaType.APPLICATION_JSON_VALUE)
-                .header("ServiceAuthorization", invalidServiceToken)
-                .header("Authorization", accessToken)
-                .body(someCallback())
-                .when()
-                .post(callbackEndpoint)
-                .then()
-                .statusCode(HttpStatus.UNAUTHORIZED.value()));
+                                      SerenityRest
+                                          .given()
+                                          .header("Content-Type", MediaType.APPLICATION_JSON_VALUE)
+                                          .header("ServiceAuthorization", invalidServiceToken)
+                                          .header("Authorization", accessToken)
+                                          .body(someCallback())
+                                          .when()
+                                          .post(callbackEndpoint)
+                                          .then()
+                                          .statusCode(HttpStatus.UNAUTHORIZED.value()));
     }
 
     @Test
-     void should_not_allow_requests_without_valid_user_authorisation_and_return_401_response_code() {
+    void should_not_allow_requests_without_valid_user_authorisation_and_return_401_response_code() {
 
         String serviceToken =
             authorizationHeadersProvider
@@ -135,16 +136,16 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.util.AuthorizationHeadersProvider;
 
         callbackEndpoints.forEach(callbackEndpoint ->
 
-            SerenityRest
-                .given()
-                .header("Content-Type", MediaType.APPLICATION_JSON_VALUE)
-                .header("ServiceAuthorization", serviceToken)
-                .header("Authorization", invalidAccessToken)
-                .body(someCallback())
-                .when()
-                .post(callbackEndpoint)
-                .then()
-                .statusCode(HttpStatus.UNAUTHORIZED.value()));
+                                      SerenityRest
+                                          .given()
+                                          .header("Content-Type", MediaType.APPLICATION_JSON_VALUE)
+                                          .header("ServiceAuthorization", serviceToken)
+                                          .header("Authorization", invalidAccessToken)
+                                          .body(someCallback())
+                                          .when()
+                                          .post(callbackEndpoint)
+                                          .then()
+                                          .statusCode(HttpStatus.UNAUTHORIZED.value()));
     }
 
     private Callback<AsylumCase> someCallback() {

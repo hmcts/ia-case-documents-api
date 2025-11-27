@@ -2,7 +2,6 @@ package uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit;
 
 import static java.util.Objects.requireNonNull;
 
-import com.google.common.collect.Lists;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.BiPredicate;

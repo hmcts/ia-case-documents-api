@@ -342,8 +342,10 @@ public class CcdScenarioRunnerTest {
 
         return switch (credentials) {
             case "LegalRepresentative" -> authorizationHeadersProvider.getLegalRepresentativeAuthorization();
-            case "LegalRepresentativeOrgSuccess" -> authorizationHeadersProvider.getLegalRepresentativeOrgSuccessAuthorization();
-            case "LegalRepresentativeOrgDeleted" -> authorizationHeadersProvider.getLegalRepresentativeOrgDeletedAuthorization();
+            case "LegalRepresentativeOrgSuccess" ->
+                authorizationHeadersProvider.getLegalRepresentativeOrgSuccessAuthorization();
+            case "LegalRepresentativeOrgDeleted" ->
+                authorizationHeadersProvider.getLegalRepresentativeOrgDeletedAuthorization();
             case "CaseOfficer" -> authorizationHeadersProvider.getCaseOfficerAuthorization();
             case "AdminOfficer" -> authorizationHeadersProvider.getAdminOfficerAuthorization();
             case "Citizen" -> authorizationHeadersProvider.getCitizenAuthorization();

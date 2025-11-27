@@ -16,12 +16,13 @@ import org.springframework.test.context.ActiveProfiles;
 @RunWith(SpringIntegrationSerenityRunner.class)
 @SpringBootTest
 @ActiveProfiles("functional")
- class WelcomeTest {
+class WelcomeTest {
 
-    @Value("${targetInstance}") private String targetInstance;
+    @Value("${targetInstance}")
+    private String targetInstance;
 
     @Test
-     void should_welcome_with_200_response_code() {
+    void should_welcome_with_200_response_code() {
 
         RestAssured.baseURI = targetInstance;
         RestAssured.useRelaxedHTTPSValidation();

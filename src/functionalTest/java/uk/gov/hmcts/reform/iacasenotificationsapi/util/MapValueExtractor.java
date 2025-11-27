@@ -80,7 +80,8 @@ public final class MapValueExtractor {
                         Map<String, Object> updatedReplacement = new HashMap<>(replacement);
 
                         if (replacement.containsKey("notificationsSent")) {
-                            List<Map<String, Object>> notificationsSent = (List<Map<String, Object>>) replacement.get("notificationsSent");
+                            List<Map<String, Object>> notificationsSent = (List<Map<String, Object>>) replacement.get(
+                                "notificationsSent");
                             List<Map<String, Object>> updatedNotificationsSent = new ArrayList<>(notificationsSent);
 
                             for (Map<String, Object> notificationSent : notificationsSent) {
@@ -106,7 +107,8 @@ public final class MapValueExtractor {
                 }
 
                 if (expectationMap.containsKey("notifications")) {
-                    List<Map<String, Object>> notifications = (List<Map<String, Object>>) expectationMap.get("notifications");
+                    List<Map<String, Object>> notifications = (List<Map<String, Object>>) expectationMap.get(
+                        "notifications");
                     List<Map<String, Object>> updatedNotifications = new ArrayList<>(notifications);
 
                     for (Map<String, Object> notification : notifications) {

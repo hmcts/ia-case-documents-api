@@ -20,7 +20,8 @@ public final class MapValueExpander {
     private static final Pattern PROPERTY_PATTERN = Pattern.compile("\\{\\$([a-zA-Z0-9].+?)}");
     public static final Properties ENVIRONMENT_PROPERTIES = new Properties(System.getProperties());
 
-    @Autowired private DocumentManagementFilesFixture documentManagementFilesFixture;
+    @Autowired
+    private DocumentManagementFilesFixture documentManagementFilesFixture;
 
     public void expandValues(Map<String, Object> map) {
 

@@ -3,7 +3,6 @@ package uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.security;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
 
-import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import java.util.Collections;
 import java.util.List;
