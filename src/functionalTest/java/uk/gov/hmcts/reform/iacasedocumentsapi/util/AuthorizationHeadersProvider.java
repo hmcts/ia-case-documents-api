@@ -10,7 +10,6 @@ import uk.gov.hmcts.reform.authorisation.generators.AuthTokenGenerator;
 
 @Service
 public class AuthorizationHeadersProvider {
-
     @Autowired
     private AuthTokenGenerator serviceAuthTokenGenerator;
 

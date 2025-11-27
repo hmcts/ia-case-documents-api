@@ -60,11 +60,13 @@ public class CcdScenarioRunnerTest {
     private List<Verifier> verifiers;
     private boolean haveAllPassed = true;
     private final ArrayList<String> failedScenarios = new ArrayList<>();
+    @Autowired
+    private LaunchDarklyFunctionalTestClient launchDarklyFunctionalTestClient;
     @MockBean
     RequestUserAccessTokenProvider requestUserAccessTokenProvider;
 
     @BeforeEach
-    void authenticateMe() {
+    public void setup() {
         String accessToken = authorizationHeadersProvider.getCaseOfficerAuthorization().getValue("Authorization");
         try {
             Thread.sleep(1000);
@@ -73,10 +75,6 @@ public class CcdScenarioRunnerTest {
         }
         assertNotNull(accessToken);
         when(requestUserAccessTokenProvider.getAccessToken()).thenReturn(accessToken);
-    }
-
-    @BeforeEach
-    public void setup() {
         MapSerializer.setObjectMapper(objectMapper);
         RestAssured.baseURI = targetInstance;
         RestAssured.useRelaxedHTTPSValidation();
@@ -84,7 +82,7 @@ public class CcdScenarioRunnerTest {
 
     @Test
     public void scenarios_should_behave_as_specified() throws IOException {
-
+        boolean launchDarklyFeature = false;
         loadPropertiesIntoMapValueExpander();
 
         for (Fixture fixture : fixtures) {
@@ -107,6 +105,7 @@ public class CcdScenarioRunnerTest {
         scenarioSources.addAll(StringResourceLoader.load("/scenarios/" + scenarioPattern).values());
         scenarioSources.addAll(StringResourceLoader.load("/scenarios/bail/" + scenarioPattern).values());
         scenarioSources.addAll(StringResourceLoader.load("/scenarios/payments/" + scenarioPattern).values());
+        scenarioSources.addAll(StringResourceLoader.load("/scenarios/notifications/" + scenarioPattern).values());
 
         System.out.println((char) 27 + "[36m" + "-------------------------------------------------------------------");
         System.out.println((char) 27 + "[33m" + "RUNNING " + scenarioSources.size() + " SCENARIOS");
@@ -116,15 +115,17 @@ public class CcdScenarioRunnerTest {
         int maxRetries = 3;
         for (String scenarioSource : scenarioSources) {
 
+            String description = "";
             for (int i = 0; i < maxRetries; i++) {
 
-                String description = "";
                 try {
                     Map<String, Object> scenario = deserializeWithExpandedValues(scenarioSource);
+                    final Headers authorizationHeaders = getAuthorizationHeaders(scenario);
 
                     description = MapValueExtractor.extract(scenario, "description");
 
                     Object scenarioEnabled = MapValueExtractor.extract(scenario, "enabled");
+                    Object scenarioFeature = MapValueExtractor.extract(scenario, "launchDarklyKey");
                     boolean scenarioEnabledFlag = true;
                     if (scenarioEnabled instanceof Boolean) {
                         scenarioEnabledFlag = (Boolean) scenarioEnabled;
@@ -137,6 +138,15 @@ public class CcdScenarioRunnerTest {
                     if (scenarioDisabled instanceof String) {
                         scenarioDisabledFlag = Boolean.parseBoolean((String) scenarioDisabled);
                     }
+                    if (scenarioFeature instanceof String) {
+                        if (String.valueOf(scenarioFeature).contains("feature")) {
+                            String[] keys = ((String) scenarioFeature).split(":");
+                            launchDarklyFeature = launchDarklyFunctionalTestClient
+                                .getKey(keys[0], authorizationHeaders.getValue("Authorization"))
+                                && Boolean.valueOf(keys[1]);
+                            scenarioEnabled = true;
+                        }
+                    }
 
                     if (!scenarioEnabledFlag || scenarioDisabledFlag) {
                         System.out.println((char) 27 + "[31m" + "SCENARIO: " + description + " **disabled**");
@@ -147,12 +157,15 @@ public class CcdScenarioRunnerTest {
 
                     Map<String, String> templatesByFilename = StringResourceLoader.load("/templates/*.json");
 
-                    final long testCaseId = MapValueExtractor.extractOrDefault(
+                    final long scenarioTestCaseId = MapValueExtractor.extractOrDefault(
                         scenario,
                         "request.input.id",
-                        ThreadLocalRandom.current().nextInt(1, 9999999 + 1)
-
+                        -1
                     );
+
+                    final long testCaseId = (scenarioTestCaseId == -1)
+                        ? ThreadLocalRandom.current().nextLong(1111111111111111L, 1999999999999999L)
+                        : scenarioTestCaseId;
 
                     final String requestBody = buildCallbackBody(
                         testCaseId,
@@ -160,9 +173,18 @@ public class CcdScenarioRunnerTest {
                         templatesByFilename
                     );
 
-                    final Headers authorizationHeaders = getAuthorizationHeaders(scenario);
                     final String requestUri = MapValueExtractor.extract(scenario, "request.uri");
-                    final int expectedStatus = MapValueExtractor.extractOrDefault(scenario, "expectation.status", 200);
+                    int expectedStatus;
+                    if (scenarioFeature != null && launchDarklyFeature == false) {
+                        expectedStatus = MapValueExtractor.extractOrDefault(
+                            scenario,
+                            "expectation.status",
+                            200,
+                            launchDarklyFeature
+                        );
+                    } else {
+                        expectedStatus = MapValueExtractor.extractOrDefault(scenario, "expectation.status", 200);
+                    }
 
                     String actualResponseBody =
                         SerenityRest
@@ -174,6 +196,8 @@ public class CcdScenarioRunnerTest {
                             .post(requestUri)
                             .peek()
                             .then()
+                            .log().ifError()
+                            .log().ifValidationFails()
                             .statusCode(expectedStatus)
                             .and()
                             .extract()
@@ -274,6 +298,10 @@ public class CcdScenarioRunnerTest {
         caseDetails.put("id", testCaseId);
         caseDetails.put("jurisdiction", MapValueExtractor.extractOrDefault(input, "jurisdiction", "IA"));
         caseDetails.put("state", MapValueExtractor.extractOrThrow(input, "state"));
+        caseDetails.put(
+            "security_classification",
+            MapValueExtractor.extractOrDefault(input, "securityClassification", "PUBLIC")
+        );
         caseDetails.put("created_date", createdDate);
         caseDetails.put("case_data", caseData);
 
@@ -350,9 +378,12 @@ public class CcdScenarioRunnerTest {
             case "AdminOfficer" -> authorizationHeadersProvider.getAdminOfficerAuthorization();
             case "Citizen" -> authorizationHeadersProvider.getCitizenAuthorization();
             case "Judge" -> authorizationHeadersProvider.getJudgeAuthorization();
-            case "System" -> authorizationHeadersProvider.getSystemAuthorization();
+            case "System", "SystemUser" -> authorizationHeadersProvider.getSystemAuthorization();
             case "HomeOfficeLart" -> authorizationHeadersProvider.getHomeOfficeLartAuthorization();
-            case "HomeOfficePOU" -> authorizationHeadersProvider.getHomeOfficePouAuthorization();
+            case "HomeOfficePOU", "HomeOfficePou" -> authorizationHeadersProvider.getHomeOfficePouAuthorization();
+            case "HomeOfficeApc" -> authorizationHeadersProvider.getHomeOfficeApcAuthorization();
+            case "HomeOfficeGeneric" -> authorizationHeadersProvider.getHomeOfficeGenericAuthorization();
+            case "LegalRepresentativeOrgA" -> authorizationHeadersProvider.getLegalRepresentativeOrgAAuthorization();
             default -> new Headers();
         };
     }
