@@ -20,7 +20,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.MakeAnApplicationT
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.Callback;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.IdValue;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.personalisation.LetterNotificationPersonalisation;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.personalisation.utils.WhatHappensNextContentUtils;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.NotificationWhatHappensNextContentUtils;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.CustomerServicesProvider;
 
 @Service
@@ -62,7 +62,7 @@ public class AppellantInternalDecideApplicationLetterPersonalisation implements 
                 .getCaseData();
 
         MakeAnApplication application = getMakeAnApplication(asylumCase).orElseThrow(() -> new IllegalStateException("Decide application is missing"));
-        String nextSteps = WhatHappensNextContentUtils.getWhatHappensNextContent(
+        String nextSteps = NotificationWhatHappensNextContentUtils.getWhatHappensNextContent(
             MakeAnApplicationTypes.from(application.getType()).orElseThrow(() -> new IllegalStateException("Invalid MakeAnApplicationType")),
             true, application.getDecision(), null);
         if (nextSteps.equals("Unknown")) {

@@ -1,10 +1,11 @@
-package uk.gov.hmcts.reform.iacasedocumentsapi.domain.personalisation.utils;
+package uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils;
 
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.MakeAnApplicationTypes;
 
-public final class WhatHappensNextContentUtils {
+// TODO: combine this class with NotificationWhatHappensNextContentUtils.class
+public final class LetterWhatHappensNextContentUtilsWithDecision {
 
-    private WhatHappensNextContentUtils() {
+    private LetterWhatHappensNextContentUtilsWithDecision() {
         // prevent public constructor for Sonar
     }
 

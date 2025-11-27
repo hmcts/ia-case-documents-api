@@ -2,10 +2,10 @@ package uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils;
 
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.MakeAnApplicationTypes;
 
-// TODO: combine this class with WhatHappensNextContentUtilsWithDecision.class
-public final class WhatHappensNextContentUtils {
+// TODO: combine this class with LetterWhatHappensNextContentUtilsWithDecision.class
+public final class LetterWhatHappensNextContentUtils {
 
-    private WhatHappensNextContentUtils() {
+    private LetterWhatHappensNextContentUtils() {
         // prevent public constructor for Sonar
     }
 
@@ -27,33 +27,39 @@ public final class WhatHappensNextContentUtils {
     private static final String homeOfficeReinstateAppealContent = "This appeal will be reinstated and will continue from the point where it was ended. You will be notified when this happens.";
     private static final String applicationTypeOtherContent = "You will be notified when the Tribunal makes the changes the Home Office asked for.";
 
-    public static String getWhatHappensNextContent(MakeAnApplicationTypes makeAnApplicationTypes, boolean isAppelantApplication) {
-        if (isAppelantApplication) {
-            return switch (makeAnApplicationTypes) {
-                case TIME_EXTENSION -> timeExtentionContent;
-                case ADJOURN, EXPEDITE, TRANSFER, UPDATE_HEARING_REQUIREMENTS ->
-                        adjournExpediteTransferOrUpdateHearingReqsContent;
-                case JUDGE_REVIEW, JUDGE_REVIEW_LO -> judgesReviewContent;
-                case LINK_OR_UNLINK -> linkOrUnlinkContent;
-                case WITHDRAW -> withdrawnContent;
-                case REINSTATE -> reinstateAppealContent;
-                case UPDATE_APPEAL_DETAILS, OTHER -> updateUpdateDetailsOrOtherContent;
-                case TRANSFER_OUT_OF_ACCELERATED_DETAINED_APPEALS_PROCESS -> transferOutOfAdaContent;
-                default -> "Unknown";
-            };
-        } else {
-            return switch (makeAnApplicationTypes) {
-                case TIME_EXTENSION -> homeOfficetimeExtentionContent;
-                case ADJOURN, EXPEDITE, TRANSFER, UPDATE_HEARING_REQUIREMENTS ->
-                        homeOfficeAdjournExpediteTransferOrUpdateHearingReqsContent;
-                case JUDGE_REVIEW, JUDGE_REVIEW_LO -> homeOfficeJudgesReviewContent;
-                case LINK_OR_UNLINK -> homeOfficeLinkOrUnlinkContent;
-                case WITHDRAW -> homeOfficeWithdrawnContent;
-                case REINSTATE -> homeOfficeReinstateAppealContent;
-                case OTHER -> applicationTypeOtherContent;
-                default -> "";
-            };
-        }
+    public static String getWhatHappensNextContent(MakeAnApplicationTypes makeAnApplicationTypes,
+                                                   boolean isAppellantApplication) {
+        return isAppellantApplication
+            ? getAppellantContent(makeAnApplicationTypes)
+            : getHomeOfficeContent(makeAnApplicationTypes);
     }
 
+    private static String getAppellantContent(MakeAnApplicationTypes makeAnApplicationTypes) {
+        return switch (makeAnApplicationTypes) {
+            case TIME_EXTENSION -> timeExtentionContent;
+            case ADJOURN, EXPEDITE, TRANSFER, UPDATE_HEARING_REQUIREMENTS ->
+                adjournExpediteTransferOrUpdateHearingReqsContent;
+            case JUDGE_REVIEW, JUDGE_REVIEW_LO -> judgesReviewContent;
+            case LINK_OR_UNLINK -> linkOrUnlinkContent;
+            case WITHDRAW -> withdrawnContent;
+            case REINSTATE -> reinstateAppealContent;
+            case UPDATE_APPEAL_DETAILS, OTHER -> updateUpdateDetailsOrOtherContent;
+            case TRANSFER_OUT_OF_ACCELERATED_DETAINED_APPEALS_PROCESS -> transferOutOfAdaContent;
+            default -> "Unknown";
+        };
+    }
+
+    private static String getHomeOfficeContent(MakeAnApplicationTypes makeAnApplicationTypes) {
+        return switch (makeAnApplicationTypes) {
+            case TIME_EXTENSION -> homeOfficetimeExtentionContent;
+            case ADJOURN, EXPEDITE, TRANSFER, UPDATE_HEARING_REQUIREMENTS ->
+                homeOfficeAdjournExpediteTransferOrUpdateHearingReqsContent;
+            case JUDGE_REVIEW, JUDGE_REVIEW_LO -> homeOfficeJudgesReviewContent;
+            case LINK_OR_UNLINK -> homeOfficeLinkOrUnlinkContent;
+            case WITHDRAW -> homeOfficeWithdrawnContent;
+            case REINSTATE -> homeOfficeReinstateAppealContent;
+            case OTHER -> applicationTypeOtherContent;
+            default -> "";
+        };
+    }
 }

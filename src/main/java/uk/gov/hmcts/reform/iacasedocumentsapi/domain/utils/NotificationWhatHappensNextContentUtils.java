@@ -2,10 +2,9 @@ package uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils;
 
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.MakeAnApplicationTypes;
 
-// TODO: combine this class with WhatHappensNextContentUtils.class
-public final class WhatHappensNextContentUtilsWithDecision {
+public final class NotificationWhatHappensNextContentUtils {
 
-    private WhatHappensNextContentUtilsWithDecision() {
+    private NotificationWhatHappensNextContentUtils() {
         // prevent public constructor for Sonar
     }
 
@@ -30,15 +29,15 @@ public final class WhatHappensNextContentUtilsWithDecision {
 
     public static String getWhatHappensNextContent(MakeAnApplicationTypes makeAnApplicationTypes, boolean isAppellantApplication, String decisionStr, String dueDate) {
         boolean isGranted = decisionStr.equals("Granted");
+        if (!isGranted) {
+            return isAppellantApplication ? REFUSED_APPELLANT_CONTENT : HOME_OFFICE_REFUSED_CONTENT;
+        }
         return isAppellantApplication
-            ? getAppellantContent(makeAnApplicationTypes, isGranted)
-            : getHomeOfficeContent(makeAnApplicationTypes, isGranted, dueDate);
+            ? getAppellantContent(makeAnApplicationTypes)
+            : getHomeOfficeContent(makeAnApplicationTypes, dueDate);
     }
 
-    private static String getAppellantContent(MakeAnApplicationTypes type, boolean isGranted) {
-        if (!isGranted) {
-            return REFUSED_APPELLANT_CONTENT;
-        }
+    private static String getAppellantContent(MakeAnApplicationTypes type) {
         return switch (type) {
             case TIME_EXTENSION -> TIME_EXTENSION_CONTENT;
             case ADJOURN, EXPEDITE, TRANSFER, UPDATE_HEARING_REQUIREMENTS ->
@@ -52,10 +51,7 @@ public final class WhatHappensNextContentUtilsWithDecision {
         };
     }
 
-    private static String getHomeOfficeContent(MakeAnApplicationTypes type, boolean isGranted, String dueDate) {
-        if (!isGranted) {
-            return HOME_OFFICE_REFUSED_CONTENT;
-        }
+    private static String getHomeOfficeContent(MakeAnApplicationTypes type, String dueDate) {
         return switch (type) {
             case TIME_EXTENSION -> HOME_OFFICE_TIME_EXTENSION_CONTENT;
             case ADJOURN, EXPEDITE, TRANSFER ->

@@ -14,7 +14,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.MakeAnApplication;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.MakeAnApplicationTypes;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseDetails;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates.DocumentTemplate;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.WhatHappensNextContentUtilsWithDecision;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.LetterWhatHappensNextContentUtilsWithDecision;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.CustomerServicesProvider;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.SystemDateProvider;
 
@@ -50,7 +50,7 @@ public class HomeOfficeApplicationDecidedLetterTemplate implements DocumentTempl
         final Map<String, Object> fieldValues = new HashMap<>();
         final MakeAnApplication application = getDecidedApplication(asylumCase);
         final String dueDate = systemDateProvider.dueDate(daysAfterApplicationDecisionInCountry);
-        final String nextSteps = WhatHappensNextContentUtilsWithDecision.getWhatHappensNextContent(
+        final String nextSteps = LetterWhatHappensNextContentUtilsWithDecision.getWhatHappensNextContent(
             MakeAnApplicationTypes.from(application.getType()).orElseThrow(() -> new IllegalStateException("Invalid MakeAnApplicationType")),
             false,
             application.getDecision(),
