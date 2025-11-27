@@ -40,7 +40,7 @@ def versions = [
   reformHealthStarter: '0.0.5',
   restAssured        : '5.4.0',
   serenity           : '4.2.31',
-  pact_version       : '4.4.9',
+  pact_version       : '4.6.17',
   sonarPitest        : '0.5',
   springDoc          : '1.8.0',
   springCloud        : '3.1.9'
@@ -410,8 +410,12 @@ dependencies {
   implementation group: 'org.springframework.boot', name: 'spring-boot-starter-json'
   implementation group: 'org.springframework.boot', name: 'spring-boot-starter-security'
   implementation group: 'org.springframework.boot', name: 'spring-boot-starter-web'
-  implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-openfeign', version: versions.springCloud
-  implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-bootstrap', version: versions.springCloud
+  implementation(group: 'org.springframework.cloud', name: 'spring-cloud-starter-openfeign', version: versions.springCloud) {
+    exclude group: "org.bouncycastle", module: "bcprov-jdk15on"
+  }
+  implementation(group: 'org.springframework.cloud', name: 'spring-cloud-starter-bootstrap', version: versions.springCloud) {
+    exclude group: "org.bouncycastle", module: "bcprov-jdk15on"
+  }
   implementation group: 'org.springframework.boot', name: 'spring-boot-starter-validation'
 
   implementation group: 'org.springframework.security', name: 'spring-security-oauth2-client'
@@ -446,7 +450,6 @@ dependencies {
     exclude group: "org.bouncycastle", module: "bcprov-jdk15on"
   }
 
-  implementation group: 'com.github.hmcts', name: 'document-management-client', version: '7.0.1'
   implementation group: 'com.github.hmcts.java-logging', name: 'logging', version: versions.reformLogging
   implementation group: 'com.github.hmcts.java-logging', name: 'logging-appinsights', version: versions.reformLogging
   implementation(group: 'com.github.hmcts', name: 'service-auth-provider-java-client', version: '4.1.2') {
@@ -457,54 +460,30 @@ dependencies {
   implementation group: 'commons-io', name: 'commons-io', version: '2.20.0'
 
   implementation group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.14'
-  implementation(group: 'org.springframework.cloud', name: 'spring-cloud-starter-openfeign', version: '3.1.9') {
-    exclude group: "org.bouncycastle", module: "bcprov-jdk15on"
-  }
-  implementation(group: 'org.springframework.cloud', name: 'spring-cloud-starter-bootstrap', version: '3.1.9') {
-    exclude group: "org.bouncycastle", module: "bcprov-jdk15on"
-  }
   implementation group: 'org.bouncycastle', name: 'bcprov-jdk18on', version: '1.81'
 
   implementation group: 'com.github.hmcts', name: 'ccd-case-document-am-client', version: '1.7.3'
-  implementation group: 'org.apache.tomcat.embed', name: 'tomcat-embed-core', version: '9.0.110'
-  implementation group: 'org.apache.tomcat.embed', name: 'tomcat-embed-websocket', version: '9.0.110'
-  implementation 'ch.qos.logback:logback-classic:1.2.13'
-  implementation 'ch.qos.logback:logback-core:1.2.13'
-  implementation group: 'org.springframework.boot', name: 'spring-boot-starter-cache'
 
   implementation group: 'uk.gov.service.notify', name: 'notifications-java-client', version: '5.2.1-RELEASE'
   implementation group: 'com.google.guava', name: 'guava', version: '32.1.3-jre'
   implementation group: 'com.launchdarkly', name: 'launchdarkly-java-server-sdk', version: '6.3.0'
-  implementation group: 'com.github.hmcts', name: 'ccd-case-document-am-client', version: '1.7.3'
-  implementation group: 'com.google.guava', name: 'guava', version: '32.1.3-jre'
 
-  annotationProcessor 'org.projectlombok:lombok:1.18.38'
-  compileOnly 'org.projectlombok:lombok:1.18.38'
   implementation group: 'org.springframework.retry', name: 'spring-retry', version: '2.0.2'
   testImplementation group: 'org.mockito', name: 'mockito-junit-jupiter', version: '3.12.4'
   testImplementation group: 'org.mockito', name: 'mockito-inline', version: '3.12.4'
-  testImplementation group: 'org.springframework.boot', name: 'spring-boot-starter-test'
-  testImplementation group: 'org.springframework.security', name: 'spring-security-test', version: versions.springSecurity
-  implementation group: 'com.google.guava', name: 'guava', version: '32.1.3-jre'
-  annotationProcessor 'org.projectlombok:lombok:1.18.38'
-  compileOnly 'org.projectlombok:lombok:1.18.38'
-  implementation group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.14'
-
-  implementation group: 'com.launchdarkly', name: 'launchdarkly-java-server-sdk', version: '6.3.0'
-
-  testImplementation group: 'org.mockito', name: 'mockito-inline', version: '3.12.4'
-  testImplementation group: 'org.assertj', name: 'assertj-core', version: '3.16.1'
-  testImplementation group: 'org.powermock', name: 'powermock-api-mockito2', version: '2.0.9'
   testImplementation(group: 'org.springframework.boot', name: 'spring-boot-starter-test') {
     exclude group: "com.vaadin.external.google", module: "android-json"
   }
+  annotationProcessor group: 'org.projectlombok', name: 'lombok', version: '1.18.38'
+  compileOnly group: 'org.projectlombok', name: 'lombok', version: '1.18.38'
+
+  testImplementation group: 'org.assertj', name: 'assertj-core', version: '3.16.1'
+  testImplementation group: 'org.powermock', name: 'powermock-api-mockito2', version: '2.0.9'
 
   testImplementation group: 'org.pitest', name: 'pitest', version: versions.pitest
   testImplementation group: 'info.solidsoft.gradle.pitest', name: 'gradle-pitest-plugin', version: versions.gradlePitest
   testImplementation "org.codehaus.sonar-plugins:sonar-pitest-plugin:${versions.sonarPitest}"
-  testImplementation group: 'org.pitest', name: 'pitest', version: versions.pitest
   testImplementation "info.solidsoft.gradle.pitest:gradle-pitest-plugin:${versions.gradlePitest}"
-  testImplementation "org.codehaus.sonar-plugins:sonar-pitest-plugin:${versions.sonarPitest}"
 
   testImplementation("io.rest-assured:rest-assured-all:${versions.restAssured}") {
     exclude group: 'org.apache.groovy', module: 'groovy-xml'
@@ -512,7 +491,6 @@ dependencies {
   testImplementation("io.rest-assured:rest-assured:${versions.restAssured}") {
     exclude group: 'org.apache.groovy', module: 'groovy-xml'
   }
-  testImplementation group: 'org.springframework.boot', name: 'spring-boot-starter-test'
   testImplementation group: 'org.springframework.security', name: 'spring-security-test'
 
   testImplementation group: 'org.jetbrains.kotlin', name: 'kotlin-stdlib', version: "1.9.0"
@@ -520,11 +498,8 @@ dependencies {
   testImplementation group: 'org.jetbrains.kotlin', name: 'kotlin-stdlib-jdk7', version: "1.9.0"
   testImplementation group: 'org.jetbrains.kotlin', name: 'kotlin-stdlib-jdk8', version: "1.9.0"
 
-  testImplementation "org.codehaus.sonar-plugins:sonar-pitest-plugin:0.5"
-  testImplementation group: 'org.pitest', name: 'pitest', version: '1.16.2'
+//  testImplementation group: 'org.pitest', name: 'pitest', version: '1.16.2'
   testImplementation group: 'io.rest-assured', name: 'rest-assured-all', version: versions.restAssured
-  testImplementation group: 'io.rest-assured', name: 'rest-assured', version: versions.restAssured
-  testImplementation(group: 'io.rest-assured', name: 'rest-assured-all', version: versions.restAssured)
   testImplementation group: 'io.rest-assured', name: 'rest-assured', version: versions.restAssured
 
   testImplementation group: 'net.serenity-bdd', name: 'serenity-core', version: versions.serenity
@@ -534,21 +509,12 @@ dependencies {
 
   testImplementation group: 'nl.jqno.equalsverifier', name: 'equalsverifier', version: '3.7.2'
   testImplementation group: 'com.github.hmcts', name: 'ccd-case-document-am-client', version: '1.7.3'
-  testImplementation group: 'org.powermock', name: 'powermock-api-mockito2', version: '2.0.9'
 
   testImplementation group: 'com.github.hmcts', name: 'fortify-client', version: '1.4.9', classifier: 'all', {
     exclude group: 'commons-io', module: 'commons-io'
     exclude group: 'org.apache.commons', module: 'commons-lang3'
   }
-  testImplementation group: 'net.serenity-bdd', name: 'serenity-core', version: versions.serenity
-  testImplementation group: 'net.serenity-bdd', name: 'serenity-junit', version: versions.serenity
-  testImplementation group: 'net.serenity-bdd', name: 'serenity-rest-assured', version: versions.serenity
-  testImplementation group: 'net.serenity-bdd', name: 'serenity-spring', version: versions.serenity
   testImplementation group: 'org.apiguardian', name: 'apiguardian-api', version: '1.1.2'
-  testImplementation group: 'com.github.hmcts', name: 'fortify-client', version: '1.4.9', classifier: 'all', {
-    exclude group: 'commons-io', module: 'commons-io'
-    exclude group: 'org.apache.commons', module: 'commons-lang3'
-  }
 
   testImplementation 'pl.pragmatists:JUnitParams:1.1.1'
 
@@ -557,11 +523,11 @@ dependencies {
   }
 
   //pact contract testing
-  contractTestImplementation group: 'au.com.dius.pact.consumer', name: 'junit5', version: "4.6.17"
-
-  contractTestImplementation("org.junit.jupiter:junit-jupiter:${versions.junit}")
-  contractTestImplementation("org.junit.jupiter:junit-jupiter-api:${versions.junit}")
-  contractTestRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:${versions.junit}")
+  contractTestImplementation group: 'au.com.dius.pact.consumer', name: 'junit5', version: versions.pact_version
+  contractTestImplementation group: 'org.springframework.boot', name: 'spring-boot-starter-test'
+  contractTestImplementation group: 'org.junit.jupiter', name: 'junit-jupiter', version: versions.junit
+  contractTestImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: versions.junit
+  contractTestRuntimeOnly group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: versions.junit
 
   integrationTestImplementation sourceSets.main.runtimeClasspath
   integrationTestImplementation sourceSets.test.runtimeClasspath
@@ -574,16 +540,6 @@ dependencies {
   smokeTestImplementation sourceSets.main.runtimeClasspath
   smokeTestImplementation sourceSets.test.runtimeClasspath
 
-  contractTestImplementation sourceSets.main.runtimeClasspath
-  contractTestImplementation sourceSets.test.runtimeClasspath
-
-  contractTestImplementation group: 'au.com.dius.pact.consumer', name: 'junit5', version: versions.pact_version
-//    contractTestImplementation group: 'au.com.dius.pact.provider', name: 'junit5', version: versions.pact_version
-//    contractTestImplementation group: 'au.com.dius.pact.provider', name: 'spring', version: versions.pact_version
-//    contractTestImplementation group: 'au.com.dius.pact.provider', name: 'junit5spring', version: versions.pact_version
-  contractTestImplementation group: 'org.springframework.boot', name: 'spring-boot-starter-test'
-  contractTestImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: versions.junit
-  contractTestRuntimeOnly group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: versions.junit
   contractTestImplementation sourceSets.main.runtimeClasspath
   contractTestImplementation sourceSets.test.runtimeClasspath
 }
