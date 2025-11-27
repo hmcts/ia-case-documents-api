@@ -21,6 +21,7 @@ plugins {
   id 'org.springframework.boot' version '2.7.18'
   id 'uk.gov.hmcts.java' version '0.12.67'
   id 'au.com.dius.pact' version '4.6.17'
+  id 'au.com.dius.pact' version '4.6.17'
   id "io.freefair.lombok" version "6.6.3"
   id "name.remal.randomize-test-classes" version "1.5.0"
   id 'org.gradle.test-retry' version '1.6.2'
@@ -129,6 +130,10 @@ processFunctionalTestResources {
 }
 
 processIntegrationTestResources {
+  duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+}
+
+processContractTestResources {
   duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 }
 
