@@ -231,14 +231,12 @@ withNightlyPipeline(type, product, component) {
   env.CCD_URL = "http://ccd-data-store-api-aat.service.core-compute-aat.internal"
   env.CCD_GW_URL = "http://dm-store-aat.service.core-compute-aat.internal"
   env.DM_URL = "http://dm-store-aat.service.core-compute-aat.internal"
-  env.CCD_GW_URL = "http://dm-store-aat.service.core-compute-aat.internal"
   env.IDAM_URL = "https://idam-api.aat.platform.hmcts.net"
   env.CASE_DOCUMENT_AM_URL = "http://ccd-case-document-am-api-aat.service.core-compute-aat.internal"
   env.S2S_URL = "http://rpe-service-auth-provider-aat.service.core-compute-aat.internal"
   env.EM_BUNDLER_URL = "http://em-ccd-orchestrator-aat.service.core-compute-aat.internal"
   env.EM_BUNDLER_STITCH_URI = "/api/stitch-ccd-bundles"
   env.OPEN_ID_IDAM_URL = "https://idam-web-public.aat.platform.hmcts.net"
-  env.CCD_URL = "http://ccd-data-store-api-aat.service.core-compute-aat.internal"
   env.ROLE_ASSIGNMENT_URL = "http://am-role-assignment-service-aat.service.core-compute-aat.internal"
 
   loadVaultSecrets(secrets)
@@ -420,6 +418,4 @@ withNightlyPipeline(type, product, component) {
     steps.archiveArtifacts allowEmptyArchive: true, artifacts: '**/build/reports/**/*'
     steps.archiveArtifacts allowEmptyArchive: true, artifacts: '**/reports/**/*'
   }
-}
-
 }

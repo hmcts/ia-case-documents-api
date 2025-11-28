@@ -26,6 +26,9 @@ management:
       documentManagement:
         uri: ${DM_URL:http://localhost:4506}/health
         response: '"status":"UP"'
+      caseDocumentManagement:
+        uri: ${CASE_DOCUMENT_AM_URL:http://localhost:4455}/health
+        response: '"status":"UP"'
       serviceAuth:
         uri: ${S2S_URL:http://localhost:4502}/health
         response: '"status":"UP"'
@@ -2239,10 +2242,6 @@ iaAipPathToSelfRepresentation: "start-representing-yourself"
 iaAipFrontendPathToJudgeReview: ask-judge-review
 
 tsvStringsFileLocation: strings.tsv
-
-ia_system_user: ${IA_SYSTEM_USERNAME:system-user}
-ia_system_user_password: ${IA_SYSTEM_PASSWORD:system-password}
-ia_system_user_scope: "openid profile authorities acr roles create-user manage-user search-user"
 
 security:
   anonymousPaths:

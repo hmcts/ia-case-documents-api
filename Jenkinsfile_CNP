@@ -196,7 +196,6 @@ withPipeline(type, product, component) {
     env.DOCMOSIS_ENDPOINT = "https://docmosis-development.platform.hmcts.net"
     env.IA_IDAM_REDIRECT_URI = "https://ia-case-api-aat.service.core-compute-aat.internal/oauth2/callback"
     env.CCD_URL = "http://ccd-data-store-api-aat.service.core-compute-aat.internal"
-    env.DM_URL = "http://dm-store-aat.service.core-compute-aat.internal"
     env.CCD_GW_URL = "http://dm-store-aat.service.core-compute-aat.internal"
     env.DM_URL = "http://dm-store-aat.service.core-compute-aat.internal"
     env.IDAM_URL = "https://idam-api.aat.platform.hmcts.net"
@@ -206,7 +205,6 @@ withPipeline(type, product, component) {
     env.EM_BUNDLER_STITCH_URI = "/api/stitch-ccd-bundles"
     env.OPEN_ID_IDAM_URL = "https://idam-web-public.aat.platform.hmcts.net"
     env.PACT_BROKER_FULL_URL = 'https://pact-broker.platform.hmcts.net'
-    env.CCD_URL = "http://ccd-data-store-api-aat.service.core-compute-aat.internal"
     env.ROLE_ASSIGNMENT_URL = "http://am-role-assignment-service-aat.service.core-compute-aat.internal"
 
     enableAksStagingDeployment()

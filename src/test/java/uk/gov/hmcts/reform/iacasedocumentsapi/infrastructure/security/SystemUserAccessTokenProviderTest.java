@@ -12,7 +12,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.clients.IdamApi;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.IdamService;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.clients.model.idam.Token;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.security.idam.IdentityManagerResponseException;
 
@@ -20,28 +20,13 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.security.idam.Ident
 public class SystemUserAccessTokenProviderTest {
 
     @Mock
-    private IdamApi idamApi;
+    private IdamService idamService;
 
     private SystemUserAccessTokenProvider systemUserAccessTokenProvider;
 
-    private final String systemUsername = "test-system-user";
-    private final String systemPassword = "test-system-password";
-    private final String systemUserScope = "openid profile authorities acr roles create-user manage-user search-user";
-    private final String idamRedirectUrl = "http://localhost:3002/oauth2/callback";
-    private final String idamClientId = "test-client-id";
-    private final String idamClientSecret = "test-client-secret";
-
     @BeforeEach
     public void setUp() {
-        systemUserAccessTokenProvider = new SystemUserAccessTokenProvider(
-            idamApi,
-            systemUsername,
-            systemPassword,
-            systemUserScope,
-            idamRedirectUrl,
-            idamClientId,
-            idamClientSecret
-        );
+        systemUserAccessTokenProvider = new SystemUserAccessTokenProvider(idamService);
     }
 
     @Test
@@ -50,7 +35,7 @@ public class SystemUserAccessTokenProviderTest {
         String expectedBearerToken = "Bearer " + expectedAccessToken;
         Token tokenResponse = new Token(expectedAccessToken, "test-scope");
 
-        when(idamApi.token(org.mockito.ArgumentMatchers.any())).thenReturn(tokenResponse);
+        when(idamService.getServiceUserToken()).thenReturn(tokenResponse);
 
         String actualAccessToken = systemUserAccessTokenProvider.getAccessToken();
 
@@ -63,7 +48,7 @@ public class SystemUserAccessTokenProviderTest {
         String expectedBearerToken = "Bearer " + expectedAccessToken;
         Token tokenResponse = new Token(expectedAccessToken, "test-scope");
 
-        when(idamApi.token(org.mockito.ArgumentMatchers.any())).thenReturn(tokenResponse);
+        when(idamService.getServiceUserToken()).thenReturn(tokenResponse);
 
         Optional<String> optionalAccessToken = systemUserAccessTokenProvider.tryGetAccessToken();
 
@@ -73,7 +58,7 @@ public class SystemUserAccessTokenProviderTest {
 
     @Test
     public void get_access_token_throws_exception_when_idam_returns_error() {
-        when(idamApi.token(org.mockito.ArgumentMatchers.any()))
+        when(idamService.getServiceUserToken())
             .thenThrow(FeignException.class);
 
         assertThatThrownBy(() -> systemUserAccessTokenProvider.getAccessToken())
@@ -83,7 +68,7 @@ public class SystemUserAccessTokenProviderTest {
 
     @Test
     public void try_get_access_token_throws_exception_when_idam_returns_error() {
-        when(idamApi.token(org.mockito.ArgumentMatchers.any()))
+        when(idamService.getServiceUserToken())
             .thenThrow(FeignException.class);
 
         assertThatThrownBy(() -> systemUserAccessTokenProvider.tryGetAccessToken())
@@ -93,7 +78,7 @@ public class SystemUserAccessTokenProviderTest {
 
     @Test
     public void get_access_token_throws_exception_when_token_response_is_null() {
-        when(idamApi.token(org.mockito.ArgumentMatchers.any())).thenReturn(null);
+        when(idamService.getServiceUserToken()).thenReturn(null);
 
         assertThatThrownBy(() -> systemUserAccessTokenProvider.getAccessToken())
             .isExactlyInstanceOf(IdentityManagerResponseException.class)
@@ -102,7 +87,7 @@ public class SystemUserAccessTokenProviderTest {
 
     @Test
     public void try_get_access_token_throws_exception_when_token_response_is_null() {
-        when(idamApi.token(org.mockito.ArgumentMatchers.any())).thenReturn(null);
+        when(idamService.getServiceUserToken()).thenReturn(null);
 
         assertThatThrownBy(() -> systemUserAccessTokenProvider.tryGetAccessToken())
             .isExactlyInstanceOf(IdentityManagerResponseException.class)
@@ -113,7 +98,7 @@ public class SystemUserAccessTokenProviderTest {
     public void get_access_token_throws_exception_when_access_token_is_null() {
         Token tokenResponse = new Token(null, "test-scope");
 
-        when(idamApi.token(org.mockito.ArgumentMatchers.any())).thenReturn(tokenResponse);
+        when(idamService.getServiceUserToken()).thenReturn(tokenResponse);
 
         assertThatThrownBy(() -> systemUserAccessTokenProvider.getAccessToken())
             .isExactlyInstanceOf(IdentityManagerResponseException.class)
@@ -124,7 +109,7 @@ public class SystemUserAccessTokenProviderTest {
     public void try_get_access_token_throws_exception_when_access_token_is_null() {
         Token tokenResponse = new Token(null, "test-scope");
 
-        when(idamApi.token(org.mockito.ArgumentMatchers.any())).thenReturn(tokenResponse);
+        when(idamService.getServiceUserToken()).thenReturn(tokenResponse);
 
         assertThatThrownBy(() -> systemUserAccessTokenProvider.tryGetAccessToken())
             .isExactlyInstanceOf(IdentityManagerResponseException.class)
@@ -135,7 +120,7 @@ public class SystemUserAccessTokenProviderTest {
     public void get_access_token_throws_exception_when_access_token_is_empty() {
         Token tokenResponse = new Token("", "test-scope");
 
-        when(idamApi.token(org.mockito.ArgumentMatchers.any())).thenReturn(tokenResponse);
+        when(idamService.getServiceUserToken()).thenReturn(tokenResponse);
 
         assertThatThrownBy(() -> systemUserAccessTokenProvider.getAccessToken())
             .isExactlyInstanceOf(IdentityManagerResponseException.class)
@@ -146,7 +131,7 @@ public class SystemUserAccessTokenProviderTest {
     public void try_get_access_token_throws_exception_when_access_token_is_empty() {
         Token tokenResponse = new Token("", "test-scope");
 
-        when(idamApi.token(org.mockito.ArgumentMatchers.any())).thenReturn(tokenResponse);
+        when(idamService.getServiceUserToken()).thenReturn(tokenResponse);
 
         assertThatThrownBy(() -> systemUserAccessTokenProvider.tryGetAccessToken())
             .isExactlyInstanceOf(IdentityManagerResponseException.class)
