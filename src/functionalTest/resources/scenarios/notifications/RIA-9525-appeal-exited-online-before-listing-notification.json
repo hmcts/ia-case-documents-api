@@ -14,7 +14,7 @@
           "appellantsRepresentation": "No",
           "legalRepEmail": "{$TEST_LAW_FIRM_A_USERNAME}",
           "endAppealOutcome": "appealTakenOffline",
-          "legalRepReferenceNumber": "REF54321",
+          "legalRepReferenceNumber": "CASE001",
           "notificationsSent": []
         }
       }
@@ -30,7 +30,7 @@
         "appellantsRepresentation": "No",
         "legalRepEmail": "{$TEST_LAW_FIRM_A_USERNAME}",
         "endAppealOutcome": "appealTakenOffline",
-        "legalRepReferenceNumber": "REF54321",
+        "legalRepReferenceNumber": "CASE001",
         "notificationsSent": [
           {
             "id": "95251_APPEAL_EXITED_ONLINE_HOME_OFFICE",
@@ -63,7 +63,7 @@
         "subject": "Immigration and Asylum appeal: case removed from online service",
         "body": [
           "PA/12345/2019",
-          "REF54321",
+          "CASE001",
           "Talha Awan",
           "{$iaExUiFrontendUrl}",
           "{$customerServices.telephoneNumber}",

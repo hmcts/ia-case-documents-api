@@ -12,7 +12,7 @@
         "replacements": {
           "listCaseHearingCentre": "taylorHouse",
           "ariaListingReference": "LP/12345/2019",
-          "legalRepReferenceNumber": "REF54321",
+          "legalRepReferenceNumber": "CASE001",
           "endAppealOutcome": "appealTakenOffline",
           "notificationsSent": []
         }
@@ -27,7 +27,7 @@
       "replacements": {
         "listCaseHearingCentre": "taylorHouse",
         "ariaListingReference": "LP/12345/2019",
-        "legalRepReferenceNumber": "REF54321",
+        "legalRepReferenceNumber": "CASE001",
         "endAppealOutcome": "appealTakenOffline",
         "notificationsSent": [
           {
@@ -62,7 +62,7 @@
         "subject": "Immigration and Asylum appeal: case removed from online service",
         "body": [
           "PA/12345/2019",
-          "REF54321",
+          "CASE001",
           "LP/12345/2019",
           "Talha Awan",
           "{$iaExUiFrontendUrl}",

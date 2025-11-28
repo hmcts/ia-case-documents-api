@@ -16,7 +16,7 @@
           "legalRepEmail": "{$TEST_LAW_FIRM_A_USERNAME}",
           "listCaseHearingCentre": "taylorHouse",
           "ariaListingReference": "LP/12345/2019",
-          "legalRepReferenceNumber": "REF54321",
+          "legalRepReferenceNumber": "CASE001",
           "caseBundles": [{
             "id": "1",
             "value": {
@@ -38,7 +38,7 @@
         "legalRepEmail": "{$TEST_LAW_FIRM_A_USERNAME}",
         "listCaseHearingCentre": "taylorHouse",
         "ariaListingReference": "LP/12345/2019",
-        "legalRepReferenceNumber": "REF54321",
+        "legalRepReferenceNumber": "CASE001",
         "notificationsSent": [
           {
             "id": "952513_HEARING_BUNDLE_IS_READY_HOME_OFFICE",

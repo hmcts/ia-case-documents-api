@@ -13,7 +13,7 @@
         "replacements": {
           "listCaseHearingCentre": "decisionWithoutHearing",
           "ariaListingReference": "XX/00000/0000",
-          "legalRepReferenceNumber": "REF54321",
+          "legalRepReferenceNumber": "CASE001",
           "caseBundles": [{
             "id": "1",
             "value": {
@@ -32,7 +32,7 @@
       "replacements": {
         "listCaseHearingCentre": "decisionWithoutHearing",
         "ariaListingReference": "XX/00000/0000",
-        "legalRepReferenceNumber": "REF54321",
+        "legalRepReferenceNumber": "CASE001",
         "notificationsSent": [
           {
             "id": "2923_HEARING_BUNDLE_IS_READY_HOME_OFFICE",
@@ -67,7 +67,7 @@
         "body": [
           "PA/12345/2019",
           "XX/00000/0000",
-          "REF54321",
+          "CASE001",
           "Talha Awan",
           "{$iaExUiFrontendUrl}",
           "{$customerServices.telephoneNumber}",

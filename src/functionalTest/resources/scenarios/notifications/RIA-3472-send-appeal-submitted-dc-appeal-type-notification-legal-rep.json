@@ -14,7 +14,7 @@
           "hearingCentre": "taylorHouse",
           "listCaseHearingCentre": "taylorHouse",
           "ariaListingReference": "LP/12345/2019",
-          "legalRepReferenceNumber": "REF54321",
+          "legalRepReferenceNumber": "CASE001",
           "appealType":"deprivation",
           "paymentStatus": "Paid"
         }
@@ -30,7 +30,7 @@
         "hearingCentre": "taylorHouse",
         "listCaseHearingCentre": "taylorHouse",
         "ariaListingReference": "LP/12345/2019",
-        "legalRepReferenceNumber": "REF54321",
+        "legalRepReferenceNumber": "CASE001",
         "appealType":"deprivation",
         "paymentStatus": "Paid",
         "notificationsSent": [
@@ -64,7 +64,7 @@
         "subject": "Immigration and Asylum appeal: Your appeal has been submitted",
         "body": [
           "PA/12345/2019",
-          "REF54321",
+          "CASE001",
           "Talha Awan",
           "{$iaExUiFrontendUrl}",
           "{$customerServices.telephoneNumber}",

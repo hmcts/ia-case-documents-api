@@ -15,7 +15,7 @@
           "hearingCentre": "taylorHouse",
           "listCaseHearingCentre": "taylorHouse",
           "ariaListingReference": "LP/12345/2019",
-          "legalRepReferenceNumber": "REF54321",
+          "legalRepReferenceNumber": "CASE001",
           "paAppealTypePaymentOption":"payLater",
           "appealType":"protection"
         }
@@ -32,7 +32,7 @@
         "hearingCentre": "taylorHouse",
         "listCaseHearingCentre": "taylorHouse",
         "ariaListingReference": "LP/12345/2019",
-        "legalRepReferenceNumber": "REF54321",
+        "legalRepReferenceNumber": "CASE001",
         "paAppealTypePaymentOption":"payLater",
         "appealType":"protection",
         "notificationsSent": [

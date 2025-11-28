@@ -12,7 +12,7 @@
         "replacements": {
           "listCaseHearingCentre": "northShields",
           "ariaListingReference": "LP/12345/2019",
-          "legalRepReferenceNumber": "REF54321",
+          "legalRepReferenceNumber": "CASE001",
           "caseBundles": [{
             "id": "1",
             "value": {
@@ -31,7 +31,7 @@
       "replacements": {
         "listCaseHearingCentre": "northShields",
         "ariaListingReference": "LP/12345/2019",
-        "legalRepReferenceNumber": "REF54321",
+        "legalRepReferenceNumber": "CASE001",
         "notificationsSent": [
           {
             "id": "4352_UPPER_TRIBUNAL_BUNDLE_FAILED_ADMIN_OFFICER",

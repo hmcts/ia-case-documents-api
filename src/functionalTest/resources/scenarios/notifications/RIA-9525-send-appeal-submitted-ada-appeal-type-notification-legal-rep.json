@@ -14,7 +14,7 @@
           "isAdmin": "Yes",
           "appellantsRepresentation": "No",
           "legalRepEmail": "{$TEST_LAW_FIRM_A_USERNAME}",
-          "legalRepReferenceNumber": "REF54321",
+          "legalRepReferenceNumber": "CASE001",
           "appealType": "deprivation",
           "isAcceleratedDetainedAppeal": "Yes"
         }
@@ -30,7 +30,7 @@
         "isAdmin": "Yes",
         "appellantsRepresentation": "No",
         "legalRepEmail": "{$TEST_LAW_FIRM_A_USERNAME}",
-        "legalRepReferenceNumber": "REF54321",
+        "legalRepReferenceNumber": "CASE001",
         "appealType": "deprivation",
         "isAcceleratedDetainedAppeal": "Yes",
         "notificationsSent": [

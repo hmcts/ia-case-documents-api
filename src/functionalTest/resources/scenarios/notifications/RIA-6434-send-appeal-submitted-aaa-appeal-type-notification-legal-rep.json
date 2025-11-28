@@ -11,7 +11,7 @@
       "caseData": {
         "template": "minimal-appeal-submitted.json",
         "replacements": {
-          "legalRepReferenceNumber": "REF54321",
+          "legalRepReferenceNumber": "CASE001",
           "appealType":"ageAssessment"
         }
       }
@@ -23,7 +23,7 @@
     "caseData": {
       "template": "minimal-appeal-submitted.json",
       "replacements": {
-        "legalRepReferenceNumber": "REF54321",
+        "legalRepReferenceNumber": "CASE001",
         "appealType":"ageAssessment",
         "notificationsSent": [
           {
@@ -40,7 +40,7 @@
         "subject": "Immigration and Asylum appeal: Your appeal has been submitted",
         "body": [
           "PA/12345/2019",
-          "REF54321",
+          "CASE001",
           "Talha Awan",
           "{$iaExUiFrontendUrl}",
           "{$customerServices.telephoneNumber}",

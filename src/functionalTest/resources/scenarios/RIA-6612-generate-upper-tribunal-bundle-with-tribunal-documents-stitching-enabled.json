@@ -12,7 +12,7 @@
         "replacements": {
           "listCaseHearingCentre": "taylorHouse",
           "ariaListingReference": "LP/12345/2019",
-          "legalRepReferenceNumber": "REF54321",
+          "legalRepReferenceNumber": "CASE001",
           "suitabilityReviewDecision": "suitable",
           "appAdditionalEvidenceDocs": [
             {
@@ -241,7 +241,7 @@
       "replacements": {
         "listCaseHearingCentre": "taylorHouse",
         "ariaListingReference": "LP/12345/2019",
-        "legalRepReferenceNumber": "REF54321",
+        "legalRepReferenceNumber": "CASE001",
         "appAdditionalEvidenceDocs": [
           {
             "id": "1",

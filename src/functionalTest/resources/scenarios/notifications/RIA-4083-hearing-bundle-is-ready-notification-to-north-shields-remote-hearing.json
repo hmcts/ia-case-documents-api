@@ -14,7 +14,7 @@
           "listCaseHearingCentre": "remoteHearing",
           "hearingCentre": "northShields",
           "ariaListingReference": "LP/12345/2019",
-          "legalRepReferenceNumber": "REF54321",
+          "legalRepReferenceNumber": "CASE001",
           "caseBundles": [{
             "id": "1",
             "value": {
@@ -34,7 +34,7 @@
         "listCaseHearingCentre": "remoteHearing",
         "hearingCentre": "northShields",
         "ariaListingReference": "LP/12345/2019",
-        "legalRepReferenceNumber": "REF54321",
+        "legalRepReferenceNumber": "CASE001",
         "notificationsSent": [
           {
             "id": "40832_HEARING_BUNDLE_IS_READY_HOME_OFFICE",
@@ -69,7 +69,7 @@
         "body": [
           "PA/12345/2019",
           "LP/12345/2019",
-          "REF54321",
+          "CASE001",
           "Talha Awan",
           "{$iaExUiFrontendUrl}",
           "{$customerServices.telephoneNumber}",
