@@ -16,7 +16,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.fixtures.DocumentManagementFilesFi
 @SuppressWarnings("unchecked")
 public final class MapValueExpander {
 
-    private static final Pattern TODAY_PATTERN = Pattern.compile("\\{\\$TODAY([+-]?\\d*?)}");
+    private static final Pattern TODAY_PATTERN = Pattern.compile("\\{\\$TODAY([+-]?\\d*?)\\|?([^0-9]*?)}");
     private static final Pattern YEAR_PATTERN = Pattern.compile("\\{\\$YEAR([+-]?\\d*?)}");
     private static final Pattern PROPERTY_PATTERN = Pattern.compile("\\{\\$([a-zA-Z0-9].+?)}");
     private static final Pattern ENVIRONMENT_PROPERTY_PATTERN = Pattern.compile("\\{\\$([a-zA-Z0-9].+?)}");
