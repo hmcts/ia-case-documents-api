@@ -12,7 +12,7 @@
         "replacements": {
           "appealType": "protection",
           "outOfTimeDecisionType": "rejected",
-          "appealReferenceNumber": "PA/11111/2019",
+          "appealReferenceNumber": "PA/12345/2019",
           "appealSubmissionDate": "{$TODAY}",
           "isAdmin": "Yes",
           "appellantsRepresentation": "Yes",
@@ -51,7 +51,7 @@
       "replacements": {
         "appealType": "protection",
         "outOfTimeDecisionType": "rejected",
-        "appealReferenceNumber": "PA/11111/2019",
+        "appealReferenceNumber": "PA/12345/2019",
         "appealSubmissionDate": "{$TODAY}",
         "isAdmin": "Yes",
         "appellantsRepresentation": "Yes",
