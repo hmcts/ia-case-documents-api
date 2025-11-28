@@ -24,7 +24,7 @@
     "status": 200,
     "errors": [],
     "caseData": {
-      "template": "minimal-bail-application-submitted-not-legally-represented.json",
+      "template": "minimal-bail-application-submitted-direction-sent.json",
       "replacements": {
         "isLegallyRepresentedForFlag": "No",
         "currentCaseStateVisibleToJudge": "applicationSubmitted",

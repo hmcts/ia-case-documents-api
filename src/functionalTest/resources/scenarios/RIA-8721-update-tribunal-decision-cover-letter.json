@@ -11,7 +11,7 @@
         "replacements": {
           "updateTribunalDecisionList": "underRule31",
           "appealReferenceNumber": "PA/12345/2019",
-          "legalRepReferenceNumber": "some-legal-rep-reference",
+          "legalRepReferenceNumber": "CASE001",
           "updatedAppealDecision": "Dismissed",
           "appellantGivenNames": "John",
           "appellantFamilyName": "Doe",

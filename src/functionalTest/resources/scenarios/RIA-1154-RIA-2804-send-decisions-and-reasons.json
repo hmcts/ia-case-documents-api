@@ -10,7 +10,7 @@
         "template": "minimal-appeal-submitted.json",
         "replacements": {
           "appealReferenceNumber": "PA/12345/2019",
-          "legalRepReferenceNumber": "some-legal-rep-reference",
+          "legalRepReferenceNumber": "CASE001",
           "isDecisionAllowed": "allowed",
           "finalDecisionAndReasonsDocument": {
             "document_url": "{$FIXTURE_DOC3_PDF_URL}",
