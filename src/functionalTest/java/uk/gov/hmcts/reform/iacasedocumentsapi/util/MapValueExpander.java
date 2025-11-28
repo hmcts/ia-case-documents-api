@@ -68,8 +68,6 @@ public final class MapValueExpander {
                 value = expandYear(value);
             } else if (PROPERTY_PATTERN.matcher(value).find()) {
                 value = expandProperty(value);
-            } else if (ENVIRONMENT_PROPERTY_PATTERN.matcher(value).find()) {
-                value = expandEnvironmentProperty(value);
             }
 
             return value;
