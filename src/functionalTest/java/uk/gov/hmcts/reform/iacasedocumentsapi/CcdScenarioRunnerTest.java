@@ -82,7 +82,6 @@ public class CcdScenarioRunnerTest {
 
     @Test
     public void scenarios_should_behave_as_specified() throws IOException {
-        boolean launchDarklyFeature = false;
         loadPropertiesIntoMapValueExpander();
 
         for (Fixture fixture : fixtures) {
@@ -113,6 +112,7 @@ public class CcdScenarioRunnerTest {
 
         List<String> runScenarios = new ArrayList<>();
         int maxRetries = 3;
+        boolean launchDarklyFeature = false;
         for (String scenarioSource : scenarioSources) {
 
             String description = "";
@@ -123,9 +123,7 @@ public class CcdScenarioRunnerTest {
                     final Headers authorizationHeaders = getAuthorizationHeaders(scenario);
 
                     description = MapValueExtractor.extract(scenario, "description");
-
                     Object scenarioEnabled = MapValueExtractor.extract(scenario, "enabled");
-                    Object scenarioFeature = MapValueExtractor.extract(scenario, "launchDarklyKey");
                     boolean scenarioEnabledFlag = true;
                     if (scenarioEnabled instanceof Boolean) {
                         scenarioEnabledFlag = (Boolean) scenarioEnabled;
@@ -138,13 +136,19 @@ public class CcdScenarioRunnerTest {
                     if (scenarioDisabled instanceof String) {
                         scenarioDisabledFlag = Boolean.parseBoolean((String) scenarioDisabled);
                     }
+                    Object scenarioFeature = null;
+                    try {
+                        scenarioFeature = MapValueExtractor.extract(scenario, "launchDarklyKey");
+                    } catch (Exception e) {
+                        // do nothing
+                    }
                     if (scenarioFeature instanceof String) {
                         if (String.valueOf(scenarioFeature).contains("feature")) {
                             String[] keys = ((String) scenarioFeature).split(":");
                             launchDarklyFeature = launchDarklyFunctionalTestClient
                                 .getKey(keys[0], authorizationHeaders.getValue("Authorization"))
                                 && Boolean.valueOf(keys[1]);
-                            scenarioEnabled = true;
+                            scenarioEnabledFlag = true;
                         }
                     }
 
