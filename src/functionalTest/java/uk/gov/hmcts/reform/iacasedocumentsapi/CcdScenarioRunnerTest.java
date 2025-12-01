@@ -398,6 +398,8 @@ public class CcdScenarioRunnerTest {
         Collection<String> scenarioSources = new ArrayList<>();
         scenarioSources.addAll(StringResourceLoader.load("/scenarios/" + scenarioPattern).values());
         scenarioSources.addAll(StringResourceLoader.load("/scenarios/bail/" + scenarioPattern).values());
+        scenarioSources.addAll(StringResourceLoader.load("/scenarios/payments/" + scenarioPattern).values());
+        scenarioSources.addAll(StringResourceLoader.load("/scenarios/notifications/" + scenarioPattern).values());
 
         System.out.println((char) 27 + "[36m" + "-------------------------------------------------------------------");
         System.out.println((char) 27 + "[33m" + "RUNNING " + scenarioSources.size() + " SCENARIOS");
