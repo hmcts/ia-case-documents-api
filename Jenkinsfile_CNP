@@ -224,17 +224,17 @@ withPipeline(type, product, component) {
         ]
     }
 
-  afterAlways('functionalTest') {
-    steps.archiveArtifacts allowEmptyArchive: true, artifacts: 'build/reports/**/*'
-    publishHTML target: [
-      allowMissing         : true,
-      alwaysLinkToLastBuild: true,
-      keepAll              : true,
-      reportDir            : "build/reports/tests/functional",
-      reportFiles          : "index.html",
-      reportName           : "Functional Test Report"
-    ]
-  }
+    afterAlways('functionalTest:preview') {
+      steps.archiveArtifacts allowEmptyArchive: true, artifacts: 'build/reports/**/*'
+      publishHTML target: [
+        allowMissing         : true,
+        alwaysLinkToLastBuild: true,
+        keepAll              : true,
+        reportDir            : "build/reports/tests/functional",
+        reportFiles          : "index.html",
+        reportName           : "Functional Test Report"
+      ]
+    }
 
     afterSuccess('functionalTest:preview') {
         steps.archiveArtifacts allowEmptyArchive: true, artifacts: '**/site/serenity/**/*'
