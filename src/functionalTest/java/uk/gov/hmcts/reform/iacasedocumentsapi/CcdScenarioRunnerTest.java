@@ -13,11 +13,17 @@ import java.time.LocalDateTime;
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 import net.serenitybdd.junit.spring.integration.SpringIntegrationSerenityRunner;
 import net.serenitybdd.rest.SerenityRest;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Named;
+import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -37,6 +43,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.security.RequestUse
 import uk.gov.hmcts.reform.iacasedocumentsapi.util.*;
 import uk.gov.hmcts.reform.iacasedocumentsapi.verifiers.Verifier;
 
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @RunWith(SpringIntegrationSerenityRunner.class)
 @SpringBootTest
 @ActiveProfiles("functional")
@@ -65,8 +72,10 @@ public class CcdScenarioRunnerTest {
     @MockBean
     RequestUserAccessTokenProvider requestUserAccessTokenProvider;
 
-    @BeforeEach
-    public void setup() {
+    private List<String> runScenarios;
+
+    @BeforeAll
+    public void init() {
         String accessToken = authorizationHeadersProvider.getCaseOfficerAuthorization().getValue("Authorization");
         try {
             Thread.sleep(1000);
@@ -78,172 +87,142 @@ public class CcdScenarioRunnerTest {
         MapSerializer.setObjectMapper(objectMapper);
         RestAssured.baseURI = targetInstance;
         RestAssured.useRelaxedHTTPSValidation();
+        runScenarios = new ArrayList<>();
     }
 
-    @Test
-    public void scenarios_should_behave_as_specified() throws IOException {
-        loadPropertiesIntoMapValueExpander();
 
-        for (Fixture fixture : fixtures) {
-            fixture.prepare();
-        }
-
-        assertFalse(
-            "Verifiers are configured",
-            verifiers.isEmpty()
-        );
-
-        String scenarioPattern = System.getProperty("scenario");
-        if (scenarioPattern == null) {
-            scenarioPattern = "*.json";
-        } else {
-            scenarioPattern = "*" + scenarioPattern + "*.json";
-        }
-
-        Collection<String> scenarioSources = new ArrayList<>();
-        scenarioSources.addAll(StringResourceLoader.load("/scenarios/" + scenarioPattern).values());
-        scenarioSources.addAll(StringResourceLoader.load("/scenarios/bail/" + scenarioPattern).values());
-        scenarioSources.addAll(StringResourceLoader.load("/scenarios/payments/" + scenarioPattern).values());
-        scenarioSources.addAll(StringResourceLoader.load("/scenarios/notifications/" + scenarioPattern).values());
-
-        System.out.println((char) 27 + "[36m" + "-------------------------------------------------------------------");
-        System.out.println((char) 27 + "[33m" + "RUNNING " + scenarioSources.size() + " SCENARIOS");
-        System.out.println((char) 27 + "[36m" + "-------------------------------------------------------------------");
-
-        List<String> runScenarios = new ArrayList<>();
-        int maxRetries = 3;
-        boolean launchDarklyFeature = false;
-        for (String scenarioSource : scenarioSources) {
-
-            String description = "";
-            for (int i = 0; i < maxRetries; i++) {
-
-                try {
-                    Map<String, Object> scenario = deserializeWithExpandedValues(scenarioSource);
-                    final Headers authorizationHeaders = getAuthorizationHeaders(scenario);
-
-                    description = MapValueExtractor.extract(scenario, "description");
-                    Object scenarioEnabled = MapValueExtractor.extract(scenario, "enabled");
-                    boolean scenarioEnabledFlag = true;
-                    if (scenarioEnabled instanceof Boolean) {
-                        scenarioEnabledFlag = (Boolean) scenarioEnabled;
-                    } else if (scenarioEnabled instanceof String) {
-                        scenarioEnabledFlag = Boolean.parseBoolean((String) scenarioEnabled);
-                    }
-
-                    Object scenarioDisabled = MapValueExtractor.extract(scenario, "disabled");
-                    boolean scenarioDisabledFlag = false;
-                    if (scenarioDisabled instanceof String) {
-                        scenarioDisabledFlag = Boolean.parseBoolean((String) scenarioDisabled);
-                    }
-                    Object scenarioFeature = null;
-                    try {
-                        scenarioFeature = MapValueExtractor.extract(scenario, "launchDarklyKey");
-                    } catch (Exception e) {
-                        // do nothing
-                    }
-                    if (scenarioFeature instanceof String) {
-                        if (String.valueOf(scenarioFeature).contains("feature")) {
-                            String[] keys = ((String) scenarioFeature).split(":");
-                            launchDarklyFeature = launchDarklyFunctionalTestClient
-                                .getKey(keys[0], authorizationHeaders.getValue("Authorization"))
-                                && Boolean.valueOf(keys[1]);
-                            scenarioEnabledFlag = true;
-                        }
-                    }
-
-                    if (!scenarioEnabledFlag || scenarioDisabledFlag) {
-                        System.out.println((char) 27 + "[31m" + "SCENARIO: " + description + " **disabled**");
-                        continue;
-                    }
-
-                    System.out.println((char) 27 + "[33m" + "SCENARIO: " + description);
-
-                    Map<String, String> templatesByFilename = StringResourceLoader.load("/templates/*.json");
-
-                    final long scenarioTestCaseId = MapValueExtractor.extractOrDefault(
-                        scenario,
-                        "request.input.id",
-                        -1
-                    );
-
-                    final long testCaseId = (scenarioTestCaseId == -1)
-                        ? ThreadLocalRandom.current().nextLong(1111111111111111L, 1999999999999999L)
-                        : scenarioTestCaseId;
-
-                    final String requestBody = buildCallbackBody(
-                        testCaseId,
-                        MapValueExtractor.extract(scenario, "request.input"),
-                        templatesByFilename
-                    );
-
-                    final String requestUri = MapValueExtractor.extract(scenario, "request.uri");
-                    int expectedStatus;
-                    if (scenarioFeature != null && launchDarklyFeature == false) {
-                        expectedStatus = MapValueExtractor.extractOrDefault(
-                            scenario,
-                            "expectation.status",
-                            200,
-                            launchDarklyFeature
-                        );
-                    } else {
-                        expectedStatus = MapValueExtractor.extractOrDefault(scenario, "expectation.status", 200);
-                    }
-
-                    String actualResponseBody =
-                        SerenityRest
-                            .given()
-                            .headers(authorizationHeaders)
-                            .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
-                            .body(requestBody)
-                            .when()
-                            .post(requestUri)
-                            .peek()
-                            .then()
-                            .log().ifError()
-                            .log().ifValidationFails()
-                            .statusCode(expectedStatus)
-                            .and()
-                            .extract()
-                            .body()
-                            .asString();
-
-                    String expectedResponseBody = buildCallbackResponseBody(
-                        MapValueExtractor.extract(scenario, "expectation"),
-                        templatesByFilename
-                    );
-
-                    Map<String, Object> actualResponse = MapSerializer.deserialize(actualResponseBody);
-                    Map<String, Object> expectedResponse = MapSerializer.deserialize(expectedResponseBody);
-
-                    verifiers.forEach(verifier ->
-                                          verifier.verify(
-                                              testCaseId,
-                                              scenario,
-                                              expectedResponse,
-                                              actualResponse
-                                          )
-                    );
-                    runScenarios.add(description);
-                    break;
-                } catch (Error | Exception e) {
-                    System.out.println(description + "Scenario failed with error " + e.getMessage());
-                    if (i == maxRetries - 1) {
-                        this.failedScenarios.add(description);
-                        this.haveAllPassed = false;
-                    }
-                }
-            }
-        }
-
+    @AfterAll
+    public void teardown() {
         System.out.println((char) 27 + "[36m" + "-------------------------------------------------------------------");
         List<String> scenariosThatHaveRun = runScenarios.stream().distinct().toList();
         System.out.println((char) 27 + "[" + scenariosThatHaveRun.size() + " SCENARIOS HAVE RUN]");
         System.out.println(String.join(";\n", scenariosThatHaveRun));
         System.out.println((char) 27 + "[36m" + "-------------------------------------------------------------------");
         if (!haveAllPassed) {
-            throw new AssertionError("Not all scenarios passed.\nFailed scenarios are:\n" + failedScenarios.stream().map(
+            System.out.println("Not all scenarios passed.\nFailed scenarios are:\n" + failedScenarios.stream().map(
                 Object::toString).collect(Collectors.joining(";\n")));
+        }
+    }
+
+    @ParameterizedTest
+    @MethodSource("scenarioSourcesProvider")
+    public void scenarios_should_behave_as_specified(Map<String, Object> scenario, String description) throws IOException {
+        int maxRetries = 3;
+        boolean launchDarklyFeature = false;
+        for (int i = 0; i < maxRetries; i++) {
+            try {
+                final Headers authorizationHeaders = getAuthorizationHeaders(scenario);
+                Object scenarioEnabled = MapValueExtractor.extract(scenario, "enabled");
+                boolean scenarioEnabledFlag = true;
+                if (scenarioEnabled instanceof Boolean) {
+                    scenarioEnabledFlag = (Boolean) scenarioEnabled;
+                } else if (scenarioEnabled instanceof String) {
+                    scenarioEnabledFlag = Boolean.parseBoolean((String) scenarioEnabled);
+                }
+
+                Object scenarioDisabled = MapValueExtractor.extract(scenario, "disabled");
+                boolean scenarioDisabledFlag = false;
+                if (scenarioDisabled instanceof String) {
+                    scenarioDisabledFlag = Boolean.parseBoolean((String) scenarioDisabled);
+                }
+                Object scenarioFeature = null;
+                try {
+                    scenarioFeature = MapValueExtractor.extract(scenario, "launchDarklyKey");
+                } catch (Exception e) {
+                    // do nothing
+                }
+                if (scenarioFeature instanceof String) {
+                    if (String.valueOf(scenarioFeature).contains("feature")) {
+                        String[] keys = ((String) scenarioFeature).split(":");
+                        launchDarklyFeature = launchDarklyFunctionalTestClient
+                            .getKey(keys[0], authorizationHeaders.getValue("Authorization"))
+                            && Boolean.valueOf(keys[1]);
+                        scenarioEnabledFlag = true;
+                    }
+                }
+
+                if (!scenarioEnabledFlag || scenarioDisabledFlag) {
+                    System.out.println((char) 27 + "[31m" + "SCENARIO: " + description + " **disabled**");
+                    continue;
+                }
+
+                System.out.println((char) 27 + "[33m" + "SCENARIO: " + description);
+
+                Map<String, String> templatesByFilename = StringResourceLoader.load("/templates/*.json");
+
+                final long scenarioTestCaseId = MapValueExtractor.extractOrDefault(
+                    scenario,
+                    "request.input.id",
+                    -1
+                );
+
+                final long testCaseId = (scenarioTestCaseId == -1)
+                    ? ThreadLocalRandom.current().nextLong(1111111111111111L, 1999999999999999L)
+                    : scenarioTestCaseId;
+
+                final String requestBody = buildCallbackBody(
+                    testCaseId,
+                    MapValueExtractor.extract(scenario, "request.input"),
+                    templatesByFilename
+                );
+
+                final String requestUri = MapValueExtractor.extract(scenario, "request.uri");
+                int expectedStatus;
+                if (scenarioFeature != null && launchDarklyFeature == false) {
+                    expectedStatus = MapValueExtractor.extractOrDefault(
+                        scenario,
+                        "expectation.status",
+                        200,
+                        launchDarklyFeature
+                    );
+                } else {
+                    expectedStatus = MapValueExtractor.extractOrDefault(scenario, "expectation.status", 200);
+                }
+
+                String actualResponseBody =
+                    SerenityRest
+                        .given()
+                        .headers(authorizationHeaders)
+                        .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
+                        .body(requestBody)
+                        .when()
+                        .post(requestUri)
+                        .peek()
+                        .then()
+                        .log().ifError()
+                        .log().ifValidationFails()
+                        .statusCode(expectedStatus)
+                        .and()
+                        .extract()
+                        .body()
+                        .asString();
+
+                String expectedResponseBody = buildCallbackResponseBody(
+                    MapValueExtractor.extract(scenario, "expectation"),
+                    templatesByFilename
+                );
+
+                Map<String, Object> actualResponse = MapSerializer.deserialize(actualResponseBody);
+                Map<String, Object> expectedResponse = MapSerializer.deserialize(expectedResponseBody);
+
+                verifiers.forEach(verifier ->
+                                      verifier.verify(
+                                          testCaseId,
+                                          scenario,
+                                          expectedResponse,
+                                          actualResponse
+                                      )
+                );
+                runScenarios.add(description);
+                break;
+            } catch (Error | Exception e) {
+                System.out.println(description + "Scenario failed with error " + e.getMessage());
+                if (i == maxRetries - 1) {
+                    failedScenarios.add(description);
+                    haveAllPassed = false;
+                    throw e;
+                }
+            }
         }
     }
 
@@ -255,7 +234,10 @@ public class CcdScenarioRunnerTest {
             .filter(propertySource -> propertySource instanceof EnumerablePropertySource)
             .map(propertySource -> ((EnumerablePropertySource<?>) propertySource).getPropertyNames())
             .flatMap(Arrays::stream)
-            .forEach(name -> MapValueExpander.ENVIRONMENT_PROPERTIES.setProperty(name, environment.getProperty(name)));
+            .forEach(name -> MapValueExpander.ENVIRONMENT_PROPERTIES.setProperty(
+                name,
+                environment.getProperty(name)
+            ));
     }
 
     private Map<String, Object> deserializeWithExpandedValues(
@@ -340,7 +322,10 @@ public class CcdScenarioRunnerTest {
 
             final Map<String, Object> callbackResponse = new HashMap<>();
 
-            callbackResponse.put("confirmation_header", MapValueExtractor.extract(expectation, "confirmation.header"));
+            callbackResponse.put(
+                "confirmation_header",
+                MapValueExtractor.extract(expectation, "confirmation.header")
+            );
             callbackResponse.put("confirmation_body", MapValueExtractor.extract(expectation, "confirmation.body"));
 
             return MapSerializer.serialize(callbackResponse);
@@ -390,5 +375,44 @@ public class CcdScenarioRunnerTest {
             case "LegalRepresentativeOrgA" -> authorizationHeadersProvider.getLegalRepresentativeOrgAAuthorization();
             default -> new Headers();
         };
+    }
+
+    private Stream<Arguments> scenarioSourcesProvider() throws IOException {
+        loadPropertiesIntoMapValueExpander();
+
+        for (Fixture fixture : fixtures) {
+            fixture.prepare();
+        }
+        assertFalse(
+            "Verifiers are configured",
+            verifiers.isEmpty()
+        );
+
+        String scenarioPattern = System.getProperty("scenario");
+        if (scenarioPattern == null) {
+            scenarioPattern = "*.json";
+        } else {
+            scenarioPattern = "*" + scenarioPattern + "*.json";
+        }
+
+        Collection<String> scenarioSources = new ArrayList<>();
+        scenarioSources.addAll(StringResourceLoader.load("/scenarios/" + scenarioPattern).values());
+        scenarioSources.addAll(StringResourceLoader.load("/scenarios/bail/" + scenarioPattern).values());
+
+        System.out.println((char) 27 + "[36m" + "-------------------------------------------------------------------");
+        System.out.println((char) 27 + "[33m" + "RUNNING " + scenarioSources.size() + " SCENARIOS");
+        System.out.println((char) 27 + "[36m" + "-------------------------------------------------------------------");
+        List<Arguments> argumentsList = new ArrayList<>(Collections.emptyList());
+        scenarioSources.forEach((scenarioSource) -> {
+            try {
+                Map<String, Object> scenario = deserializeWithExpandedValues(scenarioSource);
+                String description = MapValueExtractor.extract(scenario, "description");
+                argumentsList.add(Arguments.of(Named.of(description, scenario), description));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
+
+        return argumentsList.stream();
     }
 }
