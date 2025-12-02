@@ -153,6 +153,7 @@ def secrets = [
         secret('system-password', 'IA_SYSTEM_PASSWORD'),
 
         secret('det-irc-brookhouse-email', 'IA_DET_IRC_BROOKHOUSE_EMAIL'),
+        secret('det-irc-campsfieldhouse-email', 'IA_DET_IRC_CAMPSFIELDHOUSE_EMAIL'),
         secret('det-irc-colnbrook-email', 'IA_DET_IRC_COLNBROOK_EMAIL'),
         secret('det-irc-derwentside-email', 'IA_DET_IRC_DERWENTSIDE_EMAIL'),
         secret('det-irc-harmondsworth-email', 'IA_DET_IRC_DUNGAVEL_EMAIL'),

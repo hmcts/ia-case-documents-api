@@ -29,6 +29,7 @@ public class DetEmailServiceTest {
             ImmutableMap
                     .<String, String>builder()
                     .put("Brookhouse", "det-irc-brookhouse@example.com")
+                    .put("CampsfieldHouse", "det-irc-campsfieldhouse@example.com")
                     .put("Colnbrook", "det-irc-colnbrook@example.com")
                     .put("Derwentside", "det-irc-derwentside@example.com")
                     .put("Dungavel", "det-irc-dungavel@example.com")
@@ -61,6 +62,15 @@ public class DetEmailServiceTest {
         when(asylumCase.read(AsylumCaseDefinition.IRC_NAME, String.class)).thenReturn(Optional.of("Tinsley House"));
 
         assertThat(mockIrcToExpectedEmailMap.get("TinsleyHouse"))
+                .isEqualTo(detEmailService.getDetEmailAddress(asylumCase));
+    }
+
+    @Test
+    void should_return_det_email_address_for_campsfield_house_after_formatting_string() {
+        when(asylumCase.read(DETENTION_FACILITY, String.class)).thenReturn(Optional.of(ircValue));
+        when(asylumCase.read(AsylumCaseDefinition.IRC_NAME, String.class)).thenReturn(Optional.of("Campsfield House"));
+
+        assertThat(mockIrcToExpectedEmailMap.get("CampsfieldHouse"))
                 .isEqualTo(detEmailService.getDetEmailAddress(asylumCase));
     }
 

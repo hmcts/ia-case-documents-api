@@ -2666,6 +2666,7 @@ ftpaSubmitted:
 ### DET Email addresses for IRC
 detentionEngagementTeamIrcEmailAddresses:
   Brookhouse: ${IA_DET_IRC_BROOKHOUSE_EMAIL:det-irc-brookhouse@example.com}
+  CampsfieldHouse: ${IA_DET_IRC_CAMPSFIELDHOUSE_EMAIL:det-irc-campsfieldhouse@example.com}
   Colnbrook: ${IA_DET_IRC_COLNBROOK_EMAIL:det-irc-colnbrook@example.com}
   Derwentside: ${IA_DET_IRC_DERWENTSIDE_EMAIL:det-irc-derwentside@example.com}
   Dungavel: ${IA_DET_IRC_DUNGAVEL_EMAIL:det-irc-dungavel@example.com}

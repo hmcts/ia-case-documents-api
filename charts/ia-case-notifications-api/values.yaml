@@ -211,6 +211,8 @@ java:
           alias: IA_DET_PRISON_EMAIL_MAPPINGS
         - name: det-irc-brookhouse-email
           alias: IA_DET_IRC_BROOKHOUSE_EMAIL
+        - name: det-irc-campsfieldhouse-email
+          alias: IA_DET_IRC_CAMPSFIELDHOUSE_EMAIL
         - name: det-irc-colnbrook-email
           alias: IA_DET_IRC_COLNBROOK_EMAIL
         - name: det-irc-derwentside-email
