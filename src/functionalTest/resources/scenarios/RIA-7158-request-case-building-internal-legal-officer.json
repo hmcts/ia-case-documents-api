@@ -11,6 +11,14 @@
         "replacements": {
           "appellantInDetention": "Yes",
           "isAcceleratedDetainedAppeal": "Yes",
+          "isAdmin": "Yes",
+          "addressLine1AdminJ": "Calle Toledo 32",
+          "addressLine2AdminJ": "Madrid",
+          "addressLine3AdminJ": "28003",
+          "countryGovUkOocAdminJ": "ES",
+          "oocAddressLine1": "5",
+          "oocAddressLine2": "Example Street",
+          "oocLrCountryGovUkAdminJ": "ES",
           "directions": [
             {
               "id": "1",
@@ -36,6 +44,14 @@
     "caseData": {
       "template": "minimal-internal-appeal-submitted.json",
       "replacements": {
+        "isAdmin": "Yes",
+        "addressLine1AdminJ": "Calle Toledo 32",
+        "addressLine2AdminJ": "Madrid",
+        "addressLine3AdminJ": "28003",
+        "countryGovUkOocAdminJ": "ES",
+        "oocAddressLine1": "5",
+        "oocAddressLine2": "Example Street",
+        "oocLrCountryGovUkAdminJ": "ES",
         "directions": [
           {
             "id": "1",

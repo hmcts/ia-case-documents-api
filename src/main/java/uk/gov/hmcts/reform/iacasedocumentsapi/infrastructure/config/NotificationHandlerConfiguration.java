@@ -12,6 +12,8 @@ import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.FeeTribunal
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.FtpaDecisionOutcomeType.FTPA_GRANTED;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.FtpaDecisionOutcomeType.FTPA_PARTIALLY_GRANTED;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.FtpaDecisionOutcomeType.FTPA_REFUSED;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.UpdateTribunalRules.UNDER_RULE_31;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.UpdateTribunalRules.UNDER_RULE_32;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.JourneyType.AIP;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.JourneyType.REP;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.OutOfTimeDecisionType.IN_TIME;
@@ -82,6 +84,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DocumentWithMetada
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.FeeTribunalAction;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.FtpaDecisionOutcomeType;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.HearingCentre;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.UpdateTribunalRules;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.JourneyType;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.MakeAnApplication;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.OutOfTimeDecisionType;
@@ -7950,14 +7953,14 @@ public class NotificationHandlerConfiguration {
 
     private boolean isRule31ReasonUpdatingDecision(AsylumCase asylumCase) {
 
-        return asylumCase.read(UPDATE_TRIBUNAL_DECISION_LIST, String.class)
-            .map(reason -> reason.equals("underRule31")).orElse(false);
+        return asylumCase.read(UPDATE_TRIBUNAL_DECISION_LIST, UpdateTribunalRules.class)
+            .map(type -> type.equals(UNDER_RULE_31)).orElse(false);
     }
 
     private boolean isRule32ReasonUpdatingDecision(AsylumCase asylumCase) {
 
-        return asylumCase.read(UPDATE_TRIBUNAL_DECISION_LIST, String.class)
-            .map(reason -> reason.equals("underRule32")).orElse(false);
+        return asylumCase.read(UPDATE_TRIBUNAL_DECISION_LIST, UpdateTribunalRules.class)
+            .map(type -> type.equals(UNDER_RULE_32)).orElse(false);
     }
 
     private boolean isUpdatedTribunalDecisionAndReasonsDocument(AsylumCase asylumCase) {

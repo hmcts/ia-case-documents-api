@@ -54,7 +54,7 @@ public class InternalEditCaseListingPrisonAndIrcAttachmentBundler implements Pre
 
     @Override
     public DispatchPriority getDispatchPriority() {
-        return DispatchPriority.LATEST;
+        return DispatchPriority.LATE;
     }
 
     public boolean canHandle(

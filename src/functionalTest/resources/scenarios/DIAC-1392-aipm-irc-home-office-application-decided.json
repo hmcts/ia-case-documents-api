@@ -12,6 +12,8 @@
         "replacements": {
           "appellantInDetention": "Yes",
           "detentionFacility": "immigrationRemovalCentre",
+          "ircName": "Brookhouse",
+          "isAcceleratedDetainedAppeal": "Yes",
           "appellantsRepresentation": "Yes",
           "decideAnApplicationId": "1",
           "makeAnApplications": [
@@ -25,7 +27,7 @@
                 "date":"{$TODAY}",
                 "decision":"Refused",
                 "state":"appealSubmitted",
-                "applicantRole":"ctsc",
+                "applicantRole":"caseworker-ia-respondentofficer",
                 "decisionReason":"No Reason given",
                 "decisionDate":"{$TODAY}",
                 "decisionMaker": "Admin Officer"
@@ -44,11 +46,13 @@
       "replacements": {
         "appellantInDetention": "Yes",
         "detentionFacility": "immigrationRemovalCentre",
+        "ircName": "Brookhouse",
+        "isAcceleratedDetainedAppeal": "Yes",
         "appellantsRepresentation": "Yes",
         "decideAnApplicationId": "1",
         "notificationAttachmentDocuments": [
           {
-            "id": "2",
+            "id": "1",
             "value": {
               "document": {
                 "document_url": "$/http.+\/documents/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/",

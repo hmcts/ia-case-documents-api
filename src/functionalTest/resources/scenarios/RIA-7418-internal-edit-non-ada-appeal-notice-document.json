@@ -5,7 +5,7 @@
     "credentials": "CaseOfficer",
     "input": {
       "eventId": "editAppealAfterSubmit",
-      "state": "*",
+      "state": "appealSubmitted",
       "caseData": {
         "template": "minimal-appeal-submitted.json",
         "replacements": {

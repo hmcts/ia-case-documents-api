@@ -1,5 +1,5 @@
 {
-  "description": "RIA-8258: Mark appeal as remitted",
+  "description": "RIA-8258: Mark appeal as remitted LR",
   "enabled": "dlrm-remitted-feature-flag:true",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",

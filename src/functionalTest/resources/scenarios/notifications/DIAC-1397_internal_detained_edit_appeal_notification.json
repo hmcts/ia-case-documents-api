@@ -6,7 +6,7 @@
     "input": {
       "id": 1397,
       "eventId": "editAppealAfterSubmit",
-      "state": "*",
+      "state": "appealSubmitted",
       "caseData": {
         "template": "minimal-internal-appeal-submitted.json",
         "replacements": {

@@ -16,6 +16,7 @@
           "ftpaRespondentRjDecisionOutcomeType": "remadeRule32",
           "ftpaAppellantRjDecisionOutcomeType": "remadeRule32",
           "ftpaRespondentDecisionRemadeRule32": "allowed",
+          "ftpaAppellantDecisionRemadeRule32": "remadeRule32",
           "ftpaApplicantType": "respondent",
           "ariaListingReference": "987654321",
           "notificationsSent": [

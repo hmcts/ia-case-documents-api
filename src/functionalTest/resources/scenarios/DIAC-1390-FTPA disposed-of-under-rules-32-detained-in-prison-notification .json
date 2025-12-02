@@ -22,7 +22,8 @@
           "appealType": "refusalOfHumanRights",
           "ftpaApplicantType": "appellant",
           "ftpaAppellantDecisionRemadeRule32Text": "Some decision text",
-          "ftpaAppellantRjDecisionOutcomeType": "remadeRule32"
+          "ftpaAppellantRjDecisionOutcomeType": "remadeRule32",
+          "ftpaAppellantDecisionRemadeRule32": "remadeRule32"
         }
       }
     }
@@ -46,6 +47,7 @@
           "ftpaApplicantType": "appellant",
           "ftpaAppellantDecisionRemadeRule32Text": "Some decision text",
           "ftpaAppellantRjDecisionOutcomeType": "remadeRule32",
+          "ftpaAppellantDecisionRemadeRule32": "remadeRule32",
 
         "notificationAttachmentDocuments": [
           {

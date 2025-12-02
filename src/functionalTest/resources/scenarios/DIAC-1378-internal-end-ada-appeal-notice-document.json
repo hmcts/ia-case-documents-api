@@ -11,6 +11,7 @@
         "replacements": {
           "tribunalDocuments": [],
           "detentionFacility": "immigrationRemovalCentre",
+          "ircName": "Harmondsworth",
           "appellantInDetention": "Yes",
           "isAdmin": "Yes",
           "appealSubmissionDate": "{$TODAY}",

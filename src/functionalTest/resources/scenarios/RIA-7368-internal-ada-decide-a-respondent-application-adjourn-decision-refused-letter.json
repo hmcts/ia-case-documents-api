@@ -24,7 +24,7 @@
                 "date":"{$TODAY}",
                 "decision":"Refused",
                 "state":"appealSubmitted",
-                "applicantRole":"ctsc",
+                "applicantRole":"caseworker-ia-respondentofficer",
                 "decisionReason":"No Reason given",
                 "decisionDate":"{$TODAY}",
                 "decisionMaker": "Admin Officer"

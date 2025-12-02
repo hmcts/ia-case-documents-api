@@ -9,6 +9,7 @@
   "mobileNumber": "07987654321",
   "legalRepName": "RS John",
   "legalRepCompany": "RS Consulting",
+  "legalRepresentativeEmailAddress": "{$TEST_LAW_FIRM_A_USERNAME}",
   "appellantNationalities": [
     {
       "id": "1",

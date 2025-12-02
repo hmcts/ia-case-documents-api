@@ -168,7 +168,7 @@ public class CcdScenarioRunnerTest {
 
                 final String requestUri = MapValueExtractor.extract(scenario, "request.uri");
                 int expectedStatus;
-                if (scenarioFeature != null && launchDarklyFeature == false) {
+                if (scenarioFeature != null && !launchDarklyFeature) {
                     expectedStatus = MapValueExtractor.extractOrDefault(
                         scenario,
                         "expectation.status",
@@ -250,6 +250,7 @@ public class CcdScenarioRunnerTest {
 
     private Map<String, Object> buildCaseData(
         Map<String, Object> caseDataInput,
+        String state,
         Map<String, String> templatesByFilename
     ) throws IOException {
 
@@ -260,6 +261,24 @@ public class CcdScenarioRunnerTest {
         if (caseDataReplacements != null) {
             MapMerger.merge(caseData, caseDataReplacements);
         }
+        if (caseData.containsKey("detentionFacility")) {
+            caseData.putIfAbsent("ircName", "Brookhouse");
+        }
+        if (state != null && !state.equals("*")) {
+            caseData.putIfAbsent("currentCaseStateVisibleToCaseOfficer", state);
+            caseData.putIfAbsent("currentCaseStateVisibleToJudge", state);
+            caseData.putIfAbsent("currentCaseStateVisibleToLegalRepresentative", state);
+            caseData.putIfAbsent("currentCaseStateVisibleToAdminOfficer", state);
+            caseData.putIfAbsent("currentCaseStateVisibleToHomeOfficeApc", state);
+            caseData.putIfAbsent("currentCaseStateVisibleToHomeOfficeLart", state);
+            caseData.putIfAbsent("currentCaseStateVisibleToHomeOfficePou", state);
+            caseData.putIfAbsent("currentCaseStateVisibleToHomeOfficeGeneric", state);
+            caseData.putIfAbsent("currentCaseStateVisibleToHomeOfficeAll", state);
+        }
+        caseData.putIfAbsent(
+            "listCaseHearingCentre",
+            caseData.getOrDefault("hearingCentre", "taylorHouse")
+        );
 
         return caseData;
     }
@@ -269,9 +288,10 @@ public class CcdScenarioRunnerTest {
         Map<String, Object> input,
         Map<String, String> templatesByFilename
     ) throws IOException {
-
+        String state = MapValueExtractor.extractOrThrow(input, "state");
         Map<String, Object> caseData = buildCaseData(
             MapValueExtractor.extract(input, "caseData"),
+            state,
             templatesByFilename
         );
 
@@ -283,7 +303,7 @@ public class CcdScenarioRunnerTest {
         Map<String, Object> caseDetails = new HashMap<>();
         caseDetails.put("id", testCaseId);
         caseDetails.put("jurisdiction", MapValueExtractor.extractOrDefault(input, "jurisdiction", "IA"));
-        caseDetails.put("state", MapValueExtractor.extractOrThrow(input, "state"));
+        caseDetails.put("state", state);
         caseDetails.put(
             "security_classification",
             MapValueExtractor.extractOrDefault(input, "securityClassification", "PUBLIC")
@@ -298,13 +318,14 @@ public class CcdScenarioRunnerTest {
         if (input.containsKey("caseDataBefore")) {
             Map<String, Object> caseDataBefore = buildCaseData(
                 MapValueExtractor.extract(input, "caseDataBefore"),
+                state,
                 templatesByFilename
             );
 
             Map<String, Object> caseDetailsBefore = new HashMap<>();
             caseDetailsBefore.put("id", testCaseId);
             caseDetailsBefore.put("jurisdiction", MapValueExtractor.extractOrDefault(input, "jurisdiction", "IA"));
-            caseDetailsBefore.put("state", MapValueExtractor.extractOrThrow(input, "state"));
+            caseDetailsBefore.put("state", state);
             caseDetailsBefore.put("created_date", createdDate);
             caseDetailsBefore.put("case_data", caseDataBefore);
             callback.put("case_details_before", caseDetailsBefore);
@@ -334,6 +355,7 @@ public class CcdScenarioRunnerTest {
 
             Map<String, Object> caseData = buildCaseData(
                 MapValueExtractor.extract(expectation, "caseData"),
+                null,
                 templatesByFilename
             );
 
