@@ -27,8 +27,8 @@
         "isAdmin": "Yes",
         "hearingCentre": "taylorHouse",
         "isRemissionsEnabled": "Yes",
-        "remissionType":"hoWaiverRemission",
-        "appealType":"protection",
+        "remissionType": "hoWaiverRemission",
+        "appealType": "protection",
         "notificationsSent": [
           {
             "id": "7031_APPEAL_SUBMITTED_PAY_OFFLINE_ADMIN_OFFICER",

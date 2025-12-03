@@ -17,16 +17,16 @@
             {
               "id": "1",
               "value": {
-                "type":"Judge's review of Legal Officer decision",
-                "details":"",
-                "evidence":[],
-                "applicant":"Admin Officer",
-                "date":"{$TODAY}",
-                "decision":"Refused",
-                "state":"appealSubmitted",
-                "applicantRole":"ctsc",
-                "decisionReason":"No Reason given",
-                "decisionDate":"{$TODAY}",
+                "type": "Judge's review of Legal Officer decision",
+                "details": "",
+                "evidence": [],
+                "applicant": "Admin Officer",
+                "date": "{$TODAY}",
+                "decision": "Refused",
+                "state": "appealSubmitted",
+                "applicantRole": "ctsc",
+                "decisionReason": "No Reason given",
+                "decisionDate": "{$TODAY}",
                 "decisionMaker": "Admin Officer"
               }
             }

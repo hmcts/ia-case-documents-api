@@ -15,8 +15,9 @@
           "appellantInUk": "Yes",
           "appellantInDetention": "Yes",
           "detentionFacility": "other",
+          "otherDetentionFacilityName": "otherDetentionFacilityName",
           "submissionOutOfTime": "Yes",
-          "appealType":"refusalOfHumanRights",
+          "appealType": "refusalOfHumanRights",
           "paymentStatus": "Payment pending",
           "appellantAddress": {
             "County": "",
@@ -41,8 +42,9 @@
         "appellantInUk": "Yes",
         "appellantInDetention": "Yes",
         "detentionFacility": "other",
+        "otherDetentionFacilityName": "otherDetentionFacilityName",
         "submissionOutOfTime": "Yes",
-        "appealType":"refusalOfHumanRights",
+        "appealType": "refusalOfHumanRights",
         "paymentStatus": "Payment pending",
         "appellantAddress": {
           "County": "",

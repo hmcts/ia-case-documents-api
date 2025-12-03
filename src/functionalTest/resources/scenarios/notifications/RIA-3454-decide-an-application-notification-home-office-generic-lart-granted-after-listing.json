@@ -14,19 +14,19 @@
           "listCaseHearingCentre": "taylorHouse",
           "decideAnApplicationId": "1",
           "makeAnApplications": [
-              {
+            {
               "id": "1",
               "value": {
-                "type":"Other",
-                "details":"",
-                "evidence":[],
-                "applicant":"",
-                "date":"{$TODAY}",
-                "decision":"Granted",
-                "state":"respondentReview",
-                "applicantRole":"caseworker-ia-respondentofficer",
-                "decisionReason":"No Reason given",
-                "decisionDate":"{$TODAY}",
+                "type": "Other",
+                "details": "",
+                "evidence": [],
+                "applicant": "",
+                "date": "{$TODAY}",
+                "decision": "Granted",
+                "state": "respondentReview",
+                "applicantRole": "caseworker-ia-respondentofficer",
+                "decisionReason": "No Reason given",
+                "decisionDate": "{$TODAY}",
                 "decisionMaker": "Judge"
               }
             }

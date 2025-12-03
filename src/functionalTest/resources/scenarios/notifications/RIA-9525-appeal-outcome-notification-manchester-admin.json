@@ -59,7 +59,6 @@
           "{$customerServices.emailAddress}"
         ]
       },
-
       {
         "reference": "95252_APPEAL_OUTCOME_ADMIN",
         "recipient": "{$adminEmailAddresses.manchester}",

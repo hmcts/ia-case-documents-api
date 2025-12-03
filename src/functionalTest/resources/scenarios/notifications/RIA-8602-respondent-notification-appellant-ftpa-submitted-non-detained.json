@@ -43,6 +43,7 @@
     "caseData": {
       "template": "minimal-appeal-submitted.json",
       "replacements": {
+        "listCaseHearingCentre": "taylorHouse",
         "appellantInDetention": "No",
         "ircName": "Brookhouse",
         "notificationsSent": [

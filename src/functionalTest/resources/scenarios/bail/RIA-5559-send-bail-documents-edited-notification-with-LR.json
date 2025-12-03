@@ -1,6 +1,5 @@
 {
   "description": "RIA-5559 send bail documents edited notification to HomeOffice and legal representative",
-  "launchDarklyKey": "tcw-notifications-feature:true",
   "request": {
     "uri": "/bail/ccdAboutToSubmit",
     "credentials": "AdminOfficer",

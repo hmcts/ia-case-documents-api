@@ -35,6 +35,7 @@
     "caseData": {
       "template": "minimal-appeal-submitted.json",
       "replacements": {
+        "listCaseHearingCentre": "taylorHouse",
         "isReheardAppealEnabled": "Yes",
         "caseFlagSetAsideReheardExists": "No",
         "decisionAndReasonsAvailable": "No",

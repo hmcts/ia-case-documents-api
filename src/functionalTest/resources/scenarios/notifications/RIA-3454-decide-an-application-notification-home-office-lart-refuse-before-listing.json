@@ -12,19 +12,19 @@
         "replacements": {
           "decideAnApplicationId": "1",
           "makeAnApplications": [
-              {
+            {
               "id": "1",
               "value": {
-                "type":"Other",
-                "details":"",
-                "evidence":[],
-                "applicant":"",
-                "date":"",
-                "decision":"Refused",
-                "state":"prepareForHearing",
-                "applicantRole":"caseworker-ia-homeofficelart",
-                "decisionReason":"No Reason given",
-                "decisionDate":"{$TODAY}",
+                "type": "Other",
+                "details": "",
+                "evidence": [],
+                "applicant": "",
+                "date": "",
+                "decision": "Refused",
+                "state": "prepareForHearing",
+                "applicantRole": "caseworker-ia-homeofficelart",
+                "decisionReason": "No Reason given",
+                "decisionDate": "{$TODAY}",
                 "decisionMaker": "Judge"
               }
             }

@@ -1,6 +1,5 @@
 {
   "description": "RIA-8846-customise-reheard-hearing-ready-bundle-remitted",
-  "launchDarklyKey": "reheard-feature:true",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
     "credentials": "CaseOfficer",
@@ -227,6 +226,7 @@
     "caseData": {
       "template": "minimal-appeal-submitted.json",
       "replacements": {
+        "listCaseHearingCentre": "taylorHouse",
         "additionalEvidenceDocuments": [
           {
             "id": "2",

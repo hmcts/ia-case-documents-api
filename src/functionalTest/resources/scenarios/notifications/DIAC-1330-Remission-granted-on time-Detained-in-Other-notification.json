@@ -10,7 +10,7 @@
       "caseData": {
         "template": "minimal-appeal-submitted.json",
         "replacements": {
-          "appealType":"refusalOfHumanRights",
+          "appealType": "refusalOfHumanRights",
           "isRemissionsEnabled": "Yes",
           "remissionType": "hoWaiverRemission",
           "remissionDecision": "approved",
@@ -25,6 +25,7 @@
           "appellantsRepresentation": "Yes",
           "appellantInDetention": "Yes",
           "detentionFacility": "other",
+          "otherDetentionFacilityName": "otherDetentionFacilityName",
           "appellantInUk": "No",
           "appellantHasFixedAddressAdminJ": "Yes",
           "addressLine1AdminJ": "Calle Toledo 32",
@@ -41,7 +42,7 @@
     "caseData": {
       "template": "minimal-appeal-submitted.json",
       "replacements": {
-        "appealType":"refusalOfHumanRights",
+        "appealType": "refusalOfHumanRights",
         "isRemissionsEnabled": "Yes",
         "remissionType": "hoWaiverRemission",
         "remissionDecision": "approved",
@@ -56,6 +57,7 @@
         "appellantsRepresentation": "Yes",
         "appellantInDetention": "Yes",
         "detentionFacility": "other",
+        "otherDetentionFacilityName": "otherDetentionFacilityName",
         "appellantInUk": "No",
         "appellantHasFixedAddressAdminJ": "Yes",
         "addressLine1AdminJ": "Calle Toledo 32",

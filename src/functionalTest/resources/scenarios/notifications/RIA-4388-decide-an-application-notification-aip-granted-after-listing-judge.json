@@ -26,35 +26,35 @@
           ],
           "decideAnApplicationId": "1",
           "makeAnApplications": [
-              {
+            {
               "id": "2",
               "value": {
-                "type":"Time extension",
-                "details":"",
-                "evidence":[],
-                "applicant":"",
-                "date":"",
-                "decision":"Granted",
-                "state":"prepareForHearing",
-                "applicantRole":"citizen",
-                "decisionReason":"No Reason given",
-                "decisionDate":"{$TODAY}",
+                "type": "Time extension",
+                "details": "",
+                "evidence": [],
+                "applicant": "",
+                "date": "",
+                "decision": "Granted",
+                "state": "prepareForHearing",
+                "applicantRole": "citizen",
+                "decisionReason": "No Reason given",
+                "decisionDate": "{$TODAY}",
                 "decisionMaker": "Judge"
               }
             },
             {
               "id": "1",
               "value": {
-                "type":"Expedite",
-                "details":"",
-                "evidence":[],
-                "applicant":"",
-                "date":"",
-                "decision":"Granted",
-                "state":"preHearing",
-                "applicantRole":"citizen",
-                "decisionReason":"No Reason given",
-                "decisionDate":"{$TODAY}",
+                "type": "Expedite",
+                "details": "",
+                "evidence": [],
+                "applicant": "",
+                "date": "",
+                "decision": "Granted",
+                "state": "preHearing",
+                "applicantRole": "citizen",
+                "decisionReason": "No Reason given",
+                "decisionDate": "{$TODAY}",
                 "decisionMaker": "Judge"
               }
             }
@@ -87,32 +87,32 @@
           {
             "id": "2",
             "value": {
-              "type":"Time extension",
-              "details":"",
-              "evidence":[],
-              "applicant":"",
-              "date":"",
-              "decision":"Granted",
-              "state":"prepareForHearing",
-              "applicantRole":"citizen",
-              "decisionReason":"No Reason given",
-              "decisionDate":"{$TODAY}",
+              "type": "Time extension",
+              "details": "",
+              "evidence": [],
+              "applicant": "",
+              "date": "",
+              "decision": "Granted",
+              "state": "prepareForHearing",
+              "applicantRole": "citizen",
+              "decisionReason": "No Reason given",
+              "decisionDate": "{$TODAY}",
               "decisionMaker": "Judge"
             }
           },
           {
             "id": "1",
             "value": {
-              "type":"Expedite",
-              "details":"",
-              "evidence":[],
-              "applicant":"",
-              "date":"",
-              "decision":"Granted",
-              "state":"preHearing",
-              "applicantRole":"citizen",
-              "decisionReason":"No Reason given",
-              "decisionDate":"{$TODAY}",
+              "type": "Expedite",
+              "details": "",
+              "evidence": [],
+              "applicant": "",
+              "date": "",
+              "decision": "Granted",
+              "state": "preHearing",
+              "applicantRole": "citizen",
+              "decisionReason": "No Reason given",
+              "decisionDate": "{$TODAY}",
               "decisionMaker": "Judge"
             }
           }

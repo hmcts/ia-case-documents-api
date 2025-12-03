@@ -14,6 +14,7 @@
           "appellantsRepresentation": "Yes",
           "appellantInDetention": "Yes",
           "detentionFacility": "other",
+          "otherDetentionFacilityName": "otherDetentionFacilityName",
           "appellantInUk": "Yes",
           "appellantAddress": {
             "County": "",
@@ -28,9 +29,9 @@
             {
               "id": "1",
               "value": {
-                "type":"Other",
-                "details":"",
-                "evidence":[
+                "type": "Other",
+                "details": "",
+                "evidence": [
                   {
                     "id": "1",
                     "value": {
@@ -40,13 +41,13 @@
                     }
                   }
                 ],
-                "applicant":"Respondent",
-                "date":"",
-                "decision":"Granted",
-                "state":"caseBuilding",
-                "applicantRole":"caseworker-ia-homeofficeapc",
-                "decisionReason":"A reason for the decision",
-                "decisionDate":"{$TODAY}",
+                "applicant": "Respondent",
+                "date": "",
+                "decision": "Granted",
+                "state": "caseBuilding",
+                "applicantRole": "caseworker-ia-homeofficeapc",
+                "decisionReason": "A reason for the decision",
+                "decisionDate": "{$TODAY}",
                 "decisionMaker": "Tribunal Caseworker"
               }
             }
@@ -65,6 +66,7 @@
         "appellantsRepresentation": "Yes",
         "appellantInDetention": "Yes",
         "detentionFacility": "other",
+        "otherDetentionFacilityName": "otherDetentionFacilityName",
         "appellantInUk": "Yes",
         "appellantAddress": {
           "County": "",
@@ -79,9 +81,9 @@
           {
             "id": "1",
             "value": {
-              "type":"Other",
-              "details":"",
-              "evidence":[
+              "type": "Other",
+              "details": "",
+              "evidence": [
                 {
                   "id": "1",
                   "value": {
@@ -91,13 +93,13 @@
                   }
                 }
               ],
-              "applicant":"Respondent",
-              "date":"",
-              "decision":"Granted",
-              "state":"caseBuilding",
-              "applicantRole":"caseworker-ia-homeofficeapc",
-              "decisionReason":"A reason for the decision",
-              "decisionDate":"{$TODAY}",
+              "applicant": "Respondent",
+              "date": "",
+              "decision": "Granted",
+              "state": "caseBuilding",
+              "applicantRole": "caseworker-ia-homeofficeapc",
+              "decisionReason": "A reason for the decision",
+              "decisionDate": "{$TODAY}",
               "decisionMaker": "Tribunal Caseworker"
             }
           }

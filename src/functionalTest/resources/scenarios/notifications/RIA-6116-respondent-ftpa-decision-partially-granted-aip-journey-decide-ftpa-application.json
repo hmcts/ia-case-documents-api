@@ -1,6 +1,5 @@
 {
   "description": "RIA-61164 Respondent FTPA application decision partially granted (AIP journey) - Leadership judge",
-  "launchDarklyKey": "dlrm-setaside-feature-flag:true",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
     "credentials": "Judge",

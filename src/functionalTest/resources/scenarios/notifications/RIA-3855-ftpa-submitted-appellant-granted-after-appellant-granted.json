@@ -1,6 +1,5 @@
 {
   "description": "RIA-3855 FTPA submitted Appellant FTPA Decision home office notification failed (Judge)",
-  "launchDarklyKey": "tcw-notifications-feature:true",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
     "credentials": "Judge",
@@ -34,6 +33,7 @@
     "caseData": {
       "template": "minimal-appeal-submitted.json",
       "replacements": {
+        "listCaseHearingCentre": "bradford",
         "notificationsSent": []
       }
     },

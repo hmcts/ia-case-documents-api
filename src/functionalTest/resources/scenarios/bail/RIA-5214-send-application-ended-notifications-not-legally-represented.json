@@ -1,6 +1,5 @@
 {
   "description": "RIA-5412 send bail application ended notification to Applicant (sms) and HO (emails)",
-  "launchDarklyKey": "tcw-notifications-feature:true",
   "request": {
     "uri": "/bail/ccdAboutToSubmit",
     "credentials": "LegalRepresentative",

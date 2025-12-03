@@ -1,6 +1,5 @@
 {
   "description": "RIA-5584 RIA-5454 send bail application submitted notification to newport hearing centre, HO and LR",
-  "launchDarklyKey": "tcw-notifications-feature:true",
   "request": {
     "uri": "/bail/ccdAboutToSubmit",
     "credentials": "LegalRepresentative",

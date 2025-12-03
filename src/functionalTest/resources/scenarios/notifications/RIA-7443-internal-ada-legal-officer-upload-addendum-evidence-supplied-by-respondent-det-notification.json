@@ -1,6 +1,6 @@
 {
   "description": "RIA-7443 Internal Legal Officer upload addendum evidence DET notification - ADA",
-  "disabled" : "true",
+  "disabled": "true",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
     "credentials": "CaseOfficer",
@@ -85,7 +85,7 @@
             }
           }
         ],
-        "notificationsSent":[
+        "notificationsSent": [
           {
             "id": "7443_INTERNAL_DETAINED_LEGAL_OFFICER_UPLOAD_ADDITIONAL_EVIDENCE_DET_EMAIL",
             "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"

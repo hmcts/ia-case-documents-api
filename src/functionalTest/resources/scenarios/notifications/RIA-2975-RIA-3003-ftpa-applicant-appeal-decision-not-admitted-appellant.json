@@ -28,6 +28,7 @@
     "caseData": {
       "template": "minimal-appeal-submitted.json",
       "replacements": {
+        "listCaseHearingCentre": "bradford",
         "notificationsSent": [
           {
             "id": "1022_FTPA_APPLICATION_DECISION_HOME_OFFICE_APPELLANT",

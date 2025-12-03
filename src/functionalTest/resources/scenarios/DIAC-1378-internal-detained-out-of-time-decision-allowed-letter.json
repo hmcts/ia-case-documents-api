@@ -29,17 +29,17 @@
     "caseData": {
       "template": "minimal-internal-appeal-submitted.json",
       "replacements": {
-          "isAdmin": "Yes",
-          "appellantsRepresentation": "Yes",
-          "appellantInDetention": "Yes",
-          "detentionFacility": "immigrationRemovalCentre",
-          "ircName": "Harmondsworth",
-          "submissionOutOfTime": "Yes",
-          "appealSubmissionDate": "{$TODAY}",
-          "appealType": "refusalOfHumanRights",
-          "recordOutOfTimeDecision": "Yes",
-          "appealReferenceNumber": "$/(.+)/",
-          "notificationAttachmentDocuments": [
+        "isAdmin": "Yes",
+        "appellantsRepresentation": "Yes",
+        "appellantInDetention": "Yes",
+        "detentionFacility": "immigrationRemovalCentre",
+        "ircName": "Harmondsworth",
+        "submissionOutOfTime": "Yes",
+        "appealSubmissionDate": "{$TODAY}",
+        "appealType": "refusalOfHumanRights",
+        "recordOutOfTimeDecision": "Yes",
+        "appealReferenceNumber": "$/(.+)/",
+        "notificationAttachmentDocuments": [
           {
             "id": "2",
             "value": {

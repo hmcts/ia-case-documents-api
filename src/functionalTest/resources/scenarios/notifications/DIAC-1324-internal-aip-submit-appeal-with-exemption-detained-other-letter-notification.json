@@ -15,6 +15,7 @@
           "isAdmin": "Yes",
           "appellantInDetention": "Yes",
           "detentionFacility": "other",
+          "otherDetentionFacilityName": "otherDetentionFacilityName",
           "appellantInUk": "Yes",
           "submissionOutOfTime": "No",
           "appellantHasFixedAddress": "Yes",

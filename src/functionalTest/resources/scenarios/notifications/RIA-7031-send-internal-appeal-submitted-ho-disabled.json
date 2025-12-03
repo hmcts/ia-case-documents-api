@@ -1,6 +1,5 @@
 {
   "description": "RIA-7031 Do not Send appeal submitted notification to Home Office - (HO Notification disabled) Unrepped",
-  "launchDarklyKey": "tcw-notifications-feature:true",
   "disabled": "{$featureFlag.homeOfficeGovNotifyEnabled}",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",

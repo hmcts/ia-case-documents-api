@@ -11,22 +11,22 @@
       "caseData": {
         "template": "minimal-appeal-submitted.json",
         "replacements": {
-          "currentCaseStateVisibleToHomeOfficeAll":"appealSubmitted",
+          "currentCaseStateVisibleToHomeOfficeAll": "appealSubmitted",
           "currentCaseStateVisibleToLegalRepresentative": "appealSubmitted",
           "makeAnApplications": [
             {
               "id": "1",
               "value": {
-                "type":"withdraw",
-                "details":"",
-                "evidence":[],
-                "applicant":"",
-                "date":"{$TODAY}",
-                "decision":"Pending",
-                "state":"appealSubmitted",
-                "applicantRole":"",
-                "decisionReason":"",
-                "decisionDate":"",
+                "type": "withdraw",
+                "details": "",
+                "evidence": [],
+                "applicant": "",
+                "date": "{$TODAY}",
+                "decision": "Pending",
+                "state": "appealSubmitted",
+                "applicantRole": "",
+                "decisionReason": "",
+                "decisionDate": "",
                 "decisionMaker": ""
               }
             }
@@ -41,22 +41,22 @@
     "caseData": {
       "template": "minimal-appeal-submitted.json",
       "replacements": {
-        "currentCaseStateVisibleToHomeOfficeAll":"appealSubmitted",
+        "currentCaseStateVisibleToHomeOfficeAll": "appealSubmitted",
         "currentCaseStateVisibleToLegalRepresentative": "appealSubmitted",
         "makeAnApplications": [
           {
             "id": "1",
             "value": {
-              "type":"withdraw",
-              "details":"",
-              "evidence":[],
-              "applicant":"",
-              "date":"{$TODAY}",
-              "decision":"Pending",
-              "state":"appealSubmitted",
-              "applicantRole":"",
-              "decisionReason":"",
-              "decisionDate":"",
+              "type": "withdraw",
+              "details": "",
+              "evidence": [],
+              "applicant": "",
+              "date": "{$TODAY}",
+              "decision": "Pending",
+              "state": "appealSubmitted",
+              "applicantRole": "",
+              "decisionReason": "",
+              "decisionDate": "",
               "decisionMaker": ""
             }
           }

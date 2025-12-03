@@ -15,7 +15,7 @@
           "listCaseHearingCentre": "taylorHouse",
           "ariaListingReference": "LP/12345/2019",
           "legalRepReferenceNumber": "CASE001",
-          "appealType":"revocationOfProtection",
+          "appealType": "revocationOfProtection",
           "paAppealTypePaymentOption": "payLater"
         }
       }
@@ -31,7 +31,7 @@
         "listCaseHearingCentre": "taylorHouse",
         "ariaListingReference": "LP/12345/2019",
         "legalRepReferenceNumber": "CASE001",
-        "appealType":"revocationOfProtection",
+        "appealType": "revocationOfProtection",
         "paAppealTypePaymentOption": "payLater",
         "notificationsSent": [
           {

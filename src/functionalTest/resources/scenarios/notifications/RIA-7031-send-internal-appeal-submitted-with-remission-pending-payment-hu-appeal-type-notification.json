@@ -12,8 +12,8 @@
         "template": "minimal-internal-appeal-submitted.json",
         "replacements": {
           "isRemissionsEnabled": "Yes",
-          "remissionType":"hoWaiverRemission",
-          "appealType":"refusalOfHumanRights",
+          "remissionType": "hoWaiverRemission",
+          "appealType": "refusalOfHumanRights",
           "eaHuAppealTypePaymentOption": "payLater"
         }
       }
@@ -28,8 +28,8 @@
         "isAdmin": "Yes",
         "hearingCentre": "taylorHouse",
         "isRemissionsEnabled": "Yes",
-        "remissionType":"hoWaiverRemission",
-        "appealType":"refusalOfHumanRights",
+        "remissionType": "hoWaiverRemission",
+        "appealType": "refusalOfHumanRights",
         "eaHuAppealTypePaymentOption": "payLater",
         "notificationsSent": [
           {

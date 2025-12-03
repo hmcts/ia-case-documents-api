@@ -1,6 +1,5 @@
 {
   "description": "DIAC-1341 Adjourn hearing without date - Cancellation of Production Notice - Detained ",
-  "launchDarklyKey": "tcw-notifications-feature:true",
   "disabled": true,
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",

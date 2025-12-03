@@ -30,17 +30,17 @@
     "caseData": {
       "template": "minimal-appeal-started.json",
       "replacements": {
-          "isAdmin": "Yes",
-          "appellantsRepresentation": "Yes",
-          "appellantInDetention": "Yes",
-          "isAcceleratedDetainedAppeal": "No",
-          "detentionFacility": "prison",
-          "prisonNOMSNumber": "",
-          "submissionOutOfTime": "No",
-          "appealSubmissionDate": "{$TODAY}",
-          "appealType": "revocationOfProtection",
-          "appealReferenceNumber": "PA/50001/2025",
-          "notificationAttachmentDocuments": [
+        "isAdmin": "Yes",
+        "appellantsRepresentation": "Yes",
+        "appellantInDetention": "Yes",
+        "isAcceleratedDetainedAppeal": "No",
+        "detentionFacility": "prison",
+        "prisonNOMSNumber": "",
+        "submissionOutOfTime": "No",
+        "appealSubmissionDate": "{$TODAY}",
+        "appealType": "revocationOfProtection",
+        "appealReferenceNumber": "PA/50001/2025",
+        "notificationAttachmentDocuments": [
           {
             "id": "1",
             "value": {

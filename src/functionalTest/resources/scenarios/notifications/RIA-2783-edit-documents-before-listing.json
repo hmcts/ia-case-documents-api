@@ -1,6 +1,5 @@
 {
   "description": "RIA-2783 Immigration and Asylum appeal: document deleted before listing",
-  "launchDarklyKey": "tcw-notifications-feature:true",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
     "credentials": "CaseOfficer",

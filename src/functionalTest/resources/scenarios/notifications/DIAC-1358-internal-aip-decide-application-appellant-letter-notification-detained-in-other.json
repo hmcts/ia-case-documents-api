@@ -17,22 +17,23 @@
             {
               "id": "1",
               "value": {
-                "type":"Other",
-                "details":"",
-                "evidence":[],
+                "type": "Other",
+                "details": "",
+                "evidence": [],
                 "applicant": "",
-                "date":"",
-                "decision":"Granted",
-                "state":"appealSubmitted",
+                "date": "",
+                "decision": "Granted",
+                "state": "appealSubmitted",
                 "applicantRole": "caseworker-ia-admofficer",
-                "decisionReason":"No Reason given",
-                "decisionDate":"{$TODAY}",
+                "decisionReason": "No Reason given",
+                "decisionDate": "{$TODAY}",
                 "decisionMaker": "Judge"
               }
             }
           ],
           "appellantInDetention": "Yes",
           "detentionFacility": "other",
+          "otherDetentionFacilityName": "otherDetentionFacilityName",
           "appellantInUk": "Yes",
           "appellantAddress": {
             "County": "",
@@ -59,22 +60,23 @@
           {
             "id": "1",
             "value": {
-              "type":"Other",
-              "details":"",
-              "evidence":[],
-              "applicant":"",
-              "date":"",
-              "decision":"Granted",
-              "state":"appealSubmitted",
-              "applicantRole":"caseworker-ia-admofficer",
-              "decisionReason":"No Reason given",
-              "decisionDate":"{$TODAY}",
+              "type": "Other",
+              "details": "",
+              "evidence": [],
+              "applicant": "",
+              "date": "",
+              "decision": "Granted",
+              "state": "appealSubmitted",
+              "applicantRole": "caseworker-ia-admofficer",
+              "decisionReason": "No Reason given",
+              "decisionDate": "{$TODAY}",
               "decisionMaker": "Judge"
             }
           }
         ],
         "appellantInDetention": "Yes",
         "detentionFacility": "other",
+        "otherDetentionFacilityName": "otherDetentionFacilityName",
         "appellantAddress": {
           "County": "",
           "Country": "United Kingdom",

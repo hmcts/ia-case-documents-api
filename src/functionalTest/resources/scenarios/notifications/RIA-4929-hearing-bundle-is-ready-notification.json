@@ -31,12 +31,14 @@
           "directions": [
           ],
           "notificationsSent": [],
-          "caseBundles": [{
-            "id": "1",
-            "value": {
-              "stitchStatus": "DONE"
+          "caseBundles": [
+            {
+              "id": "1",
+              "value": {
+                "stitchStatus": "DONE"
+              }
             }
-          }]
+          ]
         }
       }
     }
@@ -47,6 +49,7 @@
     "caseData": {
       "template": "aip-minimal-appeal-submitted.json",
       "replacements": {
+        "listCaseHearingCentre": "taylorHouse",
         "hearingCentre": "taylorHouse",
         "homeOfficeReferenceNumber": "1212-0099-0062-8083",
         "subscriptions": [

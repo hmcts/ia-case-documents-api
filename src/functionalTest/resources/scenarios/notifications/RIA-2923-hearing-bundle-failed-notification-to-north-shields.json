@@ -13,12 +13,14 @@
           "listCaseHearingCentre": "northShields",
           "ariaListingReference": "LP/12345/2019",
           "legalRepReferenceNumber": "CASE001",
-          "caseBundles": [{
-            "id": "1",
-            "value": {
-              "stitchStatus": "FAILED"
+          "caseBundles": [
+            {
+              "id": "1",
+              "value": {
+                "stitchStatus": "FAILED"
+              }
             }
-          }]
+          ]
         }
       }
     }

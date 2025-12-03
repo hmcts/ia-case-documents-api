@@ -1,6 +1,5 @@
 {
   "description": "RIA-4083 Send cma listed notification to case officer, appellant and home office (Taylor House hearing centre)",
-  "launchDarklyKey": "tcw-notifications-feature:true",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
     "credentials": "AdminOfficer",

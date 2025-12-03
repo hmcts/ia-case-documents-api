@@ -21,7 +21,7 @@
               "revocationHumanitarianProtection"
             ]
           },
-        "legalRepName": "Fake Org Ltd"
+          "legalRepName": "Fake Org Ltd"
         }
       }
     }
@@ -40,7 +40,7 @@
             "revocationHumanitarianProtection"
           ]
         },
-      "legalRepName": "Fake Org Ltd"
+        "legalRepName": "Fake Org Ltd"
       }
     },
     "notifications": [

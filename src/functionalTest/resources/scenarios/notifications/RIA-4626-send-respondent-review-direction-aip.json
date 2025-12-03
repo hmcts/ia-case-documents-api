@@ -103,7 +103,8 @@
           "{$iaExUiFrontendUrl}",
           "{$TODAY+14|d MMM yyyy}",
           "{$customerServices.telephoneNumber}",
-          "{$customerServices.emailAddress}"        ]
+          "{$customerServices.emailAddress}"
+        ]
       },
       {
         "reference": "46261_REQUEST_RESPONDENT_REVIEW_APPELLANT_AIP_EMAIL",

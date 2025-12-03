@@ -1,6 +1,5 @@
 {
   "description": "RIA-3313 respondent ftpa application submitted Home Office notification failure",
-  "launchDarklyKey": "tcw-notifications-feature:true",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
     "credentials": "HomeOfficePOU",
@@ -24,6 +23,7 @@
     "caseData": {
       "template": "minimal-appeal-submitted.json",
       "replacements": {
+        "listCaseHearingCentre": "bradford",
         "notificationsSent": [
           {
             "id": "3313_FTPA_SUBMITTED_HO_NOTIFICATION_FAILED_CASE_OFFICER",

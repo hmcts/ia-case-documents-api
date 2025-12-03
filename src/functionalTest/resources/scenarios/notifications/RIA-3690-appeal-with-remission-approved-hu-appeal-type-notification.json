@@ -1,6 +1,5 @@
 {
   "description": "RIA-3690 appeal with remission approved, for HU appeal notification",
-  "launchDarklyKey": "tcw-notifications-feature:true",
   "disabled": true,
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
@@ -12,7 +11,7 @@
       "caseData": {
         "template": "minimal-appeal-submitted.json",
         "replacements": {
-          "appealType":"refusalOfHumanRights",
+          "appealType": "refusalOfHumanRights",
           "remissionDecision": "approved",
           "remittedAmount": "140.00",
           "amountLeftToPay": "00.00"
@@ -27,7 +26,7 @@
       "template": "minimal-appeal-submitted.json",
       "replacements": {
         "hearingCentre": "taylorHouse",
-        "appealType":"refusalOfHumanRights",
+        "appealType": "refusalOfHumanRights",
         "remissionDecision": "approved",
         "remittedAmount": "140.00",
         "amountLeftToPay": "00.00",

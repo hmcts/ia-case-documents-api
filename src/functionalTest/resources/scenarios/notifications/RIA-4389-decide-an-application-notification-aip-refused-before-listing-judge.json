@@ -24,19 +24,19 @@
           ],
           "decideAnApplicationId": "1",
           "makeAnApplications": [
-              {
+            {
               "id": "1",
               "value": {
-                "type":"Time extension",
-                "details":"",
-                "evidence":[],
-                "applicant":"",
-                "date":"",
-                "decision":"Refused",
-                "state":"awaitingReasonsForAppeal",
-                "applicantRole":"citizen",
-                "decisionReason":"No Reason given",
-                "decisionDate":"{$TODAY}",
+                "type": "Time extension",
+                "details": "",
+                "evidence": [],
+                "applicant": "",
+                "date": "",
+                "decision": "Refused",
+                "state": "awaitingReasonsForAppeal",
+                "applicantRole": "citizen",
+                "decisionReason": "No Reason given",
+                "decisionDate": "{$TODAY}",
                 "decisionMaker": "Judge"
               }
             }
@@ -67,16 +67,16 @@
           {
             "id": "1",
             "value": {
-              "type":"Time extension",
-              "details":"",
-              "evidence":[],
-              "applicant":"",
-              "date":"",
-              "decision":"Refused",
-              "state":"awaitingReasonsForAppeal",
-              "applicantRole":"citizen",
-              "decisionReason":"No Reason given",
-              "decisionDate":"{$TODAY}",
+              "type": "Time extension",
+              "details": "",
+              "evidence": [],
+              "applicant": "",
+              "date": "",
+              "decision": "Refused",
+              "state": "awaitingReasonsForAppeal",
+              "applicantRole": "citizen",
+              "decisionReason": "No Reason given",
+              "decisionDate": "{$TODAY}",
               "decisionMaker": "Judge"
             }
           }

@@ -10,7 +10,7 @@
       "caseData": {
         "template": "minimal-internal-appeal-submitted.json",
         "replacements": {
-          "appealType":"protection",
+          "appealType": "protection",
           "outOfTimeDecisionType": "approved",
           "appellantInDetention": "Yes",
           "isAcceleratedDetainedAppeal": "No",

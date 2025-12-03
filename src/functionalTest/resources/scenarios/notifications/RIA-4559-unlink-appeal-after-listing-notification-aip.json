@@ -41,6 +41,7 @@
       "listCaseHearingCentre": "taylorHouse",
       "ariaListingReference": "LP/12345/2019",
       "replacements": {
+        "listCaseHearingCentre": "taylorHouse",
         "appellantGivenNames": "Talha",
         "appellantFamilyName": "Awan",
         "subscriptions": [

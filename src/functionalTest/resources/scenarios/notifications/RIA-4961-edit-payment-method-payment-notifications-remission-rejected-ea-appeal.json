@@ -12,8 +12,8 @@
         "template": "minimal-appeal-submitted.json",
         "replacements": {
           "isRemissionsEnabled": "Yes",
-          "remissionType":"hoWaiverRemission",
-          "appealType":"refusalOfEu",
+          "remissionType": "hoWaiverRemission",
+          "appealType": "refusalOfEu",
           "hearingCentre": "manchester",
           "remissionDecision": "rejected"
         }
@@ -27,8 +27,8 @@
       "template": "minimal-appeal-submitted.json",
       "replacements": {
         "isRemissionsEnabled": "Yes",
-        "remissionType":"hoWaiverRemission",
-        "appealType":"refusalOfEu",
+        "remissionType": "hoWaiverRemission",
+        "appealType": "refusalOfEu",
         "hearingCentre": "manchester",
         "remissionDecision": "rejected",
         "notificationsSent": [

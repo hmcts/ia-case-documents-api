@@ -1,6 +1,5 @@
 {
   "description": "RIA-3020 Send Cma requirements submitted to appellant and caseworker",
-  "launchDarklyKey": "tcw-notifications-feature:true",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
     "credentials": "Citizen",

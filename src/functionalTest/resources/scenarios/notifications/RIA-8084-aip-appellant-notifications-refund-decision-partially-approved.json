@@ -1,6 +1,5 @@
 {
   "description": "RIA-8084 AIP Appellant notifications: refund decision partially approved",
-  "launchDarklyKey": "dlrm-refund-feature-flag:true",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
     "credentials": "AdminOfficer",

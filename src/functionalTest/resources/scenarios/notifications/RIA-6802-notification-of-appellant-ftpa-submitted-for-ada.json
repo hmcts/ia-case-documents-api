@@ -24,6 +24,7 @@
     "caseData": {
       "template": "minimal-appeal-submitted.json",
       "replacements": {
+        "listCaseHearingCentre": "harmondsworth",
         "notificationsSent": [
           {
             "id": "1373_FTPA_SUBMITTED_LEGAL_REP",

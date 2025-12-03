@@ -1,6 +1,5 @@
 {
   "description": "RIA-3631 Adjourn hearing without date - (Home Office notification disabled) (List Assist non-integrated: Notifications including Admin)",
-  "launchDarklyKey": "tcw-notifications-feature:true",
   "disabled": "{$featureFlag.homeOfficeGovNotifyEnabled}",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",

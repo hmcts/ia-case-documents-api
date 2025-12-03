@@ -1,6 +1,5 @@
 {
   "description": "RIA-5597 send application-sent notification to HomeOffice and Legal Representative",
-  "launchDarklyKey": "tcw-notifications-feature:true",
   "request": {
     "uri": "/bail/ccdAboutToSubmit",
     "credentials": "AdminOfficer",
@@ -67,7 +66,7 @@
           "John Smith",
           "{$iaExUiFrontendUrl}",
           "A direction has been sent to the Home Office.",
-         " The Home Office has been directed to:",
+          " The Home Office has been directed to:",
           "This is the content of the direction",
           "Next steps",
           "The 2022-05-25 must comply with this direction by 2022-05-25."

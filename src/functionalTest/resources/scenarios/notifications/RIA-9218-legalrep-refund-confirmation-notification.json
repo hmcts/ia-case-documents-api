@@ -1,6 +1,5 @@
 {
   "description": "RIA-9218 Refund confirmation notification for legal rep",
-  "launchDarklyKey": "dlrm-refund-feature-flag:true",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
     "credentials": "AdminOfficer",

@@ -1,6 +1,5 @@
 {
   "description": "RIA-5601 send change direction due date notification to HomeOffice and legal representative",
-  "launchDarklyKey": "tcw-notifications-feature:true",
   "request": {
     "uri": "/bail/ccdAboutToSubmit",
     "credentials": "AdminOfficer",

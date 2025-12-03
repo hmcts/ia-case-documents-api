@@ -18,7 +18,10 @@
           "currentCaseStateVisibleToHomeOfficeAll": "listing",
           "legalRepresentativeEmailAddress": "{$TEST_LAW_FIRM_A_USERNAME}",
           "changeOrganisationRequestField": {
-            "DynamicList":["caseRole", "caseRoleList"],
+            "DynamicList": [
+              "caseRole",
+              "caseRoleList"
+            ],
             "RequestTimestamp": "now",
             "ApprovalStatus": "1"
           }

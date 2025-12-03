@@ -1,6 +1,5 @@
 {
   "description": "RIA-9234 Post-submit pay for appeal notifications to LR, CO and HO for admin and represented cases",
-  "launchDarklyKey": "tcw-notifications-feature:true",
   "request": {
     "uri": "/asylum/ccdSubmitted",
     "credentials": "LegalRepresentative",

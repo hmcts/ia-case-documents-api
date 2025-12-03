@@ -18,16 +18,16 @@
             {
               "id": "1",
               "value": {
-                "type":"time extension",
-                "details":"",
-                "evidence":[],
-                "applicant":"",
-                "date":"{$TODAY}",
-                "decision":"Pending",
-                "state":"decision",
-                "applicantRole":"",
-                "decisionReason":"",
-                "decisionDate":"",
+                "type": "time extension",
+                "details": "",
+                "evidence": [],
+                "applicant": "",
+                "date": "{$TODAY}",
+                "decision": "Pending",
+                "state": "decision",
+                "applicantRole": "",
+                "decisionReason": "",
+                "decisionDate": "",
                 "decisionMaker": ""
               }
             }

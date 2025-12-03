@@ -1,6 +1,5 @@
 {
   "description": "RIA-3631 Send appeal submitted and paid notification to legal representative (Home",
-  "launchDarklyKey": "tcw-notifications-feature:true",
   "disabled": true,
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
@@ -13,8 +12,8 @@
         "template": "minimal-appeal-submitted.json",
         "replacements": {
           "hearingCentre": "taylorHouse",
-          "appealType":"refusalOfEu",
-          "paymentStatus":"Paid"
+          "appealType": "refusalOfEu",
+          "paymentStatus": "Paid"
         }
       }
     }
@@ -25,8 +24,8 @@
     "caseData": {
       "template": "minimal-appeal-submitted.json",
       "replacements": {
-        "appealType":"refusalOfEu",
-        "paymentStatus":"Paid",
+        "appealType": "refusalOfEu",
+        "paymentStatus": "Paid",
         "notificationsSent": [
           {
             "id": "1429_APPEAL_SUBMITTED_PAID_LEGAL_REPRESENTATIVE",

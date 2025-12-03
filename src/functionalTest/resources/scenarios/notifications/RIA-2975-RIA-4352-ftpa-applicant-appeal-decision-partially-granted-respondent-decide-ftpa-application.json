@@ -1,6 +1,5 @@
 {
   "description": "RIA-2975-RIA-3754-RIA-4352 FTPA Applicant Application Decision Partially Granted Respondent",
-  "launchDarklyKey": "dlrm-setaside-feature-flag:true",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
     "credentials": "Judge",

@@ -16,9 +16,9 @@
           "appellantInDetention": "No",
           "submissionOutOfTime": "Yes",
           "isRemissionsEnabled": "Yes",
-          "remissionType":"hoWaiverRemission",
+          "remissionType": "hoWaiverRemission",
           "remissionOption": "feeWaiverFromHo",
-          "appealType":"refusalOfEu",
+          "appealType": "refusalOfEu",
           "eaHuAppealTypePaymentOption": "payLater",
           "legalRepHasAddress": "Yes",
           "legalRepAddressUK": {
@@ -45,9 +45,9 @@
         "appellantInDetention": "No",
         "submissionOutOfTime": "Yes",
         "isRemissionsEnabled": "Yes",
-        "remissionType":"hoWaiverRemission",
+        "remissionType": "hoWaiverRemission",
         "remissionOption": "feeWaiverFromHo",
-        "appealType":"refusalOfEu",
+        "appealType": "refusalOfEu",
         "eaHuAppealTypePaymentOption": "payLater",
         "legalRepHasAddress": "Yes",
         "legalRepAddressUK": {

@@ -1,6 +1,5 @@
 {
   "description": "RIA-2975-RIA-3003-RIA-3754  FTPA Applicant Application Decision Refused Respondent",
-  "launchDarklyKey": "dlrm-setaside-feature-flag:true",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
     "credentials": "Judge",

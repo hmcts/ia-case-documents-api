@@ -45,6 +45,7 @@
     "caseData": {
       "template": "minimal-internal-appeal-submitted.json",
       "replacements": {
+        "listCaseHearingCentre": "taylorHouse",
         "detentionFacility": "immigrationRemovalCentre",
         "ircName": "Brookhouse",
         "appellantInDetention": "Yes",

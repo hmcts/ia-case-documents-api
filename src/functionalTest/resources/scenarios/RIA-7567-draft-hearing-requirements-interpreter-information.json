@@ -22,17 +22,22 @@
             }
           ],
           "isInterpreterServicesNeeded": "Yes",
-          "appellantInterpreterLanguageCategory": ["spokenLanguageInterpreter", "signLanguageInterpreter"],
+          "appellantInterpreterLanguageCategory": [
+            "spokenLanguageInterpreter",
+            "signLanguageInterpreter"
+          ],
           "appellantInterpreterSignLanguage": {
             "languageRefData": {
               "value": {
                 "code": "sign-dfr",
                 "label": "Deaf Relay"
               },
-              "list_items": [{
-                "code": "sign-dfr",
-                "label": "Deaf Relay"
-              }]
+              "list_items": [
+                {
+                  "code": "sign-dfr",
+                  "label": "Deaf Relay"
+                }
+              ]
             }
           },
           "appellantInterpreterSpokenLanguage": {
@@ -41,10 +46,12 @@
                 "code": "ara-mag",
                 "label": "Maghreb"
               },
-              "list_items": [{
-                "code": "ara-mag",
-                "label": "Maghreb"
-              }]
+              "list_items": [
+                {
+                  "code": "ara-mag",
+                  "label": "Maghreb"
+                }
+              ]
             }
           },
           "isAnyWitnessInterpreterRequired": "Yes",
@@ -52,13 +59,20 @@
             "witnessName": "Witness",
             "witnessFamilyName": "1"
           },
-          "witness1InterpreterLanguageCategory": ["spokenLanguageInterpreter", "signLanguageInterpreter"],
+          "witness1InterpreterLanguageCategory": [
+            "spokenLanguageInterpreter",
+            "signLanguageInterpreter"
+          ],
           "witness1InterpreterSpokenLanguage": {
-            "languageManualEntry": ["Yes"],
+            "languageManualEntry": [
+              "Yes"
+            ],
             "languageManualEntryDescription": "Witness 1 spoken language"
           },
           "witness1InterpreterSignLanguage": {
-            "languageManualEntry": ["Yes"],
+            "languageManualEntry": [
+              "Yes"
+            ],
             "languageManualEntryDescription": "Witness 1 sign language"
           },
           "isHearingRoomNeeded": "Yes",
@@ -116,17 +130,22 @@
           }
         ],
         "isInterpreterServicesNeeded": "Yes",
-        "appellantInterpreterLanguageCategory": ["spokenLanguageInterpreter", "signLanguageInterpreter"],
+        "appellantInterpreterLanguageCategory": [
+          "spokenLanguageInterpreter",
+          "signLanguageInterpreter"
+        ],
         "appellantInterpreterSignLanguage": {
           "languageRefData": {
             "value": {
               "code": "sign-dfr",
               "label": "Deaf Relay"
             },
-            "list_items": [{
-              "code": "sign-dfr",
-              "label": "Deaf Relay"
-            }]
+            "list_items": [
+              {
+                "code": "sign-dfr",
+                "label": "Deaf Relay"
+              }
+            ]
           }
         },
         "appellantInterpreterSpokenLanguage": {
@@ -135,10 +154,12 @@
               "code": "ara-mag",
               "label": "Maghreb"
             },
-            "list_items": [{
-              "code": "ara-mag",
-              "label": "Maghreb"
-            }]
+            "list_items": [
+              {
+                "code": "ara-mag",
+                "label": "Maghreb"
+              }
+            ]
           }
         },
         "isAnyWitnessInterpreterRequired": "Yes",
@@ -146,13 +167,20 @@
           "witnessName": "Witness",
           "witnessFamilyName": "1"
         },
-        "witness1InterpreterLanguageCategory": ["spokenLanguageInterpreter", "signLanguageInterpreter"],
+        "witness1InterpreterLanguageCategory": [
+          "spokenLanguageInterpreter",
+          "signLanguageInterpreter"
+        ],
         "witness1InterpreterSpokenLanguage": {
-          "languageManualEntry": ["Yes"],
+          "languageManualEntry": [
+            "Yes"
+          ],
           "languageManualEntryDescription": "Witness 1 spoken language"
         },
         "witness1InterpreterSignLanguage": {
-          "languageManualEntry": ["Yes"],
+          "languageManualEntry": [
+            "Yes"
+          ],
           "languageManualEntryDescription": "Witness 1 sign language"
         },
         "isHearingRoomNeeded": "Yes",

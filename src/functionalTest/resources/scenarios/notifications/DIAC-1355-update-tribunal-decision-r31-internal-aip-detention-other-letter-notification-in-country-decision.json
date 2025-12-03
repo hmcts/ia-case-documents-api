@@ -1,6 +1,5 @@
 {
   "description": "DIAC-1355 Update Tribunal Decision Rule 31 Internal AiP Detained in Other Letter Notification (in country)",
-  "launchDarklyKey": "dlrm-setaside-feature-flag:true",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
     "credentials": "Judge",
@@ -14,6 +13,7 @@
           "appellantsRepresentation": "Yes",
           "appellantInDetention": "Yes",
           "detentionFacility": "other",
+          "otherDetentionFacilityName": "otherDetentionFacilityName",
           "appellantInUk": "Yes",
           "appellantHasFixedAddress": "Yes",
           "appellantAddress": {

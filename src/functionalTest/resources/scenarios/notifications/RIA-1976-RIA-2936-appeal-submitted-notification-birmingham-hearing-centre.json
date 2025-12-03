@@ -1,6 +1,5 @@
 {
   "description": "RIA-1976-RIA-2936 Send appeal submitted notification (IAC Birmingham)",
-  "launchDarklyKey": "tcw-notifications-feature:true",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
     "credentials": "LegalRepresentative",

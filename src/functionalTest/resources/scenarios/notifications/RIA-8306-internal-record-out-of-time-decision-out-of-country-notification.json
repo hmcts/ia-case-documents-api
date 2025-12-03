@@ -1,25 +1,30 @@
 {
-  "description": "RIA-7369 Internal Home Office upload additional evidence DET notification - ADA",
-  "disabled": "true",
+  "description": "RIA-8306 Internal detained record out of time decision - letter notification - out of country",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
-    "credentials": "HomeOfficeGeneric",
+    "credentials": "CaseOfficer",
     "input": {
-      "id": 7466,
-      "eventId": "uploadAdditionalEvidenceHomeOffice",
-      "state": "respondentReview",
+      "id": 8306,
+      "eventId": "recordOutOfTimeDecision",
+      "state": "appealSubmitted",
       "caseData": {
         "template": "minimal-internal-appeal-submitted.json",
         "replacements": {
-          "detentionFacility": "immigrationRemovalCentre",
-          "ircName": "Brookhouse",
-          "appellantInDetention": "Yes",
-          "isAcceleratedDetainedAppeal": "Yes",
+          "appealType": "protection",
+          "outOfTimeDecisionType": "rejected",
+          "isAdmin": "Yes",
+          "appellantInDetention": "No",
+          "appellantInUk": "No",
+          "appellantHasFixedAddressAdminJ": "Yes",
+          "addressLine1AdminJ": "Calle Toledo 32",
+          "addressLine2AdminJ": "Madrid",
+          "addressLine3AdminJ": "28003",
+          "countryGovUkOocAdminJ": "ES",
           "notificationAttachmentDocuments": [
             {
               "id": "1",
               "value": {
-                "tag": "homeOfficeUploadAdditionalAddendumEvidenceLetter",
+                "tag": "recordOutOfTimeDecisionDocument",
                 "document": {
                   "document_url": "$/http.+\/documents/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/",
                   "document_binary_url": "$/http.+\/documents/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}\/binary/"
@@ -41,21 +46,21 @@
     "caseData": {
       "template": "minimal-internal-appeal-submitted.json",
       "replacements": {
-        "detentionFacility": "immigrationRemovalCentre",
-        "ircName": "Brookhouse",
-        "appellantInDetention": "Yes",
-        "isAcceleratedDetainedAppeal": "Yes",
-        "notificationsSent": [
-          {
-            "id": "7466_INTERNAL_DET_HOME_OFFICE_UPLOAD_ADDITIONAL_EVIDENCE_DET_EMAIL",
-            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
-          }
-        ],
+        "appealType": "protection",
+        "outOfTimeDecisionType": "rejected",
+        "isAdmin": "Yes",
+        "appellantInDetention": "No",
+        "appellantInUk": "No",
+        "appellantHasFixedAddressAdminJ": "Yes",
+        "addressLine1AdminJ": "Calle Toledo 32",
+        "addressLine2AdminJ": "Madrid",
+        "addressLine3AdminJ": "28003",
+        "countryGovUkOocAdminJ": "ES",
         "notificationAttachmentDocuments": [
           {
             "id": "1",
             "value": {
-              "tag": "homeOfficeUploadAdditionalAddendumEvidenceLetter",
+              "tag": "recordOutOfTimeDecisionDocument",
               "document": {
                 "document_url": "$/http.+\/documents/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/",
                 "document_binary_url": "$/http.+\/documents/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}\/binary/"
@@ -69,5 +74,11 @@
         ]
       }
     }
-  }
+  },
+  "notificationsSent": [
+    {
+      "id": "8306_INTERNAL_OUT_OF_TIME_DECISION_LETTER_BUNDLE",
+      "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+    }
+  ]
 }

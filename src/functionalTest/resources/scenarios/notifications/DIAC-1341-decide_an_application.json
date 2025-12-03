@@ -1,6 +1,5 @@
 {
   "description": "DIAC-1341 Decide an application - Cancellation of Production Notice - Detained ",
-  "launchDarklyKey": "tcw-notifications-feature:true",
   "disabled": true,
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
@@ -23,16 +22,16 @@
             {
               "id": "1",
               "value": {
-                "type":"Other",
-                "details":"",
-                "evidence":[],
-                "applicant":"",
-                "date":"{$TODAY}",
-                "decision":"Granted",
-                "state":"prepareForHearing",
-                "applicantRole":"caseworker-ia-homeofficeapc",
-                "decisionReason":"No Reason given",
-                "decisionDate":"{$TODAY}",
+                "type": "Other",
+                "details": "",
+                "evidence": [],
+                "applicant": "",
+                "date": "{$TODAY}",
+                "decision": "Granted",
+                "state": "prepareForHearing",
+                "applicantRole": "caseworker-ia-homeofficeapc",
+                "decisionReason": "No Reason given",
+                "decisionDate": "{$TODAY}",
                 "decisionMaker": "Judge"
               }
             }

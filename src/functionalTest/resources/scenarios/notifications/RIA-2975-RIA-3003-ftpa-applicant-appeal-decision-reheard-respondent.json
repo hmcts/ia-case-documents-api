@@ -1,6 +1,5 @@
 {
   "description": "RIA-2975-RIA-3003-RIA-3754  FTPA Applicant Application Decision Granted Respondent (Taylor House hearing centre)",
-  "launchDarklyKey": "tcw-notifications-feature:true",
   "enabled": "{$featureFlag.homeOfficeGovNotifyEnabled}",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
@@ -28,6 +27,7 @@
     "caseData": {
       "template": "minimal-appeal-submitted.json",
       "replacements": {
+        "listCaseHearingCentre": "taylorHouse",
         "notificationsSent": [
           {
             "id": "1010_FTPA_APPLICATION_DECISION_HOME_OFFICE_RESPONDENT",

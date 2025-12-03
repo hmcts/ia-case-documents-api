@@ -17,16 +17,16 @@
             {
               "id": "1",
               "value": {
-                "type":"Expedite",
-                "details":"",
-                "evidence":[],
-                "applicant":"Admin Officer",
-                "date":"{$TODAY}",
-                "decision":"Granted",
-                "state":"appealSubmitted",
-                "applicantRole":"ctsc",
-                "decisionReason":"No Reason given",
-                "decisionDate":"{$TODAY}",
+                "type": "Expedite",
+                "details": "",
+                "evidence": [],
+                "applicant": "Admin Officer",
+                "date": "{$TODAY}",
+                "decision": "Granted",
+                "state": "appealSubmitted",
+                "applicantRole": "ctsc",
+                "decisionReason": "No Reason given",
+                "decisionDate": "{$TODAY}",
                 "decisionMaker": "Admin Officer"
               }
             }

@@ -13,9 +13,9 @@
           "isDlrmFeeRemissionEnabled": "Yes",
           "isRemissionsEnabled": "Yes",
           "journeyType": "aip",
-          "remissionType":"hoWaiverRemission",
+          "remissionType": "hoWaiverRemission",
           "remissionOption": "feeWaiverFromHo",
-          "appealType":"revocationOfProtection",
+          "appealType": "revocationOfProtection",
           "eaHuAppealTypePaymentOption": "payLater",
           "subscriptions": [
             {
@@ -42,9 +42,9 @@
       "replacements": {
         "hearingCentre": "taylorHouse",
         "isRemissionsEnabled": "Yes",
-        "remissionType":"hoWaiverRemission",
+        "remissionType": "hoWaiverRemission",
         "remissionOption": "feeWaiverFromHo",
-        "appealType":"revocationOfProtection",
+        "appealType": "revocationOfProtection",
         "eaHuAppealTypePaymentOption": "payLater",
         "notificationsSent": [
           {

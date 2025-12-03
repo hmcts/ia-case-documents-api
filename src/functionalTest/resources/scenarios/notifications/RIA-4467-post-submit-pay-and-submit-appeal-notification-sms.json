@@ -1,6 +1,5 @@
 {
   "description": "RIA-4467 Post-submit appeal submitted and paid notifications to LR, CO, HO and Appellant (sms)",
-  "launchDarklyKey": "tcw-notifications-feature:true",
   "request": {
     "uri": "/asylum/ccdSubmitted",
     "credentials": "LegalRepresentative",

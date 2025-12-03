@@ -1,6 +1,5 @@
 {
   "description": "RIA-5965 send NoC notification to legal representative",
-  "launchDarklyKey": "tcw-notifications-feature:true",
   "request": {
     "uri": "/bail/ccdSubmitted",
     "credentials": "LegalRepresentative",

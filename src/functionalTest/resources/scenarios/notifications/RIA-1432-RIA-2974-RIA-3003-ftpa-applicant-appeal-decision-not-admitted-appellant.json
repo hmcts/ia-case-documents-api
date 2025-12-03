@@ -27,6 +27,7 @@
     "caseData": {
       "template": "minimal-appeal-submitted.json",
       "replacements": {
+        "listCaseHearingCentre": "birmingham",
         "notificationsSent": [
           {
             "id": "1002_FTPA_APPLICATION_DECISION_HOME_OFFICE_APPELLANT",

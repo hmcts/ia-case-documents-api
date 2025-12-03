@@ -1,6 +1,5 @@
 {
   "description": "RIA-2999-RIA-3003-RIA-3754 Respondent FTPA Application is reheard after the appellant application already refused (Glasgow hearing centre)",
-  "launchDarklyKey": "tcw-notifications-feature:true",
   "enabled": "{$featureFlag.homeOfficeGovNotifyEnabled}",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
@@ -35,6 +34,7 @@
     "caseData": {
       "template": "minimal-appeal-submitted.json",
       "replacements": {
+        "listCaseHearingCentre": "glasgow",
         "notificationsSent": []
       }
     },

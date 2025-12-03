@@ -10,7 +10,7 @@
       "caseData": {
         "template": "aip-minimal-appeal-submitted.json",
         "replacements": {
-          "currentCaseStateVisibleToHomeOfficeAll":"appealSubmitted",
+          "currentCaseStateVisibleToHomeOfficeAll": "appealSubmitted",
           "hearingCentre": "manchester",
           "subscriptions": [
             {
@@ -35,5 +35,5 @@
       "header": "success",
       "body": "contains([_NOC_REQUEST_DECISION_APPELLANT_EMAIL,_NOC_REQUEST_DECISION_APPELLANT_SMS,_NOC_REQUEST_DECISION_HOME_OFFICE])"
     }
-   }
+  }
 }

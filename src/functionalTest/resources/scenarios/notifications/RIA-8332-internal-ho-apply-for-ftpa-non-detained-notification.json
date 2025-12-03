@@ -46,6 +46,7 @@
     "caseData": {
       "template": "minimal-appeal-submitted.json",
       "replacements": {
+        "listCaseHearingCentre": "taylorHouse",
         "isAdmin": "Yes",
         "appellantsRepresentation": "Yes",
         "appellantInDetention": "No",

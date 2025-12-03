@@ -1,6 +1,5 @@
 {
   "description": "RIA-9233 Update Tribunal Decision Rule 31 Internal Non Detained Letter Notification (in country - represented)",
-  "launchDarklyKey": "dlrm-setaside-feature-flag:true",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
     "credentials": "Judge",

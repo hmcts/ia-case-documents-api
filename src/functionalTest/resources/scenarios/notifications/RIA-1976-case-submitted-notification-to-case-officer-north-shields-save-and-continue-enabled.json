@@ -1,6 +1,5 @@
 {
   "description": "RIA-1976 Send case submitted notification to case officer (IAC North Shields) (save and continue enabled)",
-  "launchDarklyKey": "tcw-notifications-feature:true",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
     "credentials": "LegalRepresentative",

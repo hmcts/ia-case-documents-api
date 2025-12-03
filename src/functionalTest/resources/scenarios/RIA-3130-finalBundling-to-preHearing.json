@@ -1,7 +1,6 @@
 {
   "description": "RIA-3130 finalBundling to prehearing",
   "enabled": "{$featureFlag.isEmStitchingEnabled}",
-  "launchDarklyKey": "reheard-feature:true",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
     "credentials": "CaseOfficer",
@@ -184,6 +183,7 @@
     "caseData": {
       "template": "minimal-appeal-submitted.json",
       "replacements": {
+        "listCaseHearingCentre": "taylorHouse",
         "reheardHearingDocumentsCollection": [
           {
             "id": "1",

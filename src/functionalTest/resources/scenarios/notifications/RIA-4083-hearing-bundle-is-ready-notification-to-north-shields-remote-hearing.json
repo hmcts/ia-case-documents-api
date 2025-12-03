@@ -1,6 +1,5 @@
 {
   "description": "RIA-1976 RIA-3116 RIA-4083 Hearing bundle is ready notification to home office (North Shields) remote hearing",
-  "launchDarklyKey": "tcw-notifications-feature:true",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
     "credentials": "CaseOfficer",
@@ -15,12 +14,14 @@
           "hearingCentre": "northShields",
           "ariaListingReference": "LP/12345/2019",
           "legalRepReferenceNumber": "CASE001",
-          "caseBundles": [{
-            "id": "1",
-            "value": {
-              "stitchStatus": "DONE"
+          "caseBundles": [
+            {
+              "id": "1",
+              "value": {
+                "stitchStatus": "DONE"
+              }
             }
-          }]
+          ]
         }
       }
     }

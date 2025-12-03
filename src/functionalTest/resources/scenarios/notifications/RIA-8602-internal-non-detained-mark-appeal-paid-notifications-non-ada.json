@@ -1,6 +1,5 @@
 {
   "description": "RIA-8602 Send mark appeal paid notification Internal Non Detained Non-ADA to DET",
-  "launchDarklyKey": "tcw-notifications-feature:true",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
     "credentials": "AdminOfficer",
@@ -13,7 +12,7 @@
         "replacements": {
           "appealType": "refusalOfHumanRights",
           "paymentStatus": "Paid",
-          "currentCaseStateVisibleToHomeOfficeAll":"appealSubmitted",
+          "currentCaseStateVisibleToHomeOfficeAll": "appealSubmitted",
           "appellantInDetention": "No",
           "isAcceleratedDetainedAppeal": "No",
           "detentionFacility": "immigrationRemovalCentre",

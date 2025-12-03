@@ -1,6 +1,5 @@
 {
   "description": "RIA-8192 Record adjournment details (List Assist integrated: Notification excluding Admin)",
-  "launchDarklyKey": "tcw-notifications-feature:true",
   "enabled": "{$featureFlag.homeOfficeGovNotifyEnabled}",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",

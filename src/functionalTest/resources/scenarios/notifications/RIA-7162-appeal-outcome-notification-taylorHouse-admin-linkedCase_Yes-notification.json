@@ -13,7 +13,8 @@
           "ariaListingReference": "LP/12345/2019",
           "isDecisionAllowed": "allowed",
           "caseLinks": [
-            {"id" : "7162",
+            {
+              "id": "7162",
               "value": {
                 "CaseReference": "testCase",
                 "CaseType": "testType",
@@ -46,7 +47,6 @@
             "id": "7162_APPEAL_OUTCOME_LEGAL_REPRESENTATIVE",
             "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
           }
-
         ]
       }
     },
@@ -65,7 +65,6 @@
           "{$customerServices.emailAddress}"
         ]
       },
-
       {
         "reference": "7162_APPEAL_OUTCOME_ADMIN",
         "recipient": "{$adminEmailAddresses.taylorHouse}",
@@ -76,8 +75,6 @@
           "LP/12345/2019",
           "TAYLORHOUSE",
           "ALLOWED"
-
-
         ]
       },
       {
@@ -94,7 +91,6 @@
           "{$customerServices.emailAddress}"
         ]
       }
-
     ]
   }
 }

@@ -1,6 +1,5 @@
 {
   "description": "RIA-2118 Send appeal submitted notification to Home Office",
-  "launchDarklyKey": "tcw-notifications-feature:true",
   "enabled": "{$featureFlag.homeOfficeGovNotifyEnabled}",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",

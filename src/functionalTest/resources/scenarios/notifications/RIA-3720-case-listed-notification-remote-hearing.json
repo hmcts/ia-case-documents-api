@@ -94,7 +94,6 @@
           "No other adjustments are being made",
           "{$customerServices.telephoneNumber}",
           "{$customerServices.emailAddress}"
-
         ]
       },
       {

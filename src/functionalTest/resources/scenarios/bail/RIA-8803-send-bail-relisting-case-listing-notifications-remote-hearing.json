@@ -1,6 +1,5 @@
 {
   "description": "RIA-8803 Send bail relisting case listing notification to HO, LR and Applicant with remote hearing",
-  "launchDarklyKey": "tcw-notifications-feature:true",
   "request": {
     "uri": "/bail/ccdAboutToSubmit",
     "credentials": "AdminOfficer",

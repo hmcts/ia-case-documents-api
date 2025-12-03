@@ -1,6 +1,5 @@
 {
   "description": "RIA-2999-RIA-3003-RIA-3754  Respondent FTPA Application is allowed after the appellant application allowed (Manchester hearing centre)",
-  "launchDarklyKey": "dlrm-setaside-feature-flag:true",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
     "credentials": "Judge",
@@ -36,6 +35,7 @@
     "caseData": {
       "template": "minimal-appeal-submitted.json",
       "replacements": {
+        "listCaseHearingCentre": "manchester",
         "notificationsSent": []
       }
     },

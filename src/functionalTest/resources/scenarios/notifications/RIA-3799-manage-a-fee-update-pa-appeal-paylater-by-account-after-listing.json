@@ -1,6 +1,5 @@
 {
   "description": "RIA-3799 Manage a fee update PA appeal paylater by account after listing (CTSC)",
-  "launchDarklyKey": "tcw-notifications-feature:true",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
     "credentials": "CaseOfficer",
@@ -13,9 +12,9 @@
         "replacements": {
           "ariaListingReference": "CASE0001",
           "listCaseHearingCentre": "taylorHouse",
-          "appealType":"protection",
-          "paymentStatus":"Paid",
-          "paAppealTypePaymentOption":"payLater",
+          "appealType": "protection",
+          "paymentStatus": "Paid",
+          "paAppealTypePaymentOption": "payLater",
           "feeUpdateRecorded": {
             "values": [
               "feeUpdateRecorded"
@@ -32,6 +31,7 @@
     "caseData": {
       "template": "minimal-appeal-submitted.json",
       "replacements": {
+        "listCaseHearingCentre": "taylorHouse",
         "appealType": "protection",
         "paymentStatus": "Paid",
         "notificationsSent": [

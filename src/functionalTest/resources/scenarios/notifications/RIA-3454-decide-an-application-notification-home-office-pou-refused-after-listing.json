@@ -14,19 +14,19 @@
           "listCaseHearingCentre": "taylorHouse",
           "decideAnApplicationId": "1",
           "makeAnApplications": [
-              {
+            {
               "id": "1",
               "value": {
-                "type":"Other",
-                "details":"",
-                "evidence":[],
-                "applicant":"",
-                "date":"{$TODAY}",
-                "decision":"Refused",
-                "state":"prepareForHearing",
-                "applicantRole":"caseworker-ia-homeofficepou",
-                "decisionReason":"No Reason given",
-                "decisionDate":"{$TODAY}",
+                "type": "Other",
+                "details": "",
+                "evidence": [],
+                "applicant": "",
+                "date": "{$TODAY}",
+                "decision": "Refused",
+                "state": "prepareForHearing",
+                "applicantRole": "caseworker-ia-homeofficepou",
+                "decisionReason": "No Reason given",
+                "decisionDate": "{$TODAY}",
                 "decisionMaker": "Judge"
               }
             }

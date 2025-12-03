@@ -1,6 +1,5 @@
 {
   "description": "RIA-7947 Send mark appeal paid notification Internal Non-ADA to DET",
-  "launchDarklyKey": "tcw-notifications-feature:true",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
     "credentials": "AdminOfficer",
@@ -13,7 +12,7 @@
         "replacements": {
           "appealType": "refusalOfHumanRights",
           "paymentStatus": "Paid",
-          "currentCaseStateVisibleToHomeOfficeAll":"appealSubmitted",
+          "currentCaseStateVisibleToHomeOfficeAll": "appealSubmitted",
           "isAdmin": "Yes",
           "appellantsRepresentation": "Yes",
           "appellantInDetention": "Yes",

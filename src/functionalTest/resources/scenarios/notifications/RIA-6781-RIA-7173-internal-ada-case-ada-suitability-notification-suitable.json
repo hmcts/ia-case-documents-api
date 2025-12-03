@@ -61,6 +61,7 @@
     "caseData": {
       "template": "minimal-internal-appeal-submitted.json",
       "replacements": {
+        "listCaseHearingCentre": "harmondsworth",
         "detentionFacility": "immigrationRemovalCentre",
         "ircName": "Brookhouse",
         "ariaListingReference": "LR/1234/2345",
@@ -70,14 +71,14 @@
         "isAcceleratedDetainedAppeal": "Yes",
         "suitabilityReviewDecision": "suitable",
         "listCaseHearingDate": "2023-05-01T13:30:15.000",
-        "notificationsSent":[
+        "notificationsSent": [
           {
             "id": "6781_ADA_SUITABILITY_DETERMINED_INTERNAL_ADA_DET",
             "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
           },
           {
-            "id":"6781_ADA_SUITABILITY_DETERMINED_HOME_OFFICE",
-            "value":"$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+            "id": "6781_ADA_SUITABILITY_DETERMINED_HOME_OFFICE",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
           }
         ]
       }

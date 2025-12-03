@@ -14,6 +14,7 @@
           "appellantsRepresentation": "Yes",
           "appellantInDetention": "Yes",
           "detentionFacility": "other",
+          "otherDetentionFacilityName": "otherDetentionFacilityName",
           "appellantInUk": "Yes",
           "appellantAddress": {
             "County": "",
@@ -42,6 +43,7 @@
         "appellantsRepresentation": "Yes",
         "appellantInDetention": "Yes",
         "detentionFacility": "other",
+        "otherDetentionFacilityName": "otherDetentionFacilityName",
         "appellantInUk": "Yes",
         "appellantAddress": {
           "County": "",

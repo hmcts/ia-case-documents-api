@@ -1,6 +1,5 @@
 {
   "description": "RIA-3690 appeal with remission approved, for EA appeal notification",
-  "launchDarklyKey": "tcw-notifications-feature:true",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
     "credentials": "AdminOfficer",
@@ -11,7 +10,7 @@
       "caseData": {
         "template": "minimal-appeal-submitted.json",
         "replacements": {
-          "appealType":"refusalOfEu",
+          "appealType": "refusalOfEu",
           "remissionDecision": "approved",
           "remittedAmount": "140.00",
           "amountLeftToPay": "00.00"
@@ -26,7 +25,7 @@
       "template": "minimal-appeal-submitted.json",
       "replacements": {
         "hearingCentre": "taylorHouse",
-        "appealType":"refusalOfEu",
+        "appealType": "refusalOfEu",
         "remissionDecision": "approved",
         "remittedAmount": "140.00",
         "amountLeftToPay": "00.00",

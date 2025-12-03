@@ -1,6 +1,5 @@
 {
   "description": "RIA-5782 NOC - Stop Representing a client notification",
-  "launchDarklyKey": "tcw-notifications-feature:true",
   "request": {
     "uri": "/bail/ccdAboutToSubmit",
     "credentials": "LegalRepresentative",

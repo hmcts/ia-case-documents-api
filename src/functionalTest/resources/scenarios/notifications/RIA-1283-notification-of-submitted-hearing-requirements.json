@@ -1,6 +1,5 @@
 {
   "description": "RIA-1283 Notification to case officer and legal rep of submitted hearing requirements",
-  "launchDarklyKey": "tcw-notifications-feature:true",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
     "credentials": "LegalRepresentative",

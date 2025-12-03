@@ -26,14 +26,15 @@
     "caseData": {
       "template": "minimal-internal-appeal-submitted.json",
       "replacements": {
+        "listCaseHearingCentre": "harmondsworth",
         "ariaListingReference": "LR/1234/2345",
         "appellantGivenNames": "Test",
         "appellantFamilyName": "User",
         "listCaseHearingDate": "2023-05-01T13:30:15.000",
-        "notificationsSent":[
+        "notificationsSent": [
           {
-            "id":"69392_REMOVE_DETENTION_STATUS_HOME_OFFICE",
-            "value":"$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+            "id": "69392_REMOVE_DETENTION_STATUS_HOME_OFFICE",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
           }
         ]
       }

@@ -1,6 +1,5 @@
 {
   "description": "RIA-3651 FTPA Applicant Application Decision Reheard Rule 32 Appellant (Taylor House hearing centre)",
-  "launchDarklyKey": "tcw-notifications-feature:true",
   "enabled": "{$featureFlag.homeOfficeGovNotifyEnabled}",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
@@ -30,6 +29,7 @@
     "caseData": {
       "template": "minimal-appeal-submitted.json",
       "replacements": {
+        "listCaseHearingCentre": "taylorHouse",
         "notificationsSent": [
           {
             "id": "36511_FTPA_APPLICATION_DECISION_HOME_OFFICE_APPELLANT",

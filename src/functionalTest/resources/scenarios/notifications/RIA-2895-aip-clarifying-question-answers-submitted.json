@@ -1,6 +1,5 @@
 {
   "description": "RIA-2895 Send clarifying question answers submitted to appellant and caseworker",
-  "launchDarklyKey": "tcw-notifications-feature:true",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
     "credentials": "Citizen",

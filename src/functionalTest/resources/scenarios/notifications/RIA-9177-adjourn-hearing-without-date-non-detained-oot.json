@@ -1,6 +1,5 @@
 {
   "description": "RIA-9177 Adjourn hearing without date for internal journey non-detained, oot",
-  "launchDarklyKey": "tcw-notifications-feature:true",
   "enabled": "{$featureFlag.homeOfficeGovNotifyEnabled}",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",

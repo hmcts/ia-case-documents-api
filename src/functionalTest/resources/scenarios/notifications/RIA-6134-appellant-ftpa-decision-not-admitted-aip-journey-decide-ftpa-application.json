@@ -1,6 +1,5 @@
 {
   "description": "RIA-61342 Appellant FTPA application decision not admitted (AIP journey) - Resident judge",
-  "launchDarklyKey": "dlrm-setaside-feature-flag:true",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
     "credentials": "Judge",

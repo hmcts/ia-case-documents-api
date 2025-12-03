@@ -25,6 +25,7 @@
       "listCaseHearingCentre": "taylorHouse",
       "ariaListingReference": "LP/12345/2019",
       "replacements": {
+        "listCaseHearingCentre": "taylorHouse",
         "notificationsSent": [
           {
             "id": "1234_LEGAL_REPRESENTATIVE_UNLINK_APPEAL",

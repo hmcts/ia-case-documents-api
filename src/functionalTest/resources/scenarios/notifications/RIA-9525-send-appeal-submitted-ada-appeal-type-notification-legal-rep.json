@@ -1,6 +1,5 @@
 {
   "description": "RIA-9525 Send appeal submitted ADA DC appeal type notification for admin and represented cases",
-  "launchDarklyKey": "tcw-notifications-feature:true",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
     "credentials": "LegalRepresentative",

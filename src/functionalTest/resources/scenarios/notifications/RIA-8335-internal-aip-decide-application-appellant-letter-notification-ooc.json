@@ -17,16 +17,16 @@
             {
               "id": "1",
               "value": {
-                "type":"Other",
-                "details":"",
-                "evidence":[],
-                "applicant":"",
-                "date":"",
-                "decision":"Granted",
-                "state":"appealSubmitted",
-                "applicantRole":"ctsc",
-                "decisionReason":"No Reason given",
-                "decisionDate":"{$TODAY}",
+                "type": "Other",
+                "details": "",
+                "evidence": [],
+                "applicant": "",
+                "date": "",
+                "decision": "Granted",
+                "state": "appealSubmitted",
+                "applicantRole": "ctsc",
+                "decisionReason": "No Reason given",
+                "decisionDate": "{$TODAY}",
                 "decisionMaker": "Judge"
               }
             }
@@ -55,16 +55,16 @@
           {
             "id": "1",
             "value": {
-              "type":"Other",
-              "details":"",
-              "evidence":[],
-              "applicant":"",
-              "date":"",
-              "decision":"Granted",
-              "state":"appealSubmitted",
-              "applicantRole":"ctsc",
-              "decisionReason":"No Reason given",
-              "decisionDate":"{$TODAY}",
+              "type": "Other",
+              "details": "",
+              "evidence": [],
+              "applicant": "",
+              "date": "",
+              "decision": "Granted",
+              "state": "appealSubmitted",
+              "applicantRole": "ctsc",
+              "decisionReason": "No Reason given",
+              "decisionDate": "{$TODAY}",
               "decisionMaker": "Judge"
             }
           }

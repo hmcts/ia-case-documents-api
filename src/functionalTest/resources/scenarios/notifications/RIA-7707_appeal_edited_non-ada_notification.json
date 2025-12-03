@@ -45,14 +45,15 @@
     "caseData": {
       "template": "minimal-internal-appeal-submitted.json",
       "replacements": {
+        "listCaseHearingCentre": "taylorHouse",
         "detentionFacility": "immigrationRemovalCentre",
         "ircName": "Brookhouse",
         "appellantInDetention": "Yes",
         "isAcceleratedDetainedAppeal": "No",
-        "notificationsSent":[
+        "notificationsSent": [
           {
-            "id":"7707_EDIT_APPEAL_AFTER_SUBMIT_RESPONDENT",
-            "value":"$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+            "id": "7707_EDIT_APPEAL_AFTER_SUBMIT_RESPONDENT",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
           }
         ],
         "notificationAttachmentDocuments": [

@@ -14,7 +14,7 @@
           "appellantsRepresentation": "No",
           "legalRepEmail": "{$TEST_LAW_FIRM_A_USERNAME}",
           "journeyType": "rep",
-          "currentCaseStateVisibleToHomeOfficeAll":"appealSubmitted",
+          "currentCaseStateVisibleToHomeOfficeAll": "appealSubmitted",
           "contactPreference": "wantsSms",
           "mobileNumber": "{$TEST_CITIZEN_MOBILE}",
           "hearingCentre": "manchester"
@@ -29,5 +29,5 @@
       "header": "success",
       "body": "contains([_NOC_REQUEST_DECISION_APPELLANT_SMS,_NOC_REQUEST_DECISION_HOME_OFFICE,_NOC_REQUEST_DECISION_LEGAL_REP])"
     }
-   }
+  }
 }

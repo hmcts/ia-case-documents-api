@@ -1,6 +1,5 @@
 {
   "description": "RIA-8112 send upload bail summary direction notification to HomeOffice",
-  "launchDarklyKey": "tcw-notifications-feature:true",
   "request": {
     "uri": "/bail/ccdAboutToSubmit",
     "credentials": "SystemUser",
@@ -11,7 +10,8 @@
       "caseData": {
         "template": "minimal-bail-application-submitted-direction-sent.json",
         "replacements": {
-          "directions": [{
+          "directions": [
+            {
               "id": "1",
               "value": {
                 "sendDirectionDescription": "Upload bail summary",
@@ -21,7 +21,8 @@
                 "dateTimeDirectionCreated": "{$TODAY}",
                 "previousDates": []
               }
-            }]
+            }
+          ]
         }
       }
     }

@@ -14,6 +14,7 @@
           "appellantsRepresentation": "Yes",
           "appellantInDetention": "Yes",
           "detentionFacility": "other",
+          "otherDetentionFacilityName": "otherDetentionFacilityName",
           "appellantAddress": {
             "County": "",
             "Country": "United Kingdom",
@@ -53,7 +54,6 @@
         "listCaseRequirementsSingleSexCourt": "something around SingleSexCourt",
         "listCaseRequirementsInCameraCourt": "something around InCameraCourt",
         "listCaseRequirementsOther": "something around Other",
-
         "notificationsSent": [
           {
             "id": "13541_ADJOURN_HEARING_WITHOUT_DATE_ADMIN_OFFICER",

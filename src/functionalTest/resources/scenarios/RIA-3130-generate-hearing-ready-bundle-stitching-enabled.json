@@ -1,7 +1,6 @@
 {
   "description": "RIA-3130-generate-hearing-generic-bundle",
   "enabled": "{$featureFlag.isEmStitchingEnabled}",
-  "launchDarklyKey": "reheard-feature:true",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
     "credentials": "CaseOfficer",
@@ -112,6 +111,7 @@
     "caseData": {
       "template": "minimal-appeal-submitted.json",
       "replacements": {
+        "listCaseHearingCentre": "taylorHouse",
         "appellantAddendumEvidenceDocs": [
           {
             "id": "2",
@@ -195,7 +195,6 @@
             }
           }
         ]
-
       }
     }
   }

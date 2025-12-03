@@ -1,6 +1,5 @@
 {
   "description": "DIAC-1389 Update Tribunal Decision Rule 31 Internal AiP Manual Detained in IRC Prison updateTribunalDecisionAndReasonsFinalCheck = Yes, No Email Notification",
-  "launchDarklyKey": "dlrm-setaside-feature-flag:true",
   "disabled": true,
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",

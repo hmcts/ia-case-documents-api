@@ -1,6 +1,5 @@
 {
   "description": "RIA-1793 Home Office Generic user uploaded response",
-  "launchDarklyKey": "tcw-notifications-feature:true",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
     "credentials": "HomeOfficeGeneric",

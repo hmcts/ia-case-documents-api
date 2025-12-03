@@ -1,6 +1,5 @@
 {
   "description": "RIA-8101 FTPA Applicant Application Decision Allowed Respondent - Home Office notifications disabled",
-  "launchDarklyKey": "dlrm-setaside-feature-flag:true",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
     "credentials": "Judge",
@@ -28,6 +27,7 @@
     "caseData": {
       "template": "minimal-appeal-submitted.json",
       "replacements": {
+        "listCaseHearingCentre": "manchester",
         "notificationsSent": [
           {
             "id": "1012_FTPA_APPLICATION_DECISION_HOME_OFFICE_RESPONDENT",

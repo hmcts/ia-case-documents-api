@@ -1,6 +1,5 @@
 {
   "description": "RIA-1792 Notify case officer of respondent evidence submitted",
-  "launchDarklyKey": "tcw-notifications-feature:true",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
     "credentials": "HomeOfficeApc",

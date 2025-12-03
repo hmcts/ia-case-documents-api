@@ -18,7 +18,7 @@
           "appellantInDetention": "Yes",
           "isAcceleratedDetainedAppeal": "Yes",
           "listCaseHearingCentre": "bradford",
-          "ariaListingReference" : "LP/12345/2019",
+          "ariaListingReference": "LP/12345/2019",
           "listCaseHearingDate": "2023-05-03T14:25:15.000",
           "notificationAttachmentDocuments": [
             {
@@ -60,7 +60,7 @@
         "appellantInDetention": "Yes",
         "isAcceleratedDetainedAppeal": "Yes",
         "listCaseHearingCentre": "bradford",
-        "ariaListingReference" : "LP/12345/2019",
+        "ariaListingReference": "LP/12345/2019",
         "listCaseHearingDate": "2023-05-03T14:25:15.000",
         "notificationsSent": [
           {

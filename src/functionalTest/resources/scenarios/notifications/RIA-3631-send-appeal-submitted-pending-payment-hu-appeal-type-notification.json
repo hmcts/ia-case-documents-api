@@ -1,6 +1,5 @@
 {
   "description": "RIA-3488 send appeal submitted and payment pending notification - Home Office notifications disabled",
-  "launchDarklyKey": "tcw-notifications-feature:true",
   "disabled": "{$featureFlag.homeOfficeGovNotifyEnabled}",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
@@ -12,8 +11,8 @@
       "caseData": {
         "template": "minimal-appeal-submitted.json",
         "replacements": {
-          "eaHuAppealTypePaymentOption":"payOffline",
-          "appealType":"refusalOfHumanRights"
+          "eaHuAppealTypePaymentOption": "payOffline",
+          "appealType": "refusalOfHumanRights"
         }
       }
     }
@@ -25,8 +24,8 @@
       "template": "minimal-appeal-submitted.json",
       "replacements": {
         "hearingCentre": "taylorHouse",
-        "eaHuAppealTypePaymentOption":"payOffline",
-        "appealType":"refusalOfHumanRights",
+        "eaHuAppealTypePaymentOption": "payOffline",
+        "appealType": "refusalOfHumanRights",
         "notificationsSent": [
           {
             "id": "3488_APPEAL_SUBMITTED_PENDING_PAYMENT_LEGAL_REP",

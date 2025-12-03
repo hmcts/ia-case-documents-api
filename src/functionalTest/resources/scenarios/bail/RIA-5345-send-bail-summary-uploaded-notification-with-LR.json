@@ -1,6 +1,5 @@
 {
   "description": "RIA-5345 send bail summary uploaded notification to newport hearing centre and legal representative",
-  "launchDarklyKey": "tcw-notifications-feature:true",
   "request": {
     "uri": "/bail/ccdAboutToSubmit",
     "credentials": "HomeOfficeGENERIC",

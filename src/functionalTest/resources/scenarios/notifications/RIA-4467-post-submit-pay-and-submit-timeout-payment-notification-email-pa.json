@@ -1,6 +1,5 @@
 {
   "description": "RIA-4467 Post-submit appeal submitted and payment timeout notifications to LR, HO and Appellant (email) - PA appeal ",
-  "launchDarklyKey": "tcw-notifications-feature:true",
   "request": {
     "uri": "/asylum/ccdSubmitted",
     "credentials": "LegalRepresentative",

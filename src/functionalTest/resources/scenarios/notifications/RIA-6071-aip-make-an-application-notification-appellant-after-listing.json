@@ -19,32 +19,32 @@
             {
               "id": "2",
               "value": {
-                "type":"Expedite",
-                "details":"",
-                "evidence":[],
-                "applicant":"",
-                "date":"{$TODAY}",
-                "decision":"Pending",
-                "state":"decision",
-                "applicantRole":"",
-                "decisionReason":"",
-                "decisionDate":"",
+                "type": "Expedite",
+                "details": "",
+                "evidence": [],
+                "applicant": "",
+                "date": "{$TODAY}",
+                "decision": "Pending",
+                "state": "decision",
+                "applicantRole": "",
+                "decisionReason": "",
+                "decisionDate": "",
                 "decisionMaker": ""
               }
             },
             {
               "id": "1",
               "value": {
-                "type":"Withdraw",
-                "details":"",
-                "evidence":[],
-                "applicant":"",
-                "date":"{$TODAY}",
-                "decision":"Pending",
-                "state":"decision",
-                "applicantRole":"",
-                "decisionReason":"",
-                "decisionDate":"",
+                "type": "Withdraw",
+                "details": "",
+                "evidence": [],
+                "applicant": "",
+                "date": "{$TODAY}",
+                "decision": "Pending",
+                "state": "decision",
+                "applicantRole": "",
+                "decisionReason": "",
+                "decisionDate": "",
                 "decisionMaker": ""
               }
             }

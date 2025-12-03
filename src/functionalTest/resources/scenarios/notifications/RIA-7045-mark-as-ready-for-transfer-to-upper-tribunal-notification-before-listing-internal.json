@@ -25,7 +25,6 @@
       "template": "minimal-appeal-submitted.json",
       "replacements": {
         "notificationsSent": [
-          
           {
             "id": "7045_MARK_AS_READY_FOR_UT_TRANSFER_UPPER_TRIBUNAL",
             "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"

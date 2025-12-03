@@ -12,6 +12,7 @@
           "hearingDocuments": [],
           "appellantInDetention": "Yes",
           "detentionFacility": "other",
+          "otherDetentionFacilityName": "otherDetentionFacilityName",
           "appellantHasFixedAddress": "Yes",
           "appellantInUk": "Yes",
           "appellantAddress": {
@@ -60,6 +61,7 @@
         ],
         "appellantInDetention": "Yes",
         "detentionFacility": "other",
+        "otherDetentionFacilityName": "otherDetentionFacilityName",
         "appellantHasFixedAddress": "Yes",
         "appellantInUk": "Yes",
         "appellantAddress": {

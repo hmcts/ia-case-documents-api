@@ -1,6 +1,5 @@
 {
   "description": "DIAC-1341 Hearing Cancelled - Cancellation of Production Notice - Detained ",
-  "launchDarklyKey": "tcw-notifications-feature:true",
   "disabled": true,
   "request": {
     "uri": "/asylum/ccdSubmitted",

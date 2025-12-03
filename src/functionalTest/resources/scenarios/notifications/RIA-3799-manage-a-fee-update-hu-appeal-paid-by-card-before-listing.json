@@ -1,6 +1,5 @@
 {
   "description": "RIA-3799 Manage a fee update HU appeal paid by card before listing (NBC)",
-  "launchDarklyKey": "tcw-notifications-feature:true",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
     "credentials": "CaseOfficer",
@@ -11,9 +10,9 @@
       "caseData": {
         "template": "minimal-appeal-submitted.json",
         "replacements": {
-          "appealType":"refusalOfEu",
-          "paymentStatus":"Paid",
-          "eaHuAppealTypePaymentOption":"payOffline",
+          "appealType": "refusalOfEu",
+          "paymentStatus": "Paid",
+          "eaHuAppealTypePaymentOption": "payOffline",
           "feeUpdateRecorded": {
             "values": [
               "feeUpdateRecorded"

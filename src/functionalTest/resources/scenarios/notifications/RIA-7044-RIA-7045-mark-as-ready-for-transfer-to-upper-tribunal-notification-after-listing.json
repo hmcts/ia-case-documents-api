@@ -26,6 +26,7 @@
     "caseData": {
       "template": "minimal-appeal-submitted.json",
       "replacements": {
+        "listCaseHearingCentre": "harmondsworth",
         "notificationsSent": [
           {
             "id": "7044_MARK_AS_READY_FOR_UT_TRANSFER_UPPER_TRIBUNAL",

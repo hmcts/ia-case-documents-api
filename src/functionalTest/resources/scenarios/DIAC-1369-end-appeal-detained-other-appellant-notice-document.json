@@ -12,6 +12,7 @@
           "hearingCentre": "taylorHouse",
           "appellantInDetention": "Yes",
           "detentionFacility": "other",
+          "otherDetentionFacilityName": "otherDetentionFacilityName",
           "appellantHasFixedAddress": "Yes",
           "appellantInUk": "Yes",
           "appellantAddress": {
@@ -42,6 +43,7 @@
       "replacements": {
         "appellantInDetention": "Yes",
         "detentionFacility": "other",
+        "otherDetentionFacilityName": "otherDetentionFacilityName",
         "appellantHasFixedAddress": "Yes",
         "appellantInUk": "Yes",
         "appellantAddress": {

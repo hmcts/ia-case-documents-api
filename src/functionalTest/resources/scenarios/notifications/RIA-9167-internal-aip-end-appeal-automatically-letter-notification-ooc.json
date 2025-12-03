@@ -39,13 +39,13 @@
         "appellantInDetention": "No",
         "appealType": "refusalOfHumanRights"
       },
-        "notificationsSent": [
-          {
-            "id": "9167_INTERNAL_END_APPEAL_AUTOMATICALLY_APPELLANT_LETTER",
-            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
-          }
-        ]
-      }
+      "notificationsSent": [
+        {
+          "id": "9167_INTERNAL_END_APPEAL_AUTOMATICALLY_APPELLANT_LETTER",
+          "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+        }
+      ]
     }
   }
+}
 }

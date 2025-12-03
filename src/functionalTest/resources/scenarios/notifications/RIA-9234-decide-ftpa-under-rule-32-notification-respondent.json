@@ -1,6 +1,5 @@
 {
   "description": "RIA-9234 decide FTPA application Judge decision under 32 rule (Applicant type respondent) for admin and represented cases",
-  "launchDarklyKey": "dlrm-setaside-feature-flag:true",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
     "credentials": "Judge",

@@ -1,6 +1,5 @@
 {
   "description": "RIA-5583 send bail application edited submitted notification without LR",
-  "launchDarklyKey": "tcw-notifications-feature:true",
   "request": {
     "uri": "/bail/ccdAboutToSubmit",
     "credentials": "LegalRepresentative",

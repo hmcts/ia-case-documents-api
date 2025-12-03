@@ -11,11 +11,11 @@
       "caseData": {
         "template": "minimal-internal-appeal-submitted.json",
         "replacements": {
-          "currentCaseStateVisibleToHomeOfficeAll":"awaitingRespondentEvidence",
+          "currentCaseStateVisibleToHomeOfficeAll": "awaitingRespondentEvidence",
           "currentCaseStateVisibleToLegalRepresentative": "awaitingRespondentEvidence",
           "appellantInDetention": "Yes",
           "isAcceleratedDetainedAppeal": "No",
-          "appellantsRepresentation" : "Yes",
+          "appellantsRepresentation": "Yes",
           "detentionFacility": "immigrationRemovalCentre",
           "ircName": "Brookhouse",
           "directions": [

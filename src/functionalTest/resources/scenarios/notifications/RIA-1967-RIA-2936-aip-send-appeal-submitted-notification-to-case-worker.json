@@ -1,6 +1,5 @@
 {
   "description": "RIA-1967-RIA-2936 AIP Send appeal submitted notifications to case worker",
-  "launchDarklyKey": "tcw-notifications-feature:true",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
     "credentials": "Citizen",

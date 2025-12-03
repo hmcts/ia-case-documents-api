@@ -1,6 +1,5 @@
 {
   "description": "RIA-2045-RIA-2936 Notification of legal rep uploaded additional evidence (after listing)",
-  "launchDarklyKey": "tcw-notifications-feature:true",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
     "credentials": "LegalRepresentative",

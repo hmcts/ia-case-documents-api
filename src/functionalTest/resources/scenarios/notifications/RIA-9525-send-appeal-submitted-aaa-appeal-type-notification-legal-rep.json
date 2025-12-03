@@ -1,6 +1,5 @@
 {
   "description": "RIA-952536 Send appeal submitted AAA appeal type notification for admin and represented cases",
-  "launchDarklyKey": "tcw-notifications-feature:true",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
     "credentials": "LegalRepresentative",
@@ -15,7 +14,7 @@
           "appellantsRepresentation": "No",
           "legalRepEmail": "{$TEST_LAW_FIRM_A_USERNAME}",
           "legalRepReferenceNumber": "CASE001",
-          "appealType":"ageAssessment"
+          "appealType": "ageAssessment"
         }
       }
     }
@@ -30,7 +29,7 @@
         "appellantsRepresentation": "No",
         "legalRepEmail": "{$TEST_LAW_FIRM_A_USERNAME}",
         "legalRepReferenceNumber": "CASE001",
-        "appealType":"ageAssessment",
+        "appealType": "ageAssessment",
         "notificationsSent": [
           {
             "id": "952536_APPEAL_SUBMITTED_LEGAL_REP",

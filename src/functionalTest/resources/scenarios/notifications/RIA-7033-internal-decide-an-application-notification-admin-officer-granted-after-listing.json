@@ -34,19 +34,19 @@
             }
           ],
           "makeAnApplications": [
-              {
+            {
               "id": "1",
               "value": {
-                "type":"Other",
-                "details":"",
-                "evidence":[],
-                "applicant":"",
-                "date":"{$TODAY}",
-                "decision":"Granted",
-                "state":"prepareForHearing",
-                "applicantRole":"ctsc",
-                "decisionReason":"No Reason given",
-                "decisionDate":"{$TODAY}",
+                "type": "Other",
+                "details": "",
+                "evidence": [],
+                "applicant": "",
+                "date": "{$TODAY}",
+                "decision": "Granted",
+                "state": "prepareForHearing",
+                "applicantRole": "ctsc",
+                "decisionReason": "No Reason given",
+                "decisionDate": "{$TODAY}",
                 "decisionMaker": "Judge"
               }
             }
@@ -84,8 +84,8 @@
         ],
         "notificationsSent": [
           {
-            "id":"70331_DECIDE_AN_APPLICATION_DET",
-            "value":"$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+            "id": "70331_DECIDE_AN_APPLICATION_DET",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
           },
           {
             "id": "70331_DECIDE_AN_APPLICATION_HOME_OFFICE",

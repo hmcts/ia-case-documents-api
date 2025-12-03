@@ -11,7 +11,7 @@
       "caseData": {
         "template": "minimal-appeal-submitted.json",
         "replacements": {
-          "currentCaseStateVisibleToHomeOfficeAll":"prepareForHearing",
+          "currentCaseStateVisibleToHomeOfficeAll": "prepareForHearing",
           "currentCaseStateVisibleToLegalRepresentative": "prepareForHearing",
           "listCaseHearingCentre": "taylorHouse",
           "ariaListingReference": "PA/12345/2019",
@@ -19,16 +19,16 @@
             {
               "id": "1",
               "value": {
-                "type":"withdraw",
-                "details":"",
-                "evidence":[],
-                "applicant":"",
-                "date":"{$TODAY}",
-                "decision":"Pending",
-                "state":"decision",
-                "applicantRole":"",
-                "decisionReason":"",
-                "decisionDate":"",
+                "type": "withdraw",
+                "details": "",
+                "evidence": [],
+                "applicant": "",
+                "date": "{$TODAY}",
+                "decision": "Pending",
+                "state": "decision",
+                "applicantRole": "",
+                "decisionReason": "",
+                "decisionDate": "",
                 "decisionMaker": ""
               }
             }
@@ -43,7 +43,7 @@
     "caseData": {
       "template": "minimal-appeal-submitted.json",
       "replacements": {
-        "currentCaseStateVisibleToHomeOfficeAll":"prepareForHearing",
+        "currentCaseStateVisibleToHomeOfficeAll": "prepareForHearing",
         "currentCaseStateVisibleToLegalRepresentative": "prepareForHearing",
         "listCaseHearingCentre": "taylorHouse",
         "ariaListingReference": "PA/12345/2019",
@@ -51,16 +51,16 @@
           {
             "id": "1",
             "value": {
-              "type":"withdraw",
-              "details":"",
-              "evidence":[],
-              "applicant":"",
-              "date":"{$TODAY}",
-              "decision":"Pending",
-              "state":"decision",
-              "applicantRole":"",
-              "decisionReason":"",
-              "decisionDate":"",
+              "type": "withdraw",
+              "details": "",
+              "evidence": [],
+              "applicant": "",
+              "date": "{$TODAY}",
+              "decision": "Pending",
+              "state": "decision",
+              "applicantRole": "",
+              "decisionReason": "",
+              "decisionDate": "",
               "decisionMaker": ""
             }
           }

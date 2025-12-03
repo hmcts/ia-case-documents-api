@@ -10,7 +10,7 @@
       "caseData": {
         "template": "minimal-ejp-appeal-submitted.json",
         "replacements": {
-          "currentCaseStateVisibleToHomeOfficeAll":"awaitingRespondentEvidence",
+          "currentCaseStateVisibleToHomeOfficeAll": "awaitingRespondentEvidence",
           "currentCaseStateVisibleToLegalRepresentative": "awaitingRespondentEvidence",
           "appellantInDetention": "Yes",
           "isAcceleratedDetainedAppeal": "No",

@@ -15,8 +15,9 @@
           "appellantInUk": "Yes",
           "appellantInDetention": "Yes",
           "detentionFacility": "other",
+          "otherDetentionFacilityName": "otherDetentionFacilityName",
           "submissionOutOfTime": "Yes",
-          "appealType":"revocationOfProtection",
+          "appealType": "revocationOfProtection",
           "legalRepHasAddress": "Yes",
           "legalRepAddressUK": {
             "County": "",
@@ -41,8 +42,9 @@
         "appellantInUk": "Yes",
         "appellantInDetention": "Yes",
         "detentionFacility": "other",
+        "otherDetentionFacilityName": "otherDetentionFacilityName",
         "submissionOutOfTime": "Yes",
-        "appealType":"revocationOfProtection",
+        "appealType": "revocationOfProtection",
         "legalRepHasAddress": "Yes",
         "legalRepAddressUK": {
           "County": "",

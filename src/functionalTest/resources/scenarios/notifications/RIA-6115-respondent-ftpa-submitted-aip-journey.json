@@ -36,6 +36,7 @@
     "caseData": {
       "template": "minimal-appeal-submitted.json",
       "replacements": {
+        "listCaseHearingCentre": "taylorHouse",
         "notificationsSent": [
           {
             "id": "6115_FTPA_SUBMITTED_RESPONDENT",

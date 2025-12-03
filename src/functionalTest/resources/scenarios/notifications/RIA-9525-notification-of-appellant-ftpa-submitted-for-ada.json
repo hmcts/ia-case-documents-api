@@ -27,6 +27,7 @@
     "caseData": {
       "template": "minimal-appeal-submitted.json",
       "replacements": {
+        "listCaseHearingCentre": "harmondsworth",
         "isAdmin": "Yes",
         "appellantsRepresentation": "No",
         "legalRepEmail": "{$TEST_LAW_FIRM_A_USERNAME}",

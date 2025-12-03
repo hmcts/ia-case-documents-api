@@ -1,6 +1,5 @@
 {
   "description": "RIA-8218 Update Tribunal Decision Rule 31 AIP Notification (decision)",
-  "launchDarklyKey": "dlrm-setaside-feature-flag:true",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
     "credentials": "Judge",

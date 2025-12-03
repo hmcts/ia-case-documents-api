@@ -1,6 +1,5 @@
 {
   "description": "RIA-8349 RIA-8352 Send bail initial case listing notification to HO, LR and Applicant",
-  "launchDarklyKey": "tcw-notifications-feature:true",
   "request": {
     "uri": "/bail/ccdAboutToSubmit",
     "credentials": "AdminOfficer",

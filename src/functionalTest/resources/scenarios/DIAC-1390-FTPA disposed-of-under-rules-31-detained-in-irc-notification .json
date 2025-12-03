@@ -32,19 +32,18 @@
     "caseData": {
       "template": "minimal-appeal-submitted.json",
       "replacements": {
-          "isAdmin": "Yes",
-          "appellantsRepresentation": "Yes",
-          "appellantInDetention": "Yes",
-          "isAcceleratedDetainedAppeal": "No",
-          "detentionFacility": "immigrationRemovalCentre",
-          "submissionOutOfTime": "No",
-          "appealSubmissionDate": "{$TODAY}",
-          "appealType": "refusalOfHumanRights",
-          "appealReferenceNumber": "$/(.+)/",
-          "ftpaApplicantType": "appellant",
-          "ftpaAppellantDecisionRemadeRule32Text": "Some decision text",
-          "ftpaAppellantRjDecisionOutcomeType": "remadeRule31",
-
+        "isAdmin": "Yes",
+        "appellantsRepresentation": "Yes",
+        "appellantInDetention": "Yes",
+        "isAcceleratedDetainedAppeal": "No",
+        "detentionFacility": "immigrationRemovalCentre",
+        "submissionOutOfTime": "No",
+        "appealSubmissionDate": "{$TODAY}",
+        "appealType": "refusalOfHumanRights",
+        "appealReferenceNumber": "$/(.+)/",
+        "ftpaApplicantType": "appellant",
+        "ftpaAppellantDecisionRemadeRule32Text": "Some decision text",
+        "ftpaAppellantRjDecisionOutcomeType": "remadeRule31",
         "notificationAttachmentDocuments": [
           {
             "id": "1",

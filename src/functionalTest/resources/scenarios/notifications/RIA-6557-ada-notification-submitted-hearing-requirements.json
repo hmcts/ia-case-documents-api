@@ -1,6 +1,5 @@
 {
   "description": "RIA-6557 ADA Notification for submit hearing requirements (to LR)",
-  "launchDarklyKey": "tcw-notifications-feature:true",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
     "credentials": "LegalRepresentative",

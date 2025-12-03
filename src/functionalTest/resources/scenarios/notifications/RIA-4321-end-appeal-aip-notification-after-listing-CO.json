@@ -40,6 +40,7 @@
     "caseData": {
       "template": "aip-minimal-appeal-submitted.json",
       "replacements": {
+        "listCaseHearingCentre": "taylorHouse",
         "subscriptions": [
           {
             "id": "1",

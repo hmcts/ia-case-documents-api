@@ -17,12 +17,14 @@
           "listCaseHearingCentre": "taylorHouse",
           "ariaListingReference": "LP/12345/2019",
           "legalRepReferenceNumber": "CASE001",
-          "caseBundles": [{
-            "id": "1",
-            "value": {
-              "stitchStatus": "DONE"
+          "caseBundles": [
+            {
+              "id": "1",
+              "value": {
+                "stitchStatus": "DONE"
+              }
             }
-          }]
+          ]
         }
       }
     }

@@ -28,6 +28,7 @@
     "caseData": {
       "template": "minimal-appeal-submitted.json",
       "replacements": {
+        "listCaseHearingCentre": "manchester",
         "notificationsSent": [
           {
             "id": "1012_FTPA_APPLICATION_DECISION_HOME_OFFICE_RESPONDENT",

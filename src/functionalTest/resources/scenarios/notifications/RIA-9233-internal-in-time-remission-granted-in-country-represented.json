@@ -10,7 +10,7 @@
       "caseData": {
         "template": "minimal-appeal-submitted.json",
         "replacements": {
-          "appealType":"refusalOfHumanRights",
+          "appealType": "refusalOfHumanRights",
           "isRemissionsEnabled": "Yes",
           "remissionType": "hoWaiverRemission",
           "remissionDecision": "approved",
@@ -45,7 +45,7 @@
     "caseData": {
       "template": "minimal-appeal-submitted.json",
       "replacements": {
-        "appealType":"refusalOfHumanRights",
+        "appealType": "refusalOfHumanRights",
         "isRemissionsEnabled": "Yes",
         "remissionType": "hoWaiverRemission",
         "remissionDecision": "approved",

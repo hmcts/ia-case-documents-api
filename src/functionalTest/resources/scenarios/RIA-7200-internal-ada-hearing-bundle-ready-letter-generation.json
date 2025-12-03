@@ -14,12 +14,14 @@
           "isAcceleratedDetainedAppeal": "Yes",
           "listCaseHearingDate": "2023-07-10T20:23:35",
           "listCaseHearingCentre": "birmingham",
-          "caseBundles": [{
-            "id": "1",
-            "value": {
-              "stitchStatus": "DONE"
+          "caseBundles": [
+            {
+              "id": "1",
+              "value": {
+                "stitchStatus": "DONE"
+              }
             }
-          }]
+          ]
         }
       }
     }
@@ -30,6 +32,7 @@
     "caseData": {
       "template": "minimal-internal-appeal-submitted.json",
       "replacements": {
+        "listCaseHearingCentre": "birmingham",
         "notificationAttachmentDocuments": [
           {
             "id": "1",

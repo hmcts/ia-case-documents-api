@@ -14,12 +14,14 @@
           "listCaseHearingCentre": "decisionWithoutHearing",
           "ariaListingReference": "XX/00000/0000",
           "legalRepReferenceNumber": "CASE001",
-          "caseBundles": [{
-            "id": "1",
-            "value": {
-              "stitchStatus": "DONE"
+          "caseBundles": [
+            {
+              "id": "1",
+              "value": {
+                "stitchStatus": "DONE"
+              }
             }
-          }]
+          ]
         }
       }
     }

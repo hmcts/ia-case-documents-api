@@ -1,4 +1,3 @@
-
 {
   "description": "DIAC-1350 internal-out-of-time-decision-letter - detained OTHER",
   "request": {
@@ -15,6 +14,7 @@
           "appellantsRepresentation": "Yes",
           "appellantInDetention": "Yes",
           "detentionFacility": "other",
+          "otherDetentionFacilityName": "otherDetentionFacilityName",
           "submissionOutOfTime": "Yes",
           "appealSubmissionDate": "{$TODAY}",
           "appealType": "refusalOfHumanRights",
@@ -43,6 +43,7 @@
         "appellantsRepresentation": "Yes",
         "appellantInDetention": "Yes",
         "detentionFacility": "other",
+        "otherDetentionFacilityName": "otherDetentionFacilityName",
         "submissionOutOfTime": "Yes",
         "appealSubmissionDate": "{$TODAY}",
         "appealType": "refusalOfHumanRights",

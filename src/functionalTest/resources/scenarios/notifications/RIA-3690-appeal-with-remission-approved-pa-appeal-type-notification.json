@@ -11,7 +11,7 @@
       "caseData": {
         "template": "minimal-appeal-submitted.json",
         "replacements": {
-          "appealType":"protection",
+          "appealType": "protection",
           "remissionDecision": "approved",
           "remittedAmount": "140.00",
           "amountLeftToPay": "00.00"

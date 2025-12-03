@@ -1,7 +1,5 @@
 {
   "description": "RIA-8846-customise-reheard-hearing-ready-bundle-remitted-preparer",
-  "launchDarklyKey": "reheard-feature:true",
-  "launchDarklyKey": "dlrm-remitted-feature-flag:true",
   "request": {
     "uri": "/asylum/ccdAboutToStart",
     "credentials": "CaseOfficer",
@@ -167,6 +165,7 @@
     "caseData": {
       "template": "minimal-appeal-submitted.json",
       "replacements": {
+        "listCaseHearingCentre": "taylorHouse",
         "customFtpaAppellantDocs": [
           {
             "id": "2",

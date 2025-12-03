@@ -17,9 +17,9 @@
           "submissionOutOfTime": "Yes",
           "appellantHasFixedAddress": "Yes",
           "isRemissionsEnabled": "Yes",
-          "remissionType":"hoWaiverRemission",
+          "remissionType": "hoWaiverRemission",
           "remissionOption": "feeWaiverFromHo",
-          "appealType":"refusalOfEu",
+          "appealType": "refusalOfEu",
           "eaHuAppealTypePaymentOption": "payLater",
           "appellantAddress": {
             "County": "",
@@ -46,9 +46,9 @@
         "submissionOutOfTime": "Yes",
         "appellantHasFixedAddress": "Yes",
         "isRemissionsEnabled": "Yes",
-        "remissionType":"hoWaiverRemission",
+        "remissionType": "hoWaiverRemission",
         "remissionOption": "feeWaiverFromHo",
-        "appealType":"refusalOfEu",
+        "appealType": "refusalOfEu",
         "appellantAddress": {
           "County": "",
           "Country": "United Kingdom",

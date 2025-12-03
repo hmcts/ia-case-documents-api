@@ -11,23 +11,23 @@
       "caseData": {
         "template": "minimal-appeal-submitted.json",
         "replacements": {
-          "currentCaseStateVisibleToHomeOfficeAll":"appealSubmitted",
+          "currentCaseStateVisibleToHomeOfficeAll": "appealSubmitted",
           "currentCaseStateVisibleToLegalRepresentative": "appealSubmitted",
           "listCaseHearingCentre": "taylorHouse",
           "makeAnApplications": [
             {
               "id": "1",
               "value": {
-                "type":"Judge's review of application decision",
-                "details":"",
-                "evidence":[],
-                "applicant":"",
-                "date":"{$TODAY}",
-                "decision":"Pending",
-                "state":"PREPARE_FOR_HEARING",
-                "applicantRole":"",
-                "decisionReason":"",
-                "decisionDate":"",
+                "type": "Judge's review of application decision",
+                "details": "",
+                "evidence": [],
+                "applicant": "",
+                "date": "{$TODAY}",
+                "decision": "Pending",
+                "state": "PREPARE_FOR_HEARING",
+                "applicantRole": "",
+                "decisionReason": "",
+                "decisionDate": "",
                 "decisionMaker": ""
               }
             }
@@ -42,23 +42,23 @@
     "caseData": {
       "template": "minimal-appeal-submitted.json",
       "replacements": {
-        "currentCaseStateVisibleToHomeOfficeAll":"appealSubmitted",
+        "currentCaseStateVisibleToHomeOfficeAll": "appealSubmitted",
         "currentCaseStateVisibleToLegalRepresentative": "appealSubmitted",
         "listCaseHearingCentre": "taylorHouse",
         "makeAnApplications": [
           {
             "id": "1",
             "value": {
-              "type":"Judge's review of application decision",
-              "details":"",
-              "evidence":[],
-              "applicant":"",
-              "date":"{$TODAY}",
-              "decision":"Pending",
-              "state":"PREPARE_FOR_HEARING",
-              "applicantRole":"",
-              "decisionReason":"",
-              "decisionDate":"",
+              "type": "Judge's review of application decision",
+              "details": "",
+              "evidence": [],
+              "applicant": "",
+              "date": "{$TODAY}",
+              "decision": "Pending",
+              "state": "PREPARE_FOR_HEARING",
+              "applicantRole": "",
+              "decisionReason": "",
+              "decisionDate": "",
               "decisionMaker": ""
             }
           }

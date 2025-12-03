@@ -44,6 +44,7 @@
     "caseData": {
       "template": "minimal-internal-appeal-submitted.json",
       "replacements": {
+        "listCaseHearingCentre": "taylorHouse",
         "appellantInDetention": "No",
         "notificationsSent": [
           {

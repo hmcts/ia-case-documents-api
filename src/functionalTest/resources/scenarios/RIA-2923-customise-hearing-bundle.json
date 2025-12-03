@@ -119,6 +119,7 @@
     "caseData": {
       "template": "minimal-appeal-submitted.json",
       "replacements": {
+        "listCaseHearingCentre": "taylorHouse",
         "hearingDocuments": [
           {
             "id": "2",

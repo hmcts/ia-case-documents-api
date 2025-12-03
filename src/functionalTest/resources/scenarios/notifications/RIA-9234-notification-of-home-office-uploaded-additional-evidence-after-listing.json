@@ -1,6 +1,5 @@
 {
   "description": "RIA-9234 Notification of home office uploaded additional evidence (after listing) for admin and represented cases",
-  "launchDarklyKey": "tcw-notifications-feature:true",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
     "credentials": "HomeOfficeGeneric",

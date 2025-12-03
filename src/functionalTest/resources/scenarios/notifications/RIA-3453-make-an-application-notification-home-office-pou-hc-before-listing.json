@@ -11,23 +11,23 @@
       "caseData": {
         "template": "minimal-appeal-submitted.json",
         "replacements": {
-          "currentCaseStateVisibleToHomeOfficeAll":"submitHearingRequirements",
+          "currentCaseStateVisibleToHomeOfficeAll": "submitHearingRequirements",
           "currentCaseStateVisibleToLegalRepresentative": "submitHearingRequirements",
           "hearingCentre": "taylorHouse",
           "makeAnApplications": [
             {
               "id": "1",
               "value": {
-                "type":"withdraw",
-                "details":"",
-                "evidence":[],
-                "applicant":"",
-                "date":"{$TODAY}",
-                "decision":"Pending",
-                "state":"PREPARE_FOR_HEARING",
-                "applicantRole":"",
-                "decisionReason":"",
-                "decisionDate":"",
+                "type": "withdraw",
+                "details": "",
+                "evidence": [],
+                "applicant": "",
+                "date": "{$TODAY}",
+                "decision": "Pending",
+                "state": "PREPARE_FOR_HEARING",
+                "applicantRole": "",
+                "decisionReason": "",
+                "decisionDate": "",
                 "decisionMaker": ""
               }
             }
@@ -43,23 +43,23 @@
     "caseData": {
       "template": "minimal-appeal-submitted.json",
       "replacements": {
-        "currentCaseStateVisibleToHomeOfficeAll":"submitHearingRequirements",
+        "currentCaseStateVisibleToHomeOfficeAll": "submitHearingRequirements",
         "currentCaseStateVisibleToLegalRepresentative": "submitHearingRequirements",
         "hearingCentre": "taylorHouse",
         "makeAnApplications": [
           {
             "id": "1",
             "value": {
-              "type":"withdraw",
-              "details":"",
-              "evidence":[],
-              "applicant":"",
-              "date":"{$TODAY}",
-              "decision":"Pending",
-              "state":"PREPARE_FOR_HEARING",
-              "applicantRole":"",
-              "decisionReason":"",
-              "decisionDate":"",
+              "type": "withdraw",
+              "details": "",
+              "evidence": [],
+              "applicant": "",
+              "date": "{$TODAY}",
+              "decision": "Pending",
+              "state": "PREPARE_FOR_HEARING",
+              "applicantRole": "",
+              "decisionReason": "",
+              "decisionDate": "",
               "decisionMaker": ""
             }
           }

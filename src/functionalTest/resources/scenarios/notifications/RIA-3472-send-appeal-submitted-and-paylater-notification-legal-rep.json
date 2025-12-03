@@ -1,6 +1,5 @@
 {
   "description": "RIA-3472 Send appeal submitted PA appeal type and payLater notification",
-  "launchDarklyKey": "tcw-notifications-feature:true",
   "enabled": "{$featureFlag.homeOfficeGovNotifyEnabled}",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
@@ -16,8 +15,8 @@
           "listCaseHearingCentre": "taylorHouse",
           "ariaListingReference": "LP/12345/2019",
           "legalRepReferenceNumber": "CASE001",
-          "paAppealTypePaymentOption":"payLater",
-          "appealType":"protection"
+          "paAppealTypePaymentOption": "payLater",
+          "appealType": "protection"
         }
       }
     }
@@ -32,8 +31,8 @@
         "listCaseHearingCentre": "taylorHouse",
         "ariaListingReference": "LP/12345/2019",
         "legalRepReferenceNumber": "CASE001",
-        "paAppealTypePaymentOption":"payLater",
-        "appealType":"protection",
+        "paAppealTypePaymentOption": "payLater",
+        "appealType": "protection",
         "notificationsSent": [
           {
             "id": "3472_APPEAL_SUBMITTED_CASE_OFFICER",

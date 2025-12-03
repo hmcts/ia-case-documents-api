@@ -43,7 +43,7 @@
           ],
           "directionList": "Direction 2",
           "directionEditDateDue": "2023-12-31",
-          "directionEditParties" : "appellant",
+          "directionEditParties": "appellant",
           "directionEditExplanation": "Do the second thing"
         }
       }

@@ -1,6 +1,5 @@
 {
   "description": "RIA-5476 send bail application submitted notification SMS to applicant",
-  "launchDarklyKey": "tcw-notifications-feature:true",
   "request": {
     "uri": "/bail/ccdAboutToSubmit",
     "credentials": "LegalRepresentative",

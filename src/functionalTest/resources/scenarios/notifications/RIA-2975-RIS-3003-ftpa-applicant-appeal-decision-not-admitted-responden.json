@@ -27,6 +27,7 @@
     "caseData": {
       "template": "minimal-appeal-submitted.json",
       "replacements": {
+        "listCaseHearingCentre": "hattonCross",
         "notificationsSent": [
           {
             "id": "1006_FTPA_APPLICATION_DECISION_HOME_OFFICE_RESPONDENT",

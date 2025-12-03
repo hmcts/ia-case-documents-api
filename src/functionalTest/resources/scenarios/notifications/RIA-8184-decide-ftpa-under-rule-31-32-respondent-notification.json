@@ -1,6 +1,5 @@
 {
   "description": "RIA-8184 Respondent FTPA application Judge decision under 31 rule (AIP journey)",
-  "launchDarklyKey": "dlrm-setaside-feature-flag:true",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
     "credentials": "Judge",

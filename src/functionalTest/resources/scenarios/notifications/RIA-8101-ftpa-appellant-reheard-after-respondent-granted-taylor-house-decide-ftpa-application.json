@@ -1,6 +1,5 @@
 {
   "description": "RIA-8101 Appellant FTPA Application is reheard after the respondent application already granted (Taylor House hearing centre)",
-  "launchDarklyKey": "dlrm-setaside-feature-flag:true",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
     "credentials": "Judge",
@@ -33,6 +32,7 @@
     "caseData": {
       "template": "minimal-appeal-submitted.json",
       "replacements": {
+        "listCaseHearingCentre": "taylorHouse",
         "notificationsSent": []
       }
     },

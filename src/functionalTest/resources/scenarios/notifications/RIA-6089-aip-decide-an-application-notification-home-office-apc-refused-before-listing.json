@@ -25,19 +25,19 @@
             }
           ],
           "makeAnApplications": [
-              {
+            {
               "id": "1",
               "value": {
-                "type":"Other",
-                "details":"",
-                "evidence":[],
-                "applicant":"",
-                "date":"",
-                "decision":"Refused",
-                "state":"appealSubmitted",
-                "applicantRole":"caseworker-ia-homeofficeapc",
-                "decisionReason":"No Reason given",
-                "decisionDate":"{$TODAY}",
+                "type": "Other",
+                "details": "",
+                "evidence": [],
+                "applicant": "",
+                "date": "",
+                "decision": "Refused",
+                "state": "appealSubmitted",
+                "applicantRole": "caseworker-ia-homeofficeapc",
+                "decisionReason": "No Reason given",
+                "decisionDate": "{$TODAY}",
                 "decisionMaker": "Judge"
               }
             }

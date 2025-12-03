@@ -23,6 +23,7 @@
     "caseData": {
       "template": "minimal-appeal-submitted.json",
       "replacements": {
+        "listCaseHearingCentre": "taylorHouse",
         "notificationsSent": [
           {
             "id": "2046_UPLOADED_ADDENDUM_EVIDENCE_HOME_OFFICE",

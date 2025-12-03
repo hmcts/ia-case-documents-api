@@ -23,6 +23,7 @@
     "caseData": {
       "template": "minimal-appeal-submitted.json",
       "replacements": {
+        "listCaseHearingCentre": "bradford",
         "notificationsSent": [
           {
             "id": "3305_STITCHING_BUNDLE_HO_NOTIFICATION_FAILED_CASE_OFFICER",

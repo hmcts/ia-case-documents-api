@@ -29,16 +29,16 @@
     "caseData": {
       "template": "minimal-appeal-submitted.json",
       "replacements": {
-          "isAdmin": "Yes",
-          "appellantsRepresentation": "Yes",
-          "appellantInDetention": "Yes",
-          "isAcceleratedDetainedAppeal": "No",
-          "detentionFacility": "prison",
-          "prisonNOMSNumber": "",
-          "submissionOutOfTime": "No",
-          "appealSubmissionDate": "{$TODAY}",
-          "appealReferenceNumber": "$/(.+)/",
-          "notificationAttachmentDocuments": [
+        "isAdmin": "Yes",
+        "appellantsRepresentation": "Yes",
+        "appellantInDetention": "Yes",
+        "isAcceleratedDetainedAppeal": "No",
+        "detentionFacility": "prison",
+        "prisonNOMSNumber": "",
+        "submissionOutOfTime": "No",
+        "appealSubmissionDate": "{$TODAY}",
+        "appealReferenceNumber": "$/(.+)/",
+        "notificationAttachmentDocuments": [
           {
             "id": "1",
             "value": {

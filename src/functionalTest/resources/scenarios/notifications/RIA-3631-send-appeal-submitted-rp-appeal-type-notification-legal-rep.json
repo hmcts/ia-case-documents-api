@@ -1,6 +1,5 @@
 {
   "description": "RIA-3631 Send appeal submitted RP appeal type notification (HO Notification disabled)",
-  "launchDarklyKey": "tcw-notifications-feature:true",
   "disabled": "{$featureFlag.homeOfficeGovNotifyEnabled}",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
@@ -16,7 +15,7 @@
           "listCaseHearingCentre": "taylorHouse",
           "ariaListingReference": "LP/12345/2019",
           "legalRepReferenceNumber": "CASE001",
-          "appealType":"revocationOfProtection"
+          "appealType": "revocationOfProtection"
         }
       }
     }
@@ -31,7 +30,7 @@
         "listCaseHearingCentre": "taylorHouse",
         "ariaListingReference": "LP/12345/2019",
         "legalRepReferenceNumber": "CASE001",
-        "appealType":"revocationOfProtection",
+        "appealType": "revocationOfProtection",
         "notificationsSent": [
           {
             "id": "3472_APPEAL_SUBMITTED_LEGAL_REP",

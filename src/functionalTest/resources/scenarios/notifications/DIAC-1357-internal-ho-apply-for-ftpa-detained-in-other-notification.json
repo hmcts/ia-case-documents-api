@@ -17,6 +17,7 @@
           "ariaListingReference": "LP/12345/2019",
           "appellantInDetention": "Yes",
           "detentionFacility": "other",
+          "otherDetentionFacilityName": "otherDetentionFacilityName",
           "appellantAddress": {
             "County": "",
             "Country": "United Kingdom",
@@ -47,6 +48,7 @@
     "caseData": {
       "template": "minimal-appeal-submitted.json",
       "replacements": {
+        "listCaseHearingCentre": "taylorHouse",
         "isAdmin": "Yes",
         "appellantsRepresentation": "Yes",
         "appellantInDetention": "Yes",

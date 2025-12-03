@@ -10,7 +10,7 @@
       "caseData": {
         "template": "minimal-internal-appeal-submitted.json",
         "replacements": {
-          "currentCaseStateVisibleToHomeOfficeAll":"appealSubmitted",
+          "currentCaseStateVisibleToHomeOfficeAll": "appealSubmitted",
           "contactPreferenceUnRep": []
         }
       }
@@ -22,12 +22,12 @@
     "caseData": {
       "template": "minimal-internal-appeal-submitted.json",
       "replacements": {
-        "currentCaseStateVisibleToHomeOfficeAll":"appealSubmitted",
+        "currentCaseStateVisibleToHomeOfficeAll": "appealSubmitted",
         "contactPreferenceUnRep": [],
-        "notificationsSent":[
+        "notificationsSent": [
           {
-            "id":"6940_REMOVE_DETENTION_STATUS_HOME_OFFICE",
-            "value":"$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+            "id": "6940_REMOVE_DETENTION_STATUS_HOME_OFFICE",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
           }
         ]
       }

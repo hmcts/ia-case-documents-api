@@ -1,6 +1,5 @@
 {
   "description": "RIA-8722 decide FTPA Respondent application decision under 35 rule - Notifications to HO and LR",
-  "launchDarklyKey": "dlrm-setaside-feature-flag:true",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
     "credentials": "Judge",
@@ -27,6 +26,7 @@
     "caseData": {
       "template": "minimal-appeal-submitted.json",
       "replacements": {
+        "listCaseHearingCentre": "glasgow",
         "notificationsSent": [
           {
             "id": "8722_RESPONDENT_REHEARD_UNDER_RULE_35_EMAIL",

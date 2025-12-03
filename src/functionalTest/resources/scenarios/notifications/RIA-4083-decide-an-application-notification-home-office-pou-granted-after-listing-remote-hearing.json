@@ -1,6 +1,5 @@
 {
   "description": "RIA-4083 Send decide an application notification home office POU granted after listing in remote hearing",
-  "launchDarklyKey": "tcw-notifications-feature:true",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
     "credentials": "Judge",
@@ -16,19 +15,19 @@
           "hearingCentre": "taylorHouse",
           "decideAnApplicationId": "1",
           "makeAnApplications": [
-              {
+            {
               "id": "1",
               "value": {
-                "type":"Other",
-                "details":"",
-                "evidence":[],
-                "applicant":"",
-                "date":"{$TODAY}",
-                "decision":"Granted",
-                "state":"listing",
-                "applicantRole":"caseworker-ia-homeofficepou",
-                "decisionReason":"No Reason given",
-                "decisionDate":"{$TODAY}",
+                "type": "Other",
+                "details": "",
+                "evidence": [],
+                "applicant": "",
+                "date": "{$TODAY}",
+                "decision": "Granted",
+                "state": "listing",
+                "applicantRole": "caseworker-ia-homeofficepou",
+                "decisionReason": "No Reason given",
+                "decisionDate": "{$TODAY}",
                 "decisionMaker": "Judge"
               }
             }

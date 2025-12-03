@@ -38,9 +38,9 @@
             {
               "id": "1",
               "value": {
-                "type":"Time extension",
-                "details":"",
-                "evidence":[
+                "type": "Time extension",
+                "details": "",
+                "evidence": [
                   {
                     "id": "1",
                     "value": {
@@ -50,13 +50,13 @@
                     }
                   }
                 ],
-                "applicant":"",
-                "date":"",
-                "decision":"Refused",
-                "state":"caseBuilding",
-                "applicantRole":"ctsc",
-                "decisionReason":"A reason for the decision",
-                "decisionDate":"{$TODAY}",
+                "applicant": "",
+                "date": "",
+                "decision": "Refused",
+                "state": "caseBuilding",
+                "applicantRole": "ctsc",
+                "decisionReason": "A reason for the decision",
+                "decisionDate": "{$TODAY}",
                 "decisionMaker": "Tribunal Caseworker"
               }
             }
@@ -79,11 +79,12 @@
         "isAcceleratedDetainedAppeal": "No",
         "decideAnApplicationId": "1",
         "appellantInDetention": "No",
-        "notificationsSent":[
+        "notificationsSent": [
           {
-            "id":"68112_DECIDE_AN_APPLICATION_HOME_OFFICE",
-            "value":"$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
-          }],
+            "id": "68112_DECIDE_AN_APPLICATION_HOME_OFFICE",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          }
+        ],
         "notificationAttachmentDocuments": [
           {
             "id": "1",

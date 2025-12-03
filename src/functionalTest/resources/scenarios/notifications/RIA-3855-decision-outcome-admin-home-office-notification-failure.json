@@ -1,6 +1,5 @@
 {
   "description": "RIA-3855 decision outcome judge home office notification failure (AdminOfficer) + RIA-6949 Send notification also to Admin Officer",
-  "launchDarklyKey": "tcw-notifications-feature:true",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
     "credentials": "AdminOfficer",
@@ -25,6 +24,7 @@
     "caseData": {
       "template": "minimal-appeal-submitted.json",
       "replacements": {
+        "listCaseHearingCentre": "bradford",
         "isDecisionAllowed": "allowed",
         "notificationsSent": [
           {

@@ -1,6 +1,5 @@
 {
   "description": "RIA-8160 decide FTPA application Judge decision under 32 rule (Applicant type respondent)",
-  "launchDarklyKey": "dlrm-setaside-feature-flag:true",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
     "credentials": "Judge",

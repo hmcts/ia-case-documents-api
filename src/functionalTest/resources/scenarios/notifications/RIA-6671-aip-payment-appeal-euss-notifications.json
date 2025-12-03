@@ -1,37 +1,12 @@
 {
-    "description": "RIA-6671 Notifications sent when payment is made in AIP journey for EUSS appeal",
-    "request": {
-      "uri": "/asylum/ccdAboutToSubmit",
-      "credentials": "Citizen",
-      "input": {
-        "id": 6671,
-        "eventId": "paymentAppeal",
-        "state": "appealSubmitted",
-        "caseData": {
-          "template": "aip-minimal-appeal-submitted.json",
-          "replacements": {
-            "hearingCentre": "manchester",
-            "appealType": "euSettlementScheme",
-            "paymentStatus": "Paid",
-            "subscriptions": [
-              {
-                "id": "1",
-                "value": {
-                  "subscriber": "appellant",
-                  "email": "{$TEST_CITIZEN_USERNAME}",
-                  "wantsEmail": "Yes",
-                  "mobileNumber": "{$TEST_CITIZEN_MOBILE}",
-                  "wantsSms": "Yes"
-                }
-              }
-            ]
-          }
-        }
-      }
-    },
-    "expectation": {
-      "status": 200,
-      "errors": [],
+  "description": "RIA-6671 Notifications sent when payment is made in AIP journey for EUSS appeal",
+  "request": {
+    "uri": "/asylum/ccdAboutToSubmit",
+    "credentials": "Citizen",
+    "input": {
+      "id": 6671,
+      "eventId": "paymentAppeal",
+      "state": "appealSubmitted",
       "caseData": {
         "template": "aip-minimal-appeal-submitted.json",
         "replacements": {
@@ -49,22 +24,47 @@
                 "wantsSms": "Yes"
               }
             }
-          ],
-          "notificationsSent": [
-            {
-              "id": "6671_APPEAL_SUBMITTED_APPELLANT_AIP_EMAIL",
-              "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
-            },
-            {
-              "id": "6671_APPEAL_SUBMITTED_HOME_OFFICE",
-              "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
-            },
-            {
-              "id": "6671_APPEAL_SUBMITTED_APPELLANT_AIP_SMS",
-              "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
-            }
           ]
         }
       }
     }
+  },
+  "expectation": {
+    "status": 200,
+    "errors": [],
+    "caseData": {
+      "template": "aip-minimal-appeal-submitted.json",
+      "replacements": {
+        "hearingCentre": "manchester",
+        "appealType": "euSettlementScheme",
+        "paymentStatus": "Paid",
+        "subscriptions": [
+          {
+            "id": "1",
+            "value": {
+              "subscriber": "appellant",
+              "email": "{$TEST_CITIZEN_USERNAME}",
+              "wantsEmail": "Yes",
+              "mobileNumber": "{$TEST_CITIZEN_MOBILE}",
+              "wantsSms": "Yes"
+            }
+          }
+        ],
+        "notificationsSent": [
+          {
+            "id": "6671_APPEAL_SUBMITTED_APPELLANT_AIP_EMAIL",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          },
+          {
+            "id": "6671_APPEAL_SUBMITTED_HOME_OFFICE",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          },
+          {
+            "id": "6671_APPEAL_SUBMITTED_APPELLANT_AIP_SMS",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          }
+        ]
+      }
+    }
   }
+}

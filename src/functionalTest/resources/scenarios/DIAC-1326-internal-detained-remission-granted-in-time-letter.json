@@ -33,20 +33,20 @@
     "caseData": {
       "template": "minimal-appeal-started.json",
       "replacements": {
-          "isAdmin": "Yes",
-          "appellantsRepresentation": "Yes",
-          "appellantInDetention": "Yes",
-          "isAcceleratedDetainedAppeal": "No",
-          "detentionFacility": "prison",
-          "prisonNOMSNumber": "",
-          "submissionOutOfTime": "No",
-          "appealSubmissionDate": "{$TODAY}",
-          "appealType": "refusalOfHumanRights",
-          "paymentStatus": "Payment pending",
-          "appealReferenceNumber": "$/(.+)/",
-          "remissionDecision": "approved",
-          "amountRemitted": 140,
-          "notificationAttachmentDocuments": [
+        "isAdmin": "Yes",
+        "appellantsRepresentation": "Yes",
+        "appellantInDetention": "Yes",
+        "isAcceleratedDetainedAppeal": "No",
+        "detentionFacility": "prison",
+        "prisonNOMSNumber": "",
+        "submissionOutOfTime": "No",
+        "appealSubmissionDate": "{$TODAY}",
+        "appealType": "refusalOfHumanRights",
+        "paymentStatus": "Payment pending",
+        "appealReferenceNumber": "$/(.+)/",
+        "remissionDecision": "approved",
+        "amountRemitted": 140,
+        "notificationAttachmentDocuments": [
           {
             "id": "1",
             "value": {

@@ -1,6 +1,5 @@
 {
   "description": "RIA-9525 Send appeal submitted paid notification for HU appeal Type for admin and represented cases",
-  "launchDarklyKey": "tcw-notifications-feature:true",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
     "credentials": "AdminOfficer",

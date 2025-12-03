@@ -17,16 +17,16 @@
             {
               "id": "1",
               "value": {
-                "type":"Adjourn",
-                "details":"",
-                "evidence":[],
-                "applicant":"Respondent",
-                "date":"{$TODAY}",
-                "decision":"Refused",
-                "state":"appealSubmitted",
-                "applicantRole":"caseworker-ia-respondentofficer",
-                "decisionReason":"No Reason given",
-                "decisionDate":"{$TODAY}",
+                "type": "Adjourn",
+                "details": "",
+                "evidence": [],
+                "applicant": "Respondent",
+                "date": "{$TODAY}",
+                "decision": "Refused",
+                "state": "appealSubmitted",
+                "applicantRole": "caseworker-ia-respondentofficer",
+                "decisionReason": "No Reason given",
+                "decisionDate": "{$TODAY}",
                 "decisionMaker": "Admin Officer"
               }
             }

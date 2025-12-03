@@ -13,19 +13,19 @@
           "hearingCentre": "taylorHouse",
           "decideAnApplicationId": "1",
           "makeAnApplications": [
-              {
+            {
               "id": "1",
               "value": {
-                "type":"Other",
-                "details":"",
-                "evidence":[],
-                "applicant":"",
-                "date":"",
-                "decision":"Granted",
-                "state":"appealSubmitted",
-                "applicantRole":"caseworker-ia-homeofficepou",
-                "decisionReason":"No Reason given",
-                "decisionDate":"{$TODAY}",
+                "type": "Other",
+                "details": "",
+                "evidence": [],
+                "applicant": "",
+                "date": "",
+                "decision": "Granted",
+                "state": "appealSubmitted",
+                "applicantRole": "caseworker-ia-homeofficepou",
+                "decisionReason": "No Reason given",
+                "decisionDate": "{$TODAY}",
                 "decisionMaker": "Judge"
               }
             }

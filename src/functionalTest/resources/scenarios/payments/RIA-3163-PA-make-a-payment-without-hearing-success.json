@@ -33,12 +33,12 @@
         "appealReferenceNumber": "PA/50001/2020",
         "homeOfficeDecisionDate": "{$TODAY-14}",
         "legalRepresentativeEmailAddress": "{TEST_LAW_FIRM_ORG_SUCCESS_USERNAME}",
-        "paymentAccountList":"PBA0087412",
-        "feeCode":"FEE0372",
-        "feeVersion":"3",
-        "feeAmountGbp":"8000",
-        "feeDescription":"Notice of Appeal - appellant consents without hearing A",
-        "paymentStatus":"Paid"
+        "paymentAccountList": "PBA0087412",
+        "feeCode": "FEE0372",
+        "feeVersion": "3",
+        "feeAmountGbp": "8000",
+        "feeDescription": "Notice of Appeal - appellant consents without hearing A",
+        "paymentStatus": "Paid"
       }
     }
   }

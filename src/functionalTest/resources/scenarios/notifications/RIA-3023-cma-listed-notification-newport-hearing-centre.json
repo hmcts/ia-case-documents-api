@@ -1,6 +1,5 @@
 {
   "description": "RIA-3023 Send cma listed notification to case officer, appellant and home office (Newport hearing centre)",
-  "launchDarklyKey": "tcw-notifications-feature:true",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
     "credentials": "AdminOfficer",

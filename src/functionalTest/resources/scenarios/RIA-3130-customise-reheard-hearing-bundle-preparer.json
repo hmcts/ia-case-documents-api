@@ -1,6 +1,5 @@
 {
   "description": "RIA-3130-customise-reheard-hearing-ready-bundle",
-  "launchDarklyKey": "reheard-feature:true",
   "request": {
     "uri": "/asylum/ccdAboutToStart",
     "credentials": "CaseOfficer",
@@ -226,6 +225,7 @@
     "caseData": {
       "template": "minimal-appeal-submitted.json",
       "replacements": {
+        "listCaseHearingCentre": "taylorHouse",
         "customAppAdditionalEvidenceDocs": [
           {
             "id": "2",

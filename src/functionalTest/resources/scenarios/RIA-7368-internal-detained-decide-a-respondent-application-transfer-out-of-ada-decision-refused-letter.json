@@ -16,16 +16,16 @@
             {
               "id": "1",
               "value": {
-                "type":"Transfer out of accelerated detained appeals process",
-                "details":"",
-                "evidence":[],
-                "applicant":"Respondent",
-                "date":"{$TODAY}",
-                "decision":"Refused",
-                "state":"appealSubmitted",
-                "applicantRole":"caseworker-ia-respondentofficer",
-                "decisionReason":"No Reason given",
-                "decisionDate":"{$TODAY}",
+                "type": "Transfer out of accelerated detained appeals process",
+                "details": "",
+                "evidence": [],
+                "applicant": "Respondent",
+                "date": "{$TODAY}",
+                "decision": "Refused",
+                "state": "appealSubmitted",
+                "applicantRole": "caseworker-ia-respondentofficer",
+                "decisionReason": "No Reason given",
+                "decisionDate": "{$TODAY}",
                 "decisionMaker": "Admin Officer"
               }
             }

@@ -1,6 +1,5 @@
 {
   "description": "DIAC-1341 Hearing Cancelled - No Cancellation of Production Notice - Detained - Other",
-  "launchDarklyKey": "tcw-notifications-feature:true",
   "disabled": true,
   "request": {
     "uri": "/asylum/ccdSubmitted",
@@ -17,6 +16,7 @@
           "ariaListingReference": "LP/12345/2019",
           "appellantInDetention": "Yes",
           "detentionFacility": "other",
+          "otherDetentionFacilityName": "otherDetentionFacilityName",
           "appellantAddress": {
             "County": "",
             "Country": "United Kingdom",
@@ -59,6 +59,7 @@
     "caseData": {
       "template": "minimal-appeal-submitted.json",
       "replacements": {
+        "listCaseHearingCentre": "taylorHouse",
         "notificationsSent": []
       }
     },

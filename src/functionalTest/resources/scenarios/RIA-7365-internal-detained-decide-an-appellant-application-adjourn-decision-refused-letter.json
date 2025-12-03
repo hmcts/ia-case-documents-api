@@ -16,16 +16,16 @@
             {
               "id": "1",
               "value": {
-                "type":"Adjourn",
-                "details":"",
-                "evidence":[],
-                "applicant":"Admin Officer",
-                "date":"{$TODAY}",
-                "decision":"Refused",
-                "state":"appealSubmitted",
-                "applicantRole":"ctsc",
-                "decisionReason":"No Reason given",
-                "decisionDate":"{$TODAY}",
+                "type": "Adjourn",
+                "details": "",
+                "evidence": [],
+                "applicant": "Admin Officer",
+                "date": "{$TODAY}",
+                "decision": "Refused",
+                "state": "appealSubmitted",
+                "applicantRole": "ctsc",
+                "decisionReason": "No Reason given",
+                "decisionDate": "{$TODAY}",
                 "decisionMaker": "Admin Officer"
               }
             }

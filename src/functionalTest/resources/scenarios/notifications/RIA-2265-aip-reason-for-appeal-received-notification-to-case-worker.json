@@ -1,6 +1,5 @@
 {
   "description": "RIA-2265 Send Reason for appeal received to caseworker",
-  "launchDarklyKey": "tcw-notifications-feature:true",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
     "credentials": "Citizen",

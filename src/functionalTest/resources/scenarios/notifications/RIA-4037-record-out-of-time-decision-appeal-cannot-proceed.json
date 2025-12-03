@@ -10,7 +10,7 @@
       "caseData": {
         "template": "minimal-appeal-submitted.json",
         "replacements": {
-          "appealType":"protection",
+          "appealType": "protection",
           "outOfTimeDecisionType": "rejected",
           "notificationsSent": []
         }

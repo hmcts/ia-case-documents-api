@@ -1,6 +1,5 @@
 {
   "description": "RIA-5561 send bail signed decision notice notifications to Applicant (sms) and HO (email)",
-  "launchDarklyKey": "tcw-notifications-feature:true",
   "request": {
     "uri": "/bail/ccdAboutToSubmit",
     "credentials": "LegalRepresentative",

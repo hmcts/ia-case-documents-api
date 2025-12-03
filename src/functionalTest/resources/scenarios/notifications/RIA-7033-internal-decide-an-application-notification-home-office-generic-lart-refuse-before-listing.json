@@ -14,19 +14,19 @@
           "decideAnApplicationId": "1",
           "listCaseHearingCentre": "taylorHouse",
           "makeAnApplications": [
-              {
+            {
               "id": "1",
               "value": {
-                "type":"Other",
-                "details":"",
-                "evidence":[],
-                "applicant":"",
-                "date":"",
-                "decision":"Refused",
-                "state":"appealSubmitted",
-                "applicantRole":"caseworker-ia-respondentofficer",
-                "decisionReason":"No Reason given",
-                "decisionDate":"{$TODAY}",
+                "type": "Other",
+                "details": "",
+                "evidence": [],
+                "applicant": "",
+                "date": "",
+                "decision": "Refused",
+                "state": "appealSubmitted",
+                "applicantRole": "caseworker-ia-respondentofficer",
+                "decisionReason": "No Reason given",
+                "decisionDate": "{$TODAY}",
                 "decisionMaker": "Judge"
               }
             }
@@ -41,6 +41,7 @@
     "caseData": {
       "template": "minimal-internal-appeal-submitted.json",
       "replacements": {
+        "listCaseHearingCentre": "taylorHouse",
         "isAdmin": "Yes",
         "notificationsSent": [
           {

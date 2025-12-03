@@ -20,10 +20,10 @@
           "addressLine2AdminJ": "Madrid",
           "addressLine3AdminJ": "28003",
           "countryGovUkOocAdminJ": "ES"
-          }
         }
       }
-    },
+    }
+  },
   "expectation": {
     "status": 200,
     "errors": [],
@@ -41,16 +41,16 @@
         "addressLine3AdminJ": "28003",
         "countryGovUkOocAdminJ": "ES"
       }
-        },
-        "notificationsSent": [
-          {
-            "id": "8344_HOME_OFFICE_MARK_APPEAL_AS_REMITTED",
-            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
-          },
-          {
-            "id": "8344_INTERNAL_APPEAL_REMITTED_APPELLANT_LETTER",
-            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
-          }
-        ]
+    },
+    "notificationsSent": [
+      {
+        "id": "8344_HOME_OFFICE_MARK_APPEAL_AS_REMITTED",
+        "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+      },
+      {
+        "id": "8344_INTERNAL_APPEAL_REMITTED_APPELLANT_LETTER",
+        "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
       }
-    }
+    ]
+  }
+}

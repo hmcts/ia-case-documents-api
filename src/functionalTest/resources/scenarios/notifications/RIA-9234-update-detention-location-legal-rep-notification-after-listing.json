@@ -39,6 +39,7 @@
     "caseData": {
       "template": "minimal-appeal-submitted.json",
       "replacements": {
+        "listCaseHearingCentre": "harmondsworth",
         "notificationsSent": [
           {
             "id": "923429_UPDATE_DETENTION_LOCATION_LETTER_LEGAL_REPRESENTATIVE",

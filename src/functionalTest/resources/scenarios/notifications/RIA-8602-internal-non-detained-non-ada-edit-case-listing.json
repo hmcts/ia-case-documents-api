@@ -18,7 +18,7 @@
           "isAcceleratedDetainedAppeal": "No",
           "listCaseHearingCentre": "bradford",
           "listCaseHearingDate": "2023-05-03T14:25:15.000",
-          "ariaListingReference" : "LP/12345/2019",
+          "ariaListingReference": "LP/12345/2019",
           "remoteVideoCallTribunalResponse": "Some tribunal response",
           "notificationAttachmentDocuments": [
             {
@@ -61,7 +61,7 @@
         "isAcceleratedDetainedAppeal": "No",
         "listCaseHearingCentre": "bradford",
         "listCaseHearingDate": "2023-05-03T14:25:15.000",
-        "ariaListingReference" : "LP/12345/2019",
+        "ariaListingReference": "LP/12345/2019",
         "remoteVideoCallTribunalResponse": "Some tribunal response",
         "notificationsSent": [
           {

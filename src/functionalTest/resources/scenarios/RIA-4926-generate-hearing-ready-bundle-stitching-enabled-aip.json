@@ -1,7 +1,6 @@
 {
   "description": "RIA-4926 Generate Hearing Bundle (AIP journey)",
   "enabled": "{$featureFlag.isEmStitchingEnabled}",
-  "launchDarklyKey": "reheard-feature:true",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
     "credentials": "CaseOfficer",
@@ -179,6 +178,7 @@
     "caseData": {
       "template": "minimal-aip-appeal-submitted.json",
       "replacements": {
+        "listCaseHearingCentre": "taylorHouse",
         "legalRepresentativeDocuments": [
           {
             "id": "6",
@@ -329,7 +329,6 @@
             }
           }
         ]
-
       }
     }
   }

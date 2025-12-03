@@ -1,6 +1,5 @@
 {
   "description": "RIA-61135 Applicant FTPA application decision granted (AIP journey) - Resident judge",
-  "launchDarklyKey": "dlrm-setaside-feature-flag:true",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
     "credentials": "Judge",

@@ -36,9 +36,9 @@
             {
               "id": "1",
               "value": {
-                "type":"Expedite",
-                "details":"",
-                "evidence":[
+                "type": "Expedite",
+                "details": "",
+                "evidence": [
                   {
                     "id": "1",
                     "value": {
@@ -48,13 +48,13 @@
                     }
                   }
                 ],
-                "applicant":"Respondent",
-                "date":"",
-                "decision":"Granted",
-                "state":"caseBuilding",
-                "applicantRole":"caseworker-ia-homeofficeapc",
-                "decisionReason":"A reason for the decision",
-                "decisionDate":"{$TODAY}",
+                "applicant": "Respondent",
+                "date": "",
+                "decision": "Granted",
+                "state": "caseBuilding",
+                "applicantRole": "caseworker-ia-homeofficeapc",
+                "decisionReason": "A reason for the decision",
+                "decisionDate": "{$TODAY}",
                 "decisionMaker": "Tribunal Caseworker"
               }
             }
@@ -71,10 +71,10 @@
       "replacements": {
         "detentionFacility": "immigrationRemovalCentre",
         "ircName": "Brookhouse",
-	    "appellantInDetention": "Yes",
+        "appellantInDetention": "Yes",
         "isAcceleratedDetainedAppeal": "Yes",
         "decideAnApplicationId": "1",
-        "notificationsSent":[
+        "notificationsSent": [
           {
             "id": "7366_DECIDE_AN_APPLICATION_HOME_OFFICE",
             "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"

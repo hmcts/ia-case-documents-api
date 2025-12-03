@@ -11,7 +11,7 @@
         "template": "minimal-appeal-submitted.json",
         "replacements": {
           "journeyType": "rep",
-          "currentCaseStateVisibleToHomeOfficeAll":"appealSubmitted",
+          "currentCaseStateVisibleToHomeOfficeAll": "appealSubmitted",
           "contactPreference": "wantsEmail",
           "email": "{$TEST_CITIZEN_USERNAME}",
           "hearingCentre": "manchester"
@@ -26,5 +26,5 @@
       "header": "success",
       "body": "contains([_NOC_REQUEST_DECISION_APPELLANT_EMAIL,_NOC_REQUEST_DECISION_HOME_OFFICE,_NOC_REQUEST_DECISION_LEGAL_REP])"
     }
-   }
+  }
 }

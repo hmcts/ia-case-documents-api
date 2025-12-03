@@ -31,12 +31,12 @@
       "replacements": {
         "appealType": "refusalOfEu",
         "homeOfficeDecisionDate": "{$TODAY-14}",
-        "paymentAccountList":"PBA0087240",
-        "feeCode":"FEE0372",
-        "feeVersion":"3",
-        "feeAmountGbp":"8000",
-        "feeDescription":"Notice of Appeal - appellant consents without hearing A",
-        "paymentStatus":"Failed"
+        "paymentAccountList": "PBA0087240",
+        "feeCode": "FEE0372",
+        "feeVersion": "3",
+        "feeAmountGbp": "8000",
+        "feeDescription": "Notice of Appeal - appellant consents without hearing A",
+        "paymentStatus": "Failed"
       }
     }
   }

@@ -15,6 +15,7 @@
           "appellantsRepresentation": "Yes",
           "appellantInDetention": "Yes",
           "detentionFacility": "other",
+          "otherDetentionFacilityName": "otherDetentionFacilityName",
           "appealType": "refusalOfHumanRights",
           "appellantAddress": {
             "County": "",
@@ -39,6 +40,7 @@
         "appellantInUk": "Yes",
         "appellantInDetention": "Yes",
         "detentionFacility": "other",
+        "otherDetentionFacilityName": "otherDetentionFacilityName",
         "appealType": "refusalOfHumanRights",
         "appellantAddress": {
           "County": "",

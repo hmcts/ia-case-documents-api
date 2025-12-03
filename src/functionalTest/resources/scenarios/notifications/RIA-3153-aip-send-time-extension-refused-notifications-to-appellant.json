@@ -30,7 +30,7 @@
                 "requestDate": "{$TODAY}",
                 "state": "awaitingCmaRequirements",
                 "status": "refused",
-                "evidence":  null,
+                "evidence": null,
                 "decision": "refused",
                 "decisionReason": "Not enough information",
                 "decisionOutcomeDate": "{$TODAY}"
@@ -69,7 +69,7 @@
               "requestDate": "{$TODAY}",
               "state": "awaitingCmaRequirements",
               "status": "refused",
-              "evidence":  null,
+              "evidence": null,
               "decision": "refused",
               "decisionReason": "Not enough information",
               "decisionOutcomeDate": "{$TODAY}"

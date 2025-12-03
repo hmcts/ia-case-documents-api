@@ -1,6 +1,5 @@
 {
   "description": "RIA-8198 record decision event for a bail application under IMA",
-  "launchDarklyKey": "tcw-notifications-feature:true",
   "request": {
     "uri": "/bail/ccdAboutToSubmit",
     "credentials": "Judge",

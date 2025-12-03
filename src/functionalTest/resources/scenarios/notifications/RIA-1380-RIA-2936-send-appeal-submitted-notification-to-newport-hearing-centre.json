@@ -1,6 +1,5 @@
 {
   "description": "RIA-1380-RIA-2936 Send appeal submitted notification to Columbus House (Newport hearing centre)",
-  "launchDarklyKey": "tcw-notifications-feature:true",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
     "credentials": "LegalRepresentative",

@@ -27,6 +27,7 @@
     "caseData": {
       "template": "minimal-appeal-submitted.json",
       "replacements": {
+        "listCaseHearingCentre": "taylorHouse",
         "notificationsSent": [
           {
             "id": "36514_FTPA_APPLICATION_DECISION_LEGAL_REPRESENTATIVE_RESPONDENT",

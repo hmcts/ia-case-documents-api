@@ -16,6 +16,7 @@
           "appellantsRepresentation": "Yes",
           "appellantInDetention": "Yes",
           "detentionFacility": "other",
+          "otherDetentionFacilityName": "otherDetentionFacilityName",
           "remissionDecision": "partiallyApproved",
           "lateRemissionType": "hoWaiverRemission",
           "remissionClaim": "legalAid",

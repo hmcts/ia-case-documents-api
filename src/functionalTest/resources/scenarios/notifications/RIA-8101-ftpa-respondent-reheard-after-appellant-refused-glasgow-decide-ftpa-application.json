@@ -1,6 +1,5 @@
 {
   "description": "RIA-8101 Respondent FTPA Application is reheard after the appellant application already refused (Glasgow hearing centre)",
-  "launchDarklyKey": "dlrm-setaside-feature-flag:true",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
     "credentials": "Judge",
@@ -34,6 +33,7 @@
     "caseData": {
       "template": "minimal-appeal-submitted.json",
       "replacements": {
+        "listCaseHearingCentre": "glasgow",
         "notificationsSent": []
       }
     },

@@ -62,12 +62,12 @@
           "AddressLine1": "5",
           "AddressLine2": "Example Street"
         },
-          "notificationsSent": [
-            {
-              "id": "9233_INTERNAL_LATE_REMISSION_PARTIALLY_OR_GRANTED_APPELLANT_LETTER",
-              "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
-            }
-          ]
+        "notificationsSent": [
+          {
+            "id": "9233_INTERNAL_LATE_REMISSION_PARTIALLY_OR_GRANTED_APPELLANT_LETTER",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          }
+        ]
       }
     }
   }

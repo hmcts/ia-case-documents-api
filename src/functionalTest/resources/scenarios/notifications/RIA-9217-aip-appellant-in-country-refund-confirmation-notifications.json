@@ -1,6 +1,5 @@
 {
   "description": "RIA-9217 AIP Appellant Refund confirmation notifications- In country - Email/SMS",
-  "launchDarklyKey": "dlrm-refund-feature-flag:true",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
     "credentials": "AdminOfficer",

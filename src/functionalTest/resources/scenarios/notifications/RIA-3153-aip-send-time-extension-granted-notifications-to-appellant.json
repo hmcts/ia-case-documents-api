@@ -30,7 +30,7 @@
                 "requestDate": "{$TODAY}",
                 "state": "awaitingCmaRequirements",
                 "status": "granted",
-                "evidence":  null,
+                "evidence": null,
                 "decision": "granted",
                 "decisionReason": "Request has been approved I have allowed an extra 14 days.",
                 "decisionOutcomeDate": "{$TODAY+14}"
@@ -69,7 +69,7 @@
               "requestDate": "{$TODAY}",
               "state": "awaitingCmaRequirements",
               "status": "granted",
-              "evidence":  null,
+              "evidence": null,
               "decision": "granted",
               "decisionReason": "Request has been approved I have allowed an extra 14 days.",
               "decisionOutcomeDate": "{$TODAY+14}"

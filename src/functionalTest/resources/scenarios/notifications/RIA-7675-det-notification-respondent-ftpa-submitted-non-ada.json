@@ -19,7 +19,7 @@
           "listCaseHearingCentre": "taylorHouse",
           "ariaListingReference": "LP/12345/2019",
           "appellantInDetention": "Yes",
-          "appellantsRepresentation" : "Yes",
+          "appellantsRepresentation": "Yes",
           "notificationAttachmentDocuments": [
             {
               "id": "1",
@@ -46,9 +46,10 @@
     "caseData": {
       "template": "minimal-appeal-submitted.json",
       "replacements": {
+        "listCaseHearingCentre": "taylorHouse",
         "detentionFacility": "immigrationRemovalCentre",
         "ircName": "Brookhouse",
-        "appellantsRepresentation" : "Yes",
+        "appellantsRepresentation": "Yes",
         "notificationsSent": [
           {
             "id": "7675_INTERNAL_DETAINED_APPLY_FOR_FTPA_RESPONDENT",

@@ -26,7 +26,10 @@
           "notificationsSent": [],
           "legalRepresentativeEmailAddress": "RIA-4226-test-case-1@example.com",
           "changeOrganisationRequestField": {
-            "DynamicList":["caseRole", "caseRoleList"],
+            "DynamicList": [
+              "caseRole",
+              "caseRoleList"
+            ],
             "RequestTimestamp": "now",
             "ApprovalStatus": "1"
           }

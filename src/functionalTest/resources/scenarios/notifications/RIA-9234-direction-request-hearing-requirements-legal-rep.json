@@ -1,6 +1,5 @@
 {
   "description": "RIA-9234 direction to legal rep to submit hearing requirements Legal Rep for admin and represented cases",
-  "launchDarklyKey": "tcw-notifications-feature:true",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
     "credentials": "LegalRepresentative",

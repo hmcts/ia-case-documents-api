@@ -15,6 +15,7 @@
           "appellantInUk": "Yes",
           "appellantInDetention": "Yes",
           "detentionFacility": "other",
+          "otherDetentionFacilityName": "otherDetentionFacilityName",
           "appellantAddress": {
             "County": "",
             "Country": "United Kingdom",
@@ -47,6 +48,7 @@
       "replacements": {
         "isAdmin": "Yes",
         "detentionFacility": "other",
+        "otherDetentionFacilityName": "otherDetentionFacilityName",
         "appellantsRepresentation": "Yes",
         "appellantInDetention": "Yes",
         "appellantAddress": {

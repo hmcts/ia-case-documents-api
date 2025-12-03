@@ -1,6 +1,5 @@
 {
   "description": "RIA-2975-RIA-3003-RIA-3754  FTPA Applicant Application Decision Not Admitted Respondent (Hatton Cross hearing centre)",
-  "launchDarklyKey": "dlrm-setaside-feature-flag:true",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
     "credentials": "Judge",
@@ -27,6 +26,7 @@
     "caseData": {
       "template": "minimal-appeal-submitted.json",
       "replacements": {
+        "listCaseHearingCentre": "hattonCross",
         "notificationsSent": [
           {
             "id": "1006_FTPA_APPLICATION_DECISION_HOME_OFFICE_RESPONDENT",

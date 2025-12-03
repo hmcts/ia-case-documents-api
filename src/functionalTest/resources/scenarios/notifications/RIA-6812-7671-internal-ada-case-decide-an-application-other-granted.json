@@ -23,9 +23,9 @@
             {
               "id": "1",
               "value": {
-                "type":"Withdraw",
-                "details":"",
-                "evidence":[
+                "type": "Withdraw",
+                "details": "",
+                "evidence": [
                   {
                     "id": "1",
                     "value": {
@@ -35,13 +35,13 @@
                     }
                   }
                 ],
-                "applicant":"",
-                "date":"",
-                "decision":"Granted",
-                "state":"caseBuilding",
-                "applicantRole":"caseworker-ia-respondentofficer",
-                "decisionReason":"Some reason for decision",
-                "decisionDate":"{$TODAY}",
+                "applicant": "",
+                "date": "",
+                "decision": "Granted",
+                "state": "caseBuilding",
+                "applicantRole": "caseworker-ia-respondentofficer",
+                "decisionReason": "Some reason for decision",
+                "decisionDate": "{$TODAY}",
                 "decisionMaker": "Tribunal Caseworker"
               }
             }

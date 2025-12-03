@@ -10,7 +10,7 @@
       "caseData": {
         "template": "aip-minimal-appeal-submitted.json",
         "replacements": {
-          "appealType":"protection",
+          "appealType": "protection",
           "outOfTimeDecisionType": "approved",
           "hearingCentre": "taylorHouse",
           "subscriptions": [

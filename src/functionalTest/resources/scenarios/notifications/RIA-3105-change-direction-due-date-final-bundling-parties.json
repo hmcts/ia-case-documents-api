@@ -29,6 +29,7 @@
     "caseData": {
       "template": "minimal-appeal-submitted.json",
       "replacements": {
+        "listCaseHearingCentre": "taylorHouse",
         "ariaListingReference": "LP/12345/2019",
         "directionEditExplanation": "Amending the direction due date.",
         "directionEditDateDue": "{$TODAY+5}",

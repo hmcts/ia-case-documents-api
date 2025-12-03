@@ -12,7 +12,7 @@
         "template": "minimal-appeal-submitted.json",
         "replacements": {
           "appealType": "protection",
-          "paAppealTypePaymentOption":"payNow",
+          "paAppealTypePaymentOption": "payNow",
           "hasServiceRequestAlready": "No"
         }
       }

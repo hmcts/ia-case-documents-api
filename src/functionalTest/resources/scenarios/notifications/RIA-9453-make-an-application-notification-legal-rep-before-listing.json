@@ -11,22 +11,22 @@
       "caseData": {
         "template": "minimal-appeal-submitted.json",
         "replacements": {
-          "currentCaseStateVisibleToHomeOfficeAll":"ended",
+          "currentCaseStateVisibleToHomeOfficeAll": "ended",
           "currentCaseStateVisibleToLegalRepresentative": "ended",
           "makeAnApplications": [
             {
               "id": "1",
               "value": {
-                "type":"withdraw",
-                "details":"",
-                "evidence":[],
-                "applicant":"",
-                "date":"{$TODAY}",
-                "decision":"Pending",
-                "state":"ended",
-                "applicantRole":"",
-                "decisionReason":"",
-                "decisionDate":"",
+                "type": "withdraw",
+                "details": "",
+                "evidence": [],
+                "applicant": "",
+                "date": "{$TODAY}",
+                "decision": "Pending",
+                "state": "ended",
+                "applicantRole": "",
+                "decisionReason": "",
+                "decisionDate": "",
                 "decisionMaker": ""
               }
             }
@@ -41,22 +41,22 @@
     "caseData": {
       "template": "minimal-appeal-submitted.json",
       "replacements": {
-        "currentCaseStateVisibleToHomeOfficeAll":"ended",
+        "currentCaseStateVisibleToHomeOfficeAll": "ended",
         "currentCaseStateVisibleToLegalRepresentative": "ended",
         "makeAnApplications": [
           {
             "id": "1",
             "value": {
-              "type":"withdraw",
-              "details":"",
-              "evidence":[],
-              "applicant":"",
-              "date":"{$TODAY}",
-              "decision":"Pending",
-              "state":"ended",
-              "applicantRole":"",
-              "decisionReason":"",
-              "decisionDate":"",
+              "type": "withdraw",
+              "details": "",
+              "evidence": [],
+              "applicant": "",
+              "date": "{$TODAY}",
+              "decision": "Pending",
+              "state": "ended",
+              "applicantRole": "",
+              "decisionReason": "",
+              "decisionDate": "",
               "decisionMaker": ""
             }
           }

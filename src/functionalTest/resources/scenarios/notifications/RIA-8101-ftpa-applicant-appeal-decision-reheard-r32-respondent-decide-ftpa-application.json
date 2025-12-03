@@ -1,6 +1,5 @@
 {
   "description": "RIA-8101 FTPA Applicant Application Decision Reheard Rule 32 Respondent (Taylor House hearing centre)",
-  "launchDarklyKey": "dlrm-setaside-feature-flag:true",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
     "credentials": "Judge",
@@ -28,6 +27,7 @@
     "caseData": {
       "template": "minimal-appeal-submitted.json",
       "replacements": {
+        "listCaseHearingCentre": "taylorHouse",
         "notificationsSent": [
           {
             "id": "36512_FTPA_APPLICATION_DECISION_HOME_OFFICE_RESPONDENT",
