@@ -5,7 +5,7 @@
     "credentials": "LegalRepresentativeOrgDeleted",
     "input": {
       "eventId": "payForAppeal",
-      "state": "paymentPending",
+      "state": "pendingPayment",
       "caseData": {
         "template": "minimal-payments-appeal-started.json",
         "replacements": {
