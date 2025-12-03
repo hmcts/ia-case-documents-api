@@ -2502,6 +2502,7 @@ security:
       - "caseListing"
       - "sendPaymentReminderNotification"
       - "recordRemissionReminder"
+      - "changeHearingCentre"
       - "hearingCancelled"
     caseworker-ia-homeofficebail:
       - "startApplication"
