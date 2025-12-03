@@ -46,6 +46,7 @@
         "isAcceleratedDetainedAppeal": "Yes",
         "appellantsRepresentation" : "Yes",
         "hearingCentre": "newcastle",
+        "ircName": "Harmondsworth",
         "detentionFacility": "immigrationRemovalCentre",
         "customerServicesTelephone": "{$customerServices.telephoneNumber}",
         "customerServicesEmail": "{$customerServices.emailAddress}",

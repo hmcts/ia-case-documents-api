@@ -47,6 +47,7 @@
         "appellantsRepresentation" : "Yes",
         "hearingCentre": "newcastle",
         "detentionFacility": "immigrationRemovalCentre",
+        "ircName": "Harmondsworth",
         "customerServicesTelephone": "{$customerServices.telephoneNumber}",
         "customerServicesEmail": "{$customerServices.emailAddress}",
         "notificationAttachmentDocuments": [
