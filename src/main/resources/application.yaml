@@ -1244,6 +1244,7 @@ security:
       - "caseListing"
       - "recordAdjournmentDetails"
       - "requestHearingRequirementsFeature"
+      - "changeHearingCentre"
       - "saveNotificationsToData"
     caseworker-ia-homeofficelart:
       - "uploadHomeOfficeAppealResponse"
