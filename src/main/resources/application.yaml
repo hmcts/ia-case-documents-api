@@ -193,7 +193,7 @@ endAppeal.contentType:  application/pdf
 endAppeal.fileExtension: PDF
 endAppeal.fileName: "NoticeOfEndedAppeal"
 endAppeal.templateName: ${IA_END_APPEAL_TEMPLATE:TB-IAC-GNO-ENG-00238.docx}
-endAppeal.appellant.templateName: ${IA_END_APPEAL_APPELLANT_TEMPLATE:TB-IAC-GNO-ENG-00721.docx}
+endAppeal.appellant.templateName: ${IA_END_APPEAL_APPELLANT_TEMPLATE:TB-IAC-GNO-ENG-00721-2.0.docx}
 
 endAppealAutomatically.contentType: application/pdf
 endAppealAutomatically.fileExtension: PDF
