@@ -23,6 +23,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseDetails;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.Event;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.Callback;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.DispatchPriority;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.PreSubmitCallbackResponse;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.PreSubmitCallbackStage;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.ErrorHandler;
@@ -50,8 +51,12 @@ public class NotificationHandlerTest {
 
     @BeforeEach
     public void setup() {
-
         notificationHandler = new NotificationHandler(canHandle, Collections.singletonList(notificationGenerator));
+    }
+
+    @Test
+    public void dispatch_priority_is_notifications() {
+        assertEquals(DispatchPriority.NOTIFICATIONS, notificationHandler.getDispatchPriority());
     }
 
     @ParameterizedTest

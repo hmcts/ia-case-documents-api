@@ -7,6 +7,7 @@ import java.util.Optional;
 import java.util.function.BiPredicate;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.BailCase;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.Callback;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.DispatchPriority;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.PreSubmitCallbackResponse;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.PreSubmitCallbackStage;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.ErrorHandler;
@@ -18,6 +19,11 @@ public class BailNotificationHandler implements PreSubmitCallbackHandler<BailCas
     private final BiPredicate<PreSubmitCallbackStage, Callback<BailCase>> canHandleFunction;
     private final List<? extends BailNotificationGenerator> bailNotificationGenerators;
     private final Optional<ErrorHandler<BailCase>> errorHandling;
+
+    @Override
+    public DispatchPriority getDispatchPriority() {
+        return DispatchPriority.NOTIFICATIONS;
+    }
 
     public BailNotificationHandler(BiPredicate<PreSubmitCallbackStage, Callback<BailCase>> canHandleFunction,
                                    List<? extends BailNotificationGenerator> notificationGenerator

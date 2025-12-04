@@ -18,6 +18,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.BailCase;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseDetails;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.Callback;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.DispatchPriority;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.PreSubmitCallbackResponse;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.PreSubmitCallbackStage;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.ErrorHandler;
@@ -46,6 +47,11 @@ public class BailNotificationHandlerTest {
     @BeforeEach
     public void setup() {
         bailNotificationHandler = new BailNotificationHandler(canHandle, Collections.singletonList(bailNotificationGenerator));
+    }
+
+    @Test
+    public void dispatch_priority_is_notifications() {
+        assertEquals(DispatchPriority.NOTIFICATIONS, bailNotificationHandler.getDispatchPriority());
     }
 
     @Test

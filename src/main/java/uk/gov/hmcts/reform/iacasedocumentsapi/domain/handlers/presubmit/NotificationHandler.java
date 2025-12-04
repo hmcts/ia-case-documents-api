@@ -8,6 +8,7 @@ import java.util.function.BiPredicate;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.Event;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.Callback;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.DispatchPriority;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.PreSubmitCallbackResponse;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.PreSubmitCallbackStage;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.ErrorHandler;
@@ -19,6 +20,11 @@ public class NotificationHandler implements PreSubmitCallbackHandler<AsylumCase>
     private final BiPredicate<PreSubmitCallbackStage, Callback<AsylumCase>> canHandleFunction;
     private final List<? extends NotificationGenerator> notificationGenerators;
     private final Optional<ErrorHandler<AsylumCase>> errorHandling;
+
+    @Override
+    public DispatchPriority getDispatchPriority() {
+        return DispatchPriority.NOTIFICATIONS;
+    }
 
     public NotificationHandler(BiPredicate<PreSubmitCallbackStage, Callback<AsylumCase>> canHandleFunction,
                                List<? extends NotificationGenerator> notificationGenerator
