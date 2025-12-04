@@ -48,9 +48,9 @@ public class InternalEndAppealLetterTemplate implements DocumentTemplate<AsylumC
         fieldValues.put("customerServicesEmail", customerServicesProvider.getInternalCustomerServicesEmail(asylumCase));
         fieldValues.put("dateLetterSent", formatDateForRendering(LocalDate.now().toString(), DOCUMENT_DATE_FORMAT));
 
-        List<String> appellantAddress = isAppellantInUk(asylumCase) ?
-            getAppellantAddressAsList(asylumCase) :
-            getAppellantAddressAsListOoc(asylumCase);
+        List<String> appellantAddress = hasAppealBeenSubmittedByAppellantInternalCase(asylumCase)
+                ? getAppellantAddressInCountryOrOoc(asylumCase)
+                : getLegalRepAddressInCountryOrOoc(asylumCase);
 
         for (int i = 0; i < appellantAddress.size(); i++) {
             fieldValues.put("address_line_" + (i + 1), appellantAddress.get(i));

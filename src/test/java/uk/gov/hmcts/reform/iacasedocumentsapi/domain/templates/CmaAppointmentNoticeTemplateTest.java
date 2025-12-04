@@ -42,6 +42,7 @@ public class CmaAppointmentNoticeTemplateTest {
     private String appellantFamilyName = "Awan";
     private String homeOfficeReferenceNumber = "A1234567/001";
     private String legalRepReferenceNumber = "OUR-REF";
+    private String ccdReferenceNumber = "1234-5678-9012-3456";
     private String hearingDate = "2020-12-25T12:34:56";
     private String manchesterHearingCentreAddress = "Manchester, 123 Somewhere, North";
     private String taylorHouseHearingCentreAddress = "London, 456 Somewhere, South";
@@ -116,6 +117,7 @@ public class CmaAppointmentNoticeTemplateTest {
         when(asylumCase.read(APPELLANT_FAMILY_NAME, String.class)).thenReturn(Optional.of(appellantFamilyName));
         when(asylumCase.read(HOME_OFFICE_REFERENCE_NUMBER, String.class)).thenReturn(Optional.of(homeOfficeReferenceNumber));
         when(asylumCase.read(LEGAL_REP_REFERENCE_NUMBER, String.class)).thenReturn(Optional.of(legalRepReferenceNumber));
+        when(asylumCase.read(CCD_REFERENCE_NUMBER_FOR_DISPLAY, String.class)).thenReturn(Optional.of(ccdReferenceNumber));
 
         when(asylumCase.read(LIST_CASE_HEARING_DATE, String.class)).thenReturn(Optional.of(hearingDate));
 
@@ -155,6 +157,7 @@ public class CmaAppointmentNoticeTemplateTest {
         when(asylumCase.read(APPELLANT_FAMILY_NAME, String.class)).thenReturn(Optional.of(appellantFamilyName));
         when(asylumCase.read(HOME_OFFICE_REFERENCE_NUMBER, String.class)).thenReturn(Optional.of(homeOfficeReferenceNumber));
         when(asylumCase.read(LEGAL_REP_REFERENCE_NUMBER, String.class)).thenReturn(Optional.of(legalRepReferenceNumber));
+        when(asylumCase.read(CCD_REFERENCE_NUMBER_FOR_DISPLAY, String.class)).thenReturn(Optional.of(ccdReferenceNumber));
 
         when(asylumCase.read(LIST_CASE_HEARING_DATE, String.class)).thenReturn(Optional.of(hearingDate));
 
@@ -183,13 +186,14 @@ public class CmaAppointmentNoticeTemplateTest {
 
         Map<String, Object> templateFieldValues = cmaAppointmentNoticeTemplate.mapFieldValues(caseDetails);
 
-        assertEquals(24, templateFieldValues.size());
+        assertEquals(25, templateFieldValues.size());
         assertEquals("[userImage:hmcts.png]", templateFieldValues.get("hmcts"));
         assertEquals(appealReferenceNumber, templateFieldValues.get("appealReferenceNumber"));
         assertEquals(appellantGivenNames, templateFieldValues.get("appellantGivenNames"));
         assertEquals(appellantFamilyName, templateFieldValues.get("appellantFamilyName"));
         assertEquals(homeOfficeReferenceNumber, templateFieldValues.get("homeOfficeReferenceNumber"));
         assertEquals(legalRepReferenceNumber, templateFieldValues.get("legalRepReferenceNumber"));
+        assertEquals(ccdReferenceNumber, templateFieldValues.get("ccdReferenceNumberForDisplay"));
         assertEquals(expectedFormattedHearingDatePart, templateFieldValues.get("hearingDate"));
         assertEquals(expectedFormattedHearingTimePart, templateFieldValues.get("hearingTime"));
         assertEquals(expectedFormattedManchesterHearingCentreAddress, templateFieldValues.get("hearingCentreAddress"));
@@ -249,6 +253,7 @@ public class CmaAppointmentNoticeTemplateTest {
         when(asylumCase.read(APPELLANT_FAMILY_NAME, String.class)).thenReturn(Optional.empty());
         when(asylumCase.read(HOME_OFFICE_REFERENCE_NUMBER, String.class)).thenReturn(Optional.empty());
         when(asylumCase.read(LEGAL_REP_REFERENCE_NUMBER, String.class)).thenReturn(Optional.empty());
+        when(asylumCase.read(CCD_REFERENCE_NUMBER_FOR_DISPLAY, String.class)).thenReturn(Optional.empty());
         when(asylumCase.read(LIST_CASE_HEARING_DATE, String.class)).thenReturn(Optional.empty());
         when(asylumCase.read(VULNERABILITIES_TRIBUNAL_RESPONSE, String.class)).thenReturn(Optional.empty());
         when(asylumCase.read(MULTIMEDIA_TRIBUNAL_RESPONSE, String.class)).thenReturn(Optional.empty());
@@ -263,13 +268,14 @@ public class CmaAppointmentNoticeTemplateTest {
 
         Map<String, Object> templateFieldValues = cmaAppointmentNoticeTemplate.mapFieldValues(caseDetails);
 
-        assertEquals(24, templateFieldValues.size());
+        assertEquals(25, templateFieldValues.size());
         assertEquals("[userImage:hmcts.png]", templateFieldValues.get("hmcts"));
         assertEquals("", templateFieldValues.get("appealReferenceNumber"));
         assertEquals("", templateFieldValues.get("appellantGivenNames"));
         assertEquals("", templateFieldValues.get("appellantFamilyName"));
         assertEquals("", templateFieldValues.get("homeOfficeReferenceNumber"));
         assertEquals("", templateFieldValues.get("legalRepReferenceNumber"));
+        assertEquals("", templateFieldValues.get("ccdReferenceNumberForDisplay"));
         assertEquals("", templateFieldValues.get("hearingDate"));
         assertEquals("", templateFieldValues.get("hearingTime"));
         assertEquals(expectedFormattedManchesterHearingCentreAddress, templateFieldValues.get("hearingCentreAddress"));

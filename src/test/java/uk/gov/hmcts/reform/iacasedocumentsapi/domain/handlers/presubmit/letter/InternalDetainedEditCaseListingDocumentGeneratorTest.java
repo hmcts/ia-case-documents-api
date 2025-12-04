@@ -55,13 +55,13 @@ class InternalDetainedEditCaseListingDocumentGeneratorTest {
     }
 
     @Test
-    public void should_create_internal_detained_edit_case_listing_pdf_and_append_to_notifications_documents() {
+    public void should_create_internal_non_detained_edit_case_listing_pdf_and_append_to_notifications_documents() {
         when(callback.getCaseDetails()).thenReturn(caseDetails);
         when(callback.getCaseDetailsBefore()).thenReturn(Optional.of(caseDetailsBefore));
         when(callback.getEvent()).thenReturn(Event.EDIT_CASE_LISTING);
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
         when(callback.getCaseDetails().getCaseData().read(IS_ADMIN, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
-        when(callback.getCaseDetails().getCaseData().read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
+        when(callback.getCaseDetails().getCaseData().read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO));
 
         when(internalDetainedEditCaseListingLetterCreator.create(caseDetails, caseDetailsBefore)).thenReturn(uploadedDocument);
 
@@ -74,19 +74,18 @@ class InternalDetainedEditCaseListingDocumentGeneratorTest {
         verify(documentHandler, times(1)).addWithMetadata(
             asylumCase, uploadedDocument,
             NOTIFICATION_ATTACHMENT_DOCUMENTS,
-            DocumentTag.INTERNAL_DETAINED_EDIT_CASE_LISTING_LETTER
+            DocumentTag.INTERNAL_EDIT_CASE_LISTING_LETTER
         );
     }
 
     @Test
-    public void should_create_internal_detained_ada_edit_case_listing_pdf_and_append_to_notifications_documents() {
+    public void should_create_internal_non_detained_admin_edit_case_listing_pdf_and_append_to_notifications_documents() {
         when(callback.getCaseDetails()).thenReturn(caseDetails);
         when(callback.getCaseDetailsBefore()).thenReturn(Optional.of(caseDetailsBefore));
         when(callback.getEvent()).thenReturn(Event.EDIT_CASE_LISTING);
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
         when(callback.getCaseDetails().getCaseData().read(IS_ADMIN, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
-        when(callback.getCaseDetails().getCaseData().read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
-        when(callback.getCaseDetails().getCaseData().read(IS_ACCELERATED_DETAINED_APPEAL, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
+        when(callback.getCaseDetails().getCaseData().read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO));
 
         when(internalDetainedEditCaseListingLetterCreator.create(caseDetails, caseDetailsBefore)).thenReturn(uploadedDocument);
 
@@ -99,7 +98,7 @@ class InternalDetainedEditCaseListingDocumentGeneratorTest {
         verify(documentHandler, times(1)).addWithMetadata(
                 asylumCase, uploadedDocument,
                 NOTIFICATION_ATTACHMENT_DOCUMENTS,
-                DocumentTag.INTERNAL_DETAINED_EDIT_CASE_LISTING_LETTER
+                DocumentTag.INTERNAL_EDIT_CASE_LISTING_LETTER
         );
     }
 
@@ -110,6 +109,7 @@ class InternalDetainedEditCaseListingDocumentGeneratorTest {
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
         when(callback.getCaseDetails().getCaseData().read(IS_ADMIN, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
         when(callback.getCaseDetails().getCaseData().read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
+        when(callback.getCaseDetails().getCaseData().read(DETENTION_FACILITY, String.class)).thenReturn(Optional.of("immigrationRemovalCentre"));
 
         assertThatThrownBy(() -> internalDetainedEditCaseListingDocumentGenerator.handle(PreSubmitCallbackStage.ABOUT_TO_START, callback))
             .hasMessage("Cannot handle callback")
@@ -122,12 +122,13 @@ class InternalDetainedEditCaseListingDocumentGeneratorTest {
     }
 
     @Test
-    public void handling_should_throw_if_non_ada_case_details_before_is_missing() {
+    public void handling_should_throw_if_case_details_before_is_missing() {
         when(callback.getCaseDetails()).thenReturn(caseDetails);
+        when(callback.getCaseDetailsBefore()).thenReturn(Optional.empty());
         when(callback.getEvent()).thenReturn(Event.EDIT_CASE_LISTING);
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
         when(callback.getCaseDetails().getCaseData().read(IS_ADMIN, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
-        when(callback.getCaseDetails().getCaseData().read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
+        when(callback.getCaseDetails().getCaseData().read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO));
 
         when(internalDetainedEditCaseListingLetterCreator.create(caseDetails, caseDetailsBefore)).thenReturn(uploadedDocument);
 
@@ -137,13 +138,13 @@ class InternalDetainedEditCaseListingDocumentGeneratorTest {
     }
 
     @Test
-    public void handling_should_throw_if_ada_case_details_before_is_missing() {
+    public void handling_should_throw_if_case_details_before_is_missing_admin_case() {
         when(callback.getCaseDetails()).thenReturn(caseDetails);
+        when(callback.getCaseDetailsBefore()).thenReturn(Optional.empty());
         when(callback.getEvent()).thenReturn(Event.EDIT_CASE_LISTING);
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
         when(callback.getCaseDetails().getCaseData().read(IS_ADMIN, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
-        when(callback.getCaseDetails().getCaseData().read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
-        when(callback.getCaseDetails().getCaseData().read(IS_ACCELERATED_DETAINED_APPEAL, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
+        when(callback.getCaseDetails().getCaseData().read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO));
 
         when(internalDetainedEditCaseListingLetterCreator.create(caseDetails, caseDetailsBefore)).thenReturn(uploadedDocument);
 
@@ -171,21 +172,53 @@ class InternalDetainedEditCaseListingDocumentGeneratorTest {
     }
 
     @Test
-    public void it_cannot_handle_callback_if_is_detained_is_missing() {
+    public void it_cannot_handle_callback_if_not_admin_case() {
 
-        for (Event event : Event.values()) {
+        when(callback.getEvent()).thenReturn(Event.EDIT_CASE_LISTING);
+        when(callback.getCaseDetails()).thenReturn(caseDetails);
+        when(caseDetails.getCaseData()).thenReturn(asylumCase);
+        when(callback.getCaseDetails().getCaseData().read(IS_ADMIN, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO));
+        when(callback.getCaseDetails().getCaseData().read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO));
 
-            when(callback.getEvent()).thenReturn(event);
-            when(callback.getCaseDetails()).thenReturn(caseDetails);
-            when(caseDetails.getCaseData()).thenReturn(asylumCase);
-            when(callback.getCaseDetails().getCaseData().read(IS_ADMIN, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
+        boolean canHandle = internalDetainedEditCaseListingDocumentGenerator.canHandle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
+        assertFalse(canHandle);
+    }
 
-            for (PreSubmitCallbackStage callbackStage : PreSubmitCallbackStage.values()) {
-                boolean canHandle = internalDetainedEditCaseListingDocumentGenerator.canHandle(callbackStage, callback);
-                assertFalse(canHandle);
-            }
-            reset(callback);
-        }
+    @Test
+    public void it_cannot_handle_callback_if_appellant_is_in_detention() {
+        when(callback.getEvent()).thenReturn(Event.EDIT_CASE_LISTING);
+        when(callback.getCaseDetails()).thenReturn(caseDetails);
+        when(caseDetails.getCaseData()).thenReturn(asylumCase);
+        when(callback.getCaseDetails().getCaseData().read(IS_ADMIN, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
+        when(callback.getCaseDetails().getCaseData().read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
+        when(callback.getCaseDetails().getCaseData().read(DETENTION_FACILITY, String.class)).thenReturn(Optional.of("prison"));
+
+        boolean canHandle = internalDetainedEditCaseListingDocumentGenerator.canHandle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
+        assertFalse(canHandle);
+    }
+
+    @Test
+    public void it_can_handle_callback_for_non_detained_internal_case() {
+        when(callback.getEvent()).thenReturn(Event.EDIT_CASE_LISTING);
+        when(callback.getCaseDetails()).thenReturn(caseDetails);
+        when(caseDetails.getCaseData()).thenReturn(asylumCase);
+        when(callback.getCaseDetails().getCaseData().read(IS_ADMIN, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
+        when(callback.getCaseDetails().getCaseData().read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO));
+
+        boolean canHandle = internalDetainedEditCaseListingDocumentGenerator.canHandle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
+        assertTrue(canHandle);
+    }
+
+    @Test
+    public void it_can_handle_callback_for_non_detained_admin_case() {
+        when(callback.getEvent()).thenReturn(Event.EDIT_CASE_LISTING);
+        when(callback.getCaseDetails()).thenReturn(caseDetails);
+        when(caseDetails.getCaseData()).thenReturn(asylumCase);
+        when(callback.getCaseDetails().getCaseData().read(IS_ADMIN, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
+        when(callback.getCaseDetails().getCaseData().read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO));
+
+        boolean canHandle = internalDetainedEditCaseListingDocumentGenerator.canHandle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
+        assertTrue(canHandle);
     }
 
     @Test

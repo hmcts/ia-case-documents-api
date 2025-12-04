@@ -4,12 +4,15 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.*;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo.NO;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo.YES;
 
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.EnumSource;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
@@ -51,13 +54,45 @@ class InternalEndAppealLetterGeneratorTest {
             new InternalEndAppealLetterGenerator(documentCreator, documentHandler);
     }
 
+    @ParameterizedTest
+    @EnumSource(value = YesOrNo.class, names = {"YES", "NO"})
+    void should_create_internal_end_appeal_letter_pdf_and_append_to_letter_notifications_documents_in_country(
+            YesOrNo appellantRepresentation) {
+        when(callback.getCaseDetails()).thenReturn(caseDetails);
+        when(callback.getEvent()).thenReturn(Event.END_APPEAL);
+        when(caseDetails.getCaseData()).thenReturn(asylumCase);
+        when(callback.getCaseDetails().getCaseData().read(IS_ADMIN, YesOrNo.class))
+                .thenReturn(Optional.of(YesOrNo.YES));
+        when(callback.getCaseDetails().getCaseData().read(APPELLANT_IN_DETENTION, YesOrNo.class))
+                .thenReturn(Optional.of(YesOrNo.NO));
+
+        when(asylumCase.read(APPELLANTS_REPRESENTATION, YesOrNo.class))
+                .thenReturn(Optional.of(appellantRepresentation));
+        when(asylumCase.read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(NO));
+        when(documentCreator.create(caseDetails)).thenReturn(document);
+
+        PreSubmitCallbackResponse<AsylumCase> callbackResponse =
+            internalEndAppealLetterGenerator.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
+
+        assertNotNull(callbackResponse);
+        assertEquals(asylumCase, callbackResponse.getData());
+
+        verify(documentHandler, times(1)).addWithMetadataWithoutReplacingExistingDocuments(
+            asylumCase, document,
+            LETTER_NOTIFICATION_DOCUMENTS,
+            DocumentTag.INTERNAL_END_APPEAL_LETTER
+        );
+    }
+
     @Test
-    void should_create_internal_end_appeal_letter_pdf_and_append_to_letter_notifications_documents_in_country() {
+    void should_create_internal_end_appeal_detained_other_letter_pdf_and_append_to_letter_notifications_documents_in_country() {
         when(callback.getCaseDetails()).thenReturn(caseDetails);
         when(callback.getEvent()).thenReturn(Event.END_APPEAL);
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
         when(callback.getCaseDetails().getCaseData().read(IS_ADMIN, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
-        when(callback.getCaseDetails().getCaseData().read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO));
+        when(callback.getCaseDetails().getCaseData().read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
+        when(callback.getCaseDetails().getCaseData().read(DETENTION_FACILITY, String.class)).thenReturn(Optional.of("other"));
+        when(callback.getCaseDetails().getCaseData().read(APPELLANTS_REPRESENTATION, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
         when(asylumCase.read(APPELLANT_HAS_FIXED_ADDRESS, YesOrNo.class)).thenReturn(Optional.of(YES));
 
         when(documentCreator.create(caseDetails)).thenReturn(document);
