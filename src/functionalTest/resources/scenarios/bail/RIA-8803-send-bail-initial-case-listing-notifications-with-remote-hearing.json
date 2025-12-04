@@ -50,51 +50,51 @@
             "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
           }
         ]
+      }
+    },
+    "notifications": [
+      {
+        "reference": "8350_BAIL_UPLOAD_BAIL_SUMMARY_DIRECTION_HOME_OFFICE",
+        "recipient": "{$bailHomeOfficeEmailAddress}",
+        "subject": "Bail application: Upload the Bail Summary direction",
+        "body": [
+          "1650-6221-2061-5101",
+          "John Smith",
+          "{$iaExUiFrontendUrl}"
+        ]
       },
-      "notifications": [
-        {
-          "reference": "8350_BAIL_UPLOAD_BAIL_SUMMARY_DIRECTION_HOME_OFFICE",
-          "recipient": "{$bailHomeOfficeEmailAddress}",
-          "subject": "Bail application: Upload the Bail Summary direction",
-          "body": [
-            "1650-6221-2061-5101",
-            "John Smith",
-            "{$iaExUiFrontendUrl}"
-          ]
-        },
-        {
-          "reference": "8350_BAIL_APPLICATION_CASE_LISTING_HOME_OFFICE",
-          "recipient": "{$bailHomeOfficeEmailAddress}",
-          "subject": "Bail application: Bail hearing listed",
-          "body": [
-            "1650-6221-2061-5101",
-            "John Smith",
-            "{$iaExUiFrontendUrl}",
-            "Cloud Video Platform (CVP)"
-          ]
-        },
-        {
-          "reference": "8350_BAIL_APPLICATION_CASE_LISTING_LEGAL_REPRESENTATIVE",
-          "recipient": "{$TEST_LAW_FIRM_A_USERNAME}",
-          "subject": "Bail application: Bail hearing listed",
-          "body": [
-            "1650-6221-2061-5101",
-            "John Smith",
-            "{$iaExUiFrontendUrl}",
-            "Cloud Video Platform (CVP)"
-          ]
-        },
-        {
-          "reference": "8350_BAIL_UPLOAD_BAIL_SUMMARY_DIRECTION_HOME_OFFICE",
-          "recipient": "{$TEST_CITIZEN_MOBILE}",
-          "subject": "Bail application: Bail hearing listed",
-          "body": [
-            "1650-6221-2061-5101",
-            "John Smith",
-            "Cloud Video Platform (CVP)"
-          ]
-        }
-      ]
-    }
+      {
+        "reference": "8350_BAIL_APPLICATION_CASE_LISTING_HOME_OFFICE",
+        "recipient": "{$bailHomeOfficeEmailAddress}",
+        "subject": "Bail application: Bail hearing listed",
+        "body": [
+          "1650-6221-2061-5101",
+          "John Smith",
+          "{$iaExUiFrontendUrl}",
+          "Cloud Video Platform (CVP)"
+        ]
+      },
+      {
+        "reference": "8350_BAIL_APPLICATION_CASE_LISTING_LEGAL_REPRESENTATIVE",
+        "recipient": "{$TEST_LAW_FIRM_A_USERNAME}",
+        "subject": "Bail application: Bail hearing listed",
+        "body": [
+          "1650-6221-2061-5101",
+          "John Smith",
+          "{$iaExUiFrontendUrl}",
+          "Cloud Video Platform (CVP)"
+        ]
+      },
+      {
+        "reference": "8350_BAIL_UPLOAD_BAIL_SUMMARY_DIRECTION_HOME_OFFICE",
+        "recipient": "{$TEST_CITIZEN_MOBILE}",
+        "subject": "Bail application: Bail hearing listed",
+        "body": [
+          "1650-6221-2061-5101",
+          "John Smith",
+          "Cloud Video Platform (CVP)"
+        ]
+      }
+    ]
   }
 }

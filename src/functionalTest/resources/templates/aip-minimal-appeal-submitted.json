@@ -8,6 +8,7 @@
   "appellantFamilyName": "Jimenez",
   "appellantDateOfBirth": "{$TODAY-7300}",
   "submissionOutOfTime": "No",
+  "appealSubmissionDate": "{$TODAY}",
   "appellantNationalities": [
     {
       "id": "1",

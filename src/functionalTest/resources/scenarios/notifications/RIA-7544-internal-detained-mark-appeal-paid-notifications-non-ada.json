@@ -16,8 +16,6 @@
           "isAdmin": "Yes",
           "appellantsRepresentation": "Yes",
           "appellantInDetention": "Yes",
-          "isAdmin": "Yes",
-          "appellantsRepresentation": "Yes",
           "isAcceleratedDetainedAppeal": "No",
           "detentionFacility": "immigrationRemovalCentre",
           "ircName": "Brookhouse",
@@ -28,7 +26,7 @@
                 "tag": "internalDetMarkAsPaidLetter",
                 "document": {
                   "document_url": "$/http.+\/documents/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/",
-                  "document_binary_url": "$/http.+\/documents/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}\/binary/"
+                  "document_binary_url": "$/http.+\/documents/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}\/binary/",
                   "document_filename": "{$FIXTURE_DOC1_PDF_FILENAME}"
                 },
                 "suppliedBy": "",

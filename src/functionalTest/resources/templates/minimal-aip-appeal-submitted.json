@@ -5,6 +5,7 @@
   "appellantGivenNames": "Talha",
   "appellantFamilyName": "Awan",
   "appellantDateOfBirth": "{$TODAY-7300}",
+  "appealSubmissionDate": "{$TODAY}",
   "appellantNationalities": [
     {
       "id": "1",

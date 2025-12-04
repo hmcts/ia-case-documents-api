@@ -24,7 +24,7 @@
                 "tag": "internalDetMarkAsPaidLetter",
                 "document": {
                   "document_url": "$/http.+\/documents/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/",
-                  "document_binary_url": "$/http.+\/documents/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}\/binary/"
+                  "document_binary_url": "$/http.+\/documents/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}\/binary/",
                   "document_filename": "{$FIXTURE_DOC1_PDF_FILENAME}"
                 },
                 "suppliedBy": "",
@@ -60,28 +60,6 @@
         ]
       }
     },
-    "notifications": [
-      {
-        "reference": "7947_PENDING_PAYMENT_PAID_CASE_OFFICER",
-        "recipient": "{$hearingCentreEmailAddresses.taylorHouse}",
-        "subject": "Immigration and Asylum appeal: A fee has been paid",
-        "body": [
-          "PA/12345/2019",
-          "Talha Awan",
-          "{$iaExUiFrontendUrl}"
-        ]
-      },
-      {
-        "reference": "7947_APPEAL_SUBMITTED_HOME_OFFICE",
-        "recipient": "apc_privatebetainbox@example.com",
-        "subject": "Immigration and Asylum appeal: appeal submitted",
-        "body": [
-          "HMCTS reference: PA/12345/2019",
-          "Home Office reference: A1234567",
-          "Appellant name: Talha Awan",
-          "The online service: {$iaExUiFrontendUrl}"
-        ]
-      }
-    ]
+    "notifications": []
   }
 }

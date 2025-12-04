@@ -51,39 +51,39 @@
             "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
           }
         ]
+      }
+    },
+    "notifications": [
+      {
+        "reference": "5214_BAIL_APPLICATION_ENDED_HOME_OFFICE",
+        "recipient": "{$bailHomeOfficeEmailAddress}",
+        "subject": "Bail Application: This application has ended",
+        "body": [
+          "1652-2660-6360-5220",
+          "TheName TheLastName",
+          "{$iaExUiFrontendUrl}"
+        ]
       },
-      "notifications": [
-        {
-          "reference": "5214_BAIL_APPLICATION_ENDED_HOME_OFFICE",
-          "recipient": "{$bailHomeOfficeEmailAddress}",
-          "subject": "Bail Application: This application has ended",
-          "body": [
-            "1652-2660-6360-5220",
-            "TheName TheLastName",
-            "{$iaExUiFrontendUrl}"
-          ]
-        },
-        {
-          "reference": "5214_BAIL_APPLICATION_ENDED_LEGAL_REPRESENTATIVE",
-          "recipient": "{$bailHomeOfficeEmailAddress}",
-          "subject": "Bail Application: This application has ended",
-          "body": [
-            "1652-2660-6360-5220",
-            "TheName TheLastName",
-            "{$iaExUiFrontendUrl}"
-          ]
-        },
-        {
-          "reference": "5214_BAIL_APPLICATION_ENDED_UT_EMAIL",
-          "recipient": "{${bailUpperTribunalEmailAddress}",
-          "subject": "Bail Application: This application has ended",
-          "body": [
-            "1652-2660-6360-5220",
-            "TheName TheLastName",
-            "{$iaExUiFrontendUrl}"
-          ]
-        }
-      ]
-    }
+      {
+        "reference": "5214_BAIL_APPLICATION_ENDED_LEGAL_REPRESENTATIVE",
+        "recipient": "{$bailHomeOfficeEmailAddress}",
+        "subject": "Bail Application: This application has ended",
+        "body": [
+          "1652-2660-6360-5220",
+          "TheName TheLastName",
+          "{$iaExUiFrontendUrl}"
+        ]
+      },
+      {
+        "reference": "5214_BAIL_APPLICATION_ENDED_UT_EMAIL",
+        "recipient": "{${bailUpperTribunalEmailAddress}",
+        "subject": "Bail Application: This application has ended",
+        "body": [
+          "1652-2660-6360-5220",
+          "TheName TheLastName",
+          "{$iaExUiFrontendUrl}"
+        ]
+      }
+    ]
   }
 }
