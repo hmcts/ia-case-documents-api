@@ -27,6 +27,7 @@
     "caseData": {
       "template": "minimal-internal-appeal-submitted.json",
       "replacements": {
+        "appealSubmissionDate": "{$TODAY-2}",
         "notificationAttachmentDocuments": [
           {
             "id": "1",

@@ -41,6 +41,7 @@
       "replacements": {
         "isAdmin": "Yes",
         "appellantInDetention": "Yes",
+        "appealSubmissionDate": "{$TODAY-2}",
         "isAcceleratedDetainedAppeal": "No",
         "appealReviewOutcome": "decisionMaintained",
         "notificationAttachmentDocuments": [
