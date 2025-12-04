@@ -59,7 +59,7 @@ public class DmDocumentManagementUploader {
                 ByteStreams.toByteArray(resource.getInputStream())
             );
 
-            log.info("Uploading {} using DocumentUploadClientApi (CDAM)", resource.getFilename());
+            log.info("Starting upload {} using DocumentUploadClientApi (CDAM)", resource.getFilename());
             UploadResponse uploadResponse =
                 documentUploadClientApi
                     .upload(
@@ -68,6 +68,8 @@ public class DmDocumentManagementUploader {
                         userId,
                         Collections.singletonList(file)
                     );
+
+            log.info("Finished upload {} using DocumentUploadClientApi (CDAM)", resource.getFilename());
 
             uk.gov.hmcts.reform.document.domain.Document uploadedDocument =
                 uploadResponse
