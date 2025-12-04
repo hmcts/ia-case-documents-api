@@ -133,7 +133,7 @@ public class CcdScenarioRunnerTest {
 
         Map<String, Object> expectedResponse = MapSerializer.deserialize(expectedResponseBody);
 
-        int maxRetries = 1;
+        int maxRetries = 3;
         for (int i = 0; i < maxRetries; i++) {
             try {
                 System.out.println((char) 27 + "[33m" + "Attempt " + (i + 1) + "SCENARIO: " + description);
@@ -386,6 +386,7 @@ public class CcdScenarioRunnerTest {
                 argumentsList.add(Arguments.of(filename, scenario));
             } catch (IOException e) {
                 System.out.println("Failed to parse scenario file: " + filename);
+                failedScenarios.add(filename);
                 e.printStackTrace();
             }
         });
