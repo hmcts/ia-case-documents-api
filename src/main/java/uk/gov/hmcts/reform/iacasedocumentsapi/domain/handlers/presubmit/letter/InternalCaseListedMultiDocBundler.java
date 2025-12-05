@@ -8,6 +8,8 @@ import java.util.List;
 import java.util.Map.Entry;
 import java.util.concurrent.CompletableFuture;
 import org.springframework.stereotype.Component;
+import org.springframework.web.context.request.RequestAttributes;
+import org.springframework.web.context.request.RequestContextHolder;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.Callback;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.DispatchPriority;
@@ -73,15 +75,27 @@ public class InternalCaseListedMultiDocBundler implements PreSubmitCallbackHandl
         PreSubmitCallbackStage callbackStage,
         Callback<AsylumCase> callback
     ) {
+        RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();
+
         CompletableFuture<PreSubmitCallbackResponse<AsylumCase>> appellantFuture =
-            supplyAsync(() ->
-                internalCaseListedAppellantLetterBundler.handle(callbackStage, callback)
-            );
+            supplyAsync(() -> {
+                RequestContextHolder.setRequestAttributes(requestAttributes);
+                try {
+                    return internalCaseListedAppellantLetterBundler.handle(callbackStage, callback);
+                } finally {
+                    RequestContextHolder.resetRequestAttributes();
+                }
+            });
 
         CompletableFuture<PreSubmitCallbackResponse<AsylumCase>> legalRepFuture =
-            supplyAsync(() ->
-                internalCaseListedLegalRepLetterBundler.handle(callbackStage, callback)
-            );
+            supplyAsync(() -> {
+                RequestContextHolder.setRequestAttributes(requestAttributes);
+                try {
+                    return internalCaseListedLegalRepLetterBundler.handle(callbackStage, callback);
+                } finally {
+                    RequestContextHolder.resetRequestAttributes();
+                }
+            });
 
         try {
             AsylumCase appellantCase = appellantFuture.join().getData();
