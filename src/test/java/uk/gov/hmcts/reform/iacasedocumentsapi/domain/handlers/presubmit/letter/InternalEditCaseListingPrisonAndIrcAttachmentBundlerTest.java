@@ -16,6 +16,7 @@ import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseD
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.LETTER_BUNDLE_DOCUMENTS;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.NOTIFICATION_ATTACHMENT_DOCUMENTS;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.DispatchPriority.LATE;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.DispatchPriority.LATEST;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -82,7 +83,7 @@ class InternalEditCaseListingPrisonAndIrcAttachmentBundlerTest {
 
     @Test
     void should_have_late_dispatch_priority() {
-        assertEquals(LATE, internalEditCaseListingPrisonAndIrcAttachmentBundler.getDispatchPriority());
+        assertEquals(LATEST, internalEditCaseListingPrisonAndIrcAttachmentBundler.getDispatchPriority());
     }
 
     @Test
