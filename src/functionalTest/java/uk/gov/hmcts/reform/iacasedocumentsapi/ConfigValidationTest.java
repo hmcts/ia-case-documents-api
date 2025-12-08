@@ -3,8 +3,7 @@ package uk.gov.hmcts.reform.iacasedocumentsapi;
 import net.serenitybdd.junit.spring.integration.SpringIntegrationSerenityRunner;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.CsvSource;
+import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -43,9 +42,9 @@ class ConfigValidationTest {
     @Autowired
     FeatureToggler featureToggler;
 
-    @ParameterizedTest
-    @CsvSource("use-ccd-document-am")
-    void launchDarklyFeatureTogglesPresent(String featureToggleName) {
+    @Test
+    void launchDarklyFeatureTogglesPresent() {
+        String featureToggleName = "use-ccd-document-am";
         boolean value1 = featureToggler.getValue(featureToggleName, true);
         boolean value2 = featureToggler.getValue(featureToggleName, false);
 
