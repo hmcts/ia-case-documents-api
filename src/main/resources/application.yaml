@@ -3290,6 +3290,7 @@ security:
       - "caseListing"
       - "recordAdjournmentDetails"
       - "requestHearingRequirementsFeature"
+      - "changeHearingCentre"
       - "saveNotificationsToData"
       - "updatePaymentStatus"
     caseworker-ia-homeofficebail:
