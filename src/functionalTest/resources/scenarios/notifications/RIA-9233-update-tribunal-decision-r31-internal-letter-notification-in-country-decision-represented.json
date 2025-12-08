@@ -17,7 +17,7 @@
                 "updatedDecisionDate": "{$TODAY}"
               }
             }
-          ]
+          ],
           "appellantsRepresentation": "No",
           "appellantInDetention": "No",
           "appellantInUk": "Yes",

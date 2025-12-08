@@ -17,7 +17,7 @@
                 "updatedDecisionDate": "{$TODAY}"
               }
             }
-          ]
+          ],
           "isDlrmSetAsideEnabled": "Yes",
           "listCaseHearingCentre": "taylorHouse",
           "legalRepresentativeEmailAddress": "sample@mail.com",

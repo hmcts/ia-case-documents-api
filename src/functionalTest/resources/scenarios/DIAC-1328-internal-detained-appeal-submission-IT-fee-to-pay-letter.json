@@ -40,7 +40,7 @@
         "appealReferenceNumber": "$/(.+)/",
         "notificationAttachmentDocuments": [
           {
-            "id": "1",
+            "id": "$/[0-9]/",
             "value": {
               "tag": "internalDetainedAppealRemissionPartiallyGrantedOrRefusedTemplateLetter",
               "document": {

@@ -11,6 +11,9 @@
         "template": "minimal-internal-appeal-submitted.json",
         "replacements": {
           "appealType": "protection",
+          "oocAddressLine1": "5",
+          "oocAddressLine2": "Example Street",
+          "oocLrCountryGovUkAdminJ": "ES",
           "outOfTimeDecisionType": "rejected",
           "isAdmin": "Yes",
           "appellantInDetention": "No",
@@ -58,7 +61,7 @@
         "countryGovUkOocAdminJ": "ES",
         "notificationAttachmentDocuments": [
           {
-            "id": "1",
+            "id": "$/[0-9]/",
             "value": {
               "tag": "recordOutOfTimeDecisionDocument",
               "document": {

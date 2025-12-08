@@ -14,23 +14,17 @@
           "ircName": "Brookhouse",
           "isAdmin": "Yes",
           "appellantInDetention": "Yes",
-          "listCaseHearingCentre": "harmondsworth",
-          "notificationAttachmentDocuments": [
-            {
-              "id": "1",
-              "value": {
-                "tag": "internalChangeHearingCentreLetter",
-                "document": {
-                  "document_url": "{$FIXTURE_DOC1_PDF_URL}",
-                  "document_binary_url": "{$FIXTURE_DOC1_PDF_URL_BINARY}",
-                  "document_filename": "{$FIXTURE_DOC1_PDF_FILENAME}"
-                },
-                "suppliedBy": "",
-                "description": "",
-                "dateUploaded": "{$TODAY}"
-              }
-            }
-          ]
+          "listCaseHearingCentre": "harmondsworth"
+        }
+      },
+      "caseDataBefore": {
+        "template": "minimal-internal-appeal-submitted.json",
+        "replacements": {
+          "detentionFacility": "immigrationRemovalCentre",
+          "ircName": "Brookhouse",
+          "isAdmin": "Yes",
+          "appellantInDetention": "Yes",
+          "listCaseHearingCentre": "nottingham"
         }
       }
     }

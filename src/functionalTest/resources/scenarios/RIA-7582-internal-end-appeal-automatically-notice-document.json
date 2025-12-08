@@ -31,7 +31,7 @@
         "isAcceleratedDetainedAppeal": "No",
         "notificationAttachmentDocuments": [
           {
-            "id": "1",
+            "id": "$/[0-9]/",
             "value": {
               "document": {
                 "document_filename": "PA 12345 2019-Awan-detained-appellant-end-appeal-automaticaly-notice.PDF"

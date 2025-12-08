@@ -40,7 +40,7 @@
                 "type": "Other",
                 "details": "",
                 "evidence": [],
-                "applicant": "",
+                "applicant": "Admin Officer",
                 "date": "{$TODAY}",
                 "decision": "Refused",
                 "state": "prepareForHearing",

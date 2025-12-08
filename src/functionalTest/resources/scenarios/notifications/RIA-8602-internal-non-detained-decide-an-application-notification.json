@@ -50,7 +50,7 @@
                     }
                   }
                 ],
-                "applicant": "",
+                "applicant": "Admin Officer",
                 "date": "",
                 "decision": "Refused",
                 "state": "caseBuilding",
@@ -87,7 +87,7 @@
         ],
         "notificationAttachmentDocuments": [
           {
-            "id": "1",
+            "id": "$/[0-9]/",
             "value": {
               "tag": "internalDecideAnAppellantApplicationLetter",
               "document": {

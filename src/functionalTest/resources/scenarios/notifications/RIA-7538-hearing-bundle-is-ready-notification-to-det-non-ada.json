@@ -17,6 +17,7 @@
           "appellantsRepresentation": "Yes",
           "isAcceleratedDetainedAppeal": "No",
           "listCaseHearingCentre": "harmondsworth",
+          "listCaseHearingDate": "2018-12-31T12:34:56",
           "ariaListingReference": "LP/12345/2019",
           "notificationAttachmentDocuments": [
             {

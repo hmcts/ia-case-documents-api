@@ -17,7 +17,7 @@
                 "updatedDecisionDate": "{$TODAY}"
               }
             }
-          ]
+          ],
           "journeyType": "aip",
           "isDlrmSetAsideEnabled": "Yes",
           "updateTribunalDecisionList": "underRule31",

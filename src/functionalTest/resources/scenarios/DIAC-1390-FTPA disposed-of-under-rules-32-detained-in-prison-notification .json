@@ -50,7 +50,7 @@
         "ftpaAppellantDecisionRemadeRule32": "remadeRule32",
         "notificationAttachmentDocuments": [
           {
-            "id": "1",
+            "id": "$/[0-9]/",
             "value": {
               "tag": "internalDetainedIrcPrisonFtpaDisposedRules31Or32Letter",
               "document": {

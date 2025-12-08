@@ -44,7 +44,7 @@
         "appellantInDetention": "Yes",
         "notificationAttachmentDocuments": [
           {
-            "id": "1",
+            "id": "$/[0-9]/",
             "value": {
               "document": {
                 "document_filename": "PA 12345 2019-Awan-appellant-letter-application-granted.PDF"

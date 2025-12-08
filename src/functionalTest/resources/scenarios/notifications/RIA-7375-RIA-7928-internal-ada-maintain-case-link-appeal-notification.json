@@ -31,6 +31,58 @@
                 "dateUploaded": "{$TODAY}"
               }
             }
+          ],
+          "caseLinks": [
+            {
+              "id": "1",
+              "value": {
+                "CaseType": "Asylum",
+                "CaseReference": "1",
+                "CreatedDateTime": "2023-09-22T15:54:09.839",
+                "ReasonForLink": [
+                  {
+                    "id": "f0768aed-7e52-43cf-b35c-5cd45781e80b",
+                    "value": {
+                      "Reason": "CLRC015"
+                    }
+                  },
+                  {
+                    "id": "f0768aed-7e52-43cf-b35c-5cd45781e80q",
+                    "value": {
+                      "Reason": "CLRC014"
+                    }
+                  },
+                  {
+                    "id": "f0768aed-7e52-43cf-b35c-5cd45781e80w",
+                    "value": {
+                      "Reason": "CLRC013"
+                    }
+                  },
+                  {
+                    "id": "f0768aed-7e52-43cf-b35c-5cd45781e80e",
+                    "value": {
+                      "Reason": "CLRC012"
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "id": "2",
+              "value": {
+                "CaseType": "Asylum",
+                "CaseReference": "2",
+                "CreatedDateTime": "2023-09-21T15:54:09.839",
+                "ReasonForLink": [
+                  {
+                    "id": "f0768aed-7e52-43cf-b35c-5cd45781e80b",
+                    "value": {
+                      "Reason": "CLRC015"
+                    }
+                  }
+                ]
+              }
+            }
           ]
         }
       }

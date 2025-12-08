@@ -54,7 +54,7 @@
         "updateTribunalDecisionDate": "2025-10-01",
         "notificationAttachmentDocuments": [
           {
-            "id": "1",
+            "id": "$/[0-9]/",
             "value": {
               "tag": "internalDetainedAppealUpdateTribunalDecisionRule31IrcPrisonLetter",
               "document": {

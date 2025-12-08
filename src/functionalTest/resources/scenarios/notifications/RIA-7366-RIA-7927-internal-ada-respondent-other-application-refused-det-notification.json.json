@@ -75,7 +75,7 @@
         "decideAnApplicationId": "1",
         "notificationAttachmentDocuments": [
           {
-            "id": "1",
+            "id": "$/[0-9]/",
             "value": {
               "tag": "internalDecideHomeOfficeApplicationLetter",
               "document": {

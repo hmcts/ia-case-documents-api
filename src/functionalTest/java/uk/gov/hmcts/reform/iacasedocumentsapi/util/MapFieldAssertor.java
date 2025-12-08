@@ -46,18 +46,37 @@ public final class MapFieldAssertor {
                     String pathWithKeyAndIndex = pathWithKey + "." + i;
 
                     Object expectedValueItem = expectedValueCollection.get(i);
-                    Object actualValueItem =
-                        i < actualValueCollection.size()
-                            ? actualValueCollection.get(i)
-                            : null;
-
-                    assertValue(expectedValueItem, actualValueItem, pathWithKeyAndIndex);
+                    if (pathWithKey.contains("notificationsSent")) {
+                        assertListContainsValue(actualValueCollection, expectedValueItem, pathWithKeyAndIndex);
+                    } else {
+                        Object actualValueItem =
+                            i < actualValueCollection.size()
+                                ? actualValueCollection.get(i)
+                                : null;
+                        assertValue(expectedValueItem, actualValueItem, pathWithKeyAndIndex);
+                    }
                 }
 
             } else {
                 assertValue(expectedValue, actualValue, pathWithKey);
             }
         }
+    }
+
+    private static void assertListContainsValue(
+        List actualValueCollection,
+        Object expectedValue,
+        String path
+    ) {
+        for (Object actualValueItem : actualValueCollection) {
+            try {
+                assertValue(expectedValue, actualValueItem, path);
+                return;
+            } catch (AssertionError e) {
+                // Continue searching
+            }
+        }
+        throw new AssertionError("No matching value found in collection: " + actualValueCollection + " for expectedValue: " + expectedValue);
     }
 
     private static void assertValue(

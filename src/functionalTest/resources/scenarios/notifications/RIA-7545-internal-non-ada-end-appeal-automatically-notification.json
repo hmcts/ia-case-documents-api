@@ -10,6 +10,7 @@
       "caseData": {
         "template": "minimal-appeal-submitted.json",
         "replacements": {
+          "remissionRejectedDatePlus14days": "{$TODAY-1}",
           "detentionFacility": "immigrationRemovalCentre",
           "ircName": "Brookhouse",
           "isAdmin": "Yes",

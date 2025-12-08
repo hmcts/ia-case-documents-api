@@ -16,6 +16,9 @@
           "appealType": "protection",
           "outOfTimeDecisionType": "inTime",
           "notificationsSent": [],
+          "oocAddressLine1": "5",
+          "oocAddressLine2": "Example Street",
+          "oocLrCountryGovUkAdminJ": "ES",
           "letterBundleDocuments": [
             {
               "id": "1",

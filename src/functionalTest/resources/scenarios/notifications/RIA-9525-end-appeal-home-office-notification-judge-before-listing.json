@@ -17,7 +17,10 @@
           "endAppealApproverType": "Judge",
           "endAppealDate": "2019-08-13",
           "endAppealOutcomeReason": "some outcome reason",
-          "notificationsSent": []
+          "notificationsSent": [],
+          "oocAddressLine1": "5",
+          "oocAddressLine2": "Example Street",
+          "oocLrCountryGovUkAdminJ": "ES"
         }
       }
     }

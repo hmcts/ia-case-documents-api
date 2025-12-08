@@ -12,6 +12,9 @@
         "replacements": {
           "isAdmin": "Yes",
           "appellantsRepresentation": "No",
+          "oocAddressLine1": "5",
+          "oocAddressLine2": "Example Street",
+          "oocLrCountryGovUkAdminJ": "ES",
           "legalRepEmail": "{$TEST_LAW_FIRM_A_USERNAME}",
           "appealType": "protection",
           "outOfTimeDecisionType": "rejected",

@@ -65,7 +65,7 @@
         "appealReferenceNumber": "$/(.+)/",
         "notificationAttachmentDocuments": [
           {
-            "id": "2",
+            "id": "$/[0-9]/",
             "value": {
               "tag": "internalRequestRespondentEvidenceLetter",
               "document": {

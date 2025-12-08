@@ -9,7 +9,7 @@
       "eventId": "listCase",
       "state": "prepareForHearing",
       "caseData": {
-        "template": "minimal-appeal-submitted.json",
+        "template": "minimal-internal-appeal-submitted.json",
         "replacements": {
           "appealReferenceNumber": "PA/12345/2023",
           "ariaListingReference": "LP/12345/2023",
@@ -67,7 +67,7 @@
     "status": 200,
     "errors": [],
     "caseData": {
-      "template": "minimal-appeal-submitted.json",
+      "template": "minimal-internal-appeal-submitted.json",
       "replacements": {
         "appealReferenceNumber": "PA/12345/2023",
         "listCaseHearingCentre": "harmondsworth",

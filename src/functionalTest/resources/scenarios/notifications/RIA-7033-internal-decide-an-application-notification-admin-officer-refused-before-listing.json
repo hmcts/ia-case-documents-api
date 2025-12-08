@@ -38,7 +38,7 @@
                 "type": "Other",
                 "details": "",
                 "evidence": [],
-                "applicant": "",
+                "applicant": "Admin Officer",
                 "date": "",
                 "decision": "Refused",
                 "state": "appealSubmitted",
@@ -64,7 +64,7 @@
         "isAdmin": "Yes",
         "notificationAttachmentDocuments": [
           {
-            "id": "1",
+            "id": "$/[0-9]/",
             "value": {
               "tag": "internalDecideAnAppellantApplicationLetter",
               "document": {

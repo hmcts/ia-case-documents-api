@@ -21,6 +21,9 @@
           "legalRepresentativeEmailAddress": "{$TEST_LAW_FIRM_A_USERNAME}",
           "isCaseUsingLocationRefData": "Yes",
           "isRemoteHearing": "Yes",
+          "oocAddressLine1": "5",
+          "oocAddressLine2": "Example Street",
+          "oocLrCountryGovUkAdminJ": "ES",
           "appellantAddress": {
             "County": "",
             "Country": "United Kingdom",
