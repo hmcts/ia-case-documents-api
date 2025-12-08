@@ -196,16 +196,16 @@ def secrets = [
 
     secret('ia-det-prison-email-mappings', 'IA_DET_PRISON_EMAIL_MAPPINGS'),
 
-    secret('det-irc-brookhouse-email', 'IA_DET_IRC_BROOKHOUSE_EMAIL'),
-    secret('det-irc-colnbrook-email', 'IA_DET_IRC_COLNBROOK_EMAIL'),
-    secret('det-irc-derwentside-email', 'IA_DET_IRC_DERWENTSIDE_EMAIL'),
-    secret('det-irc-harmondsworth-email', 'IA_DET_IRC_DUNGAVEL_EMAIL'),
-    secret('det-irc-dungavel-email', 'IA_DET_IRC_HARMONDSWORTH_EMAIL'),
-    secret('det-irc-swinderby-email', 'IA_DET_IRC_SWINDERBY_EMAIL'),
-    secret('det-irc-tinsleyhouse-email', 'IA_DET_IRC_TINSLEYHOUSE_EMAIL'),
-    secret('det-irc-yarlswood-email', 'IA_DET_IRC_YARLSWOOD_EMAIL')
-
-  ]
+                secret('det-irc-brookhouse-email', 'IA_DET_IRC_BROOKHOUSE_EMAIL'),
+                secret('det-irc-campsfieldhouse-email', 'IA_DET_IRC_CAMPSFIELDHOUSE_EMAIL'),
+                secret('det-irc-colnbrook-email', 'IA_DET_IRC_COLNBROOK_EMAIL'),
+                secret('det-irc-derwentside-email', 'IA_DET_IRC_DERWENTSIDE_EMAIL'),
+                secret('det-irc-harmondsworth-email', 'IA_DET_IRC_DUNGAVEL_EMAIL'),
+                secret('det-irc-dungavel-email', 'IA_DET_IRC_HARMONDSWORTH_EMAIL'),
+                secret('det-irc-swinderby-email', 'IA_DET_IRC_SWINDERBY_EMAIL'),
+                secret('det-irc-tinsleyhouse-email', 'IA_DET_IRC_TINSLEYHOUSE_EMAIL'),
+                secret('det-irc-yarlswood-email', 'IA_DET_IRC_YARLSWOOD_EMAIL')
+        ]
 ]
 
 static LinkedHashMap<String, Object> secret(String secretName, String envVar) {

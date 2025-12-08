@@ -40,10 +40,6 @@
           {
             "id": "92342_LEGAL_REPRESENTATIVE_APPLY_FOR_LATE_REMISSION",
             "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
-          },
-          {
-            "id": "92342_ADMIN_OFFICER_LATE_REMISSION_SUBMITTED",
-            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
           }
         ]
       }
@@ -59,16 +55,6 @@
           "{$iaExUiFrontendUrl}",
           "{$customerServices.telephoneNumber}",
           "{$customerServices.emailAddress}"
-        ]
-      },
-      {
-        "reference": "92342_ADMIN_OFFICER_LATE_REMISSION_SUBMITTED",
-        "recipient": "{$PAYMENT_EXCEPTIONS_ADMIN_OFFICER_EMAIL}",
-        "subject": "Immigration and Asylum appeal: Fee remission requested",
-        "body": [
-          "PA/12345/2019",
-          "Talha Awan",
-          "{$iaExUiFrontendUrl}"
         ]
       }
     ]

@@ -9,6 +9,7 @@ import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.NotificationType;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AppealType;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.RecipientsFinder;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.SystemDateProvider;
 
@@ -22,10 +23,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.APPEAL_REFERENCE_NUMBER;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.APPELLANT_FAMILY_NAME;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.APPELLANT_GIVEN_NAMES;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.HOME_OFFICE_REFERENCE_NUMBER;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.*;
 
 
 @ExtendWith(MockitoExtension.class)
@@ -39,15 +37,16 @@ public class AppellantSubmittedWithRemissionRequestPersonalisationEmailTest {
     @Mock
     SystemDateProvider systemDateProvider;
 
-    private Long caseId = 12345L;
-    private String emailTemplateId = "someEmailTemplateId";
-    private String iaAipFrontendUrl = "http://localhost";
+    private final Long caseId = 12345L;
+    private final String emailTemplateId = "someEmailTemplateId";
+    private final String paPayLaterEmailTemplateId = "paPayLaterEmailTemplateId";
+    private final String iaAipFrontendUrl = "http://localhost";
 
-    private String mockedAppealReferenceNumber = "someReferenceNumber";
-    private String mockedAppealHomeOfficeReferenceNumber = "someHomeOfficeReferenceNumber";
-    private String mockedAppellantGivenNames = "someAppellantGivenNames";
-    private String mockedAppellantFamilyName = "someAppellantFamilyName";
-    private String mockedAppellantEmailAddress = "appelant@example.net";
+    private final String mockedAppealReferenceNumber = "someReferenceNumber";
+    private final String mockedAppealHomeOfficeReferenceNumber = "someHomeOfficeReferenceNumber";
+    private final String mockedAppellantGivenNames = "someAppellantGivenNames";
+    private final String mockedAppellantFamilyName = "someAppellantFamilyName";
+    private final String mockedAppellantEmailAddress = "appelant@example.net";
 
     private AppellantSubmittedWithRemissionRequestPersonalisationEmail appellantSubmittedWithRemissionRequestPersonalisationEmail;
 
@@ -64,8 +63,10 @@ public class AppellantSubmittedWithRemissionRequestPersonalisationEmailTest {
         appellantSubmittedWithRemissionRequestPersonalisationEmail =
             new AppellantSubmittedWithRemissionRequestPersonalisationEmail(
                 emailTemplateId,
+                paPayLaterEmailTemplateId,
                 14,
                 iaAipFrontendUrl,
+                14,
                 recipientsFinder,
                 systemDateProvider
             );
@@ -73,13 +74,43 @@ public class AppellantSubmittedWithRemissionRequestPersonalisationEmailTest {
 
     @Test
     public void should_return_given_template_id() {
-        assertEquals(emailTemplateId, appellantSubmittedWithRemissionRequestPersonalisationEmail.getTemplateId());
+        assertEquals(emailTemplateId, appellantSubmittedWithRemissionRequestPersonalisationEmail.getTemplateId(asylumCase));
+    }
+
+    @Test
+    public void should_return_pa_pay_later_template_id_when_pa_and_payLater() {
+        when(asylumCase.read(APPEAL_TYPE, AppealType.class)).thenReturn(Optional.of(AppealType.PA));
+        when(asylumCase.read(PA_APPEAL_TYPE_AIP_PAYMENT_OPTION, String.class)).thenReturn(Optional.of("payLater"));
+
+        assertEquals(paPayLaterEmailTemplateId, appellantSubmittedWithRemissionRequestPersonalisationEmail.getTemplateId(asylumCase));
+    }
+
+    @Test
+    public void should_return_pa_pay_later_template_id_when_pa_and_payOffline() {
+        when(asylumCase.read(APPEAL_TYPE, AppealType.class)).thenReturn(Optional.of(AppealType.PA));
+        when(asylumCase.read(PA_APPEAL_TYPE_AIP_PAYMENT_OPTION, String.class)).thenReturn(Optional.of("payOffline"));
+
+        assertEquals(paPayLaterEmailTemplateId, appellantSubmittedWithRemissionRequestPersonalisationEmail.getTemplateId(asylumCase));
+    }
+
+    @Test
+    public void should_return_default_template_id_when_pa_and_payment_option_unknown() {
+        when(asylumCase.read(APPEAL_TYPE, AppealType.class)).thenReturn(Optional.of(AppealType.PA));
+        when(asylumCase.read(PA_APPEAL_TYPE_AIP_PAYMENT_OPTION, String.class)).thenReturn(Optional.of("someOtherOption"));
+
+        assertEquals(emailTemplateId, appellantSubmittedWithRemissionRequestPersonalisationEmail.getTemplateId(asylumCase));
+    }
+
+    @Test
+    public void should_return_default_template_id_when_appeal_type_not_pa() {
+        when(asylumCase.read(APPEAL_TYPE, AppealType.class)).thenReturn(Optional.of(AppealType.EA));
+
+        assertEquals(emailTemplateId, appellantSubmittedWithRemissionRequestPersonalisationEmail.getTemplateId(asylumCase));
     }
 
     @Test
     public void should_return_given_reference_id() {
-        assertEquals(caseId + "_SUBMITTED_WITH_REMISSION_REQUEST_AIP_EMAIL",
-            appellantSubmittedWithRemissionRequestPersonalisationEmail.getReferenceId(caseId));
+        assertEquals(caseId + "_SUBMITTED_WITH_REMISSION_REQUEST_AIP_EMAIL", appellantSubmittedWithRemissionRequestPersonalisationEmail.getReferenceId(caseId));
     }
 
     @Test
@@ -142,5 +173,47 @@ public class AppellantSubmittedWithRemissionRequestPersonalisationEmailTest {
         assertEquals("", personalisation.get("appellantGivenNames"));
         assertEquals("", personalisation.get("appellantFamilyName"));
         assertEquals(dueDate, personalisation.get("appealSubmittedDaysAfter"));
+    }
+
+    @Test
+    public void should_return_pa_personalisation_when_all_info_present() {
+        final String refundDueDate = LocalDate.now().plusDays(14)
+                .format(DateTimeFormatter.ofPattern("d MMM yyyy"));
+
+        when(systemDateProvider.dueDate(14)).thenReturn(refundDueDate);
+        when(asylumCase.read(APPEAL_TYPE, AppealType.class)).thenReturn(Optional.of(AppealType.PA));
+        when(asylumCase.read(PA_APPEAL_TYPE_AIP_PAYMENT_OPTION, String.class)).thenReturn(Optional.of("payLater"));
+
+        Map<String, String> personalisation = appellantSubmittedWithRemissionRequestPersonalisationEmail.getPersonalisation(asylumCase);
+
+        assertEquals(mockedAppealReferenceNumber, personalisation.get("appealReferenceNumber"));
+        assertEquals(mockedAppealHomeOfficeReferenceNumber, personalisation.get("homeOfficeReferenceNumber"));
+        assertEquals(mockedAppellantGivenNames, personalisation.get("appellantGivenNames"));
+        assertEquals(mockedAppellantFamilyName, personalisation.get("appellantFamilyName"));
+        assertEquals(iaAipFrontendUrl, personalisation.get("Hyperlink to service"));
+        assertEquals(refundDueDate, personalisation.get("14 days after remission request sent"));
+    }
+
+    @Test
+    public void should_return_pa_personalisation_with_missing_fields() {
+        final String refundDueDate = LocalDate.now().plusDays(14)
+                .format(DateTimeFormatter.ofPattern("d MMM yyyy"));
+
+        when(systemDateProvider.dueDate(14)).thenReturn(refundDueDate);
+        when(asylumCase.read(APPEAL_REFERENCE_NUMBER, String.class)).thenReturn(Optional.empty());
+        when(asylumCase.read(HOME_OFFICE_REFERENCE_NUMBER, String.class)).thenReturn(Optional.empty());
+        when(asylumCase.read(APPELLANT_GIVEN_NAMES, String.class)).thenReturn(Optional.empty());
+        when(asylumCase.read(APPELLANT_FAMILY_NAME, String.class)).thenReturn(Optional.empty());
+        when(asylumCase.read(APPEAL_TYPE, AppealType.class)).thenReturn(Optional.of(AppealType.PA));
+        when(asylumCase.read(PA_APPEAL_TYPE_AIP_PAYMENT_OPTION, String.class)).thenReturn(Optional.of("payLater"));
+
+        Map<String, String> personalisation = appellantSubmittedWithRemissionRequestPersonalisationEmail.getPersonalisation(asylumCase);
+
+        assertEquals("", personalisation.get("appealReferenceNumber"));
+        assertEquals("", personalisation.get("homeOfficeReferenceNumber"));
+        assertEquals("", personalisation.get("appellantGivenNames"));
+        assertEquals("", personalisation.get("appellantFamilyName"));
+        assertEquals(iaAipFrontendUrl, personalisation.get("Hyperlink to service"));
+        assertEquals(refundDueDate, personalisation.get("14 days after remission request sent"));
     }
 }

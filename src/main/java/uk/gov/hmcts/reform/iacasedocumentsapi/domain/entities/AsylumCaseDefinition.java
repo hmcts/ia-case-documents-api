@@ -542,6 +542,9 @@ public enum AsylumCaseDefinition {
     PA_APPEAL_TYPE_PAYMENT_OPTION(
         "paAppealTypePaymentOption", new TypeReference<String>(){}),
 
+    PA_APPEAL_TYPE_AIP_PAYMENT_OPTION(
+        "paAppealTypeAipPaymentOption", new TypeReference<String>(){}),
+
     IS_REHEARD_APPEAL_ENABLED(
         "isReheardAppealEnabled", new TypeReference<YesOrNo>(){}),
 
@@ -706,7 +709,6 @@ public enum AsylumCaseDefinition {
 
     AMOUNT_LEFT_TO_PAY(
         "amountLeftToPay", new TypeReference<String>(){}),
-
 
     UPDATE_TRIBUNAL_DECISION_LIST(
         "updateTribunalDecisionList", new TypeReference<UpdateTribunalRules>(){}),

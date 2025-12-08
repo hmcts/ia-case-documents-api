@@ -14,6 +14,7 @@
           "amountRemitted": "140",
           "isDlrmFeeRefundEnabled": "Yes",
           "isLateRemissionRequest": "Yes",
+          "paymentStatus": "Paid",
           "subscriptions": [
             {
               "id": "1",
@@ -27,6 +28,12 @@
             }
           ],
           "notificationsSent": []
+        }
+      },
+      "caseDataBefore": {
+        "template": "minimal-appeal-submitted.json",
+        "replacements": {
+          "paymentStatus": "Paid"
         }
       }
     }
