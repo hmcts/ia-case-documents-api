@@ -14,6 +14,19 @@
           "listCaseHearingCentre": "remoteHearing",
           "hearingCentre": "northShields",
           "listCaseHearingDate": "2019-05-03T14:25:15.000",
+          "directions": [
+            {
+              "id": "1",
+              "value": {
+                "tag": "requestCmaRequirements",
+                "parties": "appellant",
+                "dateDue": "{$TODAY+14}",
+                "dateSent": "{$TODAY}",
+                "explanation": "An explanation of why the meeting was requested",
+                "previousDates": []
+              }
+            }
+          ],
           "subscriptions": [
             {
               "id": "1",

@@ -10,6 +10,14 @@
       "caseData": {
         "template": "minimal-internal-appeal-submitted.json",
         "replacements": {
+          "correctedDecisionAndReasons": [
+            {
+              "id": "1",
+              "value": {
+                "updatedDecisionDate": "{$TODAY}"
+              }
+            }
+          ]
           "appellantsRepresentation": "No",
           "appellantInDetention": "No",
           "appellantInUk": "Yes",

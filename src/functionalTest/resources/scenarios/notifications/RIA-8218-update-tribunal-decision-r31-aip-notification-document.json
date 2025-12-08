@@ -10,6 +10,14 @@
       "caseData": {
         "template": "minimal-appeal-submitted.json",
         "replacements": {
+          "correctedDecisionAndReasons": [
+            {
+              "id": "1",
+              "value": {
+                "updatedDecisionDate": "{$TODAY}"
+              }
+            }
+          ]
           "journeyType": "aip",
           "isDlrmSetAsideEnabled": "Yes",
           "updateTribunalDecisionList": "underRule31",
