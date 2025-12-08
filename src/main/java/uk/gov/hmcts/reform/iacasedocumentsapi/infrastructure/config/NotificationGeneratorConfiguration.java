@@ -26,7 +26,6 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.personalisation.adminoffice
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.personalisation.adminofficer.AdminOfficerFtpaDecisionRespondentPersonalisation;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.personalisation.adminofficer.AdminOfficerRecordAdjournmentDetailsPersonalisation;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.personalisation.adminofficer.AdminOfficerReListCasePersonalisation;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.personalisation.adminofficer.AdminOfficerRequestFeeRemissionPersonalisation;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.personalisation.adminofficer.AdminOfficerReviewHearingRequirementsPersonalisation;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.personalisation.adminofficer.AdminOfficerUpperTribunalBundleFailedPersonalisation;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.personalisation.adminofficer.AdminOfficerWithoutHearingRequirementsPersonalisation;
