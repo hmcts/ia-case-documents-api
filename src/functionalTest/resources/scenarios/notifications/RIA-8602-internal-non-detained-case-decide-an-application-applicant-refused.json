@@ -8,7 +8,7 @@
       "eventId": "decideAnApplication",
       "state": "caseBuilding",
       "caseData": {
-        "template": "minimal-appeal-submitted.json",
+        "template": "minimal-internal-appeal-submitted.json",
         "replacements": {
           "detentionFacility": "immigrationRemovalCentre",
           "ircName": "Brookhouse",
@@ -55,7 +55,7 @@
     "status": 200,
     "errors": [],
     "caseData": {
-      "template": "minimal-appeal-submitted.json",
+      "template": "minimal-internal-appeal-submitted.json",
       "replacements": {
         "detentionFacility": "immigrationRemovalCentre",
         "ircName": "Brookhouse",
@@ -70,22 +70,6 @@
           {
             "id": "68112_DECIDE_AN_APPLICATION_HOME_OFFICE",
             "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
-          }
-        ],
-        "notificationAttachmentDocuments": [
-          {
-            "id": "1",
-            "value": {
-              "tag": "internalDecideAnAppellantApplicationLetter",
-              "document": {
-                "document_url": "$/http.+\/documents/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/",
-                "document_binary_url": "$/http.+\/documents/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}\/binary/",
-                "document_filename": "{$FIXTURE_DOC1_PDF_FILENAME}"
-              },
-              "suppliedBy": "",
-              "description": "",
-              "dateUploaded": "{$TODAY}"
-            }
           }
         ]
       }

@@ -233,8 +233,14 @@ public class CcdScenarioRunnerTest {
             "awaitingReasonsForAppeal",
             "reasonsForAppealSubmitted"
         );
-        if (state != null && !state.equals("*")) {
-            if (!unlistedStates.contains(state)) {
+        String stateBeforeEndAppeal;
+        if (caseData.containsKey("stateBeforeEndAppeal")) {
+            stateBeforeEndAppeal = caseData.get("stateBeforeEndAppeal").toString();
+        } else {
+            stateBeforeEndAppeal = state;
+        }
+        if (stateBeforeEndAppeal != null && !stateBeforeEndAppeal.equals("*")) {
+            if (!unlistedStates.contains(stateBeforeEndAppeal)) {
                 caseData.putIfAbsent(
                     "listCaseHearingCentre",
                     caseData.getOrDefault("hearingCentre", "taylorHouse")
@@ -410,10 +416,8 @@ public class CcdScenarioRunnerTest {
         List<Arguments> argumentsList = new ArrayList<>(Collections.emptyList());
         scenarioSources.forEach((filename, scenarioSource) -> {
             try {
-                if (failingScenarios.contains(filename)) {
-                    Map<String, Object> scenario = deserializeWithExpandedValues(scenarioSource);
-                    argumentsList.add(Arguments.of(filename, scenario));
-                }
+                Map<String, Object> scenario = deserializeWithExpandedValues(scenarioSource);
+                argumentsList.add(Arguments.of(filename, scenario));
             } catch (IOException e) {
                 System.out.println("Failed to parse scenario file: " + filename);
                 failedScenarios.add(filename);
@@ -459,39 +463,27 @@ public class CcdScenarioRunnerTest {
     }
 
     private final List<String> failingScenarios = List.of(
-        "DIAC-1339-case-listed-notification-harmondsworth-hearing-centre.json",
-        "RIA-8260-mark-appeal-as-remitted-aip.json",
-        "RIA-7688-internal-detained-respondent-transfer-out-of-ada-application-granted-det-notification.json",
         "RIA-6949-appeal-outcome-notification-newport-admin.json",
         "RIA-7688-internal-detained-respondent-adjourn-application-refused-det-notification.json",
         "RIA-4827-appeal-allowed-payment-failed-aip.json",
         "RIA-1463-send-appeal-dismissed-decision-notification.json",
         "RIA-6949-appeal-outcome-notification-newcastle-admin.json",
-        "DIAC-1339-edit-case-listing-notification-harmondsworth-hearing-centre.json",
         "RIA-3855-decision-outcome-judge-home-office-notification-failure.json",
-        "RIA-9525-record-out-of-time-decision-appeal-can-proceed.json",
-        "RIA-6781-RIA-7173-internal-ada-case-ada-suitability-notification-suitable.json",
         "RIA-6949-appeal-outcome-notification-glasgow-tribunal-admin.json",
         "RIA-4932-aip-appeal-outcome-allowed.json",
-        "RIA-8344-internal-aip-mark-appeal-remitted-letter-notification-in-country.json",
         "RIA-4827-appeal-dismissed-no-payment-status-aip.json",
         "RIA-7428-internal-reinstate-appeal-det-notification-ada.json",
-        "DIAC-1747-edit-case-listing-notification-harmondsworth-hearing-centre-lr-manual.json",
         "RIA-7162-appeal-outcome-notifcation-taylorHouse-admin-linkedCase_No.json",
         "RIA-7688-internal-detained-respondent-expedite-application-refused-det-notification.json",
         "RIA-4827-appeal-dismissed-payment-pending-aip.json",
         "RIA-4827-appeal-allowed-no-payment-status-aip.json",
         "RIA-6949-appeal-outcome-notification-nottingham-admin.json",
         "RIA-4827-appeal-allowed-payment-pending-aip.json",
-        "RIA-8179-re-list-case-with-integrated-case-notification.json",
-        "RIA-4774-edit-payment-method-notification-check-appeal-started.json",
         "RIA-1939-send-appeal-dismissed-decision-notification-admin.json",
-        "RIA-7688-internal-detained-respondent-transfer-out-of-ada-application-refused-det-notification.json",
         "RIA-6949-appeal-outcome-notification-hatton-cross-admin.json",
         "RIA-1939-send-appeal-dismissed-decision-notification-judge.json",
         "RIA-1939-send-appeal-allowed-decision-notification-judge.json",
         "RIA-3855-decision-outcome-caseofficer-home-office-notification-failure.json",
-        "RIA-9233-internal-aip-mark-appeal-remitted-letter-notification-in-country-represented.json",
         "RIA-7688-internal-detained-respondent-expedite-application-granted-det-notification.json",
         "RIA-6949-appeal-outcome-notification-belfast-admin.json",
         "RIA-7948-internal-ada-submit-appeal-notification.json",
@@ -500,24 +492,18 @@ public class CcdScenarioRunnerTest {
         "RIA-7950-internal-appeal-exited-online-before-notification.json",
         "RIA-6949-appeal-outcome-notification-birmingham-admin.json",
         "RIA-3799-manage-a-fee-update-hu-appeal-paynow-by-PBA-after-listing.json",
-        "RIA-8669-mark-appeal-as-remitted-non-detained-appellant-notification.json",
         "RIA-1939-send-appeal-allowed-decision-notification-admin.json",
-        "DIAC-1371-internal-aip-mark-appeal-remitted-letter-notification-detained-other.json",
         "RIA-8602-internal-non-detained-decide-an-application-notification.json",
         "RIA-7712-internal-reinstate-appeal-det-notification-non-ada.json",
         "RIA-1463-send-appeal-allowed-decision-notification.json",
-        "RIA-6608-ada-suitability-suitable.json",
         "RIA-9525-appeal-outcome-notification-manchester-admin.json",
         "RIA-6949-appeal-outcome-notification-coventry-admin.json",
         "RIA-7688-internal-detained-respondent-adjourn-application-granted-det-notification.json",
-        "RIA-7544-internal-detained-mark-appeal-paid-notifications-non-ada.json",
         "RIA-8602-internal-non-detained-decide-an-application-notification-admin-officer-granted-after-listing.json",
         "RIA-3799-manage-a-fee-update-hu-appeal-paynow-by-PBA-before-listing.json",
         "RIA-6949-appeal-outcome-notification-manchester-admin.json",
-        "RIA-9525-record-out-of-time-decision-appeal-cannot-proceed.json",
         "RIA-7688-internal-detained-respondent-other-application-refused-det-notification.json",
         "RIA-4932-aip-ooc-appeal-outcome-allowed.json",
-        "RIA-6781-RIA-7173-internal-ada-case-ada-suitability-notification-unsuitable.json",
         "RIA-8602-internal-non-detained-case-decide-an-application-applicant-refused.json",
         "RIA-7162-appeal-outcome-notification-taylorHouse-admin-linkedCase_Yes-notification.json",
         "RIA-6949-appeal-outcome-notification-bradford--admin.json",
