@@ -95,7 +95,7 @@ class DocumentTagTest {
         assertEquals("internalCaseListedLrLetterBundle", DocumentTag.INTERNAL_CASE_LISTED_LR_LETTER_BUNDLE.toString());
         assertEquals("appealWasNotSubmittedSupportingDocument", DocumentTag.APPEAL_WAS_NOT_SUBMITTED_SUPPORTING_DOCUMENT.toString());
         assertEquals("internalOutOfTimeDecisionLetter", DocumentTag.INTERNAL_OUT_OF_TIME_DECISION_LETTER.toString());
-        assertEquals("internalOutOfTimeDecisionLetter", DocumentTag.INTERNAL_OUT_OF_TIME_DECISION_LETTER_BUNDLE.toString());
+        assertEquals("internalOutOfTimeDecisionLetterBundle", DocumentTag.INTERNAL_OUT_OF_TIME_DECISION_LETTER_BUNDLE.toString());
         assertEquals("internalEditCaseListingLetter", DocumentTag.INTERNAL_EDIT_CASE_LISTING_LETTER.toString());
         assertEquals("internalEditCaseListingLetterBundle", DocumentTag.INTERNAL_EDIT_CASE_LISTING_LETTER_BUNDLE.toString());
         assertEquals("internalEditCaseListingLrLetter", DocumentTag.INTERNAL_EDIT_CASE_LISTING_LR_LETTER.toString());
