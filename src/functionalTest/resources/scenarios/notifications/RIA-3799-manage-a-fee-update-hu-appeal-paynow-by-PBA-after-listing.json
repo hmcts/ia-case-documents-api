@@ -6,7 +6,7 @@
     "input": {
       "id": 3799,
       "eventId": "manageFeeUpdate",
-      "state": "customiseHearingBundle",
+      "state": "submitHearingRequirements",
       "caseData": {
         "template": "minimal-appeal-submitted.json",
         "replacements": {

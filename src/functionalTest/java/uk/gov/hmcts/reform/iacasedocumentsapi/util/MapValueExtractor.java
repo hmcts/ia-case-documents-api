@@ -141,7 +141,7 @@ public final class MapValueExtractor {
                     for (Map<String, Object> notification : notifications) {
                         String notificationValue = (String) notification.get("reference");
 
-                        if (notificationValue.contains("_CASE_OFFICER")) {
+                        if (notificationValue != null && notificationValue.contains("_CASE_OFFICER")) {
                             updatedNotifications.remove(notification);
                         }
                     }

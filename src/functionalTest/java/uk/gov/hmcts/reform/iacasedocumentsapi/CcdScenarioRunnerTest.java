@@ -258,7 +258,11 @@ public class CcdScenarioRunnerTest {
         }
 
         if (eventId != null && eventId.equals("sendDecisionAndReasons")) {
-            String finalDecisionAndReasonsDocument = "{\"document_url\": \"{$FIXTURE_DOC1_PDF_URL}\",\"document_binary_url\": \"{$FIXTURE_DOC1_PDF_URL_BINARY}\",\"document_filename\": \"{$FIXTURE_DOC1_PDF_FILENAME}\"}";
+            Map<String, Object> finalDecisionAndReasonsDocument = new HashMap<>();
+            finalDecisionAndReasonsDocument.put("document_url", "{$FIXTURE_DOC1_PDF_URL}");
+            finalDecisionAndReasonsDocument.put("document_binary_url", "{$FIXTURE_DOC1_PDF_URL_BINARY}");
+            finalDecisionAndReasonsDocument.put("document_filename", "{$FIXTURE_DOC1_PDF_FILENAME}");
+            mapValueExpander.expandValues(finalDecisionAndReasonsDocument);
             caseData.putIfAbsent("finalDecisionAndReasonsDocument", finalDecisionAndReasonsDocument);
         }
 
@@ -405,9 +409,9 @@ public class CcdScenarioRunnerTest {
         }
 
         Map<String, String> scenarioSources = new HashMap<>();
-        // scenarioSources.putAll(StringResourceLoader.load("/scenarios/" + scenarioPattern));
-        // scenarioSources.putAll(StringResourceLoader.load("/scenarios/payments/" + scenarioPattern));
-        // scenarioSources.putAll(StringResourceLoader.load("/scenarios/bail/" + scenarioPattern));
+        scenarioSources.putAll(StringResourceLoader.load("/scenarios/" + scenarioPattern));
+        scenarioSources.putAll(StringResourceLoader.load("/scenarios/payments/" + scenarioPattern));
+        scenarioSources.putAll(StringResourceLoader.load("/scenarios/bail/" + scenarioPattern));
         scenarioSources.putAll(StringResourceLoader.load("/scenarios/notifications/" + scenarioPattern));
 
         System.out.println((char) 27 + "[36m" + "-------------------------------------------------------------------");
@@ -463,53 +467,14 @@ public class CcdScenarioRunnerTest {
     }
 
     private final List<String> failingScenarios = List.of(
-        "RIA-6949-appeal-outcome-notification-newport-admin.json",
-        "RIA-7688-internal-detained-respondent-adjourn-application-refused-det-notification.json",
-        "RIA-4827-appeal-allowed-payment-failed-aip.json",
-        "RIA-1463-send-appeal-dismissed-decision-notification.json",
-        "RIA-6949-appeal-outcome-notification-newcastle-admin.json",
-        "RIA-3855-decision-outcome-judge-home-office-notification-failure.json",
-        "RIA-6949-appeal-outcome-notification-glasgow-tribunal-admin.json",
-        "RIA-4932-aip-appeal-outcome-allowed.json",
-        "RIA-4827-appeal-dismissed-no-payment-status-aip.json",
-        "RIA-7428-internal-reinstate-appeal-det-notification-ada.json",
-        "RIA-7162-appeal-outcome-notifcation-taylorHouse-admin-linkedCase_No.json",
         "RIA-7688-internal-detained-respondent-expedite-application-refused-det-notification.json",
-        "RIA-4827-appeal-dismissed-payment-pending-aip.json",
-        "RIA-4827-appeal-allowed-no-payment-status-aip.json",
-        "RIA-6949-appeal-outcome-notification-nottingham-admin.json",
-        "RIA-4827-appeal-allowed-payment-pending-aip.json",
-        "RIA-1939-send-appeal-dismissed-decision-notification-admin.json",
-        "RIA-6949-appeal-outcome-notification-hatton-cross-admin.json",
-        "RIA-1939-send-appeal-dismissed-decision-notification-judge.json",
-        "RIA-1939-send-appeal-allowed-decision-notification-judge.json",
-        "RIA-3855-decision-outcome-caseofficer-home-office-notification-failure.json",
         "RIA-7688-internal-detained-respondent-expedite-application-granted-det-notification.json",
-        "RIA-6949-appeal-outcome-notification-belfast-admin.json",
         "RIA-7948-internal-ada-submit-appeal-notification.json",
-        "RIA-6949-appeal-outcome-notification-taylorHouse-admin.json",
-        "RIA-4932-aip-appeal-outcome-dismissed.json",
         "RIA-7950-internal-appeal-exited-online-before-notification.json",
-        "RIA-6949-appeal-outcome-notification-birmingham-admin.json",
         "RIA-3799-manage-a-fee-update-hu-appeal-paynow-by-PBA-after-listing.json",
-        "RIA-1939-send-appeal-allowed-decision-notification-admin.json",
-        "RIA-8602-internal-non-detained-decide-an-application-notification.json",
-        "RIA-7712-internal-reinstate-appeal-det-notification-non-ada.json",
-        "RIA-1463-send-appeal-allowed-decision-notification.json",
-        "RIA-9525-appeal-outcome-notification-manchester-admin.json",
-        "RIA-6949-appeal-outcome-notification-coventry-admin.json",
-        "RIA-7688-internal-detained-respondent-adjourn-application-granted-det-notification.json",
-        "RIA-8602-internal-non-detained-decide-an-application-notification-admin-officer-granted-after-listing.json",
         "RIA-3799-manage-a-fee-update-hu-appeal-paynow-by-PBA-before-listing.json",
-        "RIA-6949-appeal-outcome-notification-manchester-admin.json",
         "RIA-7688-internal-detained-respondent-other-application-refused-det-notification.json",
-        "RIA-4932-aip-ooc-appeal-outcome-allowed.json",
-        "RIA-8602-internal-non-detained-case-decide-an-application-applicant-refused.json",
         "RIA-7162-appeal-outcome-notification-taylorHouse-admin-linkedCase_Yes-notification.json",
-        "RIA-6949-appeal-outcome-notification-bradford--admin.json",
-        "RIA-4932-ooc-aip-appeal-outcome-dismissed.json",
-        "RIA-6949-appeal-outcome-notification-glasgow-admin.json",
-        "RIA-3855-decision-outcome-admin-home-office-notification-failure.json",
         "RIA-7688-internal-detained-respondent-other-application-granted-det-notification.json"
     );
 }

@@ -18,7 +18,7 @@
               "value": {
                 "CaseReference": "testCase",
                 "CaseType": "testType",
-                "CreatedDateTime": "2023-06-08 17:37:39",
+                "CreatedDateTime": "2023-06-08T17:37:39.000",
                 "ReasonForLink": []
               }
             }
