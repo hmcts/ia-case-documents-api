@@ -56,7 +56,6 @@ class DetentionEngagementTeamEditCaseListingProductionPersonalisationTest {
     private final String hearingTime = "12:00:00";
     private final String hearingCentreAddress = "someAddress";
     private final String templateId = "templateId";
-    private final String nonAdaPrefix = "IAFT - SERVE IN PERSON";
     private DetentionEngagementTeamEditCaseListingProductionPersonalisation personalisation;
 
     DocumentWithMetadata caseListedDoc = TestUtils.getDocumentWithMetadata(
@@ -71,8 +70,7 @@ class DetentionEngagementTeamEditCaseListingProductionPersonalisationTest {
             templateId,
                 detentionFacilityEmailService,
             dateTimeExtractor,
-            hearingDetailsFinder,
-            nonAdaPrefix
+            hearingDetailsFinder
         );
     }
 
@@ -118,7 +116,6 @@ class DetentionEngagementTeamEditCaseListingProductionPersonalisationTest {
 
         Map<String, String> actualPersonalisation = personalisation.getPersonalisation(asylumCase);
 
-        assertEquals(nonAdaPrefix, actualPersonalisation.get("subjectPrefix"));
         assertEquals(appealReferenceNumber, actualPersonalisation.get("appealReferenceNumber"));
         assertEquals(homeOfficeReferenceNumber, actualPersonalisation.get("homeOfficeReferenceNumber"));
         assertEquals(appellantGivenNames, actualPersonalisation.get("appellantGivenNames"));
@@ -144,7 +141,6 @@ class DetentionEngagementTeamEditCaseListingProductionPersonalisationTest {
 
         Map<String, String> actualPersonalisation = personalisation.getPersonalisation(asylumCase);
 
-        assertEquals(nonAdaPrefix, actualPersonalisation.get("subjectPrefix"));
         assertEquals(appealReferenceNumber, actualPersonalisation.get("appealReferenceNumber"));
         assertEquals(homeOfficeReferenceNumber, actualPersonalisation.get("homeOfficeReferenceNumber"));
         assertEquals(appellantGivenNames, actualPersonalisation.get("appellantGivenNames"));
@@ -169,7 +165,6 @@ class DetentionEngagementTeamEditCaseListingProductionPersonalisationTest {
 
         Map<String, String> actualPersonalisation = personalisation.getPersonalisation(asylumCase);
 
-        assertEquals(nonAdaPrefix, actualPersonalisation.get("subjectPrefix"));
         assertEquals("", actualPersonalisation.get("appealReferenceNumber"));
         assertEquals("", actualPersonalisation.get("homeOfficeReferenceNumber"));
         assertEquals("", actualPersonalisation.get("appellantGivenNames"));

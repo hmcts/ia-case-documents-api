@@ -26,20 +26,17 @@ public class DetentionEngagementTeamListCaseProductionPersonalisation implements
     private final DetentionFacilityEmailService detentionFacilityEmailService;
     private final DateTimeExtractor dateTimeExtractor;
     private final HearingDetailsFinder hearingDetailsFinder;
-    private final String subjectPrefix;
 
     public DetentionEngagementTeamListCaseProductionPersonalisation(
         @Value("${govnotify.template.caseListed.detentionEngagementTeam.production.email}") String caseListedProductionDetainedTemplateId,
         DetentionFacilityEmailService detentionFacilityEmailService,
         DateTimeExtractor dateTimeExtractor,
-        HearingDetailsFinder hearingDetailsFinder,
-        @Value("${govnotify.emailPrefix.nonAdaInPerson}") String subjectPrefix
+        HearingDetailsFinder hearingDetailsFinder
     ) {
         this.caseListedProductionDetainedTemplateId = caseListedProductionDetainedTemplateId;
         this.detentionFacilityEmailService = detentionFacilityEmailService;
         this.dateTimeExtractor = dateTimeExtractor;
         this.hearingDetailsFinder = hearingDetailsFinder;
-        this.subjectPrefix = subjectPrefix;
     }
 
     @Override
@@ -69,7 +66,6 @@ public class DetentionEngagementTeamListCaseProductionPersonalisation implements
 
         return ImmutableMap
             .<String, String>builder()
-            .put("subjectPrefix", subjectPrefix)
             .put("appealReferenceNumber", asylumCase.read(APPEAL_REFERENCE_NUMBER, String.class).orElse(""))
             .put("homeOfficeReferenceNumber", asylumCase.read(HOME_OFFICE_REFERENCE_NUMBER, String.class).orElse(""))
             .put("appellantGivenNames", asylumCase.read(APPELLANT_GIVEN_NAMES, String.class).orElse(""))
