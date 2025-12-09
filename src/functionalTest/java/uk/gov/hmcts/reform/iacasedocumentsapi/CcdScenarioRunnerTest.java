@@ -117,17 +117,20 @@ public class CcdScenarioRunnerTest {
 
         final long testCaseId = getTestId(scenario);
 
+        final String requestUri = MapValueExtractor.extract(scenario, "request.uri");
+
         final String requestBody = buildCallbackBody(
             testCaseId,
             MapValueExtractor.extract(scenario, "request.input"),
+            requestUri,
             templatesByFilename
         );
 
-        final String requestUri = MapValueExtractor.extract(scenario, "request.uri");
         int expectedStatus = MapValueExtractor.extractOrDefault(scenario, "expectation.status", 200);
 
         String expectedResponseBody = buildCallbackResponseBody(
             MapValueExtractor.extract(scenario, "expectation"),
+            requestUri,
             templatesByFilename
         );
 
@@ -205,6 +208,7 @@ public class CcdScenarioRunnerTest {
         Map<String, Object> caseDataInput,
         String state,
         String eventId,
+        String requestUri,
         Map<String, String> templatesByFilename
     ) throws IOException {
 
@@ -215,55 +219,59 @@ public class CcdScenarioRunnerTest {
         if (caseDataReplacements != null) {
             MapMerger.merge(caseData, caseDataReplacements);
         }
-        if (caseData.containsKey("detentionFacility")) {
-            caseData.putIfAbsent("ircName", "Brookhouse");
-        }
 
-        List<String> unlistedStates = List.of(
-            "appealStarted",
-            "appealStartedByAdmin",
-            "appealSubmitted",
-            "appealSubmittedOutOfTime",
-            "pendingPayment",
-            "awaitingRespondentEvidence",
-            "caseBuilding",
-            "caseUnderReview",
-            "respondentReview",
-            "submitHearingRequirements",
-            "awaitingReasonsForAppeal",
-            "reasonsForAppealSubmitted"
-        );
-        String stateBeforeEndAppeal;
-        if (caseData.containsKey("stateBeforeEndAppeal")) {
-            stateBeforeEndAppeal = caseData.get("stateBeforeEndAppeal").toString();
-        } else {
-            stateBeforeEndAppeal = state;
-        }
-        if (stateBeforeEndAppeal != null && !stateBeforeEndAppeal.equals("*")) {
-            if (!unlistedStates.contains(stateBeforeEndAppeal)) {
-                caseData.putIfAbsent(
-                    "listCaseHearingCentre",
-                    caseData.getOrDefault("hearingCentre", "taylorHouse")
-                );
+        if (requestUri.contains("asylum")) {
+
+            if (caseData.containsKey("detentionFacility")) {
+                caseData.putIfAbsent("ircName", "Brookhouse");
             }
-            caseData.putIfAbsent("currentCaseStateVisibleToCaseOfficer", state);
-            caseData.putIfAbsent("currentCaseStateVisibleToJudge", state);
-            caseData.putIfAbsent("currentCaseStateVisibleToLegalRepresentative", state);
-            caseData.putIfAbsent("currentCaseStateVisibleToAdminOfficer", state);
-            caseData.putIfAbsent("currentCaseStateVisibleToHomeOfficeApc", state);
-            caseData.putIfAbsent("currentCaseStateVisibleToHomeOfficeLart", state);
-            caseData.putIfAbsent("currentCaseStateVisibleToHomeOfficePou", state);
-            caseData.putIfAbsent("currentCaseStateVisibleToHomeOfficeGeneric", state);
-            caseData.putIfAbsent("currentCaseStateVisibleToHomeOfficeAll", state);
-        }
 
-        if (eventId != null && eventId.equals("sendDecisionAndReasons")) {
-            Map<String, Object> finalDecisionAndReasonsDocument = new HashMap<>();
-            finalDecisionAndReasonsDocument.put("document_url", "{$FIXTURE_DOC1_PDF_URL}");
-            finalDecisionAndReasonsDocument.put("document_binary_url", "{$FIXTURE_DOC1_PDF_URL_BINARY}");
-            finalDecisionAndReasonsDocument.put("document_filename", "{$FIXTURE_DOC1_PDF_FILENAME}");
-            mapValueExpander.expandValues(finalDecisionAndReasonsDocument);
-            caseData.putIfAbsent("finalDecisionAndReasonsDocument", finalDecisionAndReasonsDocument);
+            List<String> unlistedStates = List.of(
+                "appealStarted",
+                "appealStartedByAdmin",
+                "appealSubmitted",
+                "appealSubmittedOutOfTime",
+                "pendingPayment",
+                "awaitingRespondentEvidence",
+                "caseBuilding",
+                "caseUnderReview",
+                "respondentReview",
+                "submitHearingRequirements",
+                "awaitingReasonsForAppeal",
+                "reasonsForAppealSubmitted"
+            );
+            String stateBeforeEndAppeal;
+            if (caseData.containsKey("stateBeforeEndAppeal")) {
+                stateBeforeEndAppeal = caseData.get("stateBeforeEndAppeal").toString();
+            } else {
+                stateBeforeEndAppeal = state;
+            }
+            if (stateBeforeEndAppeal != null && !stateBeforeEndAppeal.equals("*")) {
+                if (!unlistedStates.contains(stateBeforeEndAppeal)) {
+                    caseData.putIfAbsent(
+                        "listCaseHearingCentre",
+                        caseData.getOrDefault("hearingCentre", "taylorHouse")
+                    );
+                }
+                caseData.putIfAbsent("currentCaseStateVisibleToCaseOfficer", state);
+                caseData.putIfAbsent("currentCaseStateVisibleToJudge", state);
+                caseData.putIfAbsent("currentCaseStateVisibleToLegalRepresentative", state);
+                caseData.putIfAbsent("currentCaseStateVisibleToAdminOfficer", state);
+                caseData.putIfAbsent("currentCaseStateVisibleToHomeOfficeApc", state);
+                caseData.putIfAbsent("currentCaseStateVisibleToHomeOfficeLart", state);
+                caseData.putIfAbsent("currentCaseStateVisibleToHomeOfficePou", state);
+                caseData.putIfAbsent("currentCaseStateVisibleToHomeOfficeGeneric", state);
+                caseData.putIfAbsent("currentCaseStateVisibleToHomeOfficeAll", state);
+            }
+
+            if (eventId != null && eventId.equals("sendDecisionAndReasons")) {
+                Map<String, Object> finalDecisionAndReasonsDocument = new HashMap<>();
+                finalDecisionAndReasonsDocument.put("document_url", "{$FIXTURE_DOC1_PDF_URL}");
+                finalDecisionAndReasonsDocument.put("document_binary_url", "{$FIXTURE_DOC1_PDF_URL_BINARY}");
+                finalDecisionAndReasonsDocument.put("document_filename", "{$FIXTURE_DOC1_PDF_FILENAME}");
+                mapValueExpander.expandValues(finalDecisionAndReasonsDocument);
+                caseData.putIfAbsent("finalDecisionAndReasonsDocument", finalDecisionAndReasonsDocument);
+            }
         }
 
         return caseData;
@@ -272,6 +280,7 @@ public class CcdScenarioRunnerTest {
     private String buildCallbackBody(
         long testCaseId,
         Map<String, Object> input,
+        String requestUri,
         Map<String, String> templatesByFilename
     ) throws IOException {
         String state = MapValueExtractor.extractOrThrow(input, "state");
@@ -280,6 +289,7 @@ public class CcdScenarioRunnerTest {
             MapValueExtractor.extract(input, "caseData"),
             state,
             eventId,
+            requestUri,
             templatesByFilename
         );
 
@@ -308,6 +318,7 @@ public class CcdScenarioRunnerTest {
                 MapValueExtractor.extract(input, "caseDataBefore"),
                 state,
                 eventId,
+                requestUri,
                 templatesByFilename
             );
 
@@ -325,6 +336,7 @@ public class CcdScenarioRunnerTest {
 
     private String buildCallbackResponseBody(
         Map<String, Object> expectation,
+        String requestUri,
         Map<String, String> templatesByFilename
     ) throws IOException {
 
@@ -346,6 +358,7 @@ public class CcdScenarioRunnerTest {
                 MapValueExtractor.extract(expectation, "caseData"),
                 null,
                 null,
+                requestUri,
                 templatesByFilename
             );
 
