@@ -21,22 +21,7 @@
           "listCaseHearingDate": "2023-05-03T14:25:15.000",
           "ariaListingReference": "LP/12345/2019",
           "remoteVideoCallTribunalResponse": "Some tribunal response",
-          "letterBundleDocuments": [
-            {
-              "id": "1",
-              "value": {
-                "tag": "internalEditCaseListingLetterBundle",
-                "document": {
-                  "document_url": "{$FIXTURE_DOC1_PDF_URL}",
-                  "document_binary_url": "{$FIXTURE_DOC1_PDF_URL_BINARY}",
-                  "document_filename": "{$FIXTURE_DOC1_PDF_FILENAME}"
-                },
-                "suppliedBy": "",
-                "description": "",
-                "dateUploaded": "{$TODAY}"
-              }
-            }
-          ]
+          "letterBundleDocuments": []
         }
       },
       "caseDataBefore": {

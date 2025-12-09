@@ -37,7 +37,7 @@
         "remissionType": "hoWaiverRemission",
         "notificationAttachmentDocuments": [
           {
-            "id": "$/[0-9]/",
+            "id": "1",
             "value": {
               "tag": "internalDetMarkAsPaidLetter",
               "document": {

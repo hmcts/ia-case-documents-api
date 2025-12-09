@@ -10,7 +10,10 @@
       "caseData": {
         "template": "minimal-internal-appeal-submitted.json",
         "replacements": {
+          "remissionType": "noRemission",
           "appealType": "refusalOfHumanRights",
+          "feeAmountGbp": "14000",
+          "paidAmount": "14000",
           "paymentStatus": "Paid",
           "currentCaseStateVisibleToHomeOfficeAll": "appealSubmitted",
           "isAdmin": "Yes",
@@ -19,22 +22,7 @@
           "isAcceleratedDetainedAppeal": "No",
           "detentionFacility": "immigrationRemovalCentre",
           "ircName": "Brookhouse",
-          "notificationAttachmentDocuments": [
-            {
-              "id": "1",
-              "value": {
-                "tag": "internalDetMarkAsPaidLetter",
-                "document": {
-                  "document_url": "{$FIXTURE_DOC1_PDF_URL}",
-                  "document_binary_url": "{$FIXTURE_DOC1_PDF_URL_BINARY}",
-                  "document_filename": "{$FIXTURE_DOC1_PDF_FILENAME}"
-                },
-                "suppliedBy": "",
-                "description": "",
-                "dateUploaded": "{$TODAY}"
-              }
-            }
-          ]
+          "notificationAttachmentDocuments": []
         }
       }
     }

@@ -485,7 +485,7 @@ class CustomiseHearingBundleHandlerTest {
         when(featureToggler.getValue("dlrm-remitted-feature-flag", false)).thenReturn(true);
 
         when(asylumCase.read(CASE_FLAG_SET_ASIDE_REHEARD_EXISTS, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
-        when(asylumCase.read(SOURCE_OF_REMITTAL, String.class)).thenReturn(Optional.of("Court of Appeal"));
+        when(asylumCase.read(SOURCE_OF_REMITTAL, SourceOfRemittal.class)).thenReturn(Optional.of(SourceOfRemittal.COURT_OF_APPEAL));
         final List<IdValue<RemittalDocument>> remittalDocuments = buildRemittalDocuments();
 
         IdValue<DocumentWithDescription> appellantAdditionalEvidenceDocuments =

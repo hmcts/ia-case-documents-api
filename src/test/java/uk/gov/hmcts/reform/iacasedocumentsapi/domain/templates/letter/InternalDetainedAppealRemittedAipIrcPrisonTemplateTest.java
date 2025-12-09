@@ -8,6 +8,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.SourceOfRemittal;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseDetails;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.CustomerServicesProvider;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.SystemDateProvider;
@@ -46,7 +47,7 @@ class InternalDetainedAppealRemittedAipIrcPrisonTemplateTest {
     private final String homeOfficeReferenceNumber = "A1234567/001";
     private final String appellantGivenNames = "John";
     private final String appellantFamilyName = "Doe";
-    private final String remittalSource = "UT";
+    private final SourceOfRemittal remittalSource = SourceOfRemittal.UPPER_TRIBUNAL;
 
     private InternalDetainedAppealRemittedAipIrcPrisonTemplate template;
 
@@ -92,7 +93,7 @@ class InternalDetainedAppealRemittedAipIrcPrisonTemplateTest {
         when(asylumCase.read(HOME_OFFICE_REFERENCE_NUMBER, String.class)).thenReturn(Optional.empty());
         when(asylumCase.read(APPELLANT_GIVEN_NAMES, String.class)).thenReturn(Optional.empty());
         when(asylumCase.read(APPELLANT_FAMILY_NAME, String.class)).thenReturn(Optional.empty());
-        when(asylumCase.read(SOURCE_OF_REMITTAL, String.class)).thenReturn(Optional.empty());
+        when(asylumCase.read(SOURCE_OF_REMITTAL, SourceOfRemittal.class)).thenReturn(Optional.empty());
 
         Map<String, Object> templateFieldValues = template.mapFieldValues(caseDetails);
 
@@ -143,6 +144,6 @@ class InternalDetainedAppealRemittedAipIrcPrisonTemplateTest {
         when(asylumCase.read(HOME_OFFICE_REFERENCE_NUMBER, String.class)).thenReturn(Optional.of(homeOfficeReferenceNumber));
         when(asylumCase.read(APPELLANT_GIVEN_NAMES, String.class)).thenReturn(Optional.of(appellantGivenNames));
         when(asylumCase.read(APPELLANT_FAMILY_NAME, String.class)).thenReturn(Optional.of(appellantFamilyName));
-        when(asylumCase.read(SOURCE_OF_REMITTAL, String.class)).thenReturn(Optional.of(remittalSource));
+        when(asylumCase.read(SOURCE_OF_REMITTAL, SourceOfRemittal.class)).thenReturn(Optional.of(remittalSource));
     }
 }

@@ -3,6 +3,7 @@ package uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates.letter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.SourceOfRemittal;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseDetails;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates.DocumentTemplate;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.CustomerServicesProvider;
@@ -40,7 +41,9 @@ public class InternalDetainedAppealRemittedAipIrcPrisonTemplate implements Docum
 
         final Map<String, Object> fieldValues = new HashMap<>();
 
-        String remittalSource = asylumCase.read(SOURCE_OF_REMITTAL, String.class).orElse("");
+        String remittalSource = asylumCase.read(SOURCE_OF_REMITTAL, SourceOfRemittal.class)
+            .map(SourceOfRemittal::getValue)
+            .orElse("");
 
         fieldValues.put("dateLetterSent", formatDateForNotificationAttachmentDocument(LocalDate.now()));
         fieldValues.putAll(getAppellantPersonalisation(asylumCase));

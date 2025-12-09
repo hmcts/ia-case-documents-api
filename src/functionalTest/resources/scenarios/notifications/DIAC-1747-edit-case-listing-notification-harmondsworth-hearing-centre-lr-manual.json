@@ -49,36 +49,7 @@
               }
             ]
           },
-          "letterBundleDocuments": [
-            {
-              "id": "1",
-              "value": {
-                "tag": "internalEditCaseListingLetterBundle",
-                "document": {
-                  "document_url": "{$FIXTURE_DOC1_PDF_URL}",
-                  "document_binary_url": "{$FIXTURE_DOC1_PDF_URL_BINARY}",
-                  "document_filename": "{$FIXTURE_DOC1_PDF_FILENAME}"
-                },
-                "suppliedBy": "",
-                "description": "",
-                "dateUploaded": "{$TODAY}"
-              }
-            },
-            {
-              "id": "2",
-              "value": {
-                "tag": "internalEditCaseListingLrLetterBundle",
-                "document": {
-                  "document_url": "{$FIXTURE_DOC1_PDF_URL}",
-                  "document_binary_url": "{$FIXTURE_DOC1_PDF_URL_BINARY}",
-                  "document_filename": "{$FIXTURE_DOC1_PDF_FILENAME}"
-                },
-                "suppliedBy": "",
-                "description": "",
-                "dateUploaded": "{$TODAY}"
-              }
-            }
-          ]
+          "letterBundleDocuments": []
         }
       },
       "caseDataBefore": {
@@ -135,7 +106,7 @@
       {
         "reference": "1747_DETAINED_EDIT_CASE_LISTING_PRODUCTION_DET",
         "recipient": "det-prison-albany@example.com",
-        "subject": "IAFT – SERVE IN PERSON: Hearing details",
+        "subject": "IAFT – Production Notice",
         "body": [
           "PA/12345/2023",
           "Appellant name: Talha Awan",

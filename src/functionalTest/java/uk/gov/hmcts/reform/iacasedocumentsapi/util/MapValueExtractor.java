@@ -78,6 +78,9 @@ public final class MapValueExtractor {
                     if (updateCaseData.containsKey("notifications")) {
                         List<Map<String, Object>> caseDataNotifications = (List<Map<String, Object>>) updateCaseData.get(
                             "notifications");
+                        if (caseDataNotifications == null) {
+                            caseDataNotifications = new ArrayList<>();
+                        }
                         List<Map<String, Object>> updatedCaseDataNotifications = new ArrayList<>(caseDataNotifications);
 
                         for (Map<String, Object> notification : caseDataNotifications) {
@@ -100,6 +103,9 @@ public final class MapValueExtractor {
                         if (replacement.containsKey("notificationsSent")) {
                             List<Map<String, Object>> notificationsSent = (List<Map<String, Object>>) updatedReplacement.get(
                                 "notificationsSent");
+                            if (notificationsSent == null) {
+                                notificationsSent = new ArrayList<>();
+                            }
                             List<Map<String, Object>> updatedNotificationsSent = new ArrayList<>(notificationsSent);
 
                             for (Map<String, Object> notificationSent : notificationsSent) {
@@ -127,6 +133,9 @@ public final class MapValueExtractor {
                 if (expectationMap.containsKey("notifications")) {
                     List<Map<String, Object>> notifications = (List<Map<String, Object>>) expectationMap.get(
                         "notifications");
+                    if (notifications == null) {
+                        notifications = new ArrayList<>();
+                    }
                     List<Map<String, Object>> updatedNotifications = new ArrayList<>(notifications);
 
                     for (Map<String, Object> notification : notifications) {
@@ -137,7 +146,7 @@ public final class MapValueExtractor {
                         }
                     }
                     ((Map<String, Object>) value).remove("notifications");
-                    if (updatedNotifications.size() > 0) {
+                    if (!updatedNotifications.isEmpty()) {
                         ((Map<String, Object>) value).put("notifications", updatedNotifications);
                     }
                 }

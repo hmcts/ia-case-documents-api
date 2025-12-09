@@ -26,7 +26,10 @@
           "listCaseHearingCentre": "remoteHearing",
           "listCaseHearingDate": "2019-05-03T14:25:15.000",
           "legalRepresentativeEmailAddress": "{$TEST_LAW_FIRM_A_USERNAME}",
-          "remoteVideoCallTribunalResponse": "Some tribunal response"
+          "remoteVideoCallTribunalResponse": "Some tribunal response",
+          "oocAddressLine1": "5",
+          "oocAddressLine2": "Example Street",
+          "oocLrCountryGovUkAdminJ": "ES"
         }
       },
       "caseDataBefore": {

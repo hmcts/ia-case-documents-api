@@ -11,6 +11,8 @@
       "caseData": {
         "template": "minimal-appeal-submitted.json",
         "replacements": {
+          "suitabilityReviewJudge": "Judge x",
+          "suitabilityReviewReason": "Reason1",
           "isAcceleratedDetainedAppeal": "Yes",
           "ariaListingReference": "LP/12345/2019",
           "listCaseHearingCentre": "harmondsworth",

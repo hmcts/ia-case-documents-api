@@ -11,10 +11,12 @@
       "caseData": {
         "template": "minimal-appeal-submitted.json",
         "replacements": {
+          "suitabilityReviewReason": "Reason1",
           "isAcceleratedDetainedAppeal": "Yes",
           "ariaListingReference": "LP/12345/2019",
           "listCaseHearingCentre": "harmondsworth",
           "listCaseHearingDate": "2019-05-03T14:25:15.000",
+          "suitabilityReviewJudge": "Judge x",
           "legalRepresentativeEmailAddress": "{$TEST_LAW_FIRM_A_USERNAME}",
           "suitabilityReviewDecision": "suitable"
         }

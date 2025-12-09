@@ -47,6 +47,7 @@
               "label": "Harmondsworth Tribunal Hearing Centre"
             }
           },
+          "listCaseHearingCentreAddress": "Harmondsworth Tribunal Hearing Centre, Colnbrook Bypass, UB7 0HB",
           "isCaseUsingLocationRefData": "Yes",
           "isRemoteHearing": "No",
           "listCaseHearingCentre": "harmondsworth",

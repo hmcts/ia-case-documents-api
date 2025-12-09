@@ -816,7 +816,7 @@ public enum AsylumCaseDefinition {
         "customLatestRemittalDocs", new TypeReference<List<IdValue<DocumentWithDescription>>>(){}),
 
     SOURCE_OF_REMITTAL(
-        "sourceOfRemittal", new TypeReference<String>(){}),
+        "sourceOfRemittal", new TypeReference<SourceOfRemittal>(){}),
 
     // Used to store generated letter notification docs which will be stitched together
     LETTER_NOTIFICATION_DOCUMENTS(

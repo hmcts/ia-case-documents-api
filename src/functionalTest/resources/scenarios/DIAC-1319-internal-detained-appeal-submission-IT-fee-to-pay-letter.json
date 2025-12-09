@@ -44,7 +44,7 @@
         "appealReferenceNumber": "$/(.+)/",
         "notificationAttachmentDocuments": [
           {
-            "id": "$/[0-9]/",
+            "id": "1",
             "value": {
               "tag": "internalDetainedAppealSubmittedInTimeWithFeeToPayLetter",
               "document": {

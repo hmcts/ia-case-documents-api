@@ -56,7 +56,7 @@
         "lateRemissionType": "helpWithFees",
         "notificationAttachmentDocuments": [
           {
-            "id": "$/[0-9]/",
+            "id": "1",
             "value": {
               "tag": "internalDetainedLateRemissionGrantedTemplateLetter",
               "document": {

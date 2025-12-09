@@ -21,6 +21,7 @@
           "isDlrmSetAsideEnabled": "Yes",
           "listCaseHearingCentre": "taylorHouse",
           "legalRepresentativeEmailAddress": "sample@mail.com",
+          "updatedAppealDecision": "Dismissed",
           "updateTribunalDecisionList": "underRule31"
         }
       }

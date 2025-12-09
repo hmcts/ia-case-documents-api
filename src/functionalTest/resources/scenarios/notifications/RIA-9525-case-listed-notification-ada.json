@@ -13,12 +13,23 @@
         "replacements": {
           "isAdmin": "Yes",
           "appellantsRepresentation": "No",
+          "appellantAddress": {
+            "County": "",
+            "Country": "United Kingdom",
+            "PostCode": "NE21JX",
+            "PostTown": "Example Town",
+            "AddressLine1": "5",
+            "AddressLine2": "Example Street"
+          },
           "legalRepEmail": "{$TEST_LAW_FIRM_A_USERNAME}",
           "isAcceleratedDetainedAppeal": "Yes",
           "ariaListingReference": "LP/12345/2019",
           "listCaseHearingCentre": "bradford",
           "listCaseHearingDate": "2019-05-03T14:25:15.000",
           "legalRepresentativeEmailAddress": "{$TEST_LAW_FIRM_A_USERNAME}",
+          "oocAddressLine1": "5",
+          "oocAddressLine2": "Example Street",
+          "oocLrCountryGovUkAdminJ": "ES",
           "directions": [
             {
               "id": "1",

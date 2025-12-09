@@ -28,23 +28,7 @@
             "PostTown": "Example Town",
             "AddressLine1": "5",
             "AddressLine2": "Example Street"
-          },
-          "letterBundleDocuments": [
-            {
-              "id": "1",
-              "value": {
-                "tag": "internalCaseListedLetterBundle",
-                "document": {
-                  "document_url": "{$FIXTURE_DOC1_PDF_URL}",
-                  "document_binary_url": "{$FIXTURE_DOC1_PDF_URL_BINARY}",
-                  "document_filename": "{$FIXTURE_DOC1_PDF_FILENAME}"
-                },
-                "suppliedBy": "",
-                "description": "",
-                "dateUploaded": "2024-06-12"
-              }
-            }
-          ]
+          }
         }
       }
     }
@@ -82,11 +66,11 @@
               "document": {
                 "document_url": "$/http.+\/documents/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/",
                 "document_binary_url": "$/http.+\/documents/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}\/binary/",
-                "document_filename": "{$FIXTURE_DOC1_PDF_FILENAME}"
+                "document_filename": "PA 12345 2019-Awan-internal-case-listed-letter-with-attachment.PDF"
               },
               "suppliedBy": "",
               "description": "",
-              "dateUploaded": "2024-06-12"
+              "dateUploaded": "{$TODAY}"
             }
           }
         ],

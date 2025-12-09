@@ -21,22 +21,7 @@
           "isAcceleratedDetainedAppeal": "Yes",
           "ftpaApplicantType": "appellant",
           "ftpaAppellantRjDecisionOutcomeType": "partiallyGranted",
-          "notificationAttachmentDocuments": [
-            {
-              "id": "1",
-              "value": {
-                "tag": "internalAppellantFtpaDecidedLetter",
-                "document": {
-                  "document_url": "{$FIXTURE_DOC1_PDF_URL}",
-                  "document_binary_url": "{$FIXTURE_DOC1_PDF_URL_BINARY}",
-                  "document_filename": "{$FIXTURE_DOC1_PDF_FILENAME}"
-                },
-                "suppliedBy": "",
-                "description": "",
-                "dateUploaded": "{$TODAY}"
-              }
-            }
-          ]
+          "notificationAttachmentDocuments": []
         }
       }
     }

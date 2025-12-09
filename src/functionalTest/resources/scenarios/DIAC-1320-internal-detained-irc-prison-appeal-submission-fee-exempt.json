@@ -42,7 +42,7 @@
         "appealReferenceNumber": "PA/50001/2025",
         "notificationAttachmentDocuments": [
           {
-            "id": "$/[0-9]/",
+            "id": "1",
             "value": {
               "tag": "internalDetainedAppealSubmittedWithExemptionLetter",
               "document": {
