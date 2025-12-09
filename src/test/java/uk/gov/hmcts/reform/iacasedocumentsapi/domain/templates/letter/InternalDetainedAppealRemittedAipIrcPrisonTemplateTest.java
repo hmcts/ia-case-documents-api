@@ -18,6 +18,7 @@ import java.util.Map;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.Mockito.when;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.APPEAL_REFERENCE_NUMBER;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.APPELLANT_FAMILY_NAME;
@@ -79,7 +80,7 @@ class InternalDetainedAppealRemittedAipIrcPrisonTemplateTest {
         assertEquals(internalCustomerServicesEmail, templateFieldValues.get("customerServicesEmail"));
         assertEquals(formatDateForNotificationAttachmentDocument(LocalDate.now()), templateFieldValues.get("dateLetterSent"));
         assertEquals(internalCustomerServicesTelephone, templateFieldValues.get("customerServicesTelephone"));
-        assertEquals(remittalSource, templateFieldValues.get("remittalSource"));
+        assertEquals(remittalSource.getValue(), templateFieldValues.get("remittalSource"));
     }
 
     @Test
@@ -125,10 +126,10 @@ class InternalDetainedAppealRemittedAipIrcPrisonTemplateTest {
         assertEquals(homeOfficeReferenceNumber, templateFieldValues.get("homeOfficeReferenceNumber"));
         assertEquals(appellantGivenNames, templateFieldValues.get("appellantGivenNames"));
         assertEquals(appellantFamilyName, templateFieldValues.get("appellantFamilyName"));
-        assertEquals(remittalSource, templateFieldValues.get("remittalSource"));
-        assertEquals(null, templateFieldValues.get("customerServicesEmail"));
+        assertEquals(remittalSource.getValue(), templateFieldValues.get("remittalSource"));
+        assertNull(templateFieldValues.get("customerServicesEmail"));
         assertEquals(formatDateForNotificationAttachmentDocument(LocalDate.now()), templateFieldValues.get("dateLetterSent"));
-        assertEquals(null, templateFieldValues.get("customerServicesTelephone"));
+        assertNull(templateFieldValues.get("customerServicesTelephone"));
     }
 
     private void dataSetUp() {
