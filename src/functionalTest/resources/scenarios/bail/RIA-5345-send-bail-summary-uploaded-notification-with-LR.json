@@ -47,12 +47,12 @@
     "notifications": [
       {
         "reference": "5345_BAIL_SUMMARY_UPLOADED_ADMIN_OFFICER",
-        "recipient": "{bailHearingCentreEmailAddresses.newport}",
+        "recipient": "{$bailHearingCentreEmailAddresses.newport}",
         "subject": "Bail application: Upload the Bail Summary direction",
         "body": [
           "1650-6221-2061-5101",
           "John Smith",
-          "{$iaExUiFrontendUrl}",
+          "https://manage-case.platform.hmcts.net/",
           "The Home Office has uploaded the Bail Summary to the online service.",
           "Sign in to your account to see the Bail Summary in the documents tab."
         ]
@@ -64,7 +64,7 @@
         "body": [
           "1650-6221-2061-5101",
           "John Smith",
-          "{$iaExUiFrontendUrl}",
+          "https://manage-case.platform.hmcts.net/",
           "The Home Office has uploaded the Bail Summary to the online service.",
           "Sign in to your account to see the Bail Summary in the documents tab."
         ]

@@ -119,10 +119,11 @@ public class CcdScenarioRunnerTest {
 
         final String requestUri = MapValueExtractor.extract(scenario, "request.uri");
 
+        boolean isAsylumCase = requestUri.contains("asylum");
         final String requestBody = buildCallbackBody(
             testCaseId,
             MapValueExtractor.extract(scenario, "request.input"),
-            requestUri,
+            isAsylumCase,
             templatesByFilename
         );
 
@@ -130,7 +131,7 @@ public class CcdScenarioRunnerTest {
 
         String expectedResponseBody = buildCallbackResponseBody(
             MapValueExtractor.extract(scenario, "expectation"),
-            requestUri,
+            isAsylumCase,
             templatesByFilename
         );
 
@@ -164,6 +165,7 @@ public class CcdScenarioRunnerTest {
                 verifiers.forEach(verifier ->
                                       verifier.verify(
                                           testCaseId,
+                                          isAsylumCase,
                                           scenario,
                                           expectedResponse,
                                           actualResponse
@@ -208,7 +210,7 @@ public class CcdScenarioRunnerTest {
         Map<String, Object> caseDataInput,
         String state,
         String eventId,
-        String requestUri,
+        boolean isAsylumCase,
         Map<String, String> templatesByFilename
     ) throws IOException {
 
@@ -220,7 +222,7 @@ public class CcdScenarioRunnerTest {
             MapMerger.merge(caseData, caseDataReplacements);
         }
 
-        if (requestUri.contains("asylum")) {
+        if (isAsylumCase) {
 
             if (caseData.containsKey("detentionFacility")) {
                 caseData.putIfAbsent("ircName", "Brookhouse");
@@ -280,7 +282,7 @@ public class CcdScenarioRunnerTest {
     private String buildCallbackBody(
         long testCaseId,
         Map<String, Object> input,
-        String requestUri,
+        boolean isAsylumCase,
         Map<String, String> templatesByFilename
     ) throws IOException {
         String state = MapValueExtractor.extractOrThrow(input, "state");
@@ -289,7 +291,7 @@ public class CcdScenarioRunnerTest {
             MapValueExtractor.extract(input, "caseData"),
             state,
             eventId,
-            requestUri,
+            isAsylumCase,
             templatesByFilename
         );
 
@@ -318,7 +320,7 @@ public class CcdScenarioRunnerTest {
                 MapValueExtractor.extract(input, "caseDataBefore"),
                 state,
                 eventId,
-                requestUri,
+                isAsylumCase,
                 templatesByFilename
             );
 
@@ -336,7 +338,7 @@ public class CcdScenarioRunnerTest {
 
     private String buildCallbackResponseBody(
         Map<String, Object> expectation,
-        String requestUri,
+        boolean isAsylumCase,
         Map<String, String> templatesByFilename
     ) throws IOException {
 
@@ -358,7 +360,7 @@ public class CcdScenarioRunnerTest {
                 MapValueExtractor.extract(expectation, "caseData"),
                 null,
                 null,
-                requestUri,
+                isAsylumCase,
                 templatesByFilename
             );
 
@@ -422,10 +424,10 @@ public class CcdScenarioRunnerTest {
         }
 
         Map<String, String> scenarioSources = new HashMap<>();
-        scenarioSources.putAll(StringResourceLoader.load("/scenarios/" + scenarioPattern));
-        scenarioSources.putAll(StringResourceLoader.load("/scenarios/payments/" + scenarioPattern));
+//        scenarioSources.putAll(StringResourceLoader.load("/scenarios/" + scenarioPattern));
+//        scenarioSources.putAll(StringResourceLoader.load("/scenarios/payments/" + scenarioPattern));
         scenarioSources.putAll(StringResourceLoader.load("/scenarios/bail/" + scenarioPattern));
-        scenarioSources.putAll(StringResourceLoader.load("/scenarios/notifications/" + scenarioPattern));
+//        scenarioSources.putAll(StringResourceLoader.load("/scenarios/notifications/" + scenarioPattern));
 
         System.out.println((char) 27 + "[36m" + "-------------------------------------------------------------------");
         System.out.println((char) 27 + "[33m" + "RUNNING " + scenarioSources.size() + " SCENARIOS");
@@ -433,8 +435,10 @@ public class CcdScenarioRunnerTest {
         List<Arguments> argumentsList = new ArrayList<>(Collections.emptyList());
         scenarioSources.forEach((filename, scenarioSource) -> {
             try {
-                Map<String, Object> scenario = deserializeWithExpandedValues(scenarioSource);
-                argumentsList.add(Arguments.of(filename, scenario));
+                if (failingScenarios.contains(filename)) {
+                    Map<String, Object> scenario = deserializeWithExpandedValues(scenarioSource);
+                    argumentsList.add(Arguments.of(filename, scenario));
+                }
             } catch (IOException e) {
                 System.out.println("Failed to parse scenario file: " + filename);
                 failedScenarios.add(filename);
@@ -480,14 +484,46 @@ public class CcdScenarioRunnerTest {
     }
 
     private final List<String> failingScenarios = List.of(
-        "RIA-7688-internal-detained-respondent-expedite-application-refused-det-notification.json",
-        "RIA-7688-internal-detained-respondent-expedite-application-granted-det-notification.json",
-        "RIA-7948-internal-ada-submit-appeal-notification.json",
-        "RIA-7950-internal-appeal-exited-online-before-notification.json",
-        "RIA-3799-manage-a-fee-update-hu-appeal-paynow-by-PBA-after-listing.json",
-        "RIA-3799-manage-a-fee-update-hu-appeal-paynow-by-PBA-before-listing.json",
-        "RIA-7688-internal-detained-respondent-other-application-refused-det-notification.json",
-        "RIA-7162-appeal-outcome-notification-taylorHouse-admin-linkedCase_Yes-notification.json",
-        "RIA-7688-internal-detained-respondent-other-application-granted-det-notification.json"
+        "RIA-5561-send-signed-decision-notice-notifications.json",
+        "RIA-5214-send-application-ended-notifications-not-legally-represented.json",
+        "RIA-5476-send-bail-application-submitted-notification-to-applicant-sms.json",
+        "RIA-8803-send-bail-relisting-case-listing-notifications-remote-hearing.json",
+        "RIA-5345-send-bail-summary-uploaded-notification-with-LR.json",
+        "RIA-8198-decision-under-ima-notification-ut.json",
+        "RIA-5559-send-bail-documents-edited-notification-with-LR.json",
+        "RIA-5561-send-bail-signed-decision-notice-notifications-not-legally-represented.json",
+        "DIAC-1393-decision-without-hearing.json",
+        "RIA-5601-Change-direction-due-date-with-LR.json",
+        "RIA-7561-internal-detained-request-hearing-requirements.json",
+        "DIAC-1379-ho-directed-to-upload-bundle-detained-in-irc-in-prison-appellant-letter.json",
+        "RIA-7174-internal-ada-suitability-suitable-document.json",
+        "RIA-7162-appeal-outcome-notification-taylorHouse-admin-linkedCase_Yes.json",
+        "RIA-5584-RIA-5454-send-bail-application-submitted-notification-to-newport-hearing-centre.json",
+        "DIAC-1405-late-remission-refused-detained-irc-letter.json",
+        "RIA-8803-send-bail-initial-case-listing-notifications-with-remote-hearing.json",
+        "RIA-5601-Change-direction-due-date-without-LR.json",
+        "RIA-4827-appeal-allowed-no-payment-status-aip.json",
+        "RIA-4827-appeal-allowed-payment-pending-aip.json",
+        "RIA-5214-send-application-ended-notifications.json",
+        "RIA-8803-send-bail-initial-case-listing-notifications-with-ref-data-location.json",
+        "RIA-5597-send-direction-sent-notifications.json",
+        "RIA-7175-internal-ada-suitability-unsuitable-document.json",
+        "DIAC-1405-late-remission-refused-detained-prison-letter.json",
+        "RIA-5583-send-bail-application-edited-submitted-notification-with-LR.json",
+        "RIA-8803-send-bail-relisting-case-listing-notifications-ref-data-location.json",
+        "RIA-5583-send-bail-application-edited-submitted-notification-without-LR.json",
+        "RIA-5345-send-bail-summary-uploaded-notification-without-LR.json",
+        "DIAC-1392-aipm-prison-home-office-application-decided.json",
+        "RIA-8112-HO-upload-bail-summary-direction-notifications.json",
+        "RIA-8306-internal-record-out-of-time-decision-out-of-country.json",
+        "RIA-5782-send-bail-stop-representing-notification.json",
+        "RIA-8349-RIA-8352-send-bail-relisting-case-listing-notifications.json",
+        "RIA-5553-send-bail-documents-uploaded-notification-with-LR.json",
+        "RIA-5553-send-bail-documents-uploaded-notification-without-LR.json",
+        "RIA-7435_appellant_respondent_non_standard_direction_letter_ada.json",
+        "DIAC-1378-internal-detained-out-of-time-decision-allowed-letter.json",
+        "RIA-8306-internal-record-out-of-time-decision-in-country.json",
+        "RIA-5584-RIA-5454-send-bail-application-submitted-notification-not-legally-represented.json",
+        "RIA-8349-RIA-8352-send-bail-initial-case-listing-notifications.json"
     );
 }

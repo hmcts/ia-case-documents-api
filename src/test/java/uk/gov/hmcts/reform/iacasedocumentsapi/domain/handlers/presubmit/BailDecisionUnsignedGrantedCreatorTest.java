@@ -10,12 +10,14 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.EnumSource;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.BailCase;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.BailCaseFieldDefinition;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DocumentTag;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.RecordDecisionType;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseDetails;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.Event;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.Callback;
@@ -36,8 +38,8 @@ public class BailDecisionUnsignedGrantedCreatorTest {
     @Mock private Document bailDecisionUnsigned;
 
     private BailDecisionUnsignedGrantedCreator bailDecisionUnsignedGrantedCreator;
-    private String recordDecisionTypeRefusal = "refused";
-    private String recordDecisionTypeGranted = "granted";
+    private RecordDecisionType recordDecisionTypeRefusal = RecordDecisionType.REFUSED;
+    private RecordDecisionType recordDecisionTypeGranted = RecordDecisionType.REFUSED;
 
 
     @BeforeEach
@@ -53,7 +55,7 @@ public class BailDecisionUnsignedGrantedCreatorTest {
             for (PreSubmitCallbackStage preSubmitCallbackStage : PreSubmitCallbackStage.values()) {
                 when(callback.getCaseDetails()).thenReturn(caseDetails);
                 when(caseDetails.getCaseData()).thenReturn(bailCase);
-                when(bailCase.read(RECORD_DECISION_TYPE, String.class)).thenReturn(Optional.of(recordDecisionTypeGranted));
+                when(bailCase.read(RECORD_DECISION_TYPE, RecordDecisionType.class)).thenReturn(Optional.of(recordDecisionTypeGranted));
                 boolean canHandle = bailDecisionUnsignedGrantedCreator.canHandle(preSubmitCallbackStage, callback);
                 if (event == Event.RECORD_THE_DECISION && preSubmitCallbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT) {
                     assertTrue(canHandle);
@@ -65,13 +67,13 @@ public class BailDecisionUnsignedGrantedCreatorTest {
     }
 
     @ParameterizedTest
-    @ValueSource(strings = {"granted", "conditionalGrant"})
-    void should_handle_valid_events_stage(String recordDecisionType) {
+    @EnumSource(value = RecordDecisionType.class, names = {"GRANTED", "CONDITIONAL_GRANT"})
+    void should_handle_valid_events_stage(RecordDecisionType recordDecisionType) {
 
         when(callback.getEvent()).thenReturn(Event.RECORD_THE_DECISION);
         when(callback.getCaseDetails()).thenReturn(caseDetails);
         when(caseDetails.getCaseData()).thenReturn(bailCase);
-        when(bailCase.read(RECORD_DECISION_TYPE, String.class)).thenReturn(Optional.of(recordDecisionType));
+        when(bailCase.read(RECORD_DECISION_TYPE, RecordDecisionType.class)).thenReturn(Optional.of(recordDecisionType));
         boolean canHandle = bailDecisionUnsignedGrantedCreator.canHandle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
         assertTrue(canHandle);
     }
@@ -100,7 +102,7 @@ public class BailDecisionUnsignedGrantedCreatorTest {
         when(callback.getEvent()).thenReturn(Event.RECORD_THE_DECISION);
         when(callback.getCaseDetails()).thenReturn(caseDetails);
         when(caseDetails.getCaseData()).thenReturn(bailCase);
-        when(bailCase.read(RECORD_DECISION_TYPE, String.class)).thenReturn(Optional.of(recordDecisionTypeRefusal));
+        when(bailCase.read(RECORD_DECISION_TYPE, RecordDecisionType.class)).thenReturn(Optional.of(recordDecisionTypeRefusal));
         assertThatThrownBy((() -> bailDecisionUnsignedGrantedCreator.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback)))
                 .isExactlyInstanceOf(IllegalStateException.class)
                 .hasMessage("Cannot handle callback");
@@ -111,7 +113,7 @@ public class BailDecisionUnsignedGrantedCreatorTest {
         when(callback.getEvent()).thenReturn(Event.START_APPEAL);
         when(callback.getCaseDetails()).thenReturn(caseDetails);
         when(caseDetails.getCaseData()).thenReturn(bailCase);
-        when(bailCase.read(RECORD_DECISION_TYPE, String.class)).thenReturn(Optional.of(recordDecisionTypeGranted));
+        when(bailCase.read(RECORD_DECISION_TYPE, RecordDecisionType.class)).thenReturn(Optional.of(recordDecisionTypeGranted));
         assertThatThrownBy((() -> bailDecisionUnsignedGrantedCreator.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback)))
             .isExactlyInstanceOf(IllegalStateException.class)
             .hasMessage("Cannot handle callback");
@@ -122,7 +124,7 @@ public class BailDecisionUnsignedGrantedCreatorTest {
         when(callback.getEvent()).thenReturn(Event.RECORD_THE_DECISION);
         when(callback.getCaseDetails()).thenReturn(caseDetails);
         when(caseDetails.getCaseData()).thenReturn(bailCase);
-        when(bailCase.read(RECORD_DECISION_TYPE, String.class)).thenReturn(Optional.of(recordDecisionTypeGranted));
+        when(bailCase.read(RECORD_DECISION_TYPE, RecordDecisionType.class)).thenReturn(Optional.of(recordDecisionTypeGranted));
         when(bailDocumentCreator.create(caseDetails)).thenReturn(bailDecisionUnsigned);
 
         PreSubmitCallbackResponse<BailCase> response = bailDecisionUnsignedGrantedCreator.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);

@@ -20,9 +20,31 @@
   "expectation": {
     "status": 200,
     "errors": [],
-    "confirmation": {
-      "header": "success",
-      "body": "contains([_BAIL_APPLICATION_SUBMITTED_APPLICANT_SMS])"
-    }
+    "caseData": {
+      "template": "minimal-bail-application-submitted.json",
+      "replacements": {
+        "bailHearingCentre": "newport",
+        "applicantHasMobile": "Yes",
+        "applicantMobileNumber1": "{$IA_TEST_APPLICANT_MOBILE}",
+        "notificationsSent": [
+          {
+            "id": "5476_BAIL_APPLICATION_SUBMITTED_APPLICANT_SMS",
+            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
+          }
+        ]
+      }
+    },
+    "notifications": [
+      {
+        "reference": "5476_BAIL_APPLICATION_SUBMITTED_APPLICANT_SMS",
+        "recipient": "{$IA_TEST_APPLICANT_MOBILE}",
+        "subject": "",
+        "body": [
+          "Your bail application: Online case reference: 1650-6221-2061-5101",
+          "A new bail application has been submitted to the Tribunal. The Tribunal will review the application and set a hearing date, if appropriate.",
+          "You will be notified when the hearing is listed."
+        ]
+      }
+    ]
   }
 }

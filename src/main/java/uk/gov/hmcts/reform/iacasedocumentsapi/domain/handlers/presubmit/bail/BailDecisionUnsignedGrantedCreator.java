@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.BailCase;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DocumentTag;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.RecordDecisionType;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseDetails;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.Event;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.Callback;
@@ -41,11 +42,11 @@ public class BailDecisionUnsignedGrantedCreator implements PreSubmitCallbackHand
         final CaseDetails<BailCase> caseDetails = callback.getCaseDetails();
         final BailCase bailCase = caseDetails.getCaseData();
 
-        String decisionType = bailCase.read(RECORD_DECISION_TYPE, String.class)
-                .orElse("");
+        RecordDecisionType decisionType = bailCase.read(RECORD_DECISION_TYPE, RecordDecisionType.class)
+                .orElse(RecordDecisionType.NONE);
 
-        boolean isGranted = decisionType.equalsIgnoreCase("granted")
-                || decisionType.equalsIgnoreCase("conditionalGrant");
+        boolean isGranted = decisionType.equals(RecordDecisionType.GRANTED)
+                || decisionType.equals(RecordDecisionType.CONDITIONAL_GRANT);
 
         return callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
             && callback.getEvent() == Event.RECORD_THE_DECISION && isGranted;
@@ -66,7 +67,7 @@ public class BailDecisionUnsignedGrantedCreator implements PreSubmitCallbackHand
 
         bailDocumentHandler.addWithMetadata(
             bailCase,
-            bailDocument,            
+            bailDocument,
             UNSIGNED_DECISION_DOCUMENTS_WITH_METADATA,
             DocumentTag.BAIL_DECISION_UNSIGNED
         );

@@ -420,7 +420,7 @@ public enum BailCaseFieldDefinition {
         "recordFinancialConditionYesOrNo", new TypeReference<YesOrNo>(){}),
 
     RECORD_DECISION_TYPE(
-        "recordDecisionType", new TypeReference<String>(){}),
+        "recordDecisionType", new TypeReference<RecordDecisionType>(){}),
 
     RECORD_THE_DECISION_LIST(
         "recordTheDecisionList", new TypeReference<String>(){}),

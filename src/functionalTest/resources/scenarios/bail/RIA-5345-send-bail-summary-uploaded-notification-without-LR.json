@@ -47,7 +47,7 @@
     "notifications": [
       {
         "reference": "5345_BAIL_SUMMARY_UPLOADED_ADMIN_OFFICER",
-        "recipient": "{bailHearingCentreEmailAddresses.newport}",
+        "recipient": "{$bailHearingCentreEmailAddresses.newport}",
         "subject": "Bail application: Upload the Bail Summary direction",
         "body": [
           "1650-6221-2061-5101",

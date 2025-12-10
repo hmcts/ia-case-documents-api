@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.BailCase;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DocumentTag;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.RecordDecisionType;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseDetails;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.Event;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.Callback;
@@ -42,13 +43,13 @@ public class BailDecisionUnsignedRefusalCreator implements PreSubmitCallbackHand
         final CaseDetails<BailCase> caseDetails = callback.getCaseDetails();
         final BailCase bailCase = caseDetails.getCaseData();
 
-        boolean isRefused = bailCase.read(RECORD_DECISION_TYPE, String.class)
-                                    .orElse("")
-                                    .equalsIgnoreCase("refused");
+        boolean isRefused = bailCase.read(RECORD_DECISION_TYPE, RecordDecisionType.class)
+            .map(type -> type.equals(RecordDecisionType.REFUSED))
+            .orElse(false);
 
-        boolean isRefusedUnderIma = bailCase.read(RECORD_DECISION_TYPE, String.class)
-                .orElse("")
-                .equalsIgnoreCase("refusedUnderIma");
+        boolean isRefusedUnderIma = bailCase.read(RECORD_DECISION_TYPE, RecordDecisionType.class)
+            .map(type -> type.equals(RecordDecisionType.REFUSED_UNDER_IMA))
+            .orElse(false);
 
         boolean isMindedToGrant = (BailCaseUtils.isImaEnabled(bailCase)
             ? bailCase.read(RECORD_THE_DECISION_LIST_IMA, String.class).orElse("")

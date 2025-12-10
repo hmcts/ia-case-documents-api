@@ -50,7 +50,7 @@
     "notifications": [
       {
         "reference": "5782_BAIL_STOP_LEGAL_REPRESENTING_ADMIN_OFFICER",
-        "recipient": "{bailHearingCentreEmailAddresses.newport}",
+        "recipient": "{$bailHearingCentreEmailAddresses.newport}",
         "subject": "Bail application: Applicant no longer represented",
         "body": [
           "1650-6221-2061-5101",

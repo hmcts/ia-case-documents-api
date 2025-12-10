@@ -5,6 +5,7 @@ import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.BailCaseFie
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.BailCaseFieldDefinition.RECORD_DECISION_TYPE;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.RecordDecisionType.GRANTED;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.RecordDecisionType.CONDITIONAL_GRANT;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.RecordDecisionType.NONE;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.RecordDecisionType.REFUSED;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.RecordDecisionType.REFUSED_UNDER_IMA;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.State.DECISION_CONDITIONAL_BAIL;
@@ -24,7 +25,7 @@ public class BailCaseUtils {
 
     public static Boolean isBailGranted(BailCase bailCase) {
         RecordDecisionType recordDecisionType = bailCase.read(RECORD_DECISION_TYPE, RecordDecisionType.class)
-            .orElse(null);
+            .orElse(NONE);
         if (Objects.equal(GRANTED, recordDecisionType)
             || Objects.equal(CONDITIONAL_GRANT, recordDecisionType)) {
 

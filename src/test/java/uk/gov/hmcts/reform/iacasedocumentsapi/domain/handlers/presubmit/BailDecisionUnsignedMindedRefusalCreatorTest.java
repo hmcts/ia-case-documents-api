@@ -20,6 +20,7 @@ import org.mockito.junit.jupiter.MockitoSettings;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.BailCase;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.BailCaseFieldDefinition;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DocumentTag;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.RecordDecisionType;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseDetails;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.Event;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.Callback;
@@ -42,8 +43,8 @@ public class BailDecisionUnsignedMindedRefusalCreatorTest {
     @Mock private Document bailDecisionUnsigned;
 
     private BailDecisionUnsignedMindedRefusalCreator bailDecisionUnsignedMindedRefusalCreator;
-    private String recordDecisionTypeRefusal = "refused";
-    private String recordDecisionTypeGranted = "granted";
+    private RecordDecisionType recordDecisionTypeRefusal = RecordDecisionType.REFUSED;
+    private RecordDecisionType recordDecisionTypeGranted = RecordDecisionType.GRANTED;
     private String tribunalDecisionRefusal = "Refused";
     private String tribunalDecisionMindedToGrant = "mindedToGrant";
 
@@ -62,7 +63,7 @@ public class BailDecisionUnsignedMindedRefusalCreatorTest {
             for (PreSubmitCallbackStage preSubmitCallbackStage : PreSubmitCallbackStage.values()) {
                 when(callback.getCaseDetails()).thenReturn(caseDetails);
                 when(caseDetails.getCaseData()).thenReturn(bailCase);
-                when(bailCase.read(RECORD_DECISION_TYPE, String.class)).thenReturn(Optional.of(recordDecisionTypeRefusal));
+                when(bailCase.read(RECORD_DECISION_TYPE, RecordDecisionType.class)).thenReturn(Optional.of(recordDecisionTypeRefusal));
                 when(bailCase.read(RECORD_THE_DECISION_LIST, String.class)).thenReturn(Optional.of(tribunalDecisionMindedToGrant));
                 when(bailCase.read(RECORD_THE_DECISION_LIST_IMA, String.class)).thenReturn(Optional.of(tribunalDecisionMindedToGrant));
                 boolean canHandle = bailDecisionUnsignedMindedRefusalCreator.canHandle(preSubmitCallbackStage, callback);
@@ -106,7 +107,7 @@ public class BailDecisionUnsignedMindedRefusalCreatorTest {
         when(callback.getEvent()).thenReturn(Event.RECORD_THE_DECISION);
         when(callback.getCaseDetails()).thenReturn(caseDetails);
         when(caseDetails.getCaseData()).thenReturn(bailCase);
-        when(bailCase.read(RECORD_DECISION_TYPE, String.class)).thenReturn(Optional.of(recordDecisionTypeGranted));
+        when(bailCase.read(RECORD_DECISION_TYPE, RecordDecisionType.class)).thenReturn(Optional.of(recordDecisionTypeGranted));
         when(bailCase.read(RECORD_THE_DECISION_LIST, String.class)).thenReturn(Optional.of(tribunalDecisionRefusal));
         assertThatThrownBy((() -> bailDecisionUnsignedMindedRefusalCreator.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback)))
                 .isExactlyInstanceOf(IllegalStateException.class)
@@ -118,7 +119,7 @@ public class BailDecisionUnsignedMindedRefusalCreatorTest {
         when(callback.getEvent()).thenReturn(Event.RECORD_THE_DECISION);
         when(callback.getCaseDetails()).thenReturn(caseDetails);
         when(caseDetails.getCaseData()).thenReturn(bailCase);
-        when(bailCase.read(RECORD_DECISION_TYPE, String.class)).thenReturn(Optional.of(recordDecisionTypeRefusal));
+        when(bailCase.read(RECORD_DECISION_TYPE, RecordDecisionType.class)).thenReturn(Optional.of(recordDecisionTypeRefusal));
         when(bailCase.read(RECORD_THE_DECISION_LIST, String.class)).thenReturn(Optional.of(tribunalDecisionRefusal));
         assertThatThrownBy((() -> bailDecisionUnsignedMindedRefusalCreator.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback)))
                 .isExactlyInstanceOf(IllegalStateException.class)
@@ -130,7 +131,7 @@ public class BailDecisionUnsignedMindedRefusalCreatorTest {
         when(callback.getEvent()).thenReturn(Event.START_APPEAL);
         when(callback.getCaseDetails()).thenReturn(caseDetails);
         when(caseDetails.getCaseData()).thenReturn(bailCase);
-        when(bailCase.read(RECORD_DECISION_TYPE, String.class)).thenReturn(Optional.of(recordDecisionTypeRefusal));
+        when(bailCase.read(RECORD_DECISION_TYPE, RecordDecisionType.class)).thenReturn(Optional.of(recordDecisionTypeRefusal));
         when(bailCase.read(RECORD_THE_DECISION_LIST, String.class)).thenReturn(Optional.of(tribunalDecisionMindedToGrant));
         assertThatThrownBy((() -> bailDecisionUnsignedMindedRefusalCreator.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback)))
             .isExactlyInstanceOf(IllegalStateException.class)
@@ -142,7 +143,7 @@ public class BailDecisionUnsignedMindedRefusalCreatorTest {
         when(callback.getEvent()).thenReturn(Event.RECORD_THE_DECISION);
         when(callback.getCaseDetails()).thenReturn(caseDetails);
         when(caseDetails.getCaseData()).thenReturn(bailCase);
-        when(bailCase.read(RECORD_DECISION_TYPE, String.class)).thenReturn(Optional.of(recordDecisionTypeRefusal));
+        when(bailCase.read(RECORD_DECISION_TYPE, RecordDecisionType.class)).thenReturn(Optional.of(recordDecisionTypeRefusal));
         when(bailCase.read(RECORD_THE_DECISION_LIST, String.class)).thenReturn(Optional.of(tribunalDecisionMindedToGrant));
         when(bailDocumentCreator.create(caseDetails)).thenReturn(bailDecisionUnsigned);
 

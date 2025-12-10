@@ -21,10 +21,6 @@
   "expectation": {
     "status": 200,
     "errors": [],
-    "confirmation": {
-      "header": "success",
-      "body": "contains([_BAIL_SIGNED_DECISION_NOTICE_UPLOADED_APPLICANT_SMS])"
-    },
     "caseData": {
       "template": "minimal-bail-application-ended-not-legally-represented.json",
       "replacements": {
@@ -63,7 +59,6 @@
             "{$iaExUiFrontendUrl}"
           ]
         },
-        ,
         {
           "reference": "5214_BAIL_APPLICATION_ENDED_UT_EMAIL",
           "recipient": "{${bailUpperTribunalEmailAddress}",

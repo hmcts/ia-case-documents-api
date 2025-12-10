@@ -15,6 +15,7 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.clients.RetryableNotificationClient;
 import uk.gov.hmcts.reform.iacasedocumentsapi.util.MapValueExtractor;
@@ -28,8 +29,13 @@ public class NotificationVerifier implements Verifier {
     @Autowired
     private RetryableNotificationClient notificationClient;
 
+    @Qualifier("BailClient")
+    @Autowired
+    private RetryableNotificationClient bailNotificationClient;
+
     public void verify(
         long testCaseId,
+        boolean isAsylumCase,
         Map<String, Object> scenario,
         Map<String, Object> expectedResponse,
         Map<String, Object> actualResponse
@@ -80,7 +86,9 @@ public class NotificationVerifier implements Verifier {
 
                 try {
 
-                    Notification notification = notificationClient.getNotificationById(deliveredNotificationId);
+                    Notification notification = isAsylumCase
+                        ? notificationClient.getNotificationById(deliveredNotificationId)
+                        : bailNotificationClient.getNotificationById(deliveredNotificationId);
 
                     final String actualReference = sanitizeNotificationId(notification.getReference().orElse(""));
                     final String actualRecipient =

@@ -7,7 +7,8 @@ public enum RecordDecisionType {
     GRANTED("granted"),
     REFUSED("refused"),
     CONDITIONAL_GRANT("conditionalGrant"),
-    REFUSED_UNDER_IMA("refusedUnderIma");
+    REFUSED_UNDER_IMA("refusedUnderIma"),
+    NONE("none");
 
     @JsonValue
     private final String value;
