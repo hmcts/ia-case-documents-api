@@ -423,10 +423,10 @@ public class CcdScenarioRunnerTest {
         }
 
         Map<String, String> scenarioSources = new HashMap<>();
-        // scenarioSources.putAll(StringResourceLoader.load("/scenarios/" + scenarioPattern));
-        // scenarioSources.putAll(StringResourceLoader.load("/scenarios/payments/" + scenarioPattern));
+        scenarioSources.putAll(StringResourceLoader.load("/scenarios/" + scenarioPattern));
+        scenarioSources.putAll(StringResourceLoader.load("/scenarios/payments/" + scenarioPattern));
         scenarioSources.putAll(StringResourceLoader.load("/scenarios/bail/" + scenarioPattern));
-        // scenarioSources.putAll(StringResourceLoader.load("/scenarios/notifications/" + scenarioPattern));
+        scenarioSources.putAll(StringResourceLoader.load("/scenarios/notifications/" + scenarioPattern));
 
         System.out.println((char) 27 + "[36m" + "-------------------------------------------------------------------");
         System.out.println((char) 27 + "[33m" + "RUNNING " + scenarioSources.size() + " SCENARIOS");
@@ -434,10 +434,8 @@ public class CcdScenarioRunnerTest {
         List<Arguments> argumentsList = new ArrayList<>(Collections.emptyList());
         scenarioSources.forEach((filename, scenarioSource) -> {
             try {
-                if (failingScenarios.contains(filename)) {
-                    Map<String, Object> scenario = deserializeWithExpandedValues(scenarioSource);
-                    argumentsList.add(Arguments.of(filename, scenario));
-                }
+                Map<String, Object> scenario = deserializeWithExpandedValues(scenarioSource);
+                argumentsList.add(Arguments.of(filename, scenario));
             } catch (IOException e) {
                 System.out.println("Failed to parse scenario file: " + filename);
                 failedScenarios.add(filename);
@@ -481,32 +479,4 @@ public class CcdScenarioRunnerTest {
             ? ThreadLocalRandom.current().nextLong(1111111111111111L, 1999999999999999L)
             : scenarioTestCaseId;
     }
-
-    private final List<String> failingScenarios = List.of(
-        "RIA-5553-send-bail-documents-uploaded-notification-with-LR.json",
-        "RIA-5583-send-bail-application-edited-submitted-notification-with-LR.json",
-        "RIA-5584-RIA-5454-send-bail-application-submitted-notification-not-legally-represented.json",
-        "RIA-7162-appeal-outcome-notification-taylorHouse-admin-linkedCase_Yes.json",
-        "RIA-8349-RIA-8352-send-bail-initial-case-listing-notifications.json",
-        "RIA-5583-send-bail-application-edited-submitted-notification-without-LR.json",
-        "RIA-8803-send-bail-relisting-case-listing-notifications-remote-hearing.json",
-        "RIA-5214-send-application-ended-notifications.json",
-        "RIA-5597-send-direction-sent-notifications.json",
-        "RIA-5601-Change-direction-due-date-with-LR.json",
-        "RIA-5584-RIA-5454-send-bail-application-submitted-notification-to-newport-hearing-centre.json",
-        "RIA-8112-HO-upload-bail-summary-direction-notifications.json",
-        "RIA-5559-send-bail-documents-edited-notification-with-LR.json",
-        "RIA-8803-send-bail-initial-case-listing-notifications-with-ref-data-location.json",
-        "RIA-5601-Change-direction-due-date-without-LR.json",
-        "RIA-5214-send-application-ended-notifications-not-legally-represented.json",
-        "RIA-5561-send-signed-decision-notice-notifications.json",
-        "RIA-5782-send-bail-stop-representing-notification.json",
-        "RIA-8349-RIA-8352-send-bail-relisting-case-listing-notifications.json",
-        "RIA-5345-send-bail-summary-uploaded-notification-without-LR.json",
-        "RIA-5561-send-bail-signed-decision-notice-notifications-not-legally-represented.json",
-        "RIA-8803-send-bail-initial-case-listing-notifications-with-remote-hearing.json",
-        "RIA-8803-send-bail-relisting-case-listing-notifications-ref-data-location.json",
-        "RIA-5553-send-bail-documents-uploaded-notification-without-LR.json",
-        "RIA-8198-decision-under-ima-notification-ut.json"
-    );
 }

@@ -68,7 +68,7 @@
         ]
       },
       {
-        "reference": "8352__BAIL_APPLICATION_CASE_LISTING_APPLICANT_SMS",
+        "reference": "8352_BAIL_APPLICATION_CASE_LISTING_APPLICANT_SMS",
         "recipient": "{$TEST_CITIZEN_MOBILE}",
         "subject": "",
         "body": [

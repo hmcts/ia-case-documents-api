@@ -15,7 +15,7 @@
           "currentCaseStateVisibleToHomeOffice": "bailSummaryUploaded",
           "currentCaseStateVisibleToAdminOfficer": "bailSummaryUploaded",
           "currentCaseStateVisibleToLegalRepresentative": "bailSummaryUploaded",
-          "recordDecisionType": "granted",
+          "recordDecisionType": "granted"
         }
       }
     }

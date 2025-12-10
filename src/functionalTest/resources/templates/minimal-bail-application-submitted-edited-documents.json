@@ -54,32 +54,31 @@
   "sendDirectionList": "Home Office",
   "dateOfCompliance": "2022-05-25",
   "applicantDocumentsWithMetadata": [
-   {
-      "id":"2",
-      "value":{
-         "tag":"uploadDocument",
-         "document":{
-            "document_url":"http://dm-store:8080/documents/e41fd4ef-6e2a-46d1-875f-d7e61711538d",
-            "document_filename":"document2.pdf",
-            "document_binary_url":"http://dm-store:8080/documents/e41fd4ef-6e2a-46d1-875f-d7e61711538d/binary"
-         },
-         "description":"applicant doc 2",
-         "dateUploaded":"2022-05-30"
+    {
+      "id": "2",
+      "value": {
+        "tag": "uploadDocument",
+        "document": {
+          "document_url": "http://dm-store:8080/documents/e41fd4ef-6e2a-46d1-875f-d7e61711538d",
+          "document_filename": "document2.pdf",
+          "document_binary_url": "http://dm-store:8080/documents/e41fd4ef-6e2a-46d1-875f-d7e61711538d/binary"
+        },
+        "description": "applicant doc 2",
+        "dateUploaded": "2022-05-30"
       }
-   },
-   {
-      "id":"1",
-      "value":{
-         "tag":"b1Document",
-         "document":{
-            "document_url":"http://dm-store:8080/documents/e39399b4-49a7-488f-96e6-b13ffe4e8bd6",
-            "document_filename":"B1_Bail_Form_0222_save.pdf",
-            "document_binary_url":"http://dm-store:8080/documents/e39399b4-49a7-488f-96e6-b13ffe4e8bd6/binary"
-         },
-         "description":"the B1",
-         "dateUploaded":"2022-05-30"
+    },
+    {
+      "id": "1",
+      "value": {
+        "tag": "b1Document",
+        "document": {
+          "document_url": "http://dm-store:8080/documents/e39399b4-49a7-488f-96e6-b13ffe4e8bd6",
+          "document_filename": "B1_Bail_Form_0222_save.pdf",
+          "document_binary_url": "http://dm-store:8080/documents/e39399b4-49a7-488f-96e6-b13ffe4e8bd6/binary"
+        },
+        "description": "the B1",
+        "dateUploaded": "2022-05-30"
       }
-   }
+    }
   ]
-
 }

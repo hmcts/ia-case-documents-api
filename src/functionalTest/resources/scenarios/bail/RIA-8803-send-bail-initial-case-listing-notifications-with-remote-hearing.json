@@ -55,7 +55,6 @@
         "subject": "Bail application: Bail hearing listed",
         "body": [
           "1650-6221-2061-5101",
-          "John Smith",
           "https://manage-case.platform.hmcts.net",
           "Cloud Video Platform (CVP)"
         ]
@@ -66,7 +65,6 @@
         "subject": "Bail application: Bail hearing listed",
         "body": [
           "1650-6221-2061-5101",
-          "John Smith",
           "https://manage-case.platform.hmcts.net",
           "Cloud Video Platform (CVP)"
         ]
@@ -74,10 +72,9 @@
       {
         "reference": "8350_BAIL_APPLICATION_CASE_LISTING_APPLICANT_SMS",
         "recipient": "{$TEST_CITIZEN_MOBILE}",
-        "subject": "Bail application: Bail hearing listed",
+        "subject": "",
         "body": [
           "1650-6221-2061-5101",
-          "John Smith",
           "Cloud Video Platform (CVP)"
         ]
       }

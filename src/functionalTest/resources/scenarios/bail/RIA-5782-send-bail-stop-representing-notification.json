@@ -1,7 +1,7 @@
 {
   "description": "RIA-5782 NOC - Stop Representing a client notification",
   "request": {
-    "uri": "/bail/ccdAboutToSubmit",
+    "uri": "/bail/ccdSubmitted",
     "credentials": "LegalRepresentative",
     "input": {
       "id": 5782,
@@ -10,6 +10,7 @@
       "caseData": {
         "template": "minimal-bail-application-submitted.json",
         "replacements": {
+          "applicantMobileNumber1": "{$TEST_CITIZEN_MOBILE}",
           "bailHearingCentre": "newport",
           "isLegallyRepresentedForFlag": "Yes"
         }
@@ -19,28 +20,15 @@
   "expectation": {
     "status": 200,
     "errors": [],
+    "confirmation": {
+      "header": "success",
+      "body": "contains([_BAIL_STOP_LEGAL_REPRESENTING_APPLICANT_SMS,5782_BAIL_STOP_LEGAL_REPRESENTING_ADMIN_OFFICER,5782_BAIL_STOP_LEGAL_REPRESENTING_LEGAL_REP,5782_BAIL_STOP_LEGAL_REPRESENTING_HOME_OFFICE])"
+    },
     "caseData": {
       "template": "minimal-bail-application-submitted.json",
       "replacements": {
-        "bailHearingCentre": "newport",
-        "notificationsSent": [
-          {
-            "id": "5782_BAIL_STOP_LEGAL_REPRESENTING_ADMIN_OFFICER",
-            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
-          },
-          {
-            "id": "5782_BAIL_STOP_LEGAL_REPRESENTING_LEGAL_REP",
-            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
-          },
-          {
-            "id": "5782_BAIL_STOP_LEGAL_REPRESENTING_HOME_OFFICE",
-            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
-          },
-          {
-            "id": "5782_BAIL_STOP_LEGAL_REPRESENTING_APPLICANT_SMS",
-            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
-          }
-        ]
+        "applicantMobileNumber1": "{$TEST_CITIZEN_MOBILE}",
+        "bailHearingCentre": "newport"
       }
     },
     "notifications": [
@@ -76,6 +64,15 @@
           "John Smith",
           "https://manage-case.platform.hmcts.net",
           "The legal representative is no longer representing the applicant in this case and they no longer have access to this case."
+        ]
+      },
+      {
+        "reference": "5782_BAIL_STOP_LEGAL_REPRESENTING_APPLICANT_SMS",
+        "recipient": "{$TEST_CITIZEN_MOBILE}",
+        "subject": "",
+        "body": [
+          "1650-6221-2061-5101",
+          "If you have a new legal representative, you need to share your case details with them so they can access your case."
         ]
       }
     ]

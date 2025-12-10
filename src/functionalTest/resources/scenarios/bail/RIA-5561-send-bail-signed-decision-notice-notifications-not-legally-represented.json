@@ -8,10 +8,15 @@
       "eventId": "uploadSignedDecisionNotice",
       "state": "recordTheDecision",
       "caseData": {
-        "template": "minimal-bail-record-the-decision.json",
+        "template": "minimal-bail-record-the-decision-not-legally-represented.json",
         "replacements": {
           "bailHearingCentre": "newport",
           "applicantHasMobile": "Yes",
+          "uploadSignedDecisionNoticeDocument": {
+            "document_url": "{$FIXTURE_DOC1_PDF_URL}",
+            "document_binary_url": "{$FIXTURE_DOC1_PDF_URL_BINARY}",
+            "document_filename": "{$FIXTURE_DOC1_PDF_FILENAME}"
+          },
           "applicantMobileNumber1": "{$IA_TEST_APPLICANT_MOBILE}"
         }
       }
@@ -24,7 +29,7 @@
       "template": "minimal-bail-record-the-decision-not-legally-represented.json",
       "replacements": {
         "applicantMobileNumber1": "{$IA_TEST_APPLICANT_MOBILE}",
-        "bailHearingCentre": "birmingham",
+        "bailHearingCentre": "newport",
         "notificationsSent": [
           {
             "id": "5561_BAIL_SIGNED_DECISION_NOTICE_UPLOADED_APPLICANT_SMS",
@@ -49,7 +54,7 @@
         "recipient": "{$IA_TEST_APPLICANT_MOBILE}",
         "subject": "",
         "body": [
-          "1650-6221-2061-5101"
+          "1652-2660-6360-5220"
         ]
       }
     ]

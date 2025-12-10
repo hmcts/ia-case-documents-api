@@ -10,6 +10,19 @@
       "caseData": {
         "template": "minimal-bail-application-submitted.json",
         "replacements": {
+          "directions": [
+            {
+              "id": "1",
+              "value": {
+                "sendDirectionDescription": "This is the content of the direction",
+                "sendDirectionList": "Home Office",
+                "dateOfCompliance": "2022-05-25",
+                "dateSent": "{$TODAY}",
+                "dateTimeDirectionCreated": "{$TODAY}",
+                "previousDates": []
+              }
+            }
+          ],
           "isLegallyRepresentedForFlag": "Yes",
           "currentCaseStateVisibleToJudge": "applicationSubmitted",
           "currentCaseStateVisibleToHomeOffice": "applicationSubmitted",
@@ -54,22 +67,22 @@
           "You have a direction for this bail application.",
           "Here are the direction details:",
           "This is the content of the direction",
-          "You must comply with this direction by 2022-05-25."
+          "You must comply with this direction by 25 May 2022."
         ]
       },
       {
         "reference": "5597_BAIL_SENT_DIRECTION_LEGAL_REPRESENTATIVE",
         "recipient": "{$TEST_LAW_FIRM_A_USERNAME}",
-        "subject": "Bail application: New document uploaded",
+        "subject": "Bail application: A direction has been sent to the Home Office",
         "body": [
           "1650-6221-2061-5101",
           "John Smith",
           "https://manage-case.platform.hmcts.net",
           "A direction has been sent to the Home Office.",
-          " The Home Office has been directed to:",
+          "The Home Office has been directed to:",
           "This is the content of the direction",
           "Next steps",
-          "The 2022-05-25 must comply with this direction by 2022-05-25."
+          "The Home Office must comply with this direction by 25 May 2022."
         ]
       }
     ]

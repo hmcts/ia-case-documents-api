@@ -8,13 +8,66 @@
       "eventId": "editBailDocuments",
       "state": "bailSummaryUploaded",
       "caseData": {
-        "template": "minimal-bail-application-submitted-edited-documents.json",
+        "template": "minimal-bail-application-submitted.json",
         "replacements": {
           "isLegallyRepresentedForFlag": "Yes",
           "currentCaseStateVisibleToJudge": "applicationSubmitted",
           "currentCaseStateVisibleToHomeOffice": "applicationSubmitted",
           "currentCaseStateVisibleToAdminOfficer": "applicationSubmitted",
-          "currentCaseStateVisibleToLegalRepresentative": "applicationSubmitted"
+          "currentCaseStateVisibleToLegalRepresentative": "applicationSubmitted",
+          "applicantDocumentsWithMetadata": [
+            {
+              "id": "2",
+              "value": {
+                "tag": "uploadDocument",
+                "document": {
+                  "document_url": "http://dm-store:8080/documents/e41fd4ef-6e2a-46d1-875f-d7e61711538d",
+                  "document_filename": "document2.pdf",
+                  "document_binary_url": "http://dm-store:8080/documents/e41fd4ef-6e2a-46d1-875f-d7e61711538d/binary"
+                },
+                "description": "applicant doc 2",
+                "dateUploaded": "2022-05-30"
+              }
+            }
+          ]
+        }
+      },
+      "caseDataBefore": {
+        "template": "minimal-bail-application-submitted.json",
+        "replacements": {
+          "isLegallyRepresentedForFlag": "Yes",
+          "currentCaseStateVisibleToJudge": "applicationSubmitted",
+          "currentCaseStateVisibleToHomeOffice": "applicationSubmitted",
+          "currentCaseStateVisibleToAdminOfficer": "applicationSubmitted",
+          "currentCaseStateVisibleToLegalRepresentative": "applicationSubmitted",
+          "applicantDocumentsWithMetadata": [
+            {
+              "id": "2",
+              "value": {
+                "tag": "uploadDocument",
+                "document": {
+                  "document_url": "http://dm-store:8080/documents/e41fd4ef-6e2a-46d1-875f-d7e61711538d",
+                  "document_filename": "document2.pdf",
+                  "document_binary_url": "http://dm-store:8080/documents/e41fd4ef-6e2a-46d1-875f-d7e61711538d/binary"
+                },
+                "description": "applicant doc 2",
+                "dateUploaded": "2022-05-30"
+              }
+            },
+            {
+              "id": "1",
+              "value": {
+                "tag": "b1Document",
+                "document": {
+                  "document_url": "http://dm-store:8080/documents/e39399b4-49a7-488f-96e6-b13ffe4e8bd6",
+                  "document_filename": "B1_Bail_Form_0222_save.pdf",
+                  "document_binary_url": "http://dm-store:8080/documents/e39399b4-49a7-488f-96e6-b13ffe4e8bd6/binary"
+                },
+                "description": "the B1",
+                "dateUploaded": "2022-05-30"
+              }
+            }
+          ]
         }
       }
     }
@@ -23,7 +76,7 @@
     "status": 200,
     "errors": [],
     "caseData": {
-      "template": "minimal-bail-application-submitted-edited-documents.json",
+      "template": "minimal-bail-application-submitted.json",
       "replacements": {
         "isLegallyRepresentedForFlag": "Yes",
         "currentCaseStateVisibleToJudge": "applicationSubmitted",
@@ -46,33 +99,25 @@
       {
         "reference": "5559_BAIL_EDITED_DOCUMENTS_HOME_OFFICE",
         "recipient": "{$bailHomeOfficeEmailAddress}",
-        "subject": "Bail application: New document uploaded",
+        "subject": "Bail application: Documents edited or removed",
         "body": [
           "1650-6221-2061-5101",
           "John Smith",
           "https://manage-case.platform.hmcts.net",
-          "The Tribunal has edited, removed or added the following document(s):",
-          "B1_Bail_Form_0222_save.pdf",
-          "document2.pdf",
-          "",
-          "Reason the document(s) were edited, removed or added:",
-          "editing B1, deleting newDocTxt, adding newDocTxt2"
+          "The Tribunal has edited or removed the following document(s):",
+          "Reason the document(s) were edited or removed:"
         ]
       },
       {
         "reference": "5559_BAIL_EDITED_DOCUMENTS_LEGAL_REPRESENTATIVE",
         "recipient": "{$TEST_LAW_FIRM_A_USERNAME}",
-        "subject": "Bail application: New document uploaded",
+        "subject": "Bail application: Documents edited or removed",
         "body": [
           "1650-6221-2061-5101",
           "John Smith",
           "https://manage-case.platform.hmcts.net",
-          "The Tribunal has edited, removed or added the following document(s):",
-          "B1_Bail_Form_0222_save.pdf",
-          "document2.pdf",
-          "",
-          "Reason the document(s) were edited, removed or added:",
-          "editing B1, deleting newDocTxt, adding newDocTxt2"
+          "The Tribunal has edited or removed the following document(s):",
+          "Reason the document(s) were edited or removed:"
         ]
       }
     ]

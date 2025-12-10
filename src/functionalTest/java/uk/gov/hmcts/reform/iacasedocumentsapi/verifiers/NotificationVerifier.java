@@ -7,6 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 
 import com.google.common.base.Strings;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -49,8 +50,32 @@ public class NotificationVerifier implements Verifier {
             return;
         }
 
-        List<Map<String, Object>> notificationsSent =
-            MapValueExtractor.extractOrDefault(actualResponse, "data.notificationsSent", Collections.emptyList());
+        List<Map<String, Object>> notificationsSent;
+        if (actualResponse.containsKey("confirmation_body")) {
+            String confirmationBody =
+                MapValueExtractor.extractOrThrow(actualResponse, "confirmation_body");
+            String[] notificationSplit = confirmationBody.split("notificationsSent=\\[");
+            String notifications = notificationSplit[1].split("\\)]")[0] + ")";
+            notificationSplit = notifications.split("IdValue");
+            List<String> notificationIdValues = Arrays.asList(notificationSplit);
+            notificationsSent =
+                notificationIdValues.stream()
+                    .filter(notificationIdValue -> notificationIdValue.contains("(id="))
+                    .map(notificationIdValue -> {
+                        String trimmedIdValue = notificationIdValue
+                            .replaceAll("\\(id=", "")
+                            .replaceAll("\\)", "")
+                            .replaceAll(",", "");
+                        String[] idValueParts = trimmedIdValue.split("value=");
+                        return Map.of(
+                            "id", idValueParts[0].trim(),
+                            "value", (Object) idValueParts[1].trim()
+                        );
+                    }).toList();
+        } else {
+            notificationsSent =
+                MapValueExtractor.extractOrDefault(actualResponse, "data.notificationsSent", Collections.emptyList());
+        }
 
         if (notificationsSent.isEmpty()) {
             assertFalse(
