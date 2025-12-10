@@ -11,7 +11,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
-import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.BailCase;
@@ -38,8 +37,8 @@ public class BailDecisionUnsignedGrantedCreatorTest {
     @Mock private Document bailDecisionUnsigned;
 
     private BailDecisionUnsignedGrantedCreator bailDecisionUnsignedGrantedCreator;
-    private RecordDecisionType recordDecisionTypeRefusal = RecordDecisionType.REFUSED;
-    private RecordDecisionType recordDecisionTypeGranted = RecordDecisionType.REFUSED;
+    private final RecordDecisionType recordDecisionTypeRefusal = RecordDecisionType.REFUSED;
+    private final RecordDecisionType recordDecisionTypeGranted = RecordDecisionType.GRANTED;
 
 
     @BeforeEach

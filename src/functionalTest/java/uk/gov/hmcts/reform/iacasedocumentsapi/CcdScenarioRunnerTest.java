@@ -424,10 +424,10 @@ public class CcdScenarioRunnerTest {
         }
 
         Map<String, String> scenarioSources = new HashMap<>();
-//        scenarioSources.putAll(StringResourceLoader.load("/scenarios/" + scenarioPattern));
-//        scenarioSources.putAll(StringResourceLoader.load("/scenarios/payments/" + scenarioPattern));
+        // scenarioSources.putAll(StringResourceLoader.load("/scenarios/" + scenarioPattern));
+        // scenarioSources.putAll(StringResourceLoader.load("/scenarios/payments/" + scenarioPattern));
         scenarioSources.putAll(StringResourceLoader.load("/scenarios/bail/" + scenarioPattern));
-//        scenarioSources.putAll(StringResourceLoader.load("/scenarios/notifications/" + scenarioPattern));
+        // scenarioSources.putAll(StringResourceLoader.load("/scenarios/notifications/" + scenarioPattern));
 
         System.out.println((char) 27 + "[36m" + "-------------------------------------------------------------------");
         System.out.println((char) 27 + "[33m" + "RUNNING " + scenarioSources.size() + " SCENARIOS");
