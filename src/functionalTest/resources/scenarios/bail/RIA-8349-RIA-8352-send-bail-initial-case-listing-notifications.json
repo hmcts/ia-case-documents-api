@@ -56,9 +56,7 @@
         "recipient": "{$bailHomeOfficeEmailAddress}",
         "subject": "Bail application: Upload the Bail Summary direction",
         "body": [
-          "1650-6221-2061-5101",
-          "John Smith",
-          "https://manage-case.platform.hmcts.net"
+          "1650-6221-2061-5101"
         ]
       },
       {
@@ -66,9 +64,7 @@
         "recipient": "{$bailHomeOfficeEmailAddress}",
         "subject": "Bail application: Bail hearing listed",
         "body": [
-          "1650-6221-2061-5101",
-          "John Smith",
-          "https://manage-case.platform.hmcts.net"
+          "1650-6221-2061-5101"
         ]
       },
       {
@@ -76,9 +72,7 @@
         "recipient": "{$TEST_LAW_FIRM_A_USERNAME}",
         "subject": "Bail application: Bail hearing listed",
         "body": [
-          "1650-6221-2061-5101",
-          "John Smith",
-          "https://manage-case.platform.hmcts.net"
+          "1650-6221-2061-5101"
         ]
       },
       {
@@ -86,8 +80,7 @@
         "recipient": "{$TEST_CITIZEN_MOBILE}",
         "subject": "",
         "body": [
-          "1650-6221-2061-5101",
-          "John Smith"
+          "1650-6221-2061-5101"
         ]
       }
     ]

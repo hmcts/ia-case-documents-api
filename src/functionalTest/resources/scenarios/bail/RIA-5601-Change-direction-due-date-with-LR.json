@@ -51,8 +51,8 @@
           "1650-6221-2061-5101",
           "John Smith",
           "https://manage-case.platform.hmcts.net",
-          "A direction due date has been changed in the online service.",
-          "Sign in to your account to view the updated direction(s) in the directions tab."
+          "The Tribunal has changed the due date for a direction sent to the",
+          "must now comply with this direction by"
         ]
       },
       {
@@ -63,8 +63,8 @@
           "1650-6221-2061-5101",
           "John Smith",
           "https://manage-case.platform.hmcts.net",
-          "A direction due date has been changed in the online service.",
-          "Sign in to your account to view the updated direction(s) in the directions tab."
+          "The Tribunal has changed the due date for a direction sent to the",
+          "must now comply with this direction by"
         ]
       }
     ]

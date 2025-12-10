@@ -25,6 +25,7 @@
       "template": "minimal-bail-application-ended-not-legally-represented.json",
       "replacements": {
         "bailHearingCentre": "newport",
+        "applicantMobileNumber1": "{$IA_TEST_APPLICANT_MOBILE}",
         "notificationsSent": [
           {
             "id": "5214__BAIL_APPLICATION_ENDED_APPLICANT_SMS",

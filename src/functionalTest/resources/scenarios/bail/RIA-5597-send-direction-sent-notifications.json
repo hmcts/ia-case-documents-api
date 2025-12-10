@@ -5,7 +5,7 @@
     "credentials": "AdminOfficer",
     "input": {
       "id": 5597,
-      "eventId": "sendDirection",
+      "eventId": "sendBailDirection",
       "state": "applicationSubmitted",
       "caseData": {
         "template": "minimal-bail-application-submitted.json",

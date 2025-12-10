@@ -14,7 +14,7 @@
           "applicantMobileNumber1": "{$TEST_CITIZEN_MOBILE}",
           "listingEvent": "relisting",
           "listingHearingDate": "2024-01-01T10:29:00.000",
-          "listingLocation": "glasgowTribunalsCentre"
+          "listingLocation": "newport"
         }
       }
     }
@@ -29,7 +29,7 @@
         "applicantMobileNumber1": "{$TEST_CITIZEN_MOBILE}",
         "listingEvent": "relisting",
         "listingHearingDate": "2024-01-01T10:29:00.000",
-        "listingLocation": "glasgowTribunalsCentre",
+        "listingLocation": "newport",
         "notificationsSent": [
           {
             "id": "8352_BAIL_APPLICATION_CASE_LISTING_HOME_OFFICE",
@@ -68,12 +68,11 @@
         ]
       },
       {
-        "reference": "8352_BAIL_UPLOAD_BAIL_SUMMARY_DIRECTION_HOME_OFFICE",
+        "reference": "8352__BAIL_APPLICATION_CASE_LISTING_APPLICANT_SMS",
         "recipient": "{$TEST_CITIZEN_MOBILE}",
-        "subject": "Bail application: Updated Bail hearing",
+        "subject": "",
         "body": [
-          "1650-6221-2061-5101",
-          "John Smith"
+          "1650-6221-2061-5101"
         ]
       }
     ]

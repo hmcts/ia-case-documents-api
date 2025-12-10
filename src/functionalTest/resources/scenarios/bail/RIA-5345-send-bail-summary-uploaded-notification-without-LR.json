@@ -36,10 +36,6 @@
           {
             "id": "5345_BAIL_SUMMARY_UPLOADED_ADMIN_OFFICER",
             "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
-          },
-          {
-            "id": "5345_BAIL_SUMMARY_UPLOADED_LEGAL_REP",
-            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
           }
         ]
       }

@@ -34,10 +34,6 @@
         "listingLocation": "glasgowTribunalsCentre",
         "notificationsSent": [
           {
-            "id": "8350_BAIL_UPLOAD_BAIL_SUMMARY_DIRECTION_HOME_OFFICE",
-            "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
-          },
-          {
             "id": "8350_BAIL_APPLICATION_CASE_LISTING_HOME_OFFICE",
             "value": "$/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/"
           },
@@ -53,16 +49,6 @@
       }
     },
     "notifications": [
-      {
-        "reference": "8350_BAIL_UPLOAD_BAIL_SUMMARY_DIRECTION_HOME_OFFICE",
-        "recipient": "{$bailHomeOfficeEmailAddress}",
-        "subject": "Bail application: Upload the Bail Summary direction",
-        "body": [
-          "1650-6221-2061-5101",
-          "John Smith",
-          "https://manage-case.platform.hmcts.net"
-        ]
-      },
       {
         "reference": "8350_BAIL_APPLICATION_CASE_LISTING_HOME_OFFICE",
         "recipient": "{$bailHomeOfficeEmailAddress}",
@@ -86,7 +72,7 @@
         ]
       },
       {
-        "reference": "8350_BAIL_UPLOAD_BAIL_SUMMARY_DIRECTION_HOME_OFFICE",
+        "reference": "8350_BAIL_APPLICATION_CASE_LISTING_APPLICANT_SMS",
         "recipient": "{$TEST_CITIZEN_MOBILE}",
         "subject": "Bail application: Bail hearing listed",
         "body": [

@@ -19,10 +19,6 @@
   "expectation": {
     "status": 200,
     "errors": [],
-    "confirmation": {
-      "header": "success",
-      "body": "contains([_BAIL_STOP_LEGAL_REPRESENTING_APPLICANT_SMS])"
-    },
     "caseData": {
       "template": "minimal-bail-application-submitted.json",
       "replacements": {

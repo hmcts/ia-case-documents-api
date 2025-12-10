@@ -8,7 +8,7 @@
       "eventId": "endApplication",
       "state": "applicationSubmitted",
       "caseData": {
-        "template": "minimal-bail-application.json",
+        "template": "minimal-bail-application-submitted.json",
         "replacements": {
           "bailHearingCentre": "newport",
           "applicantHasMobile": "Yes",
@@ -22,8 +22,9 @@
     "status": 200,
     "errors": [],
     "caseData": {
-      "template": "minimal-bail-application.json",
+      "template": "minimal-bail-application-submitted.json",
       "replacements": {
+        "applicantMobileNumber1": "{$IA_TEST_APPLICANT_MOBILE}",
         "bailHearingCentre": "newport",
         "notificationsSent": [
           {
@@ -55,9 +56,7 @@
         "recipient": "{$bailHomeOfficeEmailAddress}",
         "subject": "Bail Application: This application has ended",
         "body": [
-          "1652-2660-6360-5220",
-          "TheName TheLastName",
-          "https://manage-case.platform.hmcts.net"
+          "1652-2660-6360-5220"
         ]
       },
       {
@@ -65,9 +64,7 @@
         "recipient": "{$bailHomeOfficeEmailAddress}",
         "subject": "Bail Application: This application has ended",
         "body": [
-          "1652-2660-6360-5220",
-          "TheName TheLastName",
-          "https://manage-case.platform.hmcts.net"
+          "1652-2660-6360-5220"
         ]
       },
       {
@@ -75,9 +72,7 @@
         "recipient": "{${bailUpperTribunalEmailAddress}",
         "subject": "Bail Application: This application has ended",
         "body": [
-          "1652-2660-6360-5220",
-          "TheName TheLastName",
-          "https://manage-case.platform.hmcts.net"
+          "1652-2660-6360-5220"
         ]
       }
     ]

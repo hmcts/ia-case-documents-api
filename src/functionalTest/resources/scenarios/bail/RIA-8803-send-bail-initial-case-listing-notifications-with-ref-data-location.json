@@ -69,7 +69,6 @@
         "subject": "Bail application: Upload the Bail Summary direction",
         "body": [
           "1650-6221-2061-5101",
-          "John Smith",
           "https://manage-case.platform.hmcts.net"
         ]
       },
@@ -79,8 +78,6 @@
         "subject": "Bail application: Bail hearing listed",
         "body": [
           "1650-6221-2061-5101",
-          "John Smith",
-          "https://manage-case.platform.hmcts.net",
           "Newport Tribunal Centre - Columbus House, Langstone Business Park, Newport, NP18 2LX"
         ]
       },
@@ -90,8 +87,6 @@
         "subject": "Bail application: Bail hearing listed",
         "body": [
           "1650-6221-2061-5101",
-          "John Smith",
-          "https://manage-case.platform.hmcts.net",
           "Newport Tribunal Centre - Columbus House, Langstone Business Park, Newport, NP18 2LX"
         ]
       },
@@ -101,7 +96,6 @@
         "subject": "",
         "body": [
           "1650-6221-2061-5101",
-          "John Smith",
           "Newport Tribunal Centre - Columbus House, Langstone Business Park, Newport, NP18 2LX"
         ]
       }

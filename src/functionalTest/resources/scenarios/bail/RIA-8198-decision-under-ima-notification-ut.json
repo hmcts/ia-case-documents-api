@@ -2,7 +2,7 @@
   "description": "RIA-8198 record decision event for a bail application under IMA",
   "request": {
     "uri": "/bail/ccdAboutToSubmit",
-    "credentials": "Judge",
+    "credentials": "AdminOfficer",
     "input": {
       "id": 8198,
       "eventId": "recordTheDecision",
@@ -14,7 +14,8 @@
           "currentCaseStateVisibleToJudge": "bailSummaryUploaded",
           "currentCaseStateVisibleToHomeOffice": "bailSummaryUploaded",
           "currentCaseStateVisibleToAdminOfficer": "bailSummaryUploaded",
-          "currentCaseStateVisibleToLegalRepresentative": "bailSummaryUploaded"
+          "currentCaseStateVisibleToLegalRepresentative": "bailSummaryUploaded",
+          "recordDecisionType": "granted",
         }
       }
     }
