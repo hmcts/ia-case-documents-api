@@ -15,6 +15,8 @@ import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callbac
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.EnumSource;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.BailCase;
@@ -32,9 +34,12 @@ public class UploadSignedDecisionNoticeHandlerTest {
     @Mock
     private UploadSignedDecisionOrchestrator uploadSignedDecisionOrchestrator;
 
-    @Mock private Callback<BailCase> callback;
-    @Mock private CaseDetails<BailCase> caseDetails;
-    @Mock private BailCase bailCase;
+    @Mock
+    private Callback<BailCase> callback;
+    @Mock
+    private CaseDetails<BailCase> caseDetails;
+    @Mock
+    private BailCase bailCase;
 
     private UploadSignedDecisionNoticeHandler uploadSignedDecisionNoticeHandler;
 
@@ -64,11 +69,15 @@ public class UploadSignedDecisionNoticeHandlerTest {
             .isExactlyInstanceOf(IllegalStateException.class);
     }
 
-    @Test
-    public void calls_upload_signed_decision_service() {
+    @ParameterizedTest
+    @EnumSource(value = Event.class, names = {
+        "UPLOAD_SIGNED_DECISION_NOTICE",
+        "UPLOAD_SIGNED_DECISION_NOTICE_CONDITIONAL_GRANT"
+    })
+    public void calls_upload_signed_decision_service(Event event) {
 
         when(callback.getCaseDetails()).thenReturn(caseDetails);
-        when(callback.getEvent()).thenReturn(Event.UPLOAD_SIGNED_DECISION_NOTICE);
+        when(callback.getEvent()).thenReturn(event);
         when(caseDetails.getCaseData()).thenReturn(bailCase);
 
         PreSubmitCallbackResponse<BailCase> response =
@@ -91,7 +100,8 @@ public class UploadSignedDecisionNoticeHandlerTest {
 
                 boolean canHandle = uploadSignedDecisionNoticeHandler.canHandle(callbackStage, callback);
 
-                if (event == Event.UPLOAD_SIGNED_DECISION_NOTICE
+                if ((event == Event.UPLOAD_SIGNED_DECISION_NOTICE
+                    || event == Event.UPLOAD_SIGNED_DECISION_NOTICE_CONDITIONAL_GRANT)
                     && callbackStage == ABOUT_TO_SUBMIT) {
 
                     assertTrue(canHandle);

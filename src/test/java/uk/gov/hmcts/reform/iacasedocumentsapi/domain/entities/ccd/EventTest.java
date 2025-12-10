@@ -51,6 +51,7 @@ public class EventTest {
         assertEquals("makeNewApplication",Event.MAKE_NEW_APPLICATION.toString());
         assertEquals("editBailApplicationAfterSubmit",Event.EDIT_BAIL_APPLICATION_AFTER_SUBMIT.toString());
         assertEquals("uploadSignedDecisionNotice", Event.UPLOAD_SIGNED_DECISION_NOTICE.toString());
+        assertEquals("uploadSignedDecisionNoticeConditionalGrant", Event.UPLOAD_SIGNED_DECISION_NOTICE_CONDITIONAL_GRANT.toString());
         assertEquals("caseListing", Event.CASE_LISTING.toString());
         assertEquals("unknown", Event.UNKNOWN.toString());
         assertEquals("requestCaseBuilding", Event.REQUEST_CASE_BUILDING.toString());
@@ -86,6 +87,6 @@ public class EventTest {
 
     @Test
     public void if_this_test_fails_it_is_because_it_needs_updating_with_your_changes() {        
-        assertEquals(77, Event.values().length);
+        assertEquals(78, Event.values().length);
     }
 }

@@ -31,7 +31,8 @@ public class UploadSignedDecisionNoticeHandler implements PreSubmitCallbackHandl
         requireNonNull(callback, "callback must not be null");
 
         return callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
-               && callback.getEvent() == Event.UPLOAD_SIGNED_DECISION_NOTICE;
+            && (callback.getEvent() == Event.UPLOAD_SIGNED_DECISION_NOTICE
+            || callback.getEvent() == Event.UPLOAD_SIGNED_DECISION_NOTICE_CONDITIONAL_GRANT);
     }
 
     public PreSubmitCallbackResponse<BailCase> handle(
