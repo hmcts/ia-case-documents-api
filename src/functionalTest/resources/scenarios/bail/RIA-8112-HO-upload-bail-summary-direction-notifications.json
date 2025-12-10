@@ -8,7 +8,7 @@
       "eventId": "caseListing",
       "state": "applicationSubmitted",
       "caseData": {
-        "template": "minimal-bail-application-submitted-direction-sent.json",
+        "template": "minimal-bail-application-submitted.json",
         "replacements": {
           "directions": [
             {
@@ -62,7 +62,7 @@
         "body": [
           "1650-6221-2061-5101",
           "John Smith",
-          "{$iaExUiFrontendUrl}"
+          "https://manage-case.platform.hmcts.net"
         ]
       }
     ]

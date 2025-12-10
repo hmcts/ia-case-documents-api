@@ -55,7 +55,7 @@
         "body": [
           "1650-6221-2061-5101",
           "John Smith",
-          "{$iaExUiFrontendUrl}",
+          "https://manage-case.platform.hmcts.net",
           "The applicant in this case no longer has a legal representative."
         ]
       },
@@ -66,7 +66,7 @@
         "body": [
           "1650-6221-2061-5101",
           "John Smith",
-          "{$iaExUiFrontendUrl}",
+          "https://manage-case.platform.hmcts.net",
           "You are no longer representing the client in this case.",
           "The online case reference number for this case is: 1650-6221-2061-5101"
         ]
@@ -78,7 +78,7 @@
         "body": [
           "1650-6221-2061-5101",
           "John Smith",
-          "{$iaExUiFrontendUrl}",
+          "https://manage-case.platform.hmcts.net",
           "The legal representative is no longer representing the applicant in this case and they no longer have access to this case."
         ]
       }

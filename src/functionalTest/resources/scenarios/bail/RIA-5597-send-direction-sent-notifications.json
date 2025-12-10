@@ -8,7 +8,7 @@
       "eventId": "sendDirection",
       "state": "applicationSubmitted",
       "caseData": {
-        "template": "minimal-bail-application-submitted-direction-sent.json",
+        "template": "minimal-bail-application-submitted.json",
         "replacements": {
           "isLegallyRepresentedForFlag": "Yes",
           "currentCaseStateVisibleToJudge": "applicationSubmitted",
@@ -50,7 +50,7 @@
         "body": [
           "1650-6221-2061-5101",
           "John Smith",
-          "{$iaExUiFrontendUrl}",
+          "https://manage-case.platform.hmcts.net",
           "You have a direction for this bail application.",
           "Here are the direction details:",
           "This is the content of the direction",
@@ -64,7 +64,7 @@
         "body": [
           "1650-6221-2061-5101",
           "John Smith",
-          "{$iaExUiFrontendUrl}",
+          "https://manage-case.platform.hmcts.net",
           "A direction has been sent to the Home Office.",
           " The Home Office has been directed to:",
           "This is the content of the direction",

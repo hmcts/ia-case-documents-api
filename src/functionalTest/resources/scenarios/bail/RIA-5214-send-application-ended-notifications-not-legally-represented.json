@@ -2,11 +2,11 @@
   "description": "RIA-5412 send bail application ended notification to Applicant (sms) and HO (emails)",
   "request": {
     "uri": "/bail/ccdAboutToSubmit",
-    "credentials": "LegalRepresentative",
+    "credentials": "AdminOfficer",
     "input": {
       "id": 5214,
-      "eventId": "uploadSignedDecisionNotice",
-      "state": "signedDecisionNoticeUploaded",
+      "eventId": "endApplication",
+      "state": "applicationSubmitted",
       "caseData": {
         "template": "minimal-bail-application-ended-not-legally-represented.json",
         "replacements": {
@@ -24,7 +24,7 @@
     "caseData": {
       "template": "minimal-bail-application-ended-not-legally-represented.json",
       "replacements": {
-        "bailHearingCentre": "birmingham",
+        "bailHearingCentre": "newport",
         "notificationsSent": [
           {
             "id": "5214__BAIL_APPLICATION_ENDED_APPLICANT_SMS",
@@ -56,7 +56,7 @@
           "body": [
             "1652-2660-6360-5220",
             "TheName TheLastName",
-            "{$iaExUiFrontendUrl}"
+            "https://manage-case.platform.hmcts.net"
           ]
         },
         {
@@ -66,7 +66,7 @@
           "body": [
             "1652-2660-6360-5220",
             "TheName TheLastName",
-            "{$iaExUiFrontendUrl}"
+            "https://manage-case.platform.hmcts.net"
           ]
         }
       ]

@@ -5,8 +5,8 @@
     "credentials": "AdminOfficer",
     "input": {
       "id": 2002,
-      "eventId": "editApplicationAfterSubmit",
-      "state": "applicationEditedSubmitted",
+      "eventId": "editBailApplicationAfterSubmit",
+      "state": "applicationSubmitted",
       "caseData": {
         "template": "minimal-bail-application-submitted-not-legally-represented.json",
         "replacements": {
@@ -38,7 +38,7 @@
         "body": [
           "1650-9687-2604-3754",
           "John Doe",
-          "{$iaExUiFrontendUrl}"
+          "https://manage-case.platform.hmcts.net"
         ]
       }
     ]

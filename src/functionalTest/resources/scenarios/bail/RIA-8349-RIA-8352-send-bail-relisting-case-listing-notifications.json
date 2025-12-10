@@ -54,7 +54,7 @@
         "body": [
           "1650-6221-2061-5101",
           "John Smith",
-          "{$iaExUiFrontendUrl}"
+          "https://manage-case.platform.hmcts.net"
         ]
       },
       {
@@ -64,7 +64,7 @@
         "body": [
           "1650-6221-2061-5101",
           "John Smith",
-          "{$iaExUiFrontendUrl}"
+          "https://manage-case.platform.hmcts.net"
         ]
       },
       {

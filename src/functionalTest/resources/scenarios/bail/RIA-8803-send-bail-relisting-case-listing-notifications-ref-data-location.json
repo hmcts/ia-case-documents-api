@@ -66,7 +66,7 @@
         "body": [
           "1650-6221-2061-5101",
           "John Smith",
-          "{$iaExUiFrontendUrl}",
+          "https://manage-case.platform.hmcts.net",
           "Taylor House Tribunal Hearing Centre, Rosebery Avenue, EC1R 4QU"
         ]
       },
@@ -77,7 +77,7 @@
         "body": [
           "1650-6221-2061-5101",
           "John Smith",
-          "{$iaExUiFrontendUrl}",
+          "https://manage-case.platform.hmcts.net",
           "Taylor House Tribunal Hearing Centre, Rosebery Avenue, EC1R 4QU"
         ]
       },

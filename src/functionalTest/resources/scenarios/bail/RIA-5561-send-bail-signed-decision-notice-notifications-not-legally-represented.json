@@ -48,7 +48,7 @@
         "body": [
           "1652-2660-6360-5220",
           "TheName TheLastName",
-          "{$iaExUiFrontendUrl}"
+          "https://manage-case.platform.hmcts.net"
         ]
       },
       {
@@ -58,7 +58,7 @@
         "body": [
           "1650-6221-2061-5101",
           "John Smith",
-          "{$iaExUiFrontendUrl}"
+          "https://manage-case.platform.hmcts.net"
         ]
       }
     ]

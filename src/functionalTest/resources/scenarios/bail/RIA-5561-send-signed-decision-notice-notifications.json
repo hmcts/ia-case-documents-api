@@ -6,7 +6,7 @@
     "input": {
       "id": 5561,
       "eventId": "uploadSignedDecisionNotice",
-      "state": "recordTheDecision",
+      "state": "unsignedDecision",
       "caseData": {
         "template": "minimal-bail-record-the-decision.json",
         "replacements": {
@@ -46,7 +46,7 @@
           "body": [
             "1652-2660-6360-5220",
             "TheName TheLastName",
-            "{$iaExUiFrontendUrl}"
+            "https://manage-case.platform.hmcts.net"
           ]
         }
       ]

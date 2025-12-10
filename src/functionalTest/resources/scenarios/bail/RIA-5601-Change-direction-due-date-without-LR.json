@@ -1,5 +1,5 @@
 {
-  "description": "RIA-5601 send bail documents uploaded notification to HomeOffice",
+  "description": "RIA-5601 change direction due date without LR",
   "request": {
     "uri": "/bail/ccdAboutToSubmit",
     "credentials": "AdminOfficer",
@@ -46,9 +46,9 @@
         "body": [
           "1650-6221-2061-5101",
           "John Smith",
-          "{$iaExUiFrontendUrl}",
-          "A direction due date has been changed in the online service.",
-          "Sign in to your account to view the updated direction(s) in the directions tab."
+          "https://manage-case.platform.hmcts.net",
+          "The Tribunal has changed the due date for a direction sent to the",
+          "must now comply with this direction by"
         ]
       }
     ]

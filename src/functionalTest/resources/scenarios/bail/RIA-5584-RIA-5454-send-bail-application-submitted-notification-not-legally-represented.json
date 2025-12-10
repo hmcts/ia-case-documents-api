@@ -42,7 +42,7 @@
         "body": [
           "1650-9687-2604-3754",
           "John Doe",
-          "{$iaExUiFrontendUrl}"
+          "https://manage-case.platform.hmcts.net"
         ]
       },
       {
@@ -52,7 +52,7 @@
         "body": [
           "1650-9687-2604-3754",
           "John Doe",
-          "{$iaExUiFrontendUrl}"
+          "https://manage-case.platform.hmcts.net"
         ]
       }
     ]

@@ -46,7 +46,7 @@
         "body": [
           "1650-6221-2061-5101",
           "John Smith",
-          "{$iaExUiFrontendUrl}",
+          "https://manage-case.platform.hmcts.net",
           "New documentation has been uploaded to the online service.",
           "Sign in to your account to view the uploaded document(s) in the documents tab."
         ]

@@ -1,12 +1,12 @@
 {
-  "description": "RIA-5583 send bail application edited submitted notification without LR",
+  "description": "RIA-5583 send bail application edited submitted notification with LR",
   "request": {
     "uri": "/bail/ccdAboutToSubmit",
-    "credentials": "LegalRepresentative",
+    "credentials": "AdminOfficer",
     "input": {
       "id": 2001,
-      "eventId": "editApplicationAfterSubmit",
-      "state": "applicationEditedSubmitted",
+      "eventId": "editBailApplicationAfterSubmit",
+      "state": "applicationSubmitted",
       "caseData": {
         "template": "minimal-bail-application-submitted.json",
         "replacements": {
@@ -42,7 +42,7 @@
         "body": [
           "1650-6221-2061-5101",
           "John Smith",
-          "{$iaExUiFrontendUrl}"
+          "https://manage-case.platform.hmcts.net"
         ]
       },
       {
@@ -52,7 +52,7 @@
         "body": [
           "1650-6221-2061-5101",
           "John Smith",
-          "{$iaExUiFrontendUrl}"
+          "https://manage-case.platform.hmcts.net"
         ]
       }
     ]
