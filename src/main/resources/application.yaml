@@ -820,6 +820,7 @@ security:
       - "makeNewApplication"
       - "editBailApplicationAfterSubmit"
       - "uploadSignedDecisionNotice"
+      - "uploadSignedDecisionNoticeConditionalGrant"
       - "caseListing"
       - "removeRepresentation"
       - "removeLegalRepresentative"
@@ -1044,6 +1045,7 @@ security:
       - "recordTheDecision"
       - "endApplication"
       - "uploadSignedDecisionNotice"
+      - "uploadSignedDecisionNoticeConditionalGrant"
     judge:
       - "sendDirection"
       - "generateDecisionAndReasons"
