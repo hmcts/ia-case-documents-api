@@ -518,7 +518,7 @@ public enum BailCaseFieldDefinition {
         "listingEvent", new TypeReference<ListingEvent>(){}),
 
     LISTING_LOCATION(
-        "listingLocation", new TypeReference<String>(){}),
+        "listingLocation", new TypeReference<BailHearingLocation>(){}),
 
     LISTING_HEARING_DATE(
         "listingHearingDate", new TypeReference<String>(){}),

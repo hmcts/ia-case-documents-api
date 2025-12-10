@@ -27,6 +27,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.BailCase;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.BailHearingLocation;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseDetails;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.StringProvider;
@@ -131,7 +132,7 @@ class BailNoticeOfHearingRelistingTemplateTest {
     }
 
     void dataSetUp() {
-        final String listingLocation = "nottingham";
+        final BailHearingLocation listingLocation = BailHearingLocation.NOTTINGHAM;
         final String listingHearingDate = "2024-01-12T15:00:00.969590900";
 
         when(caseDetails.getCaseData()).thenReturn(bailCase);
@@ -143,9 +144,9 @@ class BailNoticeOfHearingRelistingTemplateTest {
         String applicantDetainedLoc = "immigrationRemovalCentre";
         when(bailCase.read(APPLICANT_DETAINED_LOC, String.class)).thenReturn(Optional.of(applicantDetainedLoc));
         when(bailCase.read(APPLICANT_PRISON_DETAILS, String.class)).thenReturn(Optional.of(applicantPrisonDetails));
-        when(bailCase.read(LISTING_LOCATION, String.class)).thenReturn(Optional.of(listingLocation));
+        when(bailCase.read(LISTING_LOCATION, BailHearingLocation.class)).thenReturn(Optional.of(listingLocation));
         when(bailCase.read(LISTING_HEARING_DATE, String.class)).thenReturn(Optional.of(listingHearingDate));
-        when(stringProvider.get("hearingCentreAddress", listingLocation))
+        when(stringProvider.get("hearingCentreAddress", listingLocation.getValue()))
             .thenReturn(Optional.of("Nottingham Justice Centre, Carrington Street, Nottingham, NG2 1EE"));
         when(customerServicesProvider.getCustomerServicesEmail()).thenReturn(customerServicesEmail);
         when(customerServicesProvider.getCustomerServicesTelephone()).thenReturn(customerServicesPhone);

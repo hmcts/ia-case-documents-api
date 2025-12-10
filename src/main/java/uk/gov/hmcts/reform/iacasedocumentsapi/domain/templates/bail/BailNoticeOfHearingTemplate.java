@@ -25,6 +25,7 @@ import java.util.Optional;
 
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ApplicantDetainedLocation;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.BailCase;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.BailHearingLocation;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseDetails;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.StringProvider;
@@ -114,7 +115,9 @@ public class BailNoticeOfHearingTemplate {
     }
 
     private String getListinglocationAddress(BailCase bailCase) {
-        String listingLocation = bailCase.read(LISTING_LOCATION, String.class).orElse("");
+        String listingLocation = bailCase.read(LISTING_LOCATION, BailHearingLocation.class)
+            .map(BailHearingLocation::getValue)
+            .orElse("");
         if (isNullOrEmptyString(listingLocation)) {
             return "";
         }
