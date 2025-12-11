@@ -46,8 +46,8 @@ class RoleAssignmentServiceTest {
     @BeforeEach
     void setUp() {
         when(authTokenGenerator.generate()).thenReturn(serviceToken);
-        when(userDetails.getAccessToken()).thenReturn(accessToken);
-        when(userDetails.getId()).thenReturn(userId);
+        when(userDetails.getAccessToken()).thenReturn("accessToken");
+        when(userDetails.getId()).thenReturn("userId");
 
         when(caseDetails.getId()).thenReturn(1234567890L);
     }
