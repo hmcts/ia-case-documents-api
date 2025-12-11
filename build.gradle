@@ -38,7 +38,7 @@ def versions = [
   reformHealthStarter: '0.0.5',
   restAssured        : '5.5.5',
   serenity           : '4.2.31',
-  pact_version       : '4.4.9',
+  pact_version       : '4.6.17',
   sonarPitest        : '0.5',
   springDoc          : '1.8.0',
   springCloud        : '3.1.9'
@@ -481,7 +481,7 @@ dependencies {
   }
 
   //pact contract testing
-  contractTestImplementation group: 'au.com.dius.pact.consumer', name: 'junit5', versions.pact_version
+  contractTestImplementation group: 'au.com.dius.pact.consumer', name: 'junit5', version: versions.pact_version
   contractTestImplementation group: 'au.com.dius.pact', name: 'consumer', version: versions.pact_version
 
   contractTestImplementation("org.junit.jupiter:junit-jupiter:${versions.junit}")
