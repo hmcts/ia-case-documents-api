@@ -434,10 +434,8 @@ public class CcdScenarioRunnerTest {
         List<Arguments> argumentsList = new ArrayList<>(Collections.emptyList());
         scenarioSources.forEach((filename, scenarioSource) -> {
             try {
-                if (failingScenarios.contains(filename)) {
-                    Map<String, Object> scenario = deserializeWithExpandedValues(scenarioSource);
-                    argumentsList.add(Arguments.of(filename, scenario));
-                }
+                Map<String, Object> scenario = deserializeWithExpandedValues(scenarioSource);
+                argumentsList.add(Arguments.of(filename, scenario));
             } catch (IOException e) {
                 System.out.println("Failed to parse scenario file: " + filename);
                 failedScenarios.add(filename);
@@ -481,15 +479,4 @@ public class CcdScenarioRunnerTest {
             ? ThreadLocalRandom.current().nextLong(1111111111111111L, 1999999999999999L)
             : scenarioTestCaseId;
     }
-
-    private List<String> failingScenarios = List.of(
-        "DIAC-1405-late-remission-refused-detained-irc-letter.json"
-        //"DIAC-1405-late-remission-refused-detained-prison-letter.json"
-        //"DIAC-1392-aipm-prison-home-office-application-decided.json"
-        //"RIA-8306-internal-record-out-of-time-decision-out-of-country.json"
-        //"DIAC-1378-internal-detained-out-of-time-decision-allowed-letter.json"
-        //"RIA-8306-internal-record-out-of-time-decision-in-country.json"
-        //"RIA-4827-appeal-allowed-no-payment-status-aip.json"
-        //"RIA-4827-appeal-allowed-payment-pending-aip.json"
-    );
 }

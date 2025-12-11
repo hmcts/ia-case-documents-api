@@ -7,7 +7,7 @@
     "input": {
       "id": 4827,
       "eventId": "sendDecisionAndReasons",
-      "state": "decided",
+      "state": "decision",
       "caseData": {
         "template": "aip-minimal-appeal-submitted.json",
         "replacements": {
