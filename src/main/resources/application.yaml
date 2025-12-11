@@ -3300,6 +3300,7 @@ security:
       - "hearingCancelled"
       - "recordAdjournmentDetails"
       - "requestHearingRequirementsFeature"
+      - "changeHearingCentre"
       - "saveNotificationsToData"
       - "updatePaymentStatus"
     caseworker-ia-homeofficebail:

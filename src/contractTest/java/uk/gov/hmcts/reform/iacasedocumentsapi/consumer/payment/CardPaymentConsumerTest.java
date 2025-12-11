@@ -74,7 +74,7 @@ public class CardPaymentConsumerTest {
                                        "9s7g2j2q3fvia0u4kneq0l7dvf",
                                        new PaymentDto.LinksDto(
                                            new PaymentDto.LinkDto(
-                                               "https://www/payments/service/gov/uk/secure/"
+                                               "secure/"
                                                    + "65888814-3a93-48cf-8e6b-fc78536eb7ad", "GET"),
                                            null, null)
             ))
