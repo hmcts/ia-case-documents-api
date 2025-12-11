@@ -1,10 +1,12 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.service;
 
+import feign.FeignException;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Component;
 import uk.gov.hmcts.reform.authorisation.generators.AuthTokenGenerator;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.roleassignment.Assignment;
@@ -25,6 +27,7 @@ public class RoleAssignmentService {
         this.roleAssignmentApi = roleAssignmentApi;
     }
 
+    @Retryable(retryFor = FeignException.class)
     public List<String> getAmRolesFromUser(String actorId,
                                            String authorization) {
         RoleAssignmentResource roleAssignmentResource = roleAssignmentApi.queryRoleAssignments(

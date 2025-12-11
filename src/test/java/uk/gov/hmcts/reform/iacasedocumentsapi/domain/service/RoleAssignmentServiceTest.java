@@ -41,8 +41,6 @@ class RoleAssignmentServiceTest {
     private UserDetails userDetails;
     @Mock
     private CaseDetails<CaseData> caseDetails;
-    private final String userId = "userId";
-    private final String accessToken = "accessToken";
     private final String serviceToken = "serviceToken";
 
     @BeforeEach
@@ -56,6 +54,7 @@ class RoleAssignmentServiceTest {
 
     @Test
     void getCaseRolesForUserTest() {
+        String userId = "userId";
         Assignment assignment1 = Assignment.builder()
             .roleName(RoleName.CTSC_TEAM_LEADER)
             .roleType(RoleType.CASE)

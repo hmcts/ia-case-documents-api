@@ -1,5 +1,6 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.payment;
 
+import static nl.jqno.equalsverifier.Warning.BIGDECIMAL_EQUALITY;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
@@ -20,6 +21,7 @@ class PaymentDtoTest {
 
         EqualsVerifier.simple()
             .forClass(PaymentDto.class)
+            .suppress(BIGDECIMAL_EQUALITY)
             .verify();
     }
 

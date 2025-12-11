@@ -36,9 +36,9 @@ def versions = [
   pitest             : '1.19.4',
   reformLogging      : '6.1.9',
   reformHealthStarter: '0.0.5',
-  restAssured        : '5.4.0',
+  restAssured        : '5.5.5',
   serenity           : '4.2.31',
-  pact_version       : '4.1.38',
+  pact_version       : '4.4.9',
   sonarPitest        : '0.5',
   springDoc          : '1.8.0',
   springCloud        : '3.1.9'
@@ -151,7 +151,7 @@ configurations {
 
 checkstyle {
   maxWarnings = 0
-  toolVersion = '10.12.5'
+  toolVersion = '10.26.0'
   configDirectory.set(new File(rootDir, 'config/checkstyle'))
 }
 
@@ -221,7 +221,7 @@ project.ext {
   } else {
     pacticipantVersion = getCheckedOutGitCommitHash()
   }
-  set('springCloudVersion', versions.springCloud)
+  set('springCloudVersion', '2021.0.9')
 }
 
 tasks.register('runAndPublishConsumerPactTests', Test) {
@@ -247,6 +247,10 @@ pact {
     tags = [System.getenv("PACT_BRANCH_NAME") ?: 'Dev']
     version = project.pacticipantVersion + '_' + System.nanoTime().toString()
   }
+}
+
+pactPublish {
+  pactPublish = project.pact.publish
 }
 
 runAndPublishConsumerPactTests.finalizedBy pactPublish
@@ -368,7 +372,15 @@ dependencies {
   implementation group: 'org.springframework.boot', name: 'spring-boot-starter-security'
   implementation group: 'org.springframework.boot', name: 'spring-boot-starter-web'
   implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-openfeign', version: versions.springCloud
-  implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-bootstrap', version: versions.springCloud
+  implementation(group: 'org.springframework.cloud', name: 'spring-cloud-starter-bootstrap', version: versions.springCloud) {
+    exclude group: "org.bouncycastle", module: "bcprov-jdk15on"
+  }
+  implementation group: 'org.springframework.cloud', name: 'spring-cloud-dependencies', version: '2021.0.9'
+  implementation(group: 'org.springframework.cloud', name: 'spring-cloud-starter-netflix-hystrix', version: '2.2.10.RELEASE') {
+    exclude group: "org.bouncycastle", module: "bcprov-jdk15on"
+  }
+  implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-openfeign'
+  implementation group: 'org.springframework', name: 'spring-aspects', version: '6.2.8'
   implementation group: 'org.springframework.boot', name: 'spring-boot-starter-validation'
 
 
@@ -398,6 +410,8 @@ dependencies {
 
   implementation group: 'com.sun.xml.bind', name: 'jaxb-osgi', version: '2.3.9'
 
+  implementation group: 'org.bouncycastle', name: 'bcprov-jdk18on', version: '1.81'
+
   implementation group: 'com.github.hmcts', name: 'document-management-client', version: '7.0.1'
   implementation group: 'com.github.hmcts.java-logging', name: 'logging', version: versions.reformLogging
   implementation group: 'com.github.hmcts.java-logging', name: 'logging-appinsights', version: versions.reformLogging
@@ -418,11 +432,12 @@ dependencies {
 
   annotationProcessor 'org.projectlombok:lombok:1.18.38'
   compileOnly 'org.projectlombok:lombok:1.18.38'
-  implementation group: 'org.springframework.retry', name: 'spring-retry', version: '2.0.2'
+  implementation group: 'org.springframework.retry', name: 'spring-retry', version: '2.0.12'
   testImplementation group: 'org.mockito', name: 'mockito-junit-jupiter', version: '3.12.4'
   testImplementation group: 'org.mockito', name: 'mockito-inline', version: '3.12.4'
   testImplementation group: 'org.springframework.boot', name: 'spring-boot-starter-test'
   testImplementation group: 'org.springframework.security', name: 'spring-security-test', version: versions.springSecurity
+  testImplementation group: 'org.apiguardian', name: 'apiguardian-api', version: '1.1.2'
 
   testImplementation group: 'org.pitest', name: 'pitest', version: versions.pitest
   testImplementation group: 'info.solidsoft.gradle.pitest', name: 'gradle-pitest-plugin', version: versions.gradlePitest
@@ -450,7 +465,7 @@ dependencies {
   testImplementation group: 'net.serenity-bdd', name: 'serenity-rest-assured', version: versions.serenity
   testImplementation group: 'net.serenity-bdd', name: 'serenity-spring', version: versions.serenity
 
-  testImplementation group: 'nl.jqno.equalsverifier', name: 'equalsverifier', version: '3.7.2'
+  testImplementation group: 'nl.jqno.equalsverifier', name: 'equalsverifier', version: '3.19.4'
   testImplementation group: 'com.github.hmcts', name: 'ccd-case-document-am-client', version: '1.7.3'
   testImplementation group: 'org.powermock', name: 'powermock-api-mockito2', version: '2.0.9'
 
@@ -466,7 +481,8 @@ dependencies {
   }
 
   //pact contract testing
-  contractTestImplementation group: 'au.com.dius.pact.consumer', name: 'junit5', version: "4.6.17"
+  contractTestImplementation group: 'au.com.dius.pact.consumer', name: 'junit5', versions.pact_version
+  contractTestImplementation group: 'au.com.dius.pact', name: 'consumer', version: versions.pact_version
 
   contractTestImplementation("org.junit.jupiter:junit-jupiter:${versions.junit}")
   contractTestImplementation("org.junit.jupiter:junit-jupiter-api:${versions.junit}")
