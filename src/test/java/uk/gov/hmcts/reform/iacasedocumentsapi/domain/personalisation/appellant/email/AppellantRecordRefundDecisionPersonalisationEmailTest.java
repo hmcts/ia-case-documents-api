@@ -63,7 +63,8 @@ class AppellantRecordRefundDecisionPersonalisationEmailTest {
     public void setup() {
 
         when(asylumCase.read(APPEAL_REFERENCE_NUMBER, String.class)).thenReturn(Optional.of(appealReferenceNumber));
-        when(asylumCase.read(HOME_OFFICE_REFERENCE_NUMBER, String.class)).thenReturn(Optional.of(homeOfficeReferenceNumber));
+        when(asylumCase.read(HOME_OFFICE_REFERENCE_NUMBER, String.class)).thenReturn(Optional.of(
+            homeOfficeReferenceNumber));
         when(asylumCase.read(APPELLANT_GIVEN_NAMES, String.class)).thenReturn(Optional.of(appellantGivenNames));
         when(asylumCase.read(APPELLANT_FAMILY_NAME, String.class)).thenReturn(Optional.of(appellantFamilyName));
         when(asylumCase.read(AMOUNT_REMITTED, String.class)).thenReturn(Optional.of(amountRemitted));
@@ -84,27 +85,35 @@ class AppellantRecordRefundDecisionPersonalisationEmailTest {
 
     @ParameterizedTest
     @EnumSource(
-            value = RemissionDecision.class,
-            names = {"APPROVED", "PARTIALLY_APPROVED", "REJECTED"})
+        value = RemissionDecision.class,
+        names = {"APPROVED", "PARTIALLY_APPROVED", "REJECTED"})
     void should_return_approved_template_id(RemissionDecision remissionDecision) {
 
         when(asylumCase.read(REMISSION_DECISION, RemissionDecision.class)).thenReturn(Optional.of(remissionDecision));
 
         switch (remissionDecision) {
-            case APPROVED ->
-                    assertEquals(appellantRefundApprovedTemplateId, appellantRecordRefundDecisionPersonalisationEmail.getTemplateId(asylumCase));
-            case PARTIALLY_APPROVED ->
-                    assertEquals(appellantRefundPartiallyApprovedTemplateId, appellantRecordRefundDecisionPersonalisationEmail.getTemplateId(asylumCase));
-            case REJECTED ->
-                    assertEquals(appellantRefundRejectedTemplateId, appellantRecordRefundDecisionPersonalisationEmail.getTemplateId(asylumCase));
+            case APPROVED -> assertEquals(
+                appellantRefundApprovedTemplateId,
+                appellantRecordRefundDecisionPersonalisationEmail.getTemplateId(asylumCase)
+            );
+            case PARTIALLY_APPROVED -> assertEquals(
+                appellantRefundPartiallyApprovedTemplateId,
+                appellantRecordRefundDecisionPersonalisationEmail.getTemplateId(asylumCase)
+            );
+            case REJECTED -> assertEquals(
+                appellantRefundRejectedTemplateId,
+                appellantRecordRefundDecisionPersonalisationEmail.getTemplateId(asylumCase)
+            );
             default -> throw new IllegalArgumentException("Unexpected remission decision: " + remissionDecision);
         }
     }
 
     @Test
     void should_return_given_reference_id() {
-        assertEquals(caseId + "_REFUND_DECISION_DECIDED_AIP_APPELLANT_EMAIL",
-                appellantRecordRefundDecisionPersonalisationEmail.getReferenceId(caseId));
+        assertEquals(
+            caseId + "_REFUND_DECISION_DECIDED_AIP_APPELLANT_EMAIL",
+            appellantRecordRefundDecisionPersonalisationEmail.getReferenceId(caseId)
+        );
     }
 
     @Test
@@ -113,7 +122,7 @@ class AppellantRecordRefundDecisionPersonalisationEmailTest {
             .thenReturn(Collections.singleton(appellantEmail));
 
         assertTrue(appellantRecordRefundDecisionPersonalisationEmail.getRecipientsList(asylumCase)
-            .contains(appellantEmail));
+                       .contains(appellantEmail));
     }
 
     @Test
@@ -127,7 +136,10 @@ class AppellantRecordRefundDecisionPersonalisationEmailTest {
     @Test
     void should_return_personalisation_when_all_information_given() {
 
-        when(asylumCase.read(REMISSION_DECISION, RemissionDecision.class)).thenReturn(Optional.of(RemissionDecision.APPROVED));
+        when(asylumCase.read(
+            REMISSION_DECISION,
+            RemissionDecision.class
+        )).thenReturn(Optional.of(RemissionDecision.APPROVED));
 
         final String dueDate = LocalDate.now().plusDays(daysAfterRefundDecision)
             .format(DateTimeFormatter.ofPattern("d MMM yyyy"));
@@ -135,14 +147,17 @@ class AppellantRecordRefundDecisionPersonalisationEmailTest {
         when(systemDateProvider.dueDate(daysAfterRefundDecision)).thenReturn(dueDate);
 
         Map<String, String> personalisation =
-                appellantRecordRefundDecisionPersonalisationEmail.getPersonalisation(asylumCase);
+            appellantRecordRefundDecisionPersonalisationEmail.getPersonalisation(asylumCase);
 
         assertEquals(appealReferenceNumber, personalisation.get("appealReferenceNumber"));
         assertEquals(homeOfficeReferenceNumber, personalisation.get("homeOfficeReferenceNumber"));
         assertEquals(appellantGivenNames, personalisation.get("appellantGivenNames"));
         assertEquals(appellantFamilyName, personalisation.get("appellantFamilyName"));
         assertEquals(iaAipFrontendUrl, personalisation.get("linkToService"));
-        assertEquals(systemDateProvider.dueDate(daysAfterRefundDecision), personalisation.get("14DaysAfterRefundDecision"));
+        assertEquals(
+            systemDateProvider.dueDate(daysAfterRefundDecision),
+            personalisation.get("14DaysAfterRefundDecision")
+        );
         assertEquals("40.00", personalisation.get("refundAmount"));
 
         assertEquals(customerServicesTelephone, customerServicesProvider.getCustomerServicesTelephone());

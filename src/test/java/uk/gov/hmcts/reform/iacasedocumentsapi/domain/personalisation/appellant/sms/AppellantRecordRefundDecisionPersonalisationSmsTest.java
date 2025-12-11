@@ -70,26 +70,34 @@ class AppellantRecordRefundDecisionPersonalisationSmsTest {
 
     @ParameterizedTest
     @EnumSource(
-            value = RemissionDecision.class,
-            names = {"APPROVED", "PARTIALLY_APPROVED", "REJECTED"})
+        value = RemissionDecision.class,
+        names = {"APPROVED", "PARTIALLY_APPROVED", "REJECTED"})
     void should_return_approved_template_id(RemissionDecision remissionDecision) {
         when(asylumCase.read(REMISSION_DECISION, RemissionDecision.class)).thenReturn(Optional.of(remissionDecision));
 
         switch (remissionDecision) {
-            case APPROVED ->
-                    assertEquals(appellantRefundApprovedTemplateId, appellantRecordRefundDecisionPersonalisationSms.getTemplateId(asylumCase));
-            case PARTIALLY_APPROVED ->
-                    assertEquals(appellantRefundPartiallyApprovedTemplateId, appellantRecordRefundDecisionPersonalisationSms.getTemplateId(asylumCase));
-            case REJECTED ->
-                    assertEquals(appellantRefundRejectedTemplateId, appellantRecordRefundDecisionPersonalisationSms.getTemplateId(asylumCase));
+            case APPROVED -> assertEquals(
+                appellantRefundApprovedTemplateId,
+                appellantRecordRefundDecisionPersonalisationSms.getTemplateId(asylumCase)
+            );
+            case PARTIALLY_APPROVED -> assertEquals(
+                appellantRefundPartiallyApprovedTemplateId,
+                appellantRecordRefundDecisionPersonalisationSms.getTemplateId(asylumCase)
+            );
+            case REJECTED -> assertEquals(
+                appellantRefundRejectedTemplateId,
+                appellantRecordRefundDecisionPersonalisationSms.getTemplateId(asylumCase)
+            );
             default -> throw new IllegalArgumentException("Unexpected remission decision: " + remissionDecision);
         }
     }
 
     @Test
     void should_return_given_reference_id() {
-        assertEquals(caseId + "_REFUND_DECISION_DECIDED_AIP_APPELLANT_SMS",
-                appellantRecordRefundDecisionPersonalisationSms.getReferenceId(caseId));
+        assertEquals(
+            caseId + "_REFUND_DECISION_DECIDED_AIP_APPELLANT_SMS",
+            appellantRecordRefundDecisionPersonalisationSms.getReferenceId(caseId)
+        );
     }
 
     @Test
@@ -98,7 +106,7 @@ class AppellantRecordRefundDecisionPersonalisationSmsTest {
             .thenReturn(Collections.singleton(appellantMobile));
 
         assertTrue(appellantRecordRefundDecisionPersonalisationSms.getRecipientsList(asylumCase)
-            .contains(appellantMobile));
+                       .contains(appellantMobile));
     }
 
     @Test
@@ -112,7 +120,10 @@ class AppellantRecordRefundDecisionPersonalisationSmsTest {
     @Test
     void should_return_personalisation_when_all_information_given() {
 
-        when(asylumCase.read(REMISSION_DECISION, RemissionDecision.class)).thenReturn(Optional.of(RemissionDecision.APPROVED));
+        when(asylumCase.read(
+            REMISSION_DECISION,
+            RemissionDecision.class
+        )).thenReturn(Optional.of(RemissionDecision.APPROVED));
 
         final String dueDate = LocalDate.now().plusDays(daysAfterRefundDecision)
             .format(DateTimeFormatter.ofPattern("d MMM yyyy"));
@@ -120,11 +131,14 @@ class AppellantRecordRefundDecisionPersonalisationSmsTest {
         when(systemDateProvider.dueDate(daysAfterRefundDecision)).thenReturn(dueDate);
 
         Map<String, String> personalisation =
-                appellantRecordRefundDecisionPersonalisationSms.getPersonalisation(asylumCase);
+            appellantRecordRefundDecisionPersonalisationSms.getPersonalisation(asylumCase);
 
         assertEquals(appealReferenceNumber, personalisation.get("appealReferenceNumber"));
         assertEquals(iaAipFrontendUrl, personalisation.get("linkToService"));
-        assertEquals(systemDateProvider.dueDate(daysAfterRefundDecision), personalisation.get("14DaysAfterRefundDecision"));
+        assertEquals(
+            systemDateProvider.dueDate(daysAfterRefundDecision),
+            personalisation.get("14DaysAfterRefundDecision")
+        );
         assertEquals("40.00", personalisation.get("refundAmount"));
     }
 }

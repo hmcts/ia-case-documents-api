@@ -63,7 +63,7 @@ public class AppellantRecordRefundDecisionPersonalisationEmail implements EmailN
     public String getTemplateId(AsylumCase asylumCase) {
 
         RemissionDecision remissionDecision = asylumCase.read(REMISSION_DECISION, RemissionDecision.class)
-                .orElseThrow(() -> new IllegalStateException("Remission decision not found"));
+            .orElseThrow(() -> new IllegalStateException("Remission decision not found"));
 
         return switch (remissionDecision) {
             case APPROVED -> appellantRefundApprovedTemplateId;
@@ -84,27 +84,30 @@ public class AppellantRecordRefundDecisionPersonalisationEmail implements EmailN
         final String dueDate = systemDateProvider.dueDate(daysAfterRefundDecision);
 
         return ImmutableMap
-                .<String, String>builder()
-                .putAll(customerServicesProvider.getCustomerServicesPersonalisation())
-                .put("appellantGivenNames", asylumCase.read(APPELLANT_GIVEN_NAMES, String.class).orElse(""))
-                .put("appellantFamilyName", asylumCase.read(APPELLANT_FAMILY_NAME, String.class).orElse(""))
-                .put("appealReferenceNumber", asylumCase.read(APPEAL_REFERENCE_NUMBER, String.class).orElse(""))
-                .put("homeOfficeReferenceNumber", asylumCase.read(HOME_OFFICE_REFERENCE_NUMBER, String.class).orElse(""))
-                .put("linkToService", iaAipFrontendUrl)
-                .put("14DaysAfterRefundDecision", dueDate)
-                .put("refundAmount", calculateAmountRefunded(asylumCase))
-                .build();
+            .<String, String>builder()
+            .putAll(customerServicesProvider.getCustomerServicesPersonalisation())
+            .put("appellantGivenNames", asylumCase.read(APPELLANT_GIVEN_NAMES, String.class).orElse(""))
+            .put("appellantFamilyName", asylumCase.read(APPELLANT_FAMILY_NAME, String.class).orElse(""))
+            .put("appealReferenceNumber", asylumCase.read(APPEAL_REFERENCE_NUMBER, String.class).orElse(""))
+            .put("homeOfficeReferenceNumber", asylumCase.read(HOME_OFFICE_REFERENCE_NUMBER, String.class).orElse(""))
+            .put("linkToService", iaAipFrontendUrl)
+            .put("14DaysAfterRefundDecision", dueDate)
+            .put("refundAmount", calculateAmountRefunded(asylumCase))
+            .build();
     }
 
     private String calculateAmountRefunded(AsylumCase asylumCase) {
-        RemissionDecision remissionDecision = asylumCase.read(AsylumCaseDefinition.REMISSION_DECISION, RemissionDecision.class)
-                .orElseThrow(() -> new IllegalStateException("Remission decision not found"));
+        RemissionDecision remissionDecision = asylumCase.read(
+                AsylumCaseDefinition.REMISSION_DECISION,
+                RemissionDecision.class
+            )
+            .orElseThrow(() -> new IllegalStateException("Remission decision not found"));
 
         if (remissionDecision.equals(PARTIALLY_APPROVED) || remissionDecision.equals(APPROVED)) {
             String amountRemitted = asylumCase.read(AMOUNT_REMITTED, String.class).orElse("");
 
             BigDecimal amountRemittedInGbp = new BigDecimal(String.valueOf(Double.parseDouble(amountRemitted) / 100))
-                    .setScale(2, RoundingMode.DOWN);
+                .setScale(2, RoundingMode.DOWN);
 
             return amountRemittedInGbp.toString();
         }
