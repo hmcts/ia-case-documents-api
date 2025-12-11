@@ -136,7 +136,7 @@ public class CcdScenarioRunnerTest {
 
         Map<String, Object> expectedResponse = MapSerializer.deserialize(expectedResponseBody);
 
-        int maxRetries = 1;
+        int maxRetries = 3;
         for (int i = 0; i < maxRetries; i++) {
             try {
                 System.out.println((char) 27 + "[33m" + "Attempt " + (i + 1) + " SCENARIO: " + filename);
@@ -423,9 +423,9 @@ public class CcdScenarioRunnerTest {
         }
 
         Map<String, String> scenarioSources = new HashMap<>();
-        //scenarioSources.putAll(StringResourceLoader.load("/scenarios/" + scenarioPattern));
-        //scenarioSources.putAll(StringResourceLoader.load("/scenarios/payments/" + scenarioPattern));
-        //scenarioSources.putAll(StringResourceLoader.load("/scenarios/bail/" + scenarioPattern));
+        scenarioSources.putAll(StringResourceLoader.load("/scenarios/" + scenarioPattern));
+        scenarioSources.putAll(StringResourceLoader.load("/scenarios/payments/" + scenarioPattern));
+        scenarioSources.putAll(StringResourceLoader.load("/scenarios/bail/" + scenarioPattern));
         scenarioSources.putAll(StringResourceLoader.load("/scenarios/notifications/" + scenarioPattern));
 
         System.out.println((char) 27 + "[36m" + "-------------------------------------------------------------------");
@@ -434,10 +434,8 @@ public class CcdScenarioRunnerTest {
         List<Arguments> argumentsList = new ArrayList<>(Collections.emptyList());
         scenarioSources.forEach((filename, scenarioSource) -> {
             try {
-                if (filename.equals("RIA-4827-appeal-allowed-no-payment-status-aip.json")) {
-                    Map<String, Object> scenario = deserializeWithExpandedValues(scenarioSource);
-                    argumentsList.add(Arguments.of(filename, scenario));
-                }
+                Map<String, Object> scenario = deserializeWithExpandedValues(scenarioSource);
+                argumentsList.add(Arguments.of(filename, scenario));
             } catch (IOException e) {
                 System.out.println("Failed to parse scenario file: " + filename);
                 failedScenarios.add(filename);
