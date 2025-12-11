@@ -3250,6 +3250,7 @@ public class NotificationGeneratorConfiguration {
     @Bean("submitAppealLegalRepNotificationGenerator")
     public List<NotificationGenerator> submitAppealLegalRepNotificationHandler(
         LegalRepresentativeAppealSubmittedPersonalisation legalRepresentativeAppealSubmittedPersonalisation,
+        HomeOfficeSubmitAppealPersonalisation homeOfficeSubmitAppealPersonalisation,
         GovNotifyNotificationSender notificationSender,
         NotificationIdAppender notificationIdAppender
     ) {
@@ -3257,7 +3258,8 @@ public class NotificationGeneratorConfiguration {
         return singletonList(
             new EmailNotificationGenerator(
                 newArrayList(
-                    legalRepresentativeAppealSubmittedPersonalisation
+                    legalRepresentativeAppealSubmittedPersonalisation,
+                    homeOfficeSubmitAppealPersonalisation
                 ),
                 notificationSender,
                 notificationIdAppender

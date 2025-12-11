@@ -144,8 +144,8 @@ public class NotificationVerifier implements Verifier {
                             + ": Notification "
                             + expectedReference
                             + " was delivered with wrong subject content",
-                        actualSubject,
-                        equalTo(expectedSubject)
+                        actualSubject.toLowerCase(),
+                        equalTo(expectedSubject.toLowerCase())
                     );
 
                     if (expectedBodyUnknownType instanceof String) {

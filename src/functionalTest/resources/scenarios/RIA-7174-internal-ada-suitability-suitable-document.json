@@ -11,6 +11,7 @@
         "replacements": {
           "isAcceleratedDetainedAppeal": "Yes",
           "suitabilityReviewJudge": "Judge x",
+          "listCaseHearingCentre": "taylorHouse",
           "suitabilityReviewDecision": "suitable",
           "suitabilityReviewReason": "Reason1",
           "directions": [
@@ -51,6 +52,7 @@
     "caseData": {
       "template": "minimal-internal-appeal-submitted.json",
       "replacements": {
+        "listCaseHearingCentre": "taylorHouse",
         "notificationAttachmentDocuments": [
           {
             "id": "1",

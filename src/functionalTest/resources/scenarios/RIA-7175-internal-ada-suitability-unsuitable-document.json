@@ -13,6 +13,7 @@
           "suitabilityReviewJudge": "Judge x",
           "suitabilityReviewDecision": "unsuitable",
           "suitabilityReviewReason": "Reason1",
+          "listCaseHearingCentre": "taylorHouse",
           "directions": [
             {
               "id": "1",
@@ -51,6 +52,7 @@
     "caseData": {
       "template": "minimal-internal-appeal-submitted.json",
       "replacements": {
+        "listCaseHearingCentre": "taylorHouse",
         "notificationAttachmentDocuments": [
           {
             "id": "1",
