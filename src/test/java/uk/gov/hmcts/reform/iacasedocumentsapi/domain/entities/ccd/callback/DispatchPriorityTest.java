@@ -18,6 +18,6 @@ public class DispatchPriorityTest {
 
     @Test
     public void if_this_test_fails_it_is_because_it_needs_updating_with_your_changes() {
-        assertEquals(5, DispatchPriority.values().length);
+        assertEquals(6, DispatchPriority.values().length);
     }
 }
