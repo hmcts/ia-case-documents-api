@@ -8,6 +8,7 @@ public class DispatchPriorityTest {
 
     @Test
     public void has_correct_case_event_ids() {
+        assertEquals("payments", DispatchPriority.PAYMENTS.toString());
         assertEquals("earliest", DispatchPriority.EARLIEST.toString());
         assertEquals("early", DispatchPriority.EARLY.toString());
         assertEquals("late", DispatchPriority.LATE.toString());

@@ -12,11 +12,11 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.Callb
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.PreSubmitCallbackResponse;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.PreSubmitCallbackStage;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.fee.Fee;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.PreSubmitCallbackHandler;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.PreSubmitPaymentsCallbackHandler;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.FeeService;
 
 @Component
-public class FeeLookupHandler implements PreSubmitCallbackHandler<AsylumCase> {
+public class FeeLookupHandler implements PreSubmitPaymentsCallbackHandler<AsylumCase> {
 
     private final FeeService feeService;
 

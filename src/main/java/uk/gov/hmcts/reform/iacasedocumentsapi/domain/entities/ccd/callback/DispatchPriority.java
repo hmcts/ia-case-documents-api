@@ -2,6 +2,7 @@ package uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback;
 
 public enum DispatchPriority {
 
+    PAYMENTS("payments"),
     EARLIEST("earliest"),
     EARLY("early"),
     LATE("late"),

@@ -44,7 +44,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.payment.CreditAcco
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.payment.Currency;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.payment.PaymentResponse;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.payment.Service;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.PreSubmitCallbackHandler;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.PreSubmitPaymentsCallbackHandler;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.FeeService;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.PaymentService;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.RefDataService;
@@ -52,7 +52,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.config.PaymentPrope
 
 @Component
 @Slf4j
-public class PaymentAppealHandler implements PreSubmitCallbackHandler<AsylumCase> {
+public class PaymentAppealHandler implements PreSubmitPaymentsCallbackHandler<AsylumCase> {
 
     private final FeeService feeService;
     private final PaymentService paymentService;
