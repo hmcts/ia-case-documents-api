@@ -39,13 +39,13 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.fee.Fee;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.PaymentStatus;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.payment.ServiceRequestResponse;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.PreSubmitCallbackHandler;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.PreSubmitPaymentsCallbackHandler;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.FeeService;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.service.ServiceRequestService;
 
 @Component
 @Slf4j
-public class CreateServiceRequestHandler implements PreSubmitCallbackHandler<AsylumCase> {
+public class CreateServiceRequestHandler implements PreSubmitPaymentsCallbackHandler<AsylumCase> {
 
     private final ServiceRequestService serviceRequestService;
     private final FeeService feeService;
