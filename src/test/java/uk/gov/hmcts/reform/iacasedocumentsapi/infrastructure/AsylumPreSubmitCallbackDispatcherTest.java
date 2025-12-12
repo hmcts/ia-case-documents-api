@@ -42,6 +42,7 @@ class AsylumPreSubmitCallbackDispatcherTest {
     @Mock private PreSubmitCallbackHandler<AsylumCase> handler3;
     @Mock private PreSubmitCallbackHandler<AsylumCase> handler4;
     @Mock private PreSubmitPaymentsCallbackHandler<AsylumCase> handler5;
+    @Mock private PreSubmitCallbackHandler<AsylumCase> handler6;
     @Mock private Callback<AsylumCase> callback;
     @Mock private CaseDetails<AsylumCase> caseDetails;
     @Mock private AsylumCase caseData;
@@ -50,11 +51,13 @@ class AsylumPreSubmitCallbackDispatcherTest {
     @Mock private AsylumCase caseDataMutation3;
     @Mock private AsylumCase caseDataMutation4;
     @Mock private AsylumCase caseDataMutation5;
+    @Mock private AsylumCase caseDataMutation6;
     @Mock private PreSubmitCallbackResponse<AsylumCase> response1;
     @Mock private PreSubmitCallbackResponse<AsylumCase> response2;
     @Mock private PreSubmitCallbackResponse<AsylumCase> response3;
     @Mock private PreSubmitCallbackResponse<AsylumCase> response4;
     @Mock private PreSubmitCallbackResponse<AsylumCase> response5;
+    @Mock private PreSubmitCallbackResponse<AsylumCase> response6;
 
     private PreSubmitCallbackDispatcher<AsylumCase> preSubmitCallbackDispatcher;
 
@@ -67,7 +70,8 @@ class AsylumPreSubmitCallbackDispatcherTest {
                 handler2,
                 handler3,
                 handler4,
-                handler5
+                handler5,
+                handler6
             )
         );
     }
@@ -76,7 +80,7 @@ class AsylumPreSubmitCallbackDispatcherTest {
     void should_dispatch_callback_to_handlers_according_to_priority_collecting_any_error_messages() {
 
         Set<String> expectedErrors =
-            ImmutableSet.of("error1", "error2", "error2.3", "error3", "error4", "error5");
+            ImmutableSet.of("error1", "error2", "error2.3", "error3", "error4", "error5", "error6");
 
         for (PreSubmitCallbackStage callbackStage : PreSubmitCallbackStage.values()) {
 
@@ -100,6 +104,9 @@ class AsylumPreSubmitCallbackDispatcherTest {
             when(response5.getData()).thenReturn(caseDataMutation5);
             when(response5.getErrors()).thenReturn(ImmutableSet.of("error5"));
 
+            when(response6.getData()).thenReturn(caseDataMutation6);
+            when(response6.getErrors()).thenReturn(ImmutableSet.of("error6"));
+
             when(handler1.getDispatchPriority()).thenReturn(DispatchPriority.EARLY);
             when(handler1.canHandle(eq(callbackStage), any(Callback.class))).thenReturn(true);
             when(handler1.handle(eq(callbackStage), any(Callback.class))).thenReturn(response1);
@@ -120,16 +127,20 @@ class AsylumPreSubmitCallbackDispatcherTest {
             when(handler5.canHandle(eq(callbackStage), any(Callback.class))).thenReturn(true);
             when(handler5.handle(eq(callbackStage), any(Callback.class))).thenReturn(response5);
 
+            when(handler6.getDispatchPriority()).thenReturn(DispatchPriority.NOTIFICATIONS);
+            when(handler6.canHandle(eq(callbackStage), any(Callback.class))).thenReturn(true);
+            when(handler6.handle(eq(callbackStage), any(Callback.class))).thenReturn(response6);
+
             PreSubmitCallbackResponse<AsylumCase> callbackResponse =
                 preSubmitCallbackDispatcher.handle(callbackStage, callback);
 
             assertNotNull(callbackResponse);
-            assertEquals(caseDataMutation4, callbackResponse.getData());
+            assertEquals(caseDataMutation6, callbackResponse.getData());
             assertEquals(expectedErrors, callbackResponse.getErrors());
 
             verify(ccdEventAuthorizor, times(1)).throwIfNotAuthorized(Event.BUILD_CASE);
 
-            InOrder inOrder = inOrder(handler5, handler3, handler1, handler2, handler4);
+            InOrder inOrder = inOrder(handler5, handler3, handler1, handler2, handler4, handler6);
 
             inOrder.verify(handler5, times(1)).canHandle(eq(callbackStage), any(Callback.class));
             inOrder.verify(handler5, times(1)).handle(eq(callbackStage), any(Callback.class));
@@ -146,7 +157,10 @@ class AsylumPreSubmitCallbackDispatcherTest {
             inOrder.verify(handler4, times(1)).canHandle(eq(callbackStage), any(Callback.class));
             inOrder.verify(handler4, times(1)).handle(eq(callbackStage), any(Callback.class));
 
-            reset(ccdEventAuthorizor, handler1, handler2, handler3, handler4, handler5);
+            inOrder.verify(handler6, times(1)).canHandle(eq(callbackStage), any(Callback.class));
+            inOrder.verify(handler6, times(1)).handle(eq(callbackStage), any(Callback.class));
+
+            reset(ccdEventAuthorizor, handler1, handler2, handler3, handler4, handler5, handler6);
         }
     }
 
@@ -168,6 +182,9 @@ class AsylumPreSubmitCallbackDispatcherTest {
             when(response5.getData()).thenReturn(caseData);
             when(response5.getErrors()).thenReturn(Collections.emptySet());
 
+            when(response6.getData()).thenReturn(caseData);
+            when(response6.getErrors()).thenReturn(Collections.emptySet());
+
             when(handler1.getDispatchPriority()).thenReturn(DispatchPriority.EARLY);
             when(handler1.canHandle(eq(callbackStage), any(Callback.class))).thenReturn(false);
             when(handler1.handle(eq(callbackStage), any(Callback.class))).thenReturn(response1);
@@ -187,6 +204,10 @@ class AsylumPreSubmitCallbackDispatcherTest {
             when(handler5.getDispatchPriority()).thenReturn(DispatchPriority.PAYMENTS);
             when(handler5.canHandle(eq(callbackStage), any(Callback.class))).thenReturn(true);
             when(handler5.handle(eq(callbackStage), any(Callback.class))).thenReturn(response5);
+
+            when(handler6.getDispatchPriority()).thenReturn(DispatchPriority.NOTIFICATIONS);
+            when(handler6.canHandle(eq(callbackStage), any(Callback.class))).thenReturn(true);
+            when(handler6.handle(eq(callbackStage), any(Callback.class))).thenReturn(response6);
 
             PreSubmitCallbackResponse<AsylumCase> callbackResponse =
                 preSubmitCallbackDispatcher.handle(callbackStage, callback);
@@ -212,7 +233,10 @@ class AsylumPreSubmitCallbackDispatcherTest {
             verify(handler5, times(1)).canHandle(eq(callbackStage), any(Callback.class));
             verify(handler5, times(1)).handle(eq(callbackStage), any(Callback.class));
 
-            reset(ccdEventAuthorizor, handler1, handler2, handler3, handler4, handler5);
+            verify(handler6, times(1)).canHandle(eq(callbackStage), any(Callback.class));
+            verify(handler6, times(1)).handle(eq(callbackStage), any(Callback.class));
+
+            reset(ccdEventAuthorizor, handler1, handler2, handler3, handler4, handler5, handler6);
         }
     }
 
@@ -242,8 +266,10 @@ class AsylumPreSubmitCallbackDispatcherTest {
             verify(handler4, never()).handle(any(), any());
             verify(handler5, never()).canHandle(any(), any());
             verify(handler5, never()).handle(any(), any());
+            verify(handler6, never()).canHandle(any(), any());
+            verify(handler6, never()).handle(any(), any());
 
-            reset(ccdEventAuthorizor, handler1, handler2, handler3, handler4, handler5);
+            reset(ccdEventAuthorizor, handler1, handler2, handler3, handler4, handler5, handler6);
         }
     }
 
