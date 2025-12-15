@@ -20,6 +20,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
+import java.util.function.BiPredicate;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -40,6 +41,11 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.PreSu
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.PreSubmitCallbackStage;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.PreSubmitCallbackHandler;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.PreSubmitPaymentsCallbackHandler;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit.BailNotificationHandler;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit.SendDecisionAndReasonsHandler;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit.payments.FeeLookupHandler;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.FeeService;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.SendDecisionAndReasonsOrchestrator;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.security.CcdEventAuthorizor;
 
 @ExtendWith(MockitoExtension.class)
@@ -368,20 +374,18 @@ class PreSubmitCallbackDispatcherTest {
 
     @Test
     void should_sort_handlers_by_name() {
-        PreSubmitCallbackHandler<CaseData> h1 = mock(PreSubmitCallbackHandler.class);
-        PreSubmitCallbackHandler<CaseData> h3 = mock(PreSubmitCallbackHandler.class);
-        Class classH1 = mock(Class.class);
-        Class classH3 = mock(Class.class);
-        when(classH1.getName()).thenReturn("AaaAaaAaaAaa");
-        when(classH3.getName()).thenReturn("ZzzZzzZzzZzz");
-        when(h1.getClass()).thenReturn(classH1);
-        when(h3.getClass()).thenReturn(classH3);
+        PreSubmitCallbackHandler<CaseData> h1 = (PreSubmitCallbackHandler) new SendDecisionAndReasonsHandler(mock(
+            SendDecisionAndReasonsOrchestrator.class));
+        PreSubmitCallbackHandler<CaseData> h2 = (PreSubmitCallbackHandler) new BailNotificationHandler(mock(
+            BiPredicate.class), Collections.emptyList());
+        PreSubmitCallbackHandler<CaseData> h3 = (PreSubmitCallbackHandler) new FeeLookupHandler(mock(FeeService.class));
 
         PreSubmitCallbackDispatcher<CaseData> dispatcher = new PreSubmitCallbackDispatcher<>(
             ccdEventAuthorizor,
             Arrays.asList(
-                h3,
-                h1
+                h1,
+                h2,
+                h3
             )
         );
 
@@ -391,9 +395,10 @@ class PreSubmitCallbackDispatcherTest {
                 "sortedCallbackHandlers"
             );
 
-        assertEquals(2, sortedDispatcher.size());
-        assertEquals(h1, sortedDispatcher.get(0));
+        assertEquals(3, sortedDispatcher.size());
+        assertEquals(h2, sortedDispatcher.get(0));
         assertEquals(h3, sortedDispatcher.get(1));
+        assertEquals(h1, sortedDispatcher.get(2));
     }
 
     @Test
