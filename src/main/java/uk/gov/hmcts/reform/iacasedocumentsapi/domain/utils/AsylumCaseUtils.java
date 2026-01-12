@@ -627,6 +627,12 @@ public class AsylumCaseUtils {
 
         return (startsWithVowelSound ? "An " : "A ") + trimmedNoun;
     }
+
+    public static boolean hasAppellantEmailOrMobileNumber(AsylumCase asylumCase) {
+        boolean appellantHasEmail = !asylumCase.read(EMAIL, String.class).orElse("").equals("");
+        boolean appellantHasMobileNumber = !asylumCase.read(MOBILE_NUMBER, String.class).orElse("").equals("");
+        return appellantHasEmail || appellantHasMobileNumber;
+    }
 }
 
 

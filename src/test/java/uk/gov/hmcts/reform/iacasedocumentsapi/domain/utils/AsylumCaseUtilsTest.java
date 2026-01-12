@@ -1001,4 +1001,18 @@ public class AsylumCaseUtilsTest {
         }
     }
 
+    @ParameterizedTest
+    @CsvSource({
+        "test@example.com, , true",
+        ", 1234567890, true",
+        "test@example.com, 1234567890, true",
+        ", , false"
+    })
+    void should_return_correct_value_for_has_appellant_email_or_mobile_number(String email, String mobile, boolean expected) {
+        Mockito.when(asylumCase.read(AsylumCaseDefinition.EMAIL, String.class)).thenReturn(Optional.ofNullable(email));
+        Mockito.when(asylumCase.read(AsylumCaseDefinition.MOBILE_NUMBER, String.class)).thenReturn(Optional.ofNullable(mobile));
+
+        assertEquals(expected, AsylumCaseUtils.hasAppellantEmailOrMobileNumber(asylumCase));
+    }
+
 }

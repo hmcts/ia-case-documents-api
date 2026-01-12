@@ -136,7 +136,8 @@ public class HearingNoticeCreator implements PreSubmitCallbackHandler<AsylumCase
                 DocumentTag.HEARING_NOTICE
             );
 
-            if (isInternalNonDetainedCase(asylumCase) || isDetainedInFacilityType(asylumCase, OTHER)) {
+            if (isInternalNonDetainedCase(asylumCase) || isDetainedInFacilityType(asylumCase, OTHER)
+                    || !hasAppellantEmailOrMobileNumber(asylumCase)) {
                 documentHandler.addWithMetadataWithoutReplacingExistingDocuments(
                     asylumCase,
                     hearingNotice,
