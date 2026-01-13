@@ -1,5 +1,5 @@
 {
-  "description": "DIAC-1213 Mobile and Email unavailable Create hearing notice for appeal",
+  "description": "DIAC-1213 List Case Mobile and Email unavailable Create hearing notice for appeal",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
     "credentials": "AdminOfficer",
