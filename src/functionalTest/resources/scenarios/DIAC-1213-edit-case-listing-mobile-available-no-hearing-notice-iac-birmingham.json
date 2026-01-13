@@ -30,6 +30,8 @@
             "AddressLine2": "Example Street"
           },
           "mobileNumber": "07983000000",
+          "isAdmin": "No",
+          "appellantInDetention": "No",
           "hearingDocuments": []
         }
       },
@@ -47,6 +49,18 @@
           "ariaListingReference": "AA/12345/1234",
           "customerServicesTelephone": "{$customerServices.telephoneNumber}",
           "customerServicesEmail": "{$customerServices.emailAddress}",
+          "appellantInUk": "Yes",
+          "appellantAddress": {
+            "County": "",
+            "Country": "United Kingdom",
+            "PostCode": "NE21JX",
+            "PostTown": "Example Town",
+            "AddressLine1": "5",
+            "AddressLine2": "Example Street"
+          },
+          "mobileNumber": "07983000000",
+          "isAdmin": "No",
+          "appellantInDetention": "No",
           "hearingDocuments": []
         }
       }
@@ -79,7 +93,9 @@
           "AddressLine1": "5",
           "AddressLine2": "Example Street"
         },
-        "mobileNumber": "07983000000"
+        "mobileNumber": "07983000000",
+        "isAdmin": "No",
+        "appellantInDetention": "No"
       }
     }
   }
