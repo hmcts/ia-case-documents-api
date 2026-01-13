@@ -1,0 +1,128 @@
+{
+  "description": "DIAC-1213 Edit Case listing Mobile available NO new hearing notice PDF (IAC Birmingham)",
+  "request": {
+    "uri": "/asylum/ccdAboutToSubmit",
+    "credentials": "CaseOfficer",
+    "input": {
+      "eventId": "editCaseListing",
+      "state": "finalBundling",
+      "caseData": {
+        "template": "minimal-appeal-submitted.json",
+        "replacements": {
+          "listCaseHearingCentre": "birmingham",
+          "listCaseHearingLength": "60",
+          "listCaseHearingDate": "2018-12-31T12:34:56",
+          "listCaseRequirementsVulnerabilities": "something around Vulnerabilities",
+          "listCaseRequirementsMultimedia": "something around Multimedia",
+          "listCaseRequirementsSingleSexCourt": "something around SingleSexCourt",
+          "listCaseRequirementsInCameraCourt": "something around InCameraCourt",
+          "listCaseRequirementsOther": "something around Other",
+          "ariaListingReference": "AA/12345/1234",
+          "customerServicesTelephone": "{$customerServices.telephoneNumber}",
+          "customerServicesEmail": "{$customerServices.emailAddress}",
+          "appellantInUk": "Yes",
+          "appellantAddress": {
+            "County": "",
+            "Country": "United Kingdom",
+            "PostCode": "NE21JX",
+            "PostTown": "Example Town",
+            "AddressLine1": "5",
+            "AddressLine2": "Example Street"
+          },
+          "mobileNumber": "07983000000",
+          "hearingDocuments": [
+            {
+              "id": "2",
+              "value": {
+                "document": {
+                  "document_url": "old-hearing-notice",
+                  "document_binary_url": "old-hearing-notice",
+                  "document_filename": "old-hearing-notice"
+                },
+                "description": "OLD HEARING NOTICE",
+                "dateUploaded": "2019-01-01",
+                "tag": "hearingNotice"
+              }
+            }
+          ]
+        }
+      },
+      "caseDataBefore": {
+        "template": "minimal-appeal-submitted.json",
+        "replacements": {
+          "listCaseHearingCentre": "birmingham",
+          "listCaseHearingLength": "60",
+          "listCaseHearingDate": "2018-12-31T12:34:56",
+          "listCaseRequirementsVulnerabilities": "something around Vulnerabilities",
+          "listCaseRequirementsMultimedia": "something around Multimedia",
+          "listCaseRequirementsSingleSexCourt": "something around SingleSexCourt",
+          "listCaseRequirementsInCameraCourt": "something around InCameraCourt",
+          "listCaseRequirementsOther": "something around Other",
+          "ariaListingReference": "AA/12345/1234",
+          "customerServicesTelephone": "{$customerServices.telephoneNumber}",
+          "customerServicesEmail": "{$customerServices.emailAddress}",
+          "hearingDocuments": [
+            {
+              "id": "1",
+              "value": {
+                "document": {
+                  "document_url": "old-hearing-notice",
+                  "document_binary_url": "old-hearing-notice",
+                  "document_filename": "old-hearing-notice"
+                },
+                "description": "OLD HEARING NOTICE",
+                "dateUploaded": "2019-01-01",
+                "tag": "hearingNotice"
+              }
+            }
+          ]
+        }
+      }
+    }
+  },
+  "expectation": {
+    "status": 200,
+    "errors": [],
+    "caseData": {
+      "template": "minimal-appeal-submitted.json",
+      "replacements": {
+        "hearingDocuments": [
+          {
+            "id": "1",
+            "value": {
+              "document": {
+                "document_url": "old-hearing-notice",
+                "document_binary_url": "old-hearing-notice",
+                "document_filename": "old-hearing-notice"
+              },
+              "description": "OLD HEARING NOTICE",
+              "dateUploaded": "2019-01-01",
+              "tag": "hearingNotice"
+            }
+          }
+        ],
+        "listCaseHearingCentre": "birmingham",
+        "listCaseHearingLength": "60",
+        "listCaseHearingDate": "2018-12-31T12:34:56",
+        "listCaseRequirementsVulnerabilities": "something around Vulnerabilities",
+        "listCaseRequirementsMultimedia": "something around Multimedia",
+        "listCaseRequirementsSingleSexCourt": "something around SingleSexCourt",
+        "listCaseRequirementsInCameraCourt": "something around InCameraCourt",
+        "listCaseRequirementsOther": "something around Other",
+        "ariaListingReference": "AA/12345/1234",
+        "customerServicesTelephone": "{$customerServices.telephoneNumber}",
+        "customerServicesEmail": "{$customerServices.emailAddress}",
+        "appellantInUk": "Yes",
+        "appellantAddress": {
+          "County": "",
+          "Country": "United Kingdom",
+          "PostCode": "NE21JX",
+          "PostTown": "Example Town",
+          "AddressLine1": "5",
+          "AddressLine2": "Example Street"
+        },
+        "mobileNumber": "07983000000"
+      }
+    }
+  }
+}
