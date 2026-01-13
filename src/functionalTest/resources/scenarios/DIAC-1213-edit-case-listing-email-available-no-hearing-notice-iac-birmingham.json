@@ -30,6 +30,8 @@
             "AddressLine2": "Example Street"
           },
           "email": "test@test.com",
+          "isAdmin": "No",
+          "appellantInDetention": "No",
           "hearingDocuments": [
             {
               "id": "1",
@@ -71,6 +73,8 @@
             "AddressLine2": "Example Street"
           },
           "email": "test@test.com",
+          "isAdmin": "No",
+          "appellantInDetention": "No",
           "hearingDocuments": [
             {
               "id": "1",
@@ -131,7 +135,9 @@
           "AddressLine1": "5",
           "AddressLine2": "Example Street"
         },
-        "email": "test@test.com"
+        "email": "test@test.com",
+        "isAdmin": "No",
+        "appellantInDetention": "No"
       }
     }
   }
