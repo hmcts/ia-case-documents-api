@@ -1,5 +1,5 @@
 {
-  "description": "DIAC-1213 Edit Case listing Mobile available NO new hearing notice PDF (IAC Birmingham)",
+  "description": "DIAC-1213 Edit Case listing Email available NO new hearing notice PDF (IAC Birmingham)",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
     "credentials": "CaseOfficer",
@@ -29,7 +29,7 @@
             "AddressLine1": "5",
             "AddressLine2": "Example Street"
           },
-          "mobileNumber": "07983000000",
+          "email": "test@test.com",
           "hearingDocuments": [
             {
               "id": "1",
@@ -121,7 +121,7 @@
           "AddressLine1": "5",
           "AddressLine2": "Example Street"
         },
-        "mobileNumber": "07983000000"
+        "email": "test@test.com"
       }
     }
   }
