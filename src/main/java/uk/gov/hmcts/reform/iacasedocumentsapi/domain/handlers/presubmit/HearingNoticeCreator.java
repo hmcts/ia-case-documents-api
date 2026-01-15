@@ -92,7 +92,7 @@ public class HearingNoticeCreator implements PreSubmitCallbackHandler<AsylumCase
 
         return Event.LIST_CASE.equals(callback.getEvent())
             && (callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
-            || callbackStage == PreSubmitCallbackStage.MID_EVENT && callback.getPageId().equals("listCaseRequirements"));
+            || (callbackStage == PreSubmitCallbackStage.MID_EVENT && callback.getPageId().equals("listCaseRequirements")));
     }
 
     public PreSubmitCallbackResponse<AsylumCase> handle(
