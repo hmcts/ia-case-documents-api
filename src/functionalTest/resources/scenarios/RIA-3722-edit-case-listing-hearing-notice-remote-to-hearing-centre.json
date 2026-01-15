@@ -21,6 +21,7 @@
           "customerServicesTelephone": "{$customerServices.telephoneNumber}",
           "customerServicesEmail": "{$customerServices.emailAddress}",
           "remoteVideoCallTribunalResponse": "Some tribunal response",
+          "mobileNumber": "07983000000",
           "hearingDocuments": [
             {
               "id": "2",
@@ -116,7 +117,8 @@
         "ariaListingReference": "AA/12345/1234",
         "customerServicesTelephone": "{$customerServices.telephoneNumber}",
         "customerServicesEmail": "{$customerServices.emailAddress}",
-        "remoteVideoCallTribunalResponse": "Some tribunal response"
+        "remoteVideoCallTribunalResponse": "Some tribunal response",
+        "mobileNumber": "07983000000"
       }
     }
   }

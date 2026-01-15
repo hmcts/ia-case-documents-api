@@ -21,6 +21,7 @@
           "ariaListingReference": "AA/12345/1234",
           "customerServicesTelephone": "{$customerServices.telephoneNumber}",
           "customerServicesEmail": "{$customerServices.emailAddress}",
+          "mobileNumber": "07983000000",
           "hearingDocuments": [
             {
               "id": "1",
@@ -162,7 +163,8 @@
         "listCaseRequirementsOther": "something around Other",
         "ariaListingReference": "AA/12345/1234",
         "customerServicesTelephone": "{$customerServices.telephoneNumber}",
-        "customerServicesEmail": "{$customerServices.emailAddress}"
+        "customerServicesEmail": "{$customerServices.emailAddress}",
+        "mobileNumber": "07983000000"
       }
     }
   }

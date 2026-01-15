@@ -1,5 +1,5 @@
 {
-  "description": "RIA-1976-RIA-2804 edit case listing hearing notice PDF (IAC Hatton Cross)",
+  "description": "DIAC-1213 Edit Case listing Mobile available NO new hearing notice PDF (IAC Birmingham)",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
     "credentials": "CaseOfficer",
@@ -9,7 +9,7 @@
       "caseData": {
         "template": "minimal-appeal-submitted.json",
         "replacements": {
-          "listCaseHearingCentre": "hattonCross",
+          "listCaseHearingCentre": "birmingham",
           "listCaseHearingLength": "60",
           "listCaseHearingDate": "2018-12-31T12:34:56",
           "listCaseRequirementsVulnerabilities": "something around Vulnerabilities",
@@ -20,28 +20,25 @@
           "ariaListingReference": "AA/12345/1234",
           "customerServicesTelephone": "{$customerServices.telephoneNumber}",
           "customerServicesEmail": "{$customerServices.emailAddress}",
+          "appellantInUk": "Yes",
+          "appellantAddress": {
+            "County": "",
+            "Country": "United Kingdom",
+            "PostCode": "NE21JX",
+            "PostTown": "Example Town",
+            "AddressLine1": "5",
+            "AddressLine2": "Example Street"
+          },
           "mobileNumber": "07983000000",
-          "hearingDocuments": [
-            {
-              "id": "2",
-              "value": {
-                "document": {
-                  "document_url": "old-hearing-notice",
-                  "document_binary_url": "old-hearing-notice",
-                  "document_filename": "old-hearing-notice"
-                },
-                "description": "OLD HEARING NOTICE",
-                "dateUploaded": "2019-01-01",
-                "tag": "hearingNotice"
-              }
-            }
-          ]
+          "isAdmin": "No",
+          "appellantInDetention": "No",
+          "hearingDocuments": []
         }
       },
       "caseDataBefore": {
         "template": "minimal-appeal-submitted.json",
         "replacements": {
-          "listCaseHearingCentre": "hattonCross",
+          "listCaseHearingCentre": "birmingham",
           "listCaseHearingLength": "60",
           "listCaseHearingDate": "2018-12-31T12:34:56",
           "listCaseRequirementsVulnerabilities": "something around Vulnerabilities",
@@ -52,21 +49,19 @@
           "ariaListingReference": "AA/12345/1234",
           "customerServicesTelephone": "{$customerServices.telephoneNumber}",
           "customerServicesEmail": "{$customerServices.emailAddress}",
-          "hearingDocuments": [
-            {
-              "id": "1",
-              "value": {
-                "document": {
-                  "document_url": "old-hearing-notice",
-                  "document_binary_url": "old-hearing-notice",
-                  "document_filename": "old-hearing-notice"
-                },
-                "description": "OLD HEARING NOTICE",
-                "dateUploaded": "2019-01-01",
-                "tag": "hearingNotice"
-              }
-            }
-          ]
+          "appellantInUk": "Yes",
+          "appellantAddress": {
+            "County": "",
+            "Country": "United Kingdom",
+            "PostCode": "NE21JX",
+            "PostTown": "Example Town",
+            "AddressLine1": "5",
+            "AddressLine2": "Example Street"
+          },
+          "mobileNumber": "07983000000",
+          "isAdmin": "No",
+          "appellantInDetention": "No",
+          "hearingDocuments": []
         }
       }
     }
@@ -77,35 +72,8 @@
     "caseData": {
       "template": "minimal-appeal-submitted.json",
       "replacements": {
-        "hearingDocuments": [
-          {
-            "id": "2",
-            "value": {
-              "document": {
-                "document_url": "$/http.+\/documents/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/",
-                "document_binary_url": "$/http.+\/documents/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}\/binary/",
-                "document_filename": "PA 11111 2019-Gonzlez-hearing-notice.PDF"
-              },
-              "description": "",
-              "dateUploaded": "{$TODAY}",
-              "tag": "hearingNoticeRelisted"
-            }
-          },
-          {
-            "id": "1",
-            "value": {
-              "document": {
-                "document_url": "old-hearing-notice",
-                "document_binary_url": "old-hearing-notice",
-                "document_filename": "old-hearing-notice"
-              },
-              "description": "OLD HEARING NOTICE",
-              "dateUploaded": "2019-01-01",
-              "tag": "hearingNotice"
-            }
-          }
-        ],
-        "listCaseHearingCentre": "hattonCross",
+        "hearingDocuments": [],
+        "listCaseHearingCentre": "birmingham",
         "listCaseHearingLength": "60",
         "listCaseHearingDate": "2018-12-31T12:34:56",
         "listCaseRequirementsVulnerabilities": "something around Vulnerabilities",
@@ -116,7 +84,18 @@
         "ariaListingReference": "AA/12345/1234",
         "customerServicesTelephone": "{$customerServices.telephoneNumber}",
         "customerServicesEmail": "{$customerServices.emailAddress}",
-        "mobileNumber": "07983000000"
+        "appellantInUk": "Yes",
+        "appellantAddress": {
+          "County": "",
+          "Country": "United Kingdom",
+          "PostCode": "NE21JX",
+          "PostTown": "Example Town",
+          "AddressLine1": "5",
+          "AddressLine2": "Example Street"
+        },
+        "mobileNumber": "07983000000",
+        "isAdmin": "No",
+        "appellantInDetention": "No"
       }
     }
   }

@@ -143,7 +143,53 @@ class InternalCaseListedAppellantLetterBundlerTest {
     }
 
     @Test
-    public void it_should_not_handle_callback_when_not_admin_and_not_detained() {
+    public void it_should_not_handle_callback_when_not_admin_and_not_detained_and_mobile_available() {
+        when(callback.getEvent()).thenReturn(Event.LIST_CASE);
+        when(callback.getCaseDetails()).thenReturn(caseDetails);
+        when(caseDetails.getCaseData()).thenReturn(asylumCase);
+        when(asylumCase.read(IS_ADMIN, YesOrNo.class)).thenReturn(Optional.of(NO));
+        when(asylumCase.read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(NO));
+        when(asylumCase.read(MOBILE_NUMBER, String.class)).thenReturn(Optional.of("07983000000"));
+
+        detainedCaseListedLetterHandler =
+                new InternalCaseListedAppellantLetterBundler(
+                        fileExtension,
+                        fileName,
+                        true,
+                        fileNameQualifier,
+                        documentBundler,
+                        documentHandler);
+
+        boolean canHandle = detainedCaseListedLetterHandler.canHandle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
+
+        assertFalse(canHandle);
+    }
+
+    @Test
+    public void it_should_not_handle_callback_when_not_admin_and_not_detained_and_email_available() {
+        when(callback.getEvent()).thenReturn(Event.LIST_CASE);
+        when(callback.getCaseDetails()).thenReturn(caseDetails);
+        when(caseDetails.getCaseData()).thenReturn(asylumCase);
+        when(asylumCase.read(IS_ADMIN, YesOrNo.class)).thenReturn(Optional.of(NO));
+        when(asylumCase.read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(NO));
+        when(asylumCase.read(EMAIL, String.class)).thenReturn(Optional.of("test@test.com"));
+
+        detainedCaseListedLetterHandler =
+                new InternalCaseListedAppellantLetterBundler(
+                        fileExtension,
+                        fileName,
+                        true,
+                        fileNameQualifier,
+                        documentBundler,
+                        documentHandler);
+
+        boolean canHandle = detainedCaseListedLetterHandler.canHandle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
+
+        assertFalse(canHandle);
+    }
+
+    @Test
+    public void it_should_handle_callback_when_not_admin_and_not_detained_and_mobile_email_unavailable() {
         when(callback.getEvent()).thenReturn(Event.LIST_CASE);
         when(callback.getCaseDetails()).thenReturn(caseDetails);
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
@@ -151,18 +197,19 @@ class InternalCaseListedAppellantLetterBundlerTest {
         when(asylumCase.read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(NO));
 
         detainedCaseListedLetterHandler =
-            new InternalCaseListedAppellantLetterBundler(
-                fileExtension,
-                fileName,
-                true,
-                fileNameQualifier,
-                documentBundler,
-                documentHandler);
+                new InternalCaseListedAppellantLetterBundler(
+                        fileExtension,
+                        fileName,
+                        true,
+                        fileNameQualifier,
+                        documentBundler,
+                        documentHandler);
 
         boolean canHandle = detainedCaseListedLetterHandler.canHandle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
 
-        assertFalse(canHandle);
+        assertTrue(canHandle);
     }
+
 
     @Test
     public void it_should_not_handle_callback_when_detained_not_in_other() {

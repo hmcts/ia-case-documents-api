@@ -12,8 +12,10 @@ import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseD
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.APPELLANT_HAS_FIXED_ADDRESS_ADMIN_J;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.APPELLANT_IN_DETENTION;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.DETENTION_FACILITY;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.EMAIL;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.IS_ADMIN;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.LETTER_NOTIFICATION_DOCUMENTS;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.MOBILE_NUMBER;
 
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
@@ -69,6 +71,7 @@ class InternalEditCaseListingLetterGeneratorTest {
         when(callback.getCaseDetails().getCaseData().read(IS_ADMIN, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
         when(callback.getCaseDetails().getCaseData().read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO));
         when(asylumCase.read(APPELLANT_HAS_FIXED_ADDRESS, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
+        when(asylumCase.read(MOBILE_NUMBER, String.class)).thenReturn(Optional.of("07983000000"));
 
         when(documentCreator.create(caseDetails, caseDetails)).thenReturn(uploadedDocument);
 
@@ -86,6 +89,31 @@ class InternalEditCaseListingLetterGeneratorTest {
     }
 
     @Test
+    void should_create_internal_non_detained_in_country_admin_no_email_mobile_unavailable_editCaseListing_pdf_and_append_to_notifications_documents() {
+        when(callback.getCaseDetails()).thenReturn(caseDetails);
+        when(callback.getEvent()).thenReturn(Event.EDIT_CASE_LISTING);
+        when(caseDetails.getCaseData()).thenReturn(asylumCase);
+        when(callback.getCaseDetailsBefore()).thenReturn(Optional.of(caseDetails));
+        when(callback.getCaseDetails().getCaseData().read(IS_ADMIN, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO));
+        when(callback.getCaseDetails().getCaseData().read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO));
+        when(asylumCase.read(APPELLANT_HAS_FIXED_ADDRESS, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
+
+        when(documentCreator.create(caseDetails, caseDetails)).thenReturn(uploadedDocument);
+
+        PreSubmitCallbackResponse<AsylumCase> callbackResponse =
+                internalEditCaseListingLetterGenerator.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
+
+        assertNotNull(callbackResponse);
+        assertEquals(asylumCase, callbackResponse.getData());
+
+        verify(documentHandler, times(1)).addWithMetadataWithoutReplacingExistingDocuments(
+                asylumCase, uploadedDocument,
+                LETTER_NOTIFICATION_DOCUMENTS,
+                DocumentTag.INTERNAL_EDIT_CASE_LISTING_LETTER
+        );
+    }
+
+    @Test
     void should_create_internal_non_detained_ooc_editCaseListing_pdf_and_append_to_notifications_documents() {
         when(callback.getCaseDetails()).thenReturn(caseDetails);
         when(callback.getEvent()).thenReturn(Event.EDIT_CASE_LISTING);
@@ -94,6 +122,7 @@ class InternalEditCaseListingLetterGeneratorTest {
         when(callback.getCaseDetails().getCaseData().read(IS_ADMIN, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
         when(callback.getCaseDetails().getCaseData().read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO));
         when(asylumCase.read(APPELLANT_HAS_FIXED_ADDRESS_ADMIN_J, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
+        when(asylumCase.read(MOBILE_NUMBER, String.class)).thenReturn(Optional.of("07983000000"));
 
         when(documentCreator.create(caseDetails, caseDetails)).thenReturn(uploadedDocument);
 
@@ -107,6 +136,31 @@ class InternalEditCaseListingLetterGeneratorTest {
             asylumCase, uploadedDocument,
             LETTER_NOTIFICATION_DOCUMENTS,
             DocumentTag.INTERNAL_EDIT_CASE_LISTING_LETTER
+        );
+    }
+
+    @Test
+    void should_create_internal_non_detained_admin_no_mobile_email_unavailable_ooc_editCaseListing_pdf_and_append_to_notifications_documents() {
+        when(callback.getCaseDetails()).thenReturn(caseDetails);
+        when(callback.getEvent()).thenReturn(Event.EDIT_CASE_LISTING);
+        when(caseDetails.getCaseData()).thenReturn(asylumCase);
+        when(callback.getCaseDetailsBefore()).thenReturn(Optional.of(caseDetails));
+        when(callback.getCaseDetails().getCaseData().read(IS_ADMIN, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO));
+        when(callback.getCaseDetails().getCaseData().read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO));
+        when(asylumCase.read(APPELLANT_HAS_FIXED_ADDRESS_ADMIN_J, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
+
+        when(documentCreator.create(caseDetails, caseDetails)).thenReturn(uploadedDocument);
+
+        PreSubmitCallbackResponse<AsylumCase> callbackResponse =
+                internalEditCaseListingLetterGenerator.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
+
+        assertNotNull(callbackResponse);
+        assertEquals(asylumCase, callbackResponse.getData());
+
+        verify(documentHandler, times(1)).addWithMetadataWithoutReplacingExistingDocuments(
+                asylumCase, uploadedDocument,
+                LETTER_NOTIFICATION_DOCUMENTS,
+                DocumentTag.INTERNAL_EDIT_CASE_LISTING_LETTER
         );
     }
 
@@ -179,7 +233,7 @@ class InternalEditCaseListingLetterGeneratorTest {
     }
 
     @Test
-    void it_cannot_handle_callback_if_is_admin_is_missing() {
+    void it_cannot_handle_callback_if_is_admin_is_missing_and_mobile_available() {
 
         for (Event event : Event.values()) {
 
@@ -187,6 +241,7 @@ class InternalEditCaseListingLetterGeneratorTest {
             when(callback.getCaseDetails()).thenReturn(caseDetails);
             when(caseDetails.getCaseData()).thenReturn(asylumCase);
             when(callback.getCaseDetails().getCaseData().read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO));
+            when(callback.getCaseDetails().getCaseData().read(MOBILE_NUMBER, String.class)).thenReturn(Optional.of("07983000000"));
 
             for (PreSubmitCallbackStage callbackStage : PreSubmitCallbackStage.values()) {
                 boolean canHandle = internalEditCaseListingLetterGenerator.canHandle(callbackStage, callback);
@@ -195,6 +250,26 @@ class InternalEditCaseListingLetterGeneratorTest {
             reset(callback);
         }
     }
+
+    @Test
+    void it_cannot_handle_callback_if_is_admin_is_missing_and_email_available() {
+
+        for (Event event : Event.values()) {
+
+            when(callback.getEvent()).thenReturn(event);
+            when(callback.getCaseDetails()).thenReturn(caseDetails);
+            when(caseDetails.getCaseData()).thenReturn(asylumCase);
+            when(callback.getCaseDetails().getCaseData().read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO));
+            when(callback.getCaseDetails().getCaseData().read(EMAIL, String.class)).thenReturn(Optional.of("test@test.com"));
+
+            for (PreSubmitCallbackStage callbackStage : PreSubmitCallbackStage.values()) {
+                boolean canHandle = internalEditCaseListingLetterGenerator.canHandle(callbackStage, callback);
+                assertFalse(canHandle);
+            }
+            reset(callback);
+        }
+    }
+
 
     @Test
     void should_not_allow_null_arguments() {
