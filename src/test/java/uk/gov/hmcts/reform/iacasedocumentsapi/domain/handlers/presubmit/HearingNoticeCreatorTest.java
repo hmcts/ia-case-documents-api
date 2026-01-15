@@ -342,7 +342,7 @@ class HearingNoticeCreatorTest {
 
                 boolean canHandle = hearingNoticeCreator.canHandle(callbackStage, callback);
 
-                if (callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT) {
+                if (event == Event.LIST_CASE && callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT) {
                     assertTrue(canHandle);
                 } else {
                     assertFalse(canHandle);
