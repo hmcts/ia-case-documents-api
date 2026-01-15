@@ -1,7 +1,6 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit.letter;
 
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -62,11 +61,11 @@ class InternalCaseListedLrLetterGeneratorTest {
         assertEquals(EARLY, internalCaseListedLrLetterGenerator.getDispatchPriority());
     }
 
-    @Disabled
     @Test
     void should_create_internal_case_listed_lr_letter_pdf_and_append_to_letter_notifications_documents() {
         when(callback.getCaseDetails()).thenReturn(caseDetails);
         when(callback.getEvent()).thenReturn(Event.LIST_CASE);
+        when(callback.getPageId()).thenReturn("listCaseRequirements");
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
         when(callback.getCaseDetails().getCaseData().read(IS_ADMIN, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
         when(callback.getCaseDetails().getCaseData().read(APPELLANTS_REPRESENTATION, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO));
@@ -74,7 +73,7 @@ class InternalCaseListedLrLetterGeneratorTest {
         when(documentCreator.create(caseDetails)).thenReturn(document);
 
         PreSubmitCallbackResponse<AsylumCase> callbackResponse =
-                internalCaseListedLrLetterGenerator.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
+                internalCaseListedLrLetterGenerator.handle(PreSubmitCallbackStage.MID_EVENT, callback);
 
         assertNotNull(callbackResponse);
         assertEquals(asylumCase, callbackResponse.getData());
@@ -90,6 +89,7 @@ class InternalCaseListedLrLetterGeneratorTest {
     void handling_should_throw_if_cannot_actually_handle() {
         when(callback.getCaseDetails()).thenReturn(caseDetails);
         when(callback.getEvent()).thenReturn(Event.LIST_CASE);
+        when(callback.getPageId()).thenReturn("listCaseRequirements");
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
         when(callback.getCaseDetails().getCaseData().read(IS_ADMIN, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
         when(callback.getCaseDetails().getCaseData().read(APPELLANTS_REPRESENTATION, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO));
@@ -99,12 +99,11 @@ class InternalCaseListedLrLetterGeneratorTest {
                 .isExactlyInstanceOf(IllegalStateException.class);
 
         when(callback.getEvent()).thenReturn(Event.SUBMIT_APPEAL);
-        assertThatThrownBy(() -> internalCaseListedLrLetterGenerator.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback))
+        assertThatThrownBy(() -> internalCaseListedLrLetterGenerator.handle(PreSubmitCallbackStage.MID_EVENT, callback))
                 .hasMessage("Cannot handle callback")
                 .isExactlyInstanceOf(IllegalStateException.class);
     }
 
-    @Disabled
     @Test
     void it_cannot_handle_callback_if_is_admin_is_missing() {
 
@@ -112,6 +111,7 @@ class InternalCaseListedLrLetterGeneratorTest {
 
             when(callback.getEvent()).thenReturn(event);
             when(callback.getCaseDetails()).thenReturn(caseDetails);
+            when(callback.getPageId()).thenReturn("listCaseRequirements");
             when(caseDetails.getCaseData()).thenReturn(asylumCase);
             when(callback.getCaseDetails().getCaseData().read(APPELLANTS_REPRESENTATION, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO));
 
@@ -130,7 +130,7 @@ class InternalCaseListedLrLetterGeneratorTest {
                 .hasMessage("callbackStage must not be null")
                 .isExactlyInstanceOf(NullPointerException.class);
 
-        assertThatThrownBy(() -> internalCaseListedLrLetterGenerator.canHandle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, null))
+        assertThatThrownBy(() -> internalCaseListedLrLetterGenerator.canHandle(PreSubmitCallbackStage.MID_EVENT, null))
                 .hasMessage("callback must not be null")
                 .isExactlyInstanceOf(NullPointerException.class);
 
@@ -138,7 +138,7 @@ class InternalCaseListedLrLetterGeneratorTest {
                 .hasMessage("callbackStage must not be null")
                 .isExactlyInstanceOf(NullPointerException.class);
 
-        assertThatThrownBy(() -> internalCaseListedLrLetterGenerator.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, null))
+        assertThatThrownBy(() -> internalCaseListedLrLetterGenerator.handle(PreSubmitCallbackStage.MID_EVENT, null))
                 .hasMessage("callback must not be null")
                 .isExactlyInstanceOf(NullPointerException.class);
     }

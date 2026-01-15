@@ -8,6 +8,7 @@ import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseD
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.DispatchPriority.LATE;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.PreSubmitCallbackStage.ABOUT_TO_START;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.PreSubmitCallbackStage.ABOUT_TO_SUBMIT;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.PreSubmitCallbackStage.MID_EVENT;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo.NO;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo.YES;
 
@@ -17,7 +18,6 @@ import java.util.Optional;
 import lombok.Value;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -77,12 +77,12 @@ class InternalCaseListedLegalRepLetterBundlerTest {
                 documentHandler);
     }
 
-    @Disabled
     @ParameterizedTest
     @MethodSource("generateDifferentEventScenarios")
     public void it_can_handle_callback(InternalCaseListedLegalRepLetterBundlerTest.TestScenario scenario) {
         when(callback.getEvent()).thenReturn(scenario.getEvent());
         when(callback.getCaseDetails()).thenReturn(caseDetails);
+        when(callback.getPageId()).thenReturn("listCaseRequirements");
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
         when(asylumCase.read(IS_ADMIN, YesOrNo.class)).thenReturn(Optional.of(YES));
         when(asylumCase.read(APPELLANTS_REPRESENTATION, YesOrNo.class)).thenReturn(Optional.of(NO));
@@ -107,12 +107,12 @@ class InternalCaseListedLegalRepLetterBundlerTest {
             for (Event e : Event.values()) {
                 if (e.equals(Event.LIST_CASE)) {
                     testScenarios.add(new InternalCaseListedLegalRepLetterBundlerTest.TestScenario(e, ABOUT_TO_START, false));
-                    testScenarios.add(new InternalCaseListedLegalRepLetterBundlerTest.TestScenario(e, ABOUT_TO_SUBMIT, true));
+                    testScenarios.add(new InternalCaseListedLegalRepLetterBundlerTest.TestScenario(e, ABOUT_TO_SUBMIT, false));
+                    testScenarios.add(new InternalCaseListedLegalRepLetterBundlerTest.TestScenario(e, MID_EVENT, true));
                 } else {
                     testScenarios.add(new InternalCaseListedLegalRepLetterBundlerTest.TestScenario(e, ABOUT_TO_START, false));
                     testScenarios.add(new InternalCaseListedLegalRepLetterBundlerTest.TestScenario(e, ABOUT_TO_SUBMIT, false));
-                    testScenarios.add(new InternalCaseListedLegalRepLetterBundlerTest.TestScenario(e, ABOUT_TO_START, false));
-                    testScenarios.add(new InternalCaseListedLegalRepLetterBundlerTest.TestScenario(e, ABOUT_TO_SUBMIT, false));
+                    testScenarios.add(new InternalCaseListedLegalRepLetterBundlerTest.TestScenario(e, MID_EVENT, false));
                 }
             }
             return testScenarios;
@@ -123,9 +123,10 @@ class InternalCaseListedLegalRepLetterBundlerTest {
     public void it_should_not_handle_callback_when_stitching_flag_is_false() {
         when(callback.getEvent()).thenReturn(Event.LIST_CASE);
         when(callback.getCaseDetails()).thenReturn(caseDetails);
+        when(callback.getPageId()).thenReturn("listCaseRequirements");
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
         when(asylumCase.read(IS_ADMIN, YesOrNo.class)).thenReturn(Optional.of(YES));
-        when(asylumCase.read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(NO));
+        when(asylumCase.read(APPELLANTS_REPRESENTATION, YesOrNo.class)).thenReturn(Optional.of(NO));
 
         internalCaseListedLetterHandler =
             new InternalCaseListedLegalRepLetterBundler(
@@ -136,16 +137,16 @@ class InternalCaseListedLegalRepLetterBundlerTest {
                 documentBundler,
                 documentHandler);
 
-        boolean canHandle = internalCaseListedLetterHandler.canHandle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
+        boolean canHandle = internalCaseListedLetterHandler.canHandle(PreSubmitCallbackStage.MID_EVENT, callback);
 
         assertFalse(canHandle);
     }
 
-    @Disabled
     @Test
     void should_read_and_bundle_letter_notification_documents() {
         when(callback.getEvent()).thenReturn(Event.LIST_CASE);
         when(callback.getCaseDetails()).thenReturn(caseDetails);
+        when(callback.getPageId()).thenReturn("listCaseRequirements");
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
         when(asylumCase.read(IS_ADMIN, YesOrNo.class)).thenReturn(Optional.of(YES));
         when(asylumCase.read(APPELLANTS_REPRESENTATION, YesOrNo.class)).thenReturn(Optional.of(NO));
@@ -161,7 +162,7 @@ class InternalCaseListedLegalRepLetterBundlerTest {
             eq("filename")
         )).thenReturn(bundleDocument);
 
-        PreSubmitCallbackResponse<AsylumCase> response = internalCaseListedLetterHandler.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
+        PreSubmitCallbackResponse<AsylumCase> response = internalCaseListedLetterHandler.handle(PreSubmitCallbackStage.MID_EVENT, callback);
 
         assertNotNull(response);
         assertEquals(asylumCase, response.getData());
@@ -178,9 +179,10 @@ class InternalCaseListedLegalRepLetterBundlerTest {
     @Test
     public void handling_should_throw_if_cannot_actually_handle() {
         when(callback.getCaseDetails()).thenReturn(caseDetails);
+        when(callback.getPageId()).thenReturn("listCaseRequirements");
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
         when(asylumCase.read(IS_ADMIN, YesOrNo.class)).thenReturn(Optional.of(YES));
-        when(asylumCase.read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(NO));
+        when(asylumCase.read(APPELLANTS_REPRESENTATION, YesOrNo.class)).thenReturn(Optional.of(NO));
 
         assertThatThrownBy(() -> internalCaseListedLetterHandler.handle(ABOUT_TO_START, callback))
             .hasMessage("Cannot handle callback")
@@ -188,7 +190,7 @@ class InternalCaseListedLegalRepLetterBundlerTest {
 
         when(callback.getEvent()).thenReturn(Event.START_APPEAL);
 
-        assertThatThrownBy(() -> internalCaseListedLetterHandler.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback))
+        assertThatThrownBy(() -> internalCaseListedLetterHandler.handle(PreSubmitCallbackStage.MID_EVENT, callback))
             .hasMessage("Cannot handle callback")
             .isExactlyInstanceOf(IllegalStateException.class);
     }

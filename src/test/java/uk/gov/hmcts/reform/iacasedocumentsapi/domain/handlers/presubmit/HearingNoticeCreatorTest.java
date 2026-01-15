@@ -19,7 +19,6 @@ import java.util.List;
 import java.util.Optional;
 import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -315,36 +314,35 @@ class HearingNoticeCreatorTest {
         verify(documentHandler, times(1)).addWithMetadataWithoutReplacingExistingDocuments(asylumCase, uploadedDocument, LETTER_NOTIFICATION_DOCUMENTS, DocumentTag.INTERNAL_CASE_LISTED_LR_LETTER);
     }
 
-    @Disabled
     @Test
     void handling_should_throw_if_cannot_actually_handle() {
 
         when(callback.getEvent()).thenReturn(Event.LIST_CASE);
+        when(callback.getPageId()).thenReturn("someOtherPage");
 
         assertThatThrownBy(() -> hearingNoticeCreator.handle(PreSubmitCallbackStage.ABOUT_TO_START, callback))
             .hasMessage("Cannot handle callback")
             .isExactlyInstanceOf(IllegalStateException.class);
 
         when(callback.getEvent()).thenReturn(Event.START_APPEAL);
-        assertThatThrownBy(() -> hearingNoticeCreator.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback))
+        assertThatThrownBy(() -> hearingNoticeCreator.handle(PreSubmitCallbackStage.MID_EVENT, callback))
             .hasMessage("Cannot handle callback")
             .isExactlyInstanceOf(IllegalStateException.class);
     }
 
-    @Disabled
     @Test
     void it_can_handle_callback() {
 
         for (Event event : Event.values()) {
 
             when(callback.getEvent()).thenReturn(event);
+            when(callback.getPageId()).thenReturn("someOtherPage");
 
             for (PreSubmitCallbackStage callbackStage : PreSubmitCallbackStage.values()) {
 
                 boolean canHandle = hearingNoticeCreator.canHandle(callbackStage, callback);
 
-                if ((event == Event.LIST_CASE)
-                    && callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT) {
+                if (callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT) {
                     assertTrue(canHandle);
                 } else {
                     assertFalse(canHandle);
@@ -353,6 +351,26 @@ class HearingNoticeCreatorTest {
 
             reset(callback);
         }
+    }
+
+    @Test
+    void it_can_handle_callback_for_mid_event() {
+        when(callback.getEvent()).thenReturn(Event.LIST_CASE);
+        when(callback.getPageId()).thenReturn("listCaseRequirements");
+
+        boolean canHandle = hearingNoticeCreator.canHandle(PreSubmitCallbackStage.MID_EVENT, callback);
+
+        assertTrue(canHandle);
+    }
+
+    @Test
+    void it_cannot_handle_callback_for_mid_event_with_wrong_page() {
+        when(callback.getEvent()).thenReturn(Event.LIST_CASE);
+        when(callback.getPageId()).thenReturn("someOtherPage");
+
+        boolean canHandle = hearingNoticeCreator.canHandle(PreSubmitCallbackStage.MID_EVENT, callback);
+
+        assertFalse(canHandle);
     }
 
     @Test

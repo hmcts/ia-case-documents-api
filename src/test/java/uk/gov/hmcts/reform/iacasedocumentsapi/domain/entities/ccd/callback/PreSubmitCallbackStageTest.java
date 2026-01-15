@@ -2,7 +2,6 @@ package uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 public class PreSubmitCallbackStageTest {
@@ -11,11 +10,11 @@ public class PreSubmitCallbackStageTest {
     public void has_correct_case_event_ids() {
         assertEquals("aboutToStart", PreSubmitCallbackStage.ABOUT_TO_START.toString());
         assertEquals("aboutToSubmit", PreSubmitCallbackStage.ABOUT_TO_SUBMIT.toString());
+        assertEquals("midEvent", PreSubmitCallbackStage.MID_EVENT.toString());
     }
 
-    @Disabled
     @Test
     public void if_this_test_fails_it_is_because_it_needs_updating_with_your_changes() {
-        assertEquals(2, PreSubmitCallbackStage.values().length);
+        assertEquals(3, PreSubmitCallbackStage.values().length);
     }
 }
