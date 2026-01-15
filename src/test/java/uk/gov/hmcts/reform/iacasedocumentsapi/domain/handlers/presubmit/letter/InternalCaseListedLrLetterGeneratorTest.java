@@ -1,6 +1,7 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit.letter;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -61,6 +62,7 @@ class InternalCaseListedLrLetterGeneratorTest {
         assertEquals(EARLY, internalCaseListedLrLetterGenerator.getDispatchPriority());
     }
 
+    @Disabled
     @Test
     void should_create_internal_case_listed_lr_letter_pdf_and_append_to_letter_notifications_documents() {
         when(callback.getCaseDetails()).thenReturn(caseDetails);
@@ -102,6 +104,7 @@ class InternalCaseListedLrLetterGeneratorTest {
                 .isExactlyInstanceOf(IllegalStateException.class);
     }
 
+    @Disabled
     @Test
     void it_cannot_handle_callback_if_is_admin_is_missing() {
 

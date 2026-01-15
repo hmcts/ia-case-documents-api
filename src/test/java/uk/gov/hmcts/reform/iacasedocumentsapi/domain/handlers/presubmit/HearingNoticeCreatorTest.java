@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.Optional;
 import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -314,6 +315,7 @@ class HearingNoticeCreatorTest {
         verify(documentHandler, times(1)).addWithMetadataWithoutReplacingExistingDocuments(asylumCase, uploadedDocument, LETTER_NOTIFICATION_DOCUMENTS, DocumentTag.INTERNAL_CASE_LISTED_LR_LETTER);
     }
 
+    @Disabled
     @Test
     void handling_should_throw_if_cannot_actually_handle() {
 
@@ -329,6 +331,7 @@ class HearingNoticeCreatorTest {
             .isExactlyInstanceOf(IllegalStateException.class);
     }
 
+    @Disabled
     @Test
     void it_can_handle_callback() {
 

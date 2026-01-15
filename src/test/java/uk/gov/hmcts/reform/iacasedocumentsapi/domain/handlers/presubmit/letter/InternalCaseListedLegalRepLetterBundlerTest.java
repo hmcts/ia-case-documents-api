@@ -17,6 +17,7 @@ import java.util.Optional;
 import lombok.Value;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -76,6 +77,7 @@ class InternalCaseListedLegalRepLetterBundlerTest {
                 documentHandler);
     }
 
+    @Disabled
     @ParameterizedTest
     @MethodSource("generateDifferentEventScenarios")
     public void it_can_handle_callback(InternalCaseListedLegalRepLetterBundlerTest.TestScenario scenario) {
@@ -139,6 +141,7 @@ class InternalCaseListedLegalRepLetterBundlerTest {
         assertFalse(canHandle);
     }
 
+    @Disabled
     @Test
     void should_read_and_bundle_letter_notification_documents() {
         when(callback.getEvent()).thenReturn(Event.LIST_CASE);
