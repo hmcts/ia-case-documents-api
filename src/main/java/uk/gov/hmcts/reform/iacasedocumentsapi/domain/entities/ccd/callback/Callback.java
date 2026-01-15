@@ -20,6 +20,8 @@ public class Callback<T extends CaseData> {
     private CaseDetails<T> caseDetails;
     private Optional<CaseDetails<T>> caseDetailsBefore = Optional.empty();
 
+    private String pageId = "";
+
     private Callback() {
         // noop -- for deserializer
     }
@@ -52,8 +54,10 @@ public class Callback<T extends CaseData> {
     }
 
     public Optional<CaseDetails<T>> getCaseDetailsBefore() {
-
         return caseDetailsBefore;
+    }
 
+    public String getPageId() {
+        return pageId;
     }
 }

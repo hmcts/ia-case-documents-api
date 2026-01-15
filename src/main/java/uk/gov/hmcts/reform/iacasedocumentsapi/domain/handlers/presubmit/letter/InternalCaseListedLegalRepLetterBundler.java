@@ -63,7 +63,8 @@ public class InternalCaseListedLegalRepLetterBundler implements PreSubmitCallbac
 
         AsylumCase asylumCase = callback.getCaseDetails().getCaseData();
 
-        return callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
+        return callbackStage == PreSubmitCallbackStage.MID_EVENT
+               && callback.getPageId().equals("listCaseRequirements")
                && callback.getEvent() == LIST_CASE
                && hasBeenSubmittedAsLegalRepresentedInternalCase(asylumCase)
                && isEmStitchingEnabled;

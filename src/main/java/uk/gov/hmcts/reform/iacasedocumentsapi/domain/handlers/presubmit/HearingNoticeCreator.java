@@ -90,8 +90,9 @@ public class HearingNoticeCreator implements PreSubmitCallbackHandler<AsylumCase
         requireNonNull(callbackStage, "callbackStage must not be null");
         requireNonNull(callback, "callback must not be null");
 
-        return callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
-            && Event.LIST_CASE.equals(callback.getEvent());
+        return (callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
+                || (callbackStage == PreSubmitCallbackStage.MID_EVENT && callback.getPageId().equals("listCaseRequirements"))
+                && Event.LIST_CASE.equals(callback.getEvent()));
     }
 
     public PreSubmitCallbackResponse<AsylumCase> handle(
