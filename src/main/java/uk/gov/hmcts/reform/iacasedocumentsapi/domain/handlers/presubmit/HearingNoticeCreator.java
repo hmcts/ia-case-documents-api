@@ -101,11 +101,12 @@ public class HearingNoticeCreator implements PreSubmitCallbackHandler<AsylumCase
         PreSubmitCallbackStage callbackStage,
         Callback<AsylumCase> callback
     ) {
-        log.info("******" + callback.getPageId() + "******");
 
         if (!canHandle(callbackStage, callback)) {
             throw new IllegalStateException("Cannot handle callback");
         }
+
+        log.info("******" + callback.getPageId() + "******");
 
         final CaseDetails<AsylumCase> caseDetails = callback.getCaseDetails();
         final AsylumCase asylumCase = caseDetails.getCaseData();
