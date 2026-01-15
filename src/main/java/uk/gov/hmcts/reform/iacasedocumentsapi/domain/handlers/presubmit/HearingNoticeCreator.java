@@ -21,6 +21,7 @@ import java.time.ZonedDateTime;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
@@ -47,6 +48,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentsAppender;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.FeatureToggler;
 
 @Component
+@Slf4j
 public class HearingNoticeCreator implements PreSubmitCallbackHandler<AsylumCase> {
 
     private final DocumentCreator<AsylumCase> hearingNoticeDocumentCreator;
@@ -99,6 +101,8 @@ public class HearingNoticeCreator implements PreSubmitCallbackHandler<AsylumCase
         PreSubmitCallbackStage callbackStage,
         Callback<AsylumCase> callback
     ) {
+        log.info("******" + callback.getPageId() + "******");
+
         if (!canHandle(callbackStage, callback)) {
             throw new IllegalStateException("Cannot handle callback");
         }
