@@ -318,13 +318,14 @@ class HearingNoticeCreatorTest {
     void handling_should_throw_if_cannot_actually_handle() {
 
         when(callback.getEvent()).thenReturn(Event.LIST_CASE);
+        when(callback.getPageId()).thenReturn("someOtherPage");
 
         assertThatThrownBy(() -> hearingNoticeCreator.handle(PreSubmitCallbackStage.ABOUT_TO_START, callback))
             .hasMessage("Cannot handle callback")
             .isExactlyInstanceOf(IllegalStateException.class);
 
         when(callback.getEvent()).thenReturn(Event.START_APPEAL);
-        assertThatThrownBy(() -> hearingNoticeCreator.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback))
+        assertThatThrownBy(() -> hearingNoticeCreator.handle(PreSubmitCallbackStage.MID_EVENT, callback))
             .hasMessage("Cannot handle callback")
             .isExactlyInstanceOf(IllegalStateException.class);
     }
@@ -340,8 +341,7 @@ class HearingNoticeCreatorTest {
 
                 boolean canHandle = hearingNoticeCreator.canHandle(callbackStage, callback);
 
-                if ((event == Event.LIST_CASE)
-                    && callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT) {
+                if (event == Event.LIST_CASE && (callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT || callbackStage == PreSubmitCallbackStage.MID_EVENT)) {
                     assertTrue(canHandle);
                 } else {
                     assertFalse(canHandle);
@@ -350,6 +350,15 @@ class HearingNoticeCreatorTest {
 
             reset(callback);
         }
+    }
+
+    @Test
+    void it_can_handle_callback_for_mid_event() {
+        when(callback.getEvent()).thenReturn(Event.LIST_CASE);
+
+        boolean canHandle = hearingNoticeCreator.canHandle(PreSubmitCallbackStage.MID_EVENT, callback);
+
+        assertTrue(canHandle);
     }
 
     @Test

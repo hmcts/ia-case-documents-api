@@ -21,6 +21,7 @@ import java.time.ZonedDateTime;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
@@ -47,6 +48,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentsAppender;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.FeatureToggler;
 
 @Component
+@Slf4j
 public class HearingNoticeCreator implements PreSubmitCallbackHandler<AsylumCase> {
 
     private final DocumentCreator<AsylumCase> hearingNoticeDocumentCreator;
@@ -90,14 +92,16 @@ public class HearingNoticeCreator implements PreSubmitCallbackHandler<AsylumCase
         requireNonNull(callbackStage, "callbackStage must not be null");
         requireNonNull(callback, "callback must not be null");
 
-        return callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
-            && Event.LIST_CASE.equals(callback.getEvent());
+        return Event.LIST_CASE.equals(callback.getEvent())
+            && (callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
+            || (callbackStage == PreSubmitCallbackStage.MID_EVENT));
     }
 
     public PreSubmitCallbackResponse<AsylumCase> handle(
         PreSubmitCallbackStage callbackStage,
         Callback<AsylumCase> callback
     ) {
+
         if (!canHandle(callbackStage, callback)) {
             throw new IllegalStateException("Cannot handle callback");
         }
@@ -155,6 +159,7 @@ public class HearingNoticeCreator implements PreSubmitCallbackHandler<AsylumCase
             }
 
             if (hasBeenSubmittedAsLegalRepresentedInternalCase(asylumCase)) {
+                log.info("Attaching hearing notice");
                 documentHandler.addWithMetadataWithoutReplacingExistingDocuments(
                     asylumCase,
                     hearingNotice,
