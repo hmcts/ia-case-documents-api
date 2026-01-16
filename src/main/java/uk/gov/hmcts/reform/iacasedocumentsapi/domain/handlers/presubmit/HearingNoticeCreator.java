@@ -94,7 +94,7 @@ public class HearingNoticeCreator implements PreSubmitCallbackHandler<AsylumCase
 
         return Event.LIST_CASE.equals(callback.getEvent())
             && (callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
-            || (callbackStage == PreSubmitCallbackStage.MID_EVENT && callback.getPageId().equals("listCaseRequirements")));
+            || (callbackStage == PreSubmitCallbackStage.MID_EVENT));
     }
 
     public PreSubmitCallbackResponse<AsylumCase> handle(
@@ -105,8 +105,6 @@ public class HearingNoticeCreator implements PreSubmitCallbackHandler<AsylumCase
         if (!canHandle(callbackStage, callback)) {
             throw new IllegalStateException("Cannot handle callback");
         }
-
-        log.info("******" + callback.getPageId() + "******");
 
         final CaseDetails<AsylumCase> caseDetails = callback.getCaseDetails();
         final AsylumCase asylumCase = caseDetails.getCaseData();
@@ -161,6 +159,7 @@ public class HearingNoticeCreator implements PreSubmitCallbackHandler<AsylumCase
             }
 
             if (hasBeenSubmittedAsLegalRepresentedInternalCase(asylumCase)) {
+                log.info("Attaching hearing notice");
                 documentHandler.addWithMetadataWithoutReplacingExistingDocuments(
                     asylumCase,
                     hearingNotice,

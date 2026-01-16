@@ -5,6 +5,7 @@ import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callbac
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.hasBeenSubmittedAsLegalRepresentedInternalCase;
 
 import java.util.Objects;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
@@ -21,6 +22,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentCreator;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentHandler;
 
 @Component
+@Slf4j
 public class InternalCaseListedLrLetterGenerator implements PreSubmitCallbackHandler<AsylumCase> {
 
     private final DocumentCreator<AsylumCase> documentCreator;
@@ -49,7 +51,6 @@ public class InternalCaseListedLrLetterGenerator implements PreSubmitCallbackHan
         AsylumCase asylumCase = callback.getCaseDetails().getCaseData();
 
         return callbackStage == MID_EVENT
-            && callback.getPageId().equals("listCaseRequirements")
             && Event.LIST_CASE.equals(callback.getEvent())
             && hasBeenSubmittedAsLegalRepresentedInternalCase(asylumCase);
     }
@@ -65,6 +66,7 @@ public class InternalCaseListedLrLetterGenerator implements PreSubmitCallbackHan
         final CaseDetails<AsylumCase> caseDetails = callback.getCaseDetails();
         final AsylumCase asylumCase = caseDetails.getCaseData();
 
+        log.info("generating letter on mid event");
         Document internalCaseListedLrLetter = documentCreator.create(caseDetails);
 
         documentHandler.addWithMetadataWithoutReplacingExistingDocuments(

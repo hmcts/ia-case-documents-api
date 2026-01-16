@@ -336,13 +336,12 @@ class HearingNoticeCreatorTest {
         for (Event event : Event.values()) {
 
             when(callback.getEvent()).thenReturn(event);
-            when(callback.getPageId()).thenReturn("someOtherPage");
 
             for (PreSubmitCallbackStage callbackStage : PreSubmitCallbackStage.values()) {
 
                 boolean canHandle = hearingNoticeCreator.canHandle(callbackStage, callback);
 
-                if (event == Event.LIST_CASE && callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT) {
+                if (event == Event.LIST_CASE && (callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT || callbackStage == PreSubmitCallbackStage.MID_EVENT)) {
                     assertTrue(canHandle);
                 } else {
                     assertFalse(canHandle);
@@ -356,21 +355,10 @@ class HearingNoticeCreatorTest {
     @Test
     void it_can_handle_callback_for_mid_event() {
         when(callback.getEvent()).thenReturn(Event.LIST_CASE);
-        when(callback.getPageId()).thenReturn("listCaseRequirements");
 
         boolean canHandle = hearingNoticeCreator.canHandle(PreSubmitCallbackStage.MID_EVENT, callback);
 
         assertTrue(canHandle);
-    }
-
-    @Test
-    void it_cannot_handle_callback_for_mid_event_with_wrong_page() {
-        when(callback.getEvent()).thenReturn(Event.LIST_CASE);
-        when(callback.getPageId()).thenReturn("someOtherPage");
-
-        boolean canHandle = hearingNoticeCreator.canHandle(PreSubmitCallbackStage.MID_EVENT, callback);
-
-        assertFalse(canHandle);
     }
 
     @Test
