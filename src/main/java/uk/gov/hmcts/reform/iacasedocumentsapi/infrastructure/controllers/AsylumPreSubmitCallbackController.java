@@ -13,10 +13,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.Callback;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.PreSubmitCallbackResponse;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.PreSubmitCallbackStage;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.AsylumPreSubmitCallbackDispatcher;
 
 @Tag(name = "Asylum Service")
@@ -108,4 +110,45 @@ public class AsylumPreSubmitCallbackController extends PreSubmitCallbackControll
     ) {
         return super.ccdAboutToSubmit(callback);
     }
+
+    @Operation(
+        summary = "Handles 'ccdMidEvent' callbacks from CCD or delegated calls from IA Case API",
+        security =
+            {
+                @SecurityRequirement(name = "Authorization"),
+                @SecurityRequirement(name = "ServiceAuthorization")
+            },
+        responses =
+            {
+                @ApiResponse(
+                    responseCode = "200",
+                    description = "Transformed Asylum case data, with any identified error or warning messages",
+                    content = @Content(schema = @Schema(implementation = PreSubmitCallbackResponse.class))),
+                @ApiResponse(
+                    responseCode = "400",
+                    description = "Bad Request",
+                    content = @Content(schema = @Schema(implementation = PreSubmitCallbackResponse.class))),
+                @ApiResponse(
+                    responseCode = "403",
+                    description = "Forbidden",
+                    content = @Content(schema = @Schema(implementation = PreSubmitCallbackResponse.class))),
+                @ApiResponse(
+                    responseCode = "415",
+                    description = "Unsupported Media Type",
+                    content = @Content(schema = @Schema(implementation = PreSubmitCallbackResponse.class))),
+                @ApiResponse(
+                    responseCode = "500",
+                    description = "Internal Server Error",
+                    content = @Content(schema = @Schema(implementation = PreSubmitCallbackResponse.class)))
+            }
+    )
+    @PostMapping(path = "/ccdMidEvent")
+    public ResponseEntity<PreSubmitCallbackResponse<AsylumCase>> ccdMidEvent(
+        @Parameter(name = "Asylum case data", required = true) @NotNull @RequestBody Callback<AsylumCase> callback,
+        @RequestParam(name = "pageId", required = false) String pageId
+    ) {
+        return super.performStageRequest(PreSubmitCallbackStage.MID_EVENT, callback);
+    }
+
+
 }

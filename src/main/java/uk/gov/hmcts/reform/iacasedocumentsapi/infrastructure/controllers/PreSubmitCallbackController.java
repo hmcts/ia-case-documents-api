@@ -40,7 +40,7 @@ public class PreSubmitCallbackController<T extends CaseData> {
         return performStageRequest(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
     }
 
-    private ResponseEntity<PreSubmitCallbackResponse<T>> performStageRequest(
+    protected ResponseEntity<PreSubmitCallbackResponse<T>> performStageRequest(
         PreSubmitCallbackStage callbackStage,
         Callback<T> callback
     ) {
