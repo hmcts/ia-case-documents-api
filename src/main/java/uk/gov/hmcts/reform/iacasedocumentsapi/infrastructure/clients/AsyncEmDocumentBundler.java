@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Optional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.DateProvider;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DocumentWithMetadata;
@@ -24,18 +23,17 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.enties.em.BundleCas
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.enties.em.BundleDocument;
 
 @Slf4j
-@Service
-@Primary
-public class EmDocumentBundler implements DocumentBundler {
+@Service("async")
+public class AsyncEmDocumentBundler implements DocumentBundler {
 
     private final String emBundlerUrl;
     private final String emBundlerStitchUri;
     private final DateProvider dateProvider;
     private final BundleRequestExecutor bundleRequestExecutor;
 
-    public EmDocumentBundler(
+    public AsyncEmDocumentBundler(
         @Value("${emBundler.url}") String emBundlerUrl,
-        @Value("${emBundler.stitch.uri}") String emBundlerStitchUri,
+        @Value("${emBundler.async-stitch.uri}") String emBundlerStitchUri,
         DateProvider dateProvider,
         BundleRequestExecutor bundleRequestExecutor
     ) {
