@@ -57,12 +57,7 @@ public class HearingNoticeOfAdjournmentWithoutADate implements PreSubmitCallback
         log.info("------------name: {}", hearingNotice.getDocumentFilename());
         documentHandler.addWithMetadataWithDateTimeWithoutReplacingExistingDocuments(
             asylumCase,
-            // hearingNotice,
-            new Document(
-                    "http://dm-store-aat.service.core-compute-aat.internal/documents/edbee23b-329d-4a1b-beb5-24b2583a98a0",
-                    "http://dm-store-aat.service.core-compute-aat.internal/documents/edbee23b-329d-4a1b-beb5-24b2583a98a0/binary",
-                    "PA 53511 2024-Raju-NoticeOfEndedAppeal.PDF"
-            ),
+            hearingNotice,
             HEARING_DOCUMENTS,
             DocumentTag.HEARING_NOTICE
         );

@@ -1,8 +1,12 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.apache.http.client.config.RequestConfig;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.client.RestOperations;
 import org.springframework.web.client.RestTemplate;
@@ -21,22 +25,37 @@ public class RestTemplateConfiguration {
     public RestTemplate restTemplate(
         ObjectMapper objectMapper
     ) {
-        // HttpClient httpClient = HttpClients.custom()
-        //         .disableContentCompression()  // Optional: prevent double compression issues
-        //         .build();
+        RequestConfig requestConfig = RequestConfig.custom()
+                .setConnectTimeout(30_000)
+                .setSocketTimeout(30_000)
+                .build();
 
-        // HttpComponentsClientHttpRequestFactory factory = new HttpComponentsClientHttpRequestFactory(httpClient);
-        // factory.setConnectTimeout(30_000);
-        // factory.setReadTimeout(30_000);
-        // factory.setBufferRequestBody(false);
+        CloseableHttpClient httpClient = HttpClients.custom()
+                .setDefaultRequestConfig(requestConfig)
+                .disableContentCompression()
+                .build();
 
-        // return new RestTemplate(factory);
+        HttpComponentsClientHttpRequestFactory factory =
+                new HttpComponentsClientHttpRequestFactory(httpClient);
 
-        RestTemplate restTemplate = new RestTemplate();
-        restTemplate.getMessageConverters().removeIf(converter -> converter instanceof MappingJackson2HttpMessageConverter);
-        restTemplate.getMessageConverters().add(mappingJackson2HttpMessageConverter(objectMapper));
+        factory.setBufferRequestBody(false);
+
+        RestTemplate restTemplate = new RestTemplate(factory);
+
+        restTemplate.getMessageConverters().removeIf(
+                c -> c instanceof MappingJackson2HttpMessageConverter
+        );
+        restTemplate.getMessageConverters().add(
+                new MappingJackson2HttpMessageConverter(objectMapper)
+        );
 
         return restTemplate;
+
+        // RestTemplate restTemplate = new RestTemplate();
+        // restTemplate.getMessageConverters().removeIf(converter -> converter instanceof MappingJackson2HttpMessageConverter);
+        // restTemplate.getMessageConverters().add(mappingJackson2HttpMessageConverter(objectMapper));
+
+        // return restTemplate;
     }
 
     @Bean
