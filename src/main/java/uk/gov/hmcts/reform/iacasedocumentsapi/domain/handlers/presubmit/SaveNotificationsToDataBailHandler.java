@@ -1,7 +1,13 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit;
 
+import static java.util.Collections.emptyList;
+import static java.util.Objects.requireNonNull;
+
+import java.util.List;
+import java.util.Optional;
 import org.springframework.stereotype.Component;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.BailCase;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.BailCaseFieldDefinition;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.StoredNotification;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseDetails;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.Event;
@@ -12,19 +18,12 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.IdValue;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.PreSubmitCallbackHandler;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.SaveNotificationsToDataPdfService;
 
-import java.util.List;
-import java.util.Optional;
-
-import static java.util.Collections.emptyList;
-import static java.util.Objects.requireNonNull;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.NOTIFICATIONS;
-
 @Component
-public class SaveNotificationsToDataHandler implements PreSubmitCallbackHandler<AsylumCase> {
+public class SaveNotificationsToDataBailHandler implements PreSubmitCallbackHandler<BailCase> {
 
     private final SaveNotificationsToDataPdfService saveNotificationsToDataPdfService;
 
-    public SaveNotificationsToDataHandler(
+    public SaveNotificationsToDataBailHandler(
         SaveNotificationsToDataPdfService saveNotificationsToDataPdfService
     ) {
         this.saveNotificationsToDataPdfService = saveNotificationsToDataPdfService;
@@ -32,7 +31,7 @@ public class SaveNotificationsToDataHandler implements PreSubmitCallbackHandler<
 
     public boolean canHandle(
         PreSubmitCallbackStage callbackStage,
-        Callback<AsylumCase> callback
+        Callback<BailCase> callback
     ) {
         requireNonNull(callbackStage, "callbackStage must not be null");
         requireNonNull(callback, "callback must not be null");
@@ -41,25 +40,25 @@ public class SaveNotificationsToDataHandler implements PreSubmitCallbackHandler<
             && callback.getEvent() == Event.SAVE_NOTIFICATIONS_TO_DATA;
     }
 
-    public PreSubmitCallbackResponse<AsylumCase> handle(
+    public PreSubmitCallbackResponse<BailCase> handle(
         PreSubmitCallbackStage callbackStage,
-        Callback<AsylumCase> callback
+        Callback<BailCase> callback
     ) {
         if (!canHandle(callbackStage, callback)) {
             throw new IllegalStateException("Cannot handle callback");
         }
 
-        final CaseDetails<AsylumCase> caseDetails = callback.getCaseDetails();
-        final AsylumCase asylumCase = caseDetails.getCaseData();
+        final CaseDetails<BailCase> caseDetails = callback.getCaseDetails();
+        final BailCase bailCase = caseDetails.getCaseData();
 
         Optional<List<IdValue<StoredNotification>>> existingNotifications =
-            asylumCase.read(NOTIFICATIONS);
+            bailCase.read(BailCaseFieldDefinition.NOTIFICATIONS);
 
         List<IdValue<StoredNotification>> newNotifications =
             saveNotificationsToDataPdfService.generatePdfsForNotifications(existingNotifications.orElse(emptyList()));
 
-        asylumCase.write(NOTIFICATIONS, newNotifications);
+        bailCase.write(BailCaseFieldDefinition.NOTIFICATIONS, newNotifications);
 
-        return new PreSubmitCallbackResponse<>(asylumCase);
+        return new PreSubmitCallbackResponse<>(bailCase);
     }
 }
