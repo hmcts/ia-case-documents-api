@@ -16,7 +16,6 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.preauth.AbstractPreAuthenticatedProcessingFilter;
 import uk.gov.hmcts.reform.authorisation.filters.ServiceAuthFilter;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.security.AuthorizedRolesProvider;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.security.SpringAuthorizedRolesProvider;
@@ -55,7 +54,7 @@ public class SecurityConfiguration {
         jwtAuthenticationConverter.setJwtGrantedAuthoritiesConverter(authoritiesConverter);
 
         http
-            .addFilterBefore(serviceAuthFiler, AbstractPreAuthenticatedProcessingFilter.class)
+            //.addFilterBefore(serviceAuthFiler, AbstractPreAuthenticatedProcessingFilter.class)
             .sessionManagement().sessionCreationPolicy(STATELESS)
             .and()
             .exceptionHandling()
