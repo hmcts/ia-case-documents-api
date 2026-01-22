@@ -27,7 +27,7 @@ public class RestTemplateConfiguration {
     public RestTemplate restTemplate(
         ObjectMapper objectMapper
     ) {
-        log.info("--------------------------------Creating rest template ia-case-api");
+        log.info("--------------------------------Creating rest template ia-case-documents-api");
         RequestConfig requestConfig = RequestConfig.custom()
                 .setConnectTimeout(30_000)
                 .setSocketTimeout(30_000)
