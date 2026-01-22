@@ -35,12 +35,18 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentCreator;
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = org.mockito.quality.Strictness.LENIENT)
 public class BailSubmissionWithUtCreatorTest {
-    @Mock private DocumentCreator<BailCase> bailSubmissionWithUtDocumentCreator;
-    @Mock private BailDocumentHandler bailDocumentHandler;
-    @Mock private Callback<BailCase> callback;
-    @Mock private CaseDetails<BailCase> caseDetails;
-    @Mock private BailCase bailCase;
-    @Mock private Document bailSubmission;
+    @Mock
+    private DocumentCreator<BailCase> bailSubmissionWithUtDocumentCreator;
+    @Mock
+    private BailDocumentHandler bailDocumentHandler;
+    @Mock
+    private Callback<BailCase> callback;
+    @Mock
+    private CaseDetails<BailCase> caseDetails;
+    @Mock
+    private BailCase bailCase;
+    @Mock
+    private Document bailSubmission;
 
     private BailSubmissionWithUtCreator bailSubmissionWithUtCreator;
 
@@ -60,8 +66,9 @@ public class BailSubmissionWithUtCreatorTest {
             when(callback.getEvent()).thenReturn(event);
             for (PreSubmitCallbackStage preSubmitCallbackStage : PreSubmitCallbackStage.values()) {
                 boolean canHandle = bailSubmissionWithUtCreator.canHandle(preSubmitCallbackStage, callback);
-                if ((event == Event.SUBMIT_APPLICATION || event == Event.MAKE_NEW_APPLICATION || event == Event.EDIT_BAIL_APPLICATION_AFTER_SUBMIT)
-                        && preSubmitCallbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT && isImaEnabled == YesOrNo.YES) {
+                if ((event == Event.SUBMIT_APPLICATION || event == Event.MAKE_NEW_APPLICATION
+                    || event == Event.EDIT_BAIL_APPLICATION_AFTER_SUBMIT || event == Event.REGENERATE_BAIL_SUBMISSION_DOCUMENT)
+                    && preSubmitCallbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT && isImaEnabled == YesOrNo.YES) {
                     assertTrue(canHandle);
                 } else {
                     assertFalse(canHandle);
