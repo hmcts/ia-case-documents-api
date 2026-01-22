@@ -82,7 +82,7 @@ public class EventTest {
         assertEquals("decisionWithoutHearing", Event.DECISION_WITHOUT_HEARING.toString());
         assertEquals("markAppealAsRemitted", Event.MARK_APPEAL_AS_REMITTED.toString());
         assertEquals("decideFtpaApplication", Event.DECIDE_FTPA_APPLICATION.toString());
-        assertEquals("saveNotificationsToData", Event.SAVE_NOTIFICATIONS_TO_DATA_BAIL.toString());
+        assertEquals("saveNotificationsToDataBail", Event.SAVE_NOTIFICATIONS_TO_DATA_BAIL.toString());
     }
 
     @Test
