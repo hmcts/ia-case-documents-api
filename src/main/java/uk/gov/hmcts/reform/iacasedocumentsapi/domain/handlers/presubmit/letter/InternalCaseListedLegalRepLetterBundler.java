@@ -82,12 +82,7 @@ public class InternalCaseListedLegalRepLetterBundler implements PreSubmitCallbac
         final String qualifiedDocumentFileName = fileNameQualifier.get(fileName + "." + fileExtension, caseDetails);
 
         List<DocumentWithMetadata> bundleDocuments = getMaybeLetterNotificationDocuments(asylumCase, DocumentTag.INTERNAL_CASE_LISTED_LR_LETTER);
-
-        /* Document internalCaseListedLetterBundle = documentBundler.bundleWithoutContentsOrCoverSheets(
-            bundleDocuments,
-            "Letter bundle documents",
-            qualifiedDocumentFileName
-        ); */
+  
 
         documentHandler.addWithMetadataWithoutReplacingExistingDocuments(
             asylumCase,
