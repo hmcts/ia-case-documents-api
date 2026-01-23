@@ -22,7 +22,6 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.PreSu
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.Document;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.IdValue;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentBundler;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentHandler;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.FileNameQualifier;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.SystemDateProvider;
@@ -30,6 +29,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.SystemDateProvider;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.clients.EmDocumentBundler;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -56,7 +56,7 @@ class InternalCaseListedAppellantLetterBundlerTest {
     @Mock
     private FileNameQualifier<AsylumCase> fileNameQualifier;
     @Mock
-    private DocumentBundler documentBundler;
+    private EmDocumentBundler documentBundler;
     @Mock
     private DocumentHandler documentHandler;
     @Mock

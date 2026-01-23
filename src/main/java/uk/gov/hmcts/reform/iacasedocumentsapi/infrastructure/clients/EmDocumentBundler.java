@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Optional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.DateProvider;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DocumentWithMetadata;
@@ -25,7 +24,6 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.enties.em.BundleDoc
 
 @Slf4j
 @Service
-@Primary
 public class EmDocumentBundler implements DocumentBundler {
 
     private final String emBundlerUrl;
@@ -89,6 +87,8 @@ public class EmDocumentBundler implements DocumentBundler {
         String bundleTitle,
         String bundleFilename
     ) {
+
+        log.info("**** bundling using endpoint: " + emBundlerStitchUri + " *****");
 
         Callback<BundleCaseData> payload =
             createBundlePayloadWithoutContentsOrCoverSheets(

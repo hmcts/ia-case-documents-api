@@ -66,6 +66,8 @@ public class AsyncEmDocumentBundler implements DocumentBundler {
         Event event
     ) {
 
+        log.info("**** bundling using endpoint: " + emBundlerStitchUri + " *****");
+
         Callback<BundleCaseData> payload =
             createBundlePayloadWithoutContentsOrCoverSheets(
                 documents,
