@@ -19,28 +19,19 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.PreSu
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.PreSubmitCallbackStage;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.PreSubmitCallbackHandler;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentHandler;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.FileNameQualifier;
 
 @Component
 public class InternalCaseListedLegalRepLetterBundler implements PreSubmitCallbackHandler<AsylumCase> {
 
-    private final String fileExtension;
-    private final String fileName;
+
     private final boolean isEmStitchingEnabled;
-    private final FileNameQualifier<AsylumCase> fileNameQualifier;
     private final DocumentHandler documentHandler;
 
     public InternalCaseListedLegalRepLetterBundler(
-        @Value("${internalCaseListedLetterWithAttachment.fileExtension}") String fileExtension,
-        @Value("${internalCaseListedLetterWithAttachment.fileName}") String fileName,
         @Value("${featureFlag.isEmStitchingEnabled}") boolean isEmStitchingEnabled,
-        FileNameQualifier<AsylumCase> fileNameQualifier,
         DocumentHandler documentHandler
     ) {
-        this.fileExtension = fileExtension;
-        this.fileName = fileName;
         this.isEmStitchingEnabled = isEmStitchingEnabled;
-        this.fileNameQualifier = fileNameQualifier;
         this.documentHandler = documentHandler;
     }
 

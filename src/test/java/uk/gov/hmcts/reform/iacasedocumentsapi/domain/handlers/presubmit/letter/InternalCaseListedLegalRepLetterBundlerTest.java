@@ -38,7 +38,6 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.IdValue;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentBundler;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentHandler;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.FileNameQualifier;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.SystemDateProvider;
 
 @ExtendWith(MockitoExtension.class)
@@ -50,28 +49,23 @@ class InternalCaseListedLegalRepLetterBundlerTest {
     private Callback<AsylumCase> callback;
     @Mock
     private CaseDetails<AsylumCase> caseDetails;
+
     @Mock
     private AsylumCase asylumCase;
-    @Mock
-    private FileNameQualifier<AsylumCase> fileNameQualifier;
     @Mock
     private DocumentBundler documentBundler;
     @Mock
     private DocumentHandler documentHandler;
     @Mock
     private Document bundleDocument;
-    private String fileExtension = "PDF";
-    private String fileName = "some-file-name";
+
 
     @BeforeEach
     public void setUp() {
 
         internalCaseListedLetterHandler =
             new InternalCaseListedLegalRepLetterBundler(
-                fileExtension,
-                fileName,
                 true,
-                fileNameQualifier,
                 documentHandler);
     }
 
@@ -126,10 +120,7 @@ class InternalCaseListedLegalRepLetterBundlerTest {
 
         internalCaseListedLetterHandler =
             new InternalCaseListedLegalRepLetterBundler(
-                fileExtension,
-                fileName,
                 false,
-                fileNameQualifier,
                 documentHandler);
 
         boolean canHandle = internalCaseListedLetterHandler.canHandle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
@@ -144,7 +135,6 @@ class InternalCaseListedLegalRepLetterBundlerTest {
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
         when(asylumCase.read(IS_ADMIN, YesOrNo.class)).thenReturn(Optional.of(YES));
         when(asylumCase.read(APPELLANTS_REPRESENTATION, YesOrNo.class)).thenReturn(Optional.of(NO));
-        when(fileNameQualifier.get(anyString(), eq(caseDetails))).thenReturn("filename");
 
         IdValue<DocumentWithMetadata> doc1 = new IdValue<>("1", createDocumentWithMetadata());
         IdValue<DocumentWithMetadata> doc2 = new IdValue<>("2", createDocumentWithMetadata());
