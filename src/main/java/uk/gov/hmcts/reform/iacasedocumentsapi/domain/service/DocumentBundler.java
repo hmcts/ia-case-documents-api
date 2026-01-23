@@ -19,7 +19,7 @@ public interface DocumentBundler {
         String bundleFilename
     );
 
-    Document bundleWithoutContentsOrCoverSheetsForEvent(
+    Document asyncBundleWithoutContentsOrCoverSheetsForEvent(
         List<DocumentWithMetadata> documents,
         String bundleTitle,
         String bundleFilename,

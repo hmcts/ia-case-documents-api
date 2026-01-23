@@ -22,7 +22,6 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.PreSubmitCallbackH
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentBundler;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentHandler;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.FileNameQualifier;
-import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.clients.AsyncEmDocumentBundler;
 
 @Component
 public class InternalCaseListedLegalRepLetterBundler implements PreSubmitCallbackHandler<AsylumCase> {
@@ -39,7 +38,7 @@ public class InternalCaseListedLegalRepLetterBundler implements PreSubmitCallbac
         @Value("${internalCaseListedLetterWithAttachment.fileName}") String fileName,
         @Value("${featureFlag.isEmStitchingEnabled}") boolean isEmStitchingEnabled,
         FileNameQualifier<AsylumCase> fileNameQualifier,
-        AsyncEmDocumentBundler documentBundler,
+        DocumentBundler documentBundler,
         DocumentHandler documentHandler
     ) {
         this.fileExtension = fileExtension;
@@ -85,7 +84,7 @@ public class InternalCaseListedLegalRepLetterBundler implements PreSubmitCallbac
 
         List<DocumentWithMetadata> bundleDocuments = getMaybeLetterNotificationDocuments(asylumCase, DocumentTag.INTERNAL_CASE_LISTED_LR_LETTER);
 
-        Document internalCaseListedLetterBundle = documentBundler.bundleWithoutContentsOrCoverSheetsForEvent(
+        Document internalCaseListedLetterBundle = documentBundler.asyncBundleWithoutContentsOrCoverSheetsForEvent(
             bundleDocuments,
             "Letter bundle documents",
             qualifiedDocumentFileName,

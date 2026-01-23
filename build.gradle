@@ -253,7 +253,7 @@ sonarqube {
                                      "src/main/java/uk/gov/hmcts/reform/iacasedocumentsapi/Application.java"
         property "sonar.cpd.exclusions", "src/main/java/uk/gov/hmcts/reform/iacasedocumentsapi/domain/entities/AsylumCase.java," +
                                          "src/main/java/uk/gov/hmcts/reform/iacasedocumentsapi/domain/entities/AsylumCaseBuilder.java," +
-                                         "src/main/java/uk/gov/hmcts/reform/iacasedocumentsapi/infrastructure/clients/AsyncEmDocumentBundler.java," +
+                                         "src/main/java/uk/gov/hmcts/reform/iacasedocumentsapi/infrastructure/clients/EmDocumentBundler.java," +
                                          "src/main/java/uk/gov/hmcts/reform/iacasedocumentsapi/domain/templates/**"
     }
 }

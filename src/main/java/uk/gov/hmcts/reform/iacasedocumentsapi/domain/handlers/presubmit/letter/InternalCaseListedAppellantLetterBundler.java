@@ -17,7 +17,6 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentHandler;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.FileNameQualifier;
 
 import java.util.List;
-import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.clients.EmDocumentBundler;
 
 import static java.util.Objects.requireNonNull;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.LETTER_BUNDLE_DOCUMENTS;
@@ -40,7 +39,7 @@ public class InternalCaseListedAppellantLetterBundler implements PreSubmitCallba
         @Value("${internalCaseListedLetterWithAttachment.fileName}") String fileName,
         @Value("${featureFlag.isEmStitchingEnabled}") boolean isEmStitchingEnabled,
         FileNameQualifier<AsylumCase> fileNameQualifier,
-        EmDocumentBundler documentBundler,
+        DocumentBundler documentBundler,
         DocumentHandler documentHandler
     ) {
         this.fileExtension = fileExtension;

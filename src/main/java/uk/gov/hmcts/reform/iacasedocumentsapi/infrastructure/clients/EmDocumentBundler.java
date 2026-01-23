@@ -30,21 +30,25 @@ public class EmDocumentBundler implements DocumentBundler {
 
     private final String emBundlerUrl;
     private final String emBundlerStitchUri;
+    private final String asyncEmBundlerStitchUri;
     private final DateProvider dateProvider;
     private final BundleRequestExecutor bundleRequestExecutor;
 
     public EmDocumentBundler(
         @Value("${emBundler.url}") String emBundlerUrl,
         @Value("${emBundler.stitch.uri}") String emBundlerStitchUri,
+        @Value("${emBundler.async-stitch.uri}") String asyncEmBundlerStitchUri,
         DateProvider dateProvider,
         BundleRequestExecutor bundleRequestExecutor
     ) {
         this.emBundlerUrl = emBundlerUrl;
         this.emBundlerStitchUri = emBundlerStitchUri;
+        this.asyncEmBundlerStitchUri = asyncEmBundlerStitchUri;
         this.dateProvider = dateProvider;
         this.bundleRequestExecutor = bundleRequestExecutor;
     }
 
+    @Override
     public Document bundle(
         List<DocumentWithMetadata> documents,
         String bundleTitle,
@@ -84,6 +88,7 @@ public class EmDocumentBundler implements DocumentBundler {
 
     }
 
+    @Override
     public Document bundleWithoutContentsOrCoverSheets(
         List<DocumentWithMetadata> documents,
         String bundleTitle,
@@ -96,7 +101,8 @@ public class EmDocumentBundler implements DocumentBundler {
             createBundlePayloadWithoutContentsOrCoverSheets(
                 documents,
                 bundleTitle,
-                bundleFilename
+                bundleFilename,
+                Event.GENERATE_HEARING_BUNDLE
             );
 
         PreSubmitCallbackResponse<BundleCaseData> response =
@@ -126,10 +132,46 @@ public class EmDocumentBundler implements DocumentBundler {
     }
 
     @Override
-    public Document bundleWithoutContentsOrCoverSheetsForEvent(
-        List<DocumentWithMetadata> documents, String bundleTitle, String bundleFilename, Event event) {
+    public Document asyncBundleWithoutContentsOrCoverSheetsForEvent(
+        List<DocumentWithMetadata> documents,
+        String bundleTitle,
+        String bundleFilename,
+        Event event
+    ) {
 
-        throw new UnsupportedOperationException("This method is not yet implemented");
+        log.info("**** bundling using endpoint: " + asyncEmBundlerStitchUri + " *****");
+
+        Callback<BundleCaseData> payload =
+            createBundlePayloadWithoutContentsOrCoverSheets(
+                documents,
+                bundleTitle,
+                bundleFilename,
+                event
+            );
+
+        PreSubmitCallbackResponse<BundleCaseData> response =
+            bundleRequestExecutor.post(
+                payload,
+                emBundlerUrl + emBundlerStitchUri
+            );
+
+        Document bundle =
+            response
+                .getData()
+                .getCaseBundles()
+                .stream()
+                .findFirst()
+                .orElseThrow(() -> new DocumentStitchingErrorResponseException("Bundle was not created", response))
+                .getValue()
+                .getStitchedDocument()
+                .orElseThrow(() -> new DocumentStitchingErrorResponseException("Stitched document was not created", response));
+
+        // rename the bundle file name
+        return new Document(
+            bundle.getDocumentUrl(),
+            bundle.getDocumentBinaryUrl(),
+            bundleFilename
+        );
     }
 
     private Callback<BundleCaseData> createBundlePayload(
@@ -189,7 +231,8 @@ public class EmDocumentBundler implements DocumentBundler {
     private Callback<BundleCaseData> createBundlePayloadWithoutContentsOrCoverSheets(
         List<DocumentWithMetadata> documents,
         String bundleTitle,
-        String bundleFilename
+        String bundleFilename,
+        Event event
     ) {
 
         List<IdValue<BundleDocument>> bundleDocuments = new ArrayList<>();
@@ -237,7 +280,7 @@ public class EmDocumentBundler implements DocumentBundler {
                     dateProvider.nowWithTime()
                 ),
                 Optional.empty(),
-                Event.GENERATE_HEARING_BUNDLE
+                event
             );
     }
 }

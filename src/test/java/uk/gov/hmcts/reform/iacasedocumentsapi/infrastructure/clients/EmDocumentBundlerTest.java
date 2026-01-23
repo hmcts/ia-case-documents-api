@@ -35,6 +35,7 @@ public class EmDocumentBundlerTest {
 
     private static final String BUNDLE_URL = "em-bundle-url";
     private static final String BUNDLE_STITCH_URL = "em-bundle-stitch-url";
+    private static final String ASYNC_BUNDLE_STITCH_URL = "em-bundle-async-stitch-url";
 
     @Mock private DateProvider dateProvider;
     @Mock private BundleRequestExecutor bundleRequestExecutor;
@@ -59,6 +60,7 @@ public class EmDocumentBundlerTest {
         emDocumentBundler = new EmDocumentBundler(
             BUNDLE_URL,
             BUNDLE_STITCH_URL,
+            ASYNC_BUNDLE_STITCH_URL,
             dateProvider,
             bundleRequestExecutor
         );
