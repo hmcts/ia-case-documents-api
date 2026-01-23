@@ -23,7 +23,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.enties.em.BundleCas
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.enties.em.BundleDocument;
 
 @Slf4j
-@Service("async")
+@Service
 public class AsyncEmDocumentBundler implements DocumentBundler {
 
     private final String emBundlerUrl;
