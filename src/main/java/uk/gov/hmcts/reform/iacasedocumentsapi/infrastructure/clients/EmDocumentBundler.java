@@ -152,7 +152,7 @@ public class EmDocumentBundler implements DocumentBundler {
         PreSubmitCallbackResponse<BundleCaseData> response =
             bundleRequestExecutor.post(
                 payload,
-                emBundlerUrl + emBundlerStitchUri
+                emBundlerUrl + asyncEmBundlerStitchUri
             );
 
         Document bundle =
