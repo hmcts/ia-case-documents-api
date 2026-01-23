@@ -152,10 +152,11 @@ class InternalCaseListedLegalRepLetterBundlerTest {
         IdValue<DocumentWithMetadata> doc2 = new IdValue<>("2", createDocumentWithMetadata());
 
         when(asylumCase.read(LETTER_NOTIFICATION_DOCUMENTS)).thenReturn(Optional.of(List.of(doc1, doc2)));
-        when(documentBundler.bundleWithoutContentsOrCoverSheets(
+        when(documentBundler.bundleWithoutContentsOrCoverSheetsForEvent(
             anyList(),
             eq("Letter bundle documents"),
-            eq("filename")
+            eq("filename"),
+            eq(Event.LIST_CASE)
         )).thenReturn(bundleDocument);
 
         PreSubmitCallbackResponse<AsylumCase> response = internalCaseListedLetterHandler.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
