@@ -38,10 +38,10 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.PreSu
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.PreSubmitCallbackStage;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.Document;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.IdValue;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentBundler;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentHandler;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.FileNameQualifier;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.SystemDateProvider;
+import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.clients.EmDocumentBundler;
 
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
@@ -59,7 +59,7 @@ public class AppealSkeletonBundleGeneratorTest {
     @Mock
     private FileNameQualifier<AsylumCase> fileNameQualifier;
     @Mock
-    private DocumentBundler documentBundler;
+    private EmDocumentBundler documentBundler;
     @Mock
     private DocumentHandler documentHandler;
 
