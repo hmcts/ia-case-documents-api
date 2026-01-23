@@ -26,7 +26,6 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.enties.em.BundleDoc
 @Slf4j
 @Service
 @Primary
-@SuppressWarnings("squid:DuplicatedBlocks")
 public class EmDocumentBundler implements DocumentBundler {
 
     private final String emBundlerUrl;
@@ -126,8 +125,8 @@ public class EmDocumentBundler implements DocumentBundler {
 
     @Override
     public Document bundleWithoutContentsOrCoverSheetsForEvent(
-        List<DocumentWithMetadata> documents, String bundleTitle, String bundleFilename, Event event)
-    {
+        List<DocumentWithMetadata> documents, String bundleTitle, String bundleFilename, Event event) {
+
         throw new UnsupportedOperationException("This method is not yet implemented");
     }
 
