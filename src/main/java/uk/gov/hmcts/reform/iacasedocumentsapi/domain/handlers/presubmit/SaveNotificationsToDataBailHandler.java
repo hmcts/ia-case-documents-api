@@ -37,7 +37,7 @@ public class SaveNotificationsToDataBailHandler implements PreSubmitCallbackHand
         requireNonNull(callback, "callback must not be null");
 
         return callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
-            && callback.getEvent() == Event.SAVE_NOTIFICATIONS_TO_DATA;
+            && callback.getEvent() == Event.SAVE_NOTIFICATIONS_TO_DATA_BAIL;
     }
 
     public PreSubmitCallbackResponse<BailCase> handle(

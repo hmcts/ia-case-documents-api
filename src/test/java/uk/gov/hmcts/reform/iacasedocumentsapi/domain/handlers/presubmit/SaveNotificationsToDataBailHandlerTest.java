@@ -56,7 +56,7 @@ class SaveNotificationsToDataBailHandlerTest {
 
     @Test
     void should_write_new_notification_data() {
-        when(callback.getEvent()).thenReturn(Event.SAVE_NOTIFICATIONS_TO_DATA);
+        when(callback.getEvent()).thenReturn(Event.SAVE_NOTIFICATIONS_TO_DATA_BAIL);
         when(callback.getCaseDetails()).thenReturn(caseDetails);
         when(caseDetails.getCaseData()).thenReturn(bailCase);
         when(bailCase.read(NOTIFICATIONS)).thenReturn(Optional.of(mockNotificationList));
@@ -75,7 +75,7 @@ class SaveNotificationsToDataBailHandlerTest {
         when(callback.getEvent()).thenReturn(event);
         for (PreSubmitCallbackStage callbackStage : PreSubmitCallbackStage.values()) {
             boolean canHandle = saveNotificationsToDataBailHandler.canHandle(callbackStage, callback);
-            if (event == Event.SAVE_NOTIFICATIONS_TO_DATA
+            if (event == Event.SAVE_NOTIFICATIONS_TO_DATA_BAIL
                 && callbackStage == ABOUT_TO_SUBMIT) {
                 assertTrue(canHandle);
             } else {
