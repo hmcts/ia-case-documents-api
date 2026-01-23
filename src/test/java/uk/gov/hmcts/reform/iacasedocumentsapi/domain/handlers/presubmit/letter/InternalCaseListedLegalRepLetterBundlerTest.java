@@ -140,7 +140,7 @@ class InternalCaseListedLegalRepLetterBundlerTest {
         assertFalse(canHandle);
     }
 
-    @Disabled
+    @Test
     void should_read_and_bundle_letter_notification_documents() {
         when(callback.getEvent()).thenReturn(Event.LIST_CASE);
         when(callback.getCaseDetails()).thenReturn(caseDetails);
@@ -164,7 +164,7 @@ class InternalCaseListedLegalRepLetterBundlerTest {
         assertNotNull(response);
         assertEquals(asylumCase, response.getData());
         verify(documentHandler, times(1)).addWithMetadataWithoutReplacingExistingDocuments(
-            asylumCase, bundleDocument, LETTER_BUNDLE_DOCUMENTS, DocumentTag.INTERNAL_CASE_LISTED_LR_LETTER_BUNDLE
+            asylumCase, doc1.getValue().getDocument(), LETTER_BUNDLE_DOCUMENTS, DocumentTag.INTERNAL_CASE_LISTED_LR_LETTER_BUNDLE
         );
     }
 
@@ -203,7 +203,7 @@ class InternalCaseListedLegalRepLetterBundlerTest {
         return
             new DocumentWithMetadata(createDocumentWithDescription(),
                 RandomStringUtils.randomAlphabetic(20),
-                new SystemDateProvider().now().toString(), DocumentTag.INTERNAL_CASE_LISTED_LETTER,"test");
+                new SystemDateProvider().now().toString(), DocumentTag.INTERNAL_CASE_LISTED_LR_LETTER,"test");
 
     }
 }
