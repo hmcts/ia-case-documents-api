@@ -125,6 +125,7 @@ public class AsylumPreSubmitCallbackController extends PreSubmitCallbackControll
                     .body(objectMapper.readValue(json, PreSubmitCallbackResponse.class));
         } catch (JsonProcessingException ex) {
             log.info("---------222");
+            log.error("--------222 ", ex);
             return preSubmitCallbackResponseResponseEntity;
         }
         //return super.ccdAboutToSubmit(callback);
