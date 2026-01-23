@@ -328,7 +328,7 @@ public class EmDocumentBundlerTest {
 
         when(bundleRequestExecutor.post(
             any(Callback.class),
-            eq(BUNDLE_URL + BUNDLE_STITCH_URL)))
+            eq(BUNDLE_URL + ASYNC_BUNDLE_STITCH_URL)))
             .thenReturn(callbackResponse
             );
         when(callbackResponse.getData()).thenReturn(bundleCaseData);
@@ -350,7 +350,7 @@ public class EmDocumentBundlerTest {
 
         verify(bundleRequestExecutor).post(
             captor.capture(),
-            eq(BUNDLE_URL + BUNDLE_STITCH_URL)
+            eq(BUNDLE_URL + ASYNC_BUNDLE_STITCH_URL)
         );
 
         final IdValue<Bundle> bundleIdValue =
@@ -404,7 +404,7 @@ public class EmDocumentBundlerTest {
 
         when(bundleRequestExecutor.post(
             any(Callback.class),
-            eq(BUNDLE_URL + BUNDLE_STITCH_URL)))
+            eq(BUNDLE_URL + ASYNC_BUNDLE_STITCH_URL)))
             .thenReturn(callbackResponse
             );
         when(callbackResponse.getData()).thenReturn(bundleCaseData);
@@ -448,7 +448,7 @@ public class EmDocumentBundlerTest {
 
         when(bundleRequestExecutor.post(
             any(Callback.class),
-            eq(BUNDLE_URL + BUNDLE_STITCH_URL)))
+            eq(BUNDLE_URL + ASYNC_BUNDLE_STITCH_URL)))
             .thenReturn(callbackResponse
             );
         when(callbackResponse.getData()).thenReturn(bundleCaseData);
