@@ -66,83 +66,39 @@ public class AsyncEmDocumentBundlerTest {
     }
 
     @Test
-    public void should_initiate_bundle_creation_and_handle_response() {
+    public void should_throw_unsupported_operation_for_bundle() {
 
-        List<IdValue<Bundle>> bundleIdValues =
-            ImmutableList.of(new IdValue<>("1", bundle));
-
-        DocumentWithMetadata docMeta1 = mock(DocumentWithMetadata.class);
-        DocumentWithMetadata docMeta2 = mock(DocumentWithMetadata.class);
-        Document doc1 = mock(Document.class);
-        Document doc2 = mock(Document.class);
-
-        List<DocumentWithMetadata> documents = ImmutableList.of(docMeta1, docMeta2);
+        List<DocumentWithMetadata> documents = ImmutableList.of();
         String bundleTitle = "some-bundle-title";
         String bundleFilename = "some-bundle-filename";
 
-        when(docMeta1.getDocument()).thenReturn(doc1);
-        when(docMeta1.getDescription()).thenReturn("test-desc1");
-        when(doc1.getDocumentFilename()).thenReturn("test-filename1");
-
-        when(docMeta2.getDocument()).thenReturn(doc2);
-        when(docMeta2.getDescription()).thenReturn("test-desc2");
-        when(doc2.getDocumentFilename()).thenReturn("test-filename2");
-
-        when(bundleRequestExecutor.post(
-            any(Callback.class),
-            eq(BUNDLE_URL + BUNDLE_ASYNC_STITCH_URL)))
-            .thenReturn(callbackResponse
-            );
-        when(callbackResponse.getData()).thenReturn(bundleCaseData);
-        when(bundleCaseData.getCaseBundles()).thenReturn(bundleIdValues);
-        when(bundle.getStitchedDocument()).thenReturn(Optional.of(returnedDocument));
-
-        Document documentBundle = asyncEmDocumentBundler.bundle(
+        assertThatThrownBy(() -> asyncEmDocumentBundler.bundle(
             documents,
             bundleTitle,
             bundleFilename
-        );
-
-        assertEquals(documentBundle.getDocumentUrl(), returnedDocument.getDocumentUrl());
-        assertEquals(documentBundle.getDocumentBinaryUrl(), returnedDocument.getDocumentBinaryUrl());
-        assertEquals(documentBundle.getDocumentFilename(), returnedDocument.getDocumentFilename());
-        assertEquals(documentBundle.getDocumentFilename(), returnedDocument.getDocumentFilename());
-
-        ArgumentCaptor<Callback<BundleCaseData>> captor = ArgumentCaptor.forClass(Callback.class);
-
-        verify(bundleRequestExecutor).post(
-            captor.capture(),
-            eq(BUNDLE_URL + BUNDLE_ASYNC_STITCH_URL)
-        );
-
-        final IdValue<Bundle> bundleIdValue =
-            new IdValue<>(
-                "1",
-                new Bundle(
-                    "1",
-                    bundleTitle,
-                    "",
-                    "yes",
-                    null,
-                    bundleFilename
-                )
-            );
-
-        Callback<BundleCaseData> caseDataCallback = captor.getValue();
-
-        assertEquals(caseDataCallback.getEvent(), Event.GENERATE_HEARING_BUNDLE);
-        assertEquals(caseDataCallback.getCaseDetails().getState(), State.UNKNOWN);
-        assertEquals(caseDataCallback.getCaseDetails().getJurisdiction(), "IA");
-        assertEquals(caseDataCallback.getCaseDetails().getId(), 1L);
-        assertEquals(caseDataCallback.getCaseDetails().getCaseData().getCaseBundles().size(), 1);
-        assertEquals(caseDataCallback.getCaseDetails().getCaseData().getCaseBundles().get(0).getId(), "1");
-        assertThat(caseDataCallback.getCaseDetails().getCaseData().getCaseBundles().get(0).getValue())
-            .usingRecursiveComparison().ignoringFields("documents").isEqualTo(bundleIdValue.getValue());
-
+        ))
+            .isInstanceOf(UnsupportedOperationException.class)
+            .hasMessage("This method is not yet implemented");
     }
 
     @Test
-    public void should_initiate_bundleWithoutContentsOrCoverSheets_creation_and_handle_response() {
+    public void should_throw_unsupported_operation_for_bundleWithoutContentsOrCoverSheets() {
+
+        List<DocumentWithMetadata> documents = ImmutableList.of();
+        String bundleTitle = "some-bundle-title";
+        String bundleFilename = "some-bundle-filename";
+
+        assertThatThrownBy(() -> asyncEmDocumentBundler.bundleWithoutContentsOrCoverSheets(
+            documents,
+            bundleTitle,
+            bundleFilename
+        ))
+            .isInstanceOf(UnsupportedOperationException.class)
+            .hasMessage("This method is not yet implemented");
+    }
+
+    @Test
+    public void should_initiate_bundleWithoutContentsOrCoverSheetsForEvent_and_handle_response() {
 
         List<IdValue<Bundle>> bundleIdValues =
             ImmutableList.of(new IdValue<>("1", bundle));
@@ -155,6 +111,7 @@ public class AsyncEmDocumentBundlerTest {
         List<DocumentWithMetadata> documents = ImmutableList.of(docMeta1, docMeta2);
         String bundleTitle = "some-bundle-title";
         String bundleFilename = "some-bundle-filename";
+        Event event = Event.GENERATE_HEARING_BUNDLE;
 
         when(docMeta1.getDocument()).thenReturn(doc1);
         when(docMeta1.getDescription()).thenReturn("test-desc1");
@@ -173,15 +130,15 @@ public class AsyncEmDocumentBundlerTest {
         when(bundleCaseData.getCaseBundles()).thenReturn(bundleIdValues);
         when(bundle.getStitchedDocument()).thenReturn(Optional.of(returnedDocument));
 
-        Document documentBundle = asyncEmDocumentBundler.bundleWithoutContentsOrCoverSheets(
+        Document documentBundle = asyncEmDocumentBundler.bundleWithoutContentsOrCoverSheetsForEvent(
             documents,
             bundleTitle,
-            bundleFilename
+            bundleFilename,
+            event
         );
 
         assertEquals(documentBundle.getDocumentUrl(), returnedDocument.getDocumentUrl());
         assertEquals(documentBundle.getDocumentBinaryUrl(), returnedDocument.getDocumentBinaryUrl());
-        assertEquals(documentBundle.getDocumentFilename(), returnedDocument.getDocumentFilename());
         assertEquals(documentBundle.getDocumentFilename(), returnedDocument.getDocumentFilename());
 
         ArgumentCaptor<Callback<BundleCaseData>> captor = ArgumentCaptor.forClass(Callback.class);
@@ -208,7 +165,7 @@ public class AsyncEmDocumentBundlerTest {
 
         Callback<BundleCaseData> caseDataCallback = captor.getValue();
 
-        assertEquals(caseDataCallback.getEvent(), Event.GENERATE_HEARING_BUNDLE);
+        assertEquals(caseDataCallback.getEvent(), event);
         assertEquals(caseDataCallback.getCaseDetails().getState(), State.UNKNOWN);
         assertEquals(caseDataCallback.getCaseDetails().getJurisdiction(), "IA");
         assertEquals(caseDataCallback.getCaseDetails().getId(), 1L);
@@ -220,7 +177,7 @@ public class AsyncEmDocumentBundlerTest {
     }
 
     @Test
-    public void should_throw_if_no_bundle_returned() {
+    public void should_throw_if_no_bundle_returned_for_bundleWithoutContentsOrCoverSheetsForEvent() {
 
         DocumentWithMetadata docMeta1 = mock(DocumentWithMetadata.class);
         DocumentWithMetadata docMeta2 = mock(DocumentWithMetadata.class);
@@ -230,6 +187,7 @@ public class AsyncEmDocumentBundlerTest {
         List<DocumentWithMetadata> documents = ImmutableList.of(docMeta1, docMeta2);
         String bundleTitle = "some-bundle-title";
         String bundleFilename = "some-bundle-filename";
+        Event event = Event.GENERATE_HEARING_BUNDLE;
 
         when(docMeta1.getDocument()).thenReturn(doc1);
         when(docMeta1.getDescription()).thenReturn("test-desc1");
@@ -247,10 +205,11 @@ public class AsyncEmDocumentBundlerTest {
         when(callbackResponse.getData()).thenReturn(bundleCaseData);
         when(bundleCaseData.getCaseBundles()).thenReturn(Collections.EMPTY_LIST);
 
-        assertThatThrownBy(() -> asyncEmDocumentBundler.bundle(
+        assertThatThrownBy(() -> asyncEmDocumentBundler.bundleWithoutContentsOrCoverSheetsForEvent(
             documents,
             bundleTitle,
-            bundleFilename
+            bundleFilename,
+            event
         ))
             .isInstanceOf(DocumentServiceResponseException.class)
             .hasMessage("Bundle was not created")
@@ -259,7 +218,7 @@ public class AsyncEmDocumentBundlerTest {
     }
 
     @Test
-    public void should_throw_if_empty_stitched_document_returned() {
+    public void should_throw_if_empty_stitched_document_returned_for_bundleWithoutContentsOrCoverSheetsForEvent() {
 
         List<IdValue<Bundle>> bundleIdValues =
             ImmutableList.of(new IdValue<>("1", bundle));
@@ -272,6 +231,7 @@ public class AsyncEmDocumentBundlerTest {
         List<DocumentWithMetadata> documents = ImmutableList.of(docMeta1, docMeta2);
         String bundleTitle = "some-bundle-title";
         String bundleFilename = "some-bundle-filename";
+        Event event = Event.GENERATE_HEARING_BUNDLE;
 
         when(docMeta1.getDocument()).thenReturn(doc1);
         when(docMeta1.getDescription()).thenReturn("test-desc1");
@@ -290,91 +250,11 @@ public class AsyncEmDocumentBundlerTest {
         when(bundleCaseData.getCaseBundles()).thenReturn(bundleIdValues);
         when(bundle.getStitchedDocument()).thenReturn(Optional.empty());
 
-        assertThatThrownBy(() -> asyncEmDocumentBundler.bundle(
+        assertThatThrownBy(() -> asyncEmDocumentBundler.bundleWithoutContentsOrCoverSheetsForEvent(
             documents,
             bundleTitle,
-            bundleFilename
-        ))
-            .isInstanceOf(DocumentServiceResponseException.class)
-            .hasMessage("Stitched document was not created")
-            .hasFieldOrProperty("stitchingServiceResponse");
-    }
-
-    @Test
-    public void should_throw_if_no_bundle_returned_for_bundleWithoutContentsOrCoverSheets() {
-
-        DocumentWithMetadata docMeta1 = mock(DocumentWithMetadata.class);
-        DocumentWithMetadata docMeta2 = mock(DocumentWithMetadata.class);
-        Document doc1 = mock(Document.class);
-        Document doc2 = mock(Document.class);
-
-        List<DocumentWithMetadata> documents = ImmutableList.of(docMeta1, docMeta2);
-        String bundleTitle = "some-bundle-title";
-        String bundleFilename = "some-bundle-filename";
-
-        when(docMeta1.getDocument()).thenReturn(doc1);
-        when(docMeta1.getDescription()).thenReturn("test-desc1");
-        when(doc1.getDocumentFilename()).thenReturn("test-filename1");
-
-        when(docMeta2.getDocument()).thenReturn(doc2);
-        when(docMeta2.getDescription()).thenReturn("test-desc2");
-        when(doc2.getDocumentFilename()).thenReturn("test-filename2");
-
-        when(bundleRequestExecutor.post(
-            any(Callback.class),
-            eq(BUNDLE_URL + BUNDLE_ASYNC_STITCH_URL)))
-            .thenReturn(callbackResponse
-            );
-        when(callbackResponse.getData()).thenReturn(bundleCaseData);
-        when(bundleCaseData.getCaseBundles()).thenReturn(Collections.EMPTY_LIST);
-
-        assertThatThrownBy(() -> asyncEmDocumentBundler.bundleWithoutContentsOrCoverSheets(
-            documents,
-            bundleTitle,
-            bundleFilename
-        ))
-            .isInstanceOf(DocumentServiceResponseException.class)
-            .hasMessage("Bundle was not created")
-            .hasFieldOrProperty("stitchingServiceResponse");
-
-    }
-
-    @Test
-    public void should_throw_if_empty_stitched_document_returned_for_bundleWithoutContentsOrCoverSheets() {
-
-        List<IdValue<Bundle>> bundleIdValues =
-            ImmutableList.of(new IdValue<>("1", bundle));
-
-        DocumentWithMetadata docMeta1 = mock(DocumentWithMetadata.class);
-        DocumentWithMetadata docMeta2 = mock(DocumentWithMetadata.class);
-        Document doc1 = mock(Document.class);
-        Document doc2 = mock(Document.class);
-
-        List<DocumentWithMetadata> documents = ImmutableList.of(docMeta1, docMeta2);
-        String bundleTitle = "some-bundle-title";
-        String bundleFilename = "some-bundle-filename";
-
-        when(docMeta1.getDocument()).thenReturn(doc1);
-        when(docMeta1.getDescription()).thenReturn("test-desc1");
-        when(doc1.getDocumentFilename()).thenReturn("test-filename1");
-
-        when(docMeta2.getDocument()).thenReturn(doc2);
-        when(docMeta2.getDescription()).thenReturn("test-desc2");
-        when(doc2.getDocumentFilename()).thenReturn("test-filename2");
-
-        when(bundleRequestExecutor.post(
-            any(Callback.class),
-            eq(BUNDLE_URL + BUNDLE_ASYNC_STITCH_URL)))
-            .thenReturn(callbackResponse
-            );
-        when(callbackResponse.getData()).thenReturn(bundleCaseData);
-        when(bundleCaseData.getCaseBundles()).thenReturn(bundleIdValues);
-        when(bundle.getStitchedDocument()).thenReturn(Optional.empty());
-
-        assertThatThrownBy(() -> asyncEmDocumentBundler.bundleWithoutContentsOrCoverSheets(
-            documents,
-            bundleTitle,
-            bundleFilename
+            bundleFilename,
+            event
         ))
             .isInstanceOf(DocumentServiceResponseException.class)
             .hasMessage("Stitched document was not created")

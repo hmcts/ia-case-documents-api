@@ -24,6 +24,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.enties.em.BundleDoc
 
 @Slf4j
 @Service("async")
+@SuppressWarnings("common-java:DuplicatedBlocks")
 public class AsyncEmDocumentBundler implements DocumentBundler {
 
     private final String emBundlerUrl;
@@ -48,38 +49,7 @@ public class AsyncEmDocumentBundler implements DocumentBundler {
         String bundleTitle,
         String bundleFilename
     ) {
-
-        Callback<BundleCaseData> payload =
-            createBundlePayload(
-                documents,
-                bundleTitle,
-                bundleFilename
-            );
-
-        PreSubmitCallbackResponse<BundleCaseData> response =
-            bundleRequestExecutor.post(
-                payload,
-                emBundlerUrl + emBundlerStitchUri
-            );
-
-        Document bundle =
-            response
-                .getData()
-                .getCaseBundles()
-                .stream()
-                .findFirst()
-                .orElseThrow(() -> new DocumentStitchingErrorResponseException("Bundle was not created", response))
-                .getValue()
-                .getStitchedDocument()
-                .orElseThrow(() -> new DocumentStitchingErrorResponseException("Stitched document was not created", response));
-
-        // rename the bundle file name
-        return new Document(
-            bundle.getDocumentUrl(),
-            bundle.getDocumentBinaryUrl(),
-            bundleFilename
-        );
-
+        throw new UnsupportedOperationException("This method is not yet implemented");
     }
 
     public Document bundleWithoutContentsOrCoverSheets(
@@ -87,12 +57,22 @@ public class AsyncEmDocumentBundler implements DocumentBundler {
         String bundleTitle,
         String bundleFilename
     ) {
+        throw new UnsupportedOperationException("This method is not yet implemented");
+    }
+
+    public Document bundleWithoutContentsOrCoverSheetsForEvent(
+        List<DocumentWithMetadata> documents,
+        String bundleTitle,
+        String bundleFilename,
+        Event event
+    ) {
 
         Callback<BundleCaseData> payload =
             createBundlePayloadWithoutContentsOrCoverSheets(
                 documents,
                 bundleTitle,
-                bundleFilename
+                bundleFilename,
+                event
             );
 
         PreSubmitCallbackResponse<BundleCaseData> response =
@@ -121,64 +101,11 @@ public class AsyncEmDocumentBundler implements DocumentBundler {
 
     }
 
-    private Callback<BundleCaseData> createBundlePayload(
-        List<DocumentWithMetadata> documents,
-        String bundleTitle,
-        String bundleFilename
-    ) {
-
-        //create the bundle documents as a list of IdValue
-        List<IdValue<BundleDocument>> bundleDocuments = new ArrayList<>();
-
-        for (int i = 0; i < documents.size(); i++) {
-
-            DocumentWithMetadata caseDocument = documents.get(i);
-
-            bundleDocuments.add(
-                new IdValue<>(
-                    String.valueOf(i),
-                    new BundleDocument(
-                        caseDocument.getDocument().getDocumentFilename(),
-                        caseDocument.getDescription(),
-                        i,
-                        caseDocument.getDocument()
-                    )
-                )
-            );
-        }
-
-        return
-            new Callback<>(
-                new CaseDetails<>(
-                    1L,
-                    "IA",
-                    State.UNKNOWN,
-                    new BundleCaseData(
-                        Collections.singletonList(
-                            new IdValue<>(
-                                "1",
-                                new Bundle(
-                                    "1",
-                                    bundleTitle,
-                                    "",
-                                    "yes",
-                                    bundleDocuments,
-                                    bundleFilename
-                                )
-                            )
-                        )
-                    ),
-                    dateProvider.nowWithTime()
-                ),
-                Optional.empty(),
-                Event.GENERATE_HEARING_BUNDLE
-            );
-    }
-
     private Callback<BundleCaseData> createBundlePayloadWithoutContentsOrCoverSheets(
         List<DocumentWithMetadata> documents,
         String bundleTitle,
-        String bundleFilename
+        String bundleFilename,
+        Event event
     ) {
 
         List<IdValue<BundleDocument>> bundleDocuments = new ArrayList<>();
@@ -226,7 +153,8 @@ public class AsyncEmDocumentBundler implements DocumentBundler {
                     dateProvider.nowWithTime()
                 ),
                 Optional.empty(),
-                Event.GENERATE_HEARING_BUNDLE
+                event
             );
     }
+
 }
