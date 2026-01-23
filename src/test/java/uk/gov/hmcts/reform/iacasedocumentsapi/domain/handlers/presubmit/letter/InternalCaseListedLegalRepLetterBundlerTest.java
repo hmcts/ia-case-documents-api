@@ -72,7 +72,6 @@ class InternalCaseListedLegalRepLetterBundlerTest {
                 fileName,
                 true,
                 fileNameQualifier,
-                documentBundler,
                 documentHandler);
     }
 
@@ -131,7 +130,6 @@ class InternalCaseListedLegalRepLetterBundlerTest {
                 fileName,
                 false,
                 fileNameQualifier,
-                documentBundler,
                 documentHandler);
 
         boolean canHandle = internalCaseListedLetterHandler.canHandle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);

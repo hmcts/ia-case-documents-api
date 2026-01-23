@@ -18,7 +18,6 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.Dispa
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.PreSubmitCallbackResponse;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.PreSubmitCallbackStage;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.PreSubmitCallbackHandler;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentBundler;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentHandler;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.FileNameQualifier;
 
@@ -29,7 +28,6 @@ public class InternalCaseListedLegalRepLetterBundler implements PreSubmitCallbac
     private final String fileName;
     private final boolean isEmStitchingEnabled;
     private final FileNameQualifier<AsylumCase> fileNameQualifier;
-    private final DocumentBundler documentBundler;
     private final DocumentHandler documentHandler;
 
     public InternalCaseListedLegalRepLetterBundler(
@@ -37,14 +35,12 @@ public class InternalCaseListedLegalRepLetterBundler implements PreSubmitCallbac
         @Value("${internalCaseListedLetterWithAttachment.fileName}") String fileName,
         @Value("${featureFlag.isEmStitchingEnabled}") boolean isEmStitchingEnabled,
         FileNameQualifier<AsylumCase> fileNameQualifier,
-        DocumentBundler documentBundler,
         DocumentHandler documentHandler
     ) {
         this.fileExtension = fileExtension;
         this.fileName = fileName;
         this.isEmStitchingEnabled = isEmStitchingEnabled;
         this.fileNameQualifier = fileNameQualifier;
-        this.documentBundler = documentBundler;
         this.documentHandler = documentHandler;
     }
 
@@ -78,8 +74,6 @@ public class InternalCaseListedLegalRepLetterBundler implements PreSubmitCallbac
 
         final CaseDetails<AsylumCase> caseDetails = callback.getCaseDetails();
         final AsylumCase asylumCase = caseDetails.getCaseData();
-
-        final String qualifiedDocumentFileName = fileNameQualifier.get(fileName + "." + fileExtension, caseDetails);
 
         List<DocumentWithMetadata> bundleDocuments = getMaybeLetterNotificationDocuments(asylumCase, DocumentTag.INTERNAL_CASE_LISTED_LR_LETTER);
   
