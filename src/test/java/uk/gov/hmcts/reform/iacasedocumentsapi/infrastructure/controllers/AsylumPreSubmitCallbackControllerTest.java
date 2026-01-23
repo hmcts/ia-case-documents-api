@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.*;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -31,7 +32,7 @@ public class AsylumPreSubmitCallbackControllerTest {
     public void setUp() {
         asylumPreSubmitCallbackController =
             new AsylumPreSubmitCallbackController(
-                callbackDispatcher
+                callbackDispatcher, new ObjectMapper()
             );
     }
 
@@ -78,7 +79,7 @@ public class AsylumPreSubmitCallbackControllerTest {
     @Test
     public void should_not_allow_null_constructor_arguments() {
 
-        assertThatThrownBy(() -> new AsylumPreSubmitCallbackController(null))
+        assertThatThrownBy(() -> new AsylumPreSubmitCallbackController(null, new ObjectMapper()))
             .hasMessage("callbackDispatcher must not be null")
             .isExactlyInstanceOf(NullPointerException.class);
     }
