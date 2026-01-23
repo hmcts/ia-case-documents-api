@@ -24,7 +24,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.enties.em.BundleDoc
 
 @Slf4j
 @Service("async")
-@SuppressWarnings("common-java:DuplicatedBlocks")
+@SuppressWarnings("squid:DuplicatedBlocks")
 public class AsyncEmDocumentBundler implements DocumentBundler {
 
     private final String emBundlerUrl;
