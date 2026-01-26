@@ -117,13 +117,10 @@ public class AsylumPreSubmitCallbackController extends PreSubmitCallbackControll
         try {
             ObjectMapper objectMapper = new ObjectMapper();
             String json = objectMapper.writeValueAsString(response);
-            PreSubmitCallbackResponse<AsylumCase> resp = objectMapper.readValue(json, PreSubmitCallbackResponse.class);
-            return ResponseEntity.ok()
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .body(resp);
+            log.error("--------111 ", json);
+            return preSubmitCallbackResponseResponseEntity;
         } catch (JsonProcessingException ex) {
             log.info("---------222");
-            log.error("--------222 ", ex);
             return preSubmitCallbackResponseResponseEntity;
         }
         // return super.ccdAboutToSubmit(callback);
