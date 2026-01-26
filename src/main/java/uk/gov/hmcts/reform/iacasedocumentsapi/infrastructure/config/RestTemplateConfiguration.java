@@ -12,26 +12,26 @@ public class RestTemplateConfiguration {
 
     @Bean
     public RestOperations restOperations(
-            ObjectMapper objectMapper
+        ObjectMapper objectMapper
     ) {
         return restTemplate(objectMapper);
     }
 
     @Bean
     public RestTemplate restTemplate(
-            ObjectMapper objectMapper
+        ObjectMapper objectMapper
     ) {
         RestTemplate restTemplate = new RestTemplate();
         restTemplate
-                .getMessageConverters()
-                .add(0, mappingJackson2HttpMessageConverter(objectMapper));
+            .getMessageConverters()
+            .add(0, mappingJackson2HttpMessageConverter(objectMapper));
 
         return restTemplate;
     }
 
     @Bean
     public MappingJackson2HttpMessageConverter mappingJackson2HttpMessageConverter(
-            ObjectMapper objectMapper
+        ObjectMapper objectMapper
     ) {
         return new MappingJackson2HttpMessageConverter(objectMapper);
     }

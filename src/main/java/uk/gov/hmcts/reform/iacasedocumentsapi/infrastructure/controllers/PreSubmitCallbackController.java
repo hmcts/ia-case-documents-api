@@ -6,8 +6,6 @@ import static org.springframework.http.ResponseEntity.ok;
 
 import io.swagger.v3.oas.annotations.Parameter;
 import javax.validation.constraints.NotNull;
-
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseData;
@@ -16,7 +14,6 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.PreSu
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.PreSubmitCallbackStage;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.PreSubmitCallbackDispatcher;
 
-@Slf4j
 public class PreSubmitCallbackController<T extends CaseData> {
 
     private static final org.slf4j.Logger LOG = getLogger(PreSubmitCallbackController.class);

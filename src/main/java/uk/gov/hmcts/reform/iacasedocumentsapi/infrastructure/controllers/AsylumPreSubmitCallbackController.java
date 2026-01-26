@@ -1,6 +1,5 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.controllers;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -9,7 +8,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import javax.validation.constraints.NotNull;
-
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -30,11 +28,8 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.AsylumPreSubmitCall
 @RestController
 public class AsylumPreSubmitCallbackController extends PreSubmitCallbackController<AsylumCase> {
 
-    private final ObjectMapper objectMapper;
-
-    public AsylumPreSubmitCallbackController(AsylumPreSubmitCallbackDispatcher callbackDispatcher, ObjectMapper objectMapper) {
+    public AsylumPreSubmitCallbackController(AsylumPreSubmitCallbackDispatcher callbackDispatcher) {
         super(callbackDispatcher);
-        this.objectMapper = objectMapper;
     }
 
     @Operation(
