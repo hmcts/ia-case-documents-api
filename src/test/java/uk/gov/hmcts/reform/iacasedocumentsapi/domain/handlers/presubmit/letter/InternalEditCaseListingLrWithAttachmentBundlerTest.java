@@ -5,9 +5,6 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.mockito.Mockito.anyList;
-import static org.mockito.Mockito.anyString;
-import static org.mockito.Mockito.eq;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -45,7 +42,6 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.IdValue;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentBundler;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentHandler;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.FileNameQualifier;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.SystemDateProvider;
 
 @ExtendWith(MockitoExtension.class)
@@ -60,26 +56,18 @@ public class InternalEditCaseListingLrWithAttachmentBundlerTest {
     @Mock
     private AsylumCase asylumCase;
     @Mock
-    private FileNameQualifier<AsylumCase> fileNameQualifier;
-    @Mock
     private DocumentBundler documentBundler;
     @Mock
     private DocumentHandler documentHandler;
     @Mock
     private Document bundleDocument;
-    private String fileExtension = "PDF";
-    private String fileName = "some-file-name";
 
     @BeforeEach
     public void setUp() {
 
         internalEditCaseListingLrWithAttachmentBundler =
                 new InternalEditCaseListingLrWithAttachmentBundler(
-                        fileExtension,
-                        fileName,
                         true,
-                        fileNameQualifier,
-                        documentBundler,
                         documentHandler);
     }
 
@@ -135,11 +123,7 @@ public class InternalEditCaseListingLrWithAttachmentBundlerTest {
 
         internalEditCaseListingLrWithAttachmentBundler =
                 new InternalEditCaseListingLrWithAttachmentBundler(
-                        fileExtension,
-                        fileName,
                         false,
-                        fileNameQualifier,
-                        documentBundler,
                         documentHandler);
 
         boolean canHandle = internalEditCaseListingLrWithAttachmentBundler.canHandle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
@@ -155,24 +139,18 @@ public class InternalEditCaseListingLrWithAttachmentBundlerTest {
         when(asylumCase.read(IS_ADMIN, YesOrNo.class)).thenReturn(Optional.of(YES));
         when(asylumCase.read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(NO));
         when(asylumCase.read(APPELLANTS_REPRESENTATION, YesOrNo.class)).thenReturn(Optional.of(NO));
-        when(fileNameQualifier.get(anyString(), eq(caseDetails))).thenReturn("filename");
 
         IdValue<DocumentWithMetadata> doc1 = new IdValue<>("1", createDocumentWithMetadata());
         IdValue<DocumentWithMetadata> doc2 = new IdValue<>("2", createDocumentWithMetadata());
 
         when(asylumCase.read(LETTER_NOTIFICATION_DOCUMENTS)).thenReturn(Optional.of(List.of(doc1, doc2)));
-        when(documentBundler.bundleWithoutContentsOrCoverSheets(
-                anyList(),
-                eq("Letter bundle documents"),
-                eq("filename")
-        )).thenReturn(bundleDocument);
 
         PreSubmitCallbackResponse<AsylumCase> response = internalEditCaseListingLrWithAttachmentBundler.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
 
         assertNotNull(response);
         assertEquals(asylumCase, response.getData());
         verify(documentHandler, times(1)).addWithMetadataWithoutReplacingExistingDocuments(
-                asylumCase, bundleDocument, LETTER_BUNDLE_DOCUMENTS, DocumentTag.INTERNAL_EDIT_CASE_LISTING_LR_LETTER_BUNDLE
+                asylumCase, doc1.getValue().getDocument(), LETTER_BUNDLE_DOCUMENTS, DocumentTag.INTERNAL_EDIT_CASE_LISTING_LR_LETTER_BUNDLE
         );
     }
 
@@ -185,24 +163,18 @@ public class InternalEditCaseListingLrWithAttachmentBundlerTest {
         when(asylumCase.read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(YES));
         when(asylumCase.read(DETENTION_FACILITY, String.class)).thenReturn(Optional.of("other"));
         when(asylumCase.read(APPELLANTS_REPRESENTATION, YesOrNo.class)).thenReturn(Optional.of(NO));
-        when(fileNameQualifier.get(anyString(), eq(caseDetails))).thenReturn("filename");
 
         IdValue<DocumentWithMetadata> doc1 = new IdValue<>("1", createDocumentWithMetadata());
         IdValue<DocumentWithMetadata> doc2 = new IdValue<>("2", createDocumentWithMetadata());
 
         when(asylumCase.read(LETTER_NOTIFICATION_DOCUMENTS)).thenReturn(Optional.of(List.of(doc1, doc2)));
-        when(documentBundler.bundleWithoutContentsOrCoverSheets(
-                anyList(),
-                eq("Letter bundle documents"),
-                eq("filename")
-        )).thenReturn(bundleDocument);
 
         PreSubmitCallbackResponse<AsylumCase> response = internalEditCaseListingLrWithAttachmentBundler.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
 
         assertNotNull(response);
         assertEquals(asylumCase, response.getData());
         verify(documentHandler, times(1)).addWithMetadataWithoutReplacingExistingDocuments(
-                asylumCase, bundleDocument, LETTER_BUNDLE_DOCUMENTS, DocumentTag.INTERNAL_EDIT_CASE_LISTING_LR_LETTER_BUNDLE
+                asylumCase, doc1.getValue().getDocument(), LETTER_BUNDLE_DOCUMENTS, DocumentTag.INTERNAL_EDIT_CASE_LISTING_LR_LETTER_BUNDLE
         );
     }
 
@@ -215,24 +187,18 @@ public class InternalEditCaseListingLrWithAttachmentBundlerTest {
         when(asylumCase.read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(YES));
         when(asylumCase.read(DETENTION_FACILITY, String.class)).thenReturn(Optional.of("other"));
         when(asylumCase.read(APPELLANTS_REPRESENTATION, YesOrNo.class)).thenReturn(Optional.of(NO));
-        when(fileNameQualifier.get(anyString(), eq(caseDetails))).thenReturn("filename");
 
         IdValue<DocumentWithMetadata> doc1 = new IdValue<>("1", createDocumentWithMetadata());
         IdValue<DocumentWithMetadata> doc2 = new IdValue<>("2", createDocumentWithMetadata());
 
         when(asylumCase.read(LETTER_NOTIFICATION_DOCUMENTS)).thenReturn(Optional.of(List.of(doc1, doc2)));
-        when(documentBundler.bundleWithoutContentsOrCoverSheets(
-                anyList(),
-                eq("Letter bundle documents"),
-                eq("filename")
-        )).thenReturn(bundleDocument);
 
         PreSubmitCallbackResponse<AsylumCase> response = internalEditCaseListingLrWithAttachmentBundler.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
 
         assertNotNull(response);
         assertEquals(asylumCase, response.getData());
         verify(documentHandler, times(1)).addWithMetadataWithoutReplacingExistingDocuments(
-                asylumCase, bundleDocument, LETTER_BUNDLE_DOCUMENTS, DocumentTag.INTERNAL_EDIT_CASE_LISTING_LR_LETTER_BUNDLE
+                asylumCase, doc1.getValue().getDocument(), LETTER_BUNDLE_DOCUMENTS, DocumentTag.INTERNAL_EDIT_CASE_LISTING_LR_LETTER_BUNDLE
         );
     }
 
@@ -271,7 +237,7 @@ public class InternalEditCaseListingLrWithAttachmentBundlerTest {
         return
                 new DocumentWithMetadata(createDocumentWithDescription(),
                         RandomStringUtils.randomAlphabetic(20),
-                        new SystemDateProvider().now().toString(), DocumentTag.INTERNAL_EDIT_CASE_LISTING_LR_LETTER_BUNDLE,"test");
+                        new SystemDateProvider().now().toString(), DocumentTag.INTERNAL_EDIT_CASE_LISTING_LR_LETTER,"test");
 
     }
 }
