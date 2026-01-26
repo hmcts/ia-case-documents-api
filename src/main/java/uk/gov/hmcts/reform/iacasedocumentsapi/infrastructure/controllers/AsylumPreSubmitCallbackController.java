@@ -120,7 +120,6 @@ public class AsylumPreSubmitCallbackController extends PreSubmitCallbackControll
             log.error("--------111 ", json);
             return preSubmitCallbackResponseResponseEntity;
         } catch (JsonProcessingException ex) {
-            log.info("---------222");
             return preSubmitCallbackResponseResponseEntity;
         }
         // return super.ccdAboutToSubmit(callback);
