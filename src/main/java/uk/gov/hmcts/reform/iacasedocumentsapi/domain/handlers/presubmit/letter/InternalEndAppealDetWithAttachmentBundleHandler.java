@@ -1,5 +1,6 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit.letter;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
@@ -25,6 +26,7 @@ import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.Event.E
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.*;
 
 @Component
+@Slf4j
 public class InternalEndAppealDetWithAttachmentBundleHandler implements PreSubmitCallbackHandler<AsylumCase> {
 
     private final String fileExtension;
@@ -94,6 +96,7 @@ public class InternalEndAppealDetWithAttachmentBundleHandler implements PreSubmi
                 qualifiedDocumentFileName
         );
 
+        log.info("------------------InternalEndAppealLetterWithAttachmentBundleHandler");
         documentHandler.addWithMetadataWithoutReplacingExistingDocuments(
                 asylumCase,
                 internalEndAppealLetterBundle,
