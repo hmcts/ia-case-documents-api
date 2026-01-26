@@ -1,6 +1,5 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.controllers;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -11,7 +10,6 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import javax.validation.constraints.NotNull;
 
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -30,7 +28,6 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.AsylumPreSubmitCall
     produces = MediaType.APPLICATION_JSON_VALUE
 )
 @RestController
-@Slf4j
 public class AsylumPreSubmitCallbackController extends PreSubmitCallbackController<AsylumCase> {
 
     private final ObjectMapper objectMapper;
@@ -114,21 +111,6 @@ public class AsylumPreSubmitCallbackController extends PreSubmitCallbackControll
     public ResponseEntity<PreSubmitCallbackResponse<AsylumCase>> ccdAboutToSubmit(
         @Parameter(name = "Asylum case data", required = true) @NotNull @RequestBody Callback<AsylumCase> callback
     ) {
-        log.info("---------ccdAboutToSubmit");
-        ResponseEntity<PreSubmitCallbackResponse<AsylumCase>> preSubmitCallbackResponseResponseEntity = super.ccdAboutToSubmit(callback);
-        PreSubmitCallbackResponse<AsylumCase> response = preSubmitCallbackResponseResponseEntity.getBody();
-        try {
-            String json = objectMapper.writeValueAsString(response);
-            log.info("---------111:\n{}", json);
-            PreSubmitCallbackResponse<AsylumCase> resp = objectMapper.readValue(json, PreSubmitCallbackResponse.class);
-            return ResponseEntity.ok()
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .body(resp);
-        } catch (JsonProcessingException ex) {
-            log.info("---------222");
-            log.error("--------222 ", ex);
-            return preSubmitCallbackResponseResponseEntity;
-        }
-        //return super.ccdAboutToSubmit(callback);
+        return super.ccdAboutToSubmit(callback);
     }
 }
