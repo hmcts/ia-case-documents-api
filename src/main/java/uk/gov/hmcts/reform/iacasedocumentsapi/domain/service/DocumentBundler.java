@@ -23,6 +23,7 @@ public interface DocumentBundler {
         List<DocumentWithMetadata> documents,
         String bundleTitle,
         String bundleFilename,
-        Event event
+        Event event,
+        Long caseId
     );
 }

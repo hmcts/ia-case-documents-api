@@ -95,7 +95,8 @@ public class InternalCaseListedLegalRepLetterBundler implements PreSubmitCallbac
             bundleDocuments,
             "Letter bundle documents",
             qualifiedDocumentFileName,
-            LIST_CASE
+            LIST_CASE,
+            caseId
         );
         log.info("InternalCaseListedLegalRepLetterBundler: Bundle created with documentUrl={} for caseId={}",
             internalCaseListedLetterBundle.getDocumentUrl(), caseId);

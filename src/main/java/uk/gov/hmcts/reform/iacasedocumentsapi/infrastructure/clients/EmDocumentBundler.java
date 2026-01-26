@@ -136,18 +136,20 @@ public class EmDocumentBundler implements DocumentBundler {
         List<DocumentWithMetadata> documents,
         String bundleTitle,
         String bundleFilename,
-        Event event
+        Event event,
+        Long caseId
     ) {
         log.info("EmDocumentBundler.asyncBundleWithoutContentsOrCoverSheetsForEvent: Starting async bundle creation, " +
             "documentsCount={}, bundleTitle={}, bundleFilename={}, event={}, endpoint={}",
             documents.size(), bundleTitle, bundleFilename, event, asyncEmBundlerStitchUri);
 
         Callback<BundleCaseData> payload =
-            createBundlePayloadWithoutContentsOrCoverSheets(
+            asyncCreateBundlePayloadWithoutContentsOrCoverSheets(
                 documents,
                 bundleTitle,
                 bundleFilename,
-                event
+                event,
+                caseId
             );
         log.info("EmDocumentBundler.asyncBundleWithoutContentsOrCoverSheetsForEvent: Payload created for bundleFilename={}", bundleFilename);
 
@@ -275,6 +277,71 @@ public class EmDocumentBundler implements DocumentBundler {
             new Callback<>(
                 new CaseDetails<>(
                     1L,
+                    "IA",
+                    State.UNKNOWN,
+                    new BundleCaseData(
+                        Collections.singletonList(
+                            new IdValue<>(
+                                "1",
+                                new Bundle(
+                                    "1",
+                                    bundleTitle,
+                                    "",
+                                    "yes",
+                                    bundleDocuments,
+                                    YesOrNo.NO,
+                                    YesOrNo.NO,
+                                    bundleFilename
+                                )
+                            )
+                        )
+                    ),
+                    dateProvider.nowWithTime()
+                ),
+                Optional.empty(),
+                event
+            );
+    }
+
+    private Callback<BundleCaseData> asyncCreateBundlePayloadWithoutContentsOrCoverSheets(
+        List<DocumentWithMetadata> documents,
+        String bundleTitle,
+        String bundleFilename,
+        Event event,
+        Long caseId
+    ) {
+        log.info("EmDocumentBundler.createBundlePayloadWithoutContentsOrCoverSheets: Creating payload, " +
+                "documentsCount={}, bundleTitle={}, bundleFilename={}, event={}",
+            documents.size(), bundleTitle, bundleFilename, event);
+
+        List<IdValue<BundleDocument>> bundleDocuments = new ArrayList<>();
+
+        for (int i = 0; i < documents.size(); i++) {
+
+            DocumentWithMetadata caseDocument = documents.get(i);
+            String documentFilename = caseDocument.getDocument().getDocumentFilename();
+            log.info("EmDocumentBundler.createBundlePayloadWithoutContentsOrCoverSheets: Adding document index={}, filename={}, tag={}",
+                i, documentFilename, caseDocument.getTag());
+
+            bundleDocuments.add(
+                new IdValue<>(
+                    String.valueOf(i),
+                    new BundleDocument(
+                        documentFilename,
+                        caseDocument.getDescription(),
+                        i,
+                        caseDocument.getDocument()
+                    )
+                )
+            );
+        }
+
+        log.info("EmDocumentBundler.createBundlePayloadWithoutContentsOrCoverSheets: Bundle documents prepared, count={}", bundleDocuments.size());
+
+        return
+            new Callback<>(
+                new CaseDetails<>(
+                    caseId,
                     "IA",
                     State.UNKNOWN,
                     new BundleCaseData(
