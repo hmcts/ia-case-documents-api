@@ -5,11 +5,13 @@ import static java.util.Objects.requireNonNull;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DocumentTag;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DocumentWithMetadata;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.IdValue;
 
+@Slf4j
 @Service
 public class DocumentsAppender {
 
@@ -40,6 +42,9 @@ public class DocumentsAppender {
         requireNonNull(existingDocuments, "existingDocuments must not be null");
         requireNonNull(newDocuments, "newDocuments must not be null");
 
+        log.info("DocumentsAppender.append: Appending documents, existingCount={}, newCount={}",
+            existingDocuments.size(), newDocuments.size());
+
         final List<IdValue<DocumentWithMetadata>> allDocuments = new ArrayList<>();
 
         int index = existingDocuments.size() + newDocuments.size();
@@ -51,6 +56,8 @@ public class DocumentsAppender {
         for (IdValue<DocumentWithMetadata> existingDocument : existingDocuments) {
             allDocuments.add(new IdValue<>(String.valueOf(index--), existingDocument.getValue()));
         }
+
+        log.info("DocumentsAppender.append: Appending complete, totalCount={}", allDocuments.size());
 
         return allDocuments;
     }

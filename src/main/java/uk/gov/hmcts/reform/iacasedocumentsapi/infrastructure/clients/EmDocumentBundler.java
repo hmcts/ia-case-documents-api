@@ -138,8 +138,9 @@ public class EmDocumentBundler implements DocumentBundler {
         String bundleFilename,
         Event event
     ) {
-
-        log.info("**** bundling using endpoint: " + asyncEmBundlerStitchUri + " *****");
+        log.info("EmDocumentBundler.asyncBundleWithoutContentsOrCoverSheetsForEvent: Starting async bundle creation, " +
+            "documentsCount={}, bundleTitle={}, bundleFilename={}, event={}, endpoint={}",
+            documents.size(), bundleTitle, bundleFilename, event, asyncEmBundlerStitchUri);
 
         Callback<BundleCaseData> payload =
             createBundlePayloadWithoutContentsOrCoverSheets(
@@ -148,12 +149,17 @@ public class EmDocumentBundler implements DocumentBundler {
                 bundleFilename,
                 event
             );
+        log.info("EmDocumentBundler.asyncBundleWithoutContentsOrCoverSheetsForEvent: Payload created for bundleFilename={}", bundleFilename);
+
+        String fullEndpoint = emBundlerUrl + asyncEmBundlerStitchUri;
+        log.info("EmDocumentBundler.asyncBundleWithoutContentsOrCoverSheetsForEvent: Calling bundleRequestExecutor.post with endpoint={}", fullEndpoint);
 
         PreSubmitCallbackResponse<BundleCaseData> response =
             bundleRequestExecutor.post(
                 payload,
-                emBundlerUrl + asyncEmBundlerStitchUri
+                fullEndpoint
             );
+        log.info("EmDocumentBundler.asyncBundleWithoutContentsOrCoverSheetsForEvent: Received response for bundleFilename={}", bundleFilename);
 
         Document bundle =
             response
@@ -165,6 +171,9 @@ public class EmDocumentBundler implements DocumentBundler {
                 .getValue()
                 .getStitchedDocument()
                 .orElseThrow(() -> new DocumentStitchingErrorResponseException("Stitched document was not created", response));
+
+        log.info("EmDocumentBundler.asyncBundleWithoutContentsOrCoverSheetsForEvent: Stitched document created, " +
+            "documentUrl={}, bundleFilename={}", bundle.getDocumentUrl(), bundleFilename);
 
         // rename the bundle file name
         return new Document(
@@ -234,18 +243,24 @@ public class EmDocumentBundler implements DocumentBundler {
         String bundleFilename,
         Event event
     ) {
+        log.info("EmDocumentBundler.createBundlePayloadWithoutContentsOrCoverSheets: Creating payload, " +
+            "documentsCount={}, bundleTitle={}, bundleFilename={}, event={}",
+            documents.size(), bundleTitle, bundleFilename, event);
 
         List<IdValue<BundleDocument>> bundleDocuments = new ArrayList<>();
 
         for (int i = 0; i < documents.size(); i++) {
 
             DocumentWithMetadata caseDocument = documents.get(i);
+            String documentFilename = caseDocument.getDocument().getDocumentFilename();
+            log.info("EmDocumentBundler.createBundlePayloadWithoutContentsOrCoverSheets: Adding document index={}, filename={}, tag={}",
+                i, documentFilename, caseDocument.getTag());
 
             bundleDocuments.add(
                 new IdValue<>(
                     String.valueOf(i),
                     new BundleDocument(
-                        caseDocument.getDocument().getDocumentFilename(),
+                        documentFilename,
                         caseDocument.getDescription(),
                         i,
                         caseDocument.getDocument()
@@ -253,6 +268,8 @@ public class EmDocumentBundler implements DocumentBundler {
                 )
             );
         }
+
+        log.info("EmDocumentBundler.createBundlePayloadWithoutContentsOrCoverSheets: Bundle documents prepared, count={}", bundleDocuments.size());
 
         return
             new Callback<>(
