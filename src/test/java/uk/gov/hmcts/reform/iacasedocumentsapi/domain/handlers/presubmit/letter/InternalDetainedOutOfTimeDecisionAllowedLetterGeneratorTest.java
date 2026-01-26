@@ -106,7 +106,7 @@ class InternalDetainedOutOfTimeDecisionAllowedLetterGeneratorTest {
                 eq("Letter bundle documents"),
                 eq("qualified-filename.pdf")
         ))
-        .thenReturn(bundledDocument);
+            .thenReturn(bundledDocument);
 
         // Mock decision of notice document
         when(asylumCase.read(OUT_OF_TIME_DECISION_DOCUMENT)).thenReturn(Optional.of(uploadedDocument));
