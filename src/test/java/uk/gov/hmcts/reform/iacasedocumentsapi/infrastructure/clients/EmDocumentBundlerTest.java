@@ -317,6 +317,7 @@ public class EmDocumentBundlerTest {
         String bundleTitle = "some-bundle-title";
         String bundleFilename = "some-bundle-filename";
         Event event = Event.LIST_CASE;
+        Long caseId = 12345L;
 
         when(docMeta1.getDocument()).thenReturn(doc1);
         when(docMeta1.getDescription()).thenReturn("test-desc1");
@@ -339,7 +340,8 @@ public class EmDocumentBundlerTest {
             documents,
             bundleTitle,
             bundleFilename,
-            event
+            event,
+            caseId
         );
 
         assertEquals(documentBundle.getDocumentUrl(), returnedDocument.getDocumentUrl());
@@ -373,7 +375,7 @@ public class EmDocumentBundlerTest {
         assertEquals(caseDataCallback.getEvent(), event);
         assertEquals(caseDataCallback.getCaseDetails().getState(), State.UNKNOWN);
         assertEquals(caseDataCallback.getCaseDetails().getJurisdiction(), "IA");
-        assertEquals(caseDataCallback.getCaseDetails().getId(), 1L);
+        assertEquals(caseDataCallback.getCaseDetails().getId(), caseId);
         assertEquals(caseDataCallback.getCaseDetails().getCaseData().getCaseBundles().size(), 1);
         assertEquals(caseDataCallback.getCaseDetails().getCaseData().getCaseBundles().get(0).getId(), "1");
         assertThat(caseDataCallback.getCaseDetails().getCaseData().getCaseBundles().get(0).getValue())
@@ -393,6 +395,7 @@ public class EmDocumentBundlerTest {
         String bundleTitle = "some-bundle-title";
         String bundleFilename = "some-bundle-filename";
         Event event = Event.LIST_CASE;
+        Long caseId = 12345L;
 
         when(docMeta1.getDocument()).thenReturn(doc1);
         when(docMeta1.getDescription()).thenReturn("test-desc1");
@@ -414,7 +417,8 @@ public class EmDocumentBundlerTest {
             documents,
             bundleTitle,
             bundleFilename,
-            event
+            event,
+            caseId
         ))
             .isInstanceOf(DocumentServiceResponseException.class)
             .hasMessage("Bundle was not created")
@@ -437,6 +441,7 @@ public class EmDocumentBundlerTest {
         String bundleTitle = "some-bundle-title";
         String bundleFilename = "some-bundle-filename";
         Event event = Event.LIST_CASE;
+        Long caseId = 12345L;
 
         when(docMeta1.getDocument()).thenReturn(doc1);
         when(docMeta1.getDescription()).thenReturn("test-desc1");
@@ -459,7 +464,8 @@ public class EmDocumentBundlerTest {
             documents,
             bundleTitle,
             bundleFilename,
-            event
+            event,
+            caseId
         ))
             .isInstanceOf(DocumentServiceResponseException.class)
             .hasMessage("Stitched document was not created")

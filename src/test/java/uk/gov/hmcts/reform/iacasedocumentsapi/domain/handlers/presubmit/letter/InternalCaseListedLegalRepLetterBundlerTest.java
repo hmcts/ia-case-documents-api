@@ -156,7 +156,8 @@ class InternalCaseListedLegalRepLetterBundlerTest {
             anyList(),
             eq("Letter bundle documents"),
             eq("filename"),
-            eq(Event.LIST_CASE)
+            eq(Event.LIST_CASE),
+            anyLong()
         )).thenReturn(bundleDocument);
 
         PreSubmitCallbackResponse<AsylumCase> response = internalCaseListedLetterHandler.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
