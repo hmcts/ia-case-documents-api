@@ -7,7 +7,6 @@ import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DetentionFa
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.JourneyType.AIP;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.*;
 
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
@@ -23,9 +22,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.PreSubmitCallbackH
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentCreator;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentHandler;
 
-
 @Component
-@Slf4j
 public class EndAppealNoticeCreator implements PreSubmitCallbackHandler<AsylumCase> {
 
     private final DocumentCreator<AsylumCase> endAppealNoticeDocumentCreator;
@@ -75,10 +72,6 @@ public class EndAppealNoticeCreator implements PreSubmitCallbackHandler<AsylumCa
         } else {
             endAppealNotice = endAppealNoticeDocumentCreator.create(caseDetails);
         }
-
-        log.info("------------url: {}", endAppealNotice.getDocumentUrl());
-        log.info("------------binary: {}", endAppealNotice.getDocumentBinaryUrl());
-        log.info("------------name: {}", endAppealNotice.getDocumentFilename());
 
         documentHandler.addWithMetadataWithoutReplacingExistingDocuments(
             asylumCase,

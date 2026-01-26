@@ -7,12 +7,15 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
+import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.DateProvider;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DocumentTag;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DocumentWithMetadata;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseDetails;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.Event;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.Callback;
@@ -25,6 +28,8 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentCreator;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentHandler;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.FileNameQualifier;
 
+import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
@@ -34,8 +39,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.ArgumentMatchers.anyList;
-import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -69,6 +74,8 @@ class InternalDetainedOutOfTimeDecisionAllowedLetterGeneratorTest {
     private Document uploadedDocument;
     @Mock
     private Document bundledDocument;
+    @Mock
+    private DateProvider dateProvider;
 
     private InternalDetainedOutOfTimeDecisionAllowedLetterGenerator letterGenerator;
 
@@ -80,7 +87,8 @@ class InternalDetainedOutOfTimeDecisionAllowedLetterGeneratorTest {
                 documentCreator,
                 documentHandler,
                 documentBundler,
-                fileNameQualifier
+                fileNameQualifier,
+                dateProvider
         );
     }
 
@@ -93,17 +101,34 @@ class InternalDetainedOutOfTimeDecisionAllowedLetterGeneratorTest {
         setUpValidCase();
         when(documentCreator.create(caseDetails)).thenReturn(uploadedDocument);
         when(fileNameQualifier.get("test-file.pdf", caseDetails)).thenReturn("qualified-filename.pdf");
-        when(documentBundler.bundleWithoutContentsOrCoverSheets(anyList(), eq("Letter bundle documents"), eq("qualified-filename.pdf")))
-                .thenReturn(bundledDocument);
+        when(documentBundler.bundleWithoutContentsOrCoverSheets(
+                anyList(),
+                eq("Letter bundle documents"),
+                eq("qualified-filename.pdf")
+        ))
+        .thenReturn(bundledDocument);
 
         // Mock decision of notice document
         when(asylumCase.read(OUT_OF_TIME_DECISION_DOCUMENT)).thenReturn(Optional.of(uploadedDocument));
+
+        when(dateProvider.now()).thenReturn(LocalDate.of(2026, 1, 25));
 
         PreSubmitCallbackResponse<AsylumCase> callbackResponse =
                 letterGenerator.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
 
         assertNotNull(callbackResponse);
         assertEquals(asylumCase, callbackResponse.getData());
+
+        ArgumentCaptor<List<DocumentWithMetadata>> captor = ArgumentCaptor.forClass(List.class);
+        verify(documentBundler).bundleWithoutContentsOrCoverSheets(
+                captor.capture(),
+                anyString(),
+                anyString()
+        );
+        List<DocumentWithMetadata> bundleDocuments = captor.getValue();
+        assertEquals(bundleDocuments.size(), 2);
+        DocumentWithMetadata bundleDocument = bundleDocuments.get(0);
+        assertEquals("2026-01-25", bundleDocument.getDateUploaded());
 
         verify(documentHandler, times(1)).addWithMetadataWithoutReplacingExistingDocuments(
                 asylumCase,
@@ -128,11 +153,24 @@ class InternalDetainedOutOfTimeDecisionAllowedLetterGeneratorTest {
         // Mock decision of notice document
         when(asylumCase.read(OUT_OF_TIME_DECISION_DOCUMENT)).thenReturn(Optional.of(uploadedDocument));
 
+        when(dateProvider.now()).thenReturn(LocalDate.of(2026, 1, 25));
+
         PreSubmitCallbackResponse<AsylumCase> callbackResponse =
                 letterGenerator.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
 
         assertNotNull(callbackResponse);
         assertEquals(asylumCase, callbackResponse.getData());
+
+        ArgumentCaptor<List<DocumentWithMetadata>> captor = ArgumentCaptor.forClass(List.class);
+        verify(documentBundler).bundleWithoutContentsOrCoverSheets(
+                captor.capture(),
+                anyString(),
+                anyString()
+        );
+        List<DocumentWithMetadata> bundleDocuments = captor.getValue();
+        assertEquals(bundleDocuments.size(), 2);
+        DocumentWithMetadata bundleDocument = bundleDocuments.get(0);
+        assertEquals("2026-01-25", bundleDocument.getDateUploaded());
 
         verify(documentHandler, times(1)).addWithMetadataWithoutReplacingExistingDocuments(
                 asylumCase,
@@ -157,11 +195,24 @@ class InternalDetainedOutOfTimeDecisionAllowedLetterGeneratorTest {
         // Mock missing decision of notice document
         when(asylumCase.read(OUT_OF_TIME_DECISION_DOCUMENT)).thenReturn(Optional.empty());
 
+        when(dateProvider.now()).thenReturn(LocalDate.of(2026, 1, 25));
+
         PreSubmitCallbackResponse<AsylumCase> callbackResponse =
                 letterGenerator.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
 
         assertNotNull(callbackResponse);
         assertEquals(asylumCase, callbackResponse.getData());
+
+        ArgumentCaptor<List<DocumentWithMetadata>> captor = ArgumentCaptor.forClass(List.class);
+        verify(documentBundler).bundleWithoutContentsOrCoverSheets(
+                captor.capture(),
+                anyString(),
+                anyString()
+        );
+        List<DocumentWithMetadata> bundleDocuments = captor.getValue();
+        assertEquals(bundleDocuments.size(), 1);
+        DocumentWithMetadata bundleDocument = bundleDocuments.get(0);
+        assertEquals("2026-01-25", bundleDocument.getDateUploaded());
 
         verify(documentHandler, times(1)).addWithMetadataWithoutReplacingExistingDocuments(
                 asylumCase,

@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.DateProvider;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DocumentTag;
@@ -15,7 +14,6 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DocumentWithMetada
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.Document;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.IdValue;
 
-@Slf4j
 @Service
 public class DocumentReceiver {
 
@@ -37,7 +35,6 @@ public class DocumentReceiver {
         requireNonNull(tag, "tag must not be null");
 
         final String dateUploaded = dateProvider.now().toString();
-        log.info("-----------dateUploaded: {}", dateUploaded);
 
         return new DocumentWithMetadata(
             document,
