@@ -33,8 +33,11 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.AsylumPreSubmitCall
 @Slf4j
 public class AsylumPreSubmitCallbackController extends PreSubmitCallbackController<AsylumCase> {
 
-    public AsylumPreSubmitCallbackController(AsylumPreSubmitCallbackDispatcher callbackDispatcher) {
+    private final ObjectMapper objectMapper;
+
+    public AsylumPreSubmitCallbackController(AsylumPreSubmitCallbackDispatcher callbackDispatcher, ObjectMapper objectMapper) {
         super(callbackDispatcher);
+        this.objectMapper = objectMapper;
     }
 
     @Operation(
@@ -115,11 +118,12 @@ public class AsylumPreSubmitCallbackController extends PreSubmitCallbackControll
         ResponseEntity<PreSubmitCallbackResponse<AsylumCase>> preSubmitCallbackResponseResponseEntity = super.ccdAboutToSubmit(callback);
         PreSubmitCallbackResponse<AsylumCase> response = preSubmitCallbackResponseResponseEntity.getBody();
         try {
-            ObjectMapper objectMapper = new ObjectMapper();
+            log.info("--------000");
             String json = objectMapper.writeValueAsString(response);
-            log.error("--------111 ", json);
+            log.info("--------111 ", json);
             return preSubmitCallbackResponseResponseEntity;
         } catch (JsonProcessingException ex) {
+            log.error("-----222", ex);
             return preSubmitCallbackResponseResponseEntity;
         }
         // return super.ccdAboutToSubmit(callback);

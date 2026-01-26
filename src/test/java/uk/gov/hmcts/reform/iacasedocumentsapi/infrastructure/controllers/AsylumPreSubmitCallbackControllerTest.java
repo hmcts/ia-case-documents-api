@@ -4,6 +4,8 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.*;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -24,6 +26,7 @@ public class AsylumPreSubmitCallbackControllerTest {
     @Mock private PreSubmitCallbackResponse<AsylumCase> callbackResponse;
     @Mock private Callback<AsylumCase> callback;
     @Mock private CaseDetails<AsylumCase> caseDetails;
+    @Mock private ObjectMapper objectMapper;
 
     private AsylumPreSubmitCallbackController asylumPreSubmitCallbackController;
 
@@ -31,7 +34,8 @@ public class AsylumPreSubmitCallbackControllerTest {
     public void setUp() {
         asylumPreSubmitCallbackController =
             new AsylumPreSubmitCallbackController(
-                callbackDispatcher
+                callbackDispatcher,
+                objectMapper
             );
     }
 
@@ -56,13 +60,38 @@ public class AsylumPreSubmitCallbackControllerTest {
     }
 
     @Test
-    public void should_dispatch_about_to_submit_callback_then_return_response() {
+    public void should_dispatch_about_to_submit_callback_then_return_response() throws JsonProcessingException {
 
         when(callback.getCaseDetails()).thenReturn(caseDetails);
 
         doReturn(callbackResponse)
             .when(callbackDispatcher)
             .handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
+
+        when(objectMapper.writeValueAsString(any())).thenReturn("{}");
+
+        ResponseEntity<PreSubmitCallbackResponse<AsylumCase>> actualResponse =
+            asylumPreSubmitCallbackController.ccdAboutToSubmit(callback);
+
+        assertNotNull(actualResponse);
+
+        verify(callbackDispatcher, times(1)).handle(
+            PreSubmitCallbackStage.ABOUT_TO_SUBMIT,
+            callback
+        );
+    }
+
+    @Test
+    public void should_dispatch_about_to_submit_callback_then_return_response_with_ex() throws JsonProcessingException {
+
+        when(callback.getCaseDetails()).thenReturn(caseDetails);
+
+        doReturn(callbackResponse)
+            .when(callbackDispatcher)
+            .handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
+
+        JsonProcessingException ex = mock(JsonProcessingException.class);
+        when(objectMapper.writeValueAsString(any())).thenThrow(ex);
 
         ResponseEntity<PreSubmitCallbackResponse<AsylumCase>> actualResponse =
             asylumPreSubmitCallbackController.ccdAboutToSubmit(callback);
@@ -78,7 +107,7 @@ public class AsylumPreSubmitCallbackControllerTest {
     @Test
     public void should_not_allow_null_constructor_arguments() {
 
-        assertThatThrownBy(() -> new AsylumPreSubmitCallbackController(null
+        assertThatThrownBy(() -> new AsylumPreSubmitCallbackController(null, objectMapper
         ))
             .hasMessage("callbackDispatcher must not be null")
             .isExactlyInstanceOf(NullPointerException.class);
