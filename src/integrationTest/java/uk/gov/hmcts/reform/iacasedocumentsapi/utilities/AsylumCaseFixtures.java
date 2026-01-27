@@ -120,7 +120,7 @@ public class AsylumCaseFixtures {
                 +
                 "        \"originalDocumentName\": \"some-appeal-reference-number-some-fname-decision-and-reasons-draft.docx\",\n"
                 +
-                "        \"links\": {\n"
+                "        \"_links\": {\n"
                 +
                 "          \"self\": {\n"
                 +
