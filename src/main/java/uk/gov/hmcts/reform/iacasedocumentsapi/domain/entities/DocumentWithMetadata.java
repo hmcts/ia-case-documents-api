@@ -2,6 +2,7 @@ package uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities;
 
 import static java.util.Objects.requireNonNull;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -84,8 +85,8 @@ public class DocumentWithMetadata implements HasDocument {
         return document;
     }
 
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     public String getDateUploaded() {
-        requireNonNull(dateUploaded);
         return dateUploaded;
     }
 
