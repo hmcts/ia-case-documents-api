@@ -7,6 +7,8 @@ import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtil
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.hasBeenSubmittedAsLegalRepresentedInternalCase;
 
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
@@ -82,20 +84,37 @@ public class InternalCaseListedLegalRepLetterBundler implements PreSubmitCallbac
 
         final String qualifiedDocumentFileName = fileNameQualifier.get(fileName + "." + fileExtension, caseDetails);
 
-        List<DocumentWithMetadata> bundleDocuments = getMaybeLetterNotificationDocuments(asylumCase, DocumentTag.INTERNAL_CASE_LISTED_LR_LETTER);
+        List<DocumentWithMetadata> bundleDocuments = getMaybeLetterNotificationDocuments(asylumCase, DocumentTag.INTERNAL_CASE_LISTED_LETTER);
+        CompletableFuture<Document> appellantLrBundleFuture = CompletableFuture.supplyAsync(() -> documentBundler.bundleWithoutContentsOrCoverSheets(
+                bundleDocuments,
+                "Letter bundle documents",
+                qualifiedDocumentFileName
+        ));
 
-        Document internalCaseListedLetterBundle = documentBundler.bundleWithoutContentsOrCoverSheets(
-            bundleDocuments,
-            "Letter bundle documents",
-            qualifiedDocumentFileName
-        );
+        List<DocumentWithMetadata> bundleDocumentsLR = getMaybeLetterNotificationDocuments(asylumCase, DocumentTag.INTERNAL_CASE_LISTED_LR_LETTER);
+        CompletableFuture<Document> legalRepLrBundleFuture = CompletableFuture.supplyAsync(() -> documentBundler.bundleWithoutContentsOrCoverSheets(
+                bundleDocumentsLR,
+                "Letter bundle documents",
+                qualifiedDocumentFileName
+        ));
 
-        documentHandler.addWithMetadataWithoutReplacingExistingDocuments(
-            asylumCase,
-            internalCaseListedLetterBundle,
-            LETTER_BUNDLE_DOCUMENTS,
-            DocumentTag.INTERNAL_CASE_LISTED_LR_LETTER_BUNDLE
-        );
+        CompletableFuture<Void> combinedFuture = CompletableFuture.allOf(appellantLrBundleFuture, legalRepLrBundleFuture);
+
+        combinedFuture.thenRun(() -> {
+            documentHandler.addWithMetadataWithoutReplacingExistingDocuments(
+                    asylumCase,
+                    appellantLrBundleFuture.join(),
+                    LETTER_BUNDLE_DOCUMENTS,
+                    DocumentTag.INTERNAL_CASE_LISTED_LETTER_BUNDLE
+            );
+
+            documentHandler.addWithMetadataWithoutReplacingExistingDocuments(
+                    asylumCase,
+                    legalRepLrBundleFuture.join(),
+                    LETTER_BUNDLE_DOCUMENTS,
+                    DocumentTag.INTERNAL_CASE_LISTED_LR_LETTER_BUNDLE
+            );
+        });
 
         return new PreSubmitCallbackResponse<>(asylumCase);
     }

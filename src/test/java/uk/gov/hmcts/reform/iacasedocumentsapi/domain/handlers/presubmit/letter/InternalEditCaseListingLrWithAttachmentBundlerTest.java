@@ -5,13 +5,10 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.mockito.Mockito.anyList;
-import static org.mockito.Mockito.anyString;
-import static org.mockito.Mockito.eq;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.*;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DocumentTag.*;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DocumentTag.INTERNAL_EDIT_CASE_LISTING_LR_LETTER_BUNDLE;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.DispatchPriority.LATE;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.PreSubmitCallbackStage.ABOUT_TO_START;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.PreSubmitCallbackStage.ABOUT_TO_SUBMIT;
@@ -67,6 +64,7 @@ public class InternalEditCaseListingLrWithAttachmentBundlerTest {
     private DocumentHandler documentHandler;
     @Mock
     private Document bundleDocument;
+
     private String fileExtension = "PDF";
     private String fileName = "some-file-name";
 
@@ -157,10 +155,13 @@ public class InternalEditCaseListingLrWithAttachmentBundlerTest {
         when(asylumCase.read(APPELLANTS_REPRESENTATION, YesOrNo.class)).thenReturn(Optional.of(NO));
         when(fileNameQualifier.get(anyString(), eq(caseDetails))).thenReturn("filename");
 
-        IdValue<DocumentWithMetadata> doc1 = new IdValue<>("1", createDocumentWithMetadata());
-        IdValue<DocumentWithMetadata> doc2 = new IdValue<>("2", createDocumentWithMetadata());
+        IdValue<DocumentWithMetadata> docID1 = new IdValue<>("1", createDocumentWithMetadata(INTERNAL_EDIT_CASE_LISTING_LETTER));
+        IdValue<DocumentWithMetadata> docID2 = new IdValue<>("2", createDocumentWithMetadata(INTERNAL_EDIT_CASE_LISTING_LETTER));
+        IdValue<DocumentWithMetadata> docID3 = new IdValue<>("3", createDocumentWithMetadata(INTERNAL_EDIT_CASE_LISTING_LR_LETTER));
+        IdValue<DocumentWithMetadata> docID4 = new IdValue<>("4", createDocumentWithMetadata(INTERNAL_EDIT_CASE_LISTING_LR_LETTER));
 
-        when(asylumCase.read(LETTER_NOTIFICATION_DOCUMENTS)).thenReturn(Optional.of(List.of(doc1, doc2)));
+        when(asylumCase.read(LETTER_NOTIFICATION_DOCUMENTS)).thenReturn(Optional.of(List.of(docID1, docID2, docID3, docID4)));
+
         when(documentBundler.bundleWithoutContentsOrCoverSheets(
                 anyList(),
                 eq("Letter bundle documents"),
@@ -171,8 +172,11 @@ public class InternalEditCaseListingLrWithAttachmentBundlerTest {
 
         assertNotNull(response);
         assertEquals(asylumCase, response.getData());
-        verify(documentHandler, times(1)).addWithMetadataWithoutReplacingExistingDocuments(
-                asylumCase, bundleDocument, LETTER_BUNDLE_DOCUMENTS, DocumentTag.INTERNAL_EDIT_CASE_LISTING_LR_LETTER_BUNDLE
+        verify(documentHandler, timeout(1000)).addWithMetadataWithoutReplacingExistingDocuments(
+                eq(asylumCase), any(Document.class), eq(LETTER_BUNDLE_DOCUMENTS), eq(INTERNAL_EDIT_CASE_LISTING_LETTER_BUNDLE)
+        );
+        verify(documentHandler, timeout(1000)).addWithMetadataWithoutReplacingExistingDocuments(
+                eq(asylumCase), any(Document.class), eq(LETTER_BUNDLE_DOCUMENTS), eq(INTERNAL_EDIT_CASE_LISTING_LR_LETTER_BUNDLE)
         );
     }
 
@@ -187,10 +191,13 @@ public class InternalEditCaseListingLrWithAttachmentBundlerTest {
         when(asylumCase.read(APPELLANTS_REPRESENTATION, YesOrNo.class)).thenReturn(Optional.of(NO));
         when(fileNameQualifier.get(anyString(), eq(caseDetails))).thenReturn("filename");
 
-        IdValue<DocumentWithMetadata> doc1 = new IdValue<>("1", createDocumentWithMetadata());
-        IdValue<DocumentWithMetadata> doc2 = new IdValue<>("2", createDocumentWithMetadata());
+        IdValue<DocumentWithMetadata> docID1 = new IdValue<>("1", createDocumentWithMetadata(INTERNAL_EDIT_CASE_LISTING_LETTER));
+        IdValue<DocumentWithMetadata> docID2 = new IdValue<>("2", createDocumentWithMetadata(INTERNAL_EDIT_CASE_LISTING_LETTER));
+        IdValue<DocumentWithMetadata> docID3 = new IdValue<>("3", createDocumentWithMetadata(INTERNAL_EDIT_CASE_LISTING_LR_LETTER));
+        IdValue<DocumentWithMetadata> docID4 = new IdValue<>("4", createDocumentWithMetadata(INTERNAL_EDIT_CASE_LISTING_LR_LETTER));
 
-        when(asylumCase.read(LETTER_NOTIFICATION_DOCUMENTS)).thenReturn(Optional.of(List.of(doc1, doc2)));
+        when(asylumCase.read(LETTER_NOTIFICATION_DOCUMENTS)).thenReturn(Optional.of(List.of(docID1, docID2, docID3, docID4)));
+
         when(documentBundler.bundleWithoutContentsOrCoverSheets(
                 anyList(),
                 eq("Letter bundle documents"),
@@ -201,8 +208,11 @@ public class InternalEditCaseListingLrWithAttachmentBundlerTest {
 
         assertNotNull(response);
         assertEquals(asylumCase, response.getData());
-        verify(documentHandler, times(1)).addWithMetadataWithoutReplacingExistingDocuments(
-                asylumCase, bundleDocument, LETTER_BUNDLE_DOCUMENTS, DocumentTag.INTERNAL_EDIT_CASE_LISTING_LR_LETTER_BUNDLE
+        verify(documentHandler, timeout(1000)).addWithMetadataWithoutReplacingExistingDocuments(
+                eq(asylumCase), any(Document.class), eq(LETTER_BUNDLE_DOCUMENTS), eq(INTERNAL_EDIT_CASE_LISTING_LETTER_BUNDLE)
+        );
+        verify(documentHandler, timeout(1000)).addWithMetadataWithoutReplacingExistingDocuments(
+                eq(asylumCase), any(Document.class), eq(LETTER_BUNDLE_DOCUMENTS), eq(INTERNAL_EDIT_CASE_LISTING_LR_LETTER_BUNDLE)
         );
     }
 
@@ -217,10 +227,13 @@ public class InternalEditCaseListingLrWithAttachmentBundlerTest {
         when(asylumCase.read(APPELLANTS_REPRESENTATION, YesOrNo.class)).thenReturn(Optional.of(NO));
         when(fileNameQualifier.get(anyString(), eq(caseDetails))).thenReturn("filename");
 
-        IdValue<DocumentWithMetadata> doc1 = new IdValue<>("1", createDocumentWithMetadata());
-        IdValue<DocumentWithMetadata> doc2 = new IdValue<>("2", createDocumentWithMetadata());
+        IdValue<DocumentWithMetadata> docID1 = new IdValue<>("1", createDocumentWithMetadata(INTERNAL_EDIT_CASE_LISTING_LETTER));
+        IdValue<DocumentWithMetadata> docID2 = new IdValue<>("2", createDocumentWithMetadata(INTERNAL_EDIT_CASE_LISTING_LETTER));
+        IdValue<DocumentWithMetadata> docID3 = new IdValue<>("3", createDocumentWithMetadata(INTERNAL_EDIT_CASE_LISTING_LR_LETTER));
+        IdValue<DocumentWithMetadata> docID4 = new IdValue<>("4", createDocumentWithMetadata(INTERNAL_EDIT_CASE_LISTING_LR_LETTER));
 
-        when(asylumCase.read(LETTER_NOTIFICATION_DOCUMENTS)).thenReturn(Optional.of(List.of(doc1, doc2)));
+        when(asylumCase.read(LETTER_NOTIFICATION_DOCUMENTS)).thenReturn(Optional.of(List.of(docID1, docID2, docID3, docID4)));
+
         when(documentBundler.bundleWithoutContentsOrCoverSheets(
                 anyList(),
                 eq("Letter bundle documents"),
@@ -231,8 +244,11 @@ public class InternalEditCaseListingLrWithAttachmentBundlerTest {
 
         assertNotNull(response);
         assertEquals(asylumCase, response.getData());
-        verify(documentHandler, times(1)).addWithMetadataWithoutReplacingExistingDocuments(
-                asylumCase, bundleDocument, LETTER_BUNDLE_DOCUMENTS, DocumentTag.INTERNAL_EDIT_CASE_LISTING_LR_LETTER_BUNDLE
+        verify(documentHandler, timeout(1000)).addWithMetadataWithoutReplacingExistingDocuments(
+                eq(asylumCase), any(Document.class), eq(LETTER_BUNDLE_DOCUMENTS), eq(INTERNAL_EDIT_CASE_LISTING_LETTER_BUNDLE)
+        );
+        verify(documentHandler, timeout(1000)).addWithMetadataWithoutReplacingExistingDocuments(
+                eq(asylumCase), any(Document.class), eq(LETTER_BUNDLE_DOCUMENTS), eq(INTERNAL_EDIT_CASE_LISTING_LR_LETTER_BUNDLE)
         );
     }
 
@@ -266,12 +282,12 @@ public class InternalEditCaseListingLrWithAttachmentBundlerTest {
                         RandomStringUtils.randomAlphabetic(20));
     }
 
-    private DocumentWithMetadata createDocumentWithMetadata() {
+    private DocumentWithMetadata createDocumentWithMetadata(DocumentTag documentTag) {
 
         return
                 new DocumentWithMetadata(createDocumentWithDescription(),
                         RandomStringUtils.randomAlphabetic(20),
-                        new SystemDateProvider().now().toString(), DocumentTag.INTERNAL_EDIT_CASE_LISTING_LR_LETTER_BUNDLE,"test");
+                        new SystemDateProvider().now().toString(), documentTag,"test");
 
     }
 }
