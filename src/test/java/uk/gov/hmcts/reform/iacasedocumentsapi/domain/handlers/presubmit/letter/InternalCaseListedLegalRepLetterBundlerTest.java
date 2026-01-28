@@ -168,10 +168,10 @@ class InternalCaseListedLegalRepLetterBundlerTest {
 
         assertNotNull(response);
         assertEquals(asylumCase, response.getData());
-        verify(documentHandler, timeout(1000)).addWithMetadataWithoutReplacingExistingDocuments(
+        verify(documentHandler, times(1)).addWithMetadataWithoutReplacingExistingDocuments(
             eq(asylumCase), any(Document.class), eq(LETTER_BUNDLE_DOCUMENTS), eq(DocumentTag.INTERNAL_CASE_LISTED_LETTER_BUNDLE)
         );
-        verify(documentHandler, timeout(1000)).addWithMetadataWithoutReplacingExistingDocuments(
+        verify(documentHandler, times(1)).addWithMetadataWithoutReplacingExistingDocuments(
             eq(asylumCase), any(Document.class), eq(LETTER_BUNDLE_DOCUMENTS), eq(DocumentTag.INTERNAL_CASE_LISTED_LR_LETTER_BUNDLE)
         );
     }

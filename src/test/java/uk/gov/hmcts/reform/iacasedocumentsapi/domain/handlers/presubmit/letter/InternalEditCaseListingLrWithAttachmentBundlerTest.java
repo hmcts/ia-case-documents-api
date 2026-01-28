@@ -172,10 +172,10 @@ public class InternalEditCaseListingLrWithAttachmentBundlerTest {
 
         assertNotNull(response);
         assertEquals(asylumCase, response.getData());
-        verify(documentHandler, timeout(1000)).addWithMetadataWithoutReplacingExistingDocuments(
+        verify(documentHandler, times(1)).addWithMetadataWithoutReplacingExistingDocuments(
                 eq(asylumCase), any(Document.class), eq(LETTER_BUNDLE_DOCUMENTS), eq(INTERNAL_EDIT_CASE_LISTING_LETTER_BUNDLE)
         );
-        verify(documentHandler, timeout(1000)).addWithMetadataWithoutReplacingExistingDocuments(
+        verify(documentHandler, times(1)).addWithMetadataWithoutReplacingExistingDocuments(
                 eq(asylumCase), any(Document.class), eq(LETTER_BUNDLE_DOCUMENTS), eq(INTERNAL_EDIT_CASE_LISTING_LR_LETTER_BUNDLE)
         );
     }
@@ -208,10 +208,10 @@ public class InternalEditCaseListingLrWithAttachmentBundlerTest {
 
         assertNotNull(response);
         assertEquals(asylumCase, response.getData());
-        verify(documentHandler, timeout(1000)).addWithMetadataWithoutReplacingExistingDocuments(
+        verify(documentHandler, times(1)).addWithMetadataWithoutReplacingExistingDocuments(
                 eq(asylumCase), any(Document.class), eq(LETTER_BUNDLE_DOCUMENTS), eq(INTERNAL_EDIT_CASE_LISTING_LETTER_BUNDLE)
         );
-        verify(documentHandler, timeout(1000)).addWithMetadataWithoutReplacingExistingDocuments(
+        verify(documentHandler, times(1)).addWithMetadataWithoutReplacingExistingDocuments(
                 eq(asylumCase), any(Document.class), eq(LETTER_BUNDLE_DOCUMENTS), eq(INTERNAL_EDIT_CASE_LISTING_LR_LETTER_BUNDLE)
         );
     }
@@ -244,10 +244,10 @@ public class InternalEditCaseListingLrWithAttachmentBundlerTest {
 
         assertNotNull(response);
         assertEquals(asylumCase, response.getData());
-        verify(documentHandler, timeout(1000)).addWithMetadataWithoutReplacingExistingDocuments(
+        verify(documentHandler, times(1)).addWithMetadataWithoutReplacingExistingDocuments(
                 eq(asylumCase), any(Document.class), eq(LETTER_BUNDLE_DOCUMENTS), eq(INTERNAL_EDIT_CASE_LISTING_LETTER_BUNDLE)
         );
-        verify(documentHandler, timeout(1000)).addWithMetadataWithoutReplacingExistingDocuments(
+        verify(documentHandler, times(1)).addWithMetadataWithoutReplacingExistingDocuments(
                 eq(asylumCase), any(Document.class), eq(LETTER_BUNDLE_DOCUMENTS), eq(INTERNAL_EDIT_CASE_LISTING_LR_LETTER_BUNDLE)
         );
     }
