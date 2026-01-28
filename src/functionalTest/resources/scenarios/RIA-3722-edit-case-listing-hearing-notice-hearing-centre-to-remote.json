@@ -22,6 +22,7 @@
           "customerServicesEmail": "{$customerServices.emailAddress}",
           "remoteVideoCallTribunalResponse": "Some tribunal response",
           "remoteHearing": "Remote hearing",
+            "mobileNumber": "07983000000",
           "hearingDocuments": [
             {
               "id": "2",
@@ -118,7 +119,8 @@
         "customerServicesTelephone": "{$customerServices.telephoneNumber}",
         "customerServicesEmail": "{$customerServices.emailAddress}",
         "remoteVideoCallTribunalResponse": "Some tribunal response",
-        "remoteHearing": "Remote hearing"
+        "remoteHearing": "Remote hearing",
+        "mobileNumber": "07983000000"
       }
     }
   }

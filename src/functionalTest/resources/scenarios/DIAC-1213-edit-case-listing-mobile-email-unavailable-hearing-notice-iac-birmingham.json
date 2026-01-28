@@ -1,5 +1,5 @@
 {
-  "description": "RIA-3722 edit case listing hearing notice PDF (Transfer: Remote hearing to Birmingham) - FTPA Reheard",
+  "description": "DIAC-1213 Edit Case listing Mobile Email unavailable create hearing notice PDF (IAC Birmingham)",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
     "credentials": "CaseOfficer",
@@ -9,8 +9,6 @@
       "caseData": {
         "template": "minimal-appeal-submitted.json",
         "replacements": {
-          "isReheardAppealEnabled": "Yes",
-          "caseFlagSetAsideReheardExists": "Yes",
           "listCaseHearingCentre": "birmingham",
           "listCaseHearingLength": "60",
           "listCaseHearingDate": "2018-12-31T12:34:56",
@@ -22,8 +20,17 @@
           "ariaListingReference": "AA/12345/1234",
           "customerServicesTelephone": "{$customerServices.telephoneNumber}",
           "customerServicesEmail": "{$customerServices.emailAddress}",
-          "remoteVideoCallTribunalResponse": "Some tribunal response",
-          "mobileNumber": "07983000000",
+          "appellantInUk": "Yes",
+          "appellantAddress": {
+            "County": "",
+            "Country": "United Kingdom",
+            "PostCode": "NE21JX",
+            "PostTown": "Example Town",
+            "AddressLine1": "5",
+            "AddressLine2": "Example Street"
+          },
+          "isAdmin": "No",
+          "appellantInDetention": "No",
           "hearingDocuments": [
             {
               "id": "2",
@@ -44,7 +51,7 @@
       "caseDataBefore": {
         "template": "minimal-appeal-submitted.json",
         "replacements": {
-          "listCaseHearingCentre": "remoteHearing",
+          "listCaseHearingCentre": "birmingham",
           "listCaseHearingLength": "60",
           "listCaseHearingDate": "2018-12-31T12:34:56",
           "listCaseRequirementsVulnerabilities": "something around Vulnerabilities",
@@ -55,6 +62,17 @@
           "ariaListingReference": "AA/12345/1234",
           "customerServicesTelephone": "{$customerServices.telephoneNumber}",
           "customerServicesEmail": "{$customerServices.emailAddress}",
+          "appellantInUk": "Yes",
+          "appellantAddress": {
+            "County": "",
+            "Country": "United Kingdom",
+            "PostCode": "NE21JX",
+            "PostTown": "Example Town",
+            "AddressLine1": "5",
+            "AddressLine2": "Example Street"
+          },
+          "isAdmin": "No",
+          "appellantInDetention": "No",
           "hearingDocuments": [
             {
               "id": "1",
@@ -80,33 +98,22 @@
     "caseData": {
       "template": "minimal-appeal-submitted.json",
       "replacements": {
-        "isReheardAppealEnabled": "Yes",
-        "caseFlagSetAsideReheardExists": "Yes",
-        "reheardHearingDocumentsCollection": [
-          {
-            "id": "1",
-            "value": {
-              "reheardHearingDocs": [
-                {
-                  "id": "1",
-                  "value": {
-                    "document": {
-                      "document_url": "$/http.+\/documents/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/",
-                      "document_binary_url": "$/http.+\/documents/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}\/binary/",
-                      "document_filename": "PA 11111 2019-Gonzlez-hearing-notice.PDF"
-                    },
-                    "description": "",
-                    "dateUploaded": "{$TODAY}",
-                    "tag": "reheardHearingNoticeRelisted"
-                  }
-                }
-              ]
-            }
-          }
-        ],
         "hearingDocuments": [
           {
             "id": "2",
+            "value": {
+              "document": {
+                "document_url": "$/http.+\/documents/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/",
+                "document_binary_url": "$/http.+\/documents/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}\/binary/",
+                "document_filename": "PA 11111 2019-Gonzlez-hearing-notice.PDF"
+              },
+              "description": "",
+              "dateUploaded": "{$TODAY}",
+              "tag": "hearingNoticeRelisted"
+            }
+          },
+          {
+            "id": "1",
             "value": {
               "document": {
                 "document_url": "old-hearing-notice",
@@ -130,8 +137,17 @@
         "ariaListingReference": "AA/12345/1234",
         "customerServicesTelephone": "{$customerServices.telephoneNumber}",
         "customerServicesEmail": "{$customerServices.emailAddress}",
-        "remoteVideoCallTribunalResponse": "Some tribunal response",
-        "mobileNumber": "07983000000"
+        "appellantInUk": "Yes",
+        "appellantAddress": {
+          "County": "",
+          "Country": "United Kingdom",
+          "PostCode": "NE21JX",
+          "PostTown": "Example Town",
+          "AddressLine1": "5",
+          "AddressLine2": "Example Street"
+        },
+        "isAdmin": "No",
+        "appellantInDetention": "No"
       }
     }
   }

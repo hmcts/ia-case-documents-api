@@ -18,6 +18,7 @@ import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseD
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.IS_ADMIN;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.LETTER_BUNDLE_DOCUMENTS;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.LETTER_NOTIFICATION_DOCUMENTS;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.MOBILE_NUMBER;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.DispatchPriority.LATE;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.PreSubmitCallbackStage.ABOUT_TO_START;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.PreSubmitCallbackStage.ABOUT_TO_SUBMIT;
@@ -96,6 +97,22 @@ public class InternalEditCaseListingLetterWithAttachmentBundlerTest {
         when(callback.getCaseDetails()).thenReturn(caseDetails);
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
         when(asylumCase.read(IS_ADMIN, YesOrNo.class)).thenReturn(Optional.of(YES));
+        when(asylumCase.read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(NO));
+        when(asylumCase.read(APPELLANT_HAS_FIXED_ADDRESS, YesOrNo.class)).thenReturn(Optional.of(YES));
+        when(asylumCase.read(MOBILE_NUMBER, String.class)).thenReturn(Optional.of("07983000000"));
+
+        boolean canHandle = internalEditCaseListingLetterWithAttachmentBundler.canHandle(scenario.callbackStage, callback);
+
+        assertEquals(canHandle, scenario.isExpected());
+    }
+
+    @ParameterizedTest
+    @MethodSource("generateDifferentEventScenarios")
+    public void it_can_handle_callback_admin_no_email_mobile_unavailable(InternalEditCaseListingLetterWithAttachmentBundlerTest.TestScenario scenario) {
+        when(callback.getEvent()).thenReturn(scenario.getEvent());
+        when(callback.getCaseDetails()).thenReturn(caseDetails);
+        when(caseDetails.getCaseData()).thenReturn(asylumCase);
+        when(asylumCase.read(IS_ADMIN, YesOrNo.class)).thenReturn(Optional.of(NO));
         when(asylumCase.read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(NO));
         when(asylumCase.read(APPELLANT_HAS_FIXED_ADDRESS, YesOrNo.class)).thenReturn(Optional.of(YES));
 
@@ -179,6 +196,35 @@ public class InternalEditCaseListingLetterWithAttachmentBundlerTest {
         assertEquals(asylumCase, response.getData());
         verify(documentHandler, times(1)).addWithMetadataWithoutReplacingExistingDocuments(
             asylumCase, bundleDocument, LETTER_BUNDLE_DOCUMENTS, DocumentTag.INTERNAL_EDIT_CASE_LISTING_LETTER_BUNDLE
+        );
+    }
+
+    @Test
+    void should_read_and_bundle_letter_notification_documents_admin_no_mobile_email_unavailable() {
+        when(callback.getEvent()).thenReturn(Event.EDIT_CASE_LISTING);
+        when(callback.getCaseDetails()).thenReturn(caseDetails);
+        when(caseDetails.getCaseData()).thenReturn(asylumCase);
+        when(asylumCase.read(IS_ADMIN, YesOrNo.class)).thenReturn(Optional.of(NO));
+        when(asylumCase.read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(NO));
+        when(asylumCase.read(APPELLANT_HAS_FIXED_ADDRESS, YesOrNo.class)).thenReturn(Optional.of(YES));
+        when(fileNameQualifier.get(anyString(), eq(caseDetails))).thenReturn("filename");
+
+        IdValue<DocumentWithMetadata> doc1 = new IdValue<>("1", createDocumentWithMetadata());
+        IdValue<DocumentWithMetadata> doc2 = new IdValue<>("2", createDocumentWithMetadata());
+
+        when(asylumCase.read(LETTER_NOTIFICATION_DOCUMENTS)).thenReturn(Optional.of(List.of(doc1, doc2)));
+        when(documentBundler.bundleWithoutContentsOrCoverSheets(
+                anyList(),
+                eq("Letter bundle documents"),
+                eq("filename")
+        )).thenReturn(bundleDocument);
+
+        PreSubmitCallbackResponse<AsylumCase> response = internalEditCaseListingLetterWithAttachmentBundler.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
+
+        assertNotNull(response);
+        assertEquals(asylumCase, response.getData());
+        verify(documentHandler, times(1)).addWithMetadataWithoutReplacingExistingDocuments(
+                asylumCase, bundleDocument, LETTER_BUNDLE_DOCUMENTS, DocumentTag.INTERNAL_EDIT_CASE_LISTING_LETTER_BUNDLE
         );
     }
 
