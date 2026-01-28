@@ -1,7 +1,12 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit.letter;
 
+import java.util.List;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import org.springframework.web.context.request.RequestContextHolder;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DocumentTag;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DocumentWithMetadata;
@@ -15,8 +20,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.PreSubmitCallbackH
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentBundler;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentHandler;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.FileNameQualifier;
-
-import java.util.List;
+import org.springframework.web.context.request.RequestAttributes;
 
 import static java.util.Objects.requireNonNull;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.LETTER_BUNDLE_DOCUMENTS;
@@ -24,6 +28,7 @@ import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DetentionFa
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.Event.LIST_CASE;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.*;
 
+@Slf4j
 @Component
 public class InternalCaseListedAppellantLetterBundler implements PreSubmitCallbackHandler<AsylumCase> {
 
@@ -65,9 +70,9 @@ public class InternalCaseListedAppellantLetterBundler implements PreSubmitCallba
         AsylumCase asylumCase = callback.getCaseDetails().getCaseData();
 
         return callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
-               && callback.getEvent() == LIST_CASE
-               && ((isInternalCase(asylumCase) && !isAppellantInDetention(asylumCase)) || isDetainedInFacilityType(asylumCase, OTHER))
-               && isEmStitchingEnabled;
+            && callback.getEvent() == LIST_CASE
+            && (letterNeedsBundlingForAppellant(asylumCase) || hasBeenSubmittedAsLegalRepresentedInternalCase(asylumCase))
+            && isEmStitchingEnabled;
     }
 
     public PreSubmitCallbackResponse<AsylumCase> handle(
@@ -81,23 +86,103 @@ public class InternalCaseListedAppellantLetterBundler implements PreSubmitCallba
         final CaseDetails<AsylumCase> caseDetails = callback.getCaseDetails();
         final AsylumCase asylumCase = caseDetails.getCaseData();
 
+        boolean needsLegalRepBundle = hasBeenSubmittedAsLegalRepresentedInternalCase(asylumCase);
+        boolean needsAppellantBundle = letterNeedsBundlingForAppellant(asylumCase);
+
+        log.info("InternalCaseListedAppellantLetterBundler: Starting handle, needsLegalRepBundle={}, needsAppellantBundle={}",
+            needsLegalRepBundle, needsAppellantBundle);
+
+        // Prepare all data needed for bundling before submitting async tasks
         final String qualifiedDocumentFileName = fileNameQualifier.get(fileName + "." + fileExtension, caseDetails);
+        final RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();
 
-        List<DocumentWithMetadata> bundleDocuments = getMaybeLetterNotificationDocuments(asylumCase, DocumentTag.INTERNAL_CASE_LISTED_LETTER);
+        final List<DocumentWithMetadata> legalRepBundleDocs = needsLegalRepBundle
+            ? getMaybeLetterNotificationDocuments(asylumCase, DocumentTag.INTERNAL_CASE_LISTED_LR_LETTER)
+            : null;
 
-        Document internalCaseListedLetterBundle = documentBundler.bundleWithoutContentsOrCoverSheets(
-            bundleDocuments,
-            "Letter bundle documents",
-            qualifiedDocumentFileName
-        );
+        final List<DocumentWithMetadata> appellantBundleDocs = needsAppellantBundle
+            ? getMaybeLetterNotificationDocuments(asylumCase, DocumentTag.INTERNAL_CASE_LISTED_LETTER)
+            : null;
 
-        documentHandler.addWithMetadataWithoutReplacingExistingDocuments(
-            asylumCase,
-            internalCaseListedLetterBundle,
-            LETTER_BUNDLE_DOCUMENTS,
-            DocumentTag.INTERNAL_CASE_LISTED_LETTER_BUNDLE
-        );
+        // Submit both futures together so they start at the same time
+        log.info("InternalCaseListedAppellantLetterBundler: Submitting async bundle tasks");
 
+        final CompletableFuture<Document> legalRepBundleFuture = needsLegalRepBundle
+            ? CompletableFuture.supplyAsync(() -> {
+                RequestContextHolder.setRequestAttributes(requestAttributes);
+                try {
+                    return documentBundler.bundleWithoutContentsOrCoverSheets(
+                        legalRepBundleDocs,
+                        "Letter bundle documents",
+                        qualifiedDocumentFileName
+                    );
+                } finally {
+                    RequestContextHolder.resetRequestAttributes();
+                }
+            })
+            : null;
+
+        final CompletableFuture<Document> appellantBundleFuture = needsAppellantBundle
+            ? CompletableFuture.supplyAsync(() -> {
+                RequestContextHolder.setRequestAttributes(requestAttributes);
+                try {
+                    return documentBundler.bundleWithoutContentsOrCoverSheets(
+                        appellantBundleDocs,
+                        "Letter bundle documents",
+                        qualifiedDocumentFileName
+                    );
+                } finally {
+                    RequestContextHolder.resetRequestAttributes();
+                }
+            })
+            : null;
+
+        // Wait for both operations to complete simultaneously
+        try {
+            CompletableFuture<?>[] futures = java.util.stream.Stream.of(legalRepBundleFuture, appellantBundleFuture)
+                .filter(java.util.Objects::nonNull)
+                .toArray(CompletableFuture[]::new);
+
+            if (futures.length > 0) {
+                log.info("InternalCaseListedAppellantLetterBundler: Waiting for {} bundle(s) to complete", futures.length);
+                CompletableFuture.allOf(futures).get();
+            }
+
+            // Add documents to case after both are complete
+            if (legalRepBundleFuture != null) {
+                Document internalCaseListedLetterBundle = legalRepBundleFuture.get();
+                log.info("InternalCaseListedAppellantLetterBundler: Legal rep bundle completed, adding to case");
+                documentHandler.addWithMetadataWithoutReplacingExistingDocuments(
+                    asylumCase,
+                    internalCaseListedLetterBundle,
+                    LETTER_BUNDLE_DOCUMENTS,
+                    DocumentTag.INTERNAL_CASE_LISTED_LR_LETTER_BUNDLE
+                );
+            }
+
+            if (appellantBundleFuture != null) {
+                Document internalCaseListedLetterBundle = appellantBundleFuture.get();
+                log.info("InternalCaseListedAppellantLetterBundler: Appellant bundle completed, adding to case");
+                documentHandler.addWithMetadataWithoutReplacingExistingDocuments(
+                    asylumCase,
+                    internalCaseListedLetterBundle,
+                    LETTER_BUNDLE_DOCUMENTS,
+                    DocumentTag.INTERNAL_CASE_LISTED_LETTER_BUNDLE
+                );
+            }
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            throw new IllegalStateException("Bundle creation was interrupted", e);
+        } catch (ExecutionException e) {
+            throw new IllegalStateException("Bundle creation failed", e.getCause());
+        }
+
+        log.info("InternalCaseListedAppellantLetterBundler: Handle completed successfully");
         return new PreSubmitCallbackResponse<>(asylumCase);
+    }
+
+    private static boolean letterNeedsBundlingForAppellant(AsylumCase asylumCase) {
+        return (isInternalCase(asylumCase) && !isAppellantInDetention(asylumCase))
+            || isDetainedInFacilityType(asylumCase, OTHER);
     }
 }
