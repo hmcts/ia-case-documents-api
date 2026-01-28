@@ -5,6 +5,8 @@ import java.time.ZonedDateTime;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition;
@@ -14,6 +16,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.Document
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.IdValue;
 
 @Service
+@Slf4j
 public class DocumentHandler {
 
     private final DocumentReceiver documentReceiver;
@@ -65,6 +68,8 @@ public class DocumentHandler {
                 "",
                 tag
             );
+
+        log.info("--------DocumentHandler 111: {}", documentWithMetadata.getDateUploaded());
 
         List<IdValue<DocumentWithMetadata>> allDocuments =
             documentsAppender.append(

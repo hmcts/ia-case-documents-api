@@ -2,10 +2,7 @@ package uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities;
 
 import static java.util.Objects.requireNonNull;
 
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.Document;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.HasDocument;
 
@@ -33,6 +30,7 @@ public class DocumentWithMetadata implements HasDocument {
     public DocumentWithMetadata(
         Document document,
         String description,
+        @NonNull
         String dateUploaded,
         DocumentTag tag
     ) {
@@ -42,6 +40,7 @@ public class DocumentWithMetadata implements HasDocument {
     public DocumentWithMetadata(
         Document document,
         String description,
+        @NonNull
         String dateUploaded,
         DocumentTag tag,
         String suppliedBy
@@ -52,6 +51,7 @@ public class DocumentWithMetadata implements HasDocument {
     public DocumentWithMetadata(
         Document document,
         String description,
+        @NonNull
         String dateUploaded,
         DocumentTag tag,
         String suppliedBy,
@@ -63,6 +63,7 @@ public class DocumentWithMetadata implements HasDocument {
     public DocumentWithMetadata(
         Document document,
         String description,
+        @NonNull
         String dateUploaded,
         DocumentTag tag,
         String suppliedBy,

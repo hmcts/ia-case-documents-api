@@ -1,5 +1,7 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.controllers;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -8,6 +10,8 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import javax.validation.constraints.NotNull;
+
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -26,10 +30,14 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.AsylumPreSubmitCall
     produces = MediaType.APPLICATION_JSON_VALUE
 )
 @RestController
+@Slf4j
 public class AsylumPreSubmitCallbackController extends PreSubmitCallbackController<AsylumCase> {
 
-    public AsylumPreSubmitCallbackController(AsylumPreSubmitCallbackDispatcher callbackDispatcher) {
+    private final ObjectMapper objectMapper;
+
+    public AsylumPreSubmitCallbackController(AsylumPreSubmitCallbackDispatcher callbackDispatcher, ObjectMapper objectMapper) {
         super(callbackDispatcher);
+        this.objectMapper = objectMapper;
     }
 
     @Operation(
@@ -106,6 +114,18 @@ public class AsylumPreSubmitCallbackController extends PreSubmitCallbackControll
     public ResponseEntity<PreSubmitCallbackResponse<AsylumCase>> ccdAboutToSubmit(
         @Parameter(name = "Asylum case data", required = true) @NotNull @RequestBody Callback<AsylumCase> callback
     ) {
-        return super.ccdAboutToSubmit(callback);
+        log.info("---------ccdAboutToSubmit");
+        ResponseEntity<PreSubmitCallbackResponse<AsylumCase>> preSubmitCallbackResponseResponseEntity = super.ccdAboutToSubmit(callback);
+        PreSubmitCallbackResponse<AsylumCase> response = preSubmitCallbackResponseResponseEntity.getBody();
+        try {
+            log.info("--------000");
+            String json = objectMapper.writeValueAsString(response);
+            log.info("--------111 ", json);
+            return preSubmitCallbackResponseResponseEntity;
+        } catch (JsonProcessingException ex) {
+            log.error("-----222", ex);
+            return preSubmitCallbackResponseResponseEntity;
+        }
+        // return super.ccdAboutToSubmit(callback);
     }
 }

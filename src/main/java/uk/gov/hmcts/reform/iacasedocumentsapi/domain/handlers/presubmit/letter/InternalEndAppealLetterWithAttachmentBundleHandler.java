@@ -8,6 +8,8 @@ import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.Event.E
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.*;
 
 import java.util.List;
+
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
@@ -25,6 +27,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentHandler;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.FileNameQualifier;
 
 @Component
+@Slf4j
 public class InternalEndAppealLetterWithAttachmentBundleHandler implements PreSubmitCallbackHandler<AsylumCase> {
 
     private final String fileExtension;
@@ -89,6 +92,7 @@ public class InternalEndAppealLetterWithAttachmentBundleHandler implements PreSu
 
         final String qualifiedDocumentFileName = fileNameQualifier.get(fileName + "." + fileExtension, caseDetails);
 
+        log.info("------------------InternalEndAppealLetterWithAttachmentBundleHandler");
         Document internalEndAppealLetterBundle = documentBundler.bundleWithoutContentsOrCoverSheets(
             bundleDocuments,
             "Letter bundle documents",
