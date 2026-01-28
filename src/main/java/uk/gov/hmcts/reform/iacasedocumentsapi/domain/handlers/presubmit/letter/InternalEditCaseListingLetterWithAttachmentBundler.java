@@ -66,7 +66,8 @@ public class InternalEditCaseListingLetterWithAttachmentBundler implements PreSu
         return callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
                && callback.getEvent() == EDIT_CASE_LISTING
                && isEmStitchingEnabled
-               && ((isInternalCase(asylumCase) && !isAppellantInDetention(asylumCase)) || isDetainedInFacilityType(asylumCase, OTHER));
+               && ((isInternalCase(asylumCase) && !isAppellantInDetention(asylumCase)) || isDetainedInFacilityType(asylumCase, OTHER))
+               && !hasBeenSubmittedAsLegalRepresentedInternalCase(asylumCase);
     }
 
     public PreSubmitCallbackResponse<AsylumCase> handle(

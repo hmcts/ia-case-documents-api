@@ -7,8 +7,12 @@ import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtil
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.hasBeenSubmittedAsLegalRepresentedInternalCase;
 
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import org.springframework.web.context.request.RequestAttributes;
+import org.springframework.web.context.request.RequestContextHolder;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DocumentTag;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DocumentWithMetadata;
@@ -80,22 +84,58 @@ public class InternalCaseListedLegalRepLetterBundler implements PreSubmitCallbac
         final CaseDetails<AsylumCase> caseDetails = callback.getCaseDetails();
         final AsylumCase asylumCase = caseDetails.getCaseData();
 
+        RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();
+
         final String qualifiedDocumentFileName = fileNameQualifier.get(fileName + "." + fileExtension, caseDetails);
 
-        List<DocumentWithMetadata> bundleDocuments = getMaybeLetterNotificationDocuments(asylumCase, DocumentTag.INTERNAL_CASE_LISTED_LR_LETTER);
+        List<DocumentWithMetadata> bundleDocuments = getMaybeLetterNotificationDocuments(asylumCase, DocumentTag.INTERNAL_CASE_LISTED_LETTER);
+        CompletableFuture<Document> appellantLrBundleFuture = CompletableFuture.supplyAsync(() -> {
+            try {
+                RequestContextHolder.setRequestAttributes(requestAttributes);
+                return documentBundler.bundleWithoutContentsOrCoverSheets(
+                        bundleDocuments,
+                        "Letter bundle documents",
+                        qualifiedDocumentFileName
+                );
+            } finally {
+                RequestContextHolder.resetRequestAttributes();
+            }
+        });
 
-        Document internalCaseListedLetterBundle = documentBundler.bundleWithoutContentsOrCoverSheets(
-            bundleDocuments,
-            "Letter bundle documents",
-            qualifiedDocumentFileName
-        );
+        List<DocumentWithMetadata> bundleDocumentsLR = getMaybeLetterNotificationDocuments(asylumCase, DocumentTag.INTERNAL_CASE_LISTED_LR_LETTER);
+        CompletableFuture<Document> legalRepLrBundleFuture = CompletableFuture.supplyAsync(() -> {
+            try {
+                RequestContextHolder.setRequestAttributes(requestAttributes);
+                return documentBundler.bundleWithoutContentsOrCoverSheets(
+                        bundleDocumentsLR,
+                        "Letter bundle documents",
+                        qualifiedDocumentFileName
+                );
+            } finally {
+                RequestContextHolder.resetRequestAttributes();
+            }
+        });
 
-        documentHandler.addWithMetadataWithoutReplacingExistingDocuments(
-            asylumCase,
-            internalCaseListedLetterBundle,
-            LETTER_BUNDLE_DOCUMENTS,
-            DocumentTag.INTERNAL_CASE_LISTED_LR_LETTER_BUNDLE
-        );
+        CompletableFuture.allOf(appellantLrBundleFuture, legalRepLrBundleFuture).join();
+
+        if (appellantLrBundleFuture != null) {
+            documentHandler.addWithMetadataWithoutReplacingExistingDocuments(
+                    asylumCase,
+                    appellantLrBundleFuture.join(),
+                    LETTER_BUNDLE_DOCUMENTS,
+                    DocumentTag.INTERNAL_CASE_LISTED_LETTER_BUNDLE
+            );
+        }
+
+        if (legalRepLrBundleFuture != null) {
+            documentHandler.addWithMetadataWithoutReplacingExistingDocuments(
+                    asylumCase,
+                    legalRepLrBundleFuture.join(),
+                    LETTER_BUNDLE_DOCUMENTS,
+                    DocumentTag.INTERNAL_CASE_LISTED_LR_LETTER_BUNDLE
+            );
+        }
+
 
         return new PreSubmitCallbackResponse<>(asylumCase);
     }
