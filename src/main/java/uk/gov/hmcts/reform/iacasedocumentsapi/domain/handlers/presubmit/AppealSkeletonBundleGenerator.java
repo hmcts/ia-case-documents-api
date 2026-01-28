@@ -24,6 +24,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.PreSubmitCallbackH
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentBundler;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentHandler;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.FileNameQualifier;
+import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.clients.EmDocumentBundler;
 
 @Component
 public class AppealSkeletonBundleGenerator implements PreSubmitCallbackHandler<AsylumCase> {
@@ -40,7 +41,7 @@ public class AppealSkeletonBundleGenerator implements PreSubmitCallbackHandler<A
         @Value("${appealSkeletonBundle.fileName}") String fileName,
         @Value("${featureFlag.isEmStitchingEnabled}") boolean isEmStitchingEnabled,
         FileNameQualifier<AsylumCase> fileNameQualifier,
-        DocumentBundler documentBundler,
+        EmDocumentBundler documentBundler,
         DocumentHandler documentHandler
     ) {
         this.fileExtension = fileExtension;

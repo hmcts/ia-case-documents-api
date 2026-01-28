@@ -5,6 +5,7 @@ import static java.util.Objects.requireNonNull;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.DateProvider;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DocumentTag;
@@ -13,6 +14,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DocumentWithMetada
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.Document;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.IdValue;
 
+@Slf4j
 @Service
 public class DocumentReceiver {
 
@@ -33,14 +35,20 @@ public class DocumentReceiver {
         requireNonNull(description, "description must not be null");
         requireNonNull(tag, "tag must not be null");
 
+        log.info("DocumentReceiver.receive: Creating DocumentWithMetadata, documentFilename={}, tag={}",
+            document.getDocumentFilename(), tag);
+
         final String dateUploaded = dateProvider.now().toString();
 
-        return new DocumentWithMetadata(
+        DocumentWithMetadata documentWithMetadata = new DocumentWithMetadata(
             document,
             description,
             dateUploaded,
             tag,""
         );
+        log.info("DocumentReceiver.receive: DocumentWithMetadata created, dateUploaded={}, tag={}", dateUploaded, tag);
+
+        return documentWithMetadata;
     }
 
     public Optional<DocumentWithMetadata> tryReceive(

@@ -38,13 +38,18 @@ public class BundleRequestExecutor {
         final Callback<BundleCaseData> payload,
         final String endpoint
     ) {
+        log.info("BundleRequestExecutor.post: Starting POST request to endpoint={}", endpoint);
 
         requireNonNull(payload, "payload must not be null");
         requireNonNull(endpoint, "endpoint must not be null");
 
+        log.info("BundleRequestExecutor.post: Generating service authorization token");
         final String serviceAuthorizationToken = serviceAuthTokenGenerator.generate();
+
+        log.info("BundleRequestExecutor.post: Retrieving user details");
         final UserDetails userDetails = userDetailsProvider.getUserDetails();
         final String accessToken = userDetails.getAccessToken();
+        log.info("BundleRequestExecutor.post: User details retrieved, userId={}", userDetails.getId());
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
@@ -57,6 +62,7 @@ public class BundleRequestExecutor {
         PreSubmitCallbackResponse<BundleCaseData> response;
 
         try {
+            log.info("BundleRequestExecutor.post: Executing REST exchange to endpoint={}", endpoint);
             response =
                 restTemplate
                     .exchange(
@@ -66,9 +72,11 @@ public class BundleRequestExecutor {
                         new ParameterizedTypeReference<PreSubmitCallbackResponse<BundleCaseData>>() {
                         }
                     ).getBody();
+            log.info("BundleRequestExecutor.post: REST exchange completed successfully for endpoint={}", endpoint);
 
         } catch (RestClientResponseException e) {
-
+            log.info("BundleRequestExecutor.post: REST exchange failed for endpoint={}, statusCode={}, responseBody={}",
+                endpoint, e.getRawStatusCode(), e.getResponseBodyAsString());
             throw new DocumentServiceResponseException(
                 "Couldn't create bundle using API: " + endpoint,
                 e

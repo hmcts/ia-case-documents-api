@@ -7,6 +7,7 @@ import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtil
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.hasBeenSubmittedAsLegalRepresentedInternalCase;
 
 import java.util.List;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
@@ -23,6 +24,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentBundler;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentHandler;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.FileNameQualifier;
 
+@Slf4j
 @Component
 public class InternalCaseListedLegalRepLetterBundler implements PreSubmitCallbackHandler<AsylumCase> {
 
@@ -79,16 +81,25 @@ public class InternalCaseListedLegalRepLetterBundler implements PreSubmitCallbac
 
         final CaseDetails<AsylumCase> caseDetails = callback.getCaseDetails();
         final AsylumCase asylumCase = caseDetails.getCaseData();
+        final long caseId = caseDetails.getId();
+
+        log.info("InternalCaseListedLegalRepLetterBundler: Starting handle for caseId={}, event={}", caseId, LIST_CASE);
 
         final String qualifiedDocumentFileName = fileNameQualifier.get(fileName + "." + fileExtension, caseDetails);
+        log.info("InternalCaseListedLegalRepLetterBundler: Qualified document file name={} for caseId={}", qualifiedDocumentFileName, caseId);
 
         List<DocumentWithMetadata> bundleDocuments = getMaybeLetterNotificationDocuments(asylumCase, DocumentTag.INTERNAL_CASE_LISTED_LR_LETTER);
+        log.info("InternalCaseListedLegalRepLetterBundler: Retrieved {} bundle documents for caseId={}", bundleDocuments.size(), caseId);
 
-        Document internalCaseListedLetterBundle = documentBundler.bundleWithoutContentsOrCoverSheets(
+        Document internalCaseListedLetterBundle = documentBundler.asyncBundleWithoutContentsOrCoverSheetsForEvent(
             bundleDocuments,
             "Letter bundle documents",
-            qualifiedDocumentFileName
+            qualifiedDocumentFileName,
+            LIST_CASE,
+            caseId
         );
+        log.info("InternalCaseListedLegalRepLetterBundler: Bundle created with documentUrl={} for caseId={}",
+            internalCaseListedLetterBundle.getDocumentUrl(), caseId);
 
         documentHandler.addWithMetadataWithoutReplacingExistingDocuments(
             asylumCase,
@@ -96,6 +107,8 @@ public class InternalCaseListedLegalRepLetterBundler implements PreSubmitCallbac
             LETTER_BUNDLE_DOCUMENTS,
             DocumentTag.INTERNAL_CASE_LISTED_LR_LETTER_BUNDLE
         );
+        log.info("InternalCaseListedLegalRepLetterBundler: Document added with metadata for caseId={}, documentField={}, tag={}",
+            caseId, LETTER_BUNDLE_DOCUMENTS, DocumentTag.INTERNAL_CASE_LISTED_LR_LETTER_BUNDLE);
 
         return new PreSubmitCallbackResponse<>(asylumCase);
     }

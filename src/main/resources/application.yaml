@@ -638,6 +638,7 @@ docmosis.convert.uri: ${DOCMOSIS_CONVERT_URL:/rs/convert}
 
 emBundler.url: ${EM_BUNDLER_URL:http://localhost:4623}
 emBundler.stitch.uri: ${EM_BUNDLER_STITCH_URI:/api/stitch-ccd-bundles}
+emBundler.async-stitch.uri: /api/async-stitch-ccd-bundles
 emBundler.stitch.async.uri: ${EM_BUNDLER_STITCH_ASYNC_URI:/api/new-bundle}
 
 featureFlag:

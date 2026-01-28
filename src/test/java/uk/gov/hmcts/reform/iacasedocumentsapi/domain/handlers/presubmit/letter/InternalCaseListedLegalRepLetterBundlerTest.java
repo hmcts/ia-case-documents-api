@@ -36,10 +36,10 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.PreSu
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.Document;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.IdValue;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentBundler;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentHandler;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.FileNameQualifier;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.SystemDateProvider;
+import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.clients.EmDocumentBundler;
 
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
@@ -55,7 +55,7 @@ class InternalCaseListedLegalRepLetterBundlerTest {
     @Mock
     private FileNameQualifier<AsylumCase> fileNameQualifier;
     @Mock
-    private DocumentBundler documentBundler;
+    private EmDocumentBundler documentBundler;
     @Mock
     private DocumentHandler documentHandler;
     @Mock
@@ -152,10 +152,12 @@ class InternalCaseListedLegalRepLetterBundlerTest {
         IdValue<DocumentWithMetadata> doc2 = new IdValue<>("2", createDocumentWithMetadata());
 
         when(asylumCase.read(LETTER_NOTIFICATION_DOCUMENTS)).thenReturn(Optional.of(List.of(doc1, doc2)));
-        when(documentBundler.bundleWithoutContentsOrCoverSheets(
+        when(documentBundler.asyncBundleWithoutContentsOrCoverSheetsForEvent(
             anyList(),
             eq("Letter bundle documents"),
-            eq("filename")
+            eq("filename"),
+            eq(Event.LIST_CASE),
+            anyLong()
         )).thenReturn(bundleDocument);
 
         PreSubmitCallbackResponse<AsylumCase> response = internalCaseListedLetterHandler.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);

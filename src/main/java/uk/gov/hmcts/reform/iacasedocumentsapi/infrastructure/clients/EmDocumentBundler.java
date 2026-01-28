@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Optional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.DateProvider;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DocumentWithMetadata;
@@ -24,25 +25,30 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.enties.em.BundleDoc
 
 @Slf4j
 @Service
+@Primary
 public class EmDocumentBundler implements DocumentBundler {
 
     private final String emBundlerUrl;
     private final String emBundlerStitchUri;
+    private final String asyncEmBundlerStitchUri;
     private final DateProvider dateProvider;
     private final BundleRequestExecutor bundleRequestExecutor;
 
     public EmDocumentBundler(
         @Value("${emBundler.url}") String emBundlerUrl,
         @Value("${emBundler.stitch.uri}") String emBundlerStitchUri,
+        @Value("${emBundler.async-stitch.uri}") String asyncEmBundlerStitchUri,
         DateProvider dateProvider,
         BundleRequestExecutor bundleRequestExecutor
     ) {
         this.emBundlerUrl = emBundlerUrl;
         this.emBundlerStitchUri = emBundlerStitchUri;
+        this.asyncEmBundlerStitchUri = asyncEmBundlerStitchUri;
         this.dateProvider = dateProvider;
         this.bundleRequestExecutor = bundleRequestExecutor;
     }
 
+    @Override
     public Document bundle(
         List<DocumentWithMetadata> documents,
         String bundleTitle,
@@ -82,17 +88,21 @@ public class EmDocumentBundler implements DocumentBundler {
 
     }
 
+    @Override
     public Document bundleWithoutContentsOrCoverSheets(
         List<DocumentWithMetadata> documents,
         String bundleTitle,
         String bundleFilename
     ) {
 
+        log.info("**** bundling using endpoint: " + emBundlerStitchUri + " *****");
+
         Callback<BundleCaseData> payload =
             createBundlePayloadWithoutContentsOrCoverSheets(
                 documents,
                 bundleTitle,
-                bundleFilename
+                bundleFilename,
+                Event.GENERATE_HEARING_BUNDLE
             );
 
         PreSubmitCallbackResponse<BundleCaseData> response =
@@ -119,6 +129,60 @@ public class EmDocumentBundler implements DocumentBundler {
             bundleFilename
         );
 
+    }
+
+    @Override
+    public Document asyncBundleWithoutContentsOrCoverSheetsForEvent(
+        List<DocumentWithMetadata> documents,
+        String bundleTitle,
+        String bundleFilename,
+        Event event,
+        Long caseId
+    ) {
+        log.info("EmDocumentBundler.asyncBundleWithoutContentsOrCoverSheetsForEvent: Starting async bundle creation, " +
+            "documentsCount={}, bundleTitle={}, bundleFilename={}, event={}, endpoint={}",
+            documents.size(), bundleTitle, bundleFilename, event, asyncEmBundlerStitchUri);
+
+        Callback<BundleCaseData> payload =
+            asyncCreateBundlePayloadWithoutContentsOrCoverSheets(
+                documents,
+                bundleTitle,
+                bundleFilename,
+                event,
+                caseId
+            );
+        log.info("EmDocumentBundler.asyncBundleWithoutContentsOrCoverSheetsForEvent: Payload created for bundleFilename={}", bundleFilename);
+
+        String fullEndpoint = emBundlerUrl + asyncEmBundlerStitchUri;
+        log.info("EmDocumentBundler.asyncBundleWithoutContentsOrCoverSheetsForEvent: Calling bundleRequestExecutor.post with endpoint={}", fullEndpoint);
+
+        PreSubmitCallbackResponse<BundleCaseData> response =
+            bundleRequestExecutor.post(
+                payload,
+                fullEndpoint
+            );
+        log.info("EmDocumentBundler.asyncBundleWithoutContentsOrCoverSheetsForEvent: Received response for bundleFilename={}", bundleFilename);
+
+        Document bundle =
+            response
+                .getData()
+                .getCaseBundles()
+                .stream()
+                .findFirst()
+                .orElseThrow(() -> new DocumentStitchingErrorResponseException("Bundle was not created", response))
+                .getValue()
+                .getStitchedDocument()
+                .orElseThrow(() -> new DocumentStitchingErrorResponseException("Stitched document was not created", response));
+
+        log.info("EmDocumentBundler.asyncBundleWithoutContentsOrCoverSheetsForEvent: Stitched document created, " +
+            "documentUrl={}, bundleFilename={}", bundle.getDocumentUrl(), bundleFilename);
+
+        // rename the bundle file name
+        return new Document(
+            bundle.getDocumentUrl(),
+            bundle.getDocumentBinaryUrl(),
+            bundleFilename
+        );
     }
 
     private Callback<BundleCaseData> createBundlePayload(
@@ -178,20 +242,27 @@ public class EmDocumentBundler implements DocumentBundler {
     private Callback<BundleCaseData> createBundlePayloadWithoutContentsOrCoverSheets(
         List<DocumentWithMetadata> documents,
         String bundleTitle,
-        String bundleFilename
+        String bundleFilename,
+        Event event
     ) {
+        log.info("EmDocumentBundler.createBundlePayloadWithoutContentsOrCoverSheets: Creating payload, " +
+            "documentsCount={}, bundleTitle={}, bundleFilename={}, event={}",
+            documents.size(), bundleTitle, bundleFilename, event);
 
         List<IdValue<BundleDocument>> bundleDocuments = new ArrayList<>();
 
         for (int i = 0; i < documents.size(); i++) {
 
             DocumentWithMetadata caseDocument = documents.get(i);
+            String documentFilename = caseDocument.getDocument().getDocumentFilename();
+            log.info("EmDocumentBundler.createBundlePayloadWithoutContentsOrCoverSheets: Adding document index={}, filename={}, tag={}",
+                i, documentFilename, caseDocument.getTag());
 
             bundleDocuments.add(
                 new IdValue<>(
                     String.valueOf(i),
                     new BundleDocument(
-                        caseDocument.getDocument().getDocumentFilename(),
+                        documentFilename,
                         caseDocument.getDescription(),
                         i,
                         caseDocument.getDocument()
@@ -199,6 +270,8 @@ public class EmDocumentBundler implements DocumentBundler {
                 )
             );
         }
+
+        log.info("EmDocumentBundler.createBundlePayloadWithoutContentsOrCoverSheets: Bundle documents prepared, count={}", bundleDocuments.size());
 
         return
             new Callback<>(
@@ -226,7 +299,72 @@ public class EmDocumentBundler implements DocumentBundler {
                     dateProvider.nowWithTime()
                 ),
                 Optional.empty(),
-                Event.GENERATE_HEARING_BUNDLE
+                event
+            );
+    }
+
+    private Callback<BundleCaseData> asyncCreateBundlePayloadWithoutContentsOrCoverSheets(
+        List<DocumentWithMetadata> documents,
+        String bundleTitle,
+        String bundleFilename,
+        Event event,
+        Long caseId
+    ) {
+        log.info("EmDocumentBundler.createBundlePayloadWithoutContentsOrCoverSheets: Creating payload, " +
+                "documentsCount={}, bundleTitle={}, bundleFilename={}, event={}",
+            documents.size(), bundleTitle, bundleFilename, event);
+
+        List<IdValue<BundleDocument>> bundleDocuments = new ArrayList<>();
+
+        for (int i = 0; i < documents.size(); i++) {
+
+            DocumentWithMetadata caseDocument = documents.get(i);
+            String documentFilename = caseDocument.getDocument().getDocumentFilename();
+            log.info("EmDocumentBundler.createBundlePayloadWithoutContentsOrCoverSheets: Adding document index={}, filename={}, tag={}",
+                i, documentFilename, caseDocument.getTag());
+
+            bundleDocuments.add(
+                new IdValue<>(
+                    String.valueOf(i),
+                    new BundleDocument(
+                        documentFilename,
+                        caseDocument.getDescription(),
+                        i,
+                        caseDocument.getDocument()
+                    )
+                )
+            );
+        }
+
+        log.info("EmDocumentBundler.createBundlePayloadWithoutContentsOrCoverSheets: Bundle documents prepared, count={}", bundleDocuments.size());
+
+        return
+            new Callback<>(
+                new CaseDetails<>(
+                    caseId,
+                    "IA",
+                    State.UNKNOWN,
+                    new BundleCaseData(
+                        Collections.singletonList(
+                            new IdValue<>(
+                                "1",
+                                new Bundle(
+                                    "1",
+                                    bundleTitle,
+                                    "",
+                                    "yes",
+                                    bundleDocuments,
+                                    YesOrNo.NO,
+                                    YesOrNo.NO,
+                                    bundleFilename
+                                )
+                            )
+                        )
+                    ),
+                    dateProvider.nowWithTime()
+                ),
+                Optional.empty(),
+                event
             );
     }
 }

@@ -5,6 +5,7 @@ import java.time.ZonedDateTime;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition;
@@ -13,6 +14,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DocumentWithMetada
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.Document;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.IdValue;
 
+@Slf4j
 @Service
 public class DocumentHandler {
 
@@ -55,9 +57,13 @@ public class DocumentHandler {
         AsylumCaseDefinition documentField,
         DocumentTag tag
     ) {
+        log.info("DocumentHandler.addWithMetadataWithoutReplacingExistingDocuments: Starting, documentField={}, tag={}, documentFilename={}",
+            documentField, tag, document.getDocumentFilename());
 
         final List<IdValue<DocumentWithMetadata>> existingDocuments =
             extractExistingDocuments(asylumCase, documentField);
+        log.info("DocumentHandler.addWithMetadataWithoutReplacingExistingDocuments: Extracted {} existing documents for field={}",
+            existingDocuments.size(), documentField);
 
         DocumentWithMetadata documentWithMetadata =
             documentReceiver.receive(
@@ -65,14 +71,17 @@ public class DocumentHandler {
                 "",
                 tag
             );
+        log.info("DocumentHandler.addWithMetadataWithoutReplacingExistingDocuments: Document received with metadata, tag={}", tag);
 
         List<IdValue<DocumentWithMetadata>> allDocuments =
             documentsAppender.append(
                 existingDocuments,
                 Collections.singletonList(documentWithMetadata)
             );
+        log.info("DocumentHandler.addWithMetadataWithoutReplacingExistingDocuments: Documents appended, totalCount={}", allDocuments.size());
 
         asylumCase.write(documentField, allDocuments);
+        log.info("DocumentHandler.addWithMetadataWithoutReplacingExistingDocuments: Written to asylumCase, documentField={}", documentField);
     }
 
     public void addWithMetadataWithDateTimeWithoutReplacingExistingDocuments(
