@@ -92,17 +92,23 @@ public class InternalCaseListedAppellantLetterBundler implements PreSubmitCallba
         log.info("InternalCaseListedAppellantLetterBundler: Starting handle, needsLegalRepBundle={}, needsAppellantBundle={}",
             needsLegalRepBundle, needsAppellantBundle);
 
-        // Start bundling operations in parallel
-        CompletableFuture<Document> legalRepBundleFuture = null;
-        CompletableFuture<Document> appellantBundleFuture = null;
-        RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();
+        // Prepare all data needed for bundling before submitting async tasks
+        final String qualifiedDocumentFileName = fileNameQualifier.get(fileName + "." + fileExtension, caseDetails);
+        final RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();
 
-        if (needsLegalRepBundle) {
-            final String qualifiedDocumentFileName = fileNameQualifier.get(fileName + "." + fileExtension, caseDetails);
-            List<DocumentWithMetadata> legalRepBundleDocs = getMaybeLetterNotificationDocuments(asylumCase, DocumentTag.INTERNAL_CASE_LISTED_LR_LETTER);
+        final List<DocumentWithMetadata> legalRepBundleDocs = needsLegalRepBundle
+            ? getMaybeLetterNotificationDocuments(asylumCase, DocumentTag.INTERNAL_CASE_LISTED_LR_LETTER)
+            : null;
 
-            log.info("InternalCaseListedAppellantLetterBundler: Starting async legal rep bundle creation");
-            legalRepBundleFuture = CompletableFuture.supplyAsync(() -> {
+        final List<DocumentWithMetadata> appellantBundleDocs = needsAppellantBundle
+            ? getMaybeLetterNotificationDocuments(asylumCase, DocumentTag.INTERNAL_CASE_LISTED_LETTER)
+            : null;
+
+        // Submit both futures together so they start at the same time
+        log.info("InternalCaseListedAppellantLetterBundler: Submitting async bundle tasks");
+
+        final CompletableFuture<Document> legalRepBundleFuture = needsLegalRepBundle
+            ? CompletableFuture.supplyAsync(() -> {
                 RequestContextHolder.setRequestAttributes(requestAttributes);
                 try {
                     return documentBundler.bundleWithoutContentsOrCoverSheets(
@@ -113,15 +119,11 @@ public class InternalCaseListedAppellantLetterBundler implements PreSubmitCallba
                 } finally {
                     RequestContextHolder.resetRequestAttributes();
                 }
-            });
-        }
+            })
+            : null;
 
-        if (needsAppellantBundle) {
-            final String qualifiedDocumentFileName = fileNameQualifier.get(fileName + "." + fileExtension, caseDetails);
-            List<DocumentWithMetadata> appellantBundleDocs = getMaybeLetterNotificationDocuments(asylumCase, DocumentTag.INTERNAL_CASE_LISTED_LETTER);
-
-            log.info("InternalCaseListedAppellantLetterBundler: Starting async appellant bundle creation");
-            appellantBundleFuture = CompletableFuture.supplyAsync(() -> {
+        final CompletableFuture<Document> appellantBundleFuture = needsAppellantBundle
+            ? CompletableFuture.supplyAsync(() -> {
                 RequestContextHolder.setRequestAttributes(requestAttributes);
                 try {
                     return documentBundler.bundleWithoutContentsOrCoverSheets(
@@ -132,10 +134,21 @@ public class InternalCaseListedAppellantLetterBundler implements PreSubmitCallba
                 } finally {
                     RequestContextHolder.resetRequestAttributes();
                 }
-            });
-        }
-        // Wait for both operations to complete and add documents to case
+            })
+            : null;
+
+        // Wait for both operations to complete simultaneously
         try {
+            CompletableFuture<?>[] futures = java.util.stream.Stream.of(legalRepBundleFuture, appellantBundleFuture)
+                .filter(java.util.Objects::nonNull)
+                .toArray(CompletableFuture[]::new);
+
+            if (futures.length > 0) {
+                log.info("InternalCaseListedAppellantLetterBundler: Waiting for {} bundle(s) to complete", futures.length);
+                CompletableFuture.allOf(futures).get();
+            }
+
+            // Add documents to case after both are complete
             if (legalRepBundleFuture != null) {
                 Document internalCaseListedLetterBundle = legalRepBundleFuture.get();
                 log.info("InternalCaseListedAppellantLetterBundler: Legal rep bundle completed, adding to case");
