@@ -1,5 +1,19 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit.letter;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.*;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.DispatchPriority.LATE;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.PreSubmitCallbackStage.ABOUT_TO_START;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.PreSubmitCallbackStage.ABOUT_TO_SUBMIT;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo.NO;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo.YES;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 import lombok.Value;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.BeforeEach;
@@ -26,21 +40,6 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentBundler;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentHandler;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.FileNameQualifier;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.SystemDateProvider;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.*;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.DispatchPriority.LATE;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.PreSubmitCallbackStage.ABOUT_TO_START;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.PreSubmitCallbackStage.ABOUT_TO_SUBMIT;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo.NO;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo.YES;
 
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
@@ -300,6 +299,188 @@ class InternalCaseListedAppellantLetterBundlerTest {
             .isExactlyInstanceOf(IllegalStateException.class);
     }
 
+    @Test
+    void should_create_both_bundles_in_parallel_when_both_conditions_are_true() {
+        // Setup: Internal case (IS_ADMIN=YES) with legal rep (APPELLANTS_REPRESENTATION=NO)
+        // AND not detained - both conditions should be true
+        when(callback.getEvent()).thenReturn(Event.LIST_CASE);
+        when(callback.getCaseDetails()).thenReturn(caseDetails);
+        when(caseDetails.getCaseData()).thenReturn(asylumCase);
+        when(asylumCase.read(IS_ADMIN, YesOrNo.class)).thenReturn(Optional.of(YES));
+        when(asylumCase.read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(NO)); // Not detained, so internal non-detained case
+        when(asylumCase.read(APPELLANTS_REPRESENTATION, YesOrNo.class)).thenReturn(Optional.of(NO)); // Legal rep case
+        when(fileNameQualifier.get(anyString(), eq(caseDetails))).thenReturn("filename");
+
+        Document bundleDocumentResult = new Document("bundle-url", "bundle-binary-url", "bundle.pdf");
+
+        IdValue<DocumentWithMetadata> doc1 = new IdValue<>("1", createDocumentWithMetadata(DocumentTag.INTERNAL_CASE_LISTED_LR_LETTER));
+        IdValue<DocumentWithMetadata> doc2 = new IdValue<>("2", createDocumentWithMetadata(DocumentTag.INTERNAL_CASE_LISTED_LETTER));
+
+        when(asylumCase.read(LETTER_NOTIFICATION_DOCUMENTS)).thenReturn(Optional.of(List.of(doc1, doc2)));
+
+        // Return same document for any bundler call
+        when(documentBundler.bundleWithoutContentsOrCoverSheets(
+            anyList(),
+            eq("Letter bundle documents"),
+            eq("filename")
+        )).thenReturn(bundleDocumentResult);
+
+        PreSubmitCallbackResponse<AsylumCase> response = detainedCaseListedLetterHandler.handle(ABOUT_TO_SUBMIT, callback);
+
+        assertNotNull(response);
+        assertEquals(asylumCase, response.getData());
+
+        // Verify both bundles were created with correct tags
+        verify(documentHandler).addWithMetadataWithoutReplacingExistingDocuments(
+            asylumCase, bundleDocumentResult, LETTER_BUNDLE_DOCUMENTS, DocumentTag.INTERNAL_CASE_LISTED_LR_LETTER_BUNDLE
+        );
+        verify(documentHandler).addWithMetadataWithoutReplacingExistingDocuments(
+            asylumCase, bundleDocumentResult, LETTER_BUNDLE_DOCUMENTS, DocumentTag.INTERNAL_CASE_LISTED_LETTER_BUNDLE
+        );
+
+        // Verify bundler was called twice (once for each bundle)
+        verify(documentBundler, times(2)).bundleWithoutContentsOrCoverSheets(
+            anyList(),
+            eq("Letter bundle documents"),
+            eq("filename")
+        );
+
+        // Verify documentHandler was called twice (once for each bundle type)
+        verify(documentHandler, times(2)).addWithMetadataWithoutReplacingExistingDocuments(
+            eq(asylumCase),
+            eq(bundleDocumentResult),
+            eq(LETTER_BUNDLE_DOCUMENTS),
+            any(DocumentTag.class)
+        );
+    }
+
+    @Test
+    void should_only_create_legal_rep_bundle_when_only_lr_condition_is_true() {
+        // Setup: Internal case with legal rep but appellant IS detained (not in OTHER)
+        when(callback.getEvent()).thenReturn(Event.LIST_CASE);
+        when(callback.getCaseDetails()).thenReturn(caseDetails);
+        when(caseDetails.getCaseData()).thenReturn(asylumCase);
+        when(asylumCase.read(IS_ADMIN, YesOrNo.class)).thenReturn(Optional.of(YES));
+        when(asylumCase.read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(YES)); // Detained
+        when(asylumCase.read(DETENTION_FACILITY, String.class)).thenReturn(Optional.of("prison")); // Not OTHER
+        when(asylumCase.read(APPELLANTS_REPRESENTATION, YesOrNo.class)).thenReturn(Optional.of(NO)); // Legal rep
+        when(fileNameQualifier.get(anyString(), eq(caseDetails))).thenReturn("filename");
+
+        IdValue<DocumentWithMetadata> doc1 = new IdValue<>("1", createDocumentWithMetadata(DocumentTag.INTERNAL_CASE_LISTED_LR_LETTER));
+
+        when(asylumCase.read(LETTER_NOTIFICATION_DOCUMENTS)).thenReturn(Optional.of(List.of(doc1)));
+        when(documentBundler.bundleWithoutContentsOrCoverSheets(
+            anyList(),
+            eq("Letter bundle documents"),
+            eq("filename")
+        )).thenReturn(bundleDocument);
+
+        PreSubmitCallbackResponse<AsylumCase> response = detainedCaseListedLetterHandler.handle(ABOUT_TO_SUBMIT, callback);
+
+        assertNotNull(response);
+
+        // Verify only LR bundle was created
+        verify(documentHandler, times(1)).addWithMetadataWithoutReplacingExistingDocuments(
+            eq(asylumCase), eq(bundleDocument), eq(LETTER_BUNDLE_DOCUMENTS), eq(DocumentTag.INTERNAL_CASE_LISTED_LR_LETTER_BUNDLE)
+        );
+
+        // Verify appellant bundle was NOT created
+        verify(documentHandler, never()).addWithMetadataWithoutReplacingExistingDocuments(
+            eq(asylumCase), any(), eq(LETTER_BUNDLE_DOCUMENTS), eq(DocumentTag.INTERNAL_CASE_LISTED_LETTER_BUNDLE)
+        );
+    }
+
+    @Test
+    void should_throw_exception_when_bundling_fails() {
+        when(callback.getEvent()).thenReturn(Event.LIST_CASE);
+        when(callback.getCaseDetails()).thenReturn(caseDetails);
+        when(caseDetails.getCaseData()).thenReturn(asylumCase);
+        when(asylumCase.read(IS_ADMIN, YesOrNo.class)).thenReturn(Optional.of(YES));
+        when(asylumCase.read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(YES));
+        when(asylumCase.read(DETENTION_FACILITY, String.class)).thenReturn(Optional.of("other"));
+        when(asylumCase.read(APPELLANTS_REPRESENTATION, YesOrNo.class)).thenReturn(Optional.of(YES)); // AIP
+        when(fileNameQualifier.get(anyString(), eq(caseDetails))).thenReturn("filename");
+
+        IdValue<DocumentWithMetadata> doc1 = new IdValue<>("1", createDocumentWithMetadata(DocumentTag.INTERNAL_CASE_LISTED_LETTER));
+
+        when(asylumCase.read(LETTER_NOTIFICATION_DOCUMENTS)).thenReturn(Optional.of(List.of(doc1)));
+
+        // Simulate bundling failure
+        RuntimeException bundlingException = new RuntimeException("Bundling service unavailable");
+        when(documentBundler.bundleWithoutContentsOrCoverSheets(
+            anyList(),
+            eq("Letter bundle documents"),
+            eq("filename")
+        )).thenThrow(bundlingException);
+
+        assertThatThrownBy(() -> detainedCaseListedLetterHandler.handle(ABOUT_TO_SUBMIT, callback))
+            .isInstanceOf(IllegalStateException.class)
+            .hasMessage("Bundle creation failed")
+            .hasCause(bundlingException);
+    }
+
+    @Test
+    void should_verify_correct_document_tags_for_lr_bundle() {
+        when(callback.getEvent()).thenReturn(Event.LIST_CASE);
+        when(callback.getCaseDetails()).thenReturn(caseDetails);
+        when(caseDetails.getCaseData()).thenReturn(asylumCase);
+        when(asylumCase.read(IS_ADMIN, YesOrNo.class)).thenReturn(Optional.of(YES));
+        when(asylumCase.read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(YES));
+        when(asylumCase.read(DETENTION_FACILITY, String.class)).thenReturn(Optional.of("prison")); // Not OTHER, so only LR path
+        when(asylumCase.read(APPELLANTS_REPRESENTATION, YesOrNo.class)).thenReturn(Optional.of(NO)); // Legal rep
+        when(fileNameQualifier.get(anyString(), eq(caseDetails))).thenReturn("filename");
+
+        IdValue<DocumentWithMetadata> doc1 = new IdValue<>("1", createDocumentWithMetadata(DocumentTag.INTERNAL_CASE_LISTED_LR_LETTER));
+
+        when(asylumCase.read(LETTER_NOTIFICATION_DOCUMENTS)).thenReturn(Optional.of(List.of(doc1)));
+        when(documentBundler.bundleWithoutContentsOrCoverSheets(
+            anyList(),
+            eq("Letter bundle documents"),
+            eq("filename")
+        )).thenReturn(bundleDocument);
+
+        detainedCaseListedLetterHandler.handle(ABOUT_TO_SUBMIT, callback);
+
+        // Verify LR bundle uses INTERNAL_CASE_LISTED_LR_LETTER_BUNDLE tag
+        verify(documentHandler).addWithMetadataWithoutReplacingExistingDocuments(
+            eq(asylumCase),
+            eq(bundleDocument),
+            eq(LETTER_BUNDLE_DOCUMENTS),
+            eq(DocumentTag.INTERNAL_CASE_LISTED_LR_LETTER_BUNDLE)
+        );
+    }
+
+    @Test
+    void should_verify_correct_document_tags_for_appellant_bundle() {
+        when(callback.getEvent()).thenReturn(Event.LIST_CASE);
+        when(callback.getCaseDetails()).thenReturn(caseDetails);
+        when(caseDetails.getCaseData()).thenReturn(asylumCase);
+        when(asylumCase.read(IS_ADMIN, YesOrNo.class)).thenReturn(Optional.of(YES));
+        when(asylumCase.read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(YES));
+        when(asylumCase.read(DETENTION_FACILITY, String.class)).thenReturn(Optional.of("other"));
+        when(asylumCase.read(APPELLANTS_REPRESENTATION, YesOrNo.class)).thenReturn(Optional.of(YES)); // AIP, not LR
+        when(fileNameQualifier.get(anyString(), eq(caseDetails))).thenReturn("filename");
+
+        IdValue<DocumentWithMetadata> doc1 = new IdValue<>("1", createDocumentWithMetadata(DocumentTag.INTERNAL_CASE_LISTED_LETTER));
+
+        when(asylumCase.read(LETTER_NOTIFICATION_DOCUMENTS)).thenReturn(Optional.of(List.of(doc1)));
+        when(documentBundler.bundleWithoutContentsOrCoverSheets(
+            anyList(),
+            eq("Letter bundle documents"),
+            eq("filename")
+        )).thenReturn(bundleDocument);
+
+        detainedCaseListedLetterHandler.handle(ABOUT_TO_SUBMIT, callback);
+
+        // Verify appellant bundle uses INTERNAL_CASE_LISTED_LETTER_BUNDLE tag
+        verify(documentHandler).addWithMetadataWithoutReplacingExistingDocuments(
+            eq(asylumCase),
+            eq(bundleDocument),
+            eq(LETTER_BUNDLE_DOCUMENTS),
+            eq(DocumentTag.INTERNAL_CASE_LISTED_LETTER_BUNDLE)
+        );
+    }
+
     private Document createDocumentWithDescription() {
         return
             new Document("some-url",
@@ -308,11 +489,13 @@ class InternalCaseListedAppellantLetterBundlerTest {
     }
 
     private DocumentWithMetadata createDocumentWithMetadata() {
+        return createDocumentWithMetadata(DocumentTag.INTERNAL_CASE_LISTED_LETTER);
+    }
 
+    private DocumentWithMetadata createDocumentWithMetadata(DocumentTag tag) {
         return
             new DocumentWithMetadata(createDocumentWithDescription(),
                 RandomStringUtils.randomAlphabetic(20),
-                new SystemDateProvider().now().toString(), DocumentTag.INTERNAL_CASE_LISTED_LETTER,"test");
-
+                new SystemDateProvider().now().toString(), tag, "test");
     }
 }
