@@ -2,6 +2,8 @@ package uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit.letter;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import org.springframework.web.context.request.RequestAttributes;
+import org.springframework.web.context.request.RequestContextHolder;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DocumentTag;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DocumentWithMetadata;
@@ -82,21 +84,37 @@ public class InternalEditCaseListingLrWithAttachmentBundler implements PreSubmit
         final CaseDetails<AsylumCase> caseDetails = callback.getCaseDetails();
         final AsylumCase asylumCase = caseDetails.getCaseData();
 
+        RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();
+
         final String qualifiedDocumentFileName = fileNameQualifier.get(fileName + "." + fileExtension, caseDetails);
 
         List<DocumentWithMetadata> bundleDocuments = getMaybeLetterNotificationDocuments(asylumCase, DocumentTag.INTERNAL_EDIT_CASE_LISTING_LETTER);
-        CompletableFuture<Document> appellantLrBundleFuture = CompletableFuture.supplyAsync(() -> documentBundler.bundleWithoutContentsOrCoverSheets(
-                bundleDocuments,
-                "Letter bundle documents",
-                qualifiedDocumentFileName
-        ));
+        CompletableFuture<Document> appellantLrBundleFuture = CompletableFuture.supplyAsync(() -> {
+            try {
+                RequestContextHolder.setRequestAttributes(requestAttributes);
+                return documentBundler.bundleWithoutContentsOrCoverSheets(
+                        bundleDocuments,
+                        "Letter bundle documents",
+                        qualifiedDocumentFileName
+                );
+            } finally {
+                RequestContextHolder.resetRequestAttributes();
+            }
+        });
 
         List<DocumentWithMetadata> bundleDocumentsLR = getMaybeLetterNotificationDocuments(asylumCase, DocumentTag.INTERNAL_EDIT_CASE_LISTING_LR_LETTER);
-        CompletableFuture<Document> legalRepLrBundleFuture = CompletableFuture.supplyAsync(() -> documentBundler.bundleWithoutContentsOrCoverSheets(
-                bundleDocumentsLR,
-                "Letter bundle documents",
-                qualifiedDocumentFileName
-        ));
+        CompletableFuture<Document> legalRepLrBundleFuture = CompletableFuture.supplyAsync(() -> {
+            try {
+                RequestContextHolder.setRequestAttributes(requestAttributes);
+                return documentBundler.bundleWithoutContentsOrCoverSheets(
+                        bundleDocumentsLR,
+                        "Letter bundle documents",
+                        qualifiedDocumentFileName
+                );
+            } finally {
+                RequestContextHolder.resetRequestAttributes();
+            }
+        });
 
         CompletableFuture.allOf(appellantLrBundleFuture, legalRepLrBundleFuture).join();
 
