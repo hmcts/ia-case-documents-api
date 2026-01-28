@@ -118,19 +118,23 @@ public class InternalCaseListedLegalRepLetterBundler implements PreSubmitCallbac
 
         CompletableFuture.allOf(appellantLrBundleFuture, legalRepLrBundleFuture).join();
 
-        documentHandler.addWithMetadataWithoutReplacingExistingDocuments(
-                asylumCase,
-                appellantLrBundleFuture.join(),
-                LETTER_BUNDLE_DOCUMENTS,
-                DocumentTag.INTERNAL_CASE_LISTED_LETTER_BUNDLE
-        );
+        if (appellantLrBundleFuture != null) {
+            documentHandler.addWithMetadataWithoutReplacingExistingDocuments(
+                    asylumCase,
+                    appellantLrBundleFuture.join(),
+                    LETTER_BUNDLE_DOCUMENTS,
+                    DocumentTag.INTERNAL_CASE_LISTED_LETTER_BUNDLE
+            );
+        }
 
-        documentHandler.addWithMetadataWithoutReplacingExistingDocuments(
-                asylumCase,
-                legalRepLrBundleFuture.join(),
-                LETTER_BUNDLE_DOCUMENTS,
-                DocumentTag.INTERNAL_CASE_LISTED_LR_LETTER_BUNDLE
-        );
+        if (legalRepLrBundleFuture != null) {
+            documentHandler.addWithMetadataWithoutReplacingExistingDocuments(
+                    asylumCase,
+                    legalRepLrBundleFuture.join(),
+                    LETTER_BUNDLE_DOCUMENTS,
+                    DocumentTag.INTERNAL_CASE_LISTED_LR_LETTER_BUNDLE
+            );
+        }
 
 
         return new PreSubmitCallbackResponse<>(asylumCase);
