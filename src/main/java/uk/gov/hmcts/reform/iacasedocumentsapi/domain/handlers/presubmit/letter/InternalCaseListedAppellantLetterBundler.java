@@ -6,6 +6,7 @@ import java.util.concurrent.ExecutionException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import org.springframework.web.context.request.RequestContextHolder;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DocumentTag;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DocumentWithMetadata;
@@ -19,6 +20,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.PreSubmitCallbackH
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentBundler;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentHandler;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.FileNameQualifier;
+import org.springframework.web.context.request.RequestAttributes;
 
 import static java.util.Objects.requireNonNull;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.LETTER_BUNDLE_DOCUMENTS;
@@ -93,35 +95,45 @@ public class InternalCaseListedAppellantLetterBundler implements PreSubmitCallba
         // Start bundling operations in parallel
         CompletableFuture<Document> legalRepBundleFuture = null;
         CompletableFuture<Document> appellantBundleFuture = null;
+        RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();
 
         if (needsLegalRepBundle) {
             final String qualifiedDocumentFileName = fileNameQualifier.get(fileName + "." + fileExtension, caseDetails);
-            List<DocumentWithMetadata> bundleDocuments = getMaybeLetterNotificationDocuments(asylumCase, DocumentTag.INTERNAL_CASE_LISTED_LR_LETTER);
+            List<DocumentWithMetadata> legalRepBundleDocs = getMaybeLetterNotificationDocuments(asylumCase, DocumentTag.INTERNAL_CASE_LISTED_LR_LETTER);
 
             log.info("InternalCaseListedAppellantLetterBundler: Starting async legal rep bundle creation");
-            legalRepBundleFuture = CompletableFuture.supplyAsync(() ->
-                documentBundler.bundleWithoutContentsOrCoverSheets(
-                    bundleDocuments,
-                    "Letter bundle documents",
-                    qualifiedDocumentFileName
-                )
-            );
+            legalRepBundleFuture = CompletableFuture.supplyAsync(() -> {
+                RequestContextHolder.setRequestAttributes(requestAttributes);
+                try {
+                    return documentBundler.bundleWithoutContentsOrCoverSheets(
+                        legalRepBundleDocs,
+                        "Letter bundle documents",
+                        qualifiedDocumentFileName
+                    );
+                } finally {
+                    RequestContextHolder.resetRequestAttributes();
+                }
+            });
         }
 
         if (needsAppellantBundle) {
             final String qualifiedDocumentFileName = fileNameQualifier.get(fileName + "." + fileExtension, caseDetails);
-            List<DocumentWithMetadata> bundleDocuments = getMaybeLetterNotificationDocuments(asylumCase, DocumentTag.INTERNAL_CASE_LISTED_LETTER);
+            List<DocumentWithMetadata> appellantBundleDocs = getMaybeLetterNotificationDocuments(asylumCase, DocumentTag.INTERNAL_CASE_LISTED_LETTER);
 
             log.info("InternalCaseListedAppellantLetterBundler: Starting async appellant bundle creation");
-            appellantBundleFuture = CompletableFuture.supplyAsync(() ->
-                documentBundler.bundleWithoutContentsOrCoverSheets(
-                    bundleDocuments,
-                    "Letter bundle documents",
-                    qualifiedDocumentFileName
-                )
-            );
+            appellantBundleFuture = CompletableFuture.supplyAsync(() -> {
+                RequestContextHolder.setRequestAttributes(requestAttributes);
+                try {
+                    return documentBundler.bundleWithoutContentsOrCoverSheets(
+                        appellantBundleDocs,
+                        "Letter bundle documents",
+                        qualifiedDocumentFileName
+                    );
+                } finally {
+                    RequestContextHolder.resetRequestAttributes();
+                }
+            });
         }
-
         // Wait for both operations to complete and add documents to case
         try {
             if (legalRepBundleFuture != null) {
