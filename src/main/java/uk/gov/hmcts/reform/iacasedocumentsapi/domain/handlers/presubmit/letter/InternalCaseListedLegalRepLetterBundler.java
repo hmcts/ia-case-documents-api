@@ -2,9 +2,11 @@ package uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit.letter;
 
 import static java.util.Objects.requireNonNull;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.LETTER_BUNDLE_DOCUMENTS;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.NOTIFICATION_ATTACHMENT_DOCUMENTS;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DetentionFacility.IRC;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DetentionFacility.PRISON;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.Event.LIST_CASE;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.getMaybeLetterNotificationDocuments;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.hasBeenSubmittedAsLegalRepresentedInternalCase;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.*;
 
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
@@ -90,8 +92,14 @@ public class InternalCaseListedLegalRepLetterBundler implements PreSubmitCallbac
         RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();
 
         final String qualifiedDocumentFileName = fileNameQualifier.get(fileName + "." + fileExtension, caseDetails);
+        List<DocumentWithMetadata> bundleDocuments;
 
-        List<DocumentWithMetadata> bundleDocuments = getMaybeLetterNotificationDocuments(asylumCase, DocumentTag.INTERNAL_CASE_LISTED_LETTER);
+        if (isDetainedInOneOfFacilityTypes(asylumCase, PRISON, IRC)) {
+            bundleDocuments = getMaybeNotificationAttachmentDocuments(asylumCase, DocumentTag.INTERNAL_CASE_LISTED_LETTER);
+        } else {
+            bundleDocuments = getMaybeLetterNotificationDocuments(asylumCase, DocumentTag.INTERNAL_CASE_LISTED_LETTER);
+        }
+
         log.info("Count of Aip documents " + bundleDocuments.stream().count());
         CompletableFuture<Document> appellantLrBundleFuture = CompletableFuture.supplyAsync(() -> {
             try {
@@ -124,12 +132,21 @@ public class InternalCaseListedLegalRepLetterBundler implements PreSubmitCallbac
         CompletableFuture.allOf(appellantLrBundleFuture, legalRepLrBundleFuture).join();
 
         if (appellantLrBundleFuture != null) {
-            documentHandler.addWithMetadataWithoutReplacingExistingDocuments(
-                    asylumCase,
-                    appellantLrBundleFuture.join(),
-                    LETTER_BUNDLE_DOCUMENTS,
-                    DocumentTag.INTERNAL_CASE_LISTED_LETTER_BUNDLE
-            );
+            if (isDetainedInOneOfFacilityTypes(asylumCase, PRISON, IRC)) {
+                documentHandler.addWithMetadataWithoutReplacingExistingDocuments(
+                        asylumCase,
+                        appellantLrBundleFuture.join(),
+                        NOTIFICATION_ATTACHMENT_DOCUMENTS,
+                        DocumentTag.INTERNAL_CASE_LISTED_LETTER_BUNDLE
+                );
+            } else {
+                documentHandler.addWithMetadataWithoutReplacingExistingDocuments(
+                        asylumCase,
+                        appellantLrBundleFuture.join(),
+                        LETTER_BUNDLE_DOCUMENTS,
+                        DocumentTag.INTERNAL_CASE_LISTED_LETTER_BUNDLE
+                );
+            }
         }
 
         if (legalRepLrBundleFuture != null) {
