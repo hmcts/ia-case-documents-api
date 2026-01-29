@@ -22,8 +22,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
@@ -52,7 +50,6 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.FeatureToggler;
 @Component
 public class HearingNoticeCreator implements PreSubmitCallbackHandler<AsylumCase> {
 
-    private static final Logger log = LoggerFactory.getLogger(HearingNoticeCreator.class);
     private final DocumentCreator<AsylumCase> hearingNoticeDocumentCreator;
     private final DocumentCreator<AsylumCase> remoteHearingNoticeDocumentCreator;
     private final DocumentCreator<AsylumCase> adaHearingNoticeDocumentCreator;
@@ -141,7 +138,6 @@ public class HearingNoticeCreator implements PreSubmitCallbackHandler<AsylumCase
             );
 
             if (isInternalNonDetainedCase(asylumCase) || isDetainedInFacilityType(asylumCase, OTHER)) {
-                log.info("AiP Notice Generated");
                 documentHandler.addWithMetadataWithoutReplacingExistingDocuments(
                     asylumCase,
                     hearingNotice,
@@ -151,7 +147,6 @@ public class HearingNoticeCreator implements PreSubmitCallbackHandler<AsylumCase
             }
 
             if (isDetainedInOneOfFacilityTypes(asylumCase, IRC, PRISON)) {
-                log.info("AiP Notice Generated");
                 documentHandler.addWithMetadataWithoutReplacingExistingDocuments(
                     asylumCase,
                     hearingNotice,
@@ -161,7 +156,6 @@ public class HearingNoticeCreator implements PreSubmitCallbackHandler<AsylumCase
             }
 
             if (hasBeenSubmittedAsLegalRepresentedInternalCase(asylumCase)) {
-                log.info("LR Notice Generated");
                 documentHandler.addWithMetadataWithoutReplacingExistingDocuments(
                     asylumCase,
                     hearingNotice,

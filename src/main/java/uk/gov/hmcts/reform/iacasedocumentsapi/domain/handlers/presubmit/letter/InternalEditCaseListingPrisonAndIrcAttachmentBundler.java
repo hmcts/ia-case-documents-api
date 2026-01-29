@@ -7,8 +7,7 @@ import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DetentionFa
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DetentionFacility.PRISON;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DocumentTag.*;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.Event.EDIT_CASE_LISTING;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.getMaybeNotificationAttachmentDocuments;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.isDetainedInOneOfFacilityTypes;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.*;
 
 import java.util.List;
 import org.springframework.beans.factory.annotation.Value;
@@ -69,7 +68,8 @@ public class InternalEditCaseListingPrisonAndIrcAttachmentBundler implements Pre
         return callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
                && callback.getEvent() == EDIT_CASE_LISTING
                && isEmStitchingEnabled
-               && isDetainedInOneOfFacilityTypes(asylumCase, IRC, PRISON);
+               && isDetainedInOneOfFacilityTypes(asylumCase, IRC, PRISON)
+               && !hasBeenSubmittedAsLegalRepresentedInternalCase(asylumCase);
     }
 
     public PreSubmitCallbackResponse<AsylumCase> handle(
