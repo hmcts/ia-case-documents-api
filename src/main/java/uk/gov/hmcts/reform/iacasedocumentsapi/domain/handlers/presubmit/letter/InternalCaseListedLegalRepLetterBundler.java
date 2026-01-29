@@ -11,8 +11,6 @@ import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtil
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestAttributes;
@@ -34,7 +32,6 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.FileNameQualifier;
 @Component
 public class InternalCaseListedLegalRepLetterBundler implements PreSubmitCallbackHandler<AsylumCase> {
 
-    private static final Logger log = LoggerFactory.getLogger(InternalCaseListedLegalRepLetterBundler.class);
     private final String fileExtension;
     private final String fileName;
     private final boolean isEmStitchingEnabled;
