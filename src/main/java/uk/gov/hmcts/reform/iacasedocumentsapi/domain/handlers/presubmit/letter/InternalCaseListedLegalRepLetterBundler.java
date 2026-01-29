@@ -9,6 +9,8 @@ import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtil
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestAttributes;
@@ -30,6 +32,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.FileNameQualifier;
 @Component
 public class InternalCaseListedLegalRepLetterBundler implements PreSubmitCallbackHandler<AsylumCase> {
 
+    private static final Logger log = LoggerFactory.getLogger(InternalCaseListedLegalRepLetterBundler.class);
     private final String fileExtension;
     private final String fileName;
     private final boolean isEmStitchingEnabled;
@@ -89,6 +92,7 @@ public class InternalCaseListedLegalRepLetterBundler implements PreSubmitCallbac
         final String qualifiedDocumentFileName = fileNameQualifier.get(fileName + "." + fileExtension, caseDetails);
 
         List<DocumentWithMetadata> bundleDocuments = getMaybeLetterNotificationDocuments(asylumCase, DocumentTag.INTERNAL_CASE_LISTED_LETTER);
+        log.info("Count of Aip documents " + bundleDocuments.stream().count());
         CompletableFuture<Document> appellantLrBundleFuture = CompletableFuture.supplyAsync(() -> {
             try {
                 RequestContextHolder.setRequestAttributes(requestAttributes);
@@ -103,6 +107,7 @@ public class InternalCaseListedLegalRepLetterBundler implements PreSubmitCallbac
         });
 
         List<DocumentWithMetadata> bundleDocumentsLR = getMaybeLetterNotificationDocuments(asylumCase, DocumentTag.INTERNAL_CASE_LISTED_LR_LETTER);
+        log.info("Count of Lr documents " + bundleDocuments.stream().count());
         CompletableFuture<Document> legalRepLrBundleFuture = CompletableFuture.supplyAsync(() -> {
             try {
                 RequestContextHolder.setRequestAttributes(requestAttributes);
