@@ -315,6 +315,45 @@ class HearingNoticeCreatorTest {
     }
 
     @Test
+    void should_append_to_letter_notification_documents_for_detained_in_other_facility() {
+        when(callback.getCaseDetails()).thenReturn(caseDetails);
+        when(callback.getEvent()).thenReturn(Event.LIST_CASE);
+        when(caseDetails.getCaseData()).thenReturn(asylumCase);
+        when(asylumCase.read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(YES));
+        when(asylumCase.read(DETENTION_FACILITY, String.class)).thenReturn(Optional.of("other"));
+        when(hearingNoticeDocumentCreator.create(caseDetails)).thenReturn(uploadedDocument);
+
+        PreSubmitCallbackResponse<AsylumCase> callbackResponse =
+            hearingNoticeCreator.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
+
+        assertNotNull(callbackResponse);
+        assertEquals(asylumCase, callbackResponse.getData());
+
+        verify(documentHandler, times(1)).addWithMetadataWithoutReplacingExistingDocuments(
+            asylumCase, uploadedDocument, LETTER_NOTIFICATION_DOCUMENTS, DocumentTag.INTERNAL_CASE_LISTED_LETTER);
+    }
+
+    @ParameterizedTest
+    @CsvSource({ "immigrationRemovalCentre", "prison" })
+    void should_append_to_notification_attachment_documents_for_detained_in_irc_or_prison(String facility) {
+        when(callback.getCaseDetails()).thenReturn(caseDetails);
+        when(callback.getEvent()).thenReturn(Event.LIST_CASE);
+        when(caseDetails.getCaseData()).thenReturn(asylumCase);
+        when(asylumCase.read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(YES));
+        when(asylumCase.read(DETENTION_FACILITY, String.class)).thenReturn(Optional.of(facility));
+        when(hearingNoticeDocumentCreator.create(caseDetails)).thenReturn(uploadedDocument);
+
+        PreSubmitCallbackResponse<AsylumCase> callbackResponse =
+            hearingNoticeCreator.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
+
+        assertNotNull(callbackResponse);
+        assertEquals(asylumCase, callbackResponse.getData());
+
+        verify(documentHandler, times(1)).addWithMetadataWithoutReplacingExistingDocuments(
+            asylumCase, uploadedDocument, NOTIFICATION_ATTACHMENT_DOCUMENTS, DocumentTag.INTERNAL_CASE_LISTED_LETTER);
+    }
+
+    @Test
     void handling_should_throw_if_cannot_actually_handle() {
 
         when(callback.getEvent()).thenReturn(Event.LIST_CASE);
