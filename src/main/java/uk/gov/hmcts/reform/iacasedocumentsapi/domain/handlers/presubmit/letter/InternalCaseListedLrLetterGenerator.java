@@ -43,8 +43,6 @@ public class InternalCaseListedLrLetterGenerator implements PreSubmitCallbackHan
         Objects.requireNonNull(callbackStage, "callbackStage must not be null");
         Objects.requireNonNull(callback, "callback must not be null");
 
-        AsylumCase asylumCase = callback.getCaseDetails().getCaseData();
-
         return false;
     }
 
