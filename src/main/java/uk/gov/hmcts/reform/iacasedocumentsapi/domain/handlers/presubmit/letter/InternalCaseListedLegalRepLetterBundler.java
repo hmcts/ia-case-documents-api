@@ -107,7 +107,7 @@ public class InternalCaseListedLegalRepLetterBundler implements PreSubmitCallbac
         });
 
         List<DocumentWithMetadata> bundleDocumentsLR = getMaybeLetterNotificationDocuments(asylumCase, DocumentTag.INTERNAL_CASE_LISTED_LR_LETTER);
-        log.info("Count of Lr documents " + bundleDocuments.stream().count());
+        log.info("Count of Lr documents " + bundleDocumentsLR.stream().count());
         CompletableFuture<Document> legalRepLrBundleFuture = CompletableFuture.supplyAsync(() -> {
             try {
                 RequestContextHolder.setRequestAttributes(requestAttributes);

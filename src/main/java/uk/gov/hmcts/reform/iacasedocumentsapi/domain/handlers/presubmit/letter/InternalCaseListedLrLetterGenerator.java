@@ -66,6 +66,8 @@ public class InternalCaseListedLrLetterGenerator implements PreSubmitCallbackHan
 
         Document internalCaseListedLrLetter = documentCreator.create(caseDetails);
 
+        log.info("Lr Letter Generated");
+
         documentHandler.addWithMetadataWithoutReplacingExistingDocuments(
             asylumCase,
             internalCaseListedLrLetter,

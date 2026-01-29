@@ -67,6 +67,7 @@ public class InternalCaseListedLetterGenerator implements PreSubmitCallbackHandl
 
         Document internalCaseListedLetter = documentCreator.create(caseDetails);
 
+        log.info("AiP Letter Generated");
         documentHandler.addWithMetadataWithoutReplacingExistingDocuments(
             asylumCase,
             internalCaseListedLetter,

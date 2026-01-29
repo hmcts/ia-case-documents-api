@@ -137,6 +137,7 @@ public class HearingNoticeCreator implements PreSubmitCallbackHandler<AsylumCase
             );
 
             if (isInternalNonDetainedCase(asylumCase) || isDetainedInFacilityType(asylumCase, OTHER)) {
+                log.info("AiP Notice Generated");
                 documentHandler.addWithMetadataWithoutReplacingExistingDocuments(
                     asylumCase,
                     hearingNotice,
@@ -146,6 +147,7 @@ public class HearingNoticeCreator implements PreSubmitCallbackHandler<AsylumCase
             }
 
             if (isDetainedInOneOfFacilityTypes(asylumCase, IRC, PRISON)) {
+                log.info("AiP Notice Generated");
                 documentHandler.addWithMetadataWithoutReplacingExistingDocuments(
                     asylumCase,
                     hearingNotice,
@@ -155,6 +157,7 @@ public class HearingNoticeCreator implements PreSubmitCallbackHandler<AsylumCase
             }
 
             if (hasBeenSubmittedAsLegalRepresentedInternalCase(asylumCase)) {
+                log.info("LR Notice Generated");
                 documentHandler.addWithMetadataWithoutReplacingExistingDocuments(
                     asylumCase,
                     hearingNotice,
