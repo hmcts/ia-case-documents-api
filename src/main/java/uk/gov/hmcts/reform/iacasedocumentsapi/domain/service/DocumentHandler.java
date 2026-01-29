@@ -5,6 +5,8 @@ import java.time.ZonedDateTime;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition;
@@ -14,6 +16,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.Document
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.IdValue;
 
 @Service
+@Slf4j
 public class DocumentHandler {
 
     private final DocumentReceiver documentReceiver;
@@ -56,6 +59,8 @@ public class DocumentHandler {
         DocumentTag tag
     ) {
 
+        log.info("Documents field name: '{}', Document tag: '{}'", documentField.value(), tag.toString());
+
         final List<IdValue<DocumentWithMetadata>> existingDocuments =
             extractExistingDocuments(asylumCase, documentField);
 
@@ -72,6 +77,8 @@ public class DocumentHandler {
                 Collections.singletonList(documentWithMetadata)
             );
 
+        log.info("Writing to case: documentField : '{}', documents: {}",
+                documentField.value(), allDocuments.toString());
         asylumCase.write(documentField, allDocuments);
     }
 
@@ -101,6 +108,8 @@ public class DocumentHandler {
                 Collections.singletonList(documentWithMetadata)
             );
 
+        log.info("addWithMetadataWithDateTimeWithoutReplacingExistingDocuments: Writing to case: documentField :"
+                        + " '{}', documents: {}", documentField.value(), allDocuments.toString());
         asylumCase.write(documentField, allDocuments);
     }
 
