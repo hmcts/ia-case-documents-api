@@ -48,9 +48,7 @@ public class InternalCaseListedLrLetterGenerator implements PreSubmitCallbackHan
 
         AsylumCase asylumCase = callback.getCaseDetails().getCaseData();
 
-        return callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
-               && callback.getEvent() == LIST_CASE
-               && hasBeenSubmittedAsLegalRepresentedInternalCase(asylumCase);
+        return false;
     }
 
     public PreSubmitCallbackResponse<AsylumCase> handle(

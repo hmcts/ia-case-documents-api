@@ -136,7 +136,7 @@ public class HearingNoticeCreator implements PreSubmitCallbackHandler<AsylumCase
                 DocumentTag.HEARING_NOTICE
             );
 
-            if (isInternalNonDetainedCase(asylumCase) || isDetainedInFacilityType(asylumCase, OTHER)) {
+            if (isInternalNonDetainedCase(asylumCase) || isDetainedInFacilityType(asylumCase, OTHER) || hasBeenSubmittedAsLegalRepresentedInternalCase(asylumCase)) {
                 documentHandler.addWithMetadataWithoutReplacingExistingDocuments(
                     asylumCase,
                     hearingNotice,
@@ -151,15 +151,6 @@ public class HearingNoticeCreator implements PreSubmitCallbackHandler<AsylumCase
                     hearingNotice,
                     NOTIFICATION_ATTACHMENT_DOCUMENTS,
                     DocumentTag.INTERNAL_CASE_LISTED_LETTER
-                );
-            }
-
-            if (hasBeenSubmittedAsLegalRepresentedInternalCase(asylumCase)) {
-                documentHandler.addWithMetadataWithoutReplacingExistingDocuments(
-                    asylumCase,
-                    hearingNotice,
-                    LETTER_NOTIFICATION_DOCUMENTS,
-                    DocumentTag.INTERNAL_CASE_LISTED_LR_LETTER
                 );
             }
         }

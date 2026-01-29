@@ -600,7 +600,7 @@ internalOutOfTimeDecisionLetterWithAttachment.fileName: "internal-out-of-time-de
 internalCaseListedLetter.contentType:  application/pdf
 internalCaseListedLetter.fileExtension: PDF
 internalCaseListedLetter.fileName: "internal-case-listed-letter"
-internalCaseListedLetter.templateName: ${INTERNAL_CASE_LISTED_LETTER_TEMPLATE:TB-IAC-LET-ENG-Internal-Case-Listed.docx}
+internalCaseListedLetter.templateName: ${INTERNAL_CASE_LISTED_LETTER_TEMPLATE:TB-IAC-LET-ENG-Internal-Case-Listed-and-NOH.docx}
 
 internalCaseListedLetterWithAttachment.fileExtension: PDF
 internalCaseListedLetterWithAttachment.fileName: "internal-case-listed-letter-with-attachment"
