@@ -90,7 +90,7 @@ public enum NationalityGovUk {
     NO("Norway"),
     OM("Oman"),
     PK("Pakistan"),
-    PS("Palestine"),
+    PS("Occupied Palestinian Territories"),
     PY("Paraguay"),
     PE("Peru"),
     PH("Philippines"),
