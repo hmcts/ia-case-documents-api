@@ -1,6 +1,8 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit.letter;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertNotNull;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.*;
@@ -8,6 +10,7 @@ import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseD
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
@@ -127,6 +130,39 @@ class InternalCaseListedLetterTemplateTest {
         assertEquals(postTown, fieldValuesMap.get("address_line_4"));
         assertEquals(Nationality.ES.toString(), fieldValuesMap.get("address_line_5"));
         assertEquals("In Person", fieldValuesMap.get("hearingChannel"));
+    }
+
+    @Test
+    void should_rename_hearingDate_and_hearingTime_from_mapper_to_noh_keys() {
+        dataSetup(true);
+
+        Map<String, Object> mapperFields = new HashMap<>();
+        mapperFields.put("hearingDate", "25122020");
+        mapperFields.put("hearingTime", "1234");
+        mapperFields.put("otherField", "someValue");
+        when(hearingNoticeFieldMapper.mapFields(asylumCase)).thenReturn(mapperFields);
+
+        fieldValuesMap = internalCaseListedLetterTemplate.mapFieldValues(caseDetails);
+
+        assertEquals("25122020", fieldValuesMap.get("hearingDateNoh"));
+        assertEquals("1234", fieldValuesMap.get("hearingTimeNoh"));
+        assertNull(fieldValuesMap.get("hearingDate_from_mapper"));
+        assertEquals("someValue", fieldValuesMap.get("otherField"));
+        // hearingDate/hearingTime should contain the template's own values, not the mapper's
+        assertEquals(formattedListCaseHearingDate, fieldValuesMap.get("hearingDate"));
+        assertEquals(formattedListCaseHearingTime, fieldValuesMap.get("hearingTime"));
+    }
+
+    @Test
+    void should_not_add_noh_keys_when_mapper_does_not_return_hearingDate_or_hearingTime() {
+        dataSetup(true);
+
+        fieldValuesMap = internalCaseListedLetterTemplate.mapFieldValues(caseDetails);
+
+        assertNull(fieldValuesMap.get("hearingDateNoh"));
+        assertNull(fieldValuesMap.get("hearingTimeNoh"));
+        assertNotNull(fieldValuesMap.get("hearingDate"));
+        assertNotNull(fieldValuesMap.get("hearingTime"));
     }
 
     void dataSetup(boolean appellantInUk) {
