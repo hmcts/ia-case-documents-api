@@ -141,7 +141,7 @@ public class HearingNoticeCreator implements PreSubmitCallbackHandler<AsylumCase
                     asylumCase,
                     hearingNotice,
                     LETTER_NOTIFICATION_DOCUMENTS,
-                    DocumentTag.INTERNAL_CASE_LISTED_LETTER
+                    DocumentTag.HEARING_NOTICE
                 );
             }
 

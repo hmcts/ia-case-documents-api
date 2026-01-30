@@ -71,7 +71,7 @@ public class DetainedCaseListedLetterGenerator implements PreSubmitCallbackHandl
             asylumCase,
             internalCaseListedLetter,
             LETTER_NOTIFICATION_DOCUMENTS,
-            DocumentTag.INTERNAL_CASE_LISTED_LETTER
+            DocumentTag.INTERNAL_CASE_LISTED_LETTER_BUNDLE
         );
 
         return new PreSubmitCallbackResponse<>(asylumCase);
