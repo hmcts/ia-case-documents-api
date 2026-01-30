@@ -60,6 +60,8 @@ public class InternalCaseListedLetterTemplate implements DocumentTemplate<Asylum
 
         final Map<String, Object> fieldValues = new HashMap<>();
 
+        addNoticeOfHearingValuesWithHack(fieldValues, asylumCase);
+
         fieldValues.putAll(getAppellantPersonalisation(asylumCase));
         fieldValues.put("customerServicesTelephone", customerServicesProvider.getInternalCustomerServicesTelephone(asylumCase));
         fieldValues.put("customerServicesEmail", customerServicesProvider.getInternalCustomerServicesEmail(asylumCase));
@@ -77,8 +79,19 @@ public class InternalCaseListedLetterTemplate implements DocumentTemplate<Asylum
             fieldValues.put("address_line_" + (i + 1), appellantAddress.get(i));
         }
 
-        fieldValues.putAll(hearingNoticeFieldMapper.mapFields(asylumCase));
-
         return fieldValues;
+    }
+
+    private void addNoticeOfHearingValuesWithHack(Map<String, Object> fieldValues, AsylumCase asylumCase) {
+        Map<String, Object> nohFields = new HashMap<>(hearingNoticeFieldMapper.mapFields(asylumCase));
+        Object hearingDate = nohFields.remove("hearingDate");
+        Object hearingTime = nohFields.remove("hearingTime");
+        if (hearingDate != null) {
+            nohFields.put("hearingDateNoh", hearingDate);
+        }
+        if (hearingTime != null) {
+            nohFields.put("hearingTimeNoh", hearingTime);
+        }
+        fieldValues.putAll(nohFields);
     }
 }

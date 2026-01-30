@@ -7,6 +7,7 @@ import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseD
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.Collections;
 import java.util.Map;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
@@ -25,6 +26,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.Nationality;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.NationalityFieldValue;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.AddressUk;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.HearingNoticeFieldMapper;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.StringProvider;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.CustomerServicesProvider;
 
@@ -43,6 +45,8 @@ class InternalCaseListedLetterTemplateTest {
     AddressUk address;
     @Mock
     private StringProvider stringProvider;
+    @Mock
+    private HearingNoticeFieldMapper hearingNoticeFieldMapper;
     @Mock
     private DynamicList hearingChannelDynamicList;
     @Mock
@@ -71,7 +75,7 @@ class InternalCaseListedLetterTemplateTest {
     @BeforeEach
     public void setUp() {
         internalCaseListedLetterTemplate =
-            new InternalCaseListedLetterTemplate(templateName, customerServicesProvider, stringProvider);
+            new InternalCaseListedLetterTemplate(templateName, customerServicesProvider, stringProvider, hearingNoticeFieldMapper);
     }
 
     @Test
@@ -127,6 +131,7 @@ class InternalCaseListedLetterTemplateTest {
 
     void dataSetup(boolean appellantInUk) {
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
+        when(hearingNoticeFieldMapper.mapFields(asylumCase)).thenReturn(Collections.emptyMap());
         when(customerServicesProvider.getInternalCustomerServicesTelephone(asylumCase)).thenReturn(telephoneNumber);
         when(asylumCase.read(APPEAL_REFERENCE_NUMBER, String.class)).thenReturn(Optional.of(appealReferenceNumber));
         when(asylumCase.read(APPELLANT_GIVEN_NAMES, String.class)).thenReturn(Optional.of(appellantGivenNames));
