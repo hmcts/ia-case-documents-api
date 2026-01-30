@@ -17,6 +17,7 @@ import org.springframework.stereotype.Component;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.HearingCentre;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseDetails;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.HearingNoticeFieldMapper;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.StringProvider;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates.DocumentTemplate;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.CustomerServicesProvider;
@@ -29,14 +30,18 @@ public class InternalCaseListedLetterTemplate implements DocumentTemplate<Asylum
     private final StringProvider stringProvider;
     private static final DateTimeFormatter DOCUMENT_DATE_FORMAT = DateTimeFormatter.ofPattern("d MMMM yyyy");
     private static final DateTimeFormatter DOCUMENT_TIME_FORMAT = DateTimeFormatter.ofPattern("HHmm");
+    private final HearingNoticeFieldMapper hearingNoticeFieldMapper;
 
     public InternalCaseListedLetterTemplate(
         @Value("${internalCaseListedLetter.templateName}") String templateName,
         CustomerServicesProvider customerServicesProvider,
-        StringProvider stringProvider) {
+        StringProvider stringProvider,
+        HearingNoticeFieldMapper hearingNoticeFieldMapper) {
+
         this.templateName = templateName;
         this.customerServicesProvider = customerServicesProvider;
         this.stringProvider = stringProvider;
+        this.hearingNoticeFieldMapper = hearingNoticeFieldMapper;
     }
 
     @Override
@@ -71,6 +76,9 @@ public class InternalCaseListedLetterTemplate implements DocumentTemplate<Asylum
         for (int i = 0; i < appellantAddress.size(); i++) {
             fieldValues.put("address_line_" + (i + 1), appellantAddress.get(i));
         }
+
+        fieldValues.putAll(hearingNoticeFieldMapper.mapFields(asylumCase));
+
         return fieldValues;
     }
 }
