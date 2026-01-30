@@ -77,7 +77,7 @@ class DetainedCaseListedLetterGeneratorTest {
 
         verify(documentHandler, times(1)).addWithMetadataWithoutReplacingExistingDocuments(
             asylumCase, document,
-            LETTER_NOTIFICATION_DOCUMENTS,
+            LETTER_BUNDLE_DOCUMENTS,
             DocumentTag.INTERNAL_CASE_LISTED_LETTER_BUNDLE
         );
     }

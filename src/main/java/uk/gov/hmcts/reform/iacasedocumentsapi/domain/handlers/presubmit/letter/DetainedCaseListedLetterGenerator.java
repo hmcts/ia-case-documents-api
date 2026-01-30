@@ -16,7 +16,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentHandler;
 
 import java.util.Objects;
 
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.LETTER_NOTIFICATION_DOCUMENTS;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.LETTER_BUNDLE_DOCUMENTS;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DetentionFacility.OTHER;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.Event.LIST_CASE;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.*;
@@ -70,7 +70,7 @@ public class DetainedCaseListedLetterGenerator implements PreSubmitCallbackHandl
         documentHandler.addWithMetadataWithoutReplacingExistingDocuments(
             asylumCase,
             internalCaseListedLetter,
-            LETTER_NOTIFICATION_DOCUMENTS,
+            LETTER_BUNDLE_DOCUMENTS,
             DocumentTag.INTERNAL_CASE_LISTED_LETTER_BUNDLE
         );
 
