@@ -23,7 +23,6 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentHandler;
 @Component
 public class InternalCaseListedLetterGenerator implements PreSubmitCallbackHandler<AsylumCase> {
 
-
     private final DocumentCreator<AsylumCase> documentCreator;
     private final DocumentHandler documentHandler;
 
