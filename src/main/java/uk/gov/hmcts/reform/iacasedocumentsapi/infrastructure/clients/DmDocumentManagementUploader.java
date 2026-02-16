@@ -59,7 +59,7 @@ public class DmDocumentManagementUploader {
                 ByteStreams.toByteArray(resource.getInputStream())
             );
 
-            log.info("Uploading {} using DocumentUploadClientApi (CDAM)", resource.getFilename());
+            log.info("Uploading {} using DocumentUploadClientApi (no CDAM)", resource.getFilename());
             UploadResponse uploadResponse =
                 documentUploadClientApi
                     .upload(

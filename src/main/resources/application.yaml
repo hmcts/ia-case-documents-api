@@ -75,14 +75,14 @@ hearingRequirementsDocument.templateName: ${IA_HEARING_REQUIREMENTS_TEMPLATE:TB-
 hearingNoticeDocument.contentType: application/pdf
 hearingNoticeDocument.fileExtension: PDF
 hearingNoticeDocument.fileName: "hearing-notice"
-hearingNoticeDocument.templateName: ${IA_HEARING_NOTICE_TEMPLATE:TB-IAC-HNO-ENG-00241.docx}
+hearingNoticeDocument.templateName: ${IA_HEARING_NOTICE_TEMPLATE:TB-IAC-HNO-ENG-00241-Notice-Of-Hearing.docx}
 
 hearingNoticeAdaDocument.templateName: ${IA_ADA_HEARING_NOTICE_TEMPLATE:TB-IAC-HNO-ENG-ADA-0001.docx}
 
 remoteHearingNoticeDocument.contentType: application/pdf
 remoteHearingNoticeDocument.fileExtension: PDF
 remoteHearingNoticeDocument.fileName: "hearing-notice"
-remoteHearingNoticeDocument.templateName: ${IA_REMOTE_HEARING_NOTICE_TEMPLATE:TB-IAC-HNO-ENG-00680.docx}
+remoteHearingNoticeDocument.templateName: ${IA_REMOTE_HEARING_NOTICE_TEMPLATE:TB-IAC-HNO-ENG-00680-Notice-Of-Hearing-Remote.docx}
 
 hearingNoticeAdjournedWithoutDateDocument.contentType: application/pdf
 hearingNoticeAdjournedWithoutDateDocument.fileExtension: PDF
@@ -97,17 +97,17 @@ noticeOfAdjournedHearingDocument.templateName: ${NOTICE_OF_ADJOURNED_HEARING_TEM
 hearingNoticeEditedDocument.contentType: application/pdf
 hearingNoticeEditedDocument.fileExtension: PDF
 hearingNoticeEditedDocument.fileName: "hearing-notice"
-hearingNoticeEditedDocument.templateName: ${IA_HEARING_NOTICE_EDITED_TEMPLATE:TB-IAC-HNO-ENG-00074B.docx}
+hearingNoticeEditedDocument.templateName: ${IA_HEARING_NOTICE_EDITED_TEMPLATE:TB-IAC-HNO-ENG-00074B-Notice-Of-Hearing-Edited.docx}
 
 hearingNoticeUpdatedRequirementsDocument.contentType: application/pdf
 hearingNoticeUpdatedRequirementsDocument.fileExtension: PDF
 hearingNoticeUpdatedRequirementsDocument.fileName: "hearing-notice"
-hearingNoticeUpdatedRequirementsDocument.templateName: ${IA_HEARING_NOTICE_UPDATED_REQUIREMENTS_TEMPLATE:TB-IAC-HNO-ENG-00243.docx}
+hearingNoticeUpdatedRequirementsDocument.templateName: ${IA_HEARING_NOTICE_UPDATED_REQUIREMENTS_TEMPLATE:TB-IAC-HNO-ENG-00243-Notice-Of-Hearing-Updated-Requirements.docx}
 
 hearingNoticeUpdatedDetailsDocument.contentType: application/pdf
 hearingNoticeUpdatedDetailsDocument.fileExtension: PDF
 hearingNoticeUpdatedDetailsDocument.fileName: "hearing-notice"
-hearingNoticeUpdatedDetailsDocument.templateName: ${IA_HEARING_NOTICE_UPDATED_DETAILS_TEMPLATE:TB-IAC-HNO-ENG-00641.docx}
+hearingNoticeUpdatedDetailsDocument.templateName: ${IA_HEARING_NOTICE_UPDATED_DETAILS_TEMPLATE:TB-IAC-HNO-ENG-00641-Notice-Of-Hearing-Updated-Details.docx}
 
 adaHearingNoticeUpdatedDetailsDocument.contentType: application/pdf
 adaHearingNoticeUpdatedDetailsDocument.fileExtension: PDF
@@ -143,7 +143,7 @@ internalDetainedRequestBuildCaseDocument.templateName: ${IA_INTERNAL_DETAINED_BU
 remoteHearingNoticeUpdatedDetailsDocument.contentType: application/pdf
 remoteHearingNoticeUpdatedDetailsDocument.fileExtension: PDF
 remoteHearingNoticeUpdatedDetailsDocument.fileName: "hearing-notice"
-remoteHearingNoticeUpdatedDetailsDocument.templateName: ${IA_REMOTE_HEARING_NOTICE_UPDATED_DETAILS_TEMPLATE:TB-IAC-HNO-ENG-00680.docx}
+remoteHearingNoticeUpdatedDetailsDocument.templateName: ${IA_REMOTE_HEARING_NOTICE_UPDATED_DETAILS_TEMPLATE:TB-IAC-HNO-ENG-00680-Notice-Of-Hearing-Remote.docx}
 
 decisionAndReasons.contentType:  application/vnd.openxmlformats-officedocument.wordprocessingml.document
 decisionAndReasons.fileExtension: docx
@@ -1244,6 +1244,7 @@ security:
       - "caseListing"
       - "recordAdjournmentDetails"
       - "requestHearingRequirementsFeature"
+      - "changeHearingCentre"
       - "saveNotificationsToData"
     caseworker-ia-homeofficelart:
       - "uploadHomeOfficeAppealResponse"
