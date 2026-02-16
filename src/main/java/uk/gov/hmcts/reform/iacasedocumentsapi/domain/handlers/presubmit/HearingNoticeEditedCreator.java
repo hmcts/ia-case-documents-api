@@ -174,7 +174,8 @@ public class HearingNoticeEditedCreator implements PreSubmitCallbackHandler<Asyl
             );
         }
 
-        if (isInternalNonDetainedCase(asylumCase) || isDetainedInFacilityType(asylumCase, OTHER)) {
+        if (isInternalNonDetainedCase(asylumCase) || isDetainedInFacilityType(asylumCase, OTHER)
+                || !hasAppellantEmailOrMobileNumber(asylumCase)) {
             documentHandler.addWithMetadataWithoutReplacingExistingDocuments(
                 asylumCase,
                 hearingNoticeEdited,

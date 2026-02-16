@@ -647,6 +647,7 @@ class HearingNoticeEditedCreatorTest {
         when(asylumCase.read(IS_ADMIN, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO)); // Not internal for this test
         when(asylumCase.read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
         when(asylumCase.read(DETENTION_FACILITY, String.class)).thenReturn(Optional.of("immigrationRemovalCentre"));
+        when(asylumCase.read(EMAIL, String.class)).thenReturn(Optional.of("test@test.com"));
 
         when(callback.getCaseDetailsBefore()).thenReturn(Optional.of(caseDetailsBefore));
         when(caseDetailsBefore.getCaseData()).thenReturn(asylumCaseBefore);
