@@ -97,7 +97,7 @@ class InternalCaseListedLetterGeneratorTest {
     }
 
     @Test
-    void it_cannot_handle_callback_if_is_admin_is_missing() {
+    void it_cannot_handle_callback_if_is_admin_is_missing_and_appellant_email_present() {
 
         for (Event event : Event.values()) {
 
@@ -105,6 +105,7 @@ class InternalCaseListedLetterGeneratorTest {
             when(callback.getCaseDetails()).thenReturn(caseDetails);
             when(caseDetails.getCaseData()).thenReturn(asylumCase);
             when(callback.getCaseDetails().getCaseData().read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO));
+            when(callback.getCaseDetails().getCaseData().read(EMAIL, String.class)).thenReturn(Optional.of("test@test.com"));
 
             for (PreSubmitCallbackStage callbackStage : PreSubmitCallbackStage.values()) {
                 boolean canHandle = internalCaseListedLetterGenerator.canHandle(callbackStage, callback);
