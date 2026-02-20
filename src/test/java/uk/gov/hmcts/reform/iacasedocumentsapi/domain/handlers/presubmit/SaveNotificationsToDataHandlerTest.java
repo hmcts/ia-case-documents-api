@@ -143,6 +143,39 @@ class SaveNotificationsToDataHandlerTest {
     }
 
     @Test
+    void should_upload_precompiled_pdf_and_clear_body() {
+
+        when(callback.getCaseDetails()).thenReturn(caseDetails);
+        when(callback.getEvent()).thenReturn(Event.SAVE_NOTIFICATIONS_TO_DATA);
+        when(caseDetails.getCaseData()).thenReturn(asylumCase);
+        StoredNotification storedNotification =
+            StoredNotification.builder()
+                .notificationId(notificationId)
+                .notificationDateSent("2024-01-01")
+                .notificationSentTo(email)
+                .notificationBody(body)
+                .notificationMethod(notificationType)
+                .notificationStatus(status)
+                .notificationReference(reference)
+                .notificationSubject("Pre-compiled PDF")
+                .build();
+        List<IdValue<StoredNotification>> storedNotifications =
+            List.of(new IdValue<>(reference, storedNotification));
+        when(asylumCase.read(NOTIFICATIONS)).thenReturn(Optional.of(storedNotifications));
+        when(saveNotificationsToDataPdfService.uploadPdf(body, reference))
+            .thenReturn(document);
+
+        PreSubmitCallbackResponse<AsylumCase> response =
+            saveNotificationsToDataHandler.handle(ABOUT_TO_SUBMIT, callback);
+
+        assertEquals(asylumCase, response.getData());
+        verify(saveNotificationsToDataPdfService).uploadPdf(body, reference);
+        verify(saveNotificationsToDataPdfService, never()).createPdf(anyString(), anyString());
+        assertEquals("", storedNotification.getNotificationBody());
+        assertEquals(document, storedNotification.getNotificationDocument());
+    }
+
+    @Test
     void should_set_notification_document_if_valid() {
 
         when(callback.getCaseDetails()).thenReturn(caseDetails);
@@ -154,12 +187,37 @@ class SaveNotificationsToDataHandlerTest {
         when(mockedStoredNotification.getNotificationStatus()).thenReturn(status);
         when(mockedStoredNotification.getNotificationBody()).thenReturn(body);
         when(mockedStoredNotification.getNotificationReference()).thenReturn(reference);
+        when(mockedStoredNotification.getNotificationSubject()).thenReturn(subject);
         when(saveNotificationsToDataPdfService.createPdf(body, reference)).thenReturn(document);
         PreSubmitCallbackResponse<AsylumCase> response =
             saveNotificationsToDataHandler.handle(ABOUT_TO_SUBMIT, callback);
 
         assertEquals(asylumCase, response.getData());
         verify(mockedStoredNotification, times(1)).setNotificationDocument(document);
+    }
+
+    @Test
+    void should_upload_precompiled_pdf_and_clear_body_with_mock() {
+
+        when(callback.getCaseDetails()).thenReturn(caseDetails);
+        when(callback.getEvent()).thenReturn(Event.SAVE_NOTIFICATIONS_TO_DATA);
+        when(caseDetails.getCaseData()).thenReturn(asylumCase);
+        List<IdValue<StoredNotification>> storedNotifications =
+            List.of(new IdValue<>(reference, mockedStoredNotification));
+        when(asylumCase.read(NOTIFICATIONS)).thenReturn(Optional.of(storedNotifications));
+        when(mockedStoredNotification.getNotificationStatus()).thenReturn(status);
+        when(mockedStoredNotification.getNotificationBody()).thenReturn(body);
+        when(mockedStoredNotification.getNotificationReference()).thenReturn(reference);
+        when(mockedStoredNotification.getNotificationSubject()).thenReturn("Pre-compiled PDF");
+        when(saveNotificationsToDataPdfService.uploadPdf(body, reference)).thenReturn(document);
+
+        PreSubmitCallbackResponse<AsylumCase> response =
+            saveNotificationsToDataHandler.handle(ABOUT_TO_SUBMIT, callback);
+
+        assertEquals(asylumCase, response.getData());
+        verify(mockedStoredNotification, times(1)).setNotificationDocument(document);
+        verify(mockedStoredNotification, times(1)).setNotificationBody("");
+        verify(saveNotificationsToDataPdfService, never()).createPdf(anyString(), anyString());
     }
 
     @Test

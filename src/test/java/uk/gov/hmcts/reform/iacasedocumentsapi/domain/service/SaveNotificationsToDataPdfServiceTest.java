@@ -13,6 +13,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.Document
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Base64;
 
 import static java.io.File.createTempFile;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -34,6 +35,7 @@ class SaveNotificationsToDataPdfServiceTest {
     private SaveNotificationsToDataPdfService saveNotificationsToDataPdfService;
     private final String notificationBody = "<div>some-content</div>";
     private final String notificationReference = "test-reference";
+    private final String base64EncodedPdf = Base64.getEncoder().encodeToString("fake-pdf-content".getBytes());
 
     @BeforeEach
     public void setUp() {
@@ -52,6 +54,17 @@ class SaveNotificationsToDataPdfServiceTest {
         assertNotNull(result);
         verify(documentToPdfConverter).convertHtmlDocResourceToPdf(any(Resource.class));
         verify(documentUploader).upload(any(ByteArrayResource.class), eq("application/pdf"));
+    }
+
+    @Test
+    void should_upload_base64_pdf_successfully() {
+        when(documentUploader.upload(any(ByteArrayResource.class), anyString())).thenReturn(pdf);
+
+        Document result = saveNotificationsToDataPdfService.uploadPdf(base64EncodedPdf, notificationReference);
+
+        assertNotNull(result);
+        verify(documentUploader).upload(any(ByteArrayResource.class), eq("application/pdf"));
+        verifyNoInteractions(documentToPdfConverter);
     }
 
     @Test
