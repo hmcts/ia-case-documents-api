@@ -12,7 +12,7 @@ public class StoredNotification {
     @NonNull private String notificationId;
     @NonNull private String notificationDateSent;
     @NonNull private String notificationSentTo;
-    @NonNull private String notificationBody;
+    @NonNull @Setter private String notificationBody;
     @Setter private Document notificationDocument;
     @NonNull private String notificationMethod;
     @NonNull private String notificationStatus;

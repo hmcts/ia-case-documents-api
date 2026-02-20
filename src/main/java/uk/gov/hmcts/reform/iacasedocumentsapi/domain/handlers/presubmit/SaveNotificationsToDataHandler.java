@@ -62,12 +62,21 @@ public class SaveNotificationsToDataHandler implements PreSubmitCallbackHandler<
             "Temporary-failure", "Permanent-failure", "Validation-failed", "Virus-scan-failed");
         for (IdValue<StoredNotification> notification : maybeExistingNotifications.orElse(emptyList())) {
             StoredNotification storedNotification = notification.getValue();
-            if (storedNotification.getNotificationDocument() == null
-                && !invalidNotificationStatuses.contains(storedNotification.getNotificationStatus())) {
+            if (storedNotification.getNotificationDocument() == null && !invalidNotificationStatuses.contains(storedNotification.getNotificationStatus())) {
                 String notificationBody = storedNotification.getNotificationBody();
                 String notificationReference = storedNotification.getNotificationReference();
-                Document notificationPdf =
-                    saveNotificationsToDataPdfService.createPdf(notificationBody, notificationReference);
+
+                Document notificationPdf;
+                if (storedNotification.getNotificationSubject().equals("Pre-compiled PDF")) {
+                    notificationPdf = saveNotificationsToDataPdfService.uploadPdf(
+                        storedNotification.getNotificationBody(),
+                        notificationReference);
+                    storedNotification.setNotificationBody("");
+                } else {
+                    notificationPdf = saveNotificationsToDataPdfService.createPdf(
+                        notificationBody,
+                        notificationReference);
+                }
                 storedNotification.setNotificationDocument(notificationPdf);
                 notification = new IdValue<>(notification.getId(), storedNotification);
             }

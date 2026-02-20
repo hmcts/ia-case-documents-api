@@ -8,6 +8,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.Document
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Base64;
 
 @Service
 public class SaveNotificationsToDataPdfService {
@@ -23,6 +24,20 @@ public class SaveNotificationsToDataPdfService {
     ) {
         this.documentUploader = documentUploader;
         this.documentToPdfConverter = documentToPdfConverter;
+    }
+
+    public Document uploadPdf(String base64EncodedPdf, String notificationReference) {
+
+        byte[] pdfBytes = Base64.getDecoder().decode(base64EncodedPdf);
+
+        ByteArrayResource byteArrayResource = new ByteArrayResource(pdfBytes) {
+            @Override
+            public String getFilename() {
+                return notificationReference + ".PDF";
+            }
+        };
+
+        return documentUploader.upload(byteArrayResource, PDF_CONTENT_TYPE);
     }
 
     public Document createPdf(String notificationBody, String notificationReference) {
