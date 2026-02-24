@@ -1326,6 +1326,7 @@ hearingCentreEmailAddresses:
   glasgow: ${IA_HEARING_CENTRE_GLASGOW_EMAIL:hc-glasgow@example.com}
   belfast: ${IA_HEARING_CENTRE_GLASGOW_EMAIL:hc-glasgow@example.com}
   harmondsworth: ${IA_HEARING_CENTRE_HARMONDSWORTH_EMAIL:hc-harmondsworth@example.com}
+  yarlsWood: ${IA_HEARING_CENTRE_YARLSWOOD_EMAIL:hc-yarlswood@example.com}
 
 govUkHolidays:
   url: https://www.gov.uk/
