@@ -23,10 +23,13 @@ public class DirectionTagTest {
         assertEquals("requestCmaRequirements", DirectionTag.REQUEST_CMA_REQUIREMENTS.toString());
         assertEquals("", DirectionTag.NONE.toString());
         assertEquals("adaListCase", DirectionTag.ADA_LIST_CASE.toString());
+        assertEquals("listingPaPayLater", DirectionTag.LISTING_PA_PAY_LATER.toString());
+        assertEquals("caseBuildingPaPayLater", DirectionTag.CASE_BUILDING_PA_PAY_LATER.toString());
+        assertEquals("decisionPaPayLater", DirectionTag.DECISION_PA_PAY_LATER.toString());
     }
 
     @Test
     public void if_this_test_fails_it_is_because_it_needs_updating_with_your_changes() {
-        assertEquals(15, DirectionTag.values().length);
+        assertEquals(18, DirectionTag.values().length);
     }
 }
