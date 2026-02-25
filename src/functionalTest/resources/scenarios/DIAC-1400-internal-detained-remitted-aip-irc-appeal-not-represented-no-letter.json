@@ -1,0 +1,46 @@
+{
+  "description": "DIAC-1400 Internal detained in IRC AiP appeal submitted Appellants Representation No - No Letter",
+  "request": {
+    "uri": "/asylum/ccdAboutToSubmit",
+    "credentials": "AdminOfficer",
+    "input": {
+      "id": 14003,
+      "eventId": "markAppealAsRemitted",
+      "state": "appealStarted",
+      "caseData": {
+        "template": "minimal-appeal-submitted.json",
+        "replacements": {
+          "appealSubmissionDate": "{$TODAY}",
+          "isAdmin": "Yes",
+          "appellantsRepresentation": "No",
+          "appellantInDetention": "Yes",
+          "isAcceleratedAppeal": "No",
+          "detentionFacility": "immigrationRemovalCentre",
+          "ircName": "Brookhouse",
+          "feeAmountGbp": "14000",
+          "amountRemitted": "14000",
+          "remissionType": "hoWaiverRemission"
+        }
+      }
+    }
+  },
+  "expectation": {
+    "status": 200,
+    "errors": [],
+    "caseData": {
+      "template": "minimal-appeal-submitted.json",
+      "replacements": {
+        "isAdmin": "Yes",
+        "appellantsRepresentation": "No",
+        "appellantInDetention": "Yes",
+        "isAcceleratedAppeal": "No",
+        "detentionFacility": "immigrationRemovalCentre",
+        "ircName": "Brookhouse",
+        "feeAmountGbp": "14000",
+        "amountRemitted": "14000",
+        "remissionType": "hoWaiverRemission",
+        "notificationAttachmentDocuments": null
+      }
+    }
+  }
+}

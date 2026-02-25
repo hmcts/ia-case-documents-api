@@ -28,6 +28,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.Application;
     "docmosis.endpoint=http://127.0.0.1:8992",
     "docmosis.render.uri=/docmosis",
     "ccdGatewayUrl=http://127.0.0.1:8992",
+    "ROLE_ASSIGNMENT_URL=http://127.0.0.1:8992/amRoleAssignment",
     "emBundler.url=http://127.0.0.1:8992"})
 @AutoConfigureMockMvc(addFilters = false)
 @SpringBootTest(classes = {TestConfiguration.class, Application.class}, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)

@@ -1,6 +1,6 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates.letter;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.*;
@@ -61,6 +61,14 @@ class InternalEndAppealLetterTemplateTest {
     public void setUp() {
         internalEndAppealLetterTemplate =
             new InternalEndAppealLetterTemplate(templateName, customerServicesProvider);
+        when(caseDetails.getCaseData()).thenReturn(asylumCase);
+        when(customerServicesProvider.getInternalCustomerServicesTelephone(asylumCase)).thenReturn(telephoneNumber);
+        when(asylumCase.read(APPEAL_REFERENCE_NUMBER, String.class)).thenReturn(Optional.of(appealReferenceNumber));
+        when(asylumCase.read(APPELLANT_GIVEN_NAMES, String.class)).thenReturn(Optional.of(appellantGivenNames));
+        when(asylumCase.read(APPELLANT_FAMILY_NAME, String.class)).thenReturn(Optional.of(appellantFamilyName));
+        when(asylumCase.read(HOME_OFFICE_REFERENCE_NUMBER, String.class)).thenReturn(Optional.of(homeOfficeReferenceNumber));
+        when(asylumCase.read(END_APPEAL_DATE, String.class)).thenReturn(Optional.of(appealEndDate));
+        when(asylumCase.read(END_APPEAL_APPROVER_TYPE, String.class)).thenReturn(Optional.of(approverType));
     }
 
     @Test
@@ -68,17 +76,10 @@ class InternalEndAppealLetterTemplateTest {
         assertEquals(templateName, internalEndAppealLetterTemplate.getName());
     }
 
-    void dataSetup() {
-        when(caseDetails.getCaseData()).thenReturn(asylumCase);
-        when(customerServicesProvider.getInternalCustomerServicesTelephone(asylumCase)).thenReturn(telephoneNumber);
-        when(asylumCase.read(APPEAL_REFERENCE_NUMBER, String.class)).thenReturn(Optional.of(appealReferenceNumber));
-        when(asylumCase.read(APPELLANT_GIVEN_NAMES, String.class)).thenReturn(Optional.of(appellantGivenNames));
-        when(asylumCase.read(APPELLANT_FAMILY_NAME, String.class)).thenReturn(Optional.of(appellantFamilyName));
-        when(asylumCase.read(HOME_OFFICE_REFERENCE_NUMBER, String.class)).thenReturn(Optional.of(homeOfficeReferenceNumber));
-        when(asylumCase.read(END_APPEAL_DATE, String.class)).thenReturn(Optional.of(appealEndDate));
-        when(asylumCase.read(END_APPEAL_APPROVER_TYPE, String.class)).thenReturn(Optional.of(approverType));
-        when(asylumCase.read(APPELLANT_ADDRESS, AddressUk.class)).thenReturn(Optional.of(address));
+    void dataSetupAiPInCountry() {
+        when(asylumCase.read(APPELLANTS_REPRESENTATION, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
         when(asylumCase.read(APPELLANT_IN_UK, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
+        when(asylumCase.read(APPELLANT_ADDRESS, AddressUk.class)).thenReturn(Optional.of(address));
         when(address.getAddressLine1()).thenReturn(Optional.of(addressLine1));
         when(address.getAddressLine2()).thenReturn(Optional.of(addressLine2));
         when(address.getAddressLine3()).thenReturn(Optional.of(addressLine3));
@@ -86,15 +87,8 @@ class InternalEndAppealLetterTemplateTest {
         when(address.getPostTown()).thenReturn(Optional.of(postTown));
     }
 
-    void dataSetupOoc() {
-        when(caseDetails.getCaseData()).thenReturn(asylumCase);
-        when(customerServicesProvider.getInternalCustomerServicesTelephone(asylumCase)).thenReturn(telephoneNumber);
-        when(asylumCase.read(APPEAL_REFERENCE_NUMBER, String.class)).thenReturn(Optional.of(appealReferenceNumber));
-        when(asylumCase.read(APPELLANT_GIVEN_NAMES, String.class)).thenReturn(Optional.of(appellantGivenNames));
-        when(asylumCase.read(APPELLANT_FAMILY_NAME, String.class)).thenReturn(Optional.of(appellantFamilyName));
-        when(asylumCase.read(HOME_OFFICE_REFERENCE_NUMBER, String.class)).thenReturn(Optional.of(homeOfficeReferenceNumber));
-        when(asylumCase.read(END_APPEAL_DATE, String.class)).thenReturn(Optional.of(appealEndDate));
-        when(asylumCase.read(END_APPEAL_APPROVER_TYPE, String.class)).thenReturn(Optional.of(approverType));
+    void dataSetupAiPOoc() {
+        when(asylumCase.read(APPELLANTS_REPRESENTATION, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
         when(asylumCase.read(APPELLANT_IN_UK, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO));
         when(asylumCase.read(ADDRESS_LINE_1_ADMIN_J, String.class)).thenReturn(Optional.of(oocAddressLine1));
         when(asylumCase.read(ADDRESS_LINE_2_ADMIN_J, String.class)).thenReturn(Optional.of(oocAddressLine2));
@@ -103,19 +97,32 @@ class InternalEndAppealLetterTemplateTest {
         when(oocAddressCountry.getCode()).thenReturn(Nationality.ES.name());
     }
 
+    void dataSetupLegalRepOoc() {
+        when(asylumCase.read(APPELLANTS_REPRESENTATION, YesOrNo.class)).thenReturn(Optional.empty());
+        when(asylumCase.read(LEGAL_REP_HAS_ADDRESS, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO));
+        when(asylumCase.read(OOC_ADDRESS_LINE_1, String.class)).thenReturn(Optional.of(oocAddressLine1));
+        when(asylumCase.read(OOC_ADDRESS_LINE_2, String.class)).thenReturn(Optional.of(oocAddressLine2));
+        when(asylumCase.read(OOC_ADDRESS_LINE_3, String.class)).thenReturn(Optional.of(oocAddressLine3));
+        when(asylumCase.read(OOC_LR_COUNTRY_GOV_UK_ADMIN_J, NationalityFieldValue.class)).thenReturn(Optional.of(oocAddressCountry));
+        when(oocAddressCountry.getCode()).thenReturn(Nationality.ES.name());
+    }
+
+    void dataSetupLegalRepInCountry() {
+        when(asylumCase.read(APPELLANTS_REPRESENTATION, YesOrNo.class)).thenReturn(Optional.empty());
+        when(asylumCase.read(LEGAL_REP_HAS_ADDRESS, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
+        when(asylumCase.read(LEGAL_REP_ADDRESS_U_K, AddressUk.class)).thenReturn(Optional.of(address));
+        when(address.getAddressLine1()).thenReturn(Optional.of(addressLine1));
+        when(address.getAddressLine2()).thenReturn(Optional.of(addressLine2));
+        when(address.getAddressLine3()).thenReturn(Optional.of(addressLine3));
+        when(address.getPostCode()).thenReturn(Optional.of(postCode));
+        when(address.getPostTown()).thenReturn(Optional.of(postTown));
+    }
+
     @Test
     void should_populate_template_correctly_in_country() {
-        dataSetup();
+        dataSetupAiPInCountry();
         fieldValuesMap = internalEndAppealLetterTemplate.mapFieldValues(caseDetails);
-        assertEquals(logo, fieldValuesMap.get("hmcts"));
-        assertEquals(appealReferenceNumber, fieldValuesMap.get("appealReferenceNumber"));
-        assertEquals(appellantGivenNames, fieldValuesMap.get("appellantGivenNames"));
-        assertEquals(appellantFamilyName, fieldValuesMap.get("appellantFamilyName"));
-        assertEquals(homeOfficeReferenceNumber, fieldValuesMap.get("homeOfficeReferenceNumber"));
-        assertEquals(telephoneNumber, fieldValuesMap.get("customerServicesTelephone"));
-        assertEquals(LocalDate.now().format(DateTimeFormatter.ofPattern("d MMMM yyyy")), fieldValuesMap.get("dateLetterSent"));
-        assertEquals("22 July 2023", fieldValuesMap.get("endAppealDate"));
-        assertEquals(approverType, fieldValuesMap.get("decisionMaker"));
+        assertAppealDetails();
         assertEquals(addressLine1, fieldValuesMap.get("address_line_1"));
         assertEquals(addressLine2, fieldValuesMap.get("address_line_2"));
         assertEquals(addressLine3, fieldValuesMap.get("address_line_3"));
@@ -125,8 +132,39 @@ class InternalEndAppealLetterTemplateTest {
 
     @Test
     void should_populate_template_correctly_out_of_country() {
-        dataSetupOoc();
+        dataSetupAiPOoc();
         fieldValuesMap = internalEndAppealLetterTemplate.mapFieldValues(caseDetails);
+        assertAppealDetails();
+        assertEquals(oocAddressLine1, fieldValuesMap.get("address_line_1"));
+        assertEquals(oocAddressLine2, fieldValuesMap.get("address_line_2"));
+        assertEquals(oocAddressLine3, fieldValuesMap.get("address_line_3"));
+        assertEquals(Nationality.ES.toString(), fieldValuesMap.get("address_line_4"));
+    }
+
+    @Test
+    void should_populate_template_correctly_legal_rep_in_country() {
+        dataSetupLegalRepInCountry();
+        fieldValuesMap = internalEndAppealLetterTemplate.mapFieldValues(caseDetails);
+        assertAppealDetails();
+        assertEquals(addressLine1, fieldValuesMap.get("address_line_1"));
+        assertEquals(addressLine2, fieldValuesMap.get("address_line_2"));
+        assertEquals(addressLine3, fieldValuesMap.get("address_line_3"));
+        assertEquals(postTown, fieldValuesMap.get("address_line_4"));
+        assertEquals(postCode, fieldValuesMap.get("address_line_5"));
+    }
+
+    @Test
+    void should_populate_template_correctly_legal_rep_out_of_country() {
+        dataSetupLegalRepOoc();
+        fieldValuesMap = internalEndAppealLetterTemplate.mapFieldValues(caseDetails);
+        assertAppealDetails();
+        assertEquals(oocAddressLine1, fieldValuesMap.get("address_line_1"));
+        assertEquals(oocAddressLine2, fieldValuesMap.get("address_line_2"));
+        assertEquals(oocAddressLine3, fieldValuesMap.get("address_line_3"));
+        assertEquals(Nationality.ES.toString(), fieldValuesMap.get("address_line_4"));
+    }
+
+    private void assertAppealDetails() {
         assertEquals(logo, fieldValuesMap.get("hmcts"));
         assertEquals(appealReferenceNumber, fieldValuesMap.get("appealReferenceNumber"));
         assertEquals(appellantGivenNames, fieldValuesMap.get("appellantGivenNames"));
@@ -136,9 +174,5 @@ class InternalEndAppealLetterTemplateTest {
         assertEquals(LocalDate.now().format(DateTimeFormatter.ofPattern("d MMMM yyyy")), fieldValuesMap.get("dateLetterSent"));
         assertEquals("22 July 2023", fieldValuesMap.get("endAppealDate"));
         assertEquals(approverType, fieldValuesMap.get("decisionMaker"));
-        assertEquals(oocAddressLine1, fieldValuesMap.get("address_line_1"));
-        assertEquals(oocAddressLine2, fieldValuesMap.get("address_line_2"));
-        assertEquals(oocAddressLine3, fieldValuesMap.get("address_line_3"));
-        assertEquals(Nationality.ES.toString(), fieldValuesMap.get("address_line_4"));
     }
 }

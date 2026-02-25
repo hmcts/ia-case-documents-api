@@ -58,6 +58,7 @@ public class InternalOocAppealSubmissionTemplateTest {
     private String homeOfficeReferenceNumber = "A1234567/001";
     private String homeOfficeDecisionDate = "2020-12-23";
     private String decisionLetterReceivedDate = "2020-12-23";
+    private String tribunalReceivedDate = "2020-12-23";
     private String appellantGivenNames = "Talha";
     private String appellantFamilyName = "Awan";
     private String appellantDateOfBirth = "1999-12-31";
@@ -150,6 +151,7 @@ public class InternalOocAppealSubmissionTemplateTest {
 
         when(asylumCase.read(APPEAL_REFERENCE_NUMBER, String.class)).thenReturn(Optional.of(appealReferenceNumber));
         when(asylumCase.read(APPEAL_SUBMISSION_DATE, String.class)).thenReturn(Optional.empty());
+        when(asylumCase.read(TRIBUNAL_RECEIVED_DATE, String.class)).thenReturn(Optional.empty());
         when(asylumCase.read(LEGAL_REPRESENTATIVE_EMAIL_ADDRESS, String.class)).thenReturn(Optional.empty());
         when(asylumCase.read(LEGAL_REP_NAME, String.class)).thenReturn(Optional.empty());
         when(asylumCase.read(LEGAL_REP_COMPANY, String.class)).thenReturn(Optional.empty());
@@ -198,7 +200,7 @@ public class InternalOocAppealSubmissionTemplateTest {
 
         assertEquals(Optional.of(YesOrNo.NO), templateFieldValues.get("appellantInDetention"));
 
-        assertEquals(33, templateFieldValues.size());
+        assertEquals(34, templateFieldValues.size());
         assertEquals("[userImage:hmcts.png]", templateFieldValues.get("hmcts"));
         assertEquals("31122020", templateFieldValues.get("CREATED_DATE"));
         assertEquals(appealReferenceNumber, templateFieldValues.get("appealReferenceNumber"));
@@ -252,8 +254,21 @@ public class InternalOocAppealSubmissionTemplateTest {
 
         Map<String, Object> templateFieldValues = internalOocAppealSubmissionTemplate.mapFieldValues(caseDetails);
 
-        assertEquals(29, templateFieldValues.size());
+        assertEquals(30, templateFieldValues.size());
         assertFalse(templateFieldValues.containsKey("appealType"));
+    }
+
+    @Test
+    void should_add_tribunal_received_date_if_present() {
+
+        dataSetUp();
+        when(asylumCase.read(TRIBUNAL_RECEIVED_DATE, String.class)).thenReturn(Optional.of(tribunalReceivedDate));
+
+
+        Map<String, Object> templateFieldValues = internalOocAppealSubmissionTemplate.mapFieldValues(caseDetails);
+
+        assertEquals(41, templateFieldValues.size());
+        assertTrue(templateFieldValues.containsKey("tribunalReceivedDate"));
     }
 
     void dataSetUp() {
@@ -296,9 +311,9 @@ public class InternalOocAppealSubmissionTemplateTest {
         asylumCase.put("prisonNOMSNumber", nomsNumber);
         when(asylumCase.get("prisonNOMSNumber")).thenReturn(nomsNumber);
 
-        when(asylumCase.containsKey("dateCustodialSentence")).thenReturn(true);
-        asylumCase.put("dateCustodialSentence", prisonerReleaseDate);
-        when(asylumCase.get("dateCustodialSentence")).thenReturn(prisonerReleaseDate);
+        when(asylumCase.containsKey("releaseDate")).thenReturn(true);
+        asylumCase.put("releaseDate", prisonerReleaseDate);
+        when(asylumCase.get("releaseDate")).thenReturn(prisonerReleaseDate);
 
         when(asylumCase.read(HAS_PENDING_BAIL_APPLICATIONS, BailApplicationStatus.class)).thenReturn(Optional.of(hasPendingBailApplication));
         when(asylumCase.read(BAIL_APPLICATION_NUMBER, String.class)).thenReturn(Optional.of(bailApplicationNumber));
@@ -315,6 +330,7 @@ public class InternalOocAppealSubmissionTemplateTest {
         when(asylumCase.read(HOME_OFFICE_DECISION_DATE, String.class)).thenReturn(Optional.empty());
         when(asylumCase.read(APPELLANT_GIVEN_NAMES, String.class)).thenReturn(Optional.empty());
         when(asylumCase.read(APPEAL_SUBMISSION_DATE, String.class)).thenReturn(Optional.empty());
+        when(asylumCase.read(TRIBUNAL_RECEIVED_DATE, String.class)).thenReturn(Optional.empty());
 
         when(asylumCase.read(LEGAL_REP_NAME, String.class)).thenReturn(Optional.empty());
         when(asylumCase.read(LEGAL_REP_COMPANY, String.class)).thenReturn(Optional.empty());
@@ -342,7 +358,7 @@ public class InternalOocAppealSubmissionTemplateTest {
 
         Map<String, Object> templateFieldValues = internalOocAppealSubmissionTemplate.mapFieldValues(caseDetails);
 
-        assertEquals(39, templateFieldValues.size());
+        assertEquals(40, templateFieldValues.size());
         assertTrue(templateFieldValues.containsKey("removalOrderOption"));
         assertEquals(YesOrNo.NO, templateFieldValues.get("removalOrderOption"));
         assertFalse(templateFieldValues.containsKey("removalOrderDate"));
@@ -367,7 +383,7 @@ public class InternalOocAppealSubmissionTemplateTest {
 
         Map<String, Object> templateFieldValues = internalOocAppealSubmissionTemplate.mapFieldValues(caseDetails);
 
-        assertEquals(34, templateFieldValues.size());
+        assertEquals(35, templateFieldValues.size());
         assertTrue(templateFieldValues.containsKey("appealOutOfCountry"));
         assertTrue(templateFieldValues.containsKey("decisionLetterReceivedDate"));
         assertTrue(templateFieldValues.containsKey("outOfCountryDecisionTypeTitle"));
@@ -421,7 +437,7 @@ public class InternalOocAppealSubmissionTemplateTest {
 
         Map<String, Object> templateFieldValues = internalOocAppealSubmissionTemplate.mapFieldValues(caseDetails);
 
-        assertEquals(40, templateFieldValues.size());
+        assertEquals(41, templateFieldValues.size());
         assertTrue(templateFieldValues.containsKey("outOfCountryDecisionTypeTitle"));
         assertTrue(templateFieldValues.containsKey("appellantOutOfCountryAddress"));
         assertTrue(templateFieldValues.containsKey("hasSponsor"));
@@ -467,11 +483,11 @@ public class InternalOocAppealSubmissionTemplateTest {
 
         Map<String, Object> templateFieldValues = internalOocAppealSubmissionTemplate.mapFieldValues(caseDetails);
         if (!oocCircumstancesType.equals(OutOfCountryCircumstances.NONE)) {
-            assertEquals(32, templateFieldValues.size());
+            assertEquals(33, templateFieldValues.size());
             assertEquals(CIRCUMSTANCES_OF_THE_APPELLANT_S_OUT_OF_COUNTRY_APPEAL_TITLE,templateFieldValues.get("outOfCountryDecisionTypeTitle"));
             assertEquals(oocCircumstancesText,templateFieldValues.get("outOfCountryDecisionType"));
         } else {
-            assertEquals(30, templateFieldValues.size());
+            assertEquals(31, templateFieldValues.size());
             assertFalse(templateFieldValues.containsKey("outOfCountryDecisionTypeTitle"));
             assertFalse(templateFieldValues.containsKey("outOfCountryDecisionType"));
         }
@@ -524,6 +540,7 @@ public class InternalOocAppealSubmissionTemplateTest {
         when(asylumCase.read(HOME_OFFICE_DECISION_DATE, String.class)).thenReturn(Optional.empty());
         when(asylumCase.read(APPELLANT_GIVEN_NAMES, String.class)).thenReturn(Optional.empty());
         when(asylumCase.read(APPEAL_SUBMISSION_DATE, String.class)).thenReturn(Optional.empty());
+        when(asylumCase.read(TRIBUNAL_RECEIVED_DATE, String.class)).thenReturn(Optional.empty());
 
         when(asylumCase.read(LEGAL_REP_NAME, String.class)).thenReturn(Optional.empty());
         when(asylumCase.read(LEGAL_REP_COMPANY, String.class)).thenReturn(Optional.empty());
@@ -546,7 +563,7 @@ public class InternalOocAppealSubmissionTemplateTest {
 
         Map<String, Object> templateFieldValues = internalOocAppealSubmissionTemplate.mapFieldValues(caseDetails);
 
-        assertEquals(30, templateFieldValues.size());
+        assertEquals(31, templateFieldValues.size());
         assertFalse(templateFieldValues.containsKey("appellantAddress"));
     }
 
@@ -590,6 +607,7 @@ public class InternalOocAppealSubmissionTemplateTest {
         when(asylumCase.read(DECISION_LETTER_RECEIVED_DATE, String.class)).thenReturn(Optional.empty());
         when(asylumCase.read(APPELLANT_GIVEN_NAMES, String.class)).thenReturn(Optional.empty());
         when(asylumCase.read(APPEAL_SUBMISSION_DATE, String.class)).thenReturn(Optional.empty());
+        when(asylumCase.read(TRIBUNAL_RECEIVED_DATE, String.class)).thenReturn(Optional.empty());
 
         when(asylumCase.read(LEGAL_REP_NAME, String.class)).thenReturn(Optional.empty());
         when(asylumCase.read(LEGAL_REP_COMPANY, String.class)).thenReturn(Optional.empty());
@@ -612,7 +630,7 @@ public class InternalOocAppealSubmissionTemplateTest {
 
         Map<String, Object> templateFieldValues = internalOocAppealSubmissionTemplate.mapFieldValues(caseDetails);
 
-        assertEquals(29, templateFieldValues.size());
+        assertEquals(30, templateFieldValues.size());
 
         assertFalse(templateFieldValues.containsKey("appealType"));
         assertFalse(templateFieldValues.containsKey("appellantAddress"));
@@ -653,7 +671,7 @@ public class InternalOocAppealSubmissionTemplateTest {
 
         Map<String, Object> templateFieldValues = internalOocAppealSubmissionTemplate.mapFieldValues(caseDetails);
 
-        assertEquals(35, templateFieldValues.size());
+        assertEquals(38, templateFieldValues.size());
 
         assertTrue(templateFieldValues.containsKey("appellantInDetention"));
         assertEquals(Optional.of(appellantInDetention), templateFieldValues.get("appellantInDetention"));
@@ -671,11 +689,12 @@ public class InternalOocAppealSubmissionTemplateTest {
         assertEquals("", templateFieldValues.get("detentionFacilityName"));
 
         assertEquals(BailApplicationStatus.NO, templateFieldValues.get("hasPendingBailApplication"));
+        assertTrue(templateFieldValues.containsKey("releaseDateProvided"));
+        assertEquals(YesOrNo.YES, templateFieldValues.get("releaseDateProvided"));
+        assertTrue(templateFieldValues.containsKey("releaseDate"));
 
         assertFalse(templateFieldValues.containsKey("nomsAvailable"));
         assertFalse(templateFieldValues.containsKey("nomsNumber"));
-        assertFalse(templateFieldValues.containsKey("releaseDateProvided"));
-        assertFalse(templateFieldValues.containsKey("releaseDate"));
         assertFalse(templateFieldValues.containsKey("bailApplicationNumber"));
     }
 
@@ -689,7 +708,7 @@ public class InternalOocAppealSubmissionTemplateTest {
 
         Map<String, Object> templateFieldValues = internalOocAppealSubmissionTemplate.mapFieldValues(caseDetails);
 
-        assertEquals(36, templateFieldValues.size());
+        assertEquals(39, templateFieldValues.size());
 
         assertTrue(templateFieldValues.containsKey("appellantInDetention"));
         assertEquals(Optional.of(appellantInDetention), templateFieldValues.get("appellantInDetention"));
@@ -711,9 +730,11 @@ public class InternalOocAppealSubmissionTemplateTest {
 
         assertTrue(templateFieldValues.containsKey("bailApplicationNumber"));
         assertEquals(Optional.of(""), templateFieldValues.get("bailApplicationNumber"));
+        assertTrue(templateFieldValues.containsKey("releaseDateProvided"));
+        assertEquals(YesOrNo.YES, templateFieldValues.get("releaseDateProvided"));
+        assertTrue(templateFieldValues.containsKey("releaseDate"));
 
         assertFalse(templateFieldValues.containsKey("nomsAvailable"));
-        assertFalse(templateFieldValues.containsKey("releaseDateProvided"));
     }
 
     @Test
@@ -726,12 +747,12 @@ public class InternalOocAppealSubmissionTemplateTest {
         asylumCase.put("prisonNOMSNumber", "");
         when(asylumCase.get("prisonNOMSNumber")).thenReturn("");
 
-        asylumCase.put("dateCustodialSentence", "");
-        when(asylumCase.get("dateCustodialSentence")).thenReturn("");
+        asylumCase.put("releaseDate", "");
+        when(asylumCase.get("releaseDate")).thenReturn("");
 
         Map<String, Object> templateFieldValues = internalOocAppealSubmissionTemplate.mapFieldValues(caseDetails);
 
-        assertEquals(38, templateFieldValues.size());
+        assertEquals(39, templateFieldValues.size());
 
         assertTrue(templateFieldValues.containsKey("appellantInDetention"));
         assertEquals(Optional.of(appellantInDetention), templateFieldValues.get("appellantInDetention"));
@@ -774,7 +795,7 @@ public class InternalOocAppealSubmissionTemplateTest {
 
         Map<String, Object> templateFieldValues = internalOocAppealSubmissionTemplate.mapFieldValues(caseDetails);
 
-        assertEquals(36, templateFieldValues.size());
+        assertEquals(39, templateFieldValues.size());
 
         assertTrue(templateFieldValues.containsKey("appellantInDetention"));
         assertEquals(Optional.of(appellantInDetention), templateFieldValues.get("appellantInDetention"));
@@ -796,8 +817,11 @@ public class InternalOocAppealSubmissionTemplateTest {
         assertTrue(templateFieldValues.containsKey("bailApplicationNumber"));
         assertEquals(Optional.of(""), templateFieldValues.get("bailApplicationNumber"));
 
+        assertTrue(templateFieldValues.containsKey("releaseDateProvided"));
+        assertEquals(YesOrNo.YES, templateFieldValues.get("releaseDateProvided"));
+        assertTrue(templateFieldValues.containsKey("releaseDate"));
+
         assertFalse(templateFieldValues.containsKey("nomsAvailable"));
-        assertFalse(templateFieldValues.containsKey("releaseDateProvided"));
     }
 
     @Test
@@ -806,7 +830,7 @@ public class InternalOocAppealSubmissionTemplateTest {
         when(asylumCase.read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO));
         Map<String, Object> templateFieldValues = internalOocAppealSubmissionTemplate.mapFieldValues(caseDetails);
 
-        assertEquals(30, templateFieldValues.size());
+        assertEquals(31, templateFieldValues.size());
 
         assertTrue(templateFieldValues.containsKey("appellantInDetention"));
         assertEquals(Optional.of(YesOrNo.NO), templateFieldValues.get("appellantInDetention"));
@@ -830,7 +854,7 @@ public class InternalOocAppealSubmissionTemplateTest {
 
         Map<String, Object> templateFieldValues = internalOocAppealSubmissionTemplate.mapFieldValues(caseDetails);
 
-        assertEquals(40, templateFieldValues.size());
+        assertEquals(41, templateFieldValues.size());
 
         assertTrue(templateFieldValues.containsKey("appellantInDetention"));
         assertTrue(templateFieldValues.containsKey("isAcceleratedDetainedAppeal"));
@@ -863,7 +887,7 @@ public class InternalOocAppealSubmissionTemplateTest {
         dataSetUp();
         Map<String, Object> templateFieldValues = internalOocAppealSubmissionTemplate.mapFieldValues(caseDetails);
 
-        assertEquals(40, templateFieldValues.size());
+        assertEquals(41, templateFieldValues.size());
 
         assertTrue(templateFieldValues.containsKey("appellantInDetention"));
         assertTrue(templateFieldValues.containsKey("isAcceleratedDetainedAppeal"));
@@ -898,7 +922,7 @@ public class InternalOocAppealSubmissionTemplateTest {
 
         Map<String, Object> templateFieldValues = internalOocAppealSubmissionTemplate.mapFieldValues(caseDetails);
 
-        assertEquals(39, templateFieldValues.size());
+        assertEquals(40, templateFieldValues.size());
 
         assertTrue(templateFieldValues.containsKey("appellantInDetention"));
         assertEquals(Optional.of(appellantInDetention), templateFieldValues.get("appellantInDetention"));
@@ -934,12 +958,12 @@ public class InternalOocAppealSubmissionTemplateTest {
     void test_detained_prison_no_release_date_template_fields() {
         dataSetUp();
 
-        asylumCase.put("dateCustodialSentence", "");
-        when(asylumCase.get("dateCustodialSentence")).thenReturn("");
+        asylumCase.put("releaseDate", "");
+        when(asylumCase.get("releaseDate")).thenReturn("");
 
         Map<String, Object> templateFieldValues = internalOocAppealSubmissionTemplate.mapFieldValues(caseDetails);
 
-        assertEquals(39, templateFieldValues.size());
+        assertEquals(40, templateFieldValues.size());
 
         assertTrue(templateFieldValues.containsKey("appellantInDetention"));
         assertEquals(Optional.of(appellantInDetention), templateFieldValues.get("appellantInDetention"));
@@ -980,7 +1004,7 @@ public class InternalOocAppealSubmissionTemplateTest {
 
         Map<String, Object> templateFieldValues = internalOocAppealSubmissionTemplate.mapFieldValues(caseDetails);
 
-        assertEquals(39, templateFieldValues.size());
+        assertEquals(40, templateFieldValues.size());
 
         assertTrue(templateFieldValues.containsKey("appellantInDetention"));
         assertEquals(Optional.of(appellantInDetention), templateFieldValues.get("appellantInDetention"));
@@ -1019,7 +1043,7 @@ public class InternalOocAppealSubmissionTemplateTest {
 
         Map<String, Object> templateFieldValues = internalOocAppealSubmissionTemplate.mapFieldValues(caseDetails);
 
-        assertEquals(36, templateFieldValues.size());
+        assertEquals(39, templateFieldValues.size());
 
         assertTrue(templateFieldValues.containsKey("appellantInDetention"));
         assertTrue(templateFieldValues.containsKey("isAcceleratedDetainedAppeal"));
@@ -1028,11 +1052,11 @@ public class InternalOocAppealSubmissionTemplateTest {
         assertTrue(templateFieldValues.containsKey("detentionFacilityName"));
         assertTrue(templateFieldValues.containsKey("hasPendingBailApplication"));
         assertTrue(templateFieldValues.containsKey("bailApplicationNumber"));
+        assertTrue(templateFieldValues.containsKey("releaseDateProvided"));
+        assertTrue(templateFieldValues.containsKey("releaseDate"));
 
         assertFalse(templateFieldValues.containsKey("nomsAvailable"));
         assertFalse(templateFieldValues.containsKey("nomsNumber"));
-        assertFalse(templateFieldValues.containsKey("releaseDateProvided"));
-        assertFalse(templateFieldValues.containsKey("releaseDate"));
 
         assertEquals(Optional.of(appellantInDetention), templateFieldValues.get("appellantInDetention"));
         assertEquals(isAcceleratedDetainedAppeal, templateFieldValues.get("isAcceleratedDetainedAppeal"));
@@ -1051,7 +1075,7 @@ public class InternalOocAppealSubmissionTemplateTest {
 
         Map<String, Object> templateFieldValues = internalOocAppealSubmissionTemplate.mapFieldValues(caseDetails);
 
-        assertEquals(36, templateFieldValues.size());
+        assertEquals(39, templateFieldValues.size());
 
         assertTrue(templateFieldValues.containsKey("appellantInDetention"));
         assertTrue(templateFieldValues.containsKey("isAcceleratedDetainedAppeal"));
@@ -1060,11 +1084,11 @@ public class InternalOocAppealSubmissionTemplateTest {
         assertTrue(templateFieldValues.containsKey("detentionFacilityName"));
         assertTrue(templateFieldValues.containsKey("hasPendingBailApplication"));
         assertTrue(templateFieldValues.containsKey("bailApplicationNumber"));
+        assertTrue(templateFieldValues.containsKey("releaseDateProvided"));
+        assertTrue(templateFieldValues.containsKey("releaseDate"));
 
         assertFalse(templateFieldValues.containsKey("nomsAvailable"));
         assertFalse(templateFieldValues.containsKey("nomsNumber"));
-        assertFalse(templateFieldValues.containsKey("releaseDateProvided"));
-        assertFalse(templateFieldValues.containsKey("releaseDate"));
 
         assertEquals(Optional.of(appellantInDetention), templateFieldValues.get("appellantInDetention"));
         assertEquals(isAcceleratedDetainedAppeal, templateFieldValues.get("isAcceleratedDetainedAppeal"));
@@ -1083,7 +1107,7 @@ public class InternalOocAppealSubmissionTemplateTest {
 
         Map<String, Object> templateFieldValues = internalOocAppealSubmissionTemplate.mapFieldValues(caseDetails);
 
-        assertEquals(40, templateFieldValues.size());
+        assertEquals(41, templateFieldValues.size());
         assertTrue(templateFieldValues.containsKey("isAdmin"));
 
         assertEquals(isAdmin, templateFieldValues.get("isAdmin"));

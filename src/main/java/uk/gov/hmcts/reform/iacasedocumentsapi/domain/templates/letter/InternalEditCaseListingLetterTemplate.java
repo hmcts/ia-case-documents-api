@@ -1,6 +1,7 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates.letter;
 
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.LIST_CASE_HEARING_DATE;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.*;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.formatDateForRendering;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.formatDateTimeForRendering;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.getAppellantAddressAsList;
@@ -56,8 +57,12 @@ public class InternalEditCaseListingLetterTemplate implements DocumentTemplate<A
         Map<String, Object> fieldValues = hearingNoticeUpdatedTemplateProvider.mapFieldValues(caseDetails, caseDetailsBefore);
 
         fieldValues.putAll(getAppellantPersonalisation(asylumCase));
-        fieldValues.put("oldHearingChannel", "Old channel"); //TODO
-        fieldValues.put("hearingChannel", "Current Channel");  //TODO
+
+        String oldHearingChannel = getHearingChannel(asylumCaseBefore, "Unknown");
+        String newHearingChannel = getHearingChannel(asylumCase, "Unknown");
+
+        fieldValues.put("oldHearingChannel", oldHearingChannel);
+        fieldValues.put("hearingChannel", newHearingChannel);
         fieldValues.put("oldHearingTime", formatDateTimeForRendering(asylumCaseBefore.read(LIST_CASE_HEARING_DATE, String.class).orElse(""), DOCUMENT_TIME_FORMAT));
         fieldValues.put("oldHearingDate", formatDateTimeForRendering(asylumCaseBefore.read(LIST_CASE_HEARING_DATE, String.class).orElse(""), DOCUMENT_DATE_FORMAT));
         fieldValues.put("customerServicesTelephone", customerServicesProvider.getInternalCustomerServicesTelephone(asylumCase));
@@ -75,4 +80,5 @@ public class InternalEditCaseListingLetterTemplate implements DocumentTemplate<A
         }
         return fieldValues;
     }
+
 }

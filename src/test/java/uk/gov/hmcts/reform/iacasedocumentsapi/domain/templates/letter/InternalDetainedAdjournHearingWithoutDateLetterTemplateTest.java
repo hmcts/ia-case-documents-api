@@ -68,7 +68,7 @@ public class InternalDetainedAdjournHearingWithoutDateLetterTemplateTest {
         when(mockAsylumCase.read(APPELLANT_GIVEN_NAMES, String.class)).thenReturn(Optional.of(appellantGivenNames));
         when(mockAsylumCase.read(APPELLANT_FAMILY_NAME, String.class)).thenReturn(Optional.of(appellantFamilyName));
         when(mockAsylumCase.read(ADJOURN_HEARING_WITHOUT_DATE_REASONS, String.class)).thenReturn(Optional.of(hearingWithoutDateReasons));
-        when(mockAsylumCaseBefore.read(AsylumCaseDefinition.HEARING_CENTRE, HearingCentre.class))
+        when(mockAsylumCaseBefore.read(LIST_CASE_HEARING_CENTRE, HearingCentre.class))
                 .thenReturn(Optional.of(HearingCentre.BIRMINGHAM));
         when(mockAsylumCaseBefore.read(AsylumCaseDefinition.LIST_CASE_HEARING_DATE, String.class)).thenReturn(Optional.of(hearingDateBefore));
         when(stringProvider.get("hearingCentreName", HearingCentre.BIRMINGHAM.toString())).thenReturn(Optional.of("Birmingham"));
@@ -94,7 +94,7 @@ public class InternalDetainedAdjournHearingWithoutDateLetterTemplateTest {
 
     @Test
     void should_throw_when_list_case_hearing_centre_before_not_present() {
-        when(mockAsylumCaseBefore.read(HEARING_CENTRE, HearingCentre.class)).thenReturn(Optional.empty());
+        when(mockAsylumCaseBefore.read(LIST_CASE_HEARING_CENTRE, HearingCentre.class)).thenReturn(Optional.empty());
 
         assertThatThrownBy(() -> internalDetainedAdjournHearingWithoutDateLetterTemplate.mapFieldValues(mockCaseDetails, mockCaseDetailsBefore))
                 .isExactlyInstanceOf(IllegalStateException.class)

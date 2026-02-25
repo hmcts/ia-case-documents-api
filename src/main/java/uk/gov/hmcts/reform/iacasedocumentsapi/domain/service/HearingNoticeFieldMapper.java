@@ -45,6 +45,8 @@ public class HearingNoticeFieldMapper {
         fieldValues.put("hearingDate", formatDateTimeForRendering(asylumCase.read(LIST_CASE_HEARING_DATE, String.class).orElse(""), DOCUMENT_DATE_FORMAT));
         fieldValues.put("hearingTime", formatDateTimeForRendering(asylumCase.read(LIST_CASE_HEARING_DATE, String.class).orElse(""), DOCUMENT_TIME_FORMAT));
 
+        String referenceNumber = asylumCase.read(CCD_REFERENCE_NUMBER_FOR_DISPLAY, String.class).orElse("");
+        fieldValues.put("ccdReferenceNumberForDisplay", referenceNumber);
 
         boolean isCaseUsingLocationRefData = asylumCase.read(IS_CASE_USING_LOCATION_REF_DATA, YesOrNo.class)
                 .orElse(YesOrNo.NO).equals(YesOrNo.YES);
@@ -54,6 +56,9 @@ public class HearingNoticeFieldMapper {
         if ((!isCaseUsingLocationRefData && listedHearingCentre.equals(HearingCentre.REMOTE_HEARING))
                 || (isCaseUsingLocationRefData && asylumCase.read(IS_REMOTE_HEARING, YesOrNo.class).orElse(YesOrNo.NO).equals(YesOrNo.YES))) {
             fieldValues.put("remoteHearing", "Remote hearing");
+            fieldValues.put("remoteVideoCallTribunalResponse", asylumCase.read(REMOTE_VIDEO_CALL_TRIBUNAL_RESPONSE, String.class).orElse(""));
+        } else if (asylumCase.read(IS_VIRTUAL_HEARING, YesOrNo.class).orElse(YesOrNo.NO).equals(YesOrNo.YES)) {
+            fieldValues.put("remoteHearing", "IAC National (Virtual)");
             fieldValues.put("remoteVideoCallTribunalResponse", asylumCase.read(REMOTE_VIDEO_CALL_TRIBUNAL_RESPONSE, String.class).orElse(""));
         }
 

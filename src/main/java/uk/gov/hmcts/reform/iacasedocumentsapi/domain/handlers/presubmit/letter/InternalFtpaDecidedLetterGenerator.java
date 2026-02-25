@@ -9,6 +9,7 @@ import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtil
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ApplicantType;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DocumentTag;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.FtpaDecisionOutcomeType;
@@ -32,7 +33,7 @@ public class InternalFtpaDecidedLetterGenerator implements PreSubmitCallbackHand
     private final DocumentCreator<AsylumCase> internalHoFtpaDecidedPartiallyGrantedLetter;
     private final DocumentCreator<AsylumCase> internalHoFtpaDecidedRefusedLetter;
     private final DocumentHandler documentHandler;
-    private final String ftpaApplicantAppellant = "appellant";
+    private final ApplicantType ftpaApplicantAppellant = ApplicantType.APPELLANT;
 
     public InternalFtpaDecidedLetterGenerator(
             @Qualifier("internalAppellantFtpaDecidedGrantedLetter") DocumentCreator<AsylumCase> internalAppellantFtpaDecidedGrantedLetter,
@@ -83,7 +84,7 @@ public class InternalFtpaDecidedLetterGenerator implements PreSubmitCallbackHand
         Optional<FtpaDecisionOutcomeType> ftpaRespondentDecisionOutcomeType = asylumCase
                 .read(FTPA_RESPONDENT_RJ_DECISION_OUTCOME_TYPE, FtpaDecisionOutcomeType.class);
 
-        Optional<String> ftpaApplicantType = asylumCase.read(FTPA_APPLICANT_TYPE, String.class);
+        Optional<ApplicantType> ftpaApplicantType = asylumCase.read(FTPA_APPLICANT_TYPE, ApplicantType.class);
 
         Document documentForUpload;
         DocumentTag documentTag;

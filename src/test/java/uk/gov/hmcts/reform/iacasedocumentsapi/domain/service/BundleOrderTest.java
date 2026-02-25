@@ -18,14 +18,14 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseType;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.Document;
 
 @ExtendWith(MockitoExtension.class)
-public class BundleOrderTest {
+class BundleOrderTest {
 
     private final BundleOrder bundleOrder = new BundleOrder();
 
     @Mock Document document;
 
     @Test
-    public void should_sort_in_correct_order_excluding_bail_tags() {
+    void should_sort_in_correct_order_excluding_bail_tags() {
         List<DocumentTag> tags = newArrayList(DocumentTag.values());
         tags.add(DocumentTag.CASE_ARGUMENT);
         tags.add(DocumentTag.APPEAL_SUBMISSION);
@@ -38,7 +38,7 @@ public class BundleOrderTest {
             .map(DocumentWithMetadata::getTag)
             .toList();
 
-        assertEquals(92, sortedTags.size());
+        assertEquals(116, sortedTags.size());
 
         List<DocumentTag> documentTagList = Arrays.asList(
             DocumentTag.CASE_SUMMARY,
@@ -87,7 +87,6 @@ public class BundleOrderTest {
             DocumentTag.INTERNAL_APPEAL_SUBMISSION,
             DocumentTag.INTERNAL_REQUEST_RESPONDENT_EVIDENCE_LETTER,
             DocumentTag.INTERNAL_END_APPEAL_AUTOMATICALLY,
-            DocumentTag.INTERNAL_APPEAL_FEE_DUE_LETTER,
             DocumentTag.INTERNAL_DET_MARK_AS_PAID_LETTER,
             DocumentTag.INTERNAL_LIST_CASE_LETTER,
             DocumentTag.INTERNAL_REQUEST_HEARING_REQUIREMENTS_LETTER,
@@ -115,7 +114,6 @@ public class BundleOrderTest {
             DocumentTag.INTERNAL_HO_CHANGE_DIRECTION_DUE_DATE_LETTER,
             DocumentTag.INTERNAL_NON_STANDARD_DIRECTION_RESPONDENT_LETTER,
             DocumentTag.INTERNAL_REINSTATE_APPEAL_LETTER,
-            DocumentTag.INTERNAL_ADJOURN_HEARING_WITHOUT_DATE,
             DocumentTag.UPPER_TRIBUNAL_TRANSFER_ORDER_DOCUMENT,
             DocumentTag.IAUT_2_FORM,
             DocumentTag.UPDATED_DECISION_AND_REASONS_COVER_LETTER,
@@ -127,11 +125,30 @@ public class BundleOrderTest {
             DocumentTag.INTERNAL_END_APPEAL_LETTER_BUNDLE,
             DocumentTag.INTERNAL_CASE_LISTED_LETTER,
             DocumentTag.INTERNAL_CASE_LISTED_LETTER_BUNDLE,
+            DocumentTag.INTERNAL_CASE_LISTED_LR_LETTER,
+            DocumentTag.INTERNAL_CASE_LISTED_LR_LETTER_BUNDLE,
             DocumentTag.INTERNAL_OUT_OF_TIME_DECISION_LETTER,
             DocumentTag.INTERNAL_OUT_OF_TIME_DECISION_LETTER_BUNDLE,
             DocumentTag.INTERNAL_EDIT_CASE_LISTING_LETTER,
             DocumentTag.INTERNAL_EDIT_CASE_LISTING_LETTER_BUNDLE,
+            DocumentTag.INTERNAL_EDIT_CASE_LISTING_LR_LETTER,
+            DocumentTag.INTERNAL_EDIT_CASE_LISTING_LR_LETTER_BUNDLE,
             DocumentTag.INTERNAL_DETAINED_MANAGE_FEE_UPDATE_LETTER,
+            DocumentTag.INTERNAL_DETAINED_APPEAL_SUBMITTED_OUT_OF_TIME_WITH_EXEMPTION_LETTER,
+            DocumentTag.INTERNAL_DETAINED_APPEAL_SUBMITTED_IN_TIME_WITH_FEE_TO_PAY_LETTER,
+            DocumentTag.INTERNAL_DETAINED_OUT_OF_TIME_DECISION_ALLOWED_LETTER,
+            DocumentTag.INTERNAL_DETAINED_OUT_OF_TIME_REMISSION_GRANTED_IRC_PRISON_LETTER,
+            DocumentTag.INTERNAL_DETAINED_APPEAL_HO_UPLOAD_BUNDLE_APPELLANT_LETTER,
+            DocumentTag.INTERNAL_DETAINED_APPEAL_SUBMITTED_OUT_OF_TIME_WITH_FEE_LETTER,
+            DocumentTag.DETAINED_LEGAL_REP_REMOVED_IRC_PRISON_LETTER,
+            DocumentTag.INTERNAL_DETAINED_LATE_REMISSION_PARTIALLY_GRANTED_OR_REFUSED_TEMPLATE_LETTER,
+            DocumentTag.INTERNAL_DETAINED_DECISION_WITHOUT_HEARING,
+            DocumentTag.INTERNAL_DETAINED_APPEAL_UPDATE_TRIBUNAL_DECISION_RULE_31_IRC_PRISON_LETTER,
+            DocumentTag.INTERNAL_DETAINED_LATE_REMISSION_GRANTED_TEMPLATE_LETTER,
+            DocumentTag.INTERNAL_DETAINED_LATE_REMISSION_REFUSED_TEMPLATE_LETTER,
+            DocumentTag.INTERNAL_DETAINED_IRC_PRISON_FTPA_DISPOSED_RULES_31_OR_32_LETTER,
+            DocumentTag.INTERNAL_DETAINED_APPEAL_REMITTED_AIP_IRC_PRISON_LETTER,
+            DocumentTag.AIPM_DETAINED_IN_PRISON_IRC_REINSTATE_APPEAL_LETTER,
             DocumentTag.NONE
         );
 

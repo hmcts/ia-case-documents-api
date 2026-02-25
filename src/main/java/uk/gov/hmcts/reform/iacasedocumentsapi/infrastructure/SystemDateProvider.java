@@ -21,4 +21,9 @@ public class SystemDateProvider implements DateProvider {
         return LocalDate.now().plusDays(plusDays)
             .format(DateTimeFormatter.ofPattern("d MMM yyyy"));
     }
+
+    public String plusWeeks(int plusWeeks) {
+        return LocalDate.now().plusWeeks(plusWeeks)
+                .format(DateTimeFormatter.ofPattern("d MMM yyyy"));
+    }
 }

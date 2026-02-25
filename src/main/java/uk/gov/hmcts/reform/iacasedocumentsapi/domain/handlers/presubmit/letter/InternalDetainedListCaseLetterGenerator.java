@@ -1,7 +1,10 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit.letter;
 
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.NOTIFICATION_ATTACHMENT_DOCUMENTS;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.*;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DetentionFacility.IRC;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DetentionFacility.PRISON;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.isAcceleratedDetainedAppeal;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.isDetainedInOneOfFacilityTypes;
 
 import java.util.Objects;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -43,9 +46,8 @@ public class InternalDetainedListCaseLetterGenerator implements PreSubmitCallbac
 
         return callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
                && callback.getEvent() == Event.LIST_CASE
-               && isInternalCase(asylumCase)
                && !isAcceleratedDetainedAppeal(asylumCase)
-               && isAppellantInDetention(asylumCase);
+               && isDetainedInOneOfFacilityTypes(asylumCase, IRC, PRISON);
     }
 
     public PreSubmitCallbackResponse<AsylumCase> handle(
@@ -61,11 +63,11 @@ public class InternalDetainedListCaseLetterGenerator implements PreSubmitCallbac
 
         Document internalDetainedListCaseLetter = documentCreator.create(caseDetails);
 
-        documentHandler.addWithMetadata(
+        documentHandler.addWithMetadataWithoutReplacingExistingDocuments(
             asylumCase,
             internalDetainedListCaseLetter,
             NOTIFICATION_ATTACHMENT_DOCUMENTS,
-            DocumentTag.INTERNAL_LIST_CASE_LETTER
+            DocumentTag.INTERNAL_CASE_LISTED_LETTER
         );
 
         return new PreSubmitCallbackResponse<>(asylumCase);

@@ -116,7 +116,7 @@ public class AppealSubmissionCreator implements PreSubmitCallbackHandler<AsylumC
             );
         }
 
-        if (callback.getEvent().equals(Event.SUBMIT_APPEAL) && isInternalCase(asylumCase) && isAppellantInDetention(asylumCase) && !isAcceleratedDetainedAppeal(asylumCase)) {
+        if (callback.getEvent().equals(Event.SUBMIT_APPEAL) && isInternalCase(asylumCase) && isAppellantInDetention(asylumCase) && isAcceleratedDetainedAppeal(asylumCase)) {
             appealSubmission = internalAppealSubmissionDocumentCreator.create(caseDetails);
             documentTag = DocumentTag.INTERNAL_APPEAL_SUBMISSION;
             documentField = NOTIFICATION_ATTACHMENT_DOCUMENTS;

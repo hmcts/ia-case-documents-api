@@ -1,0 +1,62 @@
+{
+  "description": "DIAC-1311 internal-detained-appeal-submission-OOT-fee-exempt-letter",
+  "request": {
+    "uri": "/asylum/ccdAboutToSubmit",
+    "credentials": "AdminOfficer",
+    "input": {
+      "id": 1311,
+      "eventId": "submitAppeal",
+      "state": "appealStarted",
+      "caseData": {
+        "template": "minimal-appeal-started.json",
+        "replacements": {
+          "appealReferenceNumber": "RP/50001/2025",
+          "isAdmin": "Yes",
+          "appellantsRepresentation": "Yes",
+          "appellantInDetention": "Yes",
+          "isAcceleratedDetainedAppeal": "No",
+          "detentionFacility": "prison",
+          "prisonNOMSNumber": "",
+          "submissionOutOfTime": "Yes",
+          "appealSubmissionDate": "{$TODAY}",
+          "appealType": "revocationOfProtection"
+        }
+      }
+    }
+  },
+  "expectation": {
+    "status": 200,
+    "errors": [],
+    "caseData": {
+      "template": "minimal-appeal-started.json",
+      "replacements": {
+        "isAdmin": "Yes",
+        "appellantsRepresentation": "Yes",
+        "appellantInDetention": "Yes",
+        "isAcceleratedDetainedAppeal": "No",
+        "detentionFacility": "prison",
+        "prisonNOMSNumber": "",
+        "submissionOutOfTime": "Yes",
+        "appealSubmissionDate": "{$TODAY}",
+        "appealType": "revocationOfProtection",
+        "appealReferenceNumber": "$/(.+)/",
+        "notificationAttachmentDocuments": [
+          {
+            "id": "1",
+            "value": {
+              "tag": "internalDetainedAppealSubmittedOutOfTimeWithExemptionLetter",
+              "document": {
+                "document_url": "$/http.+\/documents/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/",
+                "document_filename": "RP 50001 2025-Awan-appeal-form.PDF",
+                "document_binary_url": "$/http.+\/documents/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}\/binary/"
+              },
+              "suppliedBy": "",
+              "description": "",
+              "dateUploaded": "{$TODAY}"
+            }
+          }
+        ]
+      }
+    }
+  }
+}

@@ -11,6 +11,7 @@
         "replacements": {
           "appellantInDetention": "Yes",
           "isAcceleratedDetainedAppeal": "Yes",
+          "detentionFacility": "prison",
           "directions": [
             {
               "id": "1",

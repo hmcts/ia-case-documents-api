@@ -107,7 +107,7 @@ public class InternalDecideHomeOfficeApplicationDecisionGrantedLetterTemplateTes
                 LocalDate.now().toString(),
                 "Granted",
                 State.APPEAL_SUBMITTED.toString(),
-                "caseworker-ia-admofficer");
+                "ctsc");
         makeAnApplications.add(new IdValue<>("1", testApplication));
 
         when(asylumCase.read(MAKE_AN_APPLICATIONS)).thenReturn(Optional.of(makeAnApplications));

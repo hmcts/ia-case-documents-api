@@ -1,6 +1,7 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit.letter;
 
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.NOTIFICATION_ATTACHMENT_DOCUMENTS;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DetentionFacility.OTHER;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.*;
 
 import java.util.Objects;
@@ -44,8 +45,9 @@ public class InternalEndAppealAutomaticallyGenerator implements PreSubmitCallbac
         return callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
                && callback.getEvent() == Event.END_APPEAL_AUTOMATICALLY
                && isInternalCase(asylumCase)
+               && isAppellantInDetention(asylumCase)
                && !isAcceleratedDetainedAppeal(asylumCase)
-               && isAppellantInDetention(asylumCase);
+               && !isDetainedInFacilityType(asylumCase, OTHER);
     }
 
     public PreSubmitCallbackResponse<AsylumCase> handle(

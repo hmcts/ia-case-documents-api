@@ -1,5 +1,5 @@
 {
-  "description": "RIA-7429 Internal reinstate appeal document - ADA",
+  "description": "RIA-7429 Internal LR reinstate appeal document - ADA",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
     "credentials": "Judge",
@@ -15,7 +15,8 @@
           "reinstateAppealReason": "Withdraw",
           "reinstatedDecisionMaker": "Judge",
           "appellantInDetention": "Yes",
-          "isAcceleratedDetainedAppeal": "Yes"
+          "isAcceleratedDetainedAppeal": "Yes",
+          "appellantsRepresentation": "No"
         }
       }
     }
@@ -32,6 +33,7 @@
         "reinstatedDecisionMaker": "Judge",
         "appellantInDetention": "Yes",
         "isAcceleratedDetainedAppeal": "Yes",
+        "appellantsRepresentation": "No",
         "notificationAttachmentDocuments": [
           {
             "id": "1",

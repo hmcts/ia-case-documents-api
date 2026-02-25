@@ -12,6 +12,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.junit.jupiter.MockitoSettings;
+import org.mockito.quality.Strictness;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.HearingCentre;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseDetails;
@@ -20,6 +22,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates.HearingNoticeTemp
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.CustomerServicesProvider;
 
 @ExtendWith(MockitoExtension.class)
+@MockitoSettings(strictness = Strictness.LENIENT)
 @SuppressWarnings("unchecked")
 class HearingNoticeFieldMapperTest {
 
@@ -35,6 +38,7 @@ class HearingNoticeFieldMapperTest {
     private String appellantFamilyName = "Awan";
     private String homeOfficeReferenceNumber = "A1234567/001";
     private String legalRepReferenceNumber = "OUR-REF";
+    private String ccdReferenceNumber = "1234-5678-9012-3456";
     private String hearingDate = "2020-12-25T12:34:56";
     private String manchesterHearingCentreAddress = "Manchester, 123 Somewhere, North";
     private String taylorHouseHearingCentreAddress = "London, 456 Somewhere, South";
@@ -74,6 +78,7 @@ class HearingNoticeFieldMapperTest {
                 stringProvider,
                 customerServicesProvider
             );
+        when(asylumCase.read(IS_VIRTUAL_HEARING)).thenReturn(Optional.of(YesOrNo.NO));
 
     }
 
@@ -93,6 +98,7 @@ class HearingNoticeFieldMapperTest {
         when(asylumCase.read(APPELLANT_FAMILY_NAME, String.class)).thenReturn(Optional.of(appellantFamilyName));
         when(asylumCase.read(HOME_OFFICE_REFERENCE_NUMBER, String.class)).thenReturn(Optional.of(homeOfficeReferenceNumber));
         when(asylumCase.read(LEGAL_REP_REFERENCE_NUMBER, String.class)).thenReturn(Optional.of(legalRepReferenceNumber));
+        when(asylumCase.read(CCD_REFERENCE_NUMBER_FOR_DISPLAY, String.class)).thenReturn(Optional.of(ccdReferenceNumber));
 
         when(asylumCase.read(LIST_CASE_HEARING_DATE, String.class)).thenReturn(Optional.of(hearingDate));
 
@@ -117,13 +123,14 @@ class HearingNoticeFieldMapperTest {
 
         Map<String, Object> templateFieldValues = hearingNoticeTemplate.mapFieldValues(caseDetails);
 
-        assertEquals(18, templateFieldValues.size());
+        assertEquals(19, templateFieldValues.size());
         assertEquals("[userImage:hmcts.png]", templateFieldValues.get("hmcts"));
         assertEquals(appealReferenceNumber, templateFieldValues.get("appealReferenceNumber"));
         assertEquals(appellantGivenNames, templateFieldValues.get("appellantGivenNames"));
         assertEquals(appellantFamilyName, templateFieldValues.get("appellantFamilyName"));
         assertEquals(homeOfficeReferenceNumber, templateFieldValues.get("homeOfficeReferenceNumber"));
         assertEquals(legalRepReferenceNumber, templateFieldValues.get("legalRepReferenceNumber"));
+        assertEquals(ccdReferenceNumber, templateFieldValues.get("ccdReferenceNumberForDisplay"));
         assertEquals(expectedFormattedHearingDatePart, templateFieldValues.get("hearingDate"));
         assertEquals(expectedFormattedHearingTimePart, templateFieldValues.get("hearingTime"));
         assertEquals(expectedFormattedManchesterHearingCentreAddress, templateFieldValues.get("hearingCentreAddress"));
@@ -148,6 +155,7 @@ class HearingNoticeFieldMapperTest {
         when(asylumCase.read(APPELLANT_FAMILY_NAME, String.class)).thenReturn(Optional.of(appellantFamilyName));
         when(asylumCase.read(HOME_OFFICE_REFERENCE_NUMBER, String.class)).thenReturn(Optional.of(homeOfficeReferenceNumber));
         when(asylumCase.read(LEGAL_REP_REFERENCE_NUMBER, String.class)).thenReturn(Optional.of(legalRepReferenceNumber));
+        when(asylumCase.read(CCD_REFERENCE_NUMBER_FOR_DISPLAY, String.class)).thenReturn(Optional.of(ccdReferenceNumber));
 
         when(asylumCase.read(LIST_CASE_HEARING_DATE, String.class)).thenReturn(Optional.of(hearingDate));
 
@@ -172,13 +180,14 @@ class HearingNoticeFieldMapperTest {
         when(asylumCase.read(SUBMIT_HEARING_REQUIREMENTS_AVAILABLE)).thenReturn(Optional.of(YesOrNo.YES));
         Map<String, Object> templateFieldValues = hearingNoticeTemplate.mapFieldValues(caseDetails);
 
-        assertEquals(18, templateFieldValues.size());
+        assertEquals(19, templateFieldValues.size());
         assertEquals("[userImage:hmcts.png]", templateFieldValues.get("hmcts"));
         assertEquals(appealReferenceNumber, templateFieldValues.get("appealReferenceNumber"));
         assertEquals(appellantGivenNames, templateFieldValues.get("appellantGivenNames"));
         assertEquals(appellantFamilyName, templateFieldValues.get("appellantFamilyName"));
         assertEquals(homeOfficeReferenceNumber, templateFieldValues.get("homeOfficeReferenceNumber"));
         assertEquals(legalRepReferenceNumber, templateFieldValues.get("legalRepReferenceNumber"));
+        assertEquals(ccdReferenceNumber, templateFieldValues.get("ccdReferenceNumberForDisplay"));
         assertEquals(expectedFormattedHearingDatePart, templateFieldValues.get("hearingDate"));
         assertEquals(expectedFormattedHearingTimePart, templateFieldValues.get("hearingTime"));
         assertEquals(expectedFormattedManchesterHearingCentreAddress, templateFieldValues.get("hearingCentreAddress"));
@@ -202,6 +211,7 @@ class HearingNoticeFieldMapperTest {
         when(asylumCase.read(APPELLANT_FAMILY_NAME, String.class)).thenReturn(Optional.of(appellantFamilyName));
         when(asylumCase.read(HOME_OFFICE_REFERENCE_NUMBER, String.class)).thenReturn(Optional.of(homeOfficeReferenceNumber));
         when(asylumCase.read(LEGAL_REP_REFERENCE_NUMBER, String.class)).thenReturn(Optional.of(legalRepReferenceNumber));
+        when(asylumCase.read(CCD_REFERENCE_NUMBER_FOR_DISPLAY, String.class)).thenReturn(Optional.of(ccdReferenceNumber));
         when(asylumCase.read(LIST_CASE_HEARING_DATE, String.class)).thenReturn(Optional.of(hearingDate));
         when(asylumCase.read(ARIA_LISTING_REFERENCE, String.class)).thenReturn(Optional.of(ariaListingReference));
         when(asylumCase.read(LIST_CASE_REQUIREMENTS_VULNERABILITIES, String.class)).thenReturn(Optional.of(vulnerabilities));
@@ -251,6 +261,41 @@ class HearingNoticeFieldMapperTest {
         Map<String, Object> templateFieldValues = hearingNoticeTemplate.mapFieldValues(caseDetails);
 
         assertEquals("Remote hearing", templateFieldValues.get("remoteHearing"));
+        assertEquals("Remote hearing agreed", templateFieldValues.get("remoteVideoCallTribunalResponse"));
+        assertEquals(ariaListingReference, templateFieldValues.get("ariaListingReference"));
+    }
+
+    @Test
+    void should_use_virtual_hearing_centre_when_case_using_location_ref_data() {
+
+        setUpData();
+        when(asylumCase.read(LIST_CASE_HEARING_CENTRE, HearingCentre.class)).thenReturn(Optional.of(HearingCentre.IAC_NATIONAL_VIRTUAL));
+        when(asylumCase.read(REMOTE_VIDEO_CALL_TRIBUNAL_RESPONSE, String.class)).thenReturn(Optional.of("Remote hearing agreed"));
+        when(asylumCase.read(IS_CASE_USING_LOCATION_REF_DATA, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
+        when(asylumCase.read(IS_VIRTUAL_HEARING, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
+        when(asylumCase.read(IS_REMOTE_HEARING, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO));
+        when(asylumCase.read(IS_INTEGRATED, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
+        when(asylumCase.read(LIST_CASE_HEARING_CENTRE_ADDRESS, String.class)).thenReturn(Optional.of("Some address"));
+
+        Map<String, Object> templateFieldValues = hearingNoticeTemplate.mapFieldValues(caseDetails);
+
+        assertEquals("IAC National (Virtual)", templateFieldValues.get("remoteHearing"));
+        assertEquals("Remote hearing agreed", templateFieldValues.get("remoteVideoCallTribunalResponse"));
+        assertEquals(ariaListingReference, templateFieldValues.get("ariaListingReference"));
+    }
+
+    @Test
+    void should_use_virtual_hearing_centre_when_case_not_using_location_ref_data() {
+        setUpData();
+        when(asylumCase.read(LIST_CASE_HEARING_CENTRE, HearingCentre.class)).thenReturn(Optional.of(HearingCentre.IAC_NATIONAL_VIRTUAL));
+        when(asylumCase.read(REMOTE_VIDEO_CALL_TRIBUNAL_RESPONSE, String.class)).thenReturn(Optional.of("Remote hearing agreed"));
+        when(asylumCase.read(IS_CASE_USING_LOCATION_REF_DATA, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO));
+        when(asylumCase.read(IS_VIRTUAL_HEARING, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
+        when(asylumCase.read(IS_INTEGRATED, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
+
+        Map<String, Object> templateFieldValues = hearingNoticeTemplate.mapFieldValues(caseDetails);
+
+        assertEquals("IAC National (Virtual)", templateFieldValues.get("remoteHearing"));
         assertEquals("Remote hearing agreed", templateFieldValues.get("remoteVideoCallTribunalResponse"));
         assertEquals(ariaListingReference, templateFieldValues.get("ariaListingReference"));
     }
@@ -306,6 +351,7 @@ class HearingNoticeFieldMapperTest {
         when(asylumCase.read(APPELLANT_FAMILY_NAME, String.class)).thenReturn(Optional.empty());
         when(asylumCase.read(HOME_OFFICE_REFERENCE_NUMBER, String.class)).thenReturn(Optional.empty());
         when(asylumCase.read(LEGAL_REP_REFERENCE_NUMBER, String.class)).thenReturn(Optional.empty());
+        when(asylumCase.read(CCD_REFERENCE_NUMBER_FOR_DISPLAY, String.class)).thenReturn(Optional.empty());
         when(asylumCase.read(LIST_CASE_HEARING_DATE, String.class)).thenReturn(Optional.empty());
         when(asylumCase.read(ARIA_LISTING_REFERENCE, String.class)).thenReturn(Optional.empty());
         when(asylumCase.read(LIST_CASE_REQUIREMENTS_VULNERABILITIES, String.class)).thenReturn(Optional.empty());
@@ -318,13 +364,14 @@ class HearingNoticeFieldMapperTest {
 
         Map<String, Object> templateFieldValues = hearingNoticeTemplate.mapFieldValues(caseDetails);
 
-        assertEquals(18, templateFieldValues.size());
+        assertEquals(19, templateFieldValues.size());
         assertEquals("[userImage:hmcts.png]", templateFieldValues.get("hmcts"));
         assertEquals("", templateFieldValues.get("appealReferenceNumber"));
         assertEquals("", templateFieldValues.get("appellantGivenNames"));
         assertEquals("", templateFieldValues.get("appellantFamilyName"));
         assertEquals("", templateFieldValues.get("homeOfficeReferenceNumber"));
         assertEquals("", templateFieldValues.get("legalRepReferenceNumber"));
+        assertEquals("", templateFieldValues.get("ccdReferenceNumberForDisplay"));
         assertEquals("", templateFieldValues.get("ariaListingReference"));
         assertEquals("No special adjustments are being made to accommodate vulnerabilities", templateFieldValues.get("vulnerabilities"));
         assertEquals("No multimedia equipment is being provided", templateFieldValues.get("multimedia"));

@@ -36,6 +36,7 @@ public class InternalDetainedListCaseLetterTemplateTest {
     private final String homeOfficeReferenceNumber = "A1234567/001";
     private final String appellantGivenNames = "John";
     private final String appellantFamilyName = "Doe";
+    private final String ccdReferenceNumber = "1234-5678-9012-3456";
     private final LocalDate now = LocalDate.now();
     private final String listCaseHearingDate = "2023-08-14T14:30:00.000";
     private final String formattedListCaseHearingDate = "14082023";
@@ -68,6 +69,7 @@ public class InternalDetainedListCaseLetterTemplateTest {
         when(asylumCase.read(HOME_OFFICE_REFERENCE_NUMBER, String.class)).thenReturn(Optional.of(homeOfficeReferenceNumber));
         when(asylumCase.read(APPELLANT_GIVEN_NAMES, String.class)).thenReturn(Optional.of(appellantGivenNames));
         when(asylumCase.read(APPELLANT_FAMILY_NAME, String.class)).thenReturn(Optional.of(appellantFamilyName));
+        when(asylumCase.read(CCD_REFERENCE_NUMBER_FOR_DISPLAY, String.class)).thenReturn(Optional.of(ccdReferenceNumber));
         when(asylumCase.read(LIST_CASE_HEARING_CENTRE, HearingCentre.class)).thenReturn(Optional.of(HearingCentre.MANCHESTER));
         when(asylumCase.read(LIST_CASE_HEARING_DATE, String.class)).thenReturn(Optional.of(listCaseHearingDate));
         when(stringProvider.get("hearingCentreAddress", "manchester")).thenReturn(Optional.of(manchesterHearingCentreAddress));
@@ -81,11 +83,12 @@ public class InternalDetainedListCaseLetterTemplateTest {
 
         Map<String, Object> templateFieldValues = internalDetainedListCaseLetterTemplate.mapFieldValues(caseDetails);
 
-        assertEquals(11, templateFieldValues.size());
+        assertEquals(14, templateFieldValues.size());
         assertEquals(appealReferenceNumber, templateFieldValues.get("appealReferenceNumber"));
         assertEquals(homeOfficeReferenceNumber, templateFieldValues.get("homeOfficeReferenceNumber"));
         assertEquals(appellantGivenNames, templateFieldValues.get("appellantGivenNames"));
         assertEquals(appellantFamilyName, templateFieldValues.get("appellantFamilyName"));
+        assertEquals(ccdReferenceNumber, templateFieldValues.get("ccdReferenceNumberForDisplay"));
         assertEquals(formatDateForNotificationAttachmentDocument(now), templateFieldValues.get("dateLetterSent"));
         assertEquals(formattedListCaseHearingDate, templateFieldValues.get("hearingDate"));
         assertEquals(formattedListCaseHearingTime, templateFieldValues.get("hearingTime"));

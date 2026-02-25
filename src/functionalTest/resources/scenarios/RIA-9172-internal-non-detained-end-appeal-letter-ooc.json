@@ -17,6 +17,9 @@
           "addressLine2AdminJ": "Madrid",
           "addressLine3AdminJ": "28003",
           "countryGovUkOocAdminJ": "ES",
+          "oocAddressLine1": "5",
+          "oocAddressLine2": "Example Street",
+          "oocLrCountryGovUkAdminJ": "ES",
           "letterBundleDocuments": []
         }
       }

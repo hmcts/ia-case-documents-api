@@ -21,6 +21,9 @@
             "AddressLine1": "5",
             "AddressLine2": "Example Street"
           },
+          "oocAddressLine1": "5",
+          "oocAddressLine2": "Example Street",
+          "oocLrCountryGovUkAdminJ": "ES",
           "letterBundleDocuments": []
         }
       }

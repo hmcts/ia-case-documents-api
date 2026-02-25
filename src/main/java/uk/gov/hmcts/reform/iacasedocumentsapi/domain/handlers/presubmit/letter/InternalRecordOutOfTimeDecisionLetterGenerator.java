@@ -1,9 +1,9 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit.letter;
 
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.LETTER_NOTIFICATION_DOCUMENTS;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DetentionFacility.OTHER;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.Event.RECORD_OUT_OF_TIME_DECISION;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.isAppellantInDetention;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.isInternalCase;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.*;
 
 import java.util.Objects;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -45,7 +45,10 @@ public class InternalRecordOutOfTimeDecisionLetterGenerator implements PreSubmit
         return callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
                && callback.getEvent() == RECORD_OUT_OF_TIME_DECISION
                && isInternalCase(asylumCase)
-               && !isAppellantInDetention(asylumCase);
+               && (!isAppellantInDetention(asylumCase)
+                || (hasBeenSubmittedAsLegalRepresentedInternalCase(asylumCase))
+                || (hasAppealBeenSubmittedByAppellantInternalCase(asylumCase)
+                && isDetainedInFacilityType(asylumCase, OTHER)));
     }
 
     public PreSubmitCallbackResponse<AsylumCase> handle(
