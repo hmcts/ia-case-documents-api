@@ -1327,7 +1327,7 @@ hearingCentreEmailAddresses:
   belfast: ${IA_HEARING_CENTRE_GLASGOW_EMAIL:hc-glasgow-default@example.com}
   harmondsworth: ${IA_HEARING_CENTRE_HARMONDSWORTH_EMAIL:hc-harmondsworth-default@example.com}
   hendon: ${IA_HEARING_CENTRE_HENDON_EMAIL:hc-hendon-default@example.com}
-  yarlsWood: ${IA_HEARING_CENTRE_YARLSWOOD_EMAIL:hc-yarls-wood-default@example.com}
+  yarlsWood: ${IA_HEARING_CENTRE_YARLSWOOD_EMAIL:hc-yarlswood-default@example.com}
   bradfordKeighley: ${IA_HEARING_CENTRE_BRADFORD_KEIGHLEY_EMAIL:hc-bradford-keighley-default@example.com}
   mccMinshull: ${IA_HEARING_CENTRE_MCC_MINSHULL_EMAIL:hc-mcc-minshull-default@example.com}
   mccCrownSquare: ${IA_HEARING_CENTRE_MCC_CROWN_SQUARE_EMAIL:hc-mcc-crown-square-default@example.com}
