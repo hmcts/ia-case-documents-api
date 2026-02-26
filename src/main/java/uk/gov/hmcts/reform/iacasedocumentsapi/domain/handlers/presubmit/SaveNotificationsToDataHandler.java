@@ -67,7 +67,7 @@ public class SaveNotificationsToDataHandler implements PreSubmitCallbackHandler<
                 String notificationReference = storedNotification.getNotificationReference();
 
                 Document notificationPdf;
-                if (storedNotification.getNotificationSubject().equals("Pre-compiled PDF")) {
+                if (containsPreCompiledLetter(storedNotification)) {
                     notificationPdf = saveNotificationsToDataPdfService.uploadPdf(
                         storedNotification.getNotificationBody(),
                         notificationReference);
@@ -85,5 +85,9 @@ public class SaveNotificationsToDataHandler implements PreSubmitCallbackHandler<
         asylumCase.write(NOTIFICATIONS, newNotifications);
 
         return new PreSubmitCallbackResponse<>(asylumCase);
+    }
+
+    private static boolean containsPreCompiledLetter(StoredNotification storedNotification) {
+        return storedNotification.getNotificationSubject().equals("See PDF attachment for details");
     }
 }
