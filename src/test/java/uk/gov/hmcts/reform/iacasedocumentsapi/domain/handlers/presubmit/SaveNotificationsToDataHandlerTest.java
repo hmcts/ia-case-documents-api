@@ -157,7 +157,7 @@ class SaveNotificationsToDataHandlerTest {
                 .notificationMethod(notificationType)
                 .notificationStatus(status)
                 .notificationReference(reference)
-                .notificationSubject("Pre-compiled PDF")
+                .notificationSubject("See PDF attachment for details")
                 .build();
         List<IdValue<StoredNotification>> storedNotifications =
             List.of(new IdValue<>(reference, storedNotification));
@@ -208,7 +208,7 @@ class SaveNotificationsToDataHandlerTest {
         when(mockedStoredNotification.getNotificationStatus()).thenReturn(status);
         when(mockedStoredNotification.getNotificationBody()).thenReturn(body);
         when(mockedStoredNotification.getNotificationReference()).thenReturn(reference);
-        when(mockedStoredNotification.getNotificationSubject()).thenReturn("Pre-compiled PDF");
+        when(mockedStoredNotification.getNotificationSubject()).thenReturn("See PDF attachment for details");
         when(saveNotificationsToDataPdfService.uploadPdf(body, reference)).thenReturn(document);
 
         PreSubmitCallbackResponse<AsylumCase> response =
