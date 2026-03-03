@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.DateProvider;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DocumentTag;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DocumentWithMetadata;
@@ -41,6 +42,7 @@ public class InternalDetainedOutOfTimeDecisionAllowedLetterGenerator implements 
     private final DocumentHandler documentHandler;
     private final DocumentBundler documentBundler;
     private final FileNameQualifier<AsylumCase> fileNameQualifier;
+    private final DateProvider dateProvider;
 
     public InternalDetainedOutOfTimeDecisionAllowedLetterGenerator(
             @Value("${internalDetainedOutOfTimeDecisionAllowedLetter.fileExtension}") String fileExtension,
@@ -48,7 +50,8 @@ public class InternalDetainedOutOfTimeDecisionAllowedLetterGenerator implements 
             @Qualifier("internalDetainedOutOfTimeDecisionAllowedLetter") DocumentCreator<AsylumCase> documentCreator,
             DocumentHandler documentHandler,
             DocumentBundler documentBundler,
-            FileNameQualifier<AsylumCase> fileNameQualifier
+            FileNameQualifier<AsylumCase> fileNameQualifier,
+            DateProvider dateProvider
     ) {
         this.fileExtension = fileExtension;
         this.fileName = fileName;
@@ -56,6 +59,7 @@ public class InternalDetainedOutOfTimeDecisionAllowedLetterGenerator implements 
         this.documentHandler = documentHandler;
         this.documentBundler = documentBundler;
         this.fileNameQualifier = fileNameQualifier;
+        this.dateProvider = dateProvider;
     }
 
     public boolean canHandle(
@@ -93,7 +97,7 @@ public class InternalDetainedOutOfTimeDecisionAllowedLetterGenerator implements 
         DocumentWithMetadata letterDocument = new DocumentWithMetadata(
                 internalDetainedOutOfTimeDecisionAllowedLetter,
                 "Letter",
-                "Letter",
+                dateProvider.now().toString(),
                 DocumentTag.INTERNAL_DETAINED_OUT_OF_TIME_DECISION_ALLOWED_LETTER
         );
         bundleDocuments.add(letterDocument);
@@ -104,7 +108,7 @@ public class InternalDetainedOutOfTimeDecisionAllowedLetterGenerator implements 
             DocumentWithMetadata outOfTimeDecisionDocumentWithMetaData = new DocumentWithMetadata(
                     outOfTimeDecisionDocument.get(),
                     "Letter",
-                    "Letter",
+                    dateProvider.now().toString(),
                     DocumentTag.INTERNAL_DETAINED_OUT_OF_TIME_DECISION_ALLOWED_LETTER
             );
             bundleDocuments.add(outOfTimeDecisionDocumentWithMetaData);
