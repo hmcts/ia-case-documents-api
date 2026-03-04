@@ -824,6 +824,7 @@ security:
       - "removeRepresentation"
       - "removeLegalRepresentative"
       - "markAppealAsRemitted"
+      - "saveNotificationsToDataBail"
     hearing-centre-admin:
       - "listCase"
       - "submitAppeal"
@@ -1246,6 +1247,7 @@ security:
       - "requestHearingRequirementsFeature"
       - "changeHearingCentre"
       - "saveNotificationsToData"
+      - "saveNotificationsToDataBail"
     caseworker-ia-homeofficelart:
       - "uploadHomeOfficeAppealResponse"
       - "uploadAdditionalEvidenceHomeOffice"

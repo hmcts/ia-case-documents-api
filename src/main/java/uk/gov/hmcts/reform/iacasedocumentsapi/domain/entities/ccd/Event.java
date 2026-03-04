@@ -78,6 +78,7 @@ public enum Event {
     EDIT_BAIL_APPLICATION_AFTER_SUBMIT("editBailApplicationAfterSubmit", CaseType.BAIL),
     UPLOAD_SIGNED_DECISION_NOTICE("uploadSignedDecisionNotice", CaseType.BAIL),
     CASE_LISTING("caseListing", CaseType.BAIL),
+    SAVE_NOTIFICATIONS_TO_DATA_BAIL("saveNotificationsToDataBail", CaseType.BAIL),
 
     UPDATE_HEARING_REQUIREMENTS("updateHearingRequirements", CaseType.ASYLUM),
     UPDATE_HEARING_ADJUSTMENTS("updateHearingAdjustments", CaseType.ASYLUM),
