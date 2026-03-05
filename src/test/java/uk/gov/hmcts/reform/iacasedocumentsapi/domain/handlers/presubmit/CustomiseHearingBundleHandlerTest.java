@@ -927,7 +927,7 @@ class CustomiseHearingBundleHandlerTest {
         verify(asylumCaseCopy, times(2)).read(CUSTOM_APP_ADDITIONAL_EVIDENCE_DOCS);
         verify(asylumCaseCopy, times(2)).read(CUSTOM_RESP_ADDITIONAL_EVIDENCE_DOCS);
         verify(asylumCaseCopy, times(1)).read(CUSTOM_FTPA_APPELLANT_DOCS);
-        verify(asylumCaseCopy, times(2)).read(LATEST_DECISION_AND_REASONS_DOCUMENTS);
+        verify(asylumCaseCopy, times(1)).read(LATEST_DECISION_AND_REASONS_DOCUMENTS);
         verify(asylumCaseCopy, times(1)).read(CUSTOM_FINAL_DECISION_AND_REASONS_DOCS);
         verify(asylumCaseCopy, times(2)).read(CUSTOM_REHEARD_HEARING_DOCS);
         verify(asylumCaseCopy, times(1)).read(CUSTOM_APP_ADDENDUM_EVIDENCE_DOCS);

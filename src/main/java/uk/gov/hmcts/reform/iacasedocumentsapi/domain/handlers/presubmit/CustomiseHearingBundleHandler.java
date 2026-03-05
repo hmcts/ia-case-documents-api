@@ -183,13 +183,11 @@ public class CustomiseHearingBundleHandler implements PreSubmitCallbackHandler<A
     private Map<String, String> buildDateUploadedMap(AsylumCase asylumCaseBefore) {
         Map<String, String> dateUploadedMap = new HashMap<>();
 
-        fillDateUploadedMap(asylumCaseBefore, APPELLANT_ADDENDUM_EVIDENCE_DOCS, dateUploadedMap);
-        fillDateUploadedMap(asylumCaseBefore, RESPONDENT_ADDENDUM_EVIDENCE_DOCS, dateUploadedMap);
-        fillDateUploadedMap(asylumCaseBefore, APP_ADDITIONAL_EVIDENCE_DOCS, dateUploadedMap);
-        fillDateUploadedMap(asylumCaseBefore, RESP_ADDITIONAL_EVIDENCE_DOCS, dateUploadedMap);
-        fillDateUploadedMap(asylumCaseBefore, LATEST_REMITTAL_DOCUMENTS, dateUploadedMap);
-        fillDateUploadedMap(asylumCaseBefore, LATEST_REHEARD_HEARING_DOCUMENTS, dateUploadedMap);
-        fillDateUploadedMap(asylumCaseBefore, LATEST_DECISION_AND_REASONS_DOCUMENTS, dateUploadedMap);
+        fillDateUploadedMap(asylumCaseBefore, ADDENDUM_EVIDENCE_DOCUMENTS, dateUploadedMap);
+        fillDateUploadedMap(asylumCaseBefore, ADDITIONAL_EVIDENCE_DOCUMENTS, dateUploadedMap);
+        fillDateUploadedMap(asylumCaseBefore, HEARING_DOCUMENTS, dateUploadedMap);
+        fillDateUploadedMap(asylumCaseBefore, LEGAL_REPRESENTATIVE_DOCUMENTS, dateUploadedMap);
+        fillDateUploadedMap(asylumCaseBefore, RESPONDENT_DOCUMENTS, dateUploadedMap);
 
         return dateUploadedMap;
     }
