@@ -197,8 +197,8 @@ public class CustomiseHearingBundleHandler implements PreSubmitCallbackHandler<A
         AsylumCaseDefinition respondentAddendumEvidenceDocs,
         Map<String, String> dateUploadedMap
     ) {
-        if (asylumCaseBefore.read(respondentAddendumEvidenceDocs).isPresent()) {
-            Optional<List<IdValue<DocumentWithMetadata>>> appellantAddendumEvidenceDocsOpt = asylumCaseBefore.read(respondentAddendumEvidenceDocs);
+        Optional<List<IdValue<DocumentWithMetadata>>> appellantAddendumEvidenceDocsOpt = asylumCaseBefore.read(respondentAddendumEvidenceDocs);
+        if (appellantAddendumEvidenceDocsOpt.isPresent()) {
             List<IdValue<DocumentWithMetadata>> appellantAddendumEvidenceDocs = appellantAddendumEvidenceDocsOpt.get();
             for (IdValue<DocumentWithMetadata> idValue : appellantAddendumEvidenceDocs) {
                 dateUploadedMap.put(idValue.getValue().getDocument().getDocumentUrl(), idValue.getValue().getDateUploaded());
