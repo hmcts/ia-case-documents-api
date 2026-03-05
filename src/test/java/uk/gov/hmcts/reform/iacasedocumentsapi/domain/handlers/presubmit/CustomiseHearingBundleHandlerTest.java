@@ -46,10 +46,8 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.IdValue;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.Appender;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.FeatureToggler;
-import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.SystemDateProvider;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.clients.EmBundleRequestExecutor;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.enties.em.Bundle;
-
 
 @ExtendWith(MockitoExtension.class)
 @SuppressWarnings("unchecked")
