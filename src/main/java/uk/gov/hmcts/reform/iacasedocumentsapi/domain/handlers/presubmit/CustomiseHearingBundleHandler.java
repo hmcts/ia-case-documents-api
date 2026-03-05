@@ -10,7 +10,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.DateProvider;
@@ -31,7 +30,6 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.clients.EmBundleReq
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.enties.em.Bundle;
 
 @Component
-@Slf4j
 public class CustomiseHearingBundleHandler implements PreSubmitCallbackHandler<AsylumCase> {
     private static final String SUPPLIED_BY_RESPONDENT = "The respondent";
     private static final String SUPPLIED_BY_APPELLANT = "The appellant";
@@ -186,6 +184,9 @@ public class CustomiseHearingBundleHandler implements PreSubmitCallbackHandler<A
         fillDateUploadedMap(asylumCaseBefore, ADDENDUM_EVIDENCE_DOCUMENTS, dateUploadedMap);
         fillDateUploadedMap(asylumCaseBefore, ADDITIONAL_EVIDENCE_DOCUMENTS, dateUploadedMap);
         fillDateUploadedMap(asylumCaseBefore, HEARING_DOCUMENTS, dateUploadedMap);
+        fillDateUploadedMap(asylumCaseBefore, LATEST_DECISION_AND_REASONS_DOCUMENTS, dateUploadedMap);
+        fillDateUploadedMap(asylumCaseBefore, LATEST_REHEARD_HEARING_DOCUMENTS, dateUploadedMap);
+        fillDateUploadedMap(asylumCaseBefore, LATEST_REMITTAL_DOCUMENTS, dateUploadedMap);
         fillDateUploadedMap(asylumCaseBefore, LEGAL_REPRESENTATIVE_DOCUMENTS, dateUploadedMap);
         fillDateUploadedMap(asylumCaseBefore, RESPONDENT_DOCUMENTS, dateUploadedMap);
 
@@ -197,21 +198,13 @@ public class CustomiseHearingBundleHandler implements PreSubmitCallbackHandler<A
         AsylumCaseDefinition documentsField,
         Map<String, String> dateUploadedMap
     ) {
-        log.info("---------------fillDateUploadedMap 111 {}", documentsField);
         Optional<List<IdValue<DocumentWithMetadata>>> documentsOpt = asylumCaseBefore.read(documentsField);
         if (documentsOpt.isPresent()) {
-            log.info("---------------fillDateUploadedMap 222 {}", documentsField);
             List<IdValue<DocumentWithMetadata>> documents = documentsOpt.get();
             for (IdValue<DocumentWithMetadata> idValue : documents) {
-                log.info(
-                        "---------------fillDateUploadedMap 222 {}: {}",
-                        idValue.getValue().getDocument().getDocumentUrl(),
-                        idValue.getValue().getDateUploaded()
-                );
                 dateUploadedMap.put(idValue.getValue().getDocument().getDocumentUrl(), idValue.getValue().getDateUploaded());
             }
         }
-        log.info("---------------fillDateUploadedMap 333 {}", documentsField);
     }
 
     void initializeNewCollections(AsylumCase asylumCase) {
@@ -581,9 +574,6 @@ public class CustomiseHearingBundleHandler implements PreSubmitCallbackHandler<A
         AsylumCase asylumCase,
         Map<String, String> dateUploadedMap
     ) {
-        log.info("----------------prepareDocuments");
-        log.info("----------------{}", dateUploadedMap);
-        log.info("----------------prepareDocuments");
 
         mappingFields.forEach((sourceField, targetField) -> {
 
@@ -623,7 +613,6 @@ public class CustomiseHearingBundleHandler implements PreSubmitCallbackHandler<A
                                 maybeDocument.get().getValue().getDateTimeUploaded());
                         }
                     } else {
-                        log.info("----------------prepareDocuments {}", document.getDocumentUrl());
                         switch (sourceField) {
                             case CUSTOM_HEARING_DOCUMENTS:
                                 newDocumentWithMetadata = new DocumentWithMetadata(

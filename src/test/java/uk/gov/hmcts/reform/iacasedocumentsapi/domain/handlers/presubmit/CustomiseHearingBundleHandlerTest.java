@@ -431,6 +431,7 @@ class CustomiseHearingBundleHandlerTest {
         when(asylumCaseCopy.read(RESPONDENT_ADDENDUM_EVIDENCE_DOCS))
             .thenReturn(Optional.of(Lists.newArrayList(respondentAddendumEvidenceList)));
         when(dateProvider.nowWithTime()).thenReturn(LocalDateTime.now());
+
         PreSubmitCallbackResponse<AsylumCase> callbackResponse =
             customiseHearingBundleHandler.handle(ABOUT_TO_SUBMIT, callback);
 
@@ -908,7 +909,6 @@ class CustomiseHearingBundleHandlerTest {
             .thenReturn(Optional.of(Lists.newArrayList(reheardHearingDocs)));
         when(asylumCaseCopy.read(REHEARD_HEARING_DOCUMENTS_COLLECTION)).thenReturn(Optional.of(reheardHearingDocuments));
 
-
         when(asylumCase.read(REHEARD_HEARING_DOCUMENTS))
             .thenReturn(Optional.of(Lists.newArrayList(reheardHearingDocs)));
         when(asylumCase.read(REHEARD_HEARING_DOCUMENTS_COLLECTION))
@@ -917,6 +917,7 @@ class CustomiseHearingBundleHandlerTest {
             .thenReturn(documentsListAfterAppend);
         reheardHearingDocuments.get(0).getValue().setReheardHearingDocs(documentsListAfterAppend);
         when(dateProvider.nowWithTime()).thenReturn(LocalDateTime.now());
+
         PreSubmitCallbackResponse<AsylumCase> callbackResponse =
             customiseHearingBundleHandler.handle(ABOUT_TO_SUBMIT, callback);
 
@@ -924,15 +925,23 @@ class CustomiseHearingBundleHandlerTest {
         assertEquals(asylumCase, callbackResponse.getData());
         assertEquals(asylumCase.read(CASE_FLAG_SET_ASIDE_REHEARD_EXISTS, YesOrNo.class), Optional.of(YesOrNo.YES));
         assertTrue(featureToggler.getValue("reheard-feature", false));
+
+        verify(asylumCaseCopy, times(2)).read(ADDENDUM_EVIDENCE_DOCUMENTS);
+        verify(asylumCaseCopy, times(2)).read(ADDITIONAL_EVIDENCE_DOCUMENTS);
+        verify(asylumCaseCopy, times(1)).read(HEARING_DOCUMENTS);
         verify(asylumCaseCopy, times(2)).read(CUSTOM_APP_ADDITIONAL_EVIDENCE_DOCS);
         verify(asylumCaseCopy, times(2)).read(CUSTOM_RESP_ADDITIONAL_EVIDENCE_DOCS);
         verify(asylumCaseCopy, times(1)).read(CUSTOM_FTPA_APPELLANT_DOCS);
-        verify(asylumCaseCopy, times(1)).read(LATEST_DECISION_AND_REASONS_DOCUMENTS);
+        verify(asylumCaseCopy, times(2)).read(LATEST_DECISION_AND_REASONS_DOCUMENTS);
+        verify(asylumCaseCopy, times(1)).read(LATEST_REHEARD_HEARING_DOCUMENTS);
+        verify(asylumCaseCopy, times(1)).read(LATEST_REMITTAL_DOCUMENTS);
+        verify(asylumCaseCopy, times(1)).read(LEGAL_REPRESENTATIVE_DOCUMENTS);
         verify(asylumCaseCopy, times(1)).read(CUSTOM_FINAL_DECISION_AND_REASONS_DOCS);
         verify(asylumCaseCopy, times(2)).read(CUSTOM_REHEARD_HEARING_DOCS);
         verify(asylumCaseCopy, times(1)).read(CUSTOM_APP_ADDENDUM_EVIDENCE_DOCS);
         verify(asylumCaseCopy, times(1)).read(CUSTOM_RESP_ADDENDUM_EVIDENCE_DOCS);
         verify(asylumCaseCopy, times(2)).read(REHEARD_HEARING_DOCUMENTS);
+        verify(asylumCaseCopy, times(2)).read(RESPONDENT_DOCUMENTS);
 
         verify(asylumCase, times(1)).read(APPELLANT_ADDENDUM_EVIDENCE_DOCS);
         verify(asylumCase, times(1)).read(RESPONDENT_ADDENDUM_EVIDENCE_DOCS);
@@ -963,9 +972,13 @@ class CustomiseHearingBundleHandlerTest {
     private DocumentWithMetadata createDocumentWithMetadata(DocumentTag documentTag, String suppliedBy) {
 
         return
-            new DocumentWithMetadata(createDocument(),
+            new DocumentWithMetadata(
+                createDocument(),
                 "some-description",
-                new SystemDateProvider().now().toString(), documentTag, suppliedBy);
+                "2023-12-12",
+                documentTag,
+                suppliedBy
+            );
 
     }
 
