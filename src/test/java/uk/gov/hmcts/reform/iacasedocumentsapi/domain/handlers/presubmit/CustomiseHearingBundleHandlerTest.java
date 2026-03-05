@@ -29,6 +29,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.EnumSource;
 import org.junit.jupiter.params.provider.ValueSource;
+import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
@@ -953,6 +954,106 @@ class CustomiseHearingBundleHandlerTest {
         verify(asylumCase).clear(AsylumCaseDefinition.HMCTS);
         verify(asylumCase, times(1)).write(HMCTS, coverPageLogo);
         verify(asylumCase).clear(AsylumCaseDefinition.CASE_BUNDLES);
+    }
+
+    @Test
+    void should_preserve_dateUploaded_when_document_found() {
+        when(callback.getEvent()).thenReturn(Event.CUSTOMISE_HEARING_BUNDLE);
+        when(asylumCase.read(SUITABILITY_REVIEW_DECISION)).thenReturn(Optional.empty());
+
+        String originalDateUploaded = "2020-05-15";
+        Document sharedDoc = new Document("doc-url", "doc-binary-url", "doc.pdf");
+
+        IdValue<DocumentWithDescription> customDocIdValue = new IdValue<>("1",
+            new DocumentWithDescription(sharedDoc, "test desc"));
+
+        DocumentWithMetadata targetDocMeta = new DocumentWithMetadata(
+            sharedDoc, "original desc", originalDateUploaded, DocumentTag.HEARING_NOTICE,
+            "supplier", "uploader", "2020-05-15T10:00:00");
+        IdValue<DocumentWithMetadata> targetDocIdValue = new IdValue<>("1", targetDocMeta);
+
+        when(asylumCaseCopy.read(CUSTOM_HEARING_DOCUMENTS))
+            .thenReturn(Optional.of(Lists.newArrayList(customDocIdValue)));
+        when(asylumCaseCopy.read(HEARING_DOCUMENTS))
+            .thenReturn(Optional.of(Lists.newArrayList(targetDocIdValue)));
+        when(asylumCase.read(HEARING_DOCUMENTS))
+            .thenReturn(Optional.of(Lists.newArrayList(targetDocIdValue)));
+
+        ArgumentCaptor<DocumentWithMetadata> captor = ArgumentCaptor.forClass(DocumentWithMetadata.class);
+        when(appender.append(captor.capture(), anyList()))
+            .thenReturn(Lists.newArrayList(targetDocIdValue));
+
+        customiseHearingBundleHandler.handle(ABOUT_TO_SUBMIT, callback);
+
+        DocumentWithMetadata captured = captor.getValue();
+        assertEquals(originalDateUploaded, captured.getDateUploaded());
+        assertEquals(DocumentTag.HEARING_NOTICE, captured.getTag());
+        assertEquals("2020-05-15T10:00:00", captured.getDateTimeUploaded());
+    }
+
+    @Test
+    void should_preserve_dateUploaded_from_map_when_document_not_found() {
+        when(callback.getEvent()).thenReturn(Event.CUSTOMISE_HEARING_BUNDLE);
+        when(asylumCase.read(SUITABILITY_REVIEW_DECISION)).thenReturn(Optional.empty());
+
+        String originalDateUploaded = "2020-05-15";
+
+        // Doc in custom field - uses "doc-url" as documentUrl but unique binaryUrl
+        Document customFieldDoc = new Document("doc-url", "custom-binary-url", "doc.pdf");
+        IdValue<DocumentWithDescription> customDocIdValue = new IdValue<>("1",
+            new DocumentWithDescription(customFieldDoc, "test desc"));
+
+        // Doc in ADDITIONAL_EVIDENCE_DOCUMENTS with same documentUrl → populates dateUploadedMap
+        // but different binaryUrl so isDocumentWithDescriptionPresent won't match
+        Document mapDoc = new Document("doc-url", "map-binary-url", "map-doc.pdf");
+        DocumentWithMetadata mapDocMeta = new DocumentWithMetadata(
+            mapDoc, "desc", originalDateUploaded, DocumentTag.ADDITIONAL_EVIDENCE, "");
+        IdValue<DocumentWithMetadata> mapDocIdValue = new IdValue<>("1", mapDocMeta);
+
+        when(asylumCaseCopy.read(CUSTOM_HEARING_DOCUMENTS))
+            .thenReturn(Optional.of(Lists.newArrayList(customDocIdValue)));
+        // No matching doc in target (different binaryUrl)
+        when(asylumCaseCopy.read(ADDITIONAL_EVIDENCE_DOCUMENTS))
+            .thenReturn(Optional.of(Lists.newArrayList(mapDocIdValue)));
+        when(asylumCase.read(ADDITIONAL_EVIDENCE_DOCUMENTS))
+            .thenReturn(Optional.of(Lists.newArrayList(mapDocIdValue)));
+        when(dateProvider.nowWithTime()).thenReturn(LocalDateTime.of(2024, 1, 1, 10, 0));
+
+        ArgumentCaptor<DocumentWithMetadata> captor = ArgumentCaptor.forClass(DocumentWithMetadata.class);
+        when(appender.append(captor.capture(), anyList())).thenReturn(emptyList());
+
+        customiseHearingBundleHandler.handle(ABOUT_TO_SUBMIT, callback);
+
+        DocumentWithMetadata captured = captor.getValue();
+        assertEquals(originalDateUploaded, captured.getDateUploaded());
+        assertEquals(DocumentTag.HEARING_NOTICE, captured.getTag());
+    }
+
+    @Test
+    void should_use_current_date_for_new_document() {
+        when(callback.getEvent()).thenReturn(Event.CUSTOMISE_HEARING_BUNDLE);
+        when(asylumCase.read(SUITABILITY_REVIEW_DECISION)).thenReturn(Optional.empty());
+
+        LocalDate today = LocalDate.of(2024, 3, 5);
+        when(dateProvider.now()).thenReturn(today);
+        when(dateProvider.nowWithTime()).thenReturn(LocalDateTime.of(2024, 3, 5, 10, 0));
+
+        // Doc with URL not present in any collection
+        Document newDoc = new Document("brand-new-url", "brand-new-binary-url", "new-doc.pdf");
+        IdValue<DocumentWithDescription> customDocIdValue = new IdValue<>("1",
+            new DocumentWithDescription(newDoc, "new doc desc"));
+
+        when(asylumCaseCopy.read(CUSTOM_HEARING_DOCUMENTS))
+            .thenReturn(Optional.of(Lists.newArrayList(customDocIdValue)));
+
+        ArgumentCaptor<DocumentWithMetadata> captor = ArgumentCaptor.forClass(DocumentWithMetadata.class);
+        when(appender.append(captor.capture(), anyList())).thenReturn(emptyList());
+
+        customiseHearingBundleHandler.handle(ABOUT_TO_SUBMIT, callback);
+
+        DocumentWithMetadata captured = captor.getValue();
+        assertEquals(today.toString(), captured.getDateUploaded());
+        assertEquals(DocumentTag.HEARING_NOTICE, captured.getTag());
     }
 
     private DocumentWithDescription createDocumentWithDescription() {
