@@ -122,9 +122,11 @@ public class CustomiseHearingBundleHandler implements PreSubmitCallbackHandler<A
             throw new IllegalStateException("Cannot make a deep copy of the case");
         }
 
-        prepareDocuments(getMappingFields(isReheardCase, isRemittedPath, isOrWasAda, isUpdatedBundle), asylumCaseCopy);
+        Map<String, String> dateUploadedMap = buildDateUploadedMap(asylumCaseCopy);
+
+        prepareDocuments(getMappingFields(isReheardCase, isRemittedPath, isOrWasAda, isUpdatedBundle), asylumCaseCopy, dateUploadedMap);
         if (isReheardCase) {
-            prepareDocuments(getMappingFieldsForAdditionalEvidenceDocuments(), asylumCaseCopy);
+            prepareDocuments(getMappingFieldsForAdditionalEvidenceDocuments(), asylumCaseCopy, dateUploadedMap);
         }
 
         final PreSubmitCallbackResponse<AsylumCase> response = emBundleRequestExecutor.post(
@@ -176,6 +178,34 @@ public class CustomiseHearingBundleHandler implements PreSubmitCallbackHandler<A
         return new PreSubmitCallbackResponse<>(asylumCase);
     }
 
+    private Map<String, String> buildDateUploadedMap(AsylumCase asylumCaseBefore) {
+        Map<String, String> dateUploadedMap = new HashMap<>();
+
+        fillDateUploadedMap(asylumCaseBefore, APPELLANT_ADDENDUM_EVIDENCE_DOCS, dateUploadedMap);
+        fillDateUploadedMap(asylumCaseBefore, RESPONDENT_ADDENDUM_EVIDENCE_DOCS, dateUploadedMap);
+        fillDateUploadedMap(asylumCaseBefore, APP_ADDITIONAL_EVIDENCE_DOCS, dateUploadedMap);
+        fillDateUploadedMap(asylumCaseBefore, RESP_ADDITIONAL_EVIDENCE_DOCS, dateUploadedMap);
+        fillDateUploadedMap(asylumCaseBefore, LATEST_REMITTAL_DOCUMENTS, dateUploadedMap);
+        fillDateUploadedMap(asylumCaseBefore, LATEST_REHEARD_HEARING_DOCUMENTS, dateUploadedMap);
+        fillDateUploadedMap(asylumCaseBefore, LATEST_DECISION_AND_REASONS_DOCUMENTS, dateUploadedMap);
+
+        return dateUploadedMap;
+    }
+
+    private void fillDateUploadedMap(
+        AsylumCase asylumCaseBefore,
+        AsylumCaseDefinition respondentAddendumEvidenceDocs,
+        Map<String, String> dateUploadedMap
+    ) {
+        if (asylumCaseBefore.read(respondentAddendumEvidenceDocs).isPresent()) {
+            Optional<List<IdValue<DocumentWithMetadata>>> appellantAddendumEvidenceDocsOpt = asylumCaseBefore.read(respondentAddendumEvidenceDocs);
+            List<IdValue<DocumentWithMetadata>> appellantAddendumEvidenceDocs = appellantAddendumEvidenceDocsOpt.get();
+            for (IdValue<DocumentWithMetadata> idValue : appellantAddendumEvidenceDocs) {
+                dateUploadedMap.put(idValue.getValue().getDocument().getDocumentUrl(), idValue.getValue().getDateUploaded());
+            }
+        }
+    }
+
     void initializeNewCollections(AsylumCase asylumCase) {
         if (asylumCase.read(APPELLANT_ADDENDUM_EVIDENCE_DOCS).isEmpty()) {
             asylumCase.write(APPELLANT_ADDENDUM_EVIDENCE_DOCS, emptyList());
@@ -217,11 +247,11 @@ public class CustomiseHearingBundleHandler implements PreSubmitCallbackHandler<A
             Document legalDocument = doc.getValue().getDocument();
             Document document = documentWithDescription.getValue().getDocument().orElseThrow(() -> new IllegalStateException(MISSING_DOCUMENT_EXCEPTION_MESSAGE));
             if (legalDocument.getDocumentBinaryUrl().equals(document.getDocumentBinaryUrl())) {
-                documentWithMetadataIdValue = doc;
+                return Optional.of(doc);
             }
         }
 
-        return Optional.ofNullable(documentWithMetadataIdValue);
+        return Optional.empty();
     }
 
     private void restoreAddendumEvidence(AsylumCase asylumCase, AsylumCase asylumCaseBefore, boolean isReheardCase, boolean isUpdatedBundle) {
@@ -389,17 +419,15 @@ public class CustomiseHearingBundleHandler implements PreSubmitCallbackHandler<A
         IdValue<DocumentWithMetadata> documentWithMetadata
     ) {
 
-        boolean found = false;
-
         for (IdValue<DocumentWithMetadata> doc : existingDocuments) {
             Document legalDocument = doc.getValue().getDocument();
             Document document = documentWithMetadata.getValue().getDocument();
             if (legalDocument.getDocumentBinaryUrl().equals(document.getDocumentBinaryUrl())) {
-                found = true;
+                return true;
             }
         }
 
-        return found;
+        return false;
     }
 
     private IdValue<DocumentWithMetadata> getExistingDocument(
@@ -540,7 +568,11 @@ public class CustomiseHearingBundleHandler implements PreSubmitCallbackHandler<A
             + "-" + appellantFamilyName;
     }
 
-    private void prepareDocuments(Map<AsylumCaseDefinition, AsylumCaseDefinition> mappingFields, AsylumCase asylumCase) {
+    private void prepareDocuments(
+            Map<AsylumCaseDefinition, AsylumCaseDefinition> mappingFields,
+            AsylumCase asylumCase,
+            Map<String, String> dateUploadedMap
+    ) {
 
         mappingFields.forEach((sourceField, targetField) -> {
 
@@ -582,100 +614,125 @@ public class CustomiseHearingBundleHandler implements PreSubmitCallbackHandler<A
                     } else {
                         switch (sourceField) {
                             case CUSTOM_HEARING_DOCUMENTS:
-                                newDocumentWithMetadata = new DocumentWithMetadata(document,
+                                newDocumentWithMetadata = new DocumentWithMetadata(
+                                    document,
                                     documentWithDescription.getValue().getDescription().orElse(""),
-                                    dateProvider.now().toString(),
+                                    dateUploadedMap.getOrDefault(document.getDocumentUrl(), dateProvider.now().toString()),
                                     DocumentTag.HEARING_NOTICE,
                                     "",
                                     "",
-                                    String.valueOf(dateProvider.nowWithTime()));
+                                    String.valueOf(dateProvider.nowWithTime())
+                                );
                                 break;
                             case CUSTOM_REHEARD_HEARING_DOCS:
-                                newDocumentWithMetadata = new DocumentWithMetadata(document,
+                                newDocumentWithMetadata = new DocumentWithMetadata(
+                                    document,
                                     documentWithDescription.getValue().getDescription().orElse(""),
-                                    dateProvider.now().toString(),
+                                    dateUploadedMap.getOrDefault(document.getDocumentUrl(), dateProvider.now().toString()),
                                     DocumentTag.REHEARD_HEARING_NOTICE,
                                     "",
                                     "",
-                                    String.valueOf(dateProvider.nowWithTime()));
+                                    String.valueOf(dateProvider.nowWithTime())
+                                );
                                 break;
                             case CUSTOM_LEGAL_REP_DOCUMENTS:
-                                newDocumentWithMetadata = new DocumentWithMetadata(document,
+                                newDocumentWithMetadata = new DocumentWithMetadata(
+                                    document,
                                     documentWithDescription.getValue().getDescription().orElse(""),
-                                    dateProvider.now().toString(),
+                                    dateUploadedMap.getOrDefault(document.getDocumentUrl(), dateProvider.now().toString()),
                                     DocumentTag.CASE_ARGUMENT,
-                                    "");
+                                    ""
+                                );
                                 break;
                             case CUSTOM_ADDITIONAL_EVIDENCE_DOCUMENTS:
-                                newDocumentWithMetadata = new DocumentWithMetadata(document,
+                                newDocumentWithMetadata = new DocumentWithMetadata(
+                                    document,
                                     documentWithDescription.getValue().getDescription().orElse(""),
-                                    dateProvider.now().toString(),
+                                    dateUploadedMap.getOrDefault(document.getDocumentUrl(), dateProvider.now().toString()),
                                     DocumentTag.ADDITIONAL_EVIDENCE,
-                                    "");
+                                    ""
+                                );
                                 break;
                             case CUSTOM_RESP_ADDITIONAL_EVIDENCE_DOCS:
-                                newDocumentWithMetadata = new DocumentWithMetadata(document,
+                                newDocumentWithMetadata = new DocumentWithMetadata(
+                                    document,
                                     documentWithDescription.getValue().getDescription().orElse(""),
-                                    dateProvider.now().toString(),
+                                    dateUploadedMap.getOrDefault(document.getDocumentUrl(), dateProvider.now().toString()),
                                     DocumentTag.ADDITIONAL_EVIDENCE,
-                                    SUPPLIED_BY_RESPONDENT);
+                                    SUPPLIED_BY_RESPONDENT
+                                );
                                 break;
                             case CUSTOM_APP_ADDITIONAL_EVIDENCE_DOCS:
-                                newDocumentWithMetadata = new DocumentWithMetadata(document,
+                                newDocumentWithMetadata = new DocumentWithMetadata(
+                                    document,
                                     documentWithDescription.getValue().getDescription().orElse(""),
-                                    dateProvider.now().toString(),
+                                    dateUploadedMap.getOrDefault(document.getDocumentUrl(), dateProvider.now().toString()),
                                     DocumentTag.ADDITIONAL_EVIDENCE,
-                                    SUPPLIED_BY_APPELLANT);
+                                    SUPPLIED_BY_APPELLANT
+                                );
                                 break;
                             case CUSTOM_RESPONDENT_DOCUMENTS:
-                                newDocumentWithMetadata = new DocumentWithMetadata(document,
+                                newDocumentWithMetadata = new DocumentWithMetadata(
+                                    document,
                                     documentWithDescription.getValue().getDescription().orElse(""),
-                                    dateProvider.now().toString(),
+                                    dateUploadedMap.getOrDefault(document.getDocumentUrl(), dateProvider.now().toString()),
                                     DocumentTag.RESPONDENT_EVIDENCE,
-                                    "");
+                                    ""
+                                );
                                 break;
                             case CUSTOM_FTPA_APPELLANT_DOCS:
-                                newDocumentWithMetadata = new DocumentWithMetadata(document,
+                                newDocumentWithMetadata = new DocumentWithMetadata(
+                                    document,
                                     documentWithDescription.getValue().getDescription().orElse(""),
-                                    dateProvider.now().toString(),
+                                    dateUploadedMap.getOrDefault(document.getDocumentUrl(), dateProvider.now().toString()),
                                     DocumentTag.FTPA_APPELLANT,
-                                    "");
+                                    ""
+                                );
                                 break;
-
                             case CUSTOM_FTPA_RESPONDENT_DOCS:
-                                newDocumentWithMetadata = new DocumentWithMetadata(document,
+                                newDocumentWithMetadata = new DocumentWithMetadata(
+                                    document,
                                     documentWithDescription.getValue().getDescription().orElse(""),
-                                    dateProvider.now().toString(),
+                                    dateUploadedMap.getOrDefault(document.getDocumentUrl(), dateProvider.now().toString()),
                                     DocumentTag.FTPA_RESPONDENT,
-                                    "");
+                                    ""
+                                );
                                 break;
                             case CUSTOM_FINAL_DECISION_AND_REASONS_DOCS:
-                                newDocumentWithMetadata = new DocumentWithMetadata(document,
+                                newDocumentWithMetadata = new DocumentWithMetadata(
+                                    document,
                                     documentWithDescription.getValue().getDescription().orElse(""),
-                                    dateProvider.now().toString(),
+                                    dateUploadedMap.getOrDefault(document.getDocumentUrl(), dateProvider.now().toString()),
                                     DocumentTag.FTPA_DECISION_AND_REASONS,
-                                    "");
+                                    ""
+                                );
                                 break;
                             case CUSTOM_APP_ADDENDUM_EVIDENCE_DOCS:
-                                newDocumentWithMetadata = new DocumentWithMetadata(document,
+                                newDocumentWithMetadata = new DocumentWithMetadata(
+                                    document,
                                     documentWithDescription.getValue().getDescription().orElse(""),
-                                    dateProvider.now().toString(),
+                                    dateUploadedMap.getOrDefault(document.getDocumentUrl(), dateProvider.now().toString()),
                                     DocumentTag.ADDENDUM_EVIDENCE,
-                                    SUPPLIED_BY_APPELLANT);
+                                    SUPPLIED_BY_APPELLANT
+                                );
                                 break;
                             case CUSTOM_RESP_ADDENDUM_EVIDENCE_DOCS:
-                                newDocumentWithMetadata = new DocumentWithMetadata(document,
+                                newDocumentWithMetadata = new DocumentWithMetadata(
+                                    document,
                                     documentWithDescription.getValue().getDescription().orElse(""),
-                                    dateProvider.now().toString(),
+                                    dateUploadedMap.getOrDefault(document.getDocumentUrl(), dateProvider.now().toString()),
                                     DocumentTag.ADDENDUM_EVIDENCE,
-                                    SUPPLIED_BY_RESPONDENT);
+                                    SUPPLIED_BY_RESPONDENT
+                                );
                                 break;
                             case CUSTOM_LATEST_REMITTAL_DOCS:
-                                newDocumentWithMetadata = new DocumentWithMetadata(document,
+                                newDocumentWithMetadata = new DocumentWithMetadata(
+                                    document,
                                     documentWithDescription.getValue().getDescription().orElse(""),
-                                    dateProvider.now().toString(),
+                                    dateUploadedMap.getOrDefault(document.getDocumentUrl(), dateProvider.now().toString()),
                                     DocumentTag.REMITTAL_DECISION,
-                                    "");
+                                    ""
+                                );
                                 break;
                             default:
                                 break;
