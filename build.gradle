@@ -333,6 +333,7 @@ dependencies {
     implementation group: 'net.minidev', name: 'json-smart', version: '2.5.2'
 
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-cache'
+    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-data-redis'
     implementation group: 'com.fasterxml.jackson.core', name: 'jackson-core'
     implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind'
     implementation group: 'com.fasterxml.jackson.core', name: 'jackson-annotations'
@@ -370,6 +371,8 @@ dependencies {
 
     testImplementation group: 'org.mockito', name: 'mockito-junit-jupiter', version: '3.12.4'
     testImplementation group: 'org.mockito', name: 'mockito-inline', version: '3.12.4'
+    testImplementation group: 'org.testcontainers', name: 'testcontainers', version: '2.0.2'
+    testImplementation group: 'org.testcontainers', name: 'testcontainers-junit-jupiter', version: '2.0.2'
     testImplementation group: 'org.springframework.boot', name: 'spring-boot-starter-test'
     testImplementation group: 'org.springframework.security', name: 'spring-security-test', version: versions.springSecurity
 
