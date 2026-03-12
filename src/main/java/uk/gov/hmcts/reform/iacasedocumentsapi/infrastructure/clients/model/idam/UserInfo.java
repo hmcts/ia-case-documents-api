@@ -19,6 +19,7 @@ import lombok.Setter;
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 public class UserInfo implements Serializable {
+
     @Serial
     private static final long serialVersionUID = 1L;
 
