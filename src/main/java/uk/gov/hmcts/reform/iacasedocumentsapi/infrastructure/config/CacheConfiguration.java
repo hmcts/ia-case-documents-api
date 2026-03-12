@@ -51,12 +51,7 @@ public class CacheConfiguration {
             // Configure ObjectMapper to handle type info correctly
             ObjectMapper objectMapper = new ObjectMapper()
                     .registerModule(new JavaTimeModule())
-                    .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
-                    .activateDefaultTyping(
-                            LaissezFaireSubTypeValidator.instance,
-                            ObjectMapper.DefaultTyping.NON_FINAL,
-                            JsonTypeInfo.As.PROPERTY
-                    );
+                    .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
 
             GenericJackson2JsonRedisSerializer serializer =
                     new GenericJackson2JsonRedisSerializer(objectMapper);
