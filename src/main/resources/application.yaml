@@ -1319,17 +1319,27 @@ appellantDaysToWait:
 
 ### Email addresses
 hearingCentreEmailAddresses:
-  bradford: ${IA_HEARING_CENTRE_BRADFORD_EMAIL:hc-bradford@example.com}
-  manchester: ${IA_HEARING_CENTRE_MANCHESTER_EMAIL:hc-manchester@example.com}
-  newport: ${IA_HEARING_CENTRE_NEWPORT_EMAIL:hc-newport@example.com}
-  taylorHouse: ${IA_HEARING_CENTRE_TAYLOR_HOUSE_EMAIL:hc-taylorhouse@example.com}
-  northShields: ${IA_HEARING_CENTRE_NORTH_SHIELDS_EMAIL:hc-north-shields@example.com}
-  newcastle: ${IA_HEARING_CENTRE_NORTH_SHIELDS_EMAIL:hc-north-shields@example.com}
-  birmingham: ${IA_HEARING_CENTRE_BIRMINGHAM_EMAIL:hc-birmingham@example.com}
-  hattonCross: ${IA_HEARING_CENTRE_HATTON_CROSS_EMAIL:hc-hatton-cross@example.com}
-  glasgow: ${IA_HEARING_CENTRE_GLASGOW_EMAIL:hc-glasgow@example.com}
-  belfast: ${IA_HEARING_CENTRE_GLASGOW_EMAIL:hc-glasgow@example.com}
-  harmondsworth: ${IA_HEARING_CENTRE_HARMONDSWORTH_EMAIL:hc-harmondsworth@example.com}
+  bradford: ${IA_HEARING_CENTRE_BRADFORD_EMAIL:hc-bradford-default@example.com}
+  manchester: ${IA_HEARING_CENTRE_MANCHESTER_EMAIL:hc-manchester-default@example.com}
+  newport: ${IA_HEARING_CENTRE_NEWPORT_EMAIL:hc-newport-default@example.com}
+  taylorHouse: ${IA_HEARING_CENTRE_TAYLOR_HOUSE_EMAIL:hc-taylorhouse-default@example.com}
+  northShields: ${IA_HEARING_CENTRE_NORTH_SHIELDS_EMAIL:hc-north-shields-default@example.com}
+  newcastle: ${IA_HEARING_CENTRE_NORTH_SHIELDS_EMAIL:hc-north-shields-default@example.com}
+  birmingham: ${IA_HEARING_CENTRE_BIRMINGHAM_EMAIL:hc-birmingham-default@example.com}
+  hattonCross: ${IA_HEARING_CENTRE_HATTON_CROSS_EMAIL:hc-hatton-cross-default@example.com}
+  glasgow: ${IA_HEARING_CENTRE_GLASGOW_EMAIL:hc-glasgow-default@example.com}
+  belfast: ${IA_HEARING_CENTRE_GLASGOW_EMAIL:hc-glasgow-default@example.com}
+  harmondsworth: ${IA_HEARING_CENTRE_HARMONDSWORTH_EMAIL:hc-harmondsworth-default@example.com}
+  hendon: ${IA_HEARING_CENTRE_HENDON_EMAIL:hc-hendon-default@example.com}
+  yarlsWood: ${IA_HEARING_CENTRE_YARLSWOOD_EMAIL:hc-yarlswood-default@example.com}
+  bradfordKeighley: ${IA_HEARING_CENTRE_BRADFORD_KEIGHLEY_EMAIL:hc-bradford-keighley-default@example.com}
+  mccMinshull: ${IA_HEARING_CENTRE_MCC_MINSHULL_EMAIL:hc-mcc-minshull-default@example.com}
+  mccCrownSquare: ${IA_HEARING_CENTRE_MCC_CROWN_SQUARE_EMAIL:hc-mcc-crown-square-default@example.com}
+  manchesterMags: ${IA_HEARING_CENTRE_MANCHESTER_MAGS_EMAIL:hc-manchester-mags-default@example.com}
+  nthTyneMags: ${IA_HEARING_CENTRE_NTH_TYNE_MAGS_EMAIL:hc-nth-tyne-mags-default@example.com}
+  leedsMags: ${IA_HEARING_CENTRE_LEEDS_MAGS_EMAIL:hc-leeds-mags-default@example.com}
+  alloaSherrif: ${IA_HEARING_CENTRE_ALLOA_SHERRIF_EMAIL:hc-alloa-sherrif-default@example.com}
+  iacNationalVirtual: ${IA_HEARING_CENTRE_VIRTUAL_REGION_EMAIL:hc-virtualregion-default@example.com}
 
 govUkHolidays:
   url: https://www.gov.uk/
