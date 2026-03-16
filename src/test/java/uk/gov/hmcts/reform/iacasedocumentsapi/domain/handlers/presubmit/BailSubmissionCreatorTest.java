@@ -35,12 +35,18 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentCreator;
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = org.mockito.quality.Strictness.LENIENT)
 public class BailSubmissionCreatorTest {
-    @Mock private DocumentCreator<BailCase> bailSubmissionDocumentCreator;
-    @Mock private BailDocumentHandler bailDocumentHandler;
-    @Mock private Callback<BailCase> callback;
-    @Mock private CaseDetails<BailCase> caseDetails;
-    @Mock private BailCase bailCase;
-    @Mock private Document bailSubmission;
+    @Mock
+    private DocumentCreator<BailCase> bailSubmissionDocumentCreator;
+    @Mock
+    private BailDocumentHandler bailDocumentHandler;
+    @Mock
+    private Callback<BailCase> callback;
+    @Mock
+    private CaseDetails<BailCase> caseDetails;
+    @Mock
+    private BailCase bailCase;
+    @Mock
+    private Document bailSubmission;
 
     private BailSubmissionCreator bailSubmissionCreator;
 
@@ -60,7 +66,8 @@ public class BailSubmissionCreatorTest {
             when(callback.getEvent()).thenReturn(event);
             for (PreSubmitCallbackStage preSubmitCallbackStage : PreSubmitCallbackStage.values()) {
                 boolean canHandle = bailSubmissionCreator.canHandle(preSubmitCallbackStage, callback);
-                if ((event == Event.SUBMIT_APPLICATION || event == Event.MAKE_NEW_APPLICATION || event == Event.EDIT_BAIL_APPLICATION_AFTER_SUBMIT)
+                if ((event == Event.SUBMIT_APPLICATION || event == Event.MAKE_NEW_APPLICATION
+                    || event == Event.EDIT_BAIL_APPLICATION_AFTER_SUBMIT || event == Event.REGENERATE_BAIL_SUBMISSION_DOCUMENT)
                     && preSubmitCallbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT && isImaEnabled == YesOrNo.NO) {
                     assertTrue(canHandle);
                 } else {

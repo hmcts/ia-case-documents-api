@@ -2,6 +2,7 @@ package uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit.bail;
 
 import static java.util.Objects.requireNonNull;
 
+import java.util.List;
 import org.springframework.stereotype.Component;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.BailCase;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseDetails;
@@ -31,7 +32,7 @@ public class UploadSignedDecisionNoticeHandler implements PreSubmitCallbackHandl
         requireNonNull(callback, "callback must not be null");
 
         return callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
-               && callback.getEvent() == Event.UPLOAD_SIGNED_DECISION_NOTICE;
+               && List.of(Event.UPLOAD_SIGNED_DECISION_NOTICE, Event.UPLOAD_SIGNED_DECISION_NOTICE_CONDITIONAL_GRANT).contains(callback.getEvent());
     }
 
     public PreSubmitCallbackResponse<BailCase> handle(
