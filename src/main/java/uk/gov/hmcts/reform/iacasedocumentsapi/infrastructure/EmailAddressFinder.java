@@ -4,11 +4,14 @@ import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseD
 
 import java.util.Map;
 import java.util.Optional;
+
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.HearingCentre;
 
+@Slf4j
 @Service
 public class EmailAddressFinder {
 
@@ -31,6 +34,7 @@ public class EmailAddressFinder {
             hearingCentreEmailAddresses
                 .get(hearingCentre);
 
+        log.info("------------Hearing centre email address is {}", hearingCentreEmailAddress);
         if (hearingCentreEmailAddress == null) {
             throw new IllegalStateException("Hearing centre email address not found: " + hearingCentre.toString());
         }
