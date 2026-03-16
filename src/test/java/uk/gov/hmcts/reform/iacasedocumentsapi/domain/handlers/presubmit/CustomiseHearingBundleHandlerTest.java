@@ -29,6 +29,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.EnumSource;
 import org.junit.jupiter.params.provider.ValueSource;
+import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
@@ -45,10 +46,8 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.IdValue;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.Appender;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.FeatureToggler;
-import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.SystemDateProvider;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.clients.EmBundleRequestExecutor;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.enties.em.Bundle;
-
 
 @ExtendWith(MockitoExtension.class)
 @SuppressWarnings("unchecked")
@@ -431,6 +430,7 @@ class CustomiseHearingBundleHandlerTest {
         when(asylumCaseCopy.read(RESPONDENT_ADDENDUM_EVIDENCE_DOCS))
             .thenReturn(Optional.of(Lists.newArrayList(respondentAddendumEvidenceList)));
         when(dateProvider.nowWithTime()).thenReturn(LocalDateTime.now());
+
         PreSubmitCallbackResponse<AsylumCase> callbackResponse =
             customiseHearingBundleHandler.handle(ABOUT_TO_SUBMIT, callback);
 
@@ -908,7 +908,6 @@ class CustomiseHearingBundleHandlerTest {
             .thenReturn(Optional.of(Lists.newArrayList(reheardHearingDocs)));
         when(asylumCaseCopy.read(REHEARD_HEARING_DOCUMENTS_COLLECTION)).thenReturn(Optional.of(reheardHearingDocuments));
 
-
         when(asylumCase.read(REHEARD_HEARING_DOCUMENTS))
             .thenReturn(Optional.of(Lists.newArrayList(reheardHearingDocs)));
         when(asylumCase.read(REHEARD_HEARING_DOCUMENTS_COLLECTION))
@@ -917,6 +916,7 @@ class CustomiseHearingBundleHandlerTest {
             .thenReturn(documentsListAfterAppend);
         reheardHearingDocuments.get(0).getValue().setReheardHearingDocs(documentsListAfterAppend);
         when(dateProvider.nowWithTime()).thenReturn(LocalDateTime.now());
+
         PreSubmitCallbackResponse<AsylumCase> callbackResponse =
             customiseHearingBundleHandler.handle(ABOUT_TO_SUBMIT, callback);
 
@@ -924,15 +924,23 @@ class CustomiseHearingBundleHandlerTest {
         assertEquals(asylumCase, callbackResponse.getData());
         assertEquals(asylumCase.read(CASE_FLAG_SET_ASIDE_REHEARD_EXISTS, YesOrNo.class), Optional.of(YesOrNo.YES));
         assertTrue(featureToggler.getValue("reheard-feature", false));
+
+        verify(asylumCaseCopy, times(2)).read(ADDENDUM_EVIDENCE_DOCUMENTS);
+        verify(asylumCaseCopy, times(2)).read(ADDITIONAL_EVIDENCE_DOCUMENTS);
+        verify(asylumCaseCopy, times(1)).read(HEARING_DOCUMENTS);
         verify(asylumCaseCopy, times(2)).read(CUSTOM_APP_ADDITIONAL_EVIDENCE_DOCS);
         verify(asylumCaseCopy, times(2)).read(CUSTOM_RESP_ADDITIONAL_EVIDENCE_DOCS);
         verify(asylumCaseCopy, times(1)).read(CUSTOM_FTPA_APPELLANT_DOCS);
-        verify(asylumCaseCopy, times(1)).read(LATEST_DECISION_AND_REASONS_DOCUMENTS);
+        verify(asylumCaseCopy, times(2)).read(LATEST_DECISION_AND_REASONS_DOCUMENTS);
+        verify(asylumCaseCopy, times(1)).read(LATEST_REHEARD_HEARING_DOCUMENTS);
+        verify(asylumCaseCopy, times(1)).read(LATEST_REMITTAL_DOCUMENTS);
+        verify(asylumCaseCopy, times(1)).read(LEGAL_REPRESENTATIVE_DOCUMENTS);
         verify(asylumCaseCopy, times(1)).read(CUSTOM_FINAL_DECISION_AND_REASONS_DOCS);
         verify(asylumCaseCopy, times(2)).read(CUSTOM_REHEARD_HEARING_DOCS);
         verify(asylumCaseCopy, times(1)).read(CUSTOM_APP_ADDENDUM_EVIDENCE_DOCS);
         verify(asylumCaseCopy, times(1)).read(CUSTOM_RESP_ADDENDUM_EVIDENCE_DOCS);
         verify(asylumCaseCopy, times(2)).read(REHEARD_HEARING_DOCUMENTS);
+        verify(asylumCaseCopy, times(2)).read(RESPONDENT_DOCUMENTS);
 
         verify(asylumCase, times(1)).read(APPELLANT_ADDENDUM_EVIDENCE_DOCS);
         verify(asylumCase, times(1)).read(RESPONDENT_ADDENDUM_EVIDENCE_DOCS);
@@ -944,6 +952,106 @@ class CustomiseHearingBundleHandlerTest {
         verify(asylumCase).clear(AsylumCaseDefinition.HMCTS);
         verify(asylumCase, times(1)).write(HMCTS, coverPageLogo);
         verify(asylumCase).clear(AsylumCaseDefinition.CASE_BUNDLES);
+    }
+
+    @Test
+    void should_preserve_dateUploaded_when_document_found() {
+        when(callback.getEvent()).thenReturn(Event.CUSTOMISE_HEARING_BUNDLE);
+        when(asylumCase.read(SUITABILITY_REVIEW_DECISION)).thenReturn(Optional.empty());
+
+        String originalDateUploaded = "2020-05-15";
+        Document sharedDoc = new Document("doc-url", "doc-binary-url", "doc.pdf");
+
+        IdValue<DocumentWithDescription> customDocIdValue = new IdValue<>("1",
+            new DocumentWithDescription(sharedDoc, "test desc"));
+
+        DocumentWithMetadata targetDocMeta = new DocumentWithMetadata(
+            sharedDoc, "original desc", originalDateUploaded, DocumentTag.HEARING_NOTICE,
+            "supplier", "uploader", "2020-05-15T10:00:00");
+        IdValue<DocumentWithMetadata> targetDocIdValue = new IdValue<>("1", targetDocMeta);
+
+        when(asylumCaseCopy.read(CUSTOM_HEARING_DOCUMENTS))
+            .thenReturn(Optional.of(Lists.newArrayList(customDocIdValue)));
+        when(asylumCaseCopy.read(HEARING_DOCUMENTS))
+            .thenReturn(Optional.of(Lists.newArrayList(targetDocIdValue)));
+        when(asylumCase.read(HEARING_DOCUMENTS))
+            .thenReturn(Optional.of(Lists.newArrayList(targetDocIdValue)));
+
+        ArgumentCaptor<DocumentWithMetadata> captor = ArgumentCaptor.forClass(DocumentWithMetadata.class);
+        when(appender.append(captor.capture(), anyList()))
+            .thenReturn(Lists.newArrayList(targetDocIdValue));
+
+        customiseHearingBundleHandler.handle(ABOUT_TO_SUBMIT, callback);
+
+        DocumentWithMetadata captured = captor.getValue();
+        assertEquals(originalDateUploaded, captured.getDateUploaded());
+        assertEquals(DocumentTag.HEARING_NOTICE, captured.getTag());
+        assertEquals("2020-05-15T10:00:00", captured.getDateTimeUploaded());
+    }
+
+    @Test
+    void should_preserve_dateUploaded_from_map_when_document_not_found() {
+        when(callback.getEvent()).thenReturn(Event.CUSTOMISE_HEARING_BUNDLE);
+        when(asylumCase.read(SUITABILITY_REVIEW_DECISION)).thenReturn(Optional.empty());
+
+        String originalDateUploaded = "2020-05-15";
+
+        // Doc in custom field - uses "doc-url" as documentUrl but unique binaryUrl
+        Document customFieldDoc = new Document("doc-url", "custom-binary-url", "doc.pdf");
+        IdValue<DocumentWithDescription> customDocIdValue = new IdValue<>("1",
+            new DocumentWithDescription(customFieldDoc, "test desc"));
+
+        // Doc in ADDITIONAL_EVIDENCE_DOCUMENTS with same documentUrl → populates dateUploadedMap
+        // but different binaryUrl so isDocumentWithDescriptionPresent won't match
+        Document mapDoc = new Document("doc-url", "map-binary-url", "map-doc.pdf");
+        DocumentWithMetadata mapDocMeta = new DocumentWithMetadata(
+            mapDoc, "desc", originalDateUploaded, DocumentTag.ADDITIONAL_EVIDENCE, "");
+        IdValue<DocumentWithMetadata> mapDocIdValue = new IdValue<>("1", mapDocMeta);
+
+        when(asylumCaseCopy.read(CUSTOM_HEARING_DOCUMENTS))
+            .thenReturn(Optional.of(Lists.newArrayList(customDocIdValue)));
+        // No matching doc in target (different binaryUrl)
+        when(asylumCaseCopy.read(ADDITIONAL_EVIDENCE_DOCUMENTS))
+            .thenReturn(Optional.of(Lists.newArrayList(mapDocIdValue)));
+        when(asylumCase.read(ADDITIONAL_EVIDENCE_DOCUMENTS))
+            .thenReturn(Optional.of(Lists.newArrayList(mapDocIdValue)));
+        when(dateProvider.nowWithTime()).thenReturn(LocalDateTime.of(2024, 1, 1, 10, 0));
+
+        ArgumentCaptor<DocumentWithMetadata> captor = ArgumentCaptor.forClass(DocumentWithMetadata.class);
+        when(appender.append(captor.capture(), anyList())).thenReturn(emptyList());
+
+        customiseHearingBundleHandler.handle(ABOUT_TO_SUBMIT, callback);
+
+        DocumentWithMetadata captured = captor.getValue();
+        assertEquals(originalDateUploaded, captured.getDateUploaded());
+        assertEquals(DocumentTag.HEARING_NOTICE, captured.getTag());
+    }
+
+    @Test
+    void should_use_current_date_for_new_document() {
+        when(callback.getEvent()).thenReturn(Event.CUSTOMISE_HEARING_BUNDLE);
+        when(asylumCase.read(SUITABILITY_REVIEW_DECISION)).thenReturn(Optional.empty());
+
+        LocalDate today = LocalDate.of(2024, 3, 5);
+        when(dateProvider.now()).thenReturn(today);
+        when(dateProvider.nowWithTime()).thenReturn(LocalDateTime.of(2024, 3, 5, 10, 0));
+
+        // Doc with URL not present in any collection
+        Document newDoc = new Document("brand-new-url", "brand-new-binary-url", "new-doc.pdf");
+        IdValue<DocumentWithDescription> customDocIdValue = new IdValue<>("1",
+            new DocumentWithDescription(newDoc, "new doc desc"));
+
+        when(asylumCaseCopy.read(CUSTOM_HEARING_DOCUMENTS))
+            .thenReturn(Optional.of(Lists.newArrayList(customDocIdValue)));
+
+        ArgumentCaptor<DocumentWithMetadata> captor = ArgumentCaptor.forClass(DocumentWithMetadata.class);
+        when(appender.append(captor.capture(), anyList())).thenReturn(emptyList());
+
+        customiseHearingBundleHandler.handle(ABOUT_TO_SUBMIT, callback);
+
+        DocumentWithMetadata captured = captor.getValue();
+        assertEquals(today.toString(), captured.getDateUploaded());
+        assertEquals(DocumentTag.HEARING_NOTICE, captured.getTag());
     }
 
     private DocumentWithDescription createDocumentWithDescription() {
@@ -963,9 +1071,13 @@ class CustomiseHearingBundleHandlerTest {
     private DocumentWithMetadata createDocumentWithMetadata(DocumentTag documentTag, String suppliedBy) {
 
         return
-            new DocumentWithMetadata(createDocument(),
+            new DocumentWithMetadata(
+                createDocument(),
                 "some-description",
-                new SystemDateProvider().now().toString(), documentTag, suppliedBy);
+                "2023-12-12",
+                documentTag,
+                suppliedBy
+            );
 
     }
 
