@@ -136,11 +136,12 @@ class InternalRecordOutOfTimeDecisionLetterTemplateTest {
         assertEquals(telephoneNumber, fieldValuesMap.get("customerServicesTelephone"));
         assertEquals(systemDateProvider.dueDate(28), fieldValuesMap.get("fourWeeksAfterSubmitDate"));
         assertEquals(LocalDate.now().format(DateTimeFormatter.ofPattern("d MMMM yyyy")), fieldValuesMap.get("dateLetterSent"));
-        assertEquals(addressLine1, fieldValuesMap.get("address_line_1"));
-        assertEquals(addressLine2, fieldValuesMap.get("address_line_2"));
-        assertEquals(addressLine3, fieldValuesMap.get("address_line_3"));
-        assertEquals(postTown, fieldValuesMap.get("address_line_4"));
-        assertEquals(postCode, fieldValuesMap.get("address_line_5"));
+        assertEquals(appellantGivenNames + " " + appellantFamilyName, fieldValuesMap.get("address_line_1"));
+        assertEquals(addressLine1, fieldValuesMap.get("address_line_2"));
+        assertEquals(addressLine2, fieldValuesMap.get("address_line_3"));
+        assertEquals(addressLine3, fieldValuesMap.get("address_line_4"));
+        assertEquals(postTown, fieldValuesMap.get("address_line_5"));
+        assertEquals(postCode, fieldValuesMap.get("address_line_6"));
     }
 
     @Test
@@ -158,11 +159,12 @@ class InternalRecordOutOfTimeDecisionLetterTemplateTest {
         assertEquals(telephoneNumber, fieldValuesMap.get("customerServicesTelephone"));
         assertEquals(systemDateProvider.dueDate(28), fieldValuesMap.get("fourWeeksAfterSubmitDate"));
         assertEquals(LocalDate.now().format(DateTimeFormatter.ofPattern("d MMMM yyyy")), fieldValuesMap.get("dateLetterSent"));
-        assertEquals(occAddressLine1, fieldValuesMap.get("address_line_1"));
-        assertEquals(occAddressLine2, fieldValuesMap.get("address_line_2"));
-        assertEquals(occAddressLine3, fieldValuesMap.get("address_line_3"));
-        assertEquals(occAddressLine4, fieldValuesMap.get("address_line_4"));
-        assertEquals(occCountry, fieldValuesMap.get("address_line_5"));
+        assertEquals(appellantGivenNames + " " + appellantFamilyName, fieldValuesMap.get("address_line_1"));
+        assertEquals(occAddressLine1, fieldValuesMap.get("address_line_2"));
+        assertEquals(occAddressLine2, fieldValuesMap.get("address_line_3"));
+        assertEquals(occAddressLine3, fieldValuesMap.get("address_line_4"));
+        assertEquals(occAddressLine4, fieldValuesMap.get("address_line_5"));
+        assertEquals(occCountry, fieldValuesMap.get("address_line_6"));
     }
 
     @Test

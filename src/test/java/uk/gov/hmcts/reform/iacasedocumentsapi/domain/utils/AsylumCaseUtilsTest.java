@@ -498,12 +498,13 @@ public class AsylumCaseUtilsTest {
 
         List<String> result = AsylumCaseUtils.getAppellantAddressAsList(asylumCase);
 
-        assertEquals(5, result.size());
-        assertEquals("Apartment 99", result.get(0));
-        assertEquals("Example Road", result.get(1));
-        assertEquals("Example County", result.get(2));
-        assertEquals("Example Town", result.get(3));
-        assertEquals("PostCode", result.get(4));
+        assertEquals(6, result.size());
+        assertEquals(" ", result.get(0));
+        assertEquals("Apartment 99", result.get(1));
+        assertEquals("Example Road", result.get(2));
+        assertEquals("Example County", result.get(3));
+        assertEquals("Example Town", result.get(4));
+        assertEquals("PostCode", result.get(5));
     }
 
     @Test
