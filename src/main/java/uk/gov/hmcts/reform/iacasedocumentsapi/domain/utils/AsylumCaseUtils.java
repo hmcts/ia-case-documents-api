@@ -97,9 +97,8 @@ public class AsylumCaseUtils {
 
     public static List<IdValue<Direction>> getCaseDirections(AsylumCase asylumCase) {
         final Optional<List<IdValue<Direction>>> maybeDirections = asylumCase.read(DIRECTIONS);
-        final List<IdValue<Direction>> existingDirections = maybeDirections
-                .orElse(Collections.emptyList());
-        return existingDirections;
+
+        return maybeDirections.orElse(Collections.emptyList());
     }
 
     public static List<Direction> getCaseDirectionsBasedOnTag(AsylumCase asylumCase, DirectionTag directionTag) {
@@ -241,11 +240,8 @@ public class AsylumCaseUtils {
     public static List<IdValue<DocumentWithMetadata>> getAddendumEvidenceDocuments(AsylumCase asylumCase) {
         Optional<List<IdValue<DocumentWithMetadata>>> maybeExistingAdditionalEvidenceDocuments =
                 asylumCase.read(ADDENDUM_EVIDENCE_DOCUMENTS);
-        if (maybeExistingAdditionalEvidenceDocuments.isEmpty()) {
-            return Collections.emptyList();
-        }
+        return maybeExistingAdditionalEvidenceDocuments.orElse(Collections.emptyList());
 
-        return maybeExistingAdditionalEvidenceDocuments.get();
     }
 
     public static Optional<Document> getDecisionOfNoticeDocuments(AsylumCase asylumCase) {
@@ -259,9 +255,7 @@ public class AsylumCaseUtils {
             return Optional.empty();
         }
 
-        Optional<IdValue<DocumentWithMetadata>> optionalLatestAddendum = addendums.stream().findFirst();
-
-        return optionalLatestAddendum.isEmpty() ? Optional.empty() : Optional.of(optionalLatestAddendum.get());
+        return addendums.stream().findFirst();
     }
 
     public static boolean isDirectionPartyRespondent(AsylumCase asylumCase) {
@@ -594,7 +588,7 @@ public class AsylumCaseUtils {
             .stream()
             .filter(app -> app.getId().equals(decidedApplicationId))
             .findFirst()
-            .orElseThrow(() -> new IllegalStateException("the decided application is not present in make an applications list"));;
+            .orElseThrow(() -> new IllegalStateException("the decided application is not present in make an applications list"));
 
         return applicationIdValue.getValue();
     }
