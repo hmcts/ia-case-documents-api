@@ -1,5 +1,6 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils;
 
+import static java.lang.Math.min;
 import static java.util.Objects.requireNonNull;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ApplicantType.APPELLANT;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumAppealType.DC;
@@ -46,7 +47,6 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.RemissionDecision;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.RemissionType;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.NationalityGovUk;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.*;
-
 
 public class AsylumCaseUtils {
 
@@ -629,7 +629,8 @@ public class AsylumCaseUtils {
     private static void addAppellantName(AsylumCase asylumCase, List<String> appellantAddressAsList) {
         String appellantGivenNames = asylumCase.read(AsylumCaseDefinition.APPELLANT_GIVEN_NAMES, String.class).orElse("");
         String appellantFamilyName = asylumCase.read(AsylumCaseDefinition.APPELLANT_FAMILY_NAME, String.class).orElse("");
-        appellantAddressAsList.add(appellantGivenNames + " " + appellantFamilyName);
+        String fullName = appellantGivenNames + " " + appellantFamilyName;
+        appellantAddressAsList.add(fullName.substring(0, min(fullName.length(), 64)));
     }
 }
 
