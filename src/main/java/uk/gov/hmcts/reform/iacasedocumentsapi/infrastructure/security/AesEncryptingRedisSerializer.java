@@ -15,6 +15,7 @@ public class AesEncryptingRedisSerializer<T> implements RedisSerializer<T> {
     private static final String ALGORITHM = "AES/GCM/NoPadding";
     private static final int GCM_IV_LENGTH = 12;
     private static final int GCM_TAG_LENGTH = 128;
+    private static final SecureRandom SECURE_RANDOM = new SecureRandom();
 
     private final RedisSerializer<T> delegate;
     private final SecretKeySpec secretKey;
@@ -35,7 +36,7 @@ public class AesEncryptingRedisSerializer<T> implements RedisSerializer<T> {
             byte[] plaintext = delegate.serialize(value);
 
             byte[] iv = new byte[GCM_IV_LENGTH];
-            new SecureRandom().nextBytes(iv);
+            SECURE_RANDOM.nextBytes(iv);
 
             Cipher cipher = Cipher.getInstance(ALGORITHM);
             cipher.init(Cipher.ENCRYPT_MODE, secretKey, new GCMParameterSpec(GCM_TAG_LENGTH, iv));
