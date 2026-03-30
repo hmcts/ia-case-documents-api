@@ -60,14 +60,12 @@ spring:
       resourceserver:
         jwt:
           jwk-set-uri: ${OPEN_ID_IDAM_URL:http://127.0.0.1:5000}/o/jwks
-#  cache:
-#    cache-names: userInfoCache
-#    caffeine:
-#      spec: expireAfterAccess=3600s
   data:
     redis:
       url: ${IA_REDIS_CONNECTION_STRING:}
       secret: ${IA_REDIS_ACCESS_KEY:}
+      encryption:
+        key: ${IA_REDIS_ENCRYPTION_KEY:}
       ssl:
         enabled: true
 

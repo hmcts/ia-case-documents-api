@@ -16,7 +16,10 @@ import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactor
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.test.util.ReflectionTestUtils;
 import org.testcontainers.containers.GenericContainer;
+
+import java.util.Base64;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.verify;
@@ -38,7 +41,7 @@ class CacheConfigurationTest {
     private static final String REDIS_URL_WITH_TLS = "redis://SOME_KEY@hostname.redis.cache.windows.net:6380?tls=true";
     private static final String REDIS_URL_SSL = "rediss://SOME_KEY@hostname.redis.cache.windows.net:6380";
     private static final String ACCESS_KEY = "some-access-key";
-
+    private static final String TEST_ENCRYPTION_KEY = Base64.getEncoder().encodeToString(new byte[32]);
 
     static GenericContainer<?> redis = new GenericContainer<>("redis:7-alpine")
             .withExposedPorts(6379);
@@ -52,11 +55,13 @@ class CacheConfigurationTest {
         registry.add("spring.data.redis.url", () ->
                 String.format("redis://localhost:%d", redis.getMappedPort(6379))
         );
+        registry.add("spring.data.redis.encryption.key", () -> TEST_ENCRYPTION_KEY);
     }
 
     @BeforeEach
     void setUp() {
         cacheConfiguration = new CacheConfiguration();
+        ReflectionTestUtils.setField(cacheConfiguration, "redisEncryptionKey", TEST_ENCRYPTION_KEY);
     }
 
     @Test
