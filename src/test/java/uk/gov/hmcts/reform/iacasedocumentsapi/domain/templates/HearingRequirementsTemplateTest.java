@@ -21,68 +21,67 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.*;
 
 
 @ExtendWith(MockitoExtension.class)
-@SuppressWarnings("unchecked")
 class HearingRequirementsTemplateTest {
 
-    private static InterpreterLanguageRefData APPELLANT_SPOKEN_INTERPRETER_LANGUAGE = new InterpreterLanguageRefData();
-    private static InterpreterLanguageRefData APPELLANT_SPOKEN_INTERPRETER_LANGUAGE_MANUAL = new InterpreterLanguageRefData();
+    private static final InterpreterLanguageRefData APPELLANT_SPOKEN_INTERPRETER_LANGUAGE = new InterpreterLanguageRefData();
+    private static final InterpreterLanguageRefData APPELLANT_SPOKEN_INTERPRETER_LANGUAGE_MANUAL = new InterpreterLanguageRefData();
     private final String templateName = "HEARING_REQUIREMENTS_TEMPLATE.docx";
 
     @Mock private CaseDetails<AsylumCase> caseDetails;
     @Mock private AsylumCase asylumCase;
 
-    private String appealReferenceNumber = "RP/11111/2020";
-    private String legalRepReferenceNumber = "OUR-REF";
-    private String homeOfficeReferenceNumber = "A1234567/001";
-    private String appellantGivenNames = "Talha";
-    private String appellantFamilyName = "Awan";
-    private YesOrNo isAppellantAttendingTheHearing = YesOrNo.YES;
-    private YesOrNo isAppellantGivingOralEvidence = YesOrNo.YES;
+    private final String appealReferenceNumber = "RP/11111/2020";
+    private final String legalRepReferenceNumber = "OUR-REF";
+    private final String homeOfficeReferenceNumber = "A1234567/001";
+    private final String appellantGivenNames = "Talha";
+    private final String appellantFamilyName = "Awan";
+    private final YesOrNo isAppellantAttendingTheHearing = YesOrNo.YES;
+    private final YesOrNo isAppellantGivingOralEvidence = YesOrNo.YES;
 
-    private YesOrNo isWitnessesAttending = YesOrNo.YES;
-    private WitnessDetails witness1 = new WitnessDetails();
-    private WitnessDetails witness2 = new WitnessDetails();
+    private final YesOrNo isWitnessesAttending = YesOrNo.YES;
+    private final WitnessDetails witness1 = new WitnessDetails();
+    private final WitnessDetails witness2 = new WitnessDetails();
 
-    private YesOrNo isInterpreterServicesNeeded = YesOrNo.YES;
-    private InterpreterLanguage interpreter1 = new InterpreterLanguage();
-    private InterpreterLanguage interpreter2 = new InterpreterLanguage();
+    private final YesOrNo isInterpreterServicesNeeded = YesOrNo.YES;
+    private final InterpreterLanguage interpreter1 = new InterpreterLanguage();
+    private final InterpreterLanguage interpreter2 = new InterpreterLanguage();
 
-    private YesOrNo isAnyWitnessInterpreterRequired = YesOrNo.YES;
-    private InterpreterLanguageRefData appellantSignInterpreterLanguage = new InterpreterLanguageRefData();
-    private InterpreterLanguageRefData witness1SpokenInterpreterLanguage = new InterpreterLanguageRefData();
-    private InterpreterLanguageRefData witness1SignInterpreterLanguage = new InterpreterLanguageRefData();
-    private InterpreterLanguageRefData witness2SpokenInterpreterLanguage = new InterpreterLanguageRefData();
-    private InterpreterLanguageRefData witness2SignInterpreterLanguage = new InterpreterLanguageRefData();
-    private List<WitnessInterpreterLanguageInformation> witnessInterpreterLanguageInformationList = new ArrayList<WitnessInterpreterLanguageInformation>();
+    private final YesOrNo isAnyWitnessInterpreterRequired = YesOrNo.YES;
+    private final InterpreterLanguageRefData appellantSignInterpreterLanguage = new InterpreterLanguageRefData();
+    private final InterpreterLanguageRefData witness1SpokenInterpreterLanguage = new InterpreterLanguageRefData();
+    private final InterpreterLanguageRefData witness1SignInterpreterLanguage = new InterpreterLanguageRefData();
+    private final InterpreterLanguageRefData witness2SpokenInterpreterLanguage = new InterpreterLanguageRefData();
+    private final InterpreterLanguageRefData witness2SignInterpreterLanguage = new InterpreterLanguageRefData();
+    private final List<WitnessInterpreterLanguageInformation> witnessInterpreterLanguageInformationList = new ArrayList<WitnessInterpreterLanguageInformation>();
 
-    private YesOrNo isHearingRoomNeeded = YesOrNo.YES;
-    private YesOrNo isHearingLoopNeeded = YesOrNo.YES;
+    private final YesOrNo isHearingRoomNeeded = YesOrNo.YES;
+    private final YesOrNo isHearingLoopNeeded = YesOrNo.YES;
 
-    private YesOrNo physicalOrMentalHealthIssues = YesOrNo.YES;
-    private String physicalOrMentalHealthIssuesDescription = "Physical issues description";
+    private final YesOrNo physicalOrMentalHealthIssues = YesOrNo.YES;
+    private final String physicalOrMentalHealthIssuesDescription = "Physical issues description";
 
-    private YesOrNo pastExperiences = YesOrNo.YES;
-    private String pastExperiencesDescription = "Past experiences description";
+    private final YesOrNo pastExperiences = YesOrNo.YES;
+    private final String pastExperiencesDescription = "Past experiences description";
 
-    private YesOrNo remoteVideoCall = YesOrNo.YES;
-    private String remoteVideoCallDescription = "Remote video call evidence description";
+    private final YesOrNo remoteVideoCall = YesOrNo.YES;
+    private final String remoteVideoCallDescription = "Remote video call evidence description";
 
-    private YesOrNo multimediaEvidence = YesOrNo.YES;
-    private String multimediaEvidenceDescription = "Multimedia evidence description";
+    private final YesOrNo multimediaEvidence = YesOrNo.YES;
+    private final String multimediaEvidenceDescription = "Multimedia evidence description";
 
-    private YesOrNo singleSexCourt = YesOrNo.YES;
-    private MaleOrFemale singleSexCourtType = MaleOrFemale.FEMALE;
-    private String singleSexCourtTypeDescription = "Single-sex court type description";
+    private final YesOrNo singleSexCourt = YesOrNo.YES;
+    private final MaleOrFemale singleSexCourtType = MaleOrFemale.FEMALE;
+    private final String singleSexCourtTypeDescription = "Single-sex court type description";
 
-    private YesOrNo inCameraCourt = YesOrNo.YES;
-    private String inCameraCourtDescription = "In camera court description";
+    private final YesOrNo inCameraCourt = YesOrNo.YES;
+    private final String inCameraCourtDescription = "In camera court description";
 
-    private YesOrNo additionalRequests = YesOrNo.YES;
-    private String additionalRequestsDescription = "Additional requests description";
+    private final YesOrNo additionalRequests = YesOrNo.YES;
+    private final String additionalRequestsDescription = "Additional requests description";
 
-    private YesOrNo datesToAvoid = YesOrNo.YES;
-    private DatesToAvoid datesToAvoid1 = new DatesToAvoid();
-    private DatesToAvoid datesToAvoid2 = new DatesToAvoid();
+    private final YesOrNo datesToAvoid = YesOrNo.YES;
+    private final DatesToAvoid datesToAvoid1 = new DatesToAvoid();
+    private final DatesToAvoid datesToAvoid2 = new DatesToAvoid();
 
     private List<IdValue<WitnessDetails>> witnessDetails;
     private List<IdValue<InterpreterLanguage>> interpreterLanguage;
@@ -186,6 +185,7 @@ class HearingRequirementsTemplateTest {
         when(asylumCase.read(WITNESS_2_INTERPRETER_SPOKEN_LANGUAGE, InterpreterLanguageRefData.class)).thenReturn(Optional.of(witness2SpokenInterpreterLanguage));
         when(asylumCase.read(WITNESS_2_INTERPRETER_SIGN_LANGUAGE, InterpreterLanguageRefData.class)).thenReturn(Optional.of(witness2SignInterpreterLanguage));
 
+        when(asylumCase.read(HAS_NON_LEGAL_REP, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO));
         when(asylumCase.read(IS_HEARING_ROOM_NEEDED, YesOrNo.class)).thenReturn(Optional.of(isHearingRoomNeeded));
         when(asylumCase.read(IS_HEARING_LOOP_NEEDED, YesOrNo.class)).thenReturn(Optional.of(isHearingLoopNeeded));
 
@@ -308,8 +308,11 @@ class HearingRequirementsTemplateTest {
         when(asylumCase.read(WITNESS_2_INTERPRETER_SPOKEN_LANGUAGE, InterpreterLanguageRefData.class)).thenReturn(Optional.of(witness2SpokenInterpreterLanguage));
         when(asylumCase.read(WITNESS_2_INTERPRETER_SIGN_LANGUAGE, InterpreterLanguageRefData.class)).thenReturn(Optional.of(witness2SignInterpreterLanguage));
 
+        when(asylumCase.read(HAS_NON_LEGAL_REP, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
         when(asylumCase.read(IS_HEARING_ROOM_NEEDED, YesOrNo.class)).thenReturn(Optional.of(isHearingRoomNeeded));
         when(asylumCase.read(IS_HEARING_LOOP_NEEDED, YesOrNo.class)).thenReturn(Optional.of(isHearingLoopNeeded));
+        when(asylumCase.read(NLR_NEEDS_STEP_FREE_ACCESS, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO));
+        when(asylumCase.read(NLR_NEEDS_HEARING_LOOP, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO));
 
         when(asylumCase.read(PHYSICAL_OR_MENTAL_HEALTH_ISSUES, YesOrNo.class)).thenReturn(Optional.of(physicalOrMentalHealthIssues));
         when(asylumCase.read(PHYSICAL_OR_MENTAL_HEALTH_ISSUES_DESCRIPTION, String.class)).thenReturn(Optional.of(physicalOrMentalHealthIssuesDescription));
@@ -491,8 +494,11 @@ class HearingRequirementsTemplateTest {
         when(asylumCase.read(WITNESS_2_INTERPRETER_SPOKEN_LANGUAGE, InterpreterLanguageRefData.class)).thenReturn(Optional.of(witness2SpokenInterpreterLanguage));
         when(asylumCase.read(WITNESS_2_INTERPRETER_SIGN_LANGUAGE, InterpreterLanguageRefData.class)).thenReturn(Optional.of(witness2SignInterpreterLanguage));
 
-        when(asylumCase.read(IS_HEARING_ROOM_NEEDED, YesOrNo.class)).thenReturn(Optional.of(isHearingRoomNeeded));
-        when(asylumCase.read(IS_HEARING_LOOP_NEEDED, YesOrNo.class)).thenReturn(Optional.of(isHearingLoopNeeded));
+        when(asylumCase.read(HAS_NON_LEGAL_REP, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
+        when(asylumCase.read(IS_HEARING_LOOP_NEEDED, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO));
+        when(asylumCase.read(IS_HEARING_ROOM_NEEDED, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO));
+        when(asylumCase.read(NLR_NEEDS_HEARING_LOOP, YesOrNo.class)).thenReturn(Optional.of(isHearingRoomNeeded));
+        when(asylumCase.read(NLR_NEEDS_STEP_FREE_ACCESS, YesOrNo.class)).thenReturn(Optional.of(isHearingLoopNeeded));
 
         when(asylumCase.read(PHYSICAL_OR_MENTAL_HEALTH_ISSUES, YesOrNo.class)).thenReturn(Optional.of(physicalOrMentalHealthIssues));
         when(asylumCase.read(PHYSICAL_OR_MENTAL_HEALTH_ISSUES_DESCRIPTION, String.class)).thenReturn(Optional.of(physicalOrMentalHealthIssuesDescription));
@@ -556,6 +562,7 @@ class HearingRequirementsTemplateTest {
         when(asylumCase.read(IS_ANY_WITNESS_INTERPRETER_REQUIRED, YesOrNo.class)).thenReturn(Optional.empty());
         when(asylumCase.read(APPELLANT_INTERPRETER_SPOKEN_LANGUAGE, InterpreterLanguageRefData.class)).thenReturn(Optional.empty());
         when(asylumCase.read(APPELLANT_INTERPRETER_SIGN_LANGUAGE, InterpreterLanguageRefData.class)).thenReturn(Optional.empty());
+        when(asylumCase.read(HAS_NON_LEGAL_REP, YesOrNo.class)).thenReturn(Optional.empty());
         when(asylumCase.read(IS_HEARING_ROOM_NEEDED, YesOrNo.class)).thenReturn(Optional.empty());
         when(asylumCase.read(IS_HEARING_LOOP_NEEDED, YesOrNo.class)).thenReturn(Optional.empty());
         when(asylumCase.read(PHYSICAL_OR_MENTAL_HEALTH_ISSUES, YesOrNo.class)).thenReturn(Optional.empty());
@@ -652,6 +659,7 @@ class HearingRequirementsTemplateTest {
         when(asylumCase.read(WITNESS_2_INTERPRETER_SPOKEN_LANGUAGE, InterpreterLanguageRefData.class)).thenReturn(Optional.of(witness2SpokenInterpreterLanguage));
         when(asylumCase.read(WITNESS_2_INTERPRETER_SIGN_LANGUAGE, InterpreterLanguageRefData.class)).thenReturn(Optional.of(witness2SignInterpreterLanguage));
 
+        when(asylumCase.read(HAS_NON_LEGAL_REP, YesOrNo.class)).thenReturn(Optional.empty());
         when(asylumCase.read(IS_HEARING_ROOM_NEEDED, YesOrNo.class)).thenReturn(Optional.of(isHearingRoomNeeded));
         when(asylumCase.read(IS_HEARING_LOOP_NEEDED, YesOrNo.class)).thenReturn(Optional.of(isHearingLoopNeeded));
 
@@ -736,6 +744,7 @@ class HearingRequirementsTemplateTest {
         when(asylumCase.read(WITNESS_2_INTERPRETER_SPOKEN_LANGUAGE, InterpreterLanguageRefData.class)).thenReturn(Optional.of(witness2SpokenInterpreterLanguage));
         when(asylumCase.read(WITNESS_2_INTERPRETER_SIGN_LANGUAGE, InterpreterLanguageRefData.class)).thenReturn(Optional.of(witness2SignInterpreterLanguage));
 
+        when(asylumCase.read(HAS_NON_LEGAL_REP, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO));
         when(asylumCase.read(IS_HEARING_ROOM_NEEDED, YesOrNo.class)).thenReturn(Optional.of(isHearingRoomNeeded));
         when(asylumCase.read(IS_HEARING_LOOP_NEEDED, YesOrNo.class)).thenReturn(Optional.of(isHearingLoopNeeded));
 

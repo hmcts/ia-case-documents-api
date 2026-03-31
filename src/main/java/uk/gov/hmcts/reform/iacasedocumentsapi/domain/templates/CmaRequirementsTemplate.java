@@ -31,6 +31,6 @@ public class CmaRequirementsTemplate implements DocumentTemplate<AsylumCase> {
 
         final AppointmentRequirementsFieldMapper fieldMapper = new AppointmentRequirementsFieldMapper();
 
-        return fieldMapper.mapFields(asylumCase);
+        return fieldMapper.mapFields(asylumCase, false);
     }
 }

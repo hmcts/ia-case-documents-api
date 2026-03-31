@@ -3,6 +3,7 @@ package uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.APPEAL_OUT_OF_COUNTRY;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.APPELLANT_INTERPRETER_SIGN_LANGUAGE;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.APPELLANT_INTERPRETER_SPOKEN_LANGUAGE;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.HAS_NON_LEGAL_REP;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.IS_ANY_WITNESS_INTERPRETER_REQUIRED;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.IS_APPELLANT_ATTENDING_THE_HEARING;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.IS_APPELLANT_GIVING_ORAL_EVIDENCE;
@@ -55,8 +56,8 @@ public class HearingRequirementsTemplate implements DocumentTemplate<AsylumCase>
         final AsylumCase asylumCase = caseDetails.getCaseData();
 
         final AppointmentRequirementsFieldMapper fieldMapper = new AppointmentRequirementsFieldMapper();
-
-        Map<String, Object> fieldValues = fieldMapper.mapFields(asylumCase);
+        boolean hasNlr = asylumCase.read(HAS_NON_LEGAL_REP, YesOrNo.class).map(YesOrNo::isYes).orElse(false);
+        Map<String, Object> fieldValues = fieldMapper.mapFields(asylumCase, hasNlr);
 
         fieldValues.put("appealOutOfCountry", asylumCase.read(APPEAL_OUT_OF_COUNTRY, YesOrNo.class).orElse(YesOrNo.NO));
         fieldValues.put("isEvidenceFromOutsideUkOoc", asylumCase.read(IS_EVIDENCE_FROM_OUTSIDE_UK_OOC, YesOrNo.class).orElse(YesOrNo.NO));
