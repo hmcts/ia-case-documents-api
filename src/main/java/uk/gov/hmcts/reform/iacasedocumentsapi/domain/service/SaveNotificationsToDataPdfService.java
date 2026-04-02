@@ -1,13 +1,17 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.service;
 
+import java.util.ArrayList;
+import java.util.List;
 import org.apache.commons.io.FileUtils;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.StoredNotification;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.Document;
 
 import java.io.File;
 import java.io.IOException;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.IdValue;
 
 @Service
 public class SaveNotificationsToDataPdfService {
@@ -36,7 +40,7 @@ public class SaveNotificationsToDataPdfService {
         ByteArrayResource byteArrayResource = getByteArrayResource(
             notificationPdf,
             notificationReference + ".PDF"
-            );
+        );
 
         return documentUploader.upload(byteArrayResource, PDF_CONTENT_TYPE);
     }
@@ -58,5 +62,25 @@ public class SaveNotificationsToDataPdfService {
                 return filename;
             }
         };
+    }
+
+    public List<IdValue<StoredNotification>> generatePdfsForNotifications(List<IdValue<StoredNotification>> existingNotifications) {
+        ArrayList<IdValue<StoredNotification>> newNotifications = new ArrayList<>();
+        List<String> invalidNotificationStatuses = List.of("Cancelled", "Failed", "Technical-failure",
+            "Temporary-failure", "Permanent-failure", "Validation-failed", "Virus-scan-failed");
+        for (IdValue<StoredNotification> notification : existingNotifications) {
+            StoredNotification storedNotification = notification.getValue();
+            if (storedNotification.getNotificationDocument() == null
+                && !invalidNotificationStatuses.contains(storedNotification.getNotificationStatus())) {
+                String notificationBody = storedNotification.getNotificationBody();
+                String notificationReference = storedNotification.getNotificationReference();
+                Document notificationPdf =
+                    this.createPdf(notificationBody, notificationReference);
+                storedNotification.setNotificationDocument(notificationPdf);
+                notification = new IdValue<>(notification.getId(), storedNotification);
+            }
+            newNotifications.add(notification);
+        }
+        return newNotifications;
     }
 }

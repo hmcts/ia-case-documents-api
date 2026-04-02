@@ -1,27 +1,32 @@
-package uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit.bail;
+package uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit;
 
+import static java.util.Collections.emptyList;
 import static java.util.Objects.requireNonNull;
 
 import java.util.List;
+import java.util.Optional;
 import org.springframework.stereotype.Component;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.BailCase;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.BailCaseFieldDefinition;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.StoredNotification;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseDetails;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.Event;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.Callback;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.PreSubmitCallbackResponse;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.PreSubmitCallbackStage;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.IdValue;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.PreSubmitCallbackHandler;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.bail.UploadSignedDecisionOrchestrator;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.SaveNotificationsToDataPdfService;
 
 @Component
-public class UploadSignedDecisionNoticeHandler implements PreSubmitCallbackHandler<BailCase> {
+public class SaveNotificationsToDataBailHandler implements PreSubmitCallbackHandler<BailCase> {
 
-    private final UploadSignedDecisionOrchestrator uploadSignedDecisionOrchestrator;
+    private final SaveNotificationsToDataPdfService saveNotificationsToDataPdfService;
 
-    public UploadSignedDecisionNoticeHandler(
-        UploadSignedDecisionOrchestrator uploadSignedDecisionOrchestrator
+    public SaveNotificationsToDataBailHandler(
+        SaveNotificationsToDataPdfService saveNotificationsToDataPdfService
     ) {
-        this.uploadSignedDecisionOrchestrator = uploadSignedDecisionOrchestrator;
+        this.saveNotificationsToDataPdfService = saveNotificationsToDataPdfService;
     }
 
     public boolean canHandle(
@@ -32,7 +37,7 @@ public class UploadSignedDecisionNoticeHandler implements PreSubmitCallbackHandl
         requireNonNull(callback, "callback must not be null");
 
         return callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
-               && List.of(Event.UPLOAD_SIGNED_DECISION_NOTICE, Event.UPLOAD_SIGNED_DECISION_NOTICE_CONDITIONAL_GRANT).contains(callback.getEvent());
+            && callback.getEvent() == Event.SAVE_NOTIFICATIONS_TO_DATA_BAIL;
     }
 
     public PreSubmitCallbackResponse<BailCase> handle(
@@ -44,10 +49,15 @@ public class UploadSignedDecisionNoticeHandler implements PreSubmitCallbackHandl
         }
 
         final CaseDetails<BailCase> caseDetails = callback.getCaseDetails();
+        final BailCase bailCase = caseDetails.getCaseData();
 
-        uploadSignedDecisionOrchestrator.uploadSignedDecision(caseDetails);
+        Optional<List<IdValue<StoredNotification>>> existingNotifications =
+            bailCase.read(BailCaseFieldDefinition.NOTIFICATIONS);
 
-        BailCase bailCase = caseDetails.getCaseData();
+        List<IdValue<StoredNotification>> newNotifications =
+            saveNotificationsToDataPdfService.generatePdfsForNotifications(existingNotifications.orElse(emptyList()));
+
+        bailCase.write(BailCaseFieldDefinition.NOTIFICATIONS, newNotifications);
 
         return new PreSubmitCallbackResponse<>(bailCase);
     }

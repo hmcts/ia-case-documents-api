@@ -8,12 +8,10 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.Event;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.Callback;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.PreSubmitCallbackResponse;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.PreSubmitCallbackStage;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.Document;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.IdValue;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.PreSubmitCallbackHandler;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.SaveNotificationsToDataPdfService;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -54,25 +52,12 @@ public class SaveNotificationsToDataHandler implements PreSubmitCallbackHandler<
         final CaseDetails<AsylumCase> caseDetails = callback.getCaseDetails();
         final AsylumCase asylumCase = caseDetails.getCaseData();
 
-        Optional<List<IdValue<StoredNotification>>> maybeExistingNotifications =
+        Optional<List<IdValue<StoredNotification>>> existingNotifications =
             asylumCase.read(NOTIFICATIONS);
 
-        ArrayList<IdValue<StoredNotification>> newNotifications = new ArrayList<>();
-        List<String> invalidNotificationStatuses = List.of("Cancelled", "Failed", "Technical-failure",
-            "Temporary-failure", "Permanent-failure", "Validation-failed", "Virus-scan-failed");
-        for (IdValue<StoredNotification> notification : maybeExistingNotifications.orElse(emptyList())) {
-            StoredNotification storedNotification = notification.getValue();
-            if (storedNotification.getNotificationDocument() == null
-                && !invalidNotificationStatuses.contains(storedNotification.getNotificationStatus())) {
-                String notificationBody = storedNotification.getNotificationBody();
-                String notificationReference = storedNotification.getNotificationReference();
-                Document notificationPdf =
-                    saveNotificationsToDataPdfService.createPdf(notificationBody, notificationReference);
-                storedNotification.setNotificationDocument(notificationPdf);
-                notification = new IdValue<>(notification.getId(), storedNotification);
-            }
-            newNotifications.add(notification);
-        }
+        List<IdValue<StoredNotification>> newNotifications =
+            saveNotificationsToDataPdfService.generatePdfsForNotifications(existingNotifications.orElse(emptyList()));
+
         asylumCase.write(NOTIFICATIONS, newNotifications);
 
         return new PreSubmitCallbackResponse<>(asylumCase);
