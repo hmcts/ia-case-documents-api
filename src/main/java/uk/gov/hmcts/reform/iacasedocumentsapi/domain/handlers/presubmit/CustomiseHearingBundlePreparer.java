@@ -58,8 +58,7 @@ public class CustomiseHearingBundlePreparer implements PreSubmitCallbackHandler<
     }
 
     public void prepareCustomDocuments(AsylumCase asylumCase, boolean isUpdatedBundle) {
-        boolean isCaseReheard = asylumCase.read(CASE_FLAG_SET_ASIDE_REHEARD_EXISTS, YesOrNo.class).map(flag -> flag.equals(YesOrNo.YES)).orElse(false)
-            && featureToggler.getValue("reheard-feature", false);
+        boolean isCaseReheard = asylumCase.read(CASE_FLAG_SET_ASIDE_REHEARD_EXISTS, YesOrNo.class).map(flag -> flag.equals(YesOrNo.YES)).orElse(false);
         boolean isAipJourney = asylumCase
             .read(JOURNEY_TYPE, JourneyType.class)
             .map(type -> type == AIP).orElse(false);
