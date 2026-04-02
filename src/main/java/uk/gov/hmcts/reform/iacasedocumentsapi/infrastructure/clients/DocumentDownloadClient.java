@@ -13,7 +13,6 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.FeatureToggler;
 public class DocumentDownloadClient {
 
     private final FeatureToggler featureToggler;
-    private final DmDocumentDownloadClient dmDocumentDownloadClient;
     private final CdamDocumentDownloadClient cdamDocumentDownLoadClient;
 
     public Resource download(String documentBinaryUrl) {

@@ -13,9 +13,6 @@ import uk.gov.hmcts.reform.ccd.document.am.model.UploadResponse;
 import uk.gov.hmcts.reform.document.utils.InMemoryMultipartFile;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.Document;
 
-/**
- * This class supersedes DmDocumentManagementUploader. Its usage is driven by a feature flag.
- */
 @Component
 @ComponentScan("uk.gov.hmcts.reform.ccd.document.am.feign")
 public class CdamSystemDocumentManagementUploader {
