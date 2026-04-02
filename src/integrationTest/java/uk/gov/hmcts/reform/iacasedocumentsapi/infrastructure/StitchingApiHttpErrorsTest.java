@@ -32,7 +32,6 @@ class StitchingApiHttpErrorsTest extends SpringBootIntegrationTest implements Wi
     @ValueSource(booleans = {true, false})
     @WithMockUser(authorities = {"caseworker-ia", "tribunal-caseworker"})
     void should_return_500_with_correct_message_when_api_returns_500(boolean cdamEnabled) {
-        when(featureToggler.getValue("use-ccd-document-am", false)).thenReturn(cdamEnabled);
         addServiceAuthStub(server);
         addDocumentUploadStub(server, cdamEnabled);
         withDefaults(server);
@@ -66,7 +65,6 @@ class StitchingApiHttpErrorsTest extends SpringBootIntegrationTest implements Wi
     @ValueSource(booleans = {true, false})
     @WithMockUser(authorities = {"caseworker-ia", "tribunal-caseworker"})
     void should_return_500_with_correct_message_when_api_returns_400(boolean cdamEnabled) {
-        when(featureToggler.getValue("use-ccd-document-am", false)).thenReturn(cdamEnabled);
         addServiceAuthStub(server);
         addDocumentUploadStub(server, cdamEnabled);
         withDefaults(server);
