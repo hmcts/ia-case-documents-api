@@ -45,7 +45,6 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.IdValue;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.JourneyType;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.Appender;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.FeatureToggler;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.SystemDateProvider;
 
 
@@ -63,8 +62,6 @@ class CustomiseHearingBundlePreparerTest {
     @Mock
     private Appender<DocumentWithDescription> appender;
     @Mock
-    private FeatureToggler featureToggler;
-    @Mock
     private Document document;
     @Captor
     private ArgumentCaptor<DocumentWithDescription> documentsCaptor;
@@ -74,7 +71,7 @@ class CustomiseHearingBundlePreparerTest {
     @BeforeEach
     void setUp() {
         customiseHearingBundlePreparer =
-            new CustomiseHearingBundlePreparer(appender, featureToggler);
+            new CustomiseHearingBundlePreparer(appender);
 
         when(callback.getCaseDetails()).thenReturn(caseDetails);
         when(caseDetails.getCaseData()).thenReturn(asylumCase);

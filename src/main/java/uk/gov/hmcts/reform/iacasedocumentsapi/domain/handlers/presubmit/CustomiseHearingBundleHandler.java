@@ -41,7 +41,6 @@ public class CustomiseHearingBundleHandler implements PreSubmitCallbackHandler<A
     private final String emBundlerUrl;
     private final String emBundlerStitchUri;
     private final ObjectMapper objectMapper;
-    private final FeatureToggler featureToggler;
 
     public CustomiseHearingBundleHandler(
         @Value("${emBundler.url}") String emBundlerUrl,
@@ -49,8 +48,7 @@ public class CustomiseHearingBundleHandler implements PreSubmitCallbackHandler<A
         EmBundleRequestExecutor emBundleRequestExecutor,
         Appender<DocumentWithMetadata> documentWithMetadataAppender,
         DateProvider dateProvider,
-        ObjectMapper objectMapper,
-        FeatureToggler featureToggler
+        ObjectMapper objectMapper
     ) {
         this.emBundlerUrl = emBundlerUrl;
         this.emBundlerStitchUri = emBundlerStitchUri;
@@ -58,8 +56,6 @@ public class CustomiseHearingBundleHandler implements PreSubmitCallbackHandler<A
         this.documentWithMetadataAppender = documentWithMetadataAppender;
         this.dateProvider = dateProvider;
         this.objectMapper = objectMapper;
-        this.featureToggler = featureToggler;
-
     }
 
     public boolean canHandle(
