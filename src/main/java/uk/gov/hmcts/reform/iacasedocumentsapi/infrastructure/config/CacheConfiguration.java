@@ -99,8 +99,6 @@ public class CacheConfiguration {
             @Value("${spring.data.redis.url}") String redisUrl,
             @Value("${spring.data.redis.secret}") String accessKey) {
 
-        log.info("redis url: " + redisUrl);
-
         if (redisUrl == null || redisUrl.isBlank()) {
             log.warn("No Redis URL configured - falling back to Caffeine");
             // return a dummy factory - cacheManager will catch the ping failure and fall back
@@ -111,7 +109,6 @@ public class CacheConfiguration {
             RedisURI redisUri = RedisURI.create(redisUrl);
 
             boolean useSsl = redisUrl.contains("tls=true") || redisUrl.startsWith("rediss://");
-            log.info("Redis SSL enabled: {}", useSsl);
 
             // checked azure portal,
             if (useSsl) {
@@ -126,7 +123,6 @@ public class CacheConfiguration {
             config.setPort(redisUri.getPort());
             if (accessKey != null && !accessKey.isBlank()) {
                 config.setPassword(RedisPassword.of(accessKey));
-                log.info("adding password to redis");
             }
 
             LettuceClientConfiguration clientConfig = LettuceClientConfiguration.builder()
