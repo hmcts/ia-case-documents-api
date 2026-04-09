@@ -8,13 +8,7 @@ idam:
   scope: "openid profile authorities acr roles search-user manage-user create-user"
 
 spring:
-#  cache:
-#    cache-names: userInfoCache, legalRepATokenCache, caseOfficerTokenCache, adminOfficerTokenCache, homeOfficeApcTokenCache, homeOfficeLartTokenCache, homeOfficePouTokenCache, homeOfficeGenericTokenCache, legalRepShareCaseATokenCache, legalRepOrgSuccessTokenCache, legalRepOrgDeletedTokenCache, judgeTokenCache, citizenTokenCache, systemTokenCache
-#    caffeine:
-#      spec: expireAfterAccess=3600s
-  data:
-    redis:
-      url: ${IA_REDIS_CONNECTION_STRING:}
-      secret: ${IA_REDIS_ACCESS_KEY:}
-      ssl:
-        enabled: true
+  cache:
+    cache-names: userInfoCache, legalRepATokenCache, caseOfficerTokenCache, adminOfficerTokenCache, homeOfficeApcTokenCache, homeOfficeLartTokenCache, homeOfficePouTokenCache, homeOfficeGenericTokenCache, legalRepShareCaseATokenCache, legalRepOrgSuccessTokenCache, legalRepOrgDeletedTokenCache, judgeTokenCache, citizenTokenCache, systemTokenCache
+    caffeine:
+      spec: expireAfterAccess=3600s
