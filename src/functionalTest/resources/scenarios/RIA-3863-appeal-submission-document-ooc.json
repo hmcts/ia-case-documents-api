@@ -1,6 +1,5 @@
 {
   "description": "RIA-3863 Create out of country appeal submission PDF",
-  "launchDarklyKey": "out-of-country-feature:true",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
     "credentials": "LegalRepresentative",
