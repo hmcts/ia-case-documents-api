@@ -68,7 +68,6 @@ spring:
         key: ${IA_REDIS_ENCRYPTION_KEY:}
       ssl:
         enabled: true
-redis.enabled: true
 
 appealSubmissionDocument.contentType: application/pdf
 appealSubmissionDocument.fileExtension: PDF
