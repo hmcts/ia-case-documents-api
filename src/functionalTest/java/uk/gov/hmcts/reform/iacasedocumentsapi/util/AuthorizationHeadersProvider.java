@@ -4,10 +4,12 @@ import io.restassured.http.Header;
 import io.restassured.http.Headers;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import uk.gov.hmcts.reform.authorisation.generators.AuthTokenGenerator;
 
+@Slf4j
 @Service
 public class AuthorizationHeadersProvider {
 
@@ -31,7 +33,9 @@ public class AuthorizationHeadersProvider {
 
     public Headers getCaseOfficerAuthorization() {
         String serviceToken = tokens.computeIfAbsent("ServiceAuth", user -> serviceAuthTokenGenerator.generate());
+        log.info("Getting case officer authorization cache...");
         String accessToken = idamAuthProvider.getCaseOfficerToken();
+        log.info("Got case officer authorization cache.");
 
         return new Headers(
             new Header("ServiceAuthorization", serviceToken),

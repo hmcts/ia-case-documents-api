@@ -1,6 +1,7 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.util;
 
 import feign.FeignException;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.Cacheable;
@@ -12,6 +13,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.clients.model.idam.
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.clients.model.idam.UserInfo;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.security.idam.IdentityManagerResponseException;
 
+@Slf4j
 @Service
 public class IdamAuthProvider {
 
@@ -51,6 +53,7 @@ public class IdamAuthProvider {
 
     @Cacheable(value = "caseOfficerTokenCache")
     public String getCaseOfficerToken() {
+        log.info("Getting case officer from idam directly");
         return getUserToken(
             System.getenv("TEST_CASEOFFICER_USERNAME"),
             System.getenv("TEST_CASEOFFICER_PASSWORD")
