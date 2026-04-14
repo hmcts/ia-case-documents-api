@@ -38,14 +38,12 @@ public class CacheConfiguration {
 
     @Bean
     public CacheManagerCustomizer<CaffeineCacheManager> cacheManagerCustomizer() {
-        log.info("Configuring Caffeine cache manager for non-Redis caches");
         return cacheManager -> cacheManager.setAllowNullValues(false);
     }
 
     @Bean
     @Primary
     public CacheManager cacheManager(RedisConnectionFactory redisConnectionFactory) {
-        log.info("Configuring redis cache manager for redis caches");
         try {
             redisConnectionFactory.getConnection().ping();
             log.info("Redis connection successful - using Redis for systemTokenCache and userTokenCache");
