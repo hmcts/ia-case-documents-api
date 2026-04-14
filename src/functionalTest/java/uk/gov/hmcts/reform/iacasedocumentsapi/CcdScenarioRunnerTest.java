@@ -215,6 +215,7 @@ public class CcdScenarioRunnerTest {
             .filter(propertySource -> propertySource instanceof EnumerablePropertySource)
             .map(ropertySource -> ((EnumerablePropertySource) ropertySource).getPropertyNames())
             .flatMap(Arrays::stream)
+            .filter(name -> environment.getProperty(name) != null)
             .forEach(name -> MapValueExpander.ENVIRONMENT_PROPERTIES.setProperty(name, environment.getProperty(name)));
     }
 
