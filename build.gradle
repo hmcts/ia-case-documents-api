@@ -314,16 +314,31 @@ dependencies {
         }
     }
 
-    implementation 'org.springframework.boot:spring-boot-starter-actuator'    implementation 'org.springframework.boot:spring-boot-starter-aop'    implementation 'org.springframework.boot:spring-boot-starter-json'    implementation 'org.springframework.boot:spring-boot-starter-security'    implementation 'org.springframework.boot:spring-boot-starter-web'    implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'    implementation 'org.springframework.cloud:spring-cloud-starter-bootstrap'    implementation 'org.springframework.boot:spring-boot-starter-validation'
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+    implementation 'org.springframework.boot:spring-boot-starter-aop'
+    implementation 'org.springframework.boot:spring-boot-starter-json'
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
+    implementation 'org.springframework.cloud:spring-cloud-starter-bootstrap'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
 
-    implementation 'org.springframework.security:spring-security-oauth2-client'    implementation 'org.springframework.security:spring-security-oauth2-resource-server'    implementation 'org.springframework.security:spring-security-oauth2-jose'
+    implementation 'org.springframework.security:spring-security-oauth2-client'
+    implementation 'org.springframework.security:spring-security-oauth2-resource-server'
+    implementation 'org.springframework.security:spring-security-oauth2-jose'
     implementation 'com.github.ben-manes.caffeine:caffeine'    // CVE-2019-17195
     implementation group: 'com.nimbusds', name: 'nimbus-jose-jwt', version: '10.9'
 
     // CVE-2021-27568
     implementation group: 'net.minidev', name: 'json-smart', version: '2.6.0'
 
-    implementation 'org.springframework.boot:spring-boot-starter-cache'    implementation 'org.springframework.boot:spring-boot-starter-data-redis'    implementation 'com.fasterxml.jackson.core:jackson-core'    implementation 'com.fasterxml.jackson.core:jackson-databind'    implementation 'com.fasterxml.jackson.core:jackson-annotations'    implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310'    implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-csv'
+    implementation 'org.springframework.boot:spring-boot-starter-cache'
+    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+    implementation 'com.fasterxml.jackson.core:jackson-core'
+    implementation 'com.fasterxml.jackson.core:jackson-databind'
+    implementation 'com.fasterxml.jackson.core:jackson-annotations'
+    implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310'
+    implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-csv'
     implementation group: 'org.springdoc', name: 'springdoc-openapi-starter-webmvc-ui', version: '2.8.17'
 
     implementation group: 'ch.qos.logback', name: 'logback-classic', version: '1.5.32'
@@ -350,7 +365,8 @@ dependencies {
 
     testImplementation group: 'org.mockito', name: 'mockito-junit-jupiter', version: '5.23.0'
     testImplementation group: 'org.mockito', name: 'mockito-core', version: '5.23.0'
-    testImplementation 'org.springframework.boot:spring-boot-starter-test'    testImplementation 'org.springframework.security:spring-security-test'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'org.springframework.security:spring-security-test'
     testImplementation group: 'org.pitest', name: 'pitest', version: '1.16.2'
     testImplementation group: 'info.solidsoft.gradle.pitest', name: 'gradle-pitest-plugin', version: '1.5.0'
     testImplementation group: 'io.rest-assured', name: 'rest-assured-all', version: '5.5.7'
