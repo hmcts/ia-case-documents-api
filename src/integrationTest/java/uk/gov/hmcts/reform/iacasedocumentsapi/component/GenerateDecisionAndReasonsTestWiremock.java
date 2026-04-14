@@ -34,12 +34,10 @@ class GenerateDecisionAndReasonsTestWiremock extends SpringBootIntegrationTest i
     private FeatureToggler featureToggler;
 
     @ParameterizedTest
-    @ValueSource(booleans = {true, false})
     @WithMockUser(authorities = {"caseworker-ia", "tribunal-caseworker"})
-    void generates_decision_and_reasons(boolean cdamEnabled) {
-        when(featureToggler.getValue("use-ccd-document-am", false)).thenReturn(cdamEnabled);
+    void generates_decision_and_reasons() {
         addServiceAuthStub(server);
-        addDocumentUploadStub(server, cdamEnabled);
+        addDocumentUploadStub(server);
         withDefaults(server);
 
         someLoggedIn(userWith()

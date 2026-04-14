@@ -11,14 +11,14 @@ import com.github.tomakehurst.wiremock.stubbing.StubMapping;
 
 public interface WithDocumentUploadStub {
 
-    default void addDocumentUploadStub(WireMockServer server, boolean cdamEnabled) {
+    default void addDocumentUploadStub(WireMockServer server) {
         server.addStubMapping(
                 new StubMapping(
                         newRequestPattern(RequestMethod.POST, urlEqualTo("/documents"))
                                 .build(),
                         aResponse()
                                 .withStatus(201)
-                                .withBody(cdamEnabled ? someAmUploadResponse() : someUploadResponse())
+                                .withBody(someAmUploadResponse())
                                 .build()));
     }
 }

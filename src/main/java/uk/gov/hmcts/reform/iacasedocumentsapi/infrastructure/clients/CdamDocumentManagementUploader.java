@@ -17,9 +17,6 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.UserDetailsProvider;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.UserDetails;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.Document;
 
-/**
- * This class supersedes DMDocumentManagementUploader. Its usage is driven by a feature flag.
- */
 @Component
 @ComponentScan("uk.gov.hmcts.reform.ccd.document.am.feign")
 @Slf4j

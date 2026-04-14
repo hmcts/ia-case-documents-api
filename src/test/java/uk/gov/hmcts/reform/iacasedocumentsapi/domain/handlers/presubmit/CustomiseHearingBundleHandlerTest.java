@@ -94,8 +94,7 @@ class CustomiseHearingBundleHandlerTest {
                 bundleRequestExecutor,
                 appender,
                 dateProvider,
-                objectMapper,
-                featureToggler
+                objectMapper
             );
 
         when(callback.getCaseDetails()).thenReturn(caseDetails);
@@ -334,7 +333,6 @@ class CustomiseHearingBundleHandlerTest {
     @EnumSource(value = Event.class, names = {"CUSTOMISE_HEARING_BUNDLE", "GENERATE_UPDATED_HEARING_BUNDLE"})
     void should_successfully_handle_Reheard_the_callback(Event event) throws JsonProcessingException {
         when(callback.getEvent()).thenReturn(event);
-        when(featureToggler.getValue("reheard-feature", false)).thenReturn(true);
         when(asylumCase.read(CASE_FLAG_SET_ASIDE_REHEARD_EXISTS, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
 
         IdValue<DocumentWithDescription> appellantAdditionalEvidenceDocuments =
@@ -437,7 +435,6 @@ class CustomiseHearingBundleHandlerTest {
         assertNotNull(callbackResponse);
         assertEquals(asylumCase, callbackResponse.getData());
         assertEquals(asylumCase.read(CASE_FLAG_SET_ASIDE_REHEARD_EXISTS, YesOrNo.class), Optional.of(YesOrNo.YES));
-        assertTrue(featureToggler.getValue("reheard-feature", false));
         verifyAsylumCaseReadsFor_should_successfully_handle_Reheard_the_callback();
         verifyAsylumCaseClearsFor_should_successfully_handle_Reheard_the_callback();
         verify(asylumCase, times(1)).write(APP_ADDITIONAL_EVIDENCE_DOCS, emptyList());
@@ -481,7 +478,6 @@ class CustomiseHearingBundleHandlerTest {
     @Test
         void should_successfully_handle_Reheard_the_callback_with_Remitted() throws JsonProcessingException {
         when(callback.getEvent()).thenReturn(Event.CUSTOMISE_HEARING_BUNDLE);
-        when(featureToggler.getValue("reheard-feature", false)).thenReturn(true);
         when(featureToggler.getValue("dlrm-remitted-feature-flag", false)).thenReturn(true);
 
         when(asylumCase.read(CASE_FLAG_SET_ASIDE_REHEARD_EXISTS, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
@@ -596,7 +592,6 @@ class CustomiseHearingBundleHandlerTest {
         assertNotNull(callbackResponse);
         assertEquals(asylumCase, callbackResponse.getData());
         assertEquals(asylumCase.read(CASE_FLAG_SET_ASIDE_REHEARD_EXISTS, YesOrNo.class), Optional.of(YesOrNo.YES));
-        assertTrue(featureToggler.getValue("reheard-feature", false));
 
         verify(asylumCaseCopy, times(2)).read(CUSTOM_APP_ADDITIONAL_EVIDENCE_DOCS);
         verify(asylumCaseCopy, times(2)).read(CUSTOM_RESP_ADDITIONAL_EVIDENCE_DOCS);
@@ -643,7 +638,6 @@ class CustomiseHearingBundleHandlerTest {
     @EnumSource(value = Event.class, names = {"CUSTOMISE_HEARING_BUNDLE", "GENERATE_UPDATED_HEARING_BUNDLE"})
     void should_return_values_for_document_with_description_present_throw_exception(Event event) {
         when(callback.getEvent()).thenReturn(event);
-        when(featureToggler.getValue("reheard-feature", false)).thenReturn(false);
         when(asylumCase.read(CASE_FLAG_SET_ASIDE_REHEARD_EXISTS, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
 
         IdValue<DocumentWithDescription> documentWithDescriptionIdValue =
@@ -658,15 +652,12 @@ class CustomiseHearingBundleHandlerTest {
             .hasMessage("Document cannot be null")
             .isExactlyInstanceOf(IllegalStateException.class);
 
-        assertFalse(featureToggler.getValue("reheard-feature", false));
-
     }
 
     @ParameterizedTest
     @EnumSource(value = Event.class, names = {"CUSTOMISE_HEARING_BUNDLE", "GENERATE_UPDATED_HEARING_BUNDLE"})
     void contains_should_return_true_for_document_with_metadata_present(Event event) {
         when(callback.getEvent()).thenReturn(event);
-        when(featureToggler.getValue("reheard-feature", false)).thenReturn(true);
         when(asylumCase.read(CASE_FLAG_SET_ASIDE_REHEARD_EXISTS, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
 
         IdValue<DocumentWithMetadata> documentWithMetadataIdValue =
@@ -895,7 +886,6 @@ class CustomiseHearingBundleHandlerTest {
     @EnumSource(value = Event.class, names = {"CUSTOMISE_HEARING_BUNDLE", "GENERATE_UPDATED_HEARING_BUNDLE"})
     void test_reheard_documents_saved_in_collection_field(Event event) {
         when(callback.getEvent()).thenReturn(event);
-        when(featureToggler.getValue("reheard-feature", false)).thenReturn(true);
         when(featureToggler.getValue("dlrm-remitted-feature-flag", false)).thenReturn(true);
         when(document.getDocumentBinaryUrl()).thenReturn("some-binary-url");
         when(asylumCase.read(CASE_FLAG_SET_ASIDE_REHEARD_EXISTS, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
@@ -923,7 +913,6 @@ class CustomiseHearingBundleHandlerTest {
         assertNotNull(callbackResponse);
         assertEquals(asylumCase, callbackResponse.getData());
         assertEquals(asylumCase.read(CASE_FLAG_SET_ASIDE_REHEARD_EXISTS, YesOrNo.class), Optional.of(YesOrNo.YES));
-        assertTrue(featureToggler.getValue("reheard-feature", false));
 
         verify(asylumCaseCopy, times(2)).read(ADDENDUM_EVIDENCE_DOCUMENTS);
         verify(asylumCaseCopy, times(2)).read(ADDITIONAL_EVIDENCE_DOCUMENTS);

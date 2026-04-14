@@ -25,7 +25,6 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.IdValue;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.PreSubmitCallbackHandler;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.Appender;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.FeatureToggler;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.clients.EmBundleRequestExecutor;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.enties.em.Bundle;
 
@@ -41,7 +40,6 @@ public class CustomiseHearingBundleHandler implements PreSubmitCallbackHandler<A
     private final String emBundlerUrl;
     private final String emBundlerStitchUri;
     private final ObjectMapper objectMapper;
-    private final FeatureToggler featureToggler;
 
     public CustomiseHearingBundleHandler(
         @Value("${emBundler.url}") String emBundlerUrl,
@@ -49,8 +47,7 @@ public class CustomiseHearingBundleHandler implements PreSubmitCallbackHandler<A
         EmBundleRequestExecutor emBundleRequestExecutor,
         Appender<DocumentWithMetadata> documentWithMetadataAppender,
         DateProvider dateProvider,
-        ObjectMapper objectMapper,
-        FeatureToggler featureToggler
+        ObjectMapper objectMapper
     ) {
         this.emBundlerUrl = emBundlerUrl;
         this.emBundlerStitchUri = emBundlerStitchUri;
@@ -58,7 +55,6 @@ public class CustomiseHearingBundleHandler implements PreSubmitCallbackHandler<A
         this.documentWithMetadataAppender = documentWithMetadataAppender;
         this.dateProvider = dateProvider;
         this.objectMapper = objectMapper;
-        this.featureToggler = featureToggler;
 
     }
 
@@ -90,9 +86,7 @@ public class CustomiseHearingBundleHandler implements PreSubmitCallbackHandler<A
         asylumCase.write(AsylumCaseDefinition.HMCTS, "[userImage:hmcts.png]");
         asylumCase.clear(AsylumCaseDefinition.CASE_BUNDLES);
 
-
-        boolean isReheardCase = asylumCase.read(CASE_FLAG_SET_ASIDE_REHEARD_EXISTS, YesOrNo.class).map(flag -> flag.equals(YesOrNo.YES)).orElse(false)
-            && featureToggler.getValue("reheard-feature", false);
+        boolean isReheardCase = asylumCase.read(CASE_FLAG_SET_ASIDE_REHEARD_EXISTS, YesOrNo.class).map(flag -> flag.equals(YesOrNo.YES)).orElse(false);
         boolean isRemittedPath = asylumCase.read(SOURCE_OF_REMITTAL, String.class).isPresent();
 
         boolean isOrWasAda = asylumCase.read(SUITABILITY_REVIEW_DECISION).isPresent();
