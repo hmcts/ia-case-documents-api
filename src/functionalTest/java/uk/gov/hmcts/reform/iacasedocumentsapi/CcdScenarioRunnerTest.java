@@ -42,14 +42,22 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.verifiers.Verifier;
 @ActiveProfiles("functional")
 public class CcdScenarioRunnerTest {
 
-    @Value("${targetInstance}") private String targetInstance;
-    @Autowired FeatureToggler featureToggler;
-    @Autowired private Environment environment;
-    @Autowired private AuthorizationHeadersProvider authorizationHeadersProvider;
-    @Autowired private MapValueExpander mapValueExpander;
-    @Autowired private ObjectMapper objectMapper;
-    @Autowired private List<Fixture> fixtures;
-    @Autowired private List<Verifier> verifiers;
+    @Value("${targetInstance}")
+    private String targetInstance;
+    @Autowired
+    FeatureToggler featureToggler;
+    @Autowired
+    private Environment environment;
+    @Autowired
+    private AuthorizationHeadersProvider authorizationHeadersProvider;
+    @Autowired
+    private MapValueExpander mapValueExpander;
+    @Autowired
+    private ObjectMapper objectMapper;
+    @Autowired
+    private List<Fixture> fixtures;
+    @Autowired
+    private List<Verifier> verifiers;
     private boolean haveAllPassed = true;
     private final ArrayList<String> failedScenarios = new ArrayList<>();
     @MockitoBean
@@ -71,7 +79,7 @@ public class CcdScenarioRunnerTest {
     public void setup() {
         MapSerializer.setObjectMapper(objectMapper);
         RestAssured.baseURI = targetInstance;
-        RestAssured.useRelaxedHTTPSValidation();        
+        RestAssured.useRelaxedHTTPSValidation();
     }
 
     @Test
@@ -137,13 +145,12 @@ public class CcdScenarioRunnerTest {
                     System.out.println((char) 27 + "[33m" + "SCENARIO: " + description);
 
                     Map<String, String> templatesByFilename = StringResourceLoader.load("/templates/*.json");
-
-                    final long testCaseId = MapValueExtractor.extractOrDefault(
+                    final String caseId = String.valueOf(MapValueExtractor.extractOrDefault(
                         scenario,
                         "request.input.id",
-                        ThreadLocalRandom.current().nextInt(1, 9999999 + 1)
+                        ThreadLocalRandom.current().nextLong(1000000000000000L, 1999999999999999L)));
 
-                    );
+                    final long testCaseId = Long.parseLong(caseId);
 
                     final String requestBody = buildCallbackBody(
                         testCaseId,
