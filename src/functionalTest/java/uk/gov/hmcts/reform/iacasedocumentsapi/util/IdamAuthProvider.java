@@ -137,7 +137,7 @@ public class IdamAuthProvider {
         );
     }
 
-    @Cacheable(value = "systemTokenCache")
+    @Cacheable(value = "systemUserTokenCache")
     public String getSystemToken() {
         return getUserToken(
             System.getenv("IA_SYSTEM_USERNAME"),
