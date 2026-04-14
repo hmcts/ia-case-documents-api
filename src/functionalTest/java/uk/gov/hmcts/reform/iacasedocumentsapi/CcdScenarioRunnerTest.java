@@ -122,9 +122,6 @@ public class CcdScenarioRunnerTest {
                     Map<String, Object> scenario = deserializeWithExpandedValues(scenarioSource);
 
                     description = MapValueExtractor.extract(scenario, "description");
-                    if (description != null && !description.equals("RIA-2923-customise-hearing-ready-bundle")) {
-                        break;
-                    }
                     Object scenarioEnabled = MapValueExtractor.extract(scenario, "enabled");
                     boolean scenarioEnabledFlag = true;
                     if (scenarioEnabled instanceof String string) {
