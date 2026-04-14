@@ -78,7 +78,7 @@ class CallbackControllerAdviceTest {
         List<ILoggingEvent> logEvents = this.listAppender.list;
         assertEquals(1, logEvents.size());
 
-        assertThat(logEvents.get(0).getFormattedMessage())
+        assertThat(logEvents.getFirst().getFormattedMessage())
                 .isLessThanOrEqualTo(logMessage + ex.getMessage() + ".");
 
     }
@@ -101,7 +101,7 @@ class CallbackControllerAdviceTest {
         List<ILoggingEvent> logEvents = this.listAppender.list;
         assertEquals(logEvents.size(), 1);
 
-        assertThat(logEvents.get(0).getFormattedMessage())
+        assertThat(logEvents.getFirst().getFormattedMessage())
             .isLessThanOrEqualTo(logMessage + ex.getMessage() + ".");
 
         verify(errorResponseLogger).maybeLogErrorsListResponse(any());
@@ -124,7 +124,7 @@ class CallbackControllerAdviceTest {
 
         assertEquals(logEvents.size(), 1);
         String logMessage = "Document service Exception with message: ";
-        assertThat(logEvents.get(0).getFormattedMessage()).isGreaterThanOrEqualTo(logMessage + testExceptionMessage + ".");
+        assertThat(logEvents.getFirst().getFormattedMessage()).isGreaterThanOrEqualTo(logMessage + testExceptionMessage + ".");
 
         verify(errorResponseLogger).maybeLogException(any());
 
@@ -143,7 +143,7 @@ class CallbackControllerAdviceTest {
         List<ILoggingEvent> logEvents = this.listAppender.list;
 
         assertEquals(logEvents.size(), 1);
-        assertThat(logEvents.get(0).getFormattedMessage()).isGreaterThanOrEqualTo(logMessage + ex.getMessage() + ".");
+        assertThat(logEvents.getFirst().getFormattedMessage()).isGreaterThanOrEqualTo(logMessage + ex.getMessage() + ".");
 
     }
 

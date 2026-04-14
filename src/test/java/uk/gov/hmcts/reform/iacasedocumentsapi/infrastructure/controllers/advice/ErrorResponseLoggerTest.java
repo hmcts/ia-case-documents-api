@@ -58,7 +58,7 @@ public class ErrorResponseLoggerTest {
         List<ILoggingEvent> logEvents = this.listAppender.list;
         assertEquals(2, logEvents.size());
 
-        assertEquals(error1, logEvents.get(0).getFormattedMessage());
+        assertEquals(error1, logEvents.getFirst().getFormattedMessage());
         assertEquals(error2, logEvents.get(1).getFormattedMessage());
 
         verify(preSubmitCallbackResponse).getErrors();
@@ -92,7 +92,7 @@ public class ErrorResponseLoggerTest {
         List<ILoggingEvent> logEvents = this.listAppender.list;
         assertEquals(1, logEvents.size());
 
-        assertThat(logEvents.get(0).getFormattedMessage())
+        assertThat(logEvents.getFirst().getFormattedMessage())
             .startsWith("Error returned with status: "
                         + HttpStatus.BAD_GATEWAY.value()
                         + " \nwith response body: "
@@ -115,7 +115,7 @@ public class ErrorResponseLoggerTest {
         List<ILoggingEvent> logEvents = this.listAppender.list;
         assertEquals(1, logEvents.size());
 
-        assertThat(logEvents.get(0).getFormattedMessage())
+        assertThat(logEvents.getFirst().getFormattedMessage())
             .startsWith("Error returned with status: "
                         + HttpStatus.INTERNAL_SERVER_ERROR.value()
                         + " \nwith response body: ");

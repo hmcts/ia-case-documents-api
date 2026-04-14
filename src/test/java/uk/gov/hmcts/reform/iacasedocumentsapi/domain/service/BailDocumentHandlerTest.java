@@ -71,7 +71,7 @@ public class BailDocumentHandlerTest {
     public void should_add_document_to_non_empty_list() {
         DocumentWithMetadata documentWithMetadata = createDocumentWithMetaData();
         List<IdValue<DocumentWithMetadata>> documents = newArrayList(new IdValue<>("1", createDocumentWithMetaData()));
-        List<IdValue<DocumentWithMetadata>> allDocuments = newArrayList(documents.get(0), new IdValue<>("2", documentWithMetadata));
+        List<IdValue<DocumentWithMetadata>> allDocuments = newArrayList(documents.getFirst(), new IdValue<>("2", documentWithMetadata));
 
         when(bailCase.read(documentField))
             .thenReturn(Optional.of(documents));
@@ -98,7 +98,7 @@ public class BailDocumentHandlerTest {
 
         DocumentWithMetadata newDocumentWithMetadata = createDocumentWithMetaData();
         List<IdValue<DocumentWithMetadata>> existingDocuments = newArrayList(new IdValue<>("1", createDocumentWithMetaData()));
-        List<IdValue<DocumentWithMetadata>> allDocuments = newArrayList(existingDocuments.get(0), new IdValue<>("2", newDocumentWithMetadata));
+        List<IdValue<DocumentWithMetadata>> allDocuments = newArrayList(existingDocuments.getFirst(), new IdValue<>("2", newDocumentWithMetadata));
 
         when(bailCase.read(documentField))
             .thenReturn(Optional.of(existingDocuments));

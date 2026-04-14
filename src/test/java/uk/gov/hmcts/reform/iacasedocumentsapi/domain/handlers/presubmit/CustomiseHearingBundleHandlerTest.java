@@ -902,7 +902,7 @@ class CustomiseHearingBundleHandlerTest {
         IdValue<DocumentWithDescription> reheardHearingDocs =
             new IdValue<>("1", createDocumentWithDescription());
         List<IdValue<ReheardHearingDocuments>> reheardHearingDocuments = buildReheardDocuments();
-        List<IdValue<DocumentWithMetadata>> documentsListAfterAppend = reheardHearingDocuments.get(0).getValue().getReheardHearingDocs();
+        List<IdValue<DocumentWithMetadata>> documentsListAfterAppend = reheardHearingDocuments.getFirst().getValue().getReheardHearingDocs();
 
         when(asylumCaseCopy.read(CUSTOM_REHEARD_HEARING_DOCS))
             .thenReturn(Optional.of(Lists.newArrayList(reheardHearingDocs)));
@@ -914,7 +914,7 @@ class CustomiseHearingBundleHandlerTest {
             .thenReturn(Optional.of(reheardHearingDocuments));
         when(appender.append(any(DocumentWithMetadata.class), anyList()))
             .thenReturn(documentsListAfterAppend);
-        reheardHearingDocuments.get(0).getValue().setReheardHearingDocs(documentsListAfterAppend);
+        reheardHearingDocuments.getFirst().getValue().setReheardHearingDocs(documentsListAfterAppend);
         when(dateProvider.nowWithTime()).thenReturn(LocalDateTime.now());
 
         PreSubmitCallbackResponse<AsylumCase> callbackResponse =

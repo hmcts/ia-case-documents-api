@@ -217,7 +217,7 @@ public class HearingNoticeEditedCreator implements PreSubmitCallbackHandler<Asyl
         List<IdValue<ReheardHearingDocuments>> existingReheardDocuments = maybeExistingReheardDocuments.orElse(emptyList());
 
         if (!existingReheardDocuments.isEmpty()) {
-            IdValue<ReheardHearingDocuments> latestReheardHearingDocument = existingReheardDocuments.get(0);
+            IdValue<ReheardHearingDocuments> latestReheardHearingDocument = existingReheardDocuments.getFirst();
             List<IdValue<DocumentWithMetadata>> allDocuments = documentsAppender.append(
                 latestReheardHearingDocument.getValue().getReheardHearingDocs(),
                 Collections.singletonList(documentWithMetadata)

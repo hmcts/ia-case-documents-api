@@ -113,7 +113,7 @@ public class AsylumCaseUtils {
     }
 
     public static String getDirectionDueDate(AsylumCase asylumCase, DirectionTag tag) {
-        Direction direction = getCaseDirectionsBasedOnTag(asylumCase, tag).get(0);
+        Direction direction = getCaseDirectionsBasedOnTag(asylumCase, tag).getFirst();
         return direction.getDateDue();
     }
 
@@ -590,7 +590,7 @@ public class AsylumCaseUtils {
             .stream()
             .filter(app -> app.getId().equals(decidedApplicationId))
             .findFirst()
-            .orElseThrow(() -> new IllegalStateException("the decided application is not present in make an applications list"));;
+            .orElseThrow(() -> new IllegalStateException("the decided application is not present in make an applications list"));
 
         return applicationIdValue.getValue();
     }

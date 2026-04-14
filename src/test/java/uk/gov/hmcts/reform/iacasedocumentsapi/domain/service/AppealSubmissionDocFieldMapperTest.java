@@ -182,7 +182,7 @@ class AppealSubmissionDocFieldMapperTest {
         // Then
         List<Map<String, String>> nationalityList = (List<Map<String, String>>) result.get("appellantNationalities");
         assertEquals(1, nationalityList.size());
-        assertEquals("Unknown Country", nationalityList.get(0).get("nationality"));
+        assertEquals("Unknown Country", nationalityList.getFirst().get("nationality"));
     }
 
     @Test

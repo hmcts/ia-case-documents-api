@@ -232,22 +232,22 @@ class HearingRequirementsTemplateTest {
         assertEquals(isWitnessesAttending, templateFieldValues.get("isWitnessesAttending"));
         assertEquals(YesOrNo.NO, templateFieldValues.get("isEvidenceFromOutsideUkInCountry"));
         assertEquals(2, ((List) templateFieldValues.get("witnessDetails")).size());
-        assertEquals(ImmutableMap.of("witnessDetails", "Some Witness Some Witness Family"), ((List) templateFieldValues.get("witnessDetails")).get(0));
+        assertEquals(ImmutableMap.of("witnessDetails", "Some Witness Some Witness Family"), ((List) templateFieldValues.get("witnessDetails")).getFirst());
         assertEquals(ImmutableMap.of("witnessDetails", "Another Witness"), ((List) templateFieldValues.get("witnessDetails")).get(1));
         assertEquals(isInterpreterServicesNeeded, templateFieldValues.get("isInterpreterServicesNeeded"));
         assertEquals(2, ((List) templateFieldValues.get("language")).size());
-        assertEquals(ImmutableMap.of("language", "Nepali"), ((List) templateFieldValues.get("language")).get(0));
+        assertEquals(ImmutableMap.of("language", "Nepali"), ((List) templateFieldValues.get("language")).getFirst());
         assertEquals(ImmutableMap.of("language", "Serbian"), ((List) templateFieldValues.get("language")).get(1));
         assertEquals(2, ((List) templateFieldValues.get("languageDialect")).size());
-        assertEquals(ImmutableMap.of("languageDialect", "Dialect A"), ((List) templateFieldValues.get("languageDialect")).get(0));
+        assertEquals(ImmutableMap.of("languageDialect", "Dialect A"), ((List) templateFieldValues.get("languageDialect")).getFirst());
         assertEquals(ImmutableMap.of("languageDialect", "Dialect B"), ((List) templateFieldValues.get("languageDialect")).get(1));
         assertEquals(isAnyWitnessInterpreterRequired, templateFieldValues.get("isAnyWitnessInterpreterRequired"));
         assertEquals("Spoken language Interpreter: lang\nSign language Interpreter: lang\n", templateFieldValues.get("appellantInterpreterLanguage"));
         assertEquals(2, ((List) templateFieldValues.get("witnessInterpreterInformationList")).size());
-        assertEquals(witnessInterpreterLanguageInformationList.get(0).getWitnessName(),
-                ((WitnessInterpreterLanguageInformation)((List) templateFieldValues.get("witnessInterpreterInformationList")).get(0)).getWitnessName());
-        assertEquals(witnessInterpreterLanguageInformationList.get(0).getInterpreterLanguage(),
-                ((WitnessInterpreterLanguageInformation)((List) templateFieldValues.get("witnessInterpreterInformationList")).get(0)).getInterpreterLanguage());
+        assertEquals(witnessInterpreterLanguageInformationList.getFirst().getWitnessName(),
+                ((WitnessInterpreterLanguageInformation)((List) templateFieldValues.get("witnessInterpreterInformationList")).getFirst()).getWitnessName());
+        assertEquals(witnessInterpreterLanguageInformationList.getFirst().getInterpreterLanguage(),
+                ((WitnessInterpreterLanguageInformation)((List) templateFieldValues.get("witnessInterpreterInformationList")).getFirst()).getInterpreterLanguage());
         assertEquals(witnessInterpreterLanguageInformationList.get(1).getWitnessName(),
                 ((WitnessInterpreterLanguageInformation)((List) templateFieldValues.get("witnessInterpreterInformationList")).get(1)).getWitnessName());
         assertEquals(witnessInterpreterLanguageInformationList.get(1).getInterpreterLanguage(),
@@ -271,10 +271,10 @@ class HearingRequirementsTemplateTest {
         assertEquals(additionalRequestsDescription, templateFieldValues.get("additionalRequestsDescription"));
         assertEquals(datesToAvoid, templateFieldValues.get("datesToAvoid"));
         assertEquals(2, ((List) templateFieldValues.get("dateToAvoid")).size());
-        assertEquals(ImmutableMap.of("dateToAvoid", "25 Dec 2019"), ((List) templateFieldValues.get("dateToAvoid")).get(0));
+        assertEquals(ImmutableMap.of("dateToAvoid", "25 Dec 2019"), ((List) templateFieldValues.get("dateToAvoid")).getFirst());
         assertEquals(ImmutableMap.of("dateToAvoid", "1 Jan 2020"), ((List) templateFieldValues.get("dateToAvoid")).get(1));
         assertEquals(2, ((List) templateFieldValues.get("dateToAvoidReason")).size());
-        assertEquals(ImmutableMap.of("dateToAvoidReason", "Christmas"), ((List) templateFieldValues.get("dateToAvoidReason")).get(0));
+        assertEquals(ImmutableMap.of("dateToAvoidReason", "Christmas"), ((List) templateFieldValues.get("dateToAvoidReason")).getFirst());
         assertEquals(ImmutableMap.of("dateToAvoidReason", "New Year"), ((List) templateFieldValues.get("dateToAvoidReason")).get(1));
     }
 
@@ -353,23 +353,23 @@ class HearingRequirementsTemplateTest {
         assertEquals(isAppellantGivingOralEvidence, templateFieldValues.get("isAppellantGivingOralEvidence"));
         assertEquals(isWitnessesAttending, templateFieldValues.get("isWitnessesAttending"));
         assertEquals(2, ((List) templateFieldValues.get("witnessDetails")).size());
-        assertEquals(ImmutableMap.of("witnessDetails", "Some Witness Some Witness Family"), ((List) templateFieldValues.get("witnessDetails")).get(0));
+        assertEquals(ImmutableMap.of("witnessDetails", "Some Witness Some Witness Family"), ((List) templateFieldValues.get("witnessDetails")).getFirst());
         assertEquals(ImmutableMap.of("witnessDetails", "Another Witness"), ((List) templateFieldValues.get("witnessDetails")).get(1));
         assertEquals(YesOrNo.NO, templateFieldValues.get("isEvidenceFromOutsideUkInCountry"));
         assertEquals(isInterpreterServicesNeeded, templateFieldValues.get("isInterpreterServicesNeeded"));
         assertEquals(2, ((List) templateFieldValues.get("language")).size());
-        assertEquals(ImmutableMap.of("language", "Nepali"), ((List) templateFieldValues.get("language")).get(0));
+        assertEquals(ImmutableMap.of("language", "Nepali"), ((List) templateFieldValues.get("language")).getFirst());
         assertEquals(ImmutableMap.of("language", "Serbian"), ((List) templateFieldValues.get("language")).get(1));
         assertEquals(2, ((List) templateFieldValues.get("languageDialect")).size());
-        assertEquals(ImmutableMap.of("languageDialect", "Dialect A"), ((List) templateFieldValues.get("languageDialect")).get(0));
+        assertEquals(ImmutableMap.of("languageDialect", "Dialect A"), ((List) templateFieldValues.get("languageDialect")).getFirst());
         assertEquals(ImmutableMap.of("languageDialect", "Dialect B"), ((List) templateFieldValues.get("languageDialect")).get(1));
         assertEquals(isAnyWitnessInterpreterRequired, templateFieldValues.get("isAnyWitnessInterpreterRequired"));
         assertEquals("Spoken language Interpreter: lang\nSign language Interpreter: lang\n", templateFieldValues.get("appellantInterpreterLanguage"));
         assertEquals(2, ((List) templateFieldValues.get("witnessInterpreterInformationList")).size());
-        assertEquals(witnessInterpreterLanguageInformationList.get(0).getWitnessName(),
-                ((WitnessInterpreterLanguageInformation)((List) templateFieldValues.get("witnessInterpreterInformationList")).get(0)).getWitnessName());
-        assertEquals(witnessInterpreterLanguageInformationList.get(0).getInterpreterLanguage(),
-                ((WitnessInterpreterLanguageInformation)((List) templateFieldValues.get("witnessInterpreterInformationList")).get(0)).getInterpreterLanguage());
+        assertEquals(witnessInterpreterLanguageInformationList.getFirst().getWitnessName(),
+                ((WitnessInterpreterLanguageInformation)((List) templateFieldValues.get("witnessInterpreterInformationList")).getFirst()).getWitnessName());
+        assertEquals(witnessInterpreterLanguageInformationList.getFirst().getInterpreterLanguage(),
+                ((WitnessInterpreterLanguageInformation)((List) templateFieldValues.get("witnessInterpreterInformationList")).getFirst()).getInterpreterLanguage());
         assertEquals(witnessInterpreterLanguageInformationList.get(1).getWitnessName(),
                 ((WitnessInterpreterLanguageInformation)((List) templateFieldValues.get("witnessInterpreterInformationList")).get(1)).getWitnessName());
         assertEquals(witnessInterpreterLanguageInformationList.get(1).getInterpreterLanguage(),
@@ -393,10 +393,10 @@ class HearingRequirementsTemplateTest {
         assertEquals(additionalRequestsDescription, templateFieldValues.get("additionalRequestsDescription"));
         assertEquals(datesToAvoid, templateFieldValues.get("datesToAvoid"));
         assertEquals(2, ((List) templateFieldValues.get("dateToAvoid")).size());
-        assertEquals(ImmutableMap.of("dateToAvoid", "25 Dec 2019"), ((List) templateFieldValues.get("dateToAvoid")).get(0));
+        assertEquals(ImmutableMap.of("dateToAvoid", "25 Dec 2019"), ((List) templateFieldValues.get("dateToAvoid")).getFirst());
         assertEquals(ImmutableMap.of("dateToAvoid", "1 Jan 2020"), ((List) templateFieldValues.get("dateToAvoid")).get(1));
         assertEquals(2, ((List) templateFieldValues.get("dateToAvoidReason")).size());
-        assertEquals(ImmutableMap.of("dateToAvoidReason", "Christmas"), ((List) templateFieldValues.get("dateToAvoidReason")).get(0));
+        assertEquals(ImmutableMap.of("dateToAvoidReason", "Christmas"), ((List) templateFieldValues.get("dateToAvoidReason")).getFirst());
         assertEquals(ImmutableMap.of("dateToAvoidReason", "New Year"), ((List) templateFieldValues.get("dateToAvoidReason")).get(1));
 
         when(asylumCase.read(REMOTE_VIDEO_CALL, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO));
@@ -415,22 +415,22 @@ class HearingRequirementsTemplateTest {
         assertEquals(isAppellantGivingOralEvidence, templateFieldValues.get("isAppellantGivingOralEvidence"));
         assertEquals(isWitnessesAttending, templateFieldValues.get("isWitnessesAttending"));
         assertEquals(2, ((List) templateFieldValues.get("witnessDetails")).size());
-        assertEquals(ImmutableMap.of("witnessDetails", "Some Witness Some Witness Family"), ((List) templateFieldValues.get("witnessDetails")).get(0));
+        assertEquals(ImmutableMap.of("witnessDetails", "Some Witness Some Witness Family"), ((List) templateFieldValues.get("witnessDetails")).getFirst());
         assertEquals(ImmutableMap.of("witnessDetails", "Another Witness"), ((List) templateFieldValues.get("witnessDetails")).get(1));
         assertEquals(isInterpreterServicesNeeded, templateFieldValues.get("isInterpreterServicesNeeded"));
         assertEquals(2, ((List) templateFieldValues.get("language")).size());
-        assertEquals(ImmutableMap.of("language", "Nepali"), ((List) templateFieldValues.get("language")).get(0));
+        assertEquals(ImmutableMap.of("language", "Nepali"), ((List) templateFieldValues.get("language")).getFirst());
         assertEquals(ImmutableMap.of("language", "Serbian"), ((List) templateFieldValues.get("language")).get(1));
         assertEquals(2, ((List) templateFieldValues.get("languageDialect")).size());
-        assertEquals(ImmutableMap.of("languageDialect", "Dialect A"), ((List) templateFieldValues.get("languageDialect")).get(0));
+        assertEquals(ImmutableMap.of("languageDialect", "Dialect A"), ((List) templateFieldValues.get("languageDialect")).getFirst());
         assertEquals(ImmutableMap.of("languageDialect", "Dialect B"), ((List) templateFieldValues.get("languageDialect")).get(1));
         assertEquals(isAnyWitnessInterpreterRequired, templateFieldValues.get("isAnyWitnessInterpreterRequired"));
         assertEquals("Spoken language Interpreter: lang\nSign language Interpreter: lang\n", templateFieldValues.get("appellantInterpreterLanguage"));
         assertEquals(2, ((List) templateFieldValues.get("witnessInterpreterInformationList")).size());
-        assertEquals(witnessInterpreterLanguageInformationList.get(0).getWitnessName(),
-                ((WitnessInterpreterLanguageInformation)((List) templateFieldValues.get("witnessInterpreterInformationList")).get(0)).getWitnessName());
-        assertEquals(witnessInterpreterLanguageInformationList.get(0).getInterpreterLanguage(),
-                ((WitnessInterpreterLanguageInformation)((List) templateFieldValues.get("witnessInterpreterInformationList")).get(0)).getInterpreterLanguage());
+        assertEquals(witnessInterpreterLanguageInformationList.getFirst().getWitnessName(),
+                ((WitnessInterpreterLanguageInformation)((List) templateFieldValues.get("witnessInterpreterInformationList")).getFirst()).getWitnessName());
+        assertEquals(witnessInterpreterLanguageInformationList.getFirst().getInterpreterLanguage(),
+                ((WitnessInterpreterLanguageInformation)((List) templateFieldValues.get("witnessInterpreterInformationList")).getFirst()).getInterpreterLanguage());
         assertEquals(witnessInterpreterLanguageInformationList.get(1).getWitnessName(),
                 ((WitnessInterpreterLanguageInformation)((List) templateFieldValues.get("witnessInterpreterInformationList")).get(1)).getWitnessName());
         assertEquals(witnessInterpreterLanguageInformationList.get(1).getInterpreterLanguage(),
@@ -455,10 +455,10 @@ class HearingRequirementsTemplateTest {
         assertEquals(additionalRequestsDescription, templateFieldValues.get("additionalRequestsDescription"));
         assertEquals(datesToAvoid, templateFieldValues.get("datesToAvoid"));
         assertEquals(2, ((List) templateFieldValues.get("dateToAvoid")).size());
-        assertEquals(ImmutableMap.of("dateToAvoid", "25 Dec 2019"), ((List) templateFieldValues.get("dateToAvoid")).get(0));
+        assertEquals(ImmutableMap.of("dateToAvoid", "25 Dec 2019"), ((List) templateFieldValues.get("dateToAvoid")).getFirst());
         assertEquals(ImmutableMap.of("dateToAvoid", "1 Jan 2020"), ((List) templateFieldValues.get("dateToAvoid")).get(1));
         assertEquals(2, ((List) templateFieldValues.get("dateToAvoidReason")).size());
-        assertEquals(ImmutableMap.of("dateToAvoidReason", "Christmas"), ((List) templateFieldValues.get("dateToAvoidReason")).get(0));
+        assertEquals(ImmutableMap.of("dateToAvoidReason", "Christmas"), ((List) templateFieldValues.get("dateToAvoidReason")).getFirst());
         assertEquals(ImmutableMap.of("dateToAvoidReason", "New Year"), ((List) templateFieldValues.get("dateToAvoidReason")).get(1));
     }
 
@@ -526,10 +526,10 @@ class HearingRequirementsTemplateTest {
 
         assertEquals(YesOrNo.YES, templateFieldValues.get("datesToAvoid"));
         assertEquals(2, ((List) templateFieldValues.get("dateToAvoid")).size());
-        assertEquals(ImmutableMap.of("dateToAvoid", "25 Dec 2019"), ((List) templateFieldValues.get("dateToAvoid")).get(0));
+        assertEquals(ImmutableMap.of("dateToAvoid", "25 Dec 2019"), ((List) templateFieldValues.get("dateToAvoid")).getFirst());
         assertEquals(ImmutableMap.of("dateToAvoid", "1 Jan 2020"), ((List) templateFieldValues.get("dateToAvoid")).get(1));
         assertEquals(2, ((List) templateFieldValues.get("dateToAvoidReason")).size());
-        assertEquals(ImmutableMap.of("dateToAvoidReason", "Christmas"), ((List) templateFieldValues.get("dateToAvoidReason")).get(0));
+        assertEquals(ImmutableMap.of("dateToAvoidReason", "Christmas"), ((List) templateFieldValues.get("dateToAvoidReason")).getFirst());
         assertEquals(ImmutableMap.of("dateToAvoidReason", "New Year"), ((List) templateFieldValues.get("dateToAvoidReason")).get(1));
     }
 
@@ -699,10 +699,10 @@ class HearingRequirementsTemplateTest {
 
         assertEquals(2, ((List) templateFieldValues.get("dateToAvoid")).size());
         //assertEquals(ImmutableMap.of("dateToAvoid", LocalDate.parse("2019-12-25")), ((List) templateFieldValues.get("dateToAvoid")).get(0));
-        assertEquals(ImmutableMap.of("dateToAvoid", "25 Dec 2019"), ((List) templateFieldValues.get("dateToAvoid")).get(0));
+        assertEquals(ImmutableMap.of("dateToAvoid", "25 Dec 2019"), ((List) templateFieldValues.get("dateToAvoid")).getFirst());
         assertEquals(ImmutableMap.of("dateToAvoid", "1 Jan 2020"), ((List) templateFieldValues.get("dateToAvoid")).get(1));
         assertEquals(2, ((List) templateFieldValues.get("dateToAvoidReason")).size());
-        assertEquals(ImmutableMap.of("dateToAvoidReason", "Christmas"), ((List) templateFieldValues.get("dateToAvoidReason")).get(0));
+        assertEquals(ImmutableMap.of("dateToAvoidReason", "Christmas"), ((List) templateFieldValues.get("dateToAvoidReason")).getFirst());
         assertEquals(ImmutableMap.of("dateToAvoidReason", ""), ((List) templateFieldValues.get("dateToAvoidReason")).get(1));
     }
 
@@ -781,10 +781,10 @@ class HearingRequirementsTemplateTest {
         Map<String, Object> templateFieldValues = hearingRequirementsTemplate.mapFieldValues(caseDetails);
 
         assertEquals(2, ((List) templateFieldValues.get("dateToAvoid")).size());
-        assertEquals(ImmutableMap.of("dateToAvoid", "25 Dec 2019"), ((List) templateFieldValues.get("dateToAvoid")).get(0));
+        assertEquals(ImmutableMap.of("dateToAvoid", "25 Dec 2019"), ((List) templateFieldValues.get("dateToAvoid")).getFirst());
         assertEquals(ImmutableMap.of("dateToAvoid", "1 Jan 1900"), ((List) templateFieldValues.get("dateToAvoid")).get(1));
         assertEquals(2, ((List) templateFieldValues.get("dateToAvoidReason")).size());
-        assertEquals(ImmutableMap.of("dateToAvoidReason", "Christmas"), ((List) templateFieldValues.get("dateToAvoidReason")).get(0));
+        assertEquals(ImmutableMap.of("dateToAvoidReason", "Christmas"), ((List) templateFieldValues.get("dateToAvoidReason")).getFirst());
         assertEquals(ImmutableMap.of("dateToAvoidReason", "New Year"), ((List) templateFieldValues.get("dateToAvoidReason")).get(1));
     }
 }

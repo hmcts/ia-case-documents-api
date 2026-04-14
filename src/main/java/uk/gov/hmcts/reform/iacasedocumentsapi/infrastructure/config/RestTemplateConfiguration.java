@@ -24,7 +24,7 @@ public class RestTemplateConfiguration {
         RestTemplate restTemplate = new RestTemplate();
         restTemplate
             .getMessageConverters()
-            .add(0, mappingJackson2HttpMessageConverter(objectMapper));
+            .addFirst(mappingJackson2HttpMessageConverter(objectMapper));
 
         return restTemplate;
     }

@@ -79,7 +79,7 @@ class GenerateDecisionAndReasonsTestWiremock extends SpringBootIntegrationTest i
         Optional<List<IdValue<DocumentWithMetadata>>> draftDecisionAndReasonsDocuments =
             response.getAsylumCase().read(DRAFT_DECISION_AND_REASONS_DOCUMENTS);
 
-        IdValue<DocumentWithMetadata> documentWithMetadataIdValue = draftDecisionAndReasonsDocuments.get().get(0);
+        IdValue<DocumentWithMetadata> documentWithMetadataIdValue = draftDecisionAndReasonsDocuments.get().getFirst();
 
         assertThat(draftDecisionAndReasonsDocuments.get().size()).isEqualTo(1);
         assertThat(documentWithMetadataIdValue.getValue().getTag()).isEqualTo(DECISION_AND_REASONS_DRAFT);

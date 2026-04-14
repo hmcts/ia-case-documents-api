@@ -127,7 +127,7 @@ class InternalDetainedOutOfTimeDecisionAllowedLetterGeneratorTest {
         );
         List<DocumentWithMetadata> bundleDocuments = captor.getValue();
         assertEquals(bundleDocuments.size(), 2);
-        DocumentWithMetadata bundleDocument = bundleDocuments.get(0);
+        DocumentWithMetadata bundleDocument = bundleDocuments.getFirst();
         assertEquals("2026-01-25", bundleDocument.getDateUploaded());
 
         verify(documentHandler, times(1)).addWithMetadataWithoutReplacingExistingDocuments(
@@ -169,7 +169,7 @@ class InternalDetainedOutOfTimeDecisionAllowedLetterGeneratorTest {
         );
         List<DocumentWithMetadata> bundleDocuments = captor.getValue();
         assertEquals(bundleDocuments.size(), 2);
-        DocumentWithMetadata bundleDocument = bundleDocuments.get(0);
+        DocumentWithMetadata bundleDocument = bundleDocuments.getFirst();
         assertEquals("2026-01-25", bundleDocument.getDateUploaded());
 
         verify(documentHandler, times(1)).addWithMetadataWithoutReplacingExistingDocuments(
@@ -211,7 +211,7 @@ class InternalDetainedOutOfTimeDecisionAllowedLetterGeneratorTest {
         );
         List<DocumentWithMetadata> bundleDocuments = captor.getValue();
         assertEquals(bundleDocuments.size(), 1);
-        DocumentWithMetadata bundleDocument = bundleDocuments.get(0);
+        DocumentWithMetadata bundleDocument = bundleDocuments.getFirst();
         assertEquals("2026-01-25", bundleDocument.getDateUploaded());
 
         verify(documentHandler, times(1)).addWithMetadataWithoutReplacingExistingDocuments(

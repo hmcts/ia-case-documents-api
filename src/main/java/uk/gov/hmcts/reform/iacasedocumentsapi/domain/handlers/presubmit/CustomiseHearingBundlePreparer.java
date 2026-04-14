@@ -93,7 +93,7 @@ public class CustomiseHearingBundlePreparer implements PreSubmitCallbackHandler<
             Optional<List<IdValue<DocumentWithMetadata>>> finalDEcisionAndResonDocs = asylumCase.read(FINAL_DECISION_AND_REASONS_DOCUMENTS);
             return getDocumentWithDescListFromMetaData(finalDEcisionAndResonDocs.orElse(emptyList()));
         } else {
-            return getDocumentWithDescListFromMetaData(allReheardDecisionDocuments.get(0).getValue().getReheardHearingDocs());
+            return getDocumentWithDescListFromMetaData(allReheardDecisionDocuments.getFirst().getValue().getReheardHearingDocs());
         }
     }
 
@@ -104,7 +104,7 @@ public class CustomiseHearingBundlePreparer implements PreSubmitCallbackHandler<
             .orElse(emptyList());
 
         if (!allRemittalDocuments.isEmpty()) {
-            RemittalDocument remittalDocument = allRemittalDocuments.get(0).getValue();
+            RemittalDocument remittalDocument = allRemittalDocuments.getFirst().getValue();
             DocumentWithDescription remittalDocWithDesc = getDocumentWithDescFromMetaData(remittalDocument.getDecisionDocument());
 
             List<IdValue<DocumentWithDescription>> remittalOtherDocsWithDesc = getDocumentWithDescListFromMetaDataWithoutBundles(remittalDocument.getOtherRemittalDocs());
@@ -149,7 +149,7 @@ public class CustomiseHearingBundlePreparer implements PreSubmitCallbackHandler<
 
         List<IdValue<DocumentWithDescription>> reheardHearingDocsInCollection = emptyList();
         if (!allReheardHearingDocuments.isEmpty()) {
-            reheardHearingDocsInCollection = getDocumentWithDescListFromMetaDataWithoutBundles(allReheardHearingDocuments.get(0).getValue().getReheardHearingDocs());
+            reheardHearingDocsInCollection = getDocumentWithDescListFromMetaDataWithoutBundles(allReheardHearingDocuments.getFirst().getValue().getReheardHearingDocs());
         }
         // Also if there were any documents prior to set-aside release in REHEARD_HEARING_DOCUMENTS take them into account as well.
         Optional<List<IdValue<DocumentWithMetadata>>> maybeExistingReheardDocumentsPreSetAside =
@@ -230,14 +230,10 @@ public class CustomiseHearingBundlePreparer implements PreSubmitCallbackHandler<
                 customDocuments = handleLegalRepSourceField(documentWithMetadata, newDocumentWithDescription, customDocuments, isAipJourney);
             } else {
                 customDocuments = switch (targetField) {
-                    case CUSTOM_APP_ADDENDUM_EVIDENCE_DOCS:
-                        yield handleCustomAddendumDocsTargetField(documentWithMetadata, newDocumentWithDescription, customDocuments, "The appellant");
-                    case CUSTOM_RESP_ADDENDUM_EVIDENCE_DOCS:
-                        yield handleCustomAddendumDocsTargetField(documentWithMetadata, newDocumentWithDescription, customDocuments, "The respondent");
-                    case CUSTOM_TRIBUNAL_DOCUMENTS:
-                        yield handleCustomTribunalDocsTargetField(documentWithMetadata, newDocumentWithDescription, customDocuments);
-                    default:
-                        yield documentWithDescriptionAppender.append(newDocumentWithDescription, customDocuments);
+                    case CUSTOM_APP_ADDENDUM_EVIDENCE_DOCS -> handleCustomAddendumDocsTargetField(documentWithMetadata, newDocumentWithDescription, customDocuments, "The appellant");
+                    case CUSTOM_RESP_ADDENDUM_EVIDENCE_DOCS -> handleCustomAddendumDocsTargetField(documentWithMetadata, newDocumentWithDescription, customDocuments, "The respondent");
+                    case CUSTOM_TRIBUNAL_DOCUMENTS -> handleCustomTribunalDocsTargetField(documentWithMetadata, newDocumentWithDescription, customDocuments);
+                    default -> documentWithDescriptionAppender.append(newDocumentWithDescription, customDocuments);
                 };
             }
         }
