@@ -8,7 +8,6 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClientResponseException;
 import org.springframework.web.client.RestTemplate;
@@ -58,19 +57,15 @@ public class EmBundleRequestExecutor {
         PreSubmitCallbackResponse<AsylumCase> response;
 
         try {
-            ResponseEntity<PreSubmitCallbackResponse<AsylumCase>> exchange =
+            response =
                 restTemplate
                     .exchange(
                         endpoint,
                         HttpMethod.POST,
                         requestEntity,
-                        new ParameterizedTypeReference<>() {
+                        new ParameterizedTypeReference<PreSubmitCallbackResponse<AsylumCase>>() {
                         }
-                    );
-            log.info("EM Bundle API response status: {}", exchange.getStatusCode());
-            log.info("EM Bundle API response headers: {}", exchange.getHeaders());
-            log.info("EM Bundle API response body: {}", exchange.getBody());
-            response = exchange.getBody();
+                    ).getBody();
 
         } catch (RestClientResponseException e) {
 
