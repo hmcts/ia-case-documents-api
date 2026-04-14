@@ -50,7 +50,6 @@ class CacheConfigurationTest {
             "redis://localhost:6379"
         );
         registry.add("spring.data.redis.encryption.key", () -> TEST_ENCRYPTION_KEY);
-        registry.add("redis.enabled", () -> true);
     }
 
     @BeforeEach
