@@ -158,7 +158,7 @@ public class DocumentHandlerTest {
     private DocumentWithMetadata createDocumentWithMetadata() {
         return new DocumentWithMetadata(
             document,
-            RandomStringUtils.random(20),
+            RandomStringUtils.secure().next(20),
             "31-01-1987",
             tag, "test"
         );

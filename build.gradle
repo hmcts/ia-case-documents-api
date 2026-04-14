@@ -1,45 +1,35 @@
-buildscript {
-    repositories {
-        mavenCentral()
-    }
-    dependencies {
-        classpath("net.serenity-bdd:serenity-gradle-plugin:3.6.22")
-        classpath("au.com.dius.pact:au.com.dius.pact.gradle.plugin:4.4.0-beta.1")
-    }
-}
-
 plugins {
     id 'application'
     id 'checkstyle'
     id 'jacoco'
     id 'pmd'
-    id 'com.github.ben-manes.versions' version '0.52.0'
+    id 'com.github.ben-manes.versions' version '0.51.0'
     id 'info.solidsoft.pitest' version '1.15.0'
     id 'io.spring.dependency-management' version '1.1.7'
     id 'org.owasp.dependencycheck' version '10.0.4'
     id 'org.sonarqube' version '4.4.1.3373'
     id 'org.springframework.boot' version '2.7.18'
-    id 'uk.gov.hmcts.java' version '0.12.67'
-    id 'au.com.dius.pact' version '4.6.17'
+    id 'uk.gov.hmcts.java' version '0.12.68'
+    id 'au.com.dius.pact' version '4.6.20'
     id "io.freefair.lombok" version "6.6.3"
+    id 'org.openrewrite.rewrite' version '7.30.0'
+    id "net.serenity-bdd.serenity-gradle-plugin" version "3.6.22"
+}
+
+rewrite {
+    activeRecipe('org.openrewrite.java.spring.boot3.UpgradeSpringBoot_3_0')
+//  activeRecipe('org.openrewrite.java.spring.boot3.UpgradeSpringBoot_3_1')
+//  activeRecipe('org.openrewrite.java.spring.boot3.UpgradeSpringBoot_3_2')
+//  activeRecipe('org.openrewrite.java.spring.boot3.UpgradeSpringBoot_3_3')
+//  activeRecipe('org.openrewrite.java.spring.boot3.UpgradeSpringBoot_3_4')
+//  activeRecipe('org.openrewrite.java.spring.boot3.UpgradeSpringBoot_3_5')
+//  activeRecipe('org.openrewrite.java.migrate.UpgradeToJava21')
+//  setExportDatatables(true)
 }
 
 apply plugin: 'java'
-apply plugin: 'net.serenity-bdd.serenity-gradle-plugin'
 apply plugin: 'project-report'
 apply plugin: 'idea'
-
-def versions = [
-    junit              : '5.13.4',
-    junitPlatform      : '1.13.4',
-    reformLogging      : '6.1.9',
-    reformHealthStarter: '0.0.5',
-    restAssured        : '5.4.0',
-    serenity           : '4.2.31',
-    pact_version       : '4.1.38',
-    springDoc          : '1.8.0',
-    springCloud        : '3.1.9'
-]
 
 mainClassName = 'uk.gov.hmcts.reform.iacasedocumentsapi.Application'
 def jarName = 'ia-case-documents-api.jar'
@@ -71,12 +61,12 @@ tasks.withType(Test) {
 
 ext.libraries = [
     junit5: [
-        "org.junit.jupiter:junit-jupiter-api:${versions.junit}",
-        "org.junit.jupiter:junit-jupiter-engine:${versions.junit}",
-        "org.junit.jupiter:junit-jupiter-params:${versions.junit}",
-        "org.junit.platform:junit-platform-commons:${versions.junitPlatform}",
-        "org.junit.platform:junit-platform-engine:${versions.junitPlatform}",
-        "org.junit.platform:junit-platform-launcher:${versions.junitPlatform}"
+        "org.junit.jupiter:junit-jupiter-api:5.13.4",
+        "org.junit.jupiter:junit-jupiter-engine:5.13.4",
+        "org.junit.jupiter:junit-jupiter-params:5.13.4",
+        "org.junit.platform:junit-platform-commons:1.13.4",
+        "org.junit.platform:junit-platform-engine:1.13.4",
+        "org.junit.platform:junit-platform-launcher:1.13.4"
     ]
 ]
 
@@ -269,6 +259,9 @@ repositories {
 }
 
 dependencyManagement {
+    imports {
+        mavenBom 'org.springframework.cloud:spring-cloud-dependencies:2021.0.9'
+    }
     dependencies {
 
         dependencySet(group: 'org.yaml', version: '2.4') {
@@ -299,6 +292,8 @@ dependencyManagement {
 }
 
 dependencies {
+    rewrite('org.openrewrite.recipe:rewrite-migrate-java:3.32.0')
+    rewrite('org.openrewrite.recipe:rewrite-spring:6.28.2')
     modules {
         module("org.codehaus.groovy:groovy") {
             replacedBy("org.apache.groovy:groovy", "conflicts in current rest-assured version")
@@ -316,8 +311,8 @@ dependencies {
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-json'
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-security'
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-web'
-    implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-openfeign', version: versions.springCloud
-    implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-bootstrap', version: '3.1.9'
+    implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-openfeign'
+    implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-bootstrap'
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-validation'
 
 
@@ -340,7 +335,7 @@ dependencies {
     implementation group: 'com.fasterxml.jackson.datatype', name: 'jackson-datatype-jsr310'
     implementation group: 'com.fasterxml.jackson.dataformat', name: 'jackson-dataformat-csv'
 
-    implementation group: 'org.springdoc', name: 'springdoc-openapi-ui', version: versions.springDoc
+    implementation group: 'org.springdoc', name: 'springdoc-openapi-ui', version: '1.8.0'
 
     implementation group: 'ch.qos.logback', name: 'logback-classic', version: '1.2.13'
     implementation group: 'ch.qos.logback', name: 'logback-core', version: '1.2.13'
@@ -349,8 +344,8 @@ dependencies {
     implementation group: 'com.sun.xml.bind', name: 'jaxb-osgi', version: '2.3.9'
 
     implementation group: 'com.github.hmcts', name: 'document-management-client', version: '7.0.1'
-    implementation group: 'com.github.hmcts.java-logging', name: 'logging', version: versions.reformLogging
-    implementation group: 'com.github.hmcts.java-logging', name: 'logging-appinsights', version: versions.reformLogging
+    implementation group: 'com.github.hmcts.java-logging', name: 'logging', version: '6.1.9'
+    implementation group: 'com.github.hmcts.java-logging', name: 'logging-appinsights', version: '6.1.9'
     implementation group: 'com.github.hmcts', name: 'service-auth-provider-java-client', version: '4.1.2'
 
     implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.18.0'
@@ -371,35 +366,30 @@ dependencies {
 
     testImplementation group: 'org.mockito', name: 'mockito-junit-jupiter', version: '3.12.4'
     testImplementation group: 'org.mockito', name: 'mockito-inline', version: '3.12.4'
-    testImplementation group: 'org.testcontainers', name: 'testcontainers', version: '2.0.2'
-    testImplementation group: 'org.testcontainers', name: 'testcontainers-junit-jupiter', version: '2.0.2'
     testImplementation group: 'org.springframework.boot', name: 'spring-boot-starter-test'
-    testImplementation group: 'org.springframework.security', name: 'spring-security-test', version: versions.springSecurity
+    testImplementation group: 'org.springframework.security', name: 'spring-security-test'
 
-    testImplementation "org.codehaus.sonar-plugins:sonar-pitest-plugin:0.5"
     testImplementation group: 'org.pitest', name: 'pitest', version: '1.16.2'
-    testImplementation group: 'io.rest-assured', name: 'rest-assured-all', version: versions.restAssured
-    testImplementation group: 'io.rest-assured', name: 'rest-assured', version: versions.restAssured
-    testImplementation group: 'net.serenity-bdd', name: 'serenity-core', version: versions.serenity
-    testImplementation group: 'net.serenity-bdd', name: 'serenity-junit', version: versions.serenity
-    testImplementation group: 'net.serenity-bdd', name: 'serenity-rest-assured', version: versions.serenity
-    testImplementation group: 'net.serenity-bdd', name: 'serenity-spring', version: versions.serenity
+    testImplementation group: 'io.rest-assured', name: 'rest-assured-all', version: '5.4.0'
+    testImplementation group: 'io.rest-assured', name: 'rest-assured', version: '5.4.0'
+    testImplementation group: 'net.serenity-bdd', name: 'serenity-core', version: '4.2.31'
+    testImplementation group: 'net.serenity-bdd', name: 'serenity-junit', version: '4.2.31'
+    testImplementation group: 'net.serenity-bdd', name: 'serenity-rest-assured', version: '4.2.31'
+    testImplementation group: 'net.serenity-bdd', name: 'serenity-spring', version: '4.2.31'
 
     testImplementation group: 'com.github.hmcts', name: 'ccd-case-document-am-client', version: '1.7.3'
 
-    testImplementation group: 'com.github.hmcts', name: 'fortify-client', version: '1.4.9', classifier: 'all', {
+    testImplementation group: 'com.github.hmcts', name: 'fortify-client', version: '1.4.10', classifier: 'all', {
         exclude group: 'commons-io', module: 'commons-io'
         exclude group: 'org.apache.commons', module: 'commons-lang3'
     }
 
     testImplementation 'pl.pragmatists:JUnitParams:1.1.1'
 
-    testImplementation(group: 'org.springframework.cloud', name: 'spring-cloud-contract-wiremock', version: '3.1.10') {
-        exclude group: "com.github.tomakehurst", module: "wiremock-standalone"
-    }
+    testImplementation 'org.springframework.cloud:spring-cloud-contract-wiremock'
 
     //pact contract testing
-    contractTestImplementation group: 'au.com.dius.pact.consumer', name: 'junit5', version: "4.6.17"
+    contractTestImplementation group: 'au.com.dius.pact.consumer', name: 'junit5', version: "4.6.20"
 
     contractTestImplementation("org.junit.jupiter:junit-jupiter-api:5.13.4")
     contractTestRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.13.4")

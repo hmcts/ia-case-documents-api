@@ -72,7 +72,7 @@ public class AsylumCaseFixtures {
     }
 
     private static String someString() {
-        return RandomStringUtils.randomAlphabetic(8);
+        return RandomStringUtils.secure().nextAlphabetic(8);
     }
 
     public static String someUploadResponse() {
