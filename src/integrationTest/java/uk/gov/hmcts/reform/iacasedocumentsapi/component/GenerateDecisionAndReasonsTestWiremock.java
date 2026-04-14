@@ -12,7 +12,8 @@ import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.State.D
 
 import java.util.List;
 import java.util.Optional;
-import org.junit.jupiter.params.ParameterizedTest;
+
+import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.test.context.support.WithMockUser;
 import uk.gov.hmcts.reform.iacasedocumentsapi.component.testutils.*;
@@ -31,7 +32,7 @@ class GenerateDecisionAndReasonsTestWiremock extends SpringBootIntegrationTest i
     @MockBean
     private FeatureToggler featureToggler;
 
-    @ParameterizedTest
+    @Test
     @WithMockUser(authorities = {"caseworker-ia", "tribunal-caseworker"})
     void generates_decision_and_reasons() {
         addServiceAuthStub(server);
