@@ -3,21 +3,19 @@ package uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.enties.em;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.Document;
 
 
 class BundleDocumentTest {
 
-    private String name = "caseApplication";
+    private final String name = "caseApplication";
 
-    private String description = "Case Application Document";
+    private final String description = "Case Application Document";
 
-    private int sortIndex = 1;
-    @Mock
-    private Document document;
+    private final int sortIndex = 1;
+    private final Document document = new Document("http://test.com/documents/123", "document.pdf", "application/pdf");
 
-    private BundleDocument bundleDocument = new BundleDocument(name, description, sortIndex, document);
+    private final BundleDocument bundleDocument = new BundleDocument(name, description, sortIndex, document);
 
     @Test
     void should_return_name() {

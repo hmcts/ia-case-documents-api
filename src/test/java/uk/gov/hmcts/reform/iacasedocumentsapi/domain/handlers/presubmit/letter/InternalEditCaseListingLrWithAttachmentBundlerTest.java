@@ -5,6 +5,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.*;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.*;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DocumentTag.*;
@@ -15,16 +16,14 @@ import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callbac
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo.NO;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo.YES;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import lombok.Value;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.MethodSource;
+import org.junit.jupiter.params.provider.EnumSource;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
@@ -82,45 +81,42 @@ public class InternalEditCaseListingLrWithAttachmentBundlerTest {
     }
 
     @ParameterizedTest
-    @MethodSource("generateDifferentEventScenarios")
-    public void it_can_handle_callback(InternalEditCaseListingLrWithAttachmentBundlerTest.TestScenario scenario) {
-        when(callback.getEvent()).thenReturn(scenario.getEvent());
+    @EnumSource(value = Event.class, names = {"EDIT_CASE_LISTING"})
+    public void it_can_handle_callback(Event event) {
+        when(callback.getEvent()).thenReturn(event);
         when(callback.getCaseDetails()).thenReturn(caseDetails);
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
         when(asylumCase.read(IS_ADMIN, YesOrNo.class)).thenReturn(Optional.of(YES));
         when(asylumCase.read(APPELLANTS_REPRESENTATION, YesOrNo.class)).thenReturn(Optional.of(NO));
         when(asylumCase.read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(NO));
 
-        boolean canHandle = internalEditCaseListingLrWithAttachmentBundler.canHandle(scenario.callbackStage, callback);
-
-        assertEquals(canHandle, scenario.isExpected());
+        assertTrue(internalEditCaseListingLrWithAttachmentBundler.canHandle(ABOUT_TO_SUBMIT, callback));
     }
 
-    private static List<InternalEditCaseListingLrWithAttachmentBundlerTest.TestScenario> generateDifferentEventScenarios() {
-        return InternalEditCaseListingLrWithAttachmentBundlerTest.TestScenario.builder();
+    @ParameterizedTest
+    @EnumSource(value = Event.class, names = {"EDIT_CASE_LISTING"}, mode = EnumSource.Mode.EXCLUDE)
+    public void it_cannot_handle_callback_incorrect_event(Event event) {
+        when(callback.getEvent()).thenReturn(event);
+        when(callback.getCaseDetails()).thenReturn(caseDetails);
+        when(caseDetails.getCaseData()).thenReturn(asylumCase);
+        when(asylumCase.read(IS_ADMIN, YesOrNo.class)).thenReturn(Optional.of(YES));
+        when(asylumCase.read(APPELLANTS_REPRESENTATION, YesOrNo.class)).thenReturn(Optional.of(NO));
+        when(asylumCase.read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(NO));
+
+        assertFalse(internalEditCaseListingLrWithAttachmentBundler.canHandle(ABOUT_TO_SUBMIT, callback));
     }
 
-    @Value
-    static class TestScenario {
-        Event event;
-        PreSubmitCallbackStage callbackStage;
-        boolean expected;
+    @ParameterizedTest
+    @EnumSource(value = PreSubmitCallbackStage.class, names = {"ABOUT_TO_SUBMIT"}, mode = EnumSource.Mode.EXCLUDE)
+    public void it_cannot_handle_callback_incorrect_stage(PreSubmitCallbackStage stage) {
+        when(callback.getEvent()).thenReturn(Event.EDIT_CASE_LISTING);
+        when(callback.getCaseDetails()).thenReturn(caseDetails);
+        when(caseDetails.getCaseData()).thenReturn(asylumCase);
+        when(asylumCase.read(IS_ADMIN, YesOrNo.class)).thenReturn(Optional.of(YES));
+        when(asylumCase.read(APPELLANTS_REPRESENTATION, YesOrNo.class)).thenReturn(Optional.of(NO));
+        when(asylumCase.read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(NO));
 
-        public static List<InternalEditCaseListingLrWithAttachmentBundlerTest.TestScenario> builder() {
-            List<InternalEditCaseListingLrWithAttachmentBundlerTest.TestScenario> testScenarios = new ArrayList<>();
-            for (Event e : Event.values()) {
-                if (e.equals(Event.EDIT_CASE_LISTING)) {
-                    testScenarios.add(new InternalEditCaseListingLrWithAttachmentBundlerTest.TestScenario(e, ABOUT_TO_START, false));
-                    testScenarios.add(new InternalEditCaseListingLrWithAttachmentBundlerTest.TestScenario(e, ABOUT_TO_SUBMIT, true));
-                } else {
-                    testScenarios.add(new InternalEditCaseListingLrWithAttachmentBundlerTest.TestScenario(e, ABOUT_TO_START, false));
-                    testScenarios.add(new InternalEditCaseListingLrWithAttachmentBundlerTest.TestScenario(e, ABOUT_TO_SUBMIT, false));
-                    testScenarios.add(new InternalEditCaseListingLrWithAttachmentBundlerTest.TestScenario(e, ABOUT_TO_START, false));
-                    testScenarios.add(new InternalEditCaseListingLrWithAttachmentBundlerTest.TestScenario(e, ABOUT_TO_SUBMIT, false));
-                }
-            }
-            return testScenarios;
-        }
+        assertFalse(internalEditCaseListingLrWithAttachmentBundler.canHandle(stage, callback));
     }
 
     @Test
@@ -140,9 +136,7 @@ public class InternalEditCaseListingLrWithAttachmentBundlerTest {
                         documentBundler,
                         documentHandler);
 
-        boolean canHandle = internalEditCaseListingLrWithAttachmentBundler.canHandle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
-
-        assertFalse(canHandle);
+        assertFalse(internalEditCaseListingLrWithAttachmentBundler.canHandle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback));
     }
 
     @Test

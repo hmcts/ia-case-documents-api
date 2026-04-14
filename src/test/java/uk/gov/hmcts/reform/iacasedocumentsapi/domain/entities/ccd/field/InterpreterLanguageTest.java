@@ -1,6 +1,6 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field;
 
-import org.junit.Assert;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -20,7 +20,7 @@ public class InterpreterLanguageTest {
     @Test
     public void should_hold_onto_values() {
 
-        Assert.assertEquals(language, interpreterLanguage.getLanguage());
-        Assert.assertEquals(languageDialect, interpreterLanguage.getLanguageDialect());
+        Assertions.assertEquals(language, interpreterLanguage.getLanguage());
+        Assertions.assertEquals(languageDialect, interpreterLanguage.getLanguageDialect());
     }
 }

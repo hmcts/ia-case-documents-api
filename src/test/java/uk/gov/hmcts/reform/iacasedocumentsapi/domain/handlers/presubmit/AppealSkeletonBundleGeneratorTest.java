@@ -10,17 +10,15 @@ import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseD
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.PreSubmitCallbackStage.ABOUT_TO_START;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.PreSubmitCallbackStage.ABOUT_TO_SUBMIT;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import lombok.Value;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.MethodSource;
+import org.junit.jupiter.params.provider.EnumSource;
 import org.mockito.ArgumentCaptor;
 import org.mockito.InOrder;
 import org.mockito.Mock;
@@ -85,41 +83,24 @@ public class AppealSkeletonBundleGeneratorTest {
     }
 
     @ParameterizedTest
-    @MethodSource("generateDifferentEventScenarios")
-    public void it_can_handle_callback(TestScenario scenario) {
-        when(callback.getEvent()).thenReturn(scenario.getEvent());
-
-        boolean canHandle = appealSkeletonBundleGenerator.canHandle(scenario.callbackStage, callback);
-
-        assertEquals(canHandle, scenario.isExpected());
+    @EnumSource(value = Event.class, names = {"BUILD_CASE", "SUBMIT_CASE"})
+    public void it_can_handle_callback(Event event) {
+        when(callback.getEvent()).thenReturn(event);
+        assertTrue(appealSkeletonBundleGenerator.canHandle(ABOUT_TO_SUBMIT, callback));
     }
 
-    private static List<TestScenario> generateDifferentEventScenarios() {
-        return TestScenario.builder();
+    @ParameterizedTest
+    @EnumSource(value = Event.class, names = {"BUILD_CASE", "SUBMIT_CASE"}, mode = EnumSource.Mode.EXCLUDE)
+    public void it_cannot_handle_callback_incorrect_event(Event event) {
+        when(callback.getEvent()).thenReturn(event);
+        assertFalse(appealSkeletonBundleGenerator.canHandle(ABOUT_TO_SUBMIT, callback));
     }
 
-
-    @Value
-    static class TestScenario {
-        Event event;
-        PreSubmitCallbackStage callbackStage;
-        boolean expected;
-
-        public static List<TestScenario> builder() {
-            List<TestScenario> testScenarios = new ArrayList<>();
-            for (Event e : Event.values()) {
-                if (e.equals(Event.BUILD_CASE) || e.equals(Event.SUBMIT_CASE)) {
-                    testScenarios.add(new TestScenario(e, ABOUT_TO_START, false));
-                    testScenarios.add(new TestScenario(e, ABOUT_TO_SUBMIT, true));
-                } else {
-                    testScenarios.add(new TestScenario(e, ABOUT_TO_START, false));
-                    testScenarios.add(new TestScenario(e, ABOUT_TO_SUBMIT, false));
-                    testScenarios.add(new TestScenario(e, ABOUT_TO_START, false));
-                    testScenarios.add(new TestScenario(e, ABOUT_TO_SUBMIT, false));
-                }
-            }
-            return testScenarios;
-        }
+    @ParameterizedTest
+    @EnumSource(value = PreSubmitCallbackStage.class, names = {"ABOUT_TO_SUBMIT"}, mode = EnumSource.Mode.EXCLUDE)
+    public void it_cannot_handle_callback_incorrect_stage(PreSubmitCallbackStage stage) {
+        when(callback.getEvent()).thenReturn(Event.BUILD_CASE);
+        assertFalse(appealSkeletonBundleGenerator.canHandle(stage, callback));
     }
 
     @Test
@@ -242,7 +223,7 @@ public class AppealSkeletonBundleGeneratorTest {
         return
             new DocumentWithMetadata(createDocumentWithDescription(),
                 RandomStringUtils.secure().nextAlphabetic(20),
-                new SystemDateProvider().now().toString(), documentTag,"test");
+                new SystemDateProvider().now().toString(), documentTag, "test");
 
     }
 }

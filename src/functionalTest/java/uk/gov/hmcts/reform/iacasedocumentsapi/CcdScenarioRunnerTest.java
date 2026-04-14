@@ -1,6 +1,6 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi;
 
-import static org.junit.Assert.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.when;
 
@@ -83,8 +83,8 @@ public class CcdScenarioRunnerTest {
         }
 
         assertFalse(
-            "Verifiers are configured",
-            verifiers.isEmpty()
+            verifiers.isEmpty(),
+            "Verifiers are configured"
         );
 
         String scenarioPattern = System.getProperty("scenario");
@@ -116,14 +116,14 @@ public class CcdScenarioRunnerTest {
 
                     Object scenarioEnabled = MapValueExtractor.extract(scenario, "enabled");
                     boolean scenarioEnabledFlag = true;
-                    if (scenarioEnabled instanceof String) {
-                        scenarioEnabledFlag = Boolean.parseBoolean((String) scenarioEnabled);
+                    if (scenarioEnabled instanceof String string) {
+                        scenarioEnabledFlag = Boolean.parseBoolean(string);
                     }
 
                     Object scenarioDisabled = MapValueExtractor.extract(scenario, "disabled");
                     boolean scenarioDisabledFlag = false;
-                    if (scenarioDisabled instanceof String) {
-                        scenarioDisabledFlag = Boolean.parseBoolean((String) scenarioDisabled);
+                    if (scenarioDisabled instanceof String string) {
+                        scenarioDisabledFlag = Boolean.parseBoolean(string);
                     }
 
                     if (!scenarioEnabledFlag || scenarioDisabledFlag) {
@@ -156,7 +156,7 @@ public class CcdScenarioRunnerTest {
                         SerenityRest
                             .given()
                             .headers(authorizationHeaders)
-                            .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
+                            .contentType(MediaType.APPLICATION_JSON_VALUE)
                             .body(requestBody)
                             .when()
                             .post(requestUri)
