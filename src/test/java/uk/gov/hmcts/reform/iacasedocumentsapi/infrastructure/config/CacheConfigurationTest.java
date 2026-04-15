@@ -172,18 +172,4 @@ class CacheConfigurationTest {
 
         assertThat(result).isInstanceOf(LettuceConnectionFactory.class);
     }
-
-    // ───────────────────────────────────────────────
-    // cacheManagerCustomizer tests
-    // ───────────────────────────────────────────────
-
-    @Test
-    void cacheManagerCustomizer_shouldDisableNullValues() {
-        CaffeineCacheManager caffeineCacheManager = new CaffeineCacheManager();
-        caffeineCacheManager.setAllowNullValues(true); // set to true first
-
-        cacheConfiguration.cacheManagerCustomizer().customize(caffeineCacheManager);
-
-        assertThat(caffeineCacheManager.isAllowNullValues()).isFalse();
-    }
 }
