@@ -7,22 +7,3 @@ idam:
   redirectUrl: ${IA_IDAM_REDIRECT_URI:http://localhost:3002/oauth2/callback}
   scope: "openid profile authorities acr roles search-user manage-user create-user"
 
-spring:
-  security:
-    oauth2:
-      client:
-        provider:
-          oidc:
-            issuer-uri: ${OPEN_ID_IDAM_URL:http://127.0.0.1:5000}/o
-        registration:
-          oidc:
-            client-id: ${IA_IDAM_CLIENT_ID:ia}
-            client-secret: ${IA_IDAM_SECRET:something}
-  cache:
-    cache-names: userInfoCache, legalRepATokenCache, caseOfficerTokenCache, adminOfficerTokenCache, homeOfficeApcTokenCache, homeOfficeLartTokenCache, homeOfficePouTokenCache, homeOfficeGenericTokenCache, legalRepShareCaseATokenCache, legalRepOrgSuccessTokenCache, legalRepOrgDeletedTokenCache, judgeTokenCache, citizenTokenCache, systemTokenCache
-    caffeine:
-      spec: expireAfterAccess=3600s
-
-launchDarkly:
-  sdkKey: ${LAUNCH_DARKLY_SDK_KEY:sdk-key-test}
-
