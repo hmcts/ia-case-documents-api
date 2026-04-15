@@ -76,6 +76,14 @@ public class CcdScenarioRunnerTest {
         MapSerializer.setObjectMapper(objectMapper);
         RestAssured.baseURI = targetInstance;
         RestAssured.useRelaxedHTTPSValidation();
+        String token = authorizationHeadersProvider.getCaseOfficerAuthorization().getValue("Authorization");
+        try {
+            Thread.sleep(1000);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        assertNotNull(token);
+        when(requestUserAccessTokenProvider.getAccessToken()).thenReturn(token);
         loadPropertiesIntoMapValueExpander();
 
         for (Fixture fixture : fixtures) {
@@ -109,7 +117,7 @@ public class CcdScenarioRunnerTest {
 
                 Object scenarioDisabled = MapValueExtractor.extractOrDefault(scenario, "disabled", false);
                 if (Boolean.parseBoolean(scenarioDisabled.toString())) {
-                    return Arguments.of("Disabled: " + description, null, null, null, null, 0, 0, null, null);
+                    return Arguments.of("Disabled: " + description, null, null, null, null, 0, 0, null);
                 }
 
                 Map<String, String> templatesByFilename = StringResourceLoader.load("/templates/*.json");
@@ -134,7 +142,6 @@ public class CcdScenarioRunnerTest {
                 final int expectedStatus = MapValueExtractor.extractOrDefault(scenario, "expectation.status", 200);
                 final String credentials = MapValueExtractor.extractOrDefault(scenario, "request.credentials", "none");
                 final Headers authorizationHeaders = getAuthorizationHeaders(credentials);
-                final String token = authorizationHeaders.getValue("Authorization");
                 String expectedResponseBody = buildCallbackResponseBody(
                     MapValueExtractor.extract(scenario, "expectation"),
                     templatesByFilename
@@ -148,8 +155,7 @@ public class CcdScenarioRunnerTest {
                     requestUri,
                     expectedStatus,
                     testCaseId,
-                    expectedResponse,
-                    token
+                    expectedResponse
                 );
 
             } catch (IOException e) {
@@ -168,11 +174,7 @@ public class CcdScenarioRunnerTest {
                                                      String requestUri,
                                                      int expectedStatus,
                                                      long testCaseId,
-                                                     Map<String, Object> expectedResponse,
-                                                     String token) throws IOException {
-        assertNotNull(token, "Token should not be null for scenario: " + description);
-        when(requestUserAccessTokenProvider.getAccessToken()).thenReturn(token);
-
+                                                     Map<String, Object> expectedResponse) throws IOException {
         int maxRetries = 3;
         assumeFalse(description.startsWith("Disabled:"), "Test marked as disabled");
         for (int i = 0; i < maxRetries; i++) {
