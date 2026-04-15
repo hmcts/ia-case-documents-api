@@ -39,7 +39,7 @@ public class CacheConfiguration {
     public CacheManager cacheManager(RedisConnectionFactory redisConnectionFactory) {
         try {
             redisConnectionFactory.getConnection().ping();
-            log.info("Redis connection successful - using Redis for systemUserTokenCache and userInfoCache");
+            log.info("Redis connection successful - using Redis for systemTokenCache and userTokenCache");
 
             // Idam user info config
             AesEncryptingRedisSerializer<UserInfo> userInfoSerializer =
@@ -79,18 +79,18 @@ public class CacheConfiguration {
                     .withCacheConfiguration("systemUserTokenCache", tokenCacheConfig)
                     .withCacheConfiguration("userInfoCache", userInfoCacheConfig)
                     // functional tests
-                    .withCacheConfiguration("legalRepATokenCache", userInfoCacheConfig)
-                    .withCacheConfiguration("caseOfficerTokenCache", userInfoCacheConfig)
-                    .withCacheConfiguration("adminOfficerTokenCache", userInfoCacheConfig)
-                    .withCacheConfiguration("homeOfficeApcTokenCache", userInfoCacheConfig)
-                    .withCacheConfiguration("homeOfficeLartTokenCache", userInfoCacheConfig)
-                    .withCacheConfiguration("homeOfficePouTokenCache", userInfoCacheConfig)
-                    .withCacheConfiguration("homeOfficeGenericTokenCache", userInfoCacheConfig)
-                    .withCacheConfiguration("legalRepShareCaseATokenCache", userInfoCacheConfig)
-                    .withCacheConfiguration("legalRepOrgSuccessTokenCache", userInfoCacheConfig)
-                    .withCacheConfiguration("legalRepOrgDeletedTokenCache", userInfoCacheConfig)
-                    .withCacheConfiguration("judgeTokenCache", userInfoCacheConfig)
-                    .withCacheConfiguration("citizenTokenCache", userInfoCacheConfig)
+                    .withCacheConfiguration("legalRepATokenCache", tokenCacheConfig)
+                    .withCacheConfiguration("caseOfficerTokenCache", tokenCacheConfig)
+                    .withCacheConfiguration("adminOfficerTokenCache", tokenCacheConfig)
+                    .withCacheConfiguration("homeOfficeApcTokenCache", tokenCacheConfig)
+                    .withCacheConfiguration("homeOfficeLartTokenCache", tokenCacheConfig)
+                    .withCacheConfiguration("homeOfficePouTokenCache", tokenCacheConfig)
+                    .withCacheConfiguration("homeOfficeGenericTokenCache", tokenCacheConfig)
+                    .withCacheConfiguration("legalRepShareCaseATokenCache", tokenCacheConfig)
+                    .withCacheConfiguration("legalRepOrgSuccessTokenCache", tokenCacheConfig)
+                    .withCacheConfiguration("legalRepOrgDeletedTokenCache", tokenCacheConfig)
+                    .withCacheConfiguration("judgeTokenCache", tokenCacheConfig)
+                    .withCacheConfiguration("citizenTokenCache", tokenCacheConfig)
 
                     .build();
 
@@ -105,6 +105,13 @@ public class CacheConfiguration {
     public RedisConnectionFactory redisConnectionFactory(
             @Value("${spring.data.redis.url}") String redisUrl,
             @Value("${spring.data.redis.secret}") String accessKey) {
+
+        if (redisUrl == null || redisUrl.isBlank()) {
+            log.warn("No Redis URL configured");
+            // return a dummy factory - cacheManager will catch the ping failure and fall back
+            return new LettuceConnectionFactory();
+        }
+
 
         try {
             RedisURI redisUri = RedisURI.create(redisUrl);
