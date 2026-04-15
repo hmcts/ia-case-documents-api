@@ -111,7 +111,7 @@ public class CcdScenarioRunnerTest {
     private Stream<Arguments> scenarioSources() {
         return scenarioSources.stream().map(scenarioSource -> {
             try {
-                Map<String, Object> scenario = MapSerializer.deserialize(scenarioSource);
+                Map<String, Object> scenario = deserializeWithExpandedValues(scenarioSource);
 
                 String description = MapValueExtractor.extract(scenario, "description");
 
