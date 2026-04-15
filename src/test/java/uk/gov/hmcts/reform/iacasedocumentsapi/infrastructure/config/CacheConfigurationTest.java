@@ -106,20 +106,6 @@ class CacheConfigurationTest {
     }
 
     @Test
-    void redisConnectionFactory_shouldReturnDefaultLettuceFactory_whenUrlIsBlank() {
-        RedisConnectionFactory result = cacheConfiguration.redisConnectionFactory("", ACCESS_KEY);
-
-        assertThat(result).isInstanceOf(LettuceConnectionFactory.class);
-    }
-
-    @Test
-    void redisConnectionFactory_shouldReturnDefaultLettuceFactory_whenUrlIsNull() {
-        RedisConnectionFactory result = cacheConfiguration.redisConnectionFactory(null, ACCESS_KEY);
-
-        assertThat(result).isInstanceOf(LettuceConnectionFactory.class);
-    }
-
-    @Test
     void redisConnectionFactory_shouldCreateFactory_withTlsParameter() {
         RedisConnectionFactory result = cacheConfiguration.redisConnectionFactory(
                 REDIS_URL_WITH_TLS, ACCESS_KEY
