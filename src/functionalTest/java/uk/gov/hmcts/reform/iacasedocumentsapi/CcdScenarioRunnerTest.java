@@ -71,8 +71,6 @@ public class CcdScenarioRunnerTest {
 
     private final Collection<String> scenarioSources = new ArrayList<>();
 
-    private String token;
-
     @BeforeAll
     public void beforeAll() throws IOException {
         MapSerializer.setObjectMapper(objectMapper);
@@ -100,13 +98,6 @@ public class CcdScenarioRunnerTest {
         System.out.println((char) 27 + "[36m" + "-------------------------------------------------------------------");
         System.out.println((char) 27 + "[33m" + "RUNNING " + scenarioSources.size() + " SCENARIOS");
         System.out.println((char) 27 + "[36m" + "-------------------------------------------------------------------");
-        token = authorizationHeadersProvider.getCaseOfficerAuthorization().getValue("Authorization");
-        try {
-            Thread.sleep(1000);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        assertNotNull(token);
     }
 
     private Stream<Arguments> scenarioSources() {
@@ -118,7 +109,7 @@ public class CcdScenarioRunnerTest {
 
                 Object scenarioDisabled = MapValueExtractor.extractOrDefault(scenario, "disabled", false);
                 if (Boolean.parseBoolean(scenarioDisabled.toString())) {
-                    return Arguments.of("Disabled: " + description, null, null, null, null, 0, 0, null);
+                    return Arguments.of("Disabled: " + description, null, null, null, null, 0, 0, null, null);
                 }
 
                 Map<String, String> templatesByFilename = StringResourceLoader.load("/templates/*.json");
@@ -143,6 +134,7 @@ public class CcdScenarioRunnerTest {
                 final int expectedStatus = MapValueExtractor.extractOrDefault(scenario, "expectation.status", 200);
                 final String credentials = MapValueExtractor.extractOrDefault(scenario, "request.credentials", "none");
                 final Headers authorizationHeaders = getAuthorizationHeaders(credentials);
+                final String token = authorizationHeaders.getValue("Authorization");
                 String expectedResponseBody = buildCallbackResponseBody(
                     MapValueExtractor.extract(scenario, "expectation"),
                     templatesByFilename
@@ -156,7 +148,8 @@ public class CcdScenarioRunnerTest {
                     requestUri,
                     expectedStatus,
                     testCaseId,
-                    expectedResponse
+                    expectedResponse,
+                    token
                 );
 
             } catch (IOException e) {
@@ -175,7 +168,9 @@ public class CcdScenarioRunnerTest {
                                                      String requestUri,
                                                      int expectedStatus,
                                                      long testCaseId,
-                                                     Map<String, Object> expectedResponse) throws IOException {
+                                                     Map<String, Object> expectedResponse,
+                                                     String token) throws IOException {
+        assertNotNull(token, "Token should not be null for scenario: " + description);
         when(requestUserAccessTokenProvider.getAccessToken()).thenReturn(token);
 
         int maxRetries = 3;
