@@ -31,17 +31,9 @@ java {
     }
 }
 
-compileJava {
-    options.compilerArgs << '-parameters' << '-Xlint:deprecation' << "-Xlint:unchecked"
-}
-
-compileTestJava {
-    options.compilerArgs << '-Xlint:deprecation' << "-Xlint:unchecked"
-}
-
 tasks.withType(JavaCompile).configureEach {
     configure(options) {
-        options.compilerArgs << '-parameters'
+        options.compilerArgs << '-parameters' << '-Xlint:deprecation' << "-Xlint:unchecked"
     }
 }
 
