@@ -2,6 +2,7 @@ package uk.gov.hmcts.reform.iacasedocumentsapi;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assumptions.assumeFalse;
 import static org.mockito.Mockito.when;
 
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -178,6 +179,7 @@ public class CcdScenarioRunnerTest {
         when(requestUserAccessTokenProvider.getAccessToken()).thenReturn(token);
 
         int maxRetries = 3;
+        assumeFalse(description.startsWith("Disabled:"), "Test marked as disabled");
         for (int i = 0; i < maxRetries; i++) {
             try {
                 actualResponse = null;
