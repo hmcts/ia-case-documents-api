@@ -1,6 +1,6 @@
 {
   "description": "RIA-4926 Generate Hearing Bundle (AIP journey)",
-  "enabled": "{$featureFlag.isEmStitchingEnabled}",
+  "disabled": "!{$featureFlag.isEmStitchingEnabled}",
   "launchDarklyKey": "reheard-feature:true",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",

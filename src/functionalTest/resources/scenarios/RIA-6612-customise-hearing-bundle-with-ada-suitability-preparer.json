@@ -1,6 +1,6 @@
 {
   "description": "RIA-6612-customise-hearing-ready-bundle-preparer-with Tribunal Document (Ada Suitabilty)",
-  "enabled": "{$featureFlag.isEmStitchingEnabled}",
+  "disabled": "!{$featureFlag.isEmStitchingEnabled}",
   "request": {
     "uri": "/asylum/ccdAboutToStart",
     "credentials": "CaseOfficer",

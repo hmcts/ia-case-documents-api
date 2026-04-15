@@ -1,7 +1,7 @@
 {
   "description": "RIA-941 Generate hearing bundle - enable stitching",
   "disabled": "{$featureFlag.isEmStitchingEnabled}",
-  "enabled": "{$featureFlag.isEmStitchingEnabled}",
+  "disabled": "!{$featureFlag.isEmStitchingEnabled}",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
     "credentials": "CaseOfficer",
