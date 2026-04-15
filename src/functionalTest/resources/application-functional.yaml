@@ -7,8 +7,3 @@ idam:
   redirectUrl: ${IA_IDAM_REDIRECT_URI:http://localhost:3002/oauth2/callback}
   scope: "openid profile authorities acr roles search-user manage-user create-user"
 
-spring:
-  cache:
-    cache-names: userInfoCache, legalRepATokenCache, caseOfficerTokenCache, adminOfficerTokenCache, homeOfficeApcTokenCache, homeOfficeLartTokenCache, homeOfficePouTokenCache, homeOfficeGenericTokenCache, legalRepShareCaseATokenCache, legalRepOrgSuccessTokenCache, legalRepOrgDeletedTokenCache, judgeTokenCache, citizenTokenCache, systemUserTokenCache
-    caffeine:
-      spec: expireAfterAccess=3600s

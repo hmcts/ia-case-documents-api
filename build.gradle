@@ -326,7 +326,6 @@ dependencies {
     implementation 'org.springframework.security:spring-security-oauth2-client'
     implementation 'org.springframework.security:spring-security-oauth2-resource-server'
     implementation 'org.springframework.security:spring-security-oauth2-jose'
-    implementation 'com.github.ben-manes.caffeine:caffeine'    // CVE-2019-17195
     implementation group: 'com.nimbusds', name: 'nimbus-jose-jwt', version: '10.9'
 
     // CVE-2021-27568
