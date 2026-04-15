@@ -32,9 +32,11 @@ java {
 }
 
 tasks.withType(JavaCompile).configureEach {
-    configure(options) {
-        options.compilerArgs << '-parameters' << '-Xlint:deprecation' << "-Xlint:unchecked"
-    }
+    options.compilerArgs += [
+            '-parameters',
+            '-Xlint:deprecation',
+            '-Xlint:unchecked'
+    ]
 }
 
 tasks.withType(Test).configureEach {
