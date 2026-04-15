@@ -72,17 +72,27 @@ public class CcdScenarioRunnerTest {
     private final Collection<String> scenarioSources = new ArrayList<>();
 
     @BeforeAll
-    public void beforeAll() throws IOException {
+    public void beforeAll() throws IOException, InterruptedException {
         MapSerializer.setObjectMapper(objectMapper);
         RestAssured.baseURI = targetInstance;
         RestAssured.useRelaxedHTTPSValidation();
-        String token = authorizationHeadersProvider.getCaseOfficerAuthorization().getValue("Authorization");
-        try {
-            Thread.sleep(1000);
-        } catch (Exception e) {
-            e.printStackTrace();
+        String token;
+        int i = 0;
+        while (true) {
+            try {
+                token = authorizationHeadersProvider.getCaseOfficerAuthorization().getValue("Authorization");
+                Thread.sleep(1000);
+                assertNotNull(token);
+                break;
+            } catch (Exception e) {
+                i++;
+                if (i == 2) {
+                    System.out.println("Failed to obtain access token, giving up: " + e.getMessage());
+                    throw e;
+                }
+                System.out.println("Failed to obtain access token, trying again: " + e.getMessage());
+            }
         }
-        assertNotNull(token);
         when(requestUserAccessTokenProvider.getAccessToken()).thenReturn(token);
         loadPropertiesIntoMapValueExpander();
 
