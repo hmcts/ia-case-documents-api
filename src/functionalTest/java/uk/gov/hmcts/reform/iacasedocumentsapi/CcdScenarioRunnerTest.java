@@ -125,8 +125,11 @@ public class CcdScenarioRunnerTest {
 
                 String description = MapValueExtractor.extract(scenario, "description");
 
-                Object scenarioDisabled = MapValueExtractor.extractOrDefault(scenario, "disabled", false);
-                if (Boolean.parseBoolean(scenarioDisabled.toString())) {
+                String scenarioDisabled = MapValueExtractor.extractOrDefault(scenario, "disabled", "false");
+                boolean isDisabled = scenarioDisabled.startsWith("!")
+                    ? !Boolean.parseBoolean(scenarioDisabled.substring(1))
+                    : Boolean.parseBoolean(scenarioDisabled);
+                if (isDisabled) {
                     return Arguments.of("Disabled: " + description, null, null, null, null, 0, 0, null);
                 }
 
