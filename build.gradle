@@ -299,6 +299,8 @@ dependencyManagement {
             entry 'mockito-core'
             entry 'mockito-junit-jupiter'
         }
+
+        dependency group: 'org.apache.commons', name: 'commons-lang3', version: '3.20.0'
     }
 }
 
