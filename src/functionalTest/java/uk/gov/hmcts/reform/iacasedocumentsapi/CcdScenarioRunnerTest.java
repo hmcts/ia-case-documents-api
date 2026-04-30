@@ -193,7 +193,7 @@ public class CcdScenarioRunnerTest {
                                                      long testCaseId,
                                                      Map<String, Object> expectedResponse) throws IOException {
         int maxRetries = 3;
-        assumeFalse(description.startsWith("Disabled:"), "Test marked as disabled");
+        assumeFalse(fileName.startsWith("Disabled:"), "Test marked as disabled");
         for (int i = 0; i < maxRetries; i++) {
             try {
                 actualResponse = null;
