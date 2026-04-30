@@ -94,11 +94,12 @@ class InternalCaseListedLetterTemplateTest {
         assertEquals(formattedListCaseHearingTime, fieldValuesMap.get("hearingTime"));
         assertEquals(formattedManchesterHearingCentreAddress, fieldValuesMap.get("hearingLocation"));
         assertEquals(LocalDate.now().format(DateTimeFormatter.ofPattern("d MMMM yyyy")), fieldValuesMap.get("dateLetterSent"));
-        assertEquals(addressLine1, fieldValuesMap.get("address_line_1"));
-        assertEquals(addressLine2, fieldValuesMap.get("address_line_2"));
-        assertEquals(addressLine3, fieldValuesMap.get("address_line_3"));
-        assertEquals(postTown, fieldValuesMap.get("address_line_4"));
-        assertEquals(postCode, fieldValuesMap.get("address_line_5"));
+        assertEquals(appellantGivenNames + " " + appellantFamilyName, fieldValuesMap.get("address_line_1"));
+        assertEquals(addressLine1, fieldValuesMap.get("address_line_2"));
+        assertEquals(addressLine2, fieldValuesMap.get("address_line_3"));
+        assertEquals(addressLine3, fieldValuesMap.get("address_line_4"));
+        assertEquals(postTown, fieldValuesMap.get("address_line_5"));
+        assertEquals(postCode, fieldValuesMap.get("address_line_6"));
         assertEquals("In Person", fieldValuesMap.get("hearingChannel"));
     }
 
@@ -117,11 +118,12 @@ class InternalCaseListedLetterTemplateTest {
         assertEquals(formattedListCaseHearingTime, fieldValuesMap.get("hearingTime"));
         assertEquals(formattedManchesterHearingCentreAddress, fieldValuesMap.get("hearingLocation"));
         assertEquals(LocalDate.now().format(DateTimeFormatter.ofPattern("d MMMM yyyy")), fieldValuesMap.get("dateLetterSent"));
-        assertEquals(addressLine1, fieldValuesMap.get("address_line_1"));
-        assertEquals(addressLine2, fieldValuesMap.get("address_line_2"));
-        assertEquals(addressLine3, fieldValuesMap.get("address_line_3"));
-        assertEquals(postTown, fieldValuesMap.get("address_line_4"));
-        assertEquals(Nationality.ES.toString(), fieldValuesMap.get("address_line_5"));
+        assertEquals(appellantGivenNames + " " + appellantFamilyName, fieldValuesMap.get("address_line_1"));
+        assertEquals(addressLine1, fieldValuesMap.get("address_line_2"));
+        assertEquals(addressLine2, fieldValuesMap.get("address_line_3"));
+        assertEquals(addressLine3, fieldValuesMap.get("address_line_4"));
+        assertEquals(postTown, fieldValuesMap.get("address_line_5"));
+        assertEquals(Nationality.ES.toString(), fieldValuesMap.get("address_line_6"));
         assertEquals("In Person", fieldValuesMap.get("hearingChannel"));
     }
 

@@ -1,5 +1,6 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils;
 
+import static java.lang.Math.min;
 import static java.util.Objects.requireNonNull;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ApplicantType.APPELLANT;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumAppealType.DC;
@@ -46,7 +47,6 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.RemissionDecision;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.RemissionType;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.NationalityGovUk;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.*;
-
 
 public class AsylumCaseUtils {
 
@@ -97,9 +97,8 @@ public class AsylumCaseUtils {
 
     public static List<IdValue<Direction>> getCaseDirections(AsylumCase asylumCase) {
         final Optional<List<IdValue<Direction>>> maybeDirections = asylumCase.read(DIRECTIONS);
-        final List<IdValue<Direction>> existingDirections = maybeDirections
-                .orElse(Collections.emptyList());
-        return existingDirections;
+
+        return maybeDirections.orElse(Collections.emptyList());
     }
 
     public static List<Direction> getCaseDirectionsBasedOnTag(AsylumCase asylumCase, DirectionTag directionTag) {
@@ -241,11 +240,8 @@ public class AsylumCaseUtils {
     public static List<IdValue<DocumentWithMetadata>> getAddendumEvidenceDocuments(AsylumCase asylumCase) {
         Optional<List<IdValue<DocumentWithMetadata>>> maybeExistingAdditionalEvidenceDocuments =
                 asylumCase.read(ADDENDUM_EVIDENCE_DOCUMENTS);
-        if (maybeExistingAdditionalEvidenceDocuments.isEmpty()) {
-            return Collections.emptyList();
-        }
+        return maybeExistingAdditionalEvidenceDocuments.orElse(Collections.emptyList());
 
-        return maybeExistingAdditionalEvidenceDocuments.get();
     }
 
     public static Optional<Document> getDecisionOfNoticeDocuments(AsylumCase asylumCase) {
@@ -259,9 +255,7 @@ public class AsylumCaseUtils {
             return Optional.empty();
         }
 
-        Optional<IdValue<DocumentWithMetadata>> optionalLatestAddendum = addendums.stream().findFirst();
-
-        return optionalLatestAddendum.isEmpty() ? Optional.empty() : Optional.of(optionalLatestAddendum.get());
+        return addendums.stream().findFirst();
     }
 
     public static boolean isDirectionPartyRespondent(AsylumCase asylumCase) {
@@ -308,6 +302,8 @@ public class AsylumCaseUtils {
 
         List<String> appellantAddressAsList = new ArrayList<>();
 
+        addAppellantName(asylumCase, appellantAddressAsList);
+
         appellantAddressAsList.add(address.getAddressLine1().orElseThrow(() -> new IllegalStateException("appellantAddress line 1 is not present")));
         String addressLine2 = address.getAddressLine2().orElse(null);
         String addressLine3 = address.getAddressLine3().orElse(null);
@@ -335,6 +331,8 @@ public class AsylumCaseUtils {
             .orElseThrow(() -> new IllegalStateException("OOC Address line 2 is not present"));
 
         List<String> appellantAddressAsList = new ArrayList<>();
+
+        addAppellantName(asylumCase, appellantAddressAsList);
 
         appellantAddressAsList.add(oocAddressLine1);
         appellantAddressAsList.add(oocAddressLine2);
@@ -626,6 +624,13 @@ public class AsylumCaseUtils {
         }
 
         return (startsWithVowelSound ? "An " : "A ") + trimmedNoun;
+    }
+
+    private static void addAppellantName(AsylumCase asylumCase, List<String> appellantAddressAsList) {
+        String appellantGivenNames = asylumCase.read(AsylumCaseDefinition.APPELLANT_GIVEN_NAMES, String.class).orElse("");
+        String appellantFamilyName = asylumCase.read(AsylumCaseDefinition.APPELLANT_FAMILY_NAME, String.class).orElse("");
+        String fullName = appellantGivenNames + " " + appellantFamilyName;
+        appellantAddressAsList.add(fullName.substring(0, min(fullName.length(), 64)));
     }
 }
 

@@ -9,6 +9,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Map;
 import java.util.Optional;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -123,11 +124,12 @@ class InternalEndAppealLetterTemplateTest {
         dataSetupAiPInCountry();
         fieldValuesMap = internalEndAppealLetterTemplate.mapFieldValues(caseDetails);
         assertAppealDetails();
-        assertEquals(addressLine1, fieldValuesMap.get("address_line_1"));
-        assertEquals(addressLine2, fieldValuesMap.get("address_line_2"));
-        assertEquals(addressLine3, fieldValuesMap.get("address_line_3"));
-        assertEquals(postTown, fieldValuesMap.get("address_line_4"));
-        assertEquals(postCode, fieldValuesMap.get("address_line_5"));
+        assertEquals(appellantGivenNames + " " + appellantFamilyName, fieldValuesMap.get("address_line_1"));
+        assertEquals(addressLine1, fieldValuesMap.get("address_line_2"));
+        assertEquals(addressLine2, fieldValuesMap.get("address_line_3"));
+        assertEquals(addressLine3, fieldValuesMap.get("address_line_4"));
+        assertEquals(postTown, fieldValuesMap.get("address_line_5"));
+        assertEquals(postCode, fieldValuesMap.get("address_line_6"));
     }
 
     @Test
@@ -135,10 +137,11 @@ class InternalEndAppealLetterTemplateTest {
         dataSetupAiPOoc();
         fieldValuesMap = internalEndAppealLetterTemplate.mapFieldValues(caseDetails);
         assertAppealDetails();
-        assertEquals(oocAddressLine1, fieldValuesMap.get("address_line_1"));
-        assertEquals(oocAddressLine2, fieldValuesMap.get("address_line_2"));
-        assertEquals(oocAddressLine3, fieldValuesMap.get("address_line_3"));
-        assertEquals(Nationality.ES.toString(), fieldValuesMap.get("address_line_4"));
+        assertEquals(appellantGivenNames + " " + appellantFamilyName, fieldValuesMap.get("address_line_1"));
+        assertEquals(oocAddressLine1, fieldValuesMap.get("address_line_2"));
+        assertEquals(oocAddressLine2, fieldValuesMap.get("address_line_3"));
+        assertEquals(oocAddressLine3, fieldValuesMap.get("address_line_4"));
+        assertEquals(Nationality.ES.toString(), fieldValuesMap.get("address_line_5"));
     }
 
     @Test
