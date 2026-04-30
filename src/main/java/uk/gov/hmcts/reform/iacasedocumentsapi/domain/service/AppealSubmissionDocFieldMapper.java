@@ -129,8 +129,7 @@ public class AppealSubmissionDocFieldMapper {
                         .filter(idValue -> idValue.getValue().containsKey("code"))
                         .map(idValue -> idValue.getValue().get("code"))
                         .map(code -> stringProvider.get("isoCountries", code))
-                        .filter(Optional::isPresent)
-                        .map(Optional::get)
+                        .flatMap(Optional::stream)
                         .map(nationality -> ImmutableMap.of("nationality", nationality))
                         .collect(Collectors.toList())
         );
@@ -144,8 +143,7 @@ public class AppealSubmissionDocFieldMapper {
                         .orElse(Collections.emptyList())
                         .stream()
                         .map(code -> stringProvider.get("appealGrounds", code))
-                        .filter(Optional::isPresent)
-                        .map(Optional::get)
+                        .flatMap(Optional::stream)
                         .map(appealGround -> ImmutableMap.of("appealGround", appealGround))
                         .collect(Collectors.toList())
         );

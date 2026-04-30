@@ -278,7 +278,7 @@ public class AsylumPreSubmitCallbackDispatcherTest {
             (List<PreSubmitCallbackHandler<AsylumCase>>) ReflectionTestUtils.getField(dispatcher, "sortedCallbackHandlers");
 
         assertEquals(2, sortedDispatcher.size());
-        assertEquals(h1, sortedDispatcher.get(0));
+        assertEquals(h1, sortedDispatcher.getFirst());
         assertEquals(h3, sortedDispatcher.get(1));
     }
 }

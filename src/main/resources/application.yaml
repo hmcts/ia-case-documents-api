@@ -15,9 +15,7 @@ management:
 
   health:
     redis:
-      enabled: false  # don't let Redis affect pod health
-    probes:
-      enabled: true
+      enabled: false
     group:
       readiness:
         include: ping
@@ -37,6 +35,8 @@ management:
       serviceAuth:
         uri: ${S2S_URL:http://localhost:4502}/health
         response: '"status":"UP"'
+
+  endpoint.health.probes.enabled: true
 
 
 spring:

@@ -187,8 +187,8 @@ class SaveNotificationsToDataPdfServiceTest {
             assertEquals(storedNotification, idValue.getValue());
         }
 
-        assertNotNull(response.get(0).getValue().getNotificationDocument());
-        assertEquals(pdf, response.get(0).getValue().getNotificationDocument());
+        assertNotNull(response.getFirst().getValue().getNotificationDocument());
+        assertEquals(pdf, response.getFirst().getValue().getNotificationDocument());
     }
 
     private File createPdfFile() throws IOException {

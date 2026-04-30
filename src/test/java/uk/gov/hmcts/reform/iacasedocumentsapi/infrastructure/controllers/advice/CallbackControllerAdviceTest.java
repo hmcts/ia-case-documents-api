@@ -8,7 +8,7 @@ import ch.qos.logback.classic.Logger;
 import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.core.read.ListAppender;
 import java.util.List;
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -78,7 +78,7 @@ class CallbackControllerAdviceTest {
         List<ILoggingEvent> logEvents = this.listAppender.list;
         assertEquals(1, logEvents.size());
 
-        assertThat(logEvents.get(0).getFormattedMessage())
+        assertThat(logEvents.getFirst().getFormattedMessage())
                 .isLessThanOrEqualTo(logMessage + ex.getMessage() + ".");
 
     }
@@ -101,7 +101,7 @@ class CallbackControllerAdviceTest {
         List<ILoggingEvent> logEvents = this.listAppender.list;
         assertEquals(logEvents.size(), 1);
 
-        assertThat(logEvents.get(0).getFormattedMessage())
+        assertThat(logEvents.getFirst().getFormattedMessage())
             .isLessThanOrEqualTo(logMessage + ex.getMessage() + ".");
 
         verify(errorResponseLogger).maybeLogErrorsListResponse(any());
@@ -124,7 +124,7 @@ class CallbackControllerAdviceTest {
 
         assertEquals(logEvents.size(), 1);
         String logMessage = "Document service Exception with message: ";
-        assertThat(logEvents.get(0).getFormattedMessage()).isGreaterThanOrEqualTo(logMessage + testExceptionMessage + ".");
+        assertThat(logEvents.getFirst().getFormattedMessage()).isGreaterThanOrEqualTo(logMessage + testExceptionMessage + ".");
 
         verify(errorResponseLogger).maybeLogException(any());
 
@@ -143,7 +143,7 @@ class CallbackControllerAdviceTest {
         List<ILoggingEvent> logEvents = this.listAppender.list;
 
         assertEquals(logEvents.size(), 1);
-        assertThat(logEvents.get(0).getFormattedMessage()).isGreaterThanOrEqualTo(logMessage + ex.getMessage() + ".");
+        assertThat(logEvents.getFirst().getFormattedMessage()).isGreaterThanOrEqualTo(logMessage + ex.getMessage() + ".");
 
     }
 

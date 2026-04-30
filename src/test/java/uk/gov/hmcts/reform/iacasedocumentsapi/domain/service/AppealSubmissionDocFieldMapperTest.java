@@ -33,6 +33,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.*;
 
+@SuppressWarnings("unchecked")
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
 class AppealSubmissionDocFieldMapperTest {
@@ -181,7 +182,7 @@ class AppealSubmissionDocFieldMapperTest {
         // Then
         List<Map<String, String>> nationalityList = (List<Map<String, String>>) result.get("appellantNationalities");
         assertEquals(1, nationalityList.size());
-        assertEquals("Unknown Country", nationalityList.get(0).get("nationality"));
+        assertEquals("Unknown Country", nationalityList.getFirst().get("nationality"));
     }
 
     @Test

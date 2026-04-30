@@ -85,7 +85,7 @@ public class DocmosisDocumentGeneratorTest {
             any()
         );
 
-        HttpEntity actualHttpEntity = httpEntityCaptor.getAllValues().get(0);
+        HttpEntity actualHttpEntity = httpEntityCaptor.getAllValues().getFirst();
 
         HttpHeaders actualHeaders = actualHttpEntity.getHeaders();
         MultiValueMap actualBody = (MultiValueMap) actualHttpEntity.getBody();

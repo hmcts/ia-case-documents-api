@@ -112,7 +112,7 @@ public class AsylumCaseUtils {
     }
 
     public static String getDirectionDueDate(AsylumCase asylumCase, DirectionTag tag) {
-        Direction direction = getCaseDirectionsBasedOnTag(asylumCase, tag).get(0);
+        Direction direction = getCaseDirectionsBasedOnTag(asylumCase, tag).getFirst();
         return direction.getDateDue();
     }
 

@@ -10,8 +10,8 @@ import static uk.gov.hmcts.reform.iacasedocumentsapi.component.testutils.fixture
 
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import uk.gov.hmcts.reform.iacasedocumentsapi.component.testutils.*;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.Event;
@@ -23,7 +23,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.utilities.DocmosisStub;
 class StitchingApiHttpErrorsTest extends SpringBootIntegrationTest implements WithServiceAuthStub,
         WithDocumentUploadStub, DocmosisStub, WithIdamStub, GivensBuilder, WithStitchingStub, WithRoleAssignmentStub {
 
-    @MockBean
+    @MockitoBean
     private FeatureToggler featureToggler;
 
     private static final String STITCH_API_PATH = "/api/new-bundle";

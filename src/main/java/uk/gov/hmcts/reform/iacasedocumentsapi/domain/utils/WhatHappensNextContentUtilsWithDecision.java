@@ -62,7 +62,7 @@ public final class WhatHappensNextContentUtilsWithDecision {
                 HOME_OFFICE_ADJOURN_EXPEDITE_TRANSFER_CONTENT;
             case JUDGE_REVIEW_LO -> HOME_OFFICE_JUDGES_REVIEW_CONTENT;
             case LINK_OR_UNLINK -> HOME_OFFICE_LINK_OR_UNLINK_CONTENT;
-            case WITHDRAW -> String.format(HOME_OFFICE_WITHDRAWN_CONTENT, dueDate);
+            case WITHDRAW -> HOME_OFFICE_WITHDRAWN_CONTENT.formatted(dueDate);
             case REINSTATE -> HOME_OFFICE_REINSTATE_APPEAL_CONTENT;
             case OTHER -> APPLICATION_TYPE_OTHER_CONTENT;
             default -> "Unknown";

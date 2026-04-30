@@ -34,10 +34,7 @@ public final class MapFieldAssertor {
             Object expectedValue = expectedEntry.getValue();
             Object actualValue = actualMap.get(key);
 
-            if ((expectedValue instanceof List) && (actualValue instanceof List)) {
-
-                List expectedValueCollection = (List) expectedValue;
-                List actualValueCollection = (List) actualValue;
+            if ((expectedValue instanceof List expectedValueCollection) && (actualValue instanceof List actualValueCollection)) {
 
                 for (int i = 0; i < expectedValueCollection.size(); i++) {
 
@@ -73,17 +70,13 @@ public final class MapFieldAssertor {
 
         } else {
 
-            if ((expectedValue instanceof String) && (actualValue instanceof String)) {
-
-                String expectedValueString = (String) expectedValue;
+            if ((expectedValue instanceof String expectedValueString) && (actualValue instanceof String actualValueString)) {
 
                 if (expectedValueString.length() > 3
                     && expectedValueString.startsWith("$/")
                     && expectedValueString.endsWith("/")) {
 
                     expectedValueString = expectedValueString.substring(2, expectedValueString.length() - 1);
-
-                    String actualValueString = (String) actualValue;
 
                     assertThat(
                         "Expected field matches regular expression (" + path + ")",

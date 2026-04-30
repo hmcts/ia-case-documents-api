@@ -258,7 +258,7 @@ public class AsylumCaseUtilsTest {
 
         assertEquals(1, returnedDirection.size());
 
-        assertEquals(directionTag, returnedDirection.get(0).getTag());
+        assertEquals(directionTag, returnedDirection.getFirst().getTag());
 
     }
 
@@ -502,7 +502,7 @@ public class AsylumCaseUtilsTest {
         List<String> result = AsylumCaseUtils.getAppellantAddressAsList(asylumCase);
 
         assertEquals(6, result.size());
-        assertEquals("Aa Pp", result.get(0));
+        assertEquals("Aa Pp", result.getFirst());
         assertEquals("Apartment 99", result.get(1));
         assertEquals("Example Road", result.get(2));
         assertEquals("Example County", result.get(3));
@@ -527,7 +527,7 @@ public class AsylumCaseUtilsTest {
         List<String> result = AsylumCaseUtils.getAppellantAddressAsList(asylumCase);
 
         assertEquals(6, result.size());
-        assertEquals("VerylongVerylongVerylongVerylongAa VerylongVerylongVerylongVeryl", result.get(0));
+        assertEquals("VerylongVerylongVerylongVerylongAa VerylongVerylongVerylongVeryl", result.getFirst());
         assertEquals("Apartment 99", result.get(1));
         assertEquals("Example Road", result.get(2));
         assertEquals("Example County", result.get(3));

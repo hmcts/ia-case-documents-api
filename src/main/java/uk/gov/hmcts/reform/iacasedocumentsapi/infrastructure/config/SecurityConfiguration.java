@@ -1,5 +1,6 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.config;
 
+import static org.springframework.security.config.Customizer.withDefaults;
 import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
 
 import java.util.ArrayList;
@@ -41,8 +42,7 @@ public class SecurityConfiguration {
 
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
-        return (web) -> web.ignoring().mvcMatchers(
-            anonymousPaths
+        return (web) -> web.ignoring().requestMatchers(anonymousPaths
                 .stream()
                 .toArray(String[]::new)
         );
@@ -56,21 +56,16 @@ public class SecurityConfiguration {
 
         http
             .addFilterBefore(serviceAuthFiler, AbstractPreAuthenticatedProcessingFilter.class)
-            .sessionManagement().sessionCreationPolicy(STATELESS)
-            .and()
-            .exceptionHandling()
-            .and()
-            .csrf().disable()
-            .formLogin().disable()
-            .logout().disable()
-            .authorizeRequests().anyRequest().authenticated()
-            .and()
-            .oauth2ResourceServer()
-            .jwt()
-            .jwtAuthenticationConverter(jwtAuthenticationConverter)
-            .and()
-            .and()
-            .oauth2Client();
+            .sessionManagement(management -> management.sessionCreationPolicy(STATELESS))
+            .exceptionHandling(withDefaults())
+            .csrf(csrf -> csrf.disable())
+            .formLogin(login -> login.disable())
+            .logout(logout -> logout.disable())
+            .authorizeHttpRequests(requests -> requests.anyRequest().authenticated())
+            .oauth2ResourceServer(server -> server
+                .jwt(jwt -> jwt
+                    .jwtAuthenticationConverter(jwtAuthenticationConverter)))
+            .oauth2Client(withDefaults());
 
         return http.build();
     }

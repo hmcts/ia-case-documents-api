@@ -105,7 +105,7 @@ public class UploadSignedDecisionPdfServiceTest {
                 "some-old-type",
                 mock(Document.class)));
         List<IdValue<PreviousDecisionDetails>> idValueStoredPrevDecisionDetails = new ArrayList<>();
-        idValueStoredPrevDecisionDetails.add(new IdValue<>("1", storedPrevDecisionDetails.get(0)));
+        idValueStoredPrevDecisionDetails.add(new IdValue<>("1", storedPrevDecisionDetails.getFirst()));
         when(bailCase.read(PREVIOUS_DECISION_DETAILS)).thenReturn(Optional.of(idValueStoredPrevDecisionDetails));
         Document finalPdf = uploadSignedDecisionPdfService.generatePdf(caseDetails);
         assertNotNull(finalPdf);

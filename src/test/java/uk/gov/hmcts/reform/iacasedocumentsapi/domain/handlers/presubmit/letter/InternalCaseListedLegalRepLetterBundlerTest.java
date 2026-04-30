@@ -13,16 +13,14 @@ import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callbac
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo.NO;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo.YES;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import lombok.Value;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.MethodSource;
+import org.junit.jupiter.params.provider.EnumSource;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
@@ -80,44 +78,40 @@ class InternalCaseListedLegalRepLetterBundlerTest {
     }
 
     @ParameterizedTest
-    @MethodSource("generateDifferentEventScenarios")
-    public void it_can_handle_callback(InternalCaseListedLegalRepLetterBundlerTest.TestScenario scenario) {
-        when(callback.getEvent()).thenReturn(scenario.getEvent());
+    @EnumSource(value = Event.class, names = {"LIST_CASE"})
+    public void it_can_handle_callback(Event event) {
+        when(callback.getEvent()).thenReturn(event);
         when(callback.getCaseDetails()).thenReturn(caseDetails);
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
         when(asylumCase.read(IS_ADMIN, YesOrNo.class)).thenReturn(Optional.of(YES));
         when(asylumCase.read(APPELLANTS_REPRESENTATION, YesOrNo.class)).thenReturn(Optional.of(NO));
 
-        boolean canHandle = internalCaseListedLrLetterHandler.canHandle(scenario.callbackStage, callback);
-
-        assertEquals(canHandle, scenario.isExpected());
+        assertTrue(internalCaseListedLrLetterHandler.canHandle(ABOUT_TO_SUBMIT, callback));
     }
 
-    private static List<InternalCaseListedLegalRepLetterBundlerTest.TestScenario> generateDifferentEventScenarios() {
-        return InternalCaseListedLegalRepLetterBundlerTest.TestScenario.builder();
+    @ParameterizedTest
+    @EnumSource(value = PreSubmitCallbackStage.class, names = {"ABOUT_TO_SUBMIT"}, mode = EnumSource.Mode.EXCLUDE)
+    public void it_cannot_handle_callback_incorrect_stage(PreSubmitCallbackStage preSubmitCallbackStage) {
+        when(callback.getEvent()).thenReturn(Event.LIST_CASE);
+        when(callback.getCaseDetails()).thenReturn(caseDetails);
+        when(caseDetails.getCaseData()).thenReturn(asylumCase);
+        when(asylumCase.read(IS_ADMIN, YesOrNo.class)).thenReturn(Optional.of(YES));
+        when(asylumCase.read(APPELLANTS_REPRESENTATION, YesOrNo.class)).thenReturn(Optional.of(NO));
+
+        assertFalse(internalCaseListedLrLetterHandler.canHandle(preSubmitCallbackStage, callback));
     }
 
-    @Value
-    static class TestScenario {
-        Event event;
-        PreSubmitCallbackStage callbackStage;
-        boolean expected;
 
-        public static List<InternalCaseListedLegalRepLetterBundlerTest.TestScenario> builder() {
-            List<InternalCaseListedLegalRepLetterBundlerTest.TestScenario> testScenarios = new ArrayList<>();
-            for (Event e : Event.values()) {
-                if (e.equals(Event.LIST_CASE)) {
-                    testScenarios.add(new InternalCaseListedLegalRepLetterBundlerTest.TestScenario(e, ABOUT_TO_START, false));
-                    testScenarios.add(new InternalCaseListedLegalRepLetterBundlerTest.TestScenario(e, ABOUT_TO_SUBMIT, true));
-                } else {
-                    testScenarios.add(new InternalCaseListedLegalRepLetterBundlerTest.TestScenario(e, ABOUT_TO_START, false));
-                    testScenarios.add(new InternalCaseListedLegalRepLetterBundlerTest.TestScenario(e, ABOUT_TO_SUBMIT, false));
-                    testScenarios.add(new InternalCaseListedLegalRepLetterBundlerTest.TestScenario(e, ABOUT_TO_START, false));
-                    testScenarios.add(new InternalCaseListedLegalRepLetterBundlerTest.TestScenario(e, ABOUT_TO_SUBMIT, false));
-                }
-            }
-            return testScenarios;
-        }
+    @ParameterizedTest
+    @EnumSource(value = Event.class, names = {"LIST_CASE"}, mode = EnumSource.Mode.EXCLUDE)
+    public void it_cannot_handle_callback_incorrect_event(Event event) {
+        when(callback.getEvent()).thenReturn(event);
+        when(callback.getCaseDetails()).thenReturn(caseDetails);
+        when(caseDetails.getCaseData()).thenReturn(asylumCase);
+        when(asylumCase.read(IS_ADMIN, YesOrNo.class)).thenReturn(Optional.of(YES));
+        when(asylumCase.read(APPELLANTS_REPRESENTATION, YesOrNo.class)).thenReturn(Optional.of(NO));
+
+        assertFalse(internalCaseListedLrLetterHandler.canHandle(ABOUT_TO_SUBMIT, callback));
     }
 
     @Test
@@ -241,14 +235,14 @@ class InternalCaseListedLegalRepLetterBundlerTest {
         return
             new Document("some-url",
                 "some-binary-url",
-                RandomStringUtils.randomAlphabetic(20));
+                RandomStringUtils.secure().nextAlphabetic(20));
     }
 
     private DocumentWithMetadata createDocumentWithMetadata(DocumentTag documentTag) {
 
         return
             new DocumentWithMetadata(createDocumentWithDescription(),
-                RandomStringUtils.randomAlphabetic(20),
+                RandomStringUtils.secure().nextAlphabetic(20),
                 new SystemDateProvider().now().toString(), documentTag,"test");
 
     }

@@ -102,7 +102,7 @@ class ClarifyingQuestionsAnswersTemplateTest {
             .put("answer", "Answer")
             .put("supportingEvidence", "some-filename")
             .build();
-        assertEquals(expected, ((List<?>) templateFieldValues.get("questionsAnswers")).get(0));
+        assertEquals(expected, ((List<?>) templateFieldValues.get("questionsAnswers")).getFirst());
 
     }
 

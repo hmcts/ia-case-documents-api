@@ -72,89 +72,65 @@ public class AsylumCaseFixtures {
     }
 
     private static String someString() {
-        return RandomStringUtils.randomAlphabetic(8);
+        return RandomStringUtils.secure().nextAlphabetic(8);
     }
 
     public static String someUploadResponse() {
-        return "{\n"
-               +
-               "  \"_embedded\": {\n"
-               +
-               "    \"documents\": [\n"
-               +
-               "      {\n"
-               +
-               "        \"originalDocumentName\": \"some-document-name\",\n"
-               +
-               "        \"_links\": {\n"
-               +
-               "          \"self\": {\n"
-               +
-               "            \"href\": \"\"\n"
-               +
-               "          },\n"
-               +
-               "          \"binary\": {\n"
-               +
-               "            \"href\": \"\"\n"
-               +
-               "          }\n"
-               +
-               "      }\n"
-               +
-               "    }\n"
-               +
-               "    ]\n"
-               +
-               "  }\n"
-               +
-               "}\n";
+        return """
+               {
+                 "_embedded": {
+                   "documents": [
+                     {
+                       "originalDocumentName": "some-document-name",
+                       "_links": {
+                         "self": {
+                           "href": ""
+                         },
+                         "binary": {
+                           "href": ""
+                         }
+                     }
+                   }
+                   ]
+                 }
+               }
+               """;
     }
 
     public static String someAmUploadResponse() {
-        return "{\n"
-                +
-                "    \"documents\": [\n"
-                +
-                "      {\n"
-                +
-                "        \"originalDocumentName\": \"some-appeal-reference-number-some-fname-decision-and-reasons-draft.docx\",\n"
-                +
-                "        \"_links\": {\n"
-                +
-                "          \"self\": {\n"
-                +
-                "            \"href\": \"\"\n"
-                +
-                "          },\n"
-                +
-                "          \"binary\": {\n"
-                +
-                "            \"href\": \"\"\n"
-                +
-                "          }\n"
-                +
-                "      }\n"
-                +
-                "    }\n"
-                +
-                "    ]\n"
-                +
-                "}\n";
+        return """
+                {
+                    "documents": [
+                      {
+                        "originalDocumentName": "some-appeal-reference-number-some-fname-decision-and-reasons-draft.docx",
+                        "_links": {
+                          "self": {
+                            "href": ""
+                          },
+                          "binary": {
+                            "href": ""
+                          }
+                      }
+                    }
+                    ]
+                }
+                """;
     }
 
     public static String someUserDetails() {
-        return "{\n"
-               + "  \"sub\": \"ia-caseofficer@fake.hmcts.net\",\n"
-               + "  \"uid\": \"27ff8bb2-8bd3-4577-8ee1-33099acd50a5\",\n"
-               + "  \"roles\": [\n"
-               + "    \"caseworker-ia\",\n"
-               + "    \"tribunal-caseworker\"\n"
-               + "  ],\n"
-               + "  \"name\": \"Officer\",\n"
-               + "  \"given_name\": \"Case\",\n"
-               + "  \"family_name\": \"Case Worker\"\n"
-               + "}";
+        return """
+               {
+                 "sub": "ia-caseofficer@fake.hmcts.net",
+                 "uid": "27ff8bb2-8bd3-4577-8ee1-33099acd50a5",
+                 "roles": [
+                   "caseworker-ia",
+                   "tribunal-caseworker"
+                 ],
+                 "name": "Officer",
+                 "given_name": "Case",
+                 "family_name": "Case Worker"
+               }\
+               """;
     }
 
     private AsylumCaseFixtures() {
