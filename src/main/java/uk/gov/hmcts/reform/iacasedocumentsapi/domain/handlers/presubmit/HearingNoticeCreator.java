@@ -45,6 +45,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentHandler;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentReceiver;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentsAppender;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.FeatureToggler;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.IdamService;
 
 @Component
 public class HearingNoticeCreator implements PreSubmitCallbackHandler<AsylumCase> {
@@ -57,6 +58,7 @@ public class HearingNoticeCreator implements PreSubmitCallbackHandler<AsylumCase
     private final DocumentReceiver documentReceiver;
     private final DocumentsAppender documentsAppender;
     private final Appender<ReheardHearingDocuments> reheardHearingAppender;
+    private final IdamService idamService;
 
     public HearingNoticeCreator(
         @Qualifier("hearingNotice") DocumentCreator<AsylumCase> hearingNoticeDocumentCreator,
@@ -66,7 +68,8 @@ public class HearingNoticeCreator implements PreSubmitCallbackHandler<AsylumCase
         FeatureToggler featureToggler,
         DocumentReceiver documentReceiver,
         DocumentsAppender documentsAppender,
-        Appender<ReheardHearingDocuments> reheardHearingAppender
+        Appender<ReheardHearingDocuments> reheardHearingAppender,
+        IdamService idamService
     ) {
         this.hearingNoticeDocumentCreator = hearingNoticeDocumentCreator;
         this.remoteHearingNoticeDocumentCreator = remoteHearingNoticeDocumentCreator;
@@ -76,6 +79,7 @@ public class HearingNoticeCreator implements PreSubmitCallbackHandler<AsylumCase
         this.documentReceiver = documentReceiver;
         this.documentsAppender = documentsAppender;
         this.reheardHearingAppender = reheardHearingAppender;
+        this.idamService = idamService;
     }
 
     @Override
@@ -104,7 +108,11 @@ public class HearingNoticeCreator implements PreSubmitCallbackHandler<AsylumCase
 
         final CaseDetails<AsylumCase> caseDetails = callback.getCaseDetails();
         final AsylumCase asylumCase = caseDetails.getCaseData();
-
+        String adminOfficerToken = idamService.getAdminOfficerToken();
+        System.out.println(adminOfficerToken);
+        if (adminOfficerToken.equals("not set")) {
+            // noop
+        }
         HearingCentre listCaseHearingCentre =
             asylumCase.read(LIST_CASE_HEARING_CENTRE, HearingCentre.class).orElse(HearingCentre.TAYLOR_HOUSE);
 
