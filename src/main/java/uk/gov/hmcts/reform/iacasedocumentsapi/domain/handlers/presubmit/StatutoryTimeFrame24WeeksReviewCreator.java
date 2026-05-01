@@ -64,9 +64,6 @@ public class StatutoryTimeFrame24WeeksReviewCreator implements PreSubmitCallback
             PreSubmitCallbackStage callbackStage,
             Callback<AsylumCase> callback
     ) {
-        if (!canHandle(callbackStage, callback)) {
-            throw new IllegalStateException("Cannot handle callback");
-        }
 
         final CaseDetails<AsylumCase> caseDetails = callback.getCaseDetails();
         final AsylumCase asylumCase = caseDetails.getCaseData();
@@ -76,7 +73,7 @@ public class StatutoryTimeFrame24WeeksReviewCreator implements PreSubmitCallback
         AsylumCaseDefinition documentField;
 
 
-        if (callback.getEvent().equals(Event.SUBMIT_APPEAL) && isInternalCase(asylumCase)) {
+        if (callback.getEvent().equals(Event.COMPLETE_CASE_REVIEW) && isInternalCase(asylumCase)) {
             appealSubmission = statutoryTimeFrame24WeeksReviewDocumentCreator.create(caseDetails);
             documentTag = DocumentTag.INTERNAL_APPEAL_SUBMISSION;
             documentField = NOTIFICATION_ATTACHMENT_DOCUMENTS;
