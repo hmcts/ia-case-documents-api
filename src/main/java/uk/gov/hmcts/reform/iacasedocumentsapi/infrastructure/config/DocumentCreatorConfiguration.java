@@ -2249,5 +2249,24 @@ public class DocumentCreatorConfiguration {
         );
     }
 
-
+    @Bean("statutoryTimeFrame24WeeksReview")
+    public DocumentCreator<AsylumCase> getStatutoryTimeFrame24WeeksReviewDocumentCreator(
+            @Value("${appealSubmissionDocument.contentType}") String contentType,
+            @Value("${appealSubmissionDocument.fileExtension}") String fileExtension,
+            @Value("${appealSubmissionDocument.fileName}") String fileName,
+            AsylumCaseFileNameQualifier fileNameQualifier,
+            AppealSubmissionTemplate documentTemplate,
+            DocumentGenerator documentGenerator,
+            DocumentUploader documentUploader
+    ) {
+        return new DocumentCreator<>(
+                contentType,
+                fileExtension,
+                fileName,
+                fileNameQualifier,
+                documentTemplate,
+                documentGenerator,
+                documentUploader
+        );
+    }
 }
