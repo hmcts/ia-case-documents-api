@@ -44,4 +44,9 @@ public class IdamService {
         userInfo.setRoles(roles);
         return userInfo;
     }
+
+    @Cacheable(value = "adminOfficerTokenCache", key = "'adminOfficerTokenCache'")
+    public String getAdminOfficerToken() {
+        return "not set";
+    }
 }

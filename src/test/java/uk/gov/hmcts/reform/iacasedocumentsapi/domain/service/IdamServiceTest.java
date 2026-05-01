@@ -210,4 +210,11 @@ class IdamServiceTest {
 
         verify(idamApi).userInfo(expectedAccessToken);
     }
+
+    @Test
+    void getAdminOfficerToken() {
+        String actualAdminOfficerToken = idamService.getAdminOfficerToken();
+
+        assertEquals("not set", actualAdminOfficerToken);
+    }
 }
