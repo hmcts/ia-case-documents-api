@@ -259,6 +259,7 @@ repositories {
 dependencyManagement {
     imports {
         mavenBom 'org.springframework.cloud:spring-cloud-dependencies:2025.0.2'
+        mavenBom 'com.fasterxml.jackson:jackson-bom:2.21.2'
     }
     dependencies {
         dependencySet(group: 'org.junit.jupiter', version: '5.14.4') {
@@ -275,25 +276,6 @@ dependencyManagement {
         }
 
         dependency group: 'io.rest-assured', name: 'rest-assured', version: '5.5.7'
-
-        dependencySet(group: 'com.fasterxml.jackson.core', version: '2.21.2') {
-            entry 'jackson-databind'
-            entry 'jackson-core'
-        }
-
-        dependencySet(group: 'com.fasterxml.jackson.core', version: '2.21') {
-            entry 'jackson-annotations'
-        }
-
-        dependencySet(group: 'com.fasterxml.jackson.dataformat', version: '2.21.2') {
-            entry 'jackson-dataformat-yaml'
-            entry 'jackson-dataformat-csv'
-        }
-
-        dependencySet(group: 'com.fasterxml.jackson.datatype', version: '2.21.2') {
-            entry 'jackson-datatype-jsr310'
-            entry 'jackson-datatype-jdk8'
-        }
 
         dependencySet(group: 'org.mockito', version: '5.23.0') {
             entry 'mockito-core'
