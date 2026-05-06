@@ -328,8 +328,6 @@ dependencies {
     testImplementation 'org.springframework.security:spring-security-test'
     testImplementation group: 'org.pitest', name: 'pitest', version: '1.16.2'
     testImplementation group: 'info.solidsoft.gradle.pitest', name: 'gradle-pitest-plugin', version: '1.5.0'
-    testImplementation 'net.serenity-bdd:net.serenity-core'
-    testImplementation 'net.serenity-bdd:net.serenity-junit'
     testImplementation 'net.serenity-bdd:net.serenity-rest-assured'
     testImplementation 'net.serenity-bdd:net.serenity-spring'
 
