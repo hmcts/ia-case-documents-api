@@ -736,6 +736,7 @@ security:
       - "manageFeeUpdate"
       - "updateTribunalDecision"
       - "removeLegalRepresentative"
+      - "completeCaseReview"
     challenged-access-legal-operations:
       - "sendDirection"
       - "changeDirectionDueDate"
@@ -824,6 +825,7 @@ security:
       - "manageFeeUpdate"
       - "updateTribunalDecision"
       - "removeLegalRepresentative"
+      - "completeCaseReview"
     # These events are used by the bails service, they will need to be migrated to the admin access management roles - see DIAC-855
     caseworker-ia-admofficer:
       - "submitApplication"
@@ -838,6 +840,7 @@ security:
       - "removeLegalRepresentative"
       - "markAppealAsRemitted"
       - "saveNotificationsToDataBail"
+      - "completeCaseReview"
     hearing-centre-admin:
       - "listCase"
       - "submitAppeal"
@@ -1262,6 +1265,7 @@ security:
       - "changeHearingCentre"
       - "saveNotificationsToData"
       - "saveNotificationsToDataBail"
+      - "completeCaseReview"
     caseworker-ia-homeofficelart:
       - "uploadHomeOfficeAppealResponse"
       - "uploadAdditionalEvidenceHomeOffice"
