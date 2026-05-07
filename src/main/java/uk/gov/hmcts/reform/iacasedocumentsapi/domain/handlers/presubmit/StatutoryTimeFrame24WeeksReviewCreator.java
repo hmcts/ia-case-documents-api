@@ -1,5 +1,6 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
@@ -18,7 +19,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentHandler;
 import static java.util.Objects.requireNonNull;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.NOTIFICATION_ATTACHMENT_DOCUMENTS;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.isInternalCase;
-
+@Slf4j
 @Component
 public class StatutoryTimeFrame24WeeksReviewCreator implements PreSubmitCallbackHandler<AsylumCase> {
 
@@ -46,10 +47,12 @@ public class StatutoryTimeFrame24WeeksReviewCreator implements PreSubmitCallback
                         .getCaseDetails()
                         .getCaseData();
 
-        return callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
+        boolean canHandleReviewDoc = callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
                 &&
                 Event.COMPLETE_CASE_REVIEW
                         .equals(callback.getEvent());
+        log.info("canHandleReviewDoc {}", canHandleReviewDoc);
+        return canHandleReviewDoc;
     }
 
     public PreSubmitCallbackResponse<AsylumCase> handle(
@@ -65,7 +68,9 @@ public class StatutoryTimeFrame24WeeksReviewCreator implements PreSubmitCallback
         AsylumCaseDefinition documentField;
 
 
-        if (callback.getEvent().equals(Event.COMPLETE_CASE_REVIEW) && isInternalCase(asylumCase)) {
+        boolean canAddDocument = callback.getEvent().equals(Event.COMPLETE_CASE_REVIEW) && isInternalCase(asylumCase);
+        log.info("canAddDocument {}", canAddDocument);
+        if (canAddDocument) {
             appealSubmission = statutoryTimeFrame24WeeksReviewDocumentCreator.create(caseDetails);
             documentTag = DocumentTag.INTERNAL_APPEAL_SUBMISSION;
             documentField = NOTIFICATION_ATTACHMENT_DOCUMENTS;

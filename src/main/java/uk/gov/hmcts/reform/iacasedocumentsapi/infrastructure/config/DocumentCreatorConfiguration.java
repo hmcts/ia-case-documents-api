@@ -2259,6 +2259,7 @@ public class DocumentCreatorConfiguration {
             DocumentGenerator documentGenerator,
             DocumentUploader documentUploader
     ) {
+        log.info("contentType {}, fileExtension {},fileName {}",contentType,fileExtension,fileName);
         return new DocumentCreator<>(
                 contentType,
                 fileExtension,
