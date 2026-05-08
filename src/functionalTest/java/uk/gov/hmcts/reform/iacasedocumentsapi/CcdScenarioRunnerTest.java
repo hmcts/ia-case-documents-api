@@ -76,21 +76,22 @@ public class CcdScenarioRunnerTest {
         MapSerializer.setObjectMapper(objectMapper);
         RestAssured.baseURI = targetInstance;
         RestAssured.useRelaxedHTTPSValidation();
-        String token;
-        int i = 0;
-        while (true) {
+        String token = null;
+        int maxRetries = 3;
+        for (int attempt = 1; attempt <= maxRetries; attempt++) {
             try {
-                token = authorizationHeadersProvider.getCaseOfficerAuthorization().getValue("Authorization");
-                Thread.sleep(1000);
+                token = authorizationHeadersProvider
+                    .getCaseOfficerAuthorization()
+                    .getValue("Authorization");
                 assertNotNull(token);
                 break;
             } catch (Exception e) {
-                i++;
-                if (i == 2) {
+                if (attempt == maxRetries) {
                     System.out.println("Failed to obtain access token, giving up: " + e.getMessage());
                     throw e;
                 }
-                System.out.println("Failed to obtain access token, trying again: " + e.getMessage());
+                System.out.println("Failed to obtain access token, retrying: " + e.getMessage());
+                Thread.sleep(1000);
             }
         }
         when(requestUserAccessTokenProvider.getAccessToken()).thenReturn(token);
