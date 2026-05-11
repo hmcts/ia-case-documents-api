@@ -489,7 +489,10 @@ public class AsylumCaseUtilsTest {
 
     @Test
     void should_return_address_with_all_fields_populated() {
+        when(asylumCase.read(AsylumCaseDefinition.APPELLANT_GIVEN_NAMES, String.class)).thenReturn(Optional.of("Aa"));
+        when(asylumCase.read(AsylumCaseDefinition.APPELLANT_FAMILY_NAME, String.class)).thenReturn(Optional.of("Pp"));
         when(asylumCase.read(AsylumCaseDefinition.APPELLANT_ADDRESS, AddressUk.class)).thenReturn(Optional.of(address));
+        when(address.getAddressLine1()).thenReturn(Optional.of("Apartment 99"));
         when(address.getAddressLine1()).thenReturn(Optional.of("Apartment 99"));
         when(address.getAddressLine2()).thenReturn(Optional.of("Example Road"));
         when(address.getAddressLine3()).thenReturn(Optional.of("Example County"));
@@ -498,12 +501,38 @@ public class AsylumCaseUtilsTest {
 
         List<String> result = AsylumCaseUtils.getAppellantAddressAsList(asylumCase);
 
-        assertEquals(5, result.size());
-        assertEquals("Apartment 99", result.get(0));
-        assertEquals("Example Road", result.get(1));
-        assertEquals("Example County", result.get(2));
-        assertEquals("Example Town", result.get(3));
-        assertEquals("PostCode", result.get(4));
+        assertEquals(6, result.size());
+        assertEquals("Aa Pp", result.get(0));
+        assertEquals("Apartment 99", result.get(1));
+        assertEquals("Example Road", result.get(2));
+        assertEquals("Example County", result.get(3));
+        assertEquals("Example Town", result.get(4));
+        assertEquals("PostCode", result.get(5));
+    }
+
+    @Test
+    void should_return_address_with_all_fields_populated_with_trunmcated_very_long_full_name() {
+        when(asylumCase.read(AsylumCaseDefinition.APPELLANT_GIVEN_NAMES, String.class))
+                .thenReturn(Optional.of("VerylongVerylongVerylongVerylongAa"));
+        when(asylumCase.read(AsylumCaseDefinition.APPELLANT_FAMILY_NAME, String.class))
+                .thenReturn(Optional.of("VerylongVerylongVerylongVerylongPp"));
+        when(asylumCase.read(AsylumCaseDefinition.APPELLANT_ADDRESS, AddressUk.class)).thenReturn(Optional.of(address));
+        when(address.getAddressLine1()).thenReturn(Optional.of("Apartment 99"));
+        when(address.getAddressLine1()).thenReturn(Optional.of("Apartment 99"));
+        when(address.getAddressLine2()).thenReturn(Optional.of("Example Road"));
+        when(address.getAddressLine3()).thenReturn(Optional.of("Example County"));
+        when(address.getPostTown()).thenReturn(Optional.of("Example Town"));
+        when(address.getPostCode()).thenReturn(Optional.of("PostCode"));
+
+        List<String> result = AsylumCaseUtils.getAppellantAddressAsList(asylumCase);
+
+        assertEquals(6, result.size());
+        assertEquals("VerylongVerylongVerylongVerylongAa VerylongVerylongVerylongVeryl", result.get(0));
+        assertEquals("Apartment 99", result.get(1));
+        assertEquals("Example Road", result.get(2));
+        assertEquals("Example County", result.get(3));
+        assertEquals("Example Town", result.get(4));
+        assertEquals("PostCode", result.get(5));
     }
 
     @Test
