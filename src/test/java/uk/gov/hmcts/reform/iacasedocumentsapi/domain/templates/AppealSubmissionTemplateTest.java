@@ -225,11 +225,11 @@ public class AppealSubmissionTemplateTest {
         assertEquals(appellantAddressCountry, ((Map) templateFieldValues.get("appellantAddress")).get("appellantAddressCountry"));
 
         assertEquals(2, ((List) templateFieldValues.get("appellantNationalities")).size());
-        assertEquals(ImmutableMap.of("nationality", "Iceland"), ((List) templateFieldValues.get("appellantNationalities")).get(0));
+        assertEquals(ImmutableMap.of("nationality", "Iceland"), ((List) templateFieldValues.get("appellantNationalities")).getFirst());
         assertEquals(ImmutableMap.of("nationality", "Finland"), ((List) templateFieldValues.get("appellantNationalities")).get(1));
 
         assertEquals(2, ((List) templateFieldValues.get("appealGrounds")).size());
-        assertEquals(ImmutableMap.of("appealGround", "Refugee convention"), ((List) templateFieldValues.get("appealGrounds")).get(0));
+        assertEquals(ImmutableMap.of("appealGround", "Refugee convention"), ((List) templateFieldValues.get("appealGrounds")).getFirst());
         assertEquals(ImmutableMap.of("appealGround", "Human rights"), ((List) templateFieldValues.get("appealGrounds")).get(1));
 
         assertEquals("1234, 5678", templateFieldValues.get("otherAppeals"));

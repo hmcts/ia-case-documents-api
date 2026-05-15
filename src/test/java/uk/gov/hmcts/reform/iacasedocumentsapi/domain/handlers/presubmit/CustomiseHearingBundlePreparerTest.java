@@ -748,7 +748,7 @@ class CustomiseHearingBundlePreparerTest {
         return
             new DocumentWithDescription(new Document("some-url",
                 "some-binary-url",
-                RandomStringUtils.randomAlphabetic(20)), "test");
+                RandomStringUtils.secure().nextAlphabetic(20)), "test");
     }
 
     private Document createDocument() {

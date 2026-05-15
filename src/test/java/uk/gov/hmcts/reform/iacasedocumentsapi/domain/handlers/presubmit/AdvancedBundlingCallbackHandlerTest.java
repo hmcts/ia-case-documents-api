@@ -175,8 +175,8 @@ class AdvancedBundlingCallbackHandlerTest {
         when(asylumCase.read(REHEARD_DECISION_REASONS_COLLECTION)).thenReturn(Optional.of(reheardDecisionDocs));
         when(asylumCase.read(REHEARD_HEARING_DOCUMENTS_COLLECTION)).thenReturn(Optional.of(reheardHearingDocs));
         when(asylumCase.read(REMITTAL_DOCUMENTS)).thenReturn(Optional.of(remittalDocuments));
-        when(documentsAppender.append(remittalDocuments.get(0).getValue().getOtherRemittalDocs(),
-                Collections.singletonList(remittalDocuments.get(0).getValue().getDecisionDocument())))
+        when(documentsAppender.append(remittalDocuments.getFirst().getValue().getOtherRemittalDocs(),
+                Collections.singletonList(remittalDocuments.getFirst().getValue().getDecisionDocument())))
                 .thenReturn(latestRemittalDocs);
 
         PreSubmitCallbackResponse<AsylumCase> callbackResponse =
@@ -203,8 +203,8 @@ class AdvancedBundlingCallbackHandlerTest {
         verify(asylumCase, times(1)).read(RESPONDENT_DOCUMENTS);
         verify(asylumCase).write(AsylumCaseDefinition.APP_ADDITIONAL_EVIDENCE_DOCS, Collections.emptyList());
         verify(asylumCase).write(AsylumCaseDefinition.RESP_ADDITIONAL_EVIDENCE_DOCS, Collections.emptyList());
-        verify(asylumCase).write(LATEST_DECISION_AND_REASONS_DOCUMENTS, reheardDecisionDocs.get(0).getValue().getReheardHearingDocs());
-        verify(asylumCase).write(LATEST_REHEARD_HEARING_DOCUMENTS, reheardHearingDocs.get(0).getValue().getReheardHearingDocs());
+        verify(asylumCase).write(LATEST_DECISION_AND_REASONS_DOCUMENTS, reheardDecisionDocs.getFirst().getValue().getReheardHearingDocs());
+        verify(asylumCase).write(LATEST_REHEARD_HEARING_DOCUMENTS, reheardHearingDocs.getFirst().getValue().getReheardHearingDocs());
         verify(asylumCase).write(LATEST_REMITTAL_DOCUMENTS, latestRemittalDocs);
         verify(asylumCase).clear(LATEST_DECISION_AND_REASONS_DOCUMENTS);
         verify(asylumCase).clear(LATEST_REMITTAL_DOCUMENTS);

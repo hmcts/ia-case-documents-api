@@ -73,7 +73,7 @@ public class DmDocumentManagementUploader {
                 uploadResponse
                     .getEmbedded()
                     .getDocuments()
-                    .get(0);
+                    .getFirst();
 
             return new Document(
                 uploadedDocument

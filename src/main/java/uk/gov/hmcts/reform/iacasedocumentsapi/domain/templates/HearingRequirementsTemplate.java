@@ -89,7 +89,7 @@ public class HearingRequirementsTemplate implements DocumentTemplate<AsylumCase>
 
         return familyName == null || familyName.isEmpty()
                 ? givenNames
-                : String.format("%s %s", givenNames, familyName);
+                : "%s %s".formatted(givenNames, familyName);
     }
 
     private void setWitnessInterpreterLanguage(AsylumCase asylumCase, Map<String, Object> fieldValues) {

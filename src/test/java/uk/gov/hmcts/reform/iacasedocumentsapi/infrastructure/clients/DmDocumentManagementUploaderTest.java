@@ -86,7 +86,7 @@ public class DmDocumentManagementUploaderTest {
 
         when(uploadResponse.getEmbedded()).thenReturn(uploadResponseEmbedded);
         when(uploadResponseEmbedded.getDocuments()).thenReturn(uploadedDocuments);
-        when(uploadedDocuments.get(0)).thenReturn(uploadedDocument);
+        when(uploadedDocuments.getFirst()).thenReturn(uploadedDocument);
 
         when(documentUploadClientApi.upload(
             eq(accessToken),
@@ -111,11 +111,11 @@ public class DmDocumentManagementUploaderTest {
             multipartFilesCaptor.capture()
         );
 
-        List<MultipartFile> actualMultipartFiles = multipartFilesCaptor.getAllValues().get(0);
+        List<MultipartFile> actualMultipartFiles = multipartFilesCaptor.getAllValues().getFirst();
 
         assertEquals(1, actualMultipartFiles.size());
-        assertEquals(fileName, actualMultipartFiles.get(0).getName());
-        assertEquals(fileName, actualMultipartFiles.get(0).getOriginalFilename());
-        assertEquals(documentData.length, actualMultipartFiles.get(0).getBytes().length);
+        assertEquals(fileName, actualMultipartFiles.getFirst().getName());
+        assertEquals(fileName, actualMultipartFiles.getFirst().getOriginalFilename());
+        assertEquals(documentData.length, actualMultipartFiles.getFirst().getBytes().length);
     }
 }
