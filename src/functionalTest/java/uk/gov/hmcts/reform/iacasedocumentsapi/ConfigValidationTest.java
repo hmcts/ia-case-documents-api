@@ -44,7 +44,7 @@ class ConfigValidationTest {
     FeatureToggler featureToggler;
 
     @ParameterizedTest
-    @CsvSource("use-ccd-document-am")
+    @CsvSource("dlrm-fee-remission-feature-flag")
     void launchDarklyFeatureTogglesPresent(String featureToggleName) {
         boolean value1 = featureToggler.getValue(featureToggleName, true);
         boolean value2 = featureToggler.getValue(featureToggleName, false);
