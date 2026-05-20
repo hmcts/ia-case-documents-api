@@ -31,8 +31,13 @@ public class CacheConfiguration {
 
     private static final Logger log = LoggerFactory.getLogger(CacheConfiguration.class);
 
-    @Value("${spring.data.redis.encryption.key}") // Base64-encoded 32-byte key
-    private String redisEncryptionKey;
+    private final String redisEncryptionKey;
+
+    public CacheConfiguration(
+        @Value("${spring.data.redis.encryption.key}") String redisEncryptionKey // Base64-encoded 32-byte key
+    ) {
+        this.redisEncryptionKey = redisEncryptionKey;
+    }
 
     @Bean
     @Primary

@@ -15,9 +15,9 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.HearingCentre;
 @Service
 public class EmailAddressFinder {
 
-    private final String listCaseHearingCentreIsNotPresent = "listCaseHearingCentre is not present";
+    private static final String LIST_CASE_HEARING_CENTRE_IS_NOT_PRESENT = "listCaseHearingCentre is not present";
 
-    private final String noEmailAddressDecisionWithoutHearing = "No email address for decisions made without hearing";
+    private static final String NO_EMAIL_ADDRESS_DECISION_WITHOUT_HEARING = "No email address for decisions made without hearing";
     private final Map<HearingCentre, String> hearingCentreEmailAddresses;
 
     public EmailAddressFinder(
@@ -51,7 +51,7 @@ public class EmailAddressFinder {
                 .map(it -> Optional.ofNullable(getEmailAddress(hearingCentreEmailAddresses, it))
                     .orElseThrow(() -> new IllegalStateException("Hearing centre email address not found: " + it.toString()))
                 )
-                .orElseThrow(() -> new IllegalStateException(listCaseHearingCentreIsNotPresent));
+                .orElseThrow(() -> new IllegalStateException(LIST_CASE_HEARING_CENTRE_IS_NOT_PRESENT));
         }
     }
 
@@ -69,7 +69,7 @@ public class EmailAddressFinder {
             case COVENTRY:
                 return emailAddressesMap.get(HearingCentre.BIRMINGHAM);
             case DECISION_WITHOUT_HEARING:
-                return noEmailAddressDecisionWithoutHearing;
+                return NO_EMAIL_ADDRESS_DECISION_WITHOUT_HEARING;
             default:
                 return emailAddressesMap.get(hearingCentre);
         }
