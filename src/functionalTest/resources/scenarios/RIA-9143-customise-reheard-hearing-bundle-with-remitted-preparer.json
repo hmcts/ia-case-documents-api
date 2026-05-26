@@ -1,6 +1,5 @@
 {
   "description": "RIA-9143-customise-reheard-hearing-bundle-preparer-reheard-hearing documents are present in reheardHearingDocuments & reheardHearingDocumentsCollection",
-  "launchDarklyKey": "reheard-feature:true",
   "launchDarklyKey": "dlrm-remitted-feature-flag:true",
   "request": {
     "uri": "/asylum/ccdAboutToStart",

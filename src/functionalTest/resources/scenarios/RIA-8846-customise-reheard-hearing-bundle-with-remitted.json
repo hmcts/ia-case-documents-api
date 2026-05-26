@@ -1,6 +1,5 @@
 {
   "description": "RIA-8846-customise-reheard-hearing-ready-bundle-remitted",
-  "launchDarklyKey": "reheard-feature:true",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
     "credentials": "CaseOfficer",
