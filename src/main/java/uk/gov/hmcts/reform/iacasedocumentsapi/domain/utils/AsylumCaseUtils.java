@@ -302,7 +302,7 @@ public class AsylumCaseUtils {
 
         List<String> appellantAddressAsList = new ArrayList<>();
 
-        addAppellantName(asylumCase, appellantAddressAsList);
+        appellantAddressAsList.add(getAppellantName(asylumCase));
 
         appellantAddressAsList.add(address.getAddressLine1().orElseThrow(() -> new IllegalStateException("appellantAddress line 1 is not present")));
         String addressLine2 = address.getAddressLine2().orElse(null);
@@ -332,7 +332,7 @@ public class AsylumCaseUtils {
 
         List<String> appellantAddressAsList = new ArrayList<>();
 
-        addAppellantName(asylumCase, appellantAddressAsList);
+        appellantAddressAsList.add(getAppellantName(asylumCase));
 
         appellantAddressAsList.add(oocAddressLine1);
         appellantAddressAsList.add(oocAddressLine2);
@@ -626,11 +626,11 @@ public class AsylumCaseUtils {
         return (startsWithVowelSound ? "An " : "A ") + trimmedNoun;
     }
 
-    private static void addAppellantName(AsylumCase asylumCase, List<String> appellantAddressAsList) {
+    private static String getAppellantName(AsylumCase asylumCase) {
         String appellantGivenNames = asylumCase.read(AsylumCaseDefinition.APPELLANT_GIVEN_NAMES, String.class).orElse("");
         String appellantFamilyName = asylumCase.read(AsylumCaseDefinition.APPELLANT_FAMILY_NAME, String.class).orElse("");
         String fullName = appellantGivenNames + " " + appellantFamilyName;
-        appellantAddressAsList.add(fullName.substring(0, min(fullName.length(), 64)));
+        return fullName.substring(0, min(fullName.length(), 64));
     }
 }
 
