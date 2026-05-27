@@ -45,7 +45,6 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.IdValue;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.JourneyType;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.Appender;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.FeatureToggler;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.SystemDateProvider;
 
 
@@ -63,8 +62,6 @@ class CustomiseHearingBundlePreparerTest {
     @Mock
     private Appender<DocumentWithDescription> appender;
     @Mock
-    private FeatureToggler featureToggler;
-    @Mock
     private Document document;
     @Captor
     private ArgumentCaptor<DocumentWithDescription> documentsCaptor;
@@ -74,7 +71,7 @@ class CustomiseHearingBundlePreparerTest {
     @BeforeEach
     void setUp() {
         customiseHearingBundlePreparer =
-            new CustomiseHearingBundlePreparer(appender, featureToggler);
+            new CustomiseHearingBundlePreparer(appender);
 
         when(callback.getCaseDetails()).thenReturn(caseDetails);
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
@@ -261,7 +258,6 @@ class CustomiseHearingBundlePreparerTest {
     @ParameterizedTest
     @EnumSource(value = Event.class, names = {"CUSTOMISE_HEARING_BUNDLE", "GENERATE_UPDATED_HEARING_BUNDLE"})
     void should_create_custom_collections_in_reheard_case(Event event) {
-        when(featureToggler.getValue("reheard-feature", false)).thenReturn(true);
         when(asylumCase.read(CASE_FLAG_SET_ASIDE_REHEARD_EXISTS, YesOrNo.class))
             .thenReturn(Optional.of(YesOrNo.YES));
 
@@ -575,7 +571,6 @@ class CustomiseHearingBundlePreparerTest {
     @EnumSource(value = Event.class, names = {"CUSTOMISE_HEARING_BUNDLE", "GENERATE_UPDATED_HEARING_BUNDLE"})
     void should_not_create_custom_collections_if_source_collections_are_empty_in_reheard_case(Event event) {
         when(asylumCase.read(CASE_FLAG_SET_ASIDE_REHEARD_EXISTS, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO));
-        when(featureToggler.getValue("reheard-feature", false)).thenReturn(false);
         when(callback.getCaseDetails()).thenReturn(caseDetails);
         when(callback.getEvent()).thenReturn(event);
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
@@ -597,7 +592,6 @@ class CustomiseHearingBundlePreparerTest {
 
     @Test
     void should_create_custom_collections_in_reheard_case_with_remittal_enabled() {
-        when(featureToggler.getValue("reheard-feature", false)).thenReturn(true);
         when(asylumCase.read(CASE_FLAG_SET_ASIDE_REHEARD_EXISTS, YesOrNo.class))
             .thenReturn(Optional.of(YesOrNo.YES));
         when(asylumCase.read(SOURCE_OF_REMITTAL, String.class)).thenReturn(Optional.of("Court of Appeal"));

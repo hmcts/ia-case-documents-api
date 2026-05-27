@@ -18,18 +18,14 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.JourneyT
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.PreSubmitCallbackHandler;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.Appender;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.FeatureToggler;
 
 @Component
 public class CustomiseHearingBundlePreparer implements PreSubmitCallbackHandler<AsylumCase> {
 
     private final Appender<DocumentWithDescription> documentWithDescriptionAppender;
-    private final FeatureToggler featureToggler;
 
-    public CustomiseHearingBundlePreparer(Appender<DocumentWithDescription> documentWithDescriptionAppender,
-                                          FeatureToggler featureToggler) {
+    public CustomiseHearingBundlePreparer(Appender<DocumentWithDescription> documentWithDescriptionAppender) {
         this.documentWithDescriptionAppender = documentWithDescriptionAppender;
-        this.featureToggler = featureToggler;
     }
 
     @Override
@@ -58,8 +54,7 @@ public class CustomiseHearingBundlePreparer implements PreSubmitCallbackHandler<
     }
 
     public void prepareCustomDocuments(AsylumCase asylumCase, boolean isUpdatedBundle) {
-        boolean isCaseReheard = asylumCase.read(CASE_FLAG_SET_ASIDE_REHEARD_EXISTS, YesOrNo.class).map(flag -> flag.equals(YesOrNo.YES)).orElse(false)
-            && featureToggler.getValue("reheard-feature", false);
+        boolean isCaseReheard = asylumCase.read(CASE_FLAG_SET_ASIDE_REHEARD_EXISTS, YesOrNo.class).map(flag -> flag.equals(YesOrNo.YES)).orElse(false);
         boolean isAipJourney = asylumCase
             .read(JOURNEY_TYPE, JourneyType.class)
             .map(type -> type == AIP).orElse(false);

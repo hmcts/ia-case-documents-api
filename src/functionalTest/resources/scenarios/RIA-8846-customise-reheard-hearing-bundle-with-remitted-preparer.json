@@ -1,6 +1,5 @@
 {
   "description": "RIA-8846-customise-reheard-hearing-ready-bundle-remitted-preparer",
-  "launchDarklyKey": "reheard-feature:true",
   "launchDarklyKey": "dlrm-remitted-feature-flag:true",
   "request": {
     "uri": "/asylum/ccdAboutToStart",
