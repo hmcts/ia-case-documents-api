@@ -20,6 +20,8 @@ import net.serenitybdd.junit.spring.integration.SpringIntegrationSerenityRunner;
 import net.serenitybdd.rest.SerenityRest;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.parallel.Execution;
+import org.junit.jupiter.api.parallel.ExecutionMode;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -182,6 +184,7 @@ public class CcdScenarioRunnerTest {
         });
     }
 
+    @Execution(ExecutionMode.CONCURRENT)
     @ParameterizedTest(name = "{0}:{1}")
     @MethodSource("scenarioSources")
     public void scenarios_should_behave_as_specified(String fileName,
