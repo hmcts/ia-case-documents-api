@@ -135,4 +135,30 @@ public class InternalDetMarkAsPaidLetterTemplateTest {
                 .isExactlyInstanceOf(RequiredFieldMissingException.class)
                 .hasMessage("Paid amount is not present");
     }
+
+    @Test
+    void should_map_case_data_to_template_field_values_with_late_remission_type() {
+        dataSetUp();
+        when(asylumCase.read(REMISSION_TYPE, RemissionType.class)).thenReturn(Optional.empty());
+        when(asylumCase.read(LATE_REMISSION_TYPE, RemissionType.class)).thenReturn(Optional.of(RemissionType.HO_WAIVER_REMISSION));
+        when(asylumCase.read(PAID_AMOUNT, String.class)).thenReturn(Optional.of(totalAmountPaid));
+        when(asylumCase.read(AMOUNT_REMITTED, String.class)).thenReturn(Optional.of("8000"));
+
+        Map<String, Object> templateFieldValues = internalDetMarkAsPaidLetterTemplate.mapFieldValues(caseDetails);
+
+        assertEquals(12, templateFieldValues.size());
+        assertEquals("[userImage:hmcts.png]", templateFieldValues.get("hmcts"));
+        assertEquals(appealReferenceNumber, templateFieldValues.get("appealReferenceNumber"));
+        assertEquals(homeOfficeReferenceNumber, templateFieldValues.get("homeOfficeReferenceNumber"));
+        assertEquals(appellantGivenNames, templateFieldValues.get("appellantGivenNames"));
+        assertEquals(appellantFamilyName, templateFieldValues.get("appellantFamilyName"));
+        assertEquals(internalAdaCustomerServicesTelephoneNumber, templateFieldValues.get("customerServicesTelephone"));
+        assertEquals(internalAdaCustomerServicesEmailAddress, templateFieldValues.get("customerServicesEmail"));
+
+        assertEquals(formatDateForNotificationAttachmentDocument(now), templateFieldValues.get("dateLetterSent"));
+
+        assertEquals(String.valueOf(feeAmountInPounds), templateFieldValues.get("feeBeforeRemission"));
+        assertEquals(String.valueOf(feeRemission), templateFieldValues.get("feeRemission"));
+        assertEquals(String.valueOf(totalAmountPaidDouble), templateFieldValues.get("totalAmountToPay"));
+    }
 }
