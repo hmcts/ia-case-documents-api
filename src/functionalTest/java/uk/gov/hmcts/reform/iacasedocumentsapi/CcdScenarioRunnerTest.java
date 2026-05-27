@@ -10,12 +10,14 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import feign.RetryableException;
 import io.restassured.RestAssured;
 import io.restassured.http.Headers;
+
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
+
 import net.serenitybdd.junit.spring.integration.SpringIntegrationSerenityRunner;
 import net.serenitybdd.rest.SerenityRest;
 import org.junit.jupiter.api.BeforeAll;
@@ -196,47 +198,41 @@ public class CcdScenarioRunnerTest {
                                                      int expectedStatus,
                                                      long testCaseId,
                                                      Map<String, Object> expectedResponse) throws IOException {
-        int maxRetries = 3;
         assumeFalse(fileName.startsWith("Disabled:"), "Test marked as disabled");
-        for (int i = 0; i < maxRetries; i++) {
-            try {
-                actualResponse = null;
-                String actualResponseBody =
-                    SerenityRest
-                        .given()
-                        .headers(authorizationHeaders)
-                        .contentType(MediaType.APPLICATION_JSON_VALUE)
-                        .body(requestBody)
-                        .when()
-                        .post(requestUri)
-                        .then()
-                        .statusCode(expectedStatus)
-                        .and()
-                        .extract()
-                        .body()
-                        .asString();
+        try {
+            actualResponse = null;
+            String actualResponseBody =
+                SerenityRest
+                    .given()
+                    .headers(authorizationHeaders)
+                    .contentType(MediaType.APPLICATION_JSON_VALUE)
+                    .body(requestBody)
+                    .when()
+                    .post(requestUri)
+                    .then()
+                    .statusCode(expectedStatus)
+                    .and()
+                    .extract()
+                    .body()
+                    .asString();
 
-                actualResponse = MapSerializer.deserialize(actualResponseBody);
+            actualResponse = MapSerializer.deserialize(actualResponseBody);
 
-                verifiers.forEach(verifier ->
-                    verifier.verify(
-                        testCaseId,
-                        scenario,
-                        expectedResponse,
-                        actualResponse
-                    )
-                );
-                break;
-            } catch (Error | RetryableException | NullPointerException e) {
-                System.out.println("Scenario failed with error " + e.getMessage());
-                if (actualResponse != null) {
-                    System.out.println("actualResponse: " + objectMapper.writeValueAsString(actualResponse));
-                    System.out.println("expectedResponse: " + objectMapper.writeValueAsString(expectedResponse));
-                }
-                if (i == maxRetries - 1) {
-                    throw e;
-                }
+            verifiers.forEach(verifier ->
+                verifier.verify(
+                    testCaseId,
+                    scenario,
+                    expectedResponse,
+                    actualResponse
+                )
+            );
+        } catch (Error | RetryableException | NullPointerException e) {
+            System.out.println("Scenario failed with error " + e.getMessage());
+            if (actualResponse != null) {
+                System.out.println("actualResponse: " + objectMapper.writeValueAsString(actualResponse));
+                System.out.println("expectedResponse: " + objectMapper.writeValueAsString(expectedResponse));
             }
+            throw e;
         }
     }
 
