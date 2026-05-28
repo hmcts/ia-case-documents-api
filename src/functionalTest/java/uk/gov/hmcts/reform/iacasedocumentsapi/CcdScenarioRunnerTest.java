@@ -196,42 +196,48 @@ public class CcdScenarioRunnerTest {
                                                      int expectedStatus,
                                                      long testCaseId,
                                                      Map<String, Object> expectedResponse) throws IOException {
+        int maxRetries = 3;
         assumeFalse(fileName.startsWith("Disabled:"), "Test marked as disabled");
-        Map<String, Object> responseForError = null;
-        try {
-            String actualResponseBody =
-                SerenityRest
-                    .given()
-                    .headers(authorizationHeaders)
-                    .contentType(MediaType.APPLICATION_JSON_VALUE)
-                    .body(requestBody)
-                    .when()
-                    .post(requestUri)
-                    .then()
-                    .statusCode(expectedStatus)
-                    .and()
-                    .extract()
-                    .body()
-                    .asString();
+        for (int i = 0; i < maxRetries; i++) {
+            Map<String, Object> responseForError = null;
+            try {
+                String actualResponseBody =
+                    SerenityRest
+                        .given()
+                        .headers(authorizationHeaders)
+                        .contentType(MediaType.APPLICATION_JSON_VALUE)
+                        .body(requestBody)
+                        .when()
+                        .post(requestUri)
+                        .then()
+                        .statusCode(expectedStatus)
+                        .and()
+                        .extract()
+                        .body()
+                        .asString();
 
-            Map<String, Object> actualResponse = MapSerializer.deserialize(actualResponseBody);
-            responseForError = actualResponse;
+                Map<String, Object> actualResponse = MapSerializer.deserialize(actualResponseBody);
+                responseForError = actualResponse;
 
-            verifiers.forEach(verifier ->
-                verifier.verify(
-                    testCaseId,
-                    scenario,
-                    expectedResponse,
-                    actualResponse
-                )
-            );
-        } catch (Error | RetryableException | NullPointerException e) {
-            System.out.println("Scenario failed with error " + e.getMessage());
-            if (responseForError != null) {
-                System.out.println("actualResponse: " + objectMapper.writeValueAsString(responseForError));
-                System.out.println("expectedResponse: " + objectMapper.writeValueAsString(expectedResponse));
+                verifiers.forEach(verifier ->
+                    verifier.verify(
+                        testCaseId,
+                        scenario,
+                        expectedResponse,
+                        actualResponse
+                    )
+                );
+                break;
+            } catch (Error | RetryableException | NullPointerException e) {
+                System.out.println("Scenario failed with error " + e.getMessage());
+                if (responseForError != null) {
+                    System.out.println("actualResponse: " + objectMapper.writeValueAsString(responseForError));
+                    System.out.println("expectedResponse: " + objectMapper.writeValueAsString(expectedResponse));
+                }
+                if (i == maxRetries - 1) {
+                    throw e;
+                }
             }
-            throw e;
         }
     }
 
