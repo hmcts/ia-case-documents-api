@@ -18,3 +18,7 @@ spring:
         key: "6YN2mGkOiEFMPzg/GCFdujQD9aXZN5oSd5LVwc9hX+Q="
       ssl:
         enabled: true
+
+app:
+  cache:
+    enabled: false
