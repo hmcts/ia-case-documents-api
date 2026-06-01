@@ -165,7 +165,7 @@ public class CustomiseHearingBundleHandler implements PreSubmitCallbackHandler<A
         }
 
         //stitchStatusflags -  NEW, IN_PROGRESS, DONE, FAILED
-        final String stitchStatus = caseBundles.get(0).getStitchStatus().orElse("");
+        final String stitchStatus = caseBundles.getFirst().getStitchStatus().orElse("");
 
         asylumCase.write(AsylumCaseDefinition.STITCHING_STATUS, stitchStatus);
 
@@ -350,7 +350,7 @@ public class CustomiseHearingBundleHandler implements PreSubmitCallbackHandler<A
         ReheardHearingDocuments beforeReheardDocs = new ReheardHearingDocuments();
         // If existing reheard hearing documents exist, extract the list of documents
         if (!existingReheardDocs.isEmpty()) {
-            beforeReheardDocs = existingReheardDocs.get(0).getValue();
+            beforeReheardDocs = existingReheardDocs.getFirst().getValue();
             beforeDocuments = beforeReheardDocs.getReheardHearingDocs();
         }
         currentReheardHearingDocs = restoreDocumentsInCollection(currentReheardHearingDocs, beforeDocuments);
@@ -378,8 +378,8 @@ public class CustomiseHearingBundleHandler implements PreSubmitCallbackHandler<A
         String idValue = "1";
 
         if (!existingRemittalDocs.isEmpty()) {
-            idValue = existingRemittalDocs.get(0).getId();
-            beforeRemittalDocuments = existingRemittalDocs.get(0).getValue();
+            idValue = existingRemittalDocs.getFirst().getId();
+            beforeRemittalDocuments = existingRemittalDocs.getFirst().getValue();
             beforeDocuments = beforeRemittalDocuments.getOtherRemittalDocs();
         }
         currentRemittalDocuments = restoreDocumentsInCollection(currentRemittalDocuments, beforeDocuments);

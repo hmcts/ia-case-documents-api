@@ -74,7 +74,7 @@ public class ClarifyingQuestionsAnswersTemplate implements DocumentTemplate<Asyl
         );
 
         if (!clarifyingQuestionsAnswers.isEmpty()) {
-            ClarifyingQuestionAnswer firstAnswer = clarifyingQuestionsAnswers.get(0);
+            ClarifyingQuestionAnswer firstAnswer = clarifyingQuestionsAnswers.getFirst();
             fieldValues.put("dateSent", formatDateForRendering(firstAnswer.getDateSent()));
             fieldValues.put("dateAnswered", formatDateForRendering(firstAnswer.getDateResponded()));
         }

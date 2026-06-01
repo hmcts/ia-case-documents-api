@@ -15,12 +15,8 @@
               "id": "3",
               "value": {
                 "document": {
-                  "document_url": "{$FIXTURE_DOC3_PDF_URL}",
-                  "document_binary_url": "{$FIXTURE_DOC3_PDF_URL_BINARY}",
-                  "document_filename": "{$FIXTURE_DOC3_PDF_FILENAME}"
                 },
                 "description": "",
-                "dateUploaded": "{$TODAY-3}",
                 "tag": "caseArgument"
               }
             },
@@ -28,12 +24,8 @@
               "id": "2",
               "value": {
                 "document": {
-                  "document_url": "{$FIXTURE_DOC2_PDF_URL}",
-                  "document_binary_url": "{$FIXTURE_DOC2_PDF_URL_BINARY}",
-                  "document_filename": "{$FIXTURE_DOC2_PDF_FILENAME}"
                 },
                 "description": "",
-                "dateUploaded": "{$TODAY-3}",
                 "tag": "caseArgument"
               }
             },
@@ -41,12 +33,8 @@
               "id": "1",
               "value": {
                 "document": {
-                  "document_url": "{$FIXTURE_DOC1_PDF_URL}",
-                  "document_binary_url": "{$FIXTURE_DOC1_PDF_URL_BINARY}",
-                  "document_filename": "{$FIXTURE_DOC1_PDF_FILENAME}"
                 },
                 "description": "",
-                "dateUploaded": "{$TODAY-3}",
                 "tag": "appealSubmission"
               }
             }
@@ -66,12 +54,8 @@
             "id": "3",
             "value": {
               "document": {
-                "document_url": "{$FIXTURE_DOC3_PDF_URL}",
-                "document_binary_url": "{$FIXTURE_DOC3_PDF_URL_BINARY}",
-                "document_filename": "{$FIXTURE_DOC3_PDF_FILENAME}"
               },
               "description": "",
-              "dateUploaded": "{$TODAY-3}",
               "tag": "caseArgument"
             }
           },
@@ -79,12 +63,8 @@
             "id": "2",
             "value": {
               "document": {
-                "document_url": "{$FIXTURE_DOC2_PDF_URL}",
-                "document_binary_url": "{$FIXTURE_DOC2_PDF_URL_BINARY}",
-                "document_filename": "{$FIXTURE_DOC2_PDF_FILENAME}"
               },
               "description": "",
-              "dateUploaded": "{$TODAY-3}",
               "tag": "caseArgument"
             }
           },
@@ -92,12 +72,8 @@
             "id": "1",
             "value": {
               "document": {
-                "document_url": "{$FIXTURE_DOC1_PDF_URL}",
-                "document_binary_url": "{$FIXTURE_DOC1_PDF_URL_BINARY}",
-                "document_filename": "{$FIXTURE_DOC1_PDF_FILENAME}"
               },
               "description": "",
-              "dateUploaded": "{$TODAY-3}",
               "tag": "appealSubmission"
             }
           }

@@ -1,6 +1,6 @@
 {
   "description": "RIA-6612 Generate Upper Tribunal bundle with Tribunal Document (Ada Suitabilty) - stitching enabled (Admin Officer)",
-  "enabled": "{$featureFlag.isEmStitchingEnabled}",
+  "disabled": "!{$featureFlag.isEmStitchingEnabled}",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
     "credentials": "AdminOfficer",

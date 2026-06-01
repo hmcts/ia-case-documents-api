@@ -1,6 +1,7 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates.bail;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.BailCaseFieldDefinition.APPLICANT_FAMILY_NAME;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.BailCaseFieldDefinition.APPLICANT_GIVEN_NAMES;
@@ -12,7 +13,6 @@ import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.BailCaseFie
 
 import java.util.Map;
 import java.util.Optional;
-import junit.framework.TestCase;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -81,16 +81,16 @@ class BailEndApplicationTemplateTest {
 
     //Helper method for common assertions
     private void checkCommonFields() {
-        TestCase.assertTrue(fieldValuesMap.containsKey("applicantGivenNames"));
-        TestCase.assertTrue(fieldValuesMap.containsKey("applicantFamilyName"));
-        TestCase.assertTrue(fieldValuesMap.containsKey("bailReferenceNumber"));
-        TestCase.assertTrue(fieldValuesMap.containsKey("homeOfficeReferenceNumber"));
-        TestCase.assertTrue(fieldValuesMap.containsKey("endApplicationOutcome"));
-        TestCase.assertTrue(fieldValuesMap.containsKey("endApplicationReasons"));
-        TestCase.assertTrue(fieldValuesMap.containsKey("endApplicationDate"));
-        TestCase.assertTrue(fieldValuesMap.containsKey("customerServicesTelephone"));
-        TestCase.assertTrue(fieldValuesMap.containsKey("customerServicesEmail"));
-        TestCase.assertTrue(fieldValuesMap.containsKey("govCallChargesLink"));
+        assertTrue(fieldValuesMap.containsKey("applicantGivenNames"));
+        assertTrue(fieldValuesMap.containsKey("applicantFamilyName"));
+        assertTrue(fieldValuesMap.containsKey("bailReferenceNumber"));
+        assertTrue(fieldValuesMap.containsKey("homeOfficeReferenceNumber"));
+        assertTrue(fieldValuesMap.containsKey("endApplicationOutcome"));
+        assertTrue(fieldValuesMap.containsKey("endApplicationReasons"));
+        assertTrue(fieldValuesMap.containsKey("endApplicationDate"));
+        assertTrue(fieldValuesMap.containsKey("customerServicesTelephone"));
+        assertTrue(fieldValuesMap.containsKey("customerServicesEmail"));
+        assertTrue(fieldValuesMap.containsKey("govCallChargesLink"));
     }
 
     // Helper method to set the common data

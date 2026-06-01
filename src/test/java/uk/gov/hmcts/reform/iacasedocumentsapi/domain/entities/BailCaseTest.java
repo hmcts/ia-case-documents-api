@@ -1,7 +1,7 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities;
 
 import static java.util.Arrays.asList;
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.BailCaseFieldDefinition.APPLICANT_DETAINED_LOC;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.BailCaseFieldDefinition.APPLICANT_FAMILY_NAME;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.BailCaseFieldDefinition.APPLICANT_GIVEN_NAMES;
@@ -39,7 +39,7 @@ public class BailCaseTest {
     void should_read_complex_type_with_target_parameter_type() {
         Optional<List<IdValue<NationalityFieldValue>>> mayBeNationalities = bailCase.read(APPLICANT_NATIONALITIES);
         List<IdValue<NationalityFieldValue>> nationalityList = mayBeNationalities.get();
-        NationalityFieldValue nationality = nationalityList.get(0).getValue();
+        NationalityFieldValue nationality = nationalityList.getFirst().getValue();
         assertEquals(1, nationalityList.size());
         assertEquals("Algerian", nationality.getCode());
     }
@@ -64,7 +64,7 @@ public class BailCaseTest {
                 "some-description"));
         bailCase.write(UPLOAD_THE_BAIL_EVIDENCE_DOCS, asList(idValue));
         Optional<List<IdValue<DocumentWithDescription>>> maybeEvidence = bailCase.read(UPLOAD_THE_BAIL_EVIDENCE_DOCS);
-        IdValue<DocumentWithDescription> documentWithDescriptionIdValue = maybeEvidence.get().get(0);
+        IdValue<DocumentWithDescription> documentWithDescriptionIdValue = maybeEvidence.get().getFirst();
 
         Assertions.assertEquals(1, maybeEvidence.get().size());
         Assertions.assertEquals("some-id", documentWithDescriptionIdValue.getId());

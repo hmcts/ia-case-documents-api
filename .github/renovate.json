@@ -1,7 +1,11 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": ["local>hmcts/.github:renovate-config"],
-  "labels": ["dependencies"],
+  "extends": [
+    "local>hmcts/.github:renovate-config"
+  ],
+  "labels": [
+    "dependencies"
+  ],
   "ignoreDeps": [
     "ch.qos.logback:logback-core",
     "ch.qos.logback:logback-classic",
@@ -25,19 +29,33 @@
       "automerge": true
     },
     {
-      "matchPackageNames": ["com.github.hmcts:ccd-case-document-am-client"],
+      "matchPackageNames": [
+        "com.github.hmcts:ccd-case-document-am-client"
+      ],
       "enabled": false
     },
     {
-      "matchUpdateTypes": ["major"],
+      "matchUpdateTypes": [
+        "major"
+      ],
       "enabled": false
     },
     {
-      "matchPackageNames": ["org.pitest:pitest"],
+      "matchPackageNames": [
+        "org.pitest:pitest"
+      ],
       "enabled": false
     },
     {
-      "matchPackageNames": ["info.solidsoft.pitest"],
+      "matchPackageNames": [
+        "org.owasp.dependencycheck"
+      ],
+      "enabled": false
+    },
+    {
+      "matchPackageNames": [
+        "info.solidsoft.pitest"
+      ],
       "enabled": false
     }
   ],

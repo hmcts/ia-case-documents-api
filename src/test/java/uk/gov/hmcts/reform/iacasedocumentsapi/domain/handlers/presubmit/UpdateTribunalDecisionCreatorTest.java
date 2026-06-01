@@ -116,8 +116,8 @@ public class UpdateTribunalDecisionCreatorTest {
                         FINAL_DECISION_AND_REASONS_DOCUMENTS,
                         DocumentTag.UPDATED_DECISION_AND_REASONS_COVER_LETTER);
         verify(asylumCase, times(1)).write(CORRECTED_DECISION_AND_REASONS, existingDecisionList);
-        assertEquals(uploadedDocument, existingDecisionList.get(0).getValue().getCoverLetterDocument());
-        assertEquals(currentDate.toString(), existingDecisionList.get(0).getValue().getDateCoverLetterDocumentUploaded());
+        assertEquals(uploadedDocument, existingDecisionList.getFirst().getValue().getCoverLetterDocument());
+        assertEquals(currentDate.toString(), existingDecisionList.getFirst().getValue().getDateCoverLetterDocumentUploaded());
     }
 
     @Test
@@ -151,8 +151,8 @@ public class UpdateTribunalDecisionCreatorTest {
                         DocumentTag.UPDATED_DECISION_AND_REASONS_COVER_LETTER);
 
         verify(asylumCase, times(1)).write(CORRECTED_DECISION_AND_REASONS, existingDecisionList);
-        assertEquals(uploadedDocument, existingDecisionList.get(0).getValue().getCoverLetterDocument());
-        assertEquals(currentDate.toString(), existingDecisionList.get(0).getValue().getDateCoverLetterDocumentUploaded());
+        assertEquals(uploadedDocument, existingDecisionList.getFirst().getValue().getCoverLetterDocument());
+        assertEquals(currentDate.toString(), existingDecisionList.getFirst().getValue().getDateCoverLetterDocumentUploaded());
     }
 
     @Test
