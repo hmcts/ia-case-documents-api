@@ -124,7 +124,7 @@ public class AdvancedBundlingCallbackHandler implements PreSubmitCallbackHandler
         }
 
         //stictchStatusflags -  NEW, IN_PROGRESS, DONE, FAILED
-        final String stitchStatus = caseBundles.get(0).getStitchStatus().orElse("");
+        final String stitchStatus = caseBundles.getFirst().getStitchStatus().orElse("");
 
         responseData.write(AsylumCaseDefinition.STITCHING_STATUS, stitchStatus);
 
@@ -192,7 +192,7 @@ public class AdvancedBundlingCallbackHandler implements PreSubmitCallbackHandler
                     asylumCase.read(FINAL_DECISION_AND_REASONS_DOCUMENTS);
             return maybeFinalDecisionAndReasonsDocuments.orElse(emptyList());
         } else {
-            return allReheardDecisionDocuments.get(0).getValue().getReheardHearingDocs();
+            return allReheardDecisionDocuments.getFirst().getValue().getReheardHearingDocs();
         }
     }
 
@@ -203,7 +203,7 @@ public class AdvancedBundlingCallbackHandler implements PreSubmitCallbackHandler
                 .orElse(emptyList());
 
         if (!allRemittalDocuments.isEmpty()) {
-            RemittalDocument remittalDocument = allRemittalDocuments.get(0).getValue();
+            RemittalDocument remittalDocument = allRemittalDocuments.getFirst().getValue();
 
             List<IdValue<DocumentWithMetadata>> allDocuments =
                     documentsAppender.append(
@@ -222,7 +222,7 @@ public class AdvancedBundlingCallbackHandler implements PreSubmitCallbackHandler
                 .orElse(emptyList());
 
         if (!allReheardHearingDocuments.isEmpty()) {
-            return allReheardHearingDocuments.get(0).getValue().getReheardHearingDocs();
+            return allReheardHearingDocuments.getFirst().getValue().getReheardHearingDocs();
         }
         return emptyList();
     }

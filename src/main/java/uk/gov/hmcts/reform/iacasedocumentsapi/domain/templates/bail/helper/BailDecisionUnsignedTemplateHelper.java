@@ -29,13 +29,13 @@ public class BailDecisionUnsignedTemplateHelper {
         final BailCase bailCase = caseDetails.getCaseData();
         final String applicantDetainedLoc = "applicantDetainedLoc";
         final Map<String, Object> fieldValues = new HashMap<>();
-        boolean isLegalRep = false;
         final boolean hasLegalRep = bailCase.read(HAS_LEGAL_REP, YesOrNo.class).orElse(YesOrNo.NO).equals(YesOrNo.YES);
 
         fieldValues.put("hmcts", "[userImage:hmcts.png]");
         fieldValues.put("applicantGivenNames", bailCase.read(APPLICANT_GIVEN_NAMES, String.class));
         fieldValues.put("applicantFamilyName", bailCase.read(APPLICANT_FAMILY_NAME, String.class));
 
+        boolean isLegalRep = false;
         if (bailCase.read(IS_ADMIN, YesOrNo.class).orElse(YesOrNo.NO) == YesOrNo.YES) {
             isLegalRep = (bailCase.read(SENT_BY_CHECKLIST, String.class).orElse("").equalsIgnoreCase("legal representative"));
         } else if (bailCase.read(IS_LEGAL_REP, YesOrNo.class).orElse(YesOrNo.NO) == YesOrNo.YES) {

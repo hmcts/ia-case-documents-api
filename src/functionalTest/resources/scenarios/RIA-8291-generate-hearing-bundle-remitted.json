@@ -1,6 +1,6 @@
 {
   "description": "RIA-8291-generate-hearing-generic-bundle",
-  "enabled": "{$featureFlag.isEmStitchingEnabled}",
+  "disabled": "!{$featureFlag.isEmStitchingEnabled}",
   "launchDarklyKey": "dlrm-remitted-feature-flag:true",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",

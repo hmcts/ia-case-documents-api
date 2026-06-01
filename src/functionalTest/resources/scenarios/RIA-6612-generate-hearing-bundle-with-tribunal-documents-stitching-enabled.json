@@ -1,6 +1,6 @@
 {
   "description": "RIA-6612 Generate hearing bundle with Tribunal Document (Ada Suitabilty) - stitching enabled",
-  "enabled": "{$featureFlag.isEmStitchingEnabled}",
+  "disabled": "!{$featureFlag.isEmStitchingEnabled}",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
     "credentials": "CaseOfficer",

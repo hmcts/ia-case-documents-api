@@ -58,8 +58,8 @@ public class DocumentsAppenderTest {
         assertNotNull(allDocuments);
         assertEquals(4, allDocuments.size());
 
-        assertEquals("4", allDocuments.get(0).getId());
-        assertEquals(newDocument1, allDocuments.get(0).getValue());
+        assertEquals("4", allDocuments.getFirst().getId());
+        assertEquals(newDocument1, allDocuments.getFirst().getValue());
 
         assertEquals("3", allDocuments.get(1).getId());
         assertEquals(newDocument2, allDocuments.get(1).getValue());
@@ -105,8 +105,8 @@ public class DocumentsAppenderTest {
         assertNotNull(allDocuments);
         assertEquals(3, allDocuments.size());
 
-        assertEquals("3", allDocuments.get(0).getId());
-        assertEquals(newDocument1, allDocuments.get(0).getValue());
+        assertEquals("3", allDocuments.getFirst().getId());
+        assertEquals(newDocument1, allDocuments.getFirst().getValue());
 
         assertEquals("2", allDocuments.get(1).getId());
         assertEquals(newDocument2, allDocuments.get(1).getValue());
@@ -135,8 +135,8 @@ public class DocumentsAppenderTest {
         assertNotNull(allDocuments);
         assertEquals(2, allDocuments.size());
 
-        assertEquals("2", allDocuments.get(0).getId());
-        assertEquals(existingDocument1, allDocuments.get(0).getValue());
+        assertEquals("2", allDocuments.getFirst().getId());
+        assertEquals(existingDocument1, allDocuments.getFirst().getValue());
 
         assertEquals("1", allDocuments.get(1).getId());
         assertEquals(existingDocument2, allDocuments.get(1).getValue());
@@ -159,8 +159,8 @@ public class DocumentsAppenderTest {
         assertNotNull(allDocuments);
         assertEquals(2, allDocuments.size());
 
-        assertEquals("2", allDocuments.get(0).getId());
-        assertEquals(newDocument1, allDocuments.get(0).getValue());
+        assertEquals("2", allDocuments.getFirst().getId());
+        assertEquals(newDocument1, allDocuments.getFirst().getValue());
 
         assertEquals("1", allDocuments.get(1).getId());
         assertEquals(newDocument2, allDocuments.get(1).getValue());

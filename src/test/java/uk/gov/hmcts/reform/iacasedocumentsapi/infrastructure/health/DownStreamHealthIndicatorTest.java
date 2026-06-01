@@ -2,7 +2,7 @@ package uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.health;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.when;
 
 import com.google.common.collect.ImmutableMap;
 import java.util.HashMap;
