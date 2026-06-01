@@ -18,3 +18,12 @@ spring:
         key: "6YN2mGkOiEFMPzg/GCFdujQD9aXZN5oSd5LVwc9hX+Q="
       ssl:
         enabled: true
+  autoconfigure:
+    exclude:
+          - org.springframework.boot.autoconfigure.cache.CacheAutoConfiguration
+          - org.springframework.boot.autoconfigure.data.redis.RedisAutoConfiguration
+          - org.springframework.boot.autoconfigure.data.redis.RedisRepositoriesAutoConfiguration
+
+app:
+  cache:
+    enabled: false
