@@ -92,7 +92,7 @@ public class UpperTribunalBundleHandler implements PreSubmitCallbackHandler<Asyl
         }
 
         //stictchStatusflags -  NEW, IN_PROGRESS, DONE, FAILED
-        final String stitchStatus = caseBundles.get(0).getStitchStatus().orElse("");
+        final String stitchStatus = caseBundles.getFirst().getStitchStatus().orElse("");
 
         responseData.write(AsylumCaseDefinition.STITCHING_STATUS_UPPER_TRIBUNAL, stitchStatus);
         log.info("The case document stitch status is " + stitchStatus + " on case id "

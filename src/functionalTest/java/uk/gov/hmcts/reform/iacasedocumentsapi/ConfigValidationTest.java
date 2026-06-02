@@ -8,8 +8,8 @@ import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.FeatureToggler;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.security.RequestUserAccessTokenProvider;
 import uk.gov.hmcts.reform.iacasedocumentsapi.util.AuthorizationHeadersProvider;
@@ -22,7 +22,7 @@ import static org.mockito.Mockito.when;
 @ActiveProfiles("functional")
 class ConfigValidationTest {
 
-    @MockBean
+    @MockitoBean
     RequestUserAccessTokenProvider requestUserAccessTokenProvider;
 
     @Autowired
@@ -44,7 +44,7 @@ class ConfigValidationTest {
     FeatureToggler featureToggler;
 
     @ParameterizedTest
-    @CsvSource("use-ccd-document-am")
+    @CsvSource("dlrm-fee-remission-feature-flag")
     void launchDarklyFeatureTogglesPresent(String featureToggleName) {
         boolean value1 = featureToggler.getValue(featureToggleName, true);
         boolean value2 = featureToggler.getValue(featureToggleName, false);

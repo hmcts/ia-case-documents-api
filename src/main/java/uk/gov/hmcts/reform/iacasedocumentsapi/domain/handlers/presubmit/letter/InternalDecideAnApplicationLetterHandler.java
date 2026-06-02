@@ -80,7 +80,7 @@ public class InternalDecideAnApplicationLetterHandler implements PreSubmitCallba
         final AsylumCase asylumCase = caseDetails.getCaseData();
 
         Optional<MakeAnApplication> optionalMakeAnApplication = makeAnApplicationService.getMakeAnApplication(asylumCase, true);
-        if (!optionalMakeAnApplication.isPresent()) {
+        if (optionalMakeAnApplication.isEmpty()) {
             throw new IllegalStateException("Application not found");
         }
 
