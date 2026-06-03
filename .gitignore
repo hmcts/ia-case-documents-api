@@ -28,4 +28,4 @@
 /nbdist/
 /.nb-gradle/
 .mirrord/
-pacts/
+pacts//reports/pmd/*
