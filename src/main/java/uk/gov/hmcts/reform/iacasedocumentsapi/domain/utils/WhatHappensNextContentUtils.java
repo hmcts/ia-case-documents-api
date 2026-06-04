@@ -32,7 +32,7 @@ public final class WhatHappensNextContentUtils {
             return switch (makeAnApplicationTypes) {
                 case TIME_EXTENSION -> timeExtentionContent;
                 case ADJOURN, EXPEDITE, TRANSFER, UPDATE_HEARING_REQUIREMENTS ->
-                        adjournExpediteTransferOrUpdateHearingReqsContent;
+                    adjournExpediteTransferOrUpdateHearingReqsContent;
                 case JUDGE_REVIEW, JUDGE_REVIEW_LO -> judgesReviewContent;
                 case LINK_OR_UNLINK -> linkOrUnlinkContent;
                 case WITHDRAW -> withdrawnContent;
@@ -45,7 +45,7 @@ public final class WhatHappensNextContentUtils {
             return switch (makeAnApplicationTypes) {
                 case TIME_EXTENSION -> homeOfficetimeExtentionContent;
                 case ADJOURN, EXPEDITE, TRANSFER, UPDATE_HEARING_REQUIREMENTS ->
-                        homeOfficeAdjournExpediteTransferOrUpdateHearingReqsContent;
+                    homeOfficeAdjournExpediteTransferOrUpdateHearingReqsContent;
                 case JUDGE_REVIEW, JUDGE_REVIEW_LO -> homeOfficeJudgesReviewContent;
                 case LINK_OR_UNLINK -> homeOfficeLinkOrUnlinkContent;
                 case WITHDRAW -> homeOfficeWithdrawnContent;

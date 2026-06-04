@@ -11,16 +11,14 @@ import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callbac
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo.NO;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo.YES;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import lombok.Value;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.MethodSource;
+import org.junit.jupiter.params.provider.EnumSource;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
@@ -77,45 +75,42 @@ class InternalRecordOutOfTimeDecisionLetterHandlerTest {
     }
 
     @ParameterizedTest
-    @MethodSource("generateDifferentEventScenarios")
-    public void it_can_handle_callback(InternalRecordOutOfTimeDecisionLetterHandlerTest.TestScenario scenario) {
-        when(callback.getEvent()).thenReturn(scenario.getEvent());
+    @EnumSource(value = Event.class, names = {"RECORD_OUT_OF_TIME_DECISION"})
+    public void it_can_handle_callback(Event event) {
+        when(callback.getEvent()).thenReturn(event);
         when(callback.getCaseDetails()).thenReturn(caseDetails);
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
         when(asylumCase.read(IS_ADMIN, YesOrNo.class)).thenReturn(Optional.of(YES));
         when(asylumCase.read(DETENTION_FACILITY, String.class)).thenReturn(Optional.of("other"));
         when(asylumCase.read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(NO));
 
-        boolean canHandle = internalRecordOutOfTimeDecisionLetterHandler.canHandle(scenario.callbackStage, callback);
-
-        assertEquals(canHandle, scenario.isExpected());
+        assertTrue(internalRecordOutOfTimeDecisionLetterHandler.canHandle(ABOUT_TO_SUBMIT, callback));
     }
 
-    private static List<InternalRecordOutOfTimeDecisionLetterHandlerTest.TestScenario> generateDifferentEventScenarios() {
-        return InternalRecordOutOfTimeDecisionLetterHandlerTest.TestScenario.builder();
+    @ParameterizedTest
+    @EnumSource(value = Event.class, names = {"RECORD_OUT_OF_TIME_DECISION"}, mode = EnumSource.Mode.EXCLUDE)
+    public void it_cannot_handle_callback_incorrect_event(Event event) {
+        when(callback.getEvent()).thenReturn(event);
+        when(callback.getCaseDetails()).thenReturn(caseDetails);
+        when(caseDetails.getCaseData()).thenReturn(asylumCase);
+        when(asylumCase.read(IS_ADMIN, YesOrNo.class)).thenReturn(Optional.of(YES));
+        when(asylumCase.read(DETENTION_FACILITY, String.class)).thenReturn(Optional.of("other"));
+        when(asylumCase.read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(NO));
+
+        assertFalse(internalRecordOutOfTimeDecisionLetterHandler.canHandle(ABOUT_TO_SUBMIT, callback));
     }
 
-    @Value
-    static class TestScenario {
-        Event event;
-        PreSubmitCallbackStage callbackStage;
-        boolean expected;
+    @ParameterizedTest
+    @EnumSource(value = PreSubmitCallbackStage.class, names = {"ABOUT_TO_SUBMIT"}, mode = EnumSource.Mode.EXCLUDE)
+    public void it_cannot_handle_callback_incorrect_stage(PreSubmitCallbackStage stage) {
+        when(callback.getEvent()).thenReturn(Event.RECORD_OUT_OF_TIME_DECISION);
+        when(callback.getCaseDetails()).thenReturn(caseDetails);
+        when(caseDetails.getCaseData()).thenReturn(asylumCase);
+        when(asylumCase.read(IS_ADMIN, YesOrNo.class)).thenReturn(Optional.of(YES));
+        when(asylumCase.read(DETENTION_FACILITY, String.class)).thenReturn(Optional.of("other"));
+        when(asylumCase.read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(NO));
 
-        public static List<InternalRecordOutOfTimeDecisionLetterHandlerTest.TestScenario> builder() {
-            List<InternalRecordOutOfTimeDecisionLetterHandlerTest.TestScenario> testScenarios = new ArrayList<>();
-            for (Event e : Event.values()) {
-                if (e.equals(Event.RECORD_OUT_OF_TIME_DECISION)) {
-                    testScenarios.add(new InternalRecordOutOfTimeDecisionLetterHandlerTest.TestScenario(e, ABOUT_TO_START, false));
-                    testScenarios.add(new InternalRecordOutOfTimeDecisionLetterHandlerTest.TestScenario(e, ABOUT_TO_SUBMIT, true));
-                } else {
-                    testScenarios.add(new InternalRecordOutOfTimeDecisionLetterHandlerTest.TestScenario(e, ABOUT_TO_START, false));
-                    testScenarios.add(new InternalRecordOutOfTimeDecisionLetterHandlerTest.TestScenario(e, ABOUT_TO_SUBMIT, false));
-                    testScenarios.add(new InternalRecordOutOfTimeDecisionLetterHandlerTest.TestScenario(e, ABOUT_TO_START, false));
-                    testScenarios.add(new InternalRecordOutOfTimeDecisionLetterHandlerTest.TestScenario(e, ABOUT_TO_SUBMIT, false));
-                }
-            }
-            return testScenarios;
-        }
+        assertFalse(internalRecordOutOfTimeDecisionLetterHandler.canHandle(stage, callback));
     }
 
     @Test
@@ -196,14 +191,14 @@ class InternalRecordOutOfTimeDecisionLetterHandlerTest {
         return
             new Document("some-url",
                 "some-binary-url",
-                RandomStringUtils.randomAlphabetic(20));
+                RandomStringUtils.secure().nextAlphabetic(20));
     }
 
     private DocumentWithMetadata createDocumentWithMetadata() {
 
         return
             new DocumentWithMetadata(createDocumentWithDescription(),
-                RandomStringUtils.randomAlphabetic(20),
+                RandomStringUtils.secure().nextAlphabetic(20),
                 new SystemDateProvider().now().toString(), DocumentTag.INTERNAL_CASE_LISTED_LETTER,"test");
 
     }

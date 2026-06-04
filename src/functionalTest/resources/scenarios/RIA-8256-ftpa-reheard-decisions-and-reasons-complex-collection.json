@@ -1,6 +1,5 @@
 {
   "description": "RIA-8256 Send decision and reasons - FTPA reheard",
-  "enabled": "true",
   "request": {
     "uri": "/asylum/ccdAboutToSubmit",
     "credentials": "CaseOfficer",

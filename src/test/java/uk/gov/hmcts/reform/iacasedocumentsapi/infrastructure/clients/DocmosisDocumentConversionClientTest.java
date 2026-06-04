@@ -73,10 +73,10 @@ public class DocmosisDocumentConversionClientTest {
 
         HttpEntity<Map<String, List>> httpEntity = httpEntityArgumentCaptor.getValue();
 
-        assertEquals(httpEntity.getBody().get("accessKey").get(0), someAccessKey);
-        assertEquals(httpEntity.getBody().get("outputName").get(0), "temp.pdf");
+        assertEquals(httpEntity.getBody().get("accessKey").getFirst(), someAccessKey);
+        assertEquals(httpEntity.getBody().get("outputName").getFirst(), "temp.pdf");
         assertThat(httpEntity.getBody().get("file")
-                .get(0)).extracting("file")
+                .getFirst()).extracting("file")
                 .isEqualTo(tempSourceFile);
     }
 

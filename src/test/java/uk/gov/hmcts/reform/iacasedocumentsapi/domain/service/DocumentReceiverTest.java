@@ -107,10 +107,10 @@ public class DocumentReceiverTest {
 
         assertNotNull(actualReceivedDocuments);
         assertEquals(1, actualReceivedDocuments.size());
-        assertEquals(document, actualReceivedDocuments.get(0).getDocument());
-        assertEquals(description, actualReceivedDocuments.get(0).getDescription());
-        assertEquals(dateUploaded, actualReceivedDocuments.get(0).getDateUploaded());
-        assertEquals(tag, actualReceivedDocuments.get(0).getTag());
+        assertEquals(document, actualReceivedDocuments.getFirst().getDocument());
+        assertEquals(description, actualReceivedDocuments.getFirst().getDescription());
+        assertEquals(dateUploaded, actualReceivedDocuments.getFirst().getDateUploaded());
+        assertEquals(tag, actualReceivedDocuments.getFirst().getTag());
     }
 
     @Test

@@ -89,6 +89,6 @@ public class InternalDetHearingBundleReadyHandler implements PreSubmitCallbackHa
                 .map(IdValue::getValue)
                 .collect(Collectors.toList()) : Collections.emptyList();
 
-        return caseBundles.isEmpty() ? "" : caseBundles.get(0).getStitchStatus().orElse("");
+        return caseBundles.isEmpty() ? "" : caseBundles.getFirst().getStitchStatus().orElse("");
     }
 }
