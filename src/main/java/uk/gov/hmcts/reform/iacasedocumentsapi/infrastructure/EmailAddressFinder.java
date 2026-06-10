@@ -15,7 +15,6 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.HearingCentre;
 @Service
 public class EmailAddressFinder {
 
-    private static final String LIST_CASE_HEARING_CENTRE_IS_NOT_PRESENT = "listCaseHearingCentre is not present";
     private static final Set<HearingCentre> SHARED_HEARING_CENTRES = Set.of(HearingCentre.HENDON,
             HearingCentre.BRADFORD_KEIGHLEY, HearingCentre.MCC_MINSHULL, HearingCentre.MCC_CROWN_SQUARE,
             HearingCentre.MANCHESTER_MAGS, HearingCentre.NTH_TYNE_MAGS, HearingCentre.LEEDS_MAGS, HearingCentre.ALLOA_SHERRIF);
@@ -25,7 +24,7 @@ public class EmailAddressFinder {
 
     public EmailAddressFinder(
         Map<HearingCentre, String> hearingCentreEmailAddresses) {
-        this.hearingCentreEmailAddresses = hearingCentreEmailAddresses;
+        this.hearingCentreEmailAddresses = Map.copyOf(hearingCentreEmailAddresses);
     }
 
     public String getHearingCentreEmailAddress(AsylumCase asylumCase) {
@@ -49,14 +48,6 @@ public class EmailAddressFinder {
         if (isRemoteHearing(asylumCase)) {
             return getHearingCentreEmailAddress(asylumCase);
         } else {
-            /*
-            return asylumCase
-                .read(LIST_CASE_HEARING_CENTRE, HearingCentre.class)
-                .map(it -> Optional.ofNullable(getEmailAddress(hearingCentreEmailAddresses, it))
-                    .orElseThrow(() -> new IllegalStateException("Hearing centre email address not found: " + it.toString()))
-                )
-                .orElseThrow(() -> new IllegalStateException(LIST_CASE_HEARING_CENTRE_IS_NOT_PRESENT));
-            */
             HearingCentre hearingCentre = asylumCase.read(LIST_CASE_HEARING_CENTRE, HearingCentre.class)
                     .orElseThrow(() -> new IllegalStateException(LIST_CASE_HEARING_CENTRE.value() + " is not present"));
 
