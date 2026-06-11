@@ -17,7 +17,8 @@
       "matchUpdateTypes": [
         "patch"
       ],
-      "groupSlug": "all-minor-patch",
+      "groupName": "all patches",
+      "groupSlug": "all-patch",
       "automerge": true
     },
     {
