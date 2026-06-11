@@ -314,9 +314,6 @@ dependencyManagement {
             entry 'log4j-api'
         }
 
-        // due to Serenity 5.3.10 forcing spring-context-support@6.2.10
-        dependency group: 'org.springframework', name: 'spring-context-support', version: '6.2.18'
-
         // CVE-2020-13956 - transitive from service-auth-provider-java-client@5.3.3
         dependency group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.14'
     }
