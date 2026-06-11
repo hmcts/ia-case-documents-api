@@ -7,13 +7,7 @@
     "dependencies"
   ],
   "ignoreDeps": [
-    "ch.qos.logback:logback-core",
-    "ch.qos.logback:logback-classic",
-    "org.apache.logging.log4j:log4j-to-slf4j",
-    "org.apache.logging.log4j:log4j-api",
-    "checkstyle",
-    "io.rest-assured:rest-assured",
-    "io.rest-assured:rest-assured-all"
+    "org.owasp.dependencycheck"
   ],
   "packageRules": [
     {
@@ -21,40 +15,16 @@
         "*"
       ],
       "matchUpdateTypes": [
-        "minor",
         "patch"
       ],
-      "groupName": "all non-major dependencies",
-      "groupSlug": "all-minor-patch",
+      "groupName": "all patches",
+      "groupSlug": "all-patch",
       "automerge": true
     },
     {
-      "matchPackageNames": [
-        "com.github.hmcts:ccd-case-document-am-client"
-      ],
-      "enabled": false
-    },
-    {
       "matchUpdateTypes": [
-        "major"
-      ],
-      "enabled": false
-    },
-    {
-      "matchPackageNames": [
-        "org.pitest:pitest"
-      ],
-      "enabled": false
-    },
-    {
-      "matchPackageNames": [
-        "org.owasp.dependencycheck"
-      ],
-      "enabled": false
-    },
-    {
-      "matchPackageNames": [
-        "info.solidsoft.pitest"
+        "major",
+        "minor"
       ],
       "enabled": false
     }
