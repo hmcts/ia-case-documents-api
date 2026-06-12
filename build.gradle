@@ -193,7 +193,7 @@ project.ext {
 }
 
 jacoco {
-    toolVersion = "0.8.13"
+    toolVersion = "0.8.15"
 }
 
 jacocoTestReport {
@@ -276,7 +276,7 @@ dependencyManagement {
         // CVE-2026-33870
         // CVE-2026-33871
         // CVE-2025-67735 - from spring-boot-starter-data-redis@3.5.14
-        mavenBom "io.netty:netty-bom:4.2.13.Final"
+        mavenBom "io.netty:netty-bom:4.2.15.Final"
     }
 
     dependencies {
@@ -346,7 +346,7 @@ dependencies {
 
     implementation group: 'com.github.hmcts', name: 'document-management-client', version: '7.0.1'
     implementation group: 'com.github.hmcts.java-logging', name: 'logging', version: '8.0.0'
-    implementation group: 'com.github.hmcts', name: 'service-auth-provider-java-client', version: '5.3.3'
+    implementation group: 'com.github.hmcts', name: 'service-auth-provider-java-client', version: '5.3.4'
 
     implementation group: 'commons-io', name: 'commons-io', version: '2.21.0'
 
