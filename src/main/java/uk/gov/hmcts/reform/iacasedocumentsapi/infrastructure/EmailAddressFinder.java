@@ -24,7 +24,7 @@ public class EmailAddressFinder {
 
     public EmailAddressFinder(
         Map<HearingCentre, String> hearingCentreEmailAddresses) {
-        this.hearingCentreEmailAddresses = Map.copyOf(hearingCentreEmailAddresses);
+        this.hearingCentreEmailAddresses = hearingCentreEmailAddresses;
     }
 
     public String getHearingCentreEmailAddress(AsylumCase asylumCase) {

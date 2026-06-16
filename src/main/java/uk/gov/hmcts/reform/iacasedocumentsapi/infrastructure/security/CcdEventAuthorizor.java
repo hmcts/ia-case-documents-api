@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
+
+import static java.util.stream.Collectors.toUnmodifiableMap;
 import org.springframework.security.access.AccessDeniedException;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.Event;
 
@@ -17,7 +19,11 @@ public class CcdEventAuthorizor {
         Map<String, List<Event>> roleEventAccess,
         AuthorizedRolesProvider authorizedRolesProvider
     ) {
-        this.roleEventAccess = roleEventAccess;
+        this.roleEventAccess = roleEventAccess.entrySet().stream()
+            .collect(toUnmodifiableMap(
+                Map.Entry::getKey,
+                entry -> List.copyOf(entry.getValue())
+            ));
         this.authorizedRolesProvider = authorizedRolesProvider;
     }
 
