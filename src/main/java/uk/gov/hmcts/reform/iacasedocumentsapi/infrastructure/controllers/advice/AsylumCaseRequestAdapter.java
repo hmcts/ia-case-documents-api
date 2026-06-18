@@ -1,8 +1,9 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.controllers.advice;
 
 import java.lang.reflect.Type;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
+import lombok.extern.slf4j.Slf4j;
+import org.slf4j.MDC;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.HttpInputMessage;
 import org.springframework.http.converter.HttpMessageConverter;
@@ -17,9 +18,8 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.Callb
 
 @ControllerAdvice
 @SuppressWarnings("unchecked")
+@Slf4j
 public class AsylumCaseRequestAdapter extends RequestBodyAdviceAdapter {
-
-    private Logger log = LoggerFactory.getLogger(AsylumCaseRequestAdapter.class);
 
     @Override
     public boolean supports(MethodParameter methodParameter, Type targetType, Class<? extends HttpMessageConverter<?>> converterType) {
@@ -31,8 +31,12 @@ public class AsylumCaseRequestAdapter extends RequestBodyAdviceAdapter {
 
         Callback<AsylumCase> callback = (Callback<AsylumCase>) body;
         CaseDetails<AsylumCase> caseDetails = callback.getCaseDetails();
+        String caseId = String.valueOf(caseDetails.getId());
 
-        RequestContextHolder.currentRequestAttributes().setAttribute("CCDCaseId", caseDetails.getId(), RequestAttributes.SCOPE_REQUEST);
+        RequestContextHolder.currentRequestAttributes().setAttribute("CCDCaseId", caseId, RequestAttributes.SCOPE_REQUEST);
+
+        // Set in MDC for logging pattern
+        MDC.put(CorrelationIdFilter.CCD_CASE_ID_MDC_KEY, caseId);
 
         return body;
     }
