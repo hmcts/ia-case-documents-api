@@ -1,7 +1,7 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field;
 
 import java.util.Optional;
-import org.junit.Assert;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 public class AddressUkTest {
@@ -27,12 +27,12 @@ public class AddressUkTest {
     @Test
     public void should_hold_onto_values() {
 
-        Assert.assertEquals(Optional.of(addressLine1), addressUk.getAddressLine1());
-        Assert.assertEquals(Optional.of(addressLine2), addressUk.getAddressLine2());
-        Assert.assertEquals(Optional.of(addressLine3), addressUk.getAddressLine3());
-        Assert.assertEquals(Optional.of(postTown), addressUk.getPostTown());
-        Assert.assertEquals(Optional.of(county), addressUk.getCounty());
-        Assert.assertEquals(Optional.of(postCode), addressUk.getPostCode());
-        Assert.assertEquals(Optional.of(country), addressUk.getCountry());
+        Assertions.assertEquals(Optional.of(addressLine1), addressUk.getAddressLine1());
+        Assertions.assertEquals(Optional.of(addressLine2), addressUk.getAddressLine2());
+        Assertions.assertEquals(Optional.of(addressLine3), addressUk.getAddressLine3());
+        Assertions.assertEquals(Optional.of(postTown), addressUk.getPostTown());
+        Assertions.assertEquals(Optional.of(county), addressUk.getCounty());
+        Assertions.assertEquals(Optional.of(postCode), addressUk.getPostCode());
+        Assertions.assertEquals(Optional.of(country), addressUk.getCountry());
     }
 }

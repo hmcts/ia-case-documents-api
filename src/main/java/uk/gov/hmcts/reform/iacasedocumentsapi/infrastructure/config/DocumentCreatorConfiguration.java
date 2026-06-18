@@ -546,7 +546,7 @@ public class DocumentCreatorConfiguration {
     }
 
     @Bean("clarifyingQuestionsAnswers")
-    public DocumentCreator<AsylumCase> getAppealReasonsDocumentCreator(
+    public DocumentCreator<AsylumCase> getClarifyingQuestionAnswersDocumentCreator(
         @Value("${clarifyingQuestionsAnswers.contentType}") String contentType,
         @Value("${clarifyingQuestionsAnswers.fileExtension}") String fileExtension,
         @Value("${clarifyingQuestionsAnswers.fileName}") String fileName,

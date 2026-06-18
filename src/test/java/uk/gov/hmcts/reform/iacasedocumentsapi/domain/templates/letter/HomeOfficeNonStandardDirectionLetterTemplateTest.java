@@ -1,6 +1,6 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates.letter;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.APPELLANT_FAMILY_NAME;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.APPELLANT_GIVEN_NAMES;
@@ -87,7 +87,7 @@ public class HomeOfficeNonStandardDirectionLetterTemplateTest {
     void dataSetUp() {
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
         when(customerServicesProvider.getInternalCustomerServicesTelephone(asylumCase)).thenReturn(telephoneNumber);
-        when(customerServicesProvider.getInternalCustomerServicesEmail(asylumCase)).thenReturn(email);;
+        when(customerServicesProvider.getInternalCustomerServicesEmail(asylumCase)).thenReturn(email);
         when(asylumCase.read(APPELLANT_GIVEN_NAMES, String.class)).thenReturn(Optional.of(appellantGivenNames));
         when(asylumCase.read(APPELLANT_FAMILY_NAME, String.class)).thenReturn(Optional.of(appellantFamilyName));
         when(asylumCase.read(HOME_OFFICE_REFERENCE_NUMBER, String.class)).thenReturn(Optional.of(homeOfficeReferenceNumber));

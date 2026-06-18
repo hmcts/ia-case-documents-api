@@ -4,6 +4,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.cache.support.NoOpCacheManager;
@@ -23,8 +24,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-@Import({ CacheConfiguration.class })
+@Import({CacheConfiguration.class})
 @ExtendWith(SpringExtension.class)
+@ExtendWith(MockitoExtension.class)
 @EnableCaching
 class CacheConfigurationTest {
 
@@ -41,12 +43,10 @@ class CacheConfigurationTest {
     private static final String ACCESS_KEY = "some-access-key";
     private static final String TEST_ENCRYPTION_KEY = Base64.getEncoder().encodeToString(new byte[32]);
 
-
-
     @DynamicPropertySource
     static void redisProperties(DynamicPropertyRegistry registry) {
         registry.add("spring.data.redis.url", () ->
-                String.format("redis://localhost:%d", 6379)
+            "redis://localhost:6379"
         );
         registry.add("spring.data.redis.encryption.key", () -> TEST_ENCRYPTION_KEY);
     }

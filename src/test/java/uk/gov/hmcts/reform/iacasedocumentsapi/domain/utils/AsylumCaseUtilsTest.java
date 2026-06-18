@@ -74,6 +74,7 @@ import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseD
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.IS_REMOTE_HEARING;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.IS_VIRTUAL_HEARING;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.LIST_CASE_HEARING_CENTRE;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.LATE_REMISSION_TYPE;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.REMISSION_DECISION;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.REMISSION_TYPE;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.SUBMISSION_OUT_OF_TIME;
@@ -258,7 +259,7 @@ public class AsylumCaseUtilsTest {
 
         assertEquals(1, returnedDirection.size());
 
-        assertEquals(directionTag, returnedDirection.get(0).getTag());
+        assertEquals(directionTag, returnedDirection.getFirst().getTag());
 
     }
 
@@ -325,7 +326,20 @@ public class AsylumCaseUtilsTest {
 
     @ParameterizedTest
     @EnumSource(value = RemissionType.class)
-    void should_return_amount_remitted(RemissionType remissionType) {
+    void should_return_amount_remitted_from_late_remission_type(RemissionType remissionType) {
+        when(asylumCase.read(LATE_REMISSION_TYPE, RemissionType.class)).thenReturn(Optional.of(remissionType));
+        if (remissionType.equals(NO_REMISSION)) {
+            assertEquals(0, AsylumCaseUtils.getFeeRemission(asylumCase));
+        } else {
+            when(asylumCase.read(AMOUNT_REMITTED, String.class)).thenReturn(Optional.of("8000"));
+            assertEquals(80, AsylumCaseUtils.getFeeRemission(asylumCase));
+        }
+    }
+
+    @ParameterizedTest
+    @EnumSource(value = RemissionType.class)
+    void should_return_amount_remitted_from_remission_type(RemissionType remissionType) {
+        when(asylumCase.read(LATE_REMISSION_TYPE, RemissionType.class)).thenReturn(Optional.empty());
         when(asylumCase.read(REMISSION_TYPE, RemissionType.class)).thenReturn(Optional.of(remissionType));
         if (remissionType.equals(NO_REMISSION)) {
             assertEquals(0, AsylumCaseUtils.getFeeRemission(asylumCase));
@@ -502,7 +516,7 @@ public class AsylumCaseUtilsTest {
         List<String> result = AsylumCaseUtils.getAppellantAddressAsList(asylumCase);
 
         assertEquals(6, result.size());
-        assertEquals("Aa Pp", result.get(0));
+        assertEquals("Aa Pp", result.getFirst());
         assertEquals("Apartment 99", result.get(1));
         assertEquals("Example Road", result.get(2));
         assertEquals("Example County", result.get(3));
@@ -527,7 +541,7 @@ public class AsylumCaseUtilsTest {
         List<String> result = AsylumCaseUtils.getAppellantAddressAsList(asylumCase);
 
         assertEquals(6, result.size());
-        assertEquals("VerylongVerylongVerylongVerylongAa VerylongVerylongVerylongVeryl", result.get(0));
+        assertEquals("VerylongVerylongVerylongVerylongAa VerylongVerylongVerylongVeryl", result.getFirst());
         assertEquals("Apartment 99", result.get(1));
         assertEquals("Example Road", result.get(2));
         assertEquals("Example County", result.get(3));

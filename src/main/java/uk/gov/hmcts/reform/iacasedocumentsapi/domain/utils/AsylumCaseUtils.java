@@ -112,7 +112,7 @@ public class AsylumCaseUtils {
     }
 
     public static String getDirectionDueDate(AsylumCase asylumCase, DirectionTag tag) {
-        Direction direction = getCaseDirectionsBasedOnTag(asylumCase, tag).get(0);
+        Direction direction = getCaseDirectionsBasedOnTag(asylumCase, tag).getFirst();
         return direction.getDateDue();
     }
 
@@ -227,7 +227,8 @@ public class AsylumCaseUtils {
     }
 
     public static double getFeeRemission(AsylumCase asylumCase) {
-        RemissionType remissionType = asylumCase.read(REMISSION_TYPE, RemissionType.class)
+        RemissionType remissionType = asylumCase.read(LATE_REMISSION_TYPE, RemissionType.class)
+                .or(() -> asylumCase.read(REMISSION_TYPE, RemissionType.class))
                 .orElseThrow(() -> new RequiredFieldMissingException("Remission type not found"));
 
         if (remissionType.equals(RemissionType.NO_REMISSION)) {

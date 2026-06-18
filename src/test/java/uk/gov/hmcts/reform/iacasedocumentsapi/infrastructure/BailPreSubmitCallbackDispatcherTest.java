@@ -284,6 +284,6 @@ public class BailPreSubmitCallbackDispatcherTest {
             (List<PreSubmitCallbackHandler<BailCase>>) ReflectionTestUtils.getField(dispatcher, "sortedCallbackHandlers");
 
         assertEquals(1, sortedDispatcher.size());
-        assertEquals(h1, sortedDispatcher.get(0));
+        assertEquals(h1, sortedDispatcher.getFirst());
     }
 }

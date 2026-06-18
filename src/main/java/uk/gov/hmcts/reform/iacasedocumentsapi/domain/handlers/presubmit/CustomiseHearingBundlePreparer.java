@@ -18,18 +18,14 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.JourneyT
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.PreSubmitCallbackHandler;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.Appender;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.FeatureToggler;
 
 @Component
 public class CustomiseHearingBundlePreparer implements PreSubmitCallbackHandler<AsylumCase> {
 
     private final Appender<DocumentWithDescription> documentWithDescriptionAppender;
-    private final FeatureToggler featureToggler;
 
-    public CustomiseHearingBundlePreparer(Appender<DocumentWithDescription> documentWithDescriptionAppender,
-                                          FeatureToggler featureToggler) {
+    public CustomiseHearingBundlePreparer(Appender<DocumentWithDescription> documentWithDescriptionAppender) {
         this.documentWithDescriptionAppender = documentWithDescriptionAppender;
-        this.featureToggler = featureToggler;
     }
 
     @Override
@@ -58,8 +54,7 @@ public class CustomiseHearingBundlePreparer implements PreSubmitCallbackHandler<
     }
 
     public void prepareCustomDocuments(AsylumCase asylumCase, boolean isUpdatedBundle) {
-        boolean isCaseReheard = asylumCase.read(CASE_FLAG_SET_ASIDE_REHEARD_EXISTS, YesOrNo.class).map(flag -> flag.equals(YesOrNo.YES)).orElse(false)
-            && featureToggler.getValue("reheard-feature", false);
+        boolean isCaseReheard = asylumCase.read(CASE_FLAG_SET_ASIDE_REHEARD_EXISTS, YesOrNo.class).map(flag -> flag.equals(YesOrNo.YES)).orElse(false);
         boolean isAipJourney = asylumCase
             .read(JOURNEY_TYPE, JourneyType.class)
             .map(type -> type == AIP).orElse(false);
@@ -93,7 +88,7 @@ public class CustomiseHearingBundlePreparer implements PreSubmitCallbackHandler<
             Optional<List<IdValue<DocumentWithMetadata>>> finalDEcisionAndResonDocs = asylumCase.read(FINAL_DECISION_AND_REASONS_DOCUMENTS);
             return getDocumentWithDescListFromMetaData(finalDEcisionAndResonDocs.orElse(emptyList()));
         } else {
-            return getDocumentWithDescListFromMetaData(allReheardDecisionDocuments.get(0).getValue().getReheardHearingDocs());
+            return getDocumentWithDescListFromMetaData(allReheardDecisionDocuments.getFirst().getValue().getReheardHearingDocs());
         }
     }
 
@@ -104,7 +99,7 @@ public class CustomiseHearingBundlePreparer implements PreSubmitCallbackHandler<
             .orElse(emptyList());
 
         if (!allRemittalDocuments.isEmpty()) {
-            RemittalDocument remittalDocument = allRemittalDocuments.get(0).getValue();
+            RemittalDocument remittalDocument = allRemittalDocuments.getFirst().getValue();
             DocumentWithDescription remittalDocWithDesc = getDocumentWithDescFromMetaData(remittalDocument.getDecisionDocument());
 
             List<IdValue<DocumentWithDescription>> remittalOtherDocsWithDesc = getDocumentWithDescListFromMetaDataWithoutBundles(remittalDocument.getOtherRemittalDocs());
@@ -149,7 +144,7 @@ public class CustomiseHearingBundlePreparer implements PreSubmitCallbackHandler<
 
         List<IdValue<DocumentWithDescription>> reheardHearingDocsInCollection = emptyList();
         if (!allReheardHearingDocuments.isEmpty()) {
-            reheardHearingDocsInCollection = getDocumentWithDescListFromMetaDataWithoutBundles(allReheardHearingDocuments.get(0).getValue().getReheardHearingDocs());
+            reheardHearingDocsInCollection = getDocumentWithDescListFromMetaDataWithoutBundles(allReheardHearingDocuments.getFirst().getValue().getReheardHearingDocs());
         }
         // Also if there were any documents prior to set-aside release in REHEARD_HEARING_DOCUMENTS take them into account as well.
         Optional<List<IdValue<DocumentWithMetadata>>> maybeExistingReheardDocumentsPreSetAside =
@@ -230,14 +225,10 @@ public class CustomiseHearingBundlePreparer implements PreSubmitCallbackHandler<
                 customDocuments = handleLegalRepSourceField(documentWithMetadata, newDocumentWithDescription, customDocuments, isAipJourney);
             } else {
                 customDocuments = switch (targetField) {
-                    case CUSTOM_APP_ADDENDUM_EVIDENCE_DOCS:
-                        yield handleCustomAddendumDocsTargetField(documentWithMetadata, newDocumentWithDescription, customDocuments, "The appellant");
-                    case CUSTOM_RESP_ADDENDUM_EVIDENCE_DOCS:
-                        yield handleCustomAddendumDocsTargetField(documentWithMetadata, newDocumentWithDescription, customDocuments, "The respondent");
-                    case CUSTOM_TRIBUNAL_DOCUMENTS:
-                        yield handleCustomTribunalDocsTargetField(documentWithMetadata, newDocumentWithDescription, customDocuments);
-                    default:
-                        yield documentWithDescriptionAppender.append(newDocumentWithDescription, customDocuments);
+                    case CUSTOM_APP_ADDENDUM_EVIDENCE_DOCS -> handleCustomAddendumDocsTargetField(documentWithMetadata, newDocumentWithDescription, customDocuments, "The appellant");
+                    case CUSTOM_RESP_ADDENDUM_EVIDENCE_DOCS -> handleCustomAddendumDocsTargetField(documentWithMetadata, newDocumentWithDescription, customDocuments, "The respondent");
+                    case CUSTOM_TRIBUNAL_DOCUMENTS -> handleCustomTribunalDocsTargetField(documentWithMetadata, newDocumentWithDescription, customDocuments);
+                    default -> documentWithDescriptionAppender.append(newDocumentWithDescription, customDocuments);
                 };
             }
         }

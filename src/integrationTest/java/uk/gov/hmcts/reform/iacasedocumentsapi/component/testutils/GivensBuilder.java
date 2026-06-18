@@ -19,7 +19,7 @@ public interface GivensBuilder {
                                 .build(),
                         aResponse()
                 .withStatus(200)
-                .withBody(RandomStringUtils.random(100).getBytes())
+                .withBody(RandomStringUtils.secure().next(100).getBytes())
                 .build()));
     }
 

@@ -135,8 +135,8 @@ public class EmDocumentBundlerTest {
         assertEquals(caseDataCallback.getCaseDetails().getJurisdiction(), "IA");
         assertEquals(caseDataCallback.getCaseDetails().getId(), 1L);
         assertEquals(caseDataCallback.getCaseDetails().getCaseData().getCaseBundles().size(), 1);
-        assertEquals(caseDataCallback.getCaseDetails().getCaseData().getCaseBundles().get(0).getId(), "1");
-        assertThat(caseDataCallback.getCaseDetails().getCaseData().getCaseBundles().get(0).getValue())
+        assertEquals(caseDataCallback.getCaseDetails().getCaseData().getCaseBundles().getFirst().getId(), "1");
+        assertThat(caseDataCallback.getCaseDetails().getCaseData().getCaseBundles().getFirst().getValue())
             .usingRecursiveComparison().ignoringFields("documents").isEqualTo(bundleIdValue.getValue());
 
     }
@@ -213,8 +213,8 @@ public class EmDocumentBundlerTest {
         assertEquals(caseDataCallback.getCaseDetails().getJurisdiction(), "IA");
         assertEquals(caseDataCallback.getCaseDetails().getId(), 1L);
         assertEquals(caseDataCallback.getCaseDetails().getCaseData().getCaseBundles().size(), 1);
-        assertEquals(caseDataCallback.getCaseDetails().getCaseData().getCaseBundles().get(0).getId(), "1");
-        assertThat(caseDataCallback.getCaseDetails().getCaseData().getCaseBundles().get(0).getValue())
+        assertEquals(caseDataCallback.getCaseDetails().getCaseData().getCaseBundles().getFirst().getId(), "1");
+        assertThat(caseDataCallback.getCaseDetails().getCaseData().getCaseBundles().getFirst().getValue())
             .usingRecursiveComparison().ignoringFields("documents").isEqualTo(bundleIdValue.getValue());
 
     }

@@ -1,6 +1,7 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.APPEAL_REFERENCE_NUMBER;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.APPELLANT_FAMILY_NAME;
@@ -11,7 +12,6 @@ import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseD
 
 import java.util.Map;
 import java.util.Optional;
-import junit.framework.TestCase;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -75,12 +75,12 @@ class EndAppealAutomaticallyTemplateTest {
 
     //Helper method for common assertions
     private void checkCommonFields() {
-        TestCase.assertTrue(fieldValuesMap.containsKey("appealReferenceNumber"));
-        TestCase.assertTrue(fieldValuesMap.containsKey("appellantGivenNames"));
-        TestCase.assertTrue(fieldValuesMap.containsKey("appellantFamilyName"));
-        TestCase.assertTrue(fieldValuesMap.containsKey("homeOfficeReferenceNumber"));
-        TestCase.assertTrue(fieldValuesMap.containsKey("legalRepReferenceNumber"));
-        TestCase.assertTrue(fieldValuesMap.containsKey("endAppealDate"));
+        assertTrue(fieldValuesMap.containsKey("appealReferenceNumber"));
+        assertTrue(fieldValuesMap.containsKey("appellantGivenNames"));
+        assertTrue(fieldValuesMap.containsKey("appellantFamilyName"));
+        assertTrue(fieldValuesMap.containsKey("homeOfficeReferenceNumber"));
+        assertTrue(fieldValuesMap.containsKey("legalRepReferenceNumber"));
+        assertTrue(fieldValuesMap.containsKey("endAppealDate"));
     }
 
     // Helper method to set the common data

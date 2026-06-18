@@ -25,7 +25,6 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.IdValue;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.PreSubmitCallbackHandler;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.Appender;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.FeatureToggler;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.clients.EmBundleRequestExecutor;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.enties.em.Bundle;
 
@@ -41,7 +40,6 @@ public class CustomiseHearingBundleHandler implements PreSubmitCallbackHandler<A
     private final String emBundlerUrl;
     private final String emBundlerStitchUri;
     private final ObjectMapper objectMapper;
-    private final FeatureToggler featureToggler;
 
     public CustomiseHearingBundleHandler(
         @Value("${emBundler.url}") String emBundlerUrl,
@@ -49,8 +47,7 @@ public class CustomiseHearingBundleHandler implements PreSubmitCallbackHandler<A
         EmBundleRequestExecutor emBundleRequestExecutor,
         Appender<DocumentWithMetadata> documentWithMetadataAppender,
         DateProvider dateProvider,
-        ObjectMapper objectMapper,
-        FeatureToggler featureToggler
+        ObjectMapper objectMapper
     ) {
         this.emBundlerUrl = emBundlerUrl;
         this.emBundlerStitchUri = emBundlerStitchUri;
@@ -58,8 +55,6 @@ public class CustomiseHearingBundleHandler implements PreSubmitCallbackHandler<A
         this.documentWithMetadataAppender = documentWithMetadataAppender;
         this.dateProvider = dateProvider;
         this.objectMapper = objectMapper;
-        this.featureToggler = featureToggler;
-
     }
 
     public boolean canHandle(
@@ -91,8 +86,7 @@ public class CustomiseHearingBundleHandler implements PreSubmitCallbackHandler<A
         asylumCase.clear(AsylumCaseDefinition.CASE_BUNDLES);
 
 
-        boolean isReheardCase = asylumCase.read(CASE_FLAG_SET_ASIDE_REHEARD_EXISTS, YesOrNo.class).map(flag -> flag.equals(YesOrNo.YES)).orElse(false)
-            && featureToggler.getValue("reheard-feature", false);
+        boolean isReheardCase = asylumCase.read(CASE_FLAG_SET_ASIDE_REHEARD_EXISTS, YesOrNo.class).map(flag -> flag.equals(YesOrNo.YES)).orElse(false);
         boolean isRemittedPath = asylumCase.read(SOURCE_OF_REMITTAL, String.class).isPresent();
 
         boolean isOrWasAda = asylumCase.read(SUITABILITY_REVIEW_DECISION).isPresent();
@@ -171,7 +165,7 @@ public class CustomiseHearingBundleHandler implements PreSubmitCallbackHandler<A
         }
 
         //stitchStatusflags -  NEW, IN_PROGRESS, DONE, FAILED
-        final String stitchStatus = caseBundles.get(0).getStitchStatus().orElse("");
+        final String stitchStatus = caseBundles.getFirst().getStitchStatus().orElse("");
 
         asylumCase.write(AsylumCaseDefinition.STITCHING_STATUS, stitchStatus);
 
@@ -356,7 +350,7 @@ public class CustomiseHearingBundleHandler implements PreSubmitCallbackHandler<A
         ReheardHearingDocuments beforeReheardDocs = new ReheardHearingDocuments();
         // If existing reheard hearing documents exist, extract the list of documents
         if (!existingReheardDocs.isEmpty()) {
-            beforeReheardDocs = existingReheardDocs.get(0).getValue();
+            beforeReheardDocs = existingReheardDocs.getFirst().getValue();
             beforeDocuments = beforeReheardDocs.getReheardHearingDocs();
         }
         currentReheardHearingDocs = restoreDocumentsInCollection(currentReheardHearingDocs, beforeDocuments);
@@ -384,8 +378,8 @@ public class CustomiseHearingBundleHandler implements PreSubmitCallbackHandler<A
         String idValue = "1";
 
         if (!existingRemittalDocs.isEmpty()) {
-            idValue = existingRemittalDocs.get(0).getId();
-            beforeRemittalDocuments = existingRemittalDocs.get(0).getValue();
+            idValue = existingRemittalDocs.getFirst().getId();
+            beforeRemittalDocuments = existingRemittalDocs.getFirst().getValue();
             beforeDocuments = beforeRemittalDocuments.getOtherRemittalDocs();
         }
         currentRemittalDocuments = restoreDocumentsInCollection(currentRemittalDocuments, beforeDocuments);

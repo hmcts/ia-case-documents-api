@@ -38,7 +38,7 @@ public class AsylumCaseTest {
 
         Optional<List<IdValue<DocumentWithDescription>>> maybeCaseArgumentEvidence = asylumCase.read(AsylumCaseDefinition.CASE_ARGUMENT_EVIDENCE);
 
-        IdValue<DocumentWithDescription> documentWithDescriptionIdValue = maybeCaseArgumentEvidence.get().get(0);
+        IdValue<DocumentWithDescription> documentWithDescriptionIdValue = maybeCaseArgumentEvidence.get().getFirst();
 
         assertEquals(documentWithDescriptionIdValue.getId(), "d019091d-806c-49cf-af64-669fb3d21361");
         assertEquals(documentWithDescriptionIdValue.getValue().getDocument().get().getDocumentUrl(),
@@ -79,7 +79,7 @@ public class AsylumCaseTest {
 
         Optional<List<IdValue<DocumentWithDescription>>> maybeCaseArgumentEvidence = asylumCase.read(CASE_ARGUMENT_EVIDENCE);
 
-        IdValue<DocumentWithDescription> documentWithDescriptionIdValue = maybeCaseArgumentEvidence.get().get(0);
+        IdValue<DocumentWithDescription> documentWithDescriptionIdValue = maybeCaseArgumentEvidence.get().getFirst();
 
 
         assertEquals(maybeCaseArgumentEvidence.get().size(),1);
