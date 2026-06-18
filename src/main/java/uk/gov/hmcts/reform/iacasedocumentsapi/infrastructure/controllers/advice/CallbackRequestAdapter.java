@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.servlet.mvc.method.annotation.RequestBodyAdviceAdapter;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseData;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseDetails;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.Callback;
 
@@ -19,7 +19,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.Callb
 @ControllerAdvice
 @SuppressWarnings("unchecked")
 @Slf4j
-public class AsylumCaseRequestAdapter extends RequestBodyAdviceAdapter {
+public class CallbackRequestAdapter extends RequestBodyAdviceAdapter {
 
     @Override
     public boolean supports(MethodParameter methodParameter, Type targetType, Class<? extends HttpMessageConverter<?>> converterType) {
@@ -29,8 +29,8 @@ public class AsylumCaseRequestAdapter extends RequestBodyAdviceAdapter {
     @Override
     public Object afterBodyRead(Object body, HttpInputMessage inputMessage, MethodParameter parameter, Type targetType, Class<? extends HttpMessageConverter<?>> converterType) {
 
-        Callback<AsylumCase> callback = (Callback<AsylumCase>) body;
-        CaseDetails<AsylumCase> caseDetails = callback.getCaseDetails();
+        Callback<? extends CaseData> callback = (Callback<? extends CaseData>) body;
+        CaseDetails<? extends CaseData> caseDetails = callback.getCaseDetails();
         String caseId = String.valueOf(caseDetails.getId());
 
         RequestContextHolder.currentRequestAttributes().setAttribute("CCDCaseId", caseId, RequestAttributes.SCOPE_REQUEST);
