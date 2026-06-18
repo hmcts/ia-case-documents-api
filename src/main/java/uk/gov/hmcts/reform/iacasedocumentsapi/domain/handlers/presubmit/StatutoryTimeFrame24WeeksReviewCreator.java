@@ -4,7 +4,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DocumentTag;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseDetails;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.Event;
@@ -43,16 +42,11 @@ public class StatutoryTimeFrame24WeeksReviewCreator implements PreSubmitCallback
         requireNonNull(callbackStage, "callbackStage must not be null");
         requireNonNull(callback, "callback must not be null");
 
-        final AsylumCase asylumCase =
-                callback
-                        .getCaseDetails()
-                        .getCaseData();
-
+        final AsylumCase asylumCase = callback.getCaseDetails().getCaseData();
         boolean canHandleReviewDoc = callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
-                &&
-                Event.COMPLETE_CASE_REVIEW
-                        .equals(callback.getEvent());
-        log.info("canHandleReviewDoc {}", canHandleReviewDoc);
+                && Event.COMPLETE_CASE_REVIEW.equals(callback.getEvent())
+                && !isInternalCase(asylumCase);
+        log.info("canHandle 24 weeks Review Doc {}", canHandleReviewDoc);
         return canHandleReviewDoc;
     }
 
@@ -65,22 +59,17 @@ public class StatutoryTimeFrame24WeeksReviewCreator implements PreSubmitCallback
         final AsylumCase asylumCase = caseDetails.getCaseData();
 
         Document appealSubmission;
-        DocumentTag documentTag;
-        AsylumCaseDefinition documentField;
 
 
-        boolean canAddDocument = callback.getEvent().equals(Event.COMPLETE_CASE_REVIEW) && isInternalCase(asylumCase);
-        log.info("canAddDocument {}", canAddDocument);
+        boolean canAddDocument = callback.getEvent().equals(Event.COMPLETE_CASE_REVIEW) && !isInternalCase(asylumCase);
+        log.info("canAdd review document Document {}", canAddDocument);
         if (canAddDocument) {
             appealSubmission = statutoryTimeFrame24WeeksReviewDocumentCreator.create(caseDetails);
-            documentTag = DocumentTag.INTERNAL_APPEAL_SUBMISSION;
-            documentField = NOTIFICATION_ATTACHMENT_DOCUMENTS;
-
             documentHandler.addWithMetadata(
                     asylumCase,
                     appealSubmission,
-                    documentField,
-                    documentTag
+                    NOTIFICATION_ATTACHMENT_DOCUMENTS,
+                    DocumentTag.INTERNAL_APPEAL_SUBMISSION
             );
         }
         return new PreSubmitCallbackResponse<>(asylumCase);
