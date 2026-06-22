@@ -13,7 +13,7 @@ import org.springframework.core.MethodParameter;
 
 @ExtendWith(MockitoExtension.class)
 @SuppressWarnings("unchecked")
-class AsylumCaseRequestAdapterTest {
+class CallbackRequestAdapterTest {
 
     @Mock
     private MethodParameter methodParameter;
@@ -22,7 +22,7 @@ class AsylumCaseRequestAdapterTest {
     private Type type;
 
     @InjectMocks
-    private AsylumCaseRequestAdapter asylumCaseRequestAdapter;
+    private CallbackRequestAdapter callbackRequestAdapter;
 
     @BeforeEach
     void setUp() {
@@ -31,7 +31,7 @@ class AsylumCaseRequestAdapterTest {
 
     @Test
     void should_return_true() {
-        assertEquals(true, asylumCaseRequestAdapter.supports(methodParameter, type, null));
+        assertEquals(true, callbackRequestAdapter.supports(methodParameter, type, null));
     }
 
 }
