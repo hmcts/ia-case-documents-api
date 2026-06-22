@@ -4,8 +4,6 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.security.access.AccessDeniedException;
@@ -25,7 +23,6 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.security.idam.Ident
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Slf4j
 @ControllerAdvice(basePackages = "uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.controllers")
 @RequestMapping(produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
 @RequiredArgsConstructor
@@ -39,7 +36,6 @@ public class CallbackControllerAdvice {
         HttpServletRequest request,
         RequiredFieldMissingException ex
     ) {
-        logAbbreviatedStackTrace(ex);
         errorResponseBuilder.logError(ex, ErrorCode.REQUIRED_FIELD_MISSING, request);
         ErrorResponse response = errorResponseBuilder.build(
             ErrorCode.REQUIRED_FIELD_MISSING, request, "Required field is missing: " + ex.getMessage());
@@ -51,7 +47,6 @@ public class CallbackControllerAdvice {
         HttpServletRequest request,
         IllegalStateException ex
     ) {
-        logAbbreviatedStackTrace(ex);
         errorResponseBuilder.logError(ex, ErrorCode.BAD_REQUEST, request);
         ErrorResponse response = errorResponseBuilder.build(
             ErrorCode.BAD_REQUEST, request, "Invalid application state: " + ex.getMessage());
@@ -63,7 +58,6 @@ public class CallbackControllerAdvice {
         HttpServletRequest request,
         IllegalArgumentException ex
     ) {
-        logAbbreviatedStackTrace(ex);
         errorResponseBuilder.logError(ex, ErrorCode.BAD_REQUEST, request);
         ErrorResponse response = errorResponseBuilder.build(
             ErrorCode.BAD_REQUEST, request, "Invalid argument: " + ex.getMessage());
@@ -75,7 +69,6 @@ public class CallbackControllerAdvice {
         HttpServletRequest request,
         MethodArgumentNotValidException ex
     ) {
-        logAbbreviatedStackTrace(ex);
         errorResponseBuilder.logError(ex, ErrorCode.VALIDATION_ERROR, request);
 
         List<ErrorResponse.FieldError> fieldErrors = ex.getBindingResult()
@@ -97,7 +90,6 @@ public class CallbackControllerAdvice {
         HttpServletRequest request,
         HttpMessageNotReadableException ex
     ) {
-        logAbbreviatedStackTrace(ex);
         errorResponseBuilder.logError(ex, ErrorCode.BAD_REQUEST, request);
         ErrorResponse response = errorResponseBuilder.build(
             ErrorCode.BAD_REQUEST, request, "Malformed request body");
@@ -109,7 +101,6 @@ public class CallbackControllerAdvice {
         HttpServletRequest request,
         MissingServletRequestParameterException ex
     ) {
-        logAbbreviatedStackTrace(ex);
         errorResponseBuilder.logError(ex, ErrorCode.BAD_REQUEST, request);
         ErrorResponse response = errorResponseBuilder.build(
             ErrorCode.BAD_REQUEST, request, "Missing request parameter: " + ex.getParameterName());
@@ -121,7 +112,6 @@ public class CallbackControllerAdvice {
         HttpServletRequest request,
         HttpMediaTypeNotSupportedException ex
     ) {
-        logAbbreviatedStackTrace(ex);
         errorResponseBuilder.logError(ex, ErrorCode.BAD_REQUEST, request);
         ErrorResponse response = errorResponseBuilder.build(
             ErrorCode.BAD_REQUEST, request, "Unsupported media type: " + ex.getContentType());
@@ -133,7 +123,6 @@ public class CallbackControllerAdvice {
         HttpServletRequest request,
         HttpRequestMethodNotSupportedException ex
     ) {
-        logAbbreviatedStackTrace(ex);
         errorResponseBuilder.logError(ex, ErrorCode.BAD_REQUEST, request);
         ErrorResponse response = errorResponseBuilder.build(
             ErrorCode.BAD_REQUEST, request, "HTTP method not supported: " + ex.getMethod());
@@ -145,7 +134,6 @@ public class CallbackControllerAdvice {
         HttpServletRequest request,
         DocumentStitchingErrorResponseException ex
     ) {
-        logAbbreviatedStackTrace(ex);
         errorResponseBuilder.logError(ex, ErrorCode.DOCUMENT_STITCHING_ERROR, request);
         errorResponseLogger.maybeLogErrorsListResponse(ex.getStitchingServiceResponse());
         ErrorResponse response = errorResponseBuilder.build(
@@ -158,7 +146,6 @@ public class CallbackControllerAdvice {
         HttpServletRequest request,
         DocumentServiceResponseException ex
     ) {
-        logAbbreviatedStackTrace(ex);
         errorResponseBuilder.logError(ex, ErrorCode.DOCUMENT_SERVICE_ERROR, request);
         errorResponseLogger.maybeLogException(ex.getCause());
         ErrorResponse response = errorResponseBuilder.build(
@@ -171,7 +158,6 @@ public class CallbackControllerAdvice {
         HttpServletRequest request,
         IdentityManagerResponseException ex
     ) {
-        logAbbreviatedStackTrace(ex);
         errorResponseBuilder.logError(ex, ErrorCode.IDENTITY_MANAGER_ERROR, request);
         ErrorResponse response = errorResponseBuilder.build(
             ErrorCode.IDENTITY_MANAGER_ERROR, request, "Authentication service unavailable");
@@ -183,7 +169,6 @@ public class CallbackControllerAdvice {
         HttpServletRequest request,
         AccessDeniedException ex
     ) {
-        logAbbreviatedStackTrace(ex);
         errorResponseBuilder.logError(ex, ErrorCode.ACCESS_DENIED, request);
         ErrorResponse response = errorResponseBuilder.build(ErrorCode.ACCESS_DENIED, request, null);
         return new ResponseEntity<>(response, ErrorCode.ACCESS_DENIED.getHttpStatus());
@@ -194,30 +179,8 @@ public class CallbackControllerAdvice {
         HttpServletRequest request,
         Exception ex
     ) {
-        logAbbreviatedStackTrace(ex);
         errorResponseBuilder.logError(ex, ErrorCode.INTERNAL_ERROR, request);
         ErrorResponse response = errorResponseBuilder.build(ErrorCode.INTERNAL_ERROR, request, null);
         return new ResponseEntity<>(response, ErrorCode.INTERNAL_ERROR.getHttpStatus());
-    }
-
-    private void logAbbreviatedStackTrace(Exception ex) {
-        log.error(getAbbreviatedStackTrace(ex, 5));
-    }
-
-    private String getAbbreviatedStackTrace(Exception ex, int numInitialLines) {
-        String[] trace = ExceptionUtils.getRootCauseStackTrace(ex);
-        StringBuilder sb = new StringBuilder();
-        String lastLine = "";
-        String continuationLine = "        ...";
-        for (int i = 0; i < trace.length; i++) {
-            if (i < numInitialLines || trace[i].contains("uk.gov.hmcts.reform")) {
-                lastLine = trace[i];
-                sb.append(lastLine).append("\r\n");
-            } else if (!lastLine.equals(continuationLine)) {
-                lastLine = continuationLine;
-                sb.append(lastLine).append("\r\n");
-            }
-        }
-        return sb.toString();
     }
 }
