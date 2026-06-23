@@ -3,7 +3,7 @@ package uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.*;
 
 import java.util.Map;
-import java.util.Optional;
+import java.util.Set;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -15,7 +15,9 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.HearingCentre;
 @Service
 public class EmailAddressFinder {
 
-    private final String listCaseHearingCentreIsNotPresent = "listCaseHearingCentre is not present";
+    private static final Set<HearingCentre> SHARED_HEARING_CENTRES = Set.of(HearingCentre.HENDON,
+            HearingCentre.BRADFORD_KEIGHLEY, HearingCentre.MCC_MINSHULL, HearingCentre.MCC_CROWN_SQUARE,
+            HearingCentre.MANCHESTER_MAGS, HearingCentre.NTH_TYNE_MAGS, HearingCentre.LEEDS_MAGS, HearingCentre.ALLOA_SHERRIF);
 
     private final String noEmailAddressDecisionWithoutHearing = "No email address for decisions made without hearing";
     private final Map<HearingCentre, String> hearingCentreEmailAddresses;
@@ -46,12 +48,19 @@ public class EmailAddressFinder {
         if (isRemoteHearing(asylumCase)) {
             return getHearingCentreEmailAddress(asylumCase);
         } else {
-            return asylumCase
-                .read(LIST_CASE_HEARING_CENTRE, HearingCentre.class)
-                .map(it -> Optional.ofNullable(getEmailAddress(hearingCentreEmailAddresses, it))
-                    .orElseThrow(() -> new IllegalStateException("Hearing centre email address not found: " + it.toString()))
-                )
-                .orElseThrow(() -> new IllegalStateException(listCaseHearingCentreIsNotPresent));
+            HearingCentre hearingCentre = asylumCase.read(LIST_CASE_HEARING_CENTRE, HearingCentre.class)
+                    .orElseThrow(() -> new IllegalStateException(LIST_CASE_HEARING_CENTRE.value() + " is not present"));
+
+            if (isASharedHearingCentre(hearingCentre)) {
+                hearingCentre = asylumCase.read(HEARING_CENTRE, HearingCentre.class)
+                        .orElseThrow(() -> new IllegalStateException(HEARING_CENTRE.value() + " is not present"));
+            }
+
+            String emailAddress = getEmailAddress(hearingCentreEmailAddresses, hearingCentre);
+            if (emailAddress == null) {
+                throw new IllegalStateException("List case hearing centre email address not found: " + hearingCentre.getValue());
+            }
+            return emailAddress;
         }
     }
 
@@ -79,6 +88,10 @@ public class EmailAddressFinder {
         return asylumCase.read(AsylumCaseDefinition.LIST_CASE_HEARING_CENTRE, HearingCentre.class)
             .map(hearingCentre -> hearingCentre == HearingCentre.REMOTE_HEARING)
             .orElse(false);
+    }
+
+    private static boolean isASharedHearingCentre(HearingCentre hearingCentre) {
+        return SHARED_HEARING_CENTRES.contains(hearingCentre);
     }
 
 }
