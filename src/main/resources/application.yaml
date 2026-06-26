@@ -1329,6 +1329,7 @@ appellantDaysToWait:
     afterSubmitAppealWithFeeToPayDetained: 28
     tribunalDocumentToSendTimeline: 4
     afterRemissionDecision: 14
+    afterRemissionDecisionDetained: 28
     appealAfterTribunalDecision: 14
 
 
