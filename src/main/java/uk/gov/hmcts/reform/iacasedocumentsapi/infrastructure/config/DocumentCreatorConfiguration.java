@@ -2253,11 +2253,11 @@ public class DocumentCreatorConfiguration {
 
     @Bean(STF_24_WEEKS_REVIEW_DOCUMENT_CREATOR)
     public DocumentCreator<AsylumCase> getStatutoryTimeFrame24WeeksReviewDocumentCreator(
-            @Value("${appealSubmissionDocument.contentType}") String contentType,
-            @Value("${appealSubmissionDocument.fileExtension}") String fileExtension,
-            @Value("${appealSubmissionDocument.fileName}") String fileName,
+            @Value("${stf24WeeksCaseReview.contentType}") String contentType,
+            @Value("${stf24WeeksCaseReview.fileExtension}") String fileExtension,
+            @Value("${stf24WeeksCaseReview.fileName}") String fileName,
             AsylumCaseFileNameQualifier fileNameQualifier,
-            AppealSubmissionTemplate documentTemplate,
+            Stf24WeeksCaseReviewTemplate documentTemplate,
             DocumentGenerator documentGenerator,
             DocumentUploader documentUploader
     ) {

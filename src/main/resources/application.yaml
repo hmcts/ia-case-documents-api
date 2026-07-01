@@ -639,6 +639,11 @@ bailNoticeOfHearingRelisting.templateName: ${IA_BAIL_NOTICE_OF_HEARING_RELISTING
 bailNoticeOfHearingConditionalBailRelisting.templateName: ${IA_BAIL_NOTICE_OF_HEARING_RELISTING_TEMPLATE:TB-IAC-HNO-ENG-bails-notice-of-hearings-relisted-conditional-bail.docx}
 bailNoticeOfHearingInitialListing.templateName: ${IA_BAIL_NOTICE_OF_HEARING_INITIAL_LISTING_TEMPLATE:TB-IAC-HNO-ENG-Bails-Notice-of-Hearing.docx}
 
+stf24WeeksCaseReview.contentType:  application/pdf
+stf24WeeksCaseReview.fileExtension: PDF
+stf24WeeksCaseReview.fileName: "aipm-detained-in-irc-prison-reinstate-appeal-letter"
+stf24WeeksCaseReview.templateName: ${AIPM_PRISON_IRC_REINSTATE_APPEAL:TB-IAC-PHRD-ENG-001 Appellant v3.docx}
+
 ccdGatewayUrl: ${CCD_GW_URL:http://localhost:3453}
 
 docmosis.accessKey: ${DOCMOSIS_ACCESS_KEY}
