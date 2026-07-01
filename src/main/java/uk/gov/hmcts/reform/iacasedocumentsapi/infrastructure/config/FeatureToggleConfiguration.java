@@ -13,14 +13,19 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class FeatureToggleConfiguration {
 
-    @Value("${launchDarkly.sdkKey}")
-    private String sdkKey;
+    private final String sdkKey;
+    private final Integer connectionTimeout;
+    private final Integer socketTimeout;
 
-    @Value("${launchDarkly.connectionTimeout}")
-    private Integer connectionTimeout;
-
-    @Value("${launchDarkly.socketTimeout}")
-    private Integer socketTimeout;
+    public FeatureToggleConfiguration(
+        @Value("${launchDarkly.sdkKey}") String sdkKey,
+        @Value("${launchDarkly.connectionTimeout}") Integer connectionTimeout,
+        @Value("${launchDarkly.socketTimeout}") Integer socketTimeout
+    ) {
+        this.sdkKey = sdkKey;
+        this.connectionTimeout = connectionTimeout;
+        this.socketTimeout = socketTimeout;
+    }
 
     @Bean
     public LDConfig ldConfig() {

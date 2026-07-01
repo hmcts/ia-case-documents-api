@@ -24,8 +24,8 @@ import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtil
 @Component
 public class InternalEditCaseListingLrLetterGenerator implements PreSubmitCallbackHandler<AsylumCase> {
 
-    private DocumentCreator<AsylumCase> documentCreator;
-    private DocumentHandler documentHandler;
+    private final DocumentCreator<AsylumCase> documentCreator;
+    private final DocumentHandler documentHandler;
 
     public InternalEditCaseListingLrLetterGenerator(
             @Qualifier("internalEditCaseListingLrLetter") DocumentCreator<AsylumCase> documentCreator,

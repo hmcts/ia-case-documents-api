@@ -19,7 +19,7 @@ public class EmailAddressFinder {
             HearingCentre.BRADFORD_KEIGHLEY, HearingCentre.MCC_MINSHULL, HearingCentre.MCC_CROWN_SQUARE,
             HearingCentre.MANCHESTER_MAGS, HearingCentre.NTH_TYNE_MAGS, HearingCentre.LEEDS_MAGS, HearingCentre.ALLOA_SHERRIF);
 
-    private final String noEmailAddressDecisionWithoutHearing = "No email address for decisions made without hearing";
+    private static final String NO_EMAIL_ADDRESS_DECISION_WITHOUT_HEARING = "No email address for decisions made without hearing";
     private final Map<HearingCentre, String> hearingCentreEmailAddresses;
 
     public EmailAddressFinder(
@@ -78,7 +78,7 @@ public class EmailAddressFinder {
             case COVENTRY:
                 return emailAddressesMap.get(HearingCentre.BIRMINGHAM);
             case DECISION_WITHOUT_HEARING:
-                return noEmailAddressDecisionWithoutHearing;
+                return NO_EMAIL_ADDRESS_DECISION_WITHOUT_HEARING;
             default:
                 return emailAddressesMap.get(hearingCentre);
         }

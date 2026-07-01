@@ -12,7 +12,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.test.util.ReflectionTestUtils;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo;
 
@@ -34,7 +33,9 @@ public class CustomerServicesProviderTest {
     public void setUp() {
         customerServicesProvider = new CustomerServicesProvider(
             customerServicesTelephone,
-            customerServicesEmail
+            customerServicesEmail,
+            internalAdaCustomerServicesTelephone,
+            internalAdaCustomerServicesEmail
         );
     }
 
@@ -51,10 +52,12 @@ public class CustomerServicesProviderTest {
     @Test
     public void should_not_allow_null_arguments() {
 
-        assertThatThrownBy(() -> new CustomerServicesProvider(null, customerServicesEmail))
+        assertThatThrownBy(() -> new CustomerServicesProvider(null, customerServicesEmail,
+            internalAdaCustomerServicesTelephone, internalAdaCustomerServicesEmail))
             .isExactlyInstanceOf(NullPointerException.class);
 
-        assertThatThrownBy(() -> new CustomerServicesProvider(customerServicesTelephone, null))
+        assertThatThrownBy(() -> new CustomerServicesProvider(customerServicesTelephone, null,
+            internalAdaCustomerServicesTelephone, internalAdaCustomerServicesEmail))
             .isExactlyInstanceOf(NullPointerException.class);
     }
 
@@ -68,9 +71,6 @@ public class CustomerServicesProviderTest {
 
     @Test
     public void should_return_internal_ada_customer_services_telephone_number_and_email() {
-        ReflectionTestUtils.setField(customerServicesProvider, "internalAdaCustomerServicesTelephone", internalAdaCustomerServicesTelephone);
-        ReflectionTestUtils.setField(customerServicesProvider, "internalAdaCustomerServicesEmail", internalAdaCustomerServicesEmail);
-
         when(asylumCase.read(IS_ADMIN, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
         when(asylumCase.read(IS_ACCELERATED_DETAINED_APPEAL, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
         when(asylumCase.read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
@@ -84,9 +84,6 @@ public class CustomerServicesProviderTest {
 
     @Test
     public void should_return_internal_non_ada_customer_services_telephone_number_and_email() {
-        ReflectionTestUtils.setField(customerServicesProvider, "internalAdaCustomerServicesTelephone", internalAdaCustomerServicesTelephone);
-        ReflectionTestUtils.setField(customerServicesProvider, "internalAdaCustomerServicesEmail", internalAdaCustomerServicesEmail);
-
         when(asylumCase.read(IS_ADMIN, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
         when(asylumCase.read(IS_ACCELERATED_DETAINED_APPEAL, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO));
         when(asylumCase.read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO));

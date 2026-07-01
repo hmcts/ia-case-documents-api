@@ -17,21 +17,22 @@ public class CustomerServicesProvider {
 
     private final String customerServicesTelephone;
     private final String customerServicesEmail;
-    @Value("${customerServices.internal.telephoneNumber.ada}")
-    private String internalAdaCustomerServicesTelephone;
-    @Value("${customerServices.internal.emailAddress.ada}")
-    private String internalAdaCustomerServicesEmail;
-
+    private final String internalAdaCustomerServicesTelephone;
+    private final String internalAdaCustomerServicesEmail;
 
     public CustomerServicesProvider(
         @Value("${customerServices.telephoneNumber}") String customerServicesTelephone,
-        @Value("${customerServices.emailAddress}") String customerServicesEmail
+        @Value("${customerServices.emailAddress}") String customerServicesEmail,
+        @Value("${customerServices.internal.telephoneNumber.ada}") String internalAdaCustomerServicesTelephone,
+        @Value("${customerServices.internal.emailAddress.ada}") String internalAdaCustomerServicesEmail
     ) {
         requireNonNull(customerServicesTelephone);
         requireNonNull(customerServicesEmail);
 
         this.customerServicesTelephone = customerServicesTelephone;
         this.customerServicesEmail = customerServicesEmail;
+        this.internalAdaCustomerServicesTelephone = internalAdaCustomerServicesTelephone;
+        this.internalAdaCustomerServicesEmail = internalAdaCustomerServicesEmail;
     }
 
     public Map<String, String> getCustomerServicesPersonalisation() {
