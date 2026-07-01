@@ -10,6 +10,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.*;
 
 @Service
@@ -18,7 +19,7 @@ public class AppointmentRequirementsFieldMapper {
     public AppointmentRequirementsFieldMapper() {
     }
 
-    public Map<String, Object> mapFields(AsylumCase asylumCase) {
+    public Map<String, Object> mapFields(AsylumCase asylumCase, boolean hasNlr) {
 
         final Map<String, Object> fieldValues = new HashMap<>();
         fieldValues.putAll(getAppellantPersonalisation(asylumCase));
@@ -43,8 +44,8 @@ public class AppointmentRequirementsFieldMapper {
                 .collect(Collectors.toList())
         );
 
-        fieldValues.put("isHearingRoomNeeded", asylumCase.read(IS_HEARING_ROOM_NEEDED, YesOrNo.class).orElse(YesOrNo.NO));
-        fieldValues.put("isHearingLoopNeeded", asylumCase.read(IS_HEARING_LOOP_NEEDED, YesOrNo.class).orElse(YesOrNo.NO));
+        fieldValues.put("isHearingRoomNeeded", handleNlrYesNoValues(asylumCase, hasNlr, IS_HEARING_ROOM_NEEDED, NLR_NEEDS_STEP_FREE_ACCESS));
+        fieldValues.put("isHearingLoopNeeded", handleNlrYesNoValues(asylumCase, hasNlr, IS_HEARING_LOOP_NEEDED, NLR_NEEDS_HEARING_LOOP));
         fieldValues.put("physicalOrMentalHealthIssues", asylumCase.read(PHYSICAL_OR_MENTAL_HEALTH_ISSUES, YesOrNo.class).orElse(YesOrNo.NO));
         fieldValues.put("physicalOrMentalHealthIssuesDescription", asylumCase.read(PHYSICAL_OR_MENTAL_HEALTH_ISSUES_DESCRIPTION, String.class).orElse(""));
         fieldValues.put("pastExperiences", asylumCase.read(PAST_EXPERIENCES, YesOrNo.class).orElse(YesOrNo.NO));
@@ -114,5 +115,14 @@ public class AppointmentRequirementsFieldMapper {
         );
 
         return fieldValues;
+    }
+
+    private YesOrNo handleNlrYesNoValues(AsylumCase asylumCase,
+                                         boolean hasNlr,
+                                         AsylumCaseDefinition caseField,
+                                         AsylumCaseDefinition nlrField) {
+        boolean boolOne = asylumCase.read(caseField, YesOrNo.class).map(YesOrNo::isYes).orElse(false);
+        boolean boolTwo = hasNlr && asylumCase.read(nlrField, YesOrNo.class).map(YesOrNo::isYes).orElse(false);
+        return (boolOne || boolTwo) ? YesOrNo.YES : YesOrNo.NO;
     }
 }
