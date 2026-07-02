@@ -639,6 +639,11 @@ bailNoticeOfHearingRelisting.templateName: ${IA_BAIL_NOTICE_OF_HEARING_RELISTING
 bailNoticeOfHearingConditionalBailRelisting.templateName: ${IA_BAIL_NOTICE_OF_HEARING_RELISTING_TEMPLATE:TB-IAC-HNO-ENG-bails-notice-of-hearings-relisted-conditional-bail.docx}
 bailNoticeOfHearingInitialListing.templateName: ${IA_BAIL_NOTICE_OF_HEARING_INITIAL_LISTING_TEMPLATE:TB-IAC-HNO-ENG-Bails-Notice-of-Hearing.docx}
 
+stf24WeeksCaseReview.contentType:  application/pdf
+stf24WeeksCaseReview.fileExtension: PDF
+stf24WeeksCaseReview.fileName: "aipm-detained-in-irc-prison-reinstate-appeal-letter"
+stf24WeeksCaseReview.templateName: ${AIPM_PRISON_IRC_REINSTATE_APPEAL:TB-IAC-PHRD-ENG-001 Appellant v3.docx}
+
 ccdGatewayUrl: ${CCD_GW_URL:http://localhost:3453}
 
 docmosis.accessKey: ${DOCMOSIS_ACCESS_KEY}
@@ -736,6 +741,7 @@ security:
       - "manageFeeUpdate"
       - "updateTribunalDecision"
       - "removeLegalRepresentative"
+      - "completeCaseReview"
     challenged-access-legal-operations:
       - "sendDirection"
       - "changeDirectionDueDate"
@@ -824,6 +830,7 @@ security:
       - "manageFeeUpdate"
       - "updateTribunalDecision"
       - "removeLegalRepresentative"
+      - "completeCaseReview"
     # These events are used by the bails service, they will need to be migrated to the admin access management roles - see DIAC-855
     caseworker-ia-admofficer:
       - "submitApplication"
@@ -838,6 +845,7 @@ security:
       - "removeLegalRepresentative"
       - "markAppealAsRemitted"
       - "saveNotificationsToDataBail"
+      - "completeCaseReview"
     hearing-centre-admin:
       - "listCase"
       - "submitAppeal"
@@ -1262,6 +1270,7 @@ security:
       - "changeHearingCentre"
       - "saveNotificationsToData"
       - "saveNotificationsToDataBail"
+      - "completeCaseReview"
     caseworker-ia-homeofficelart:
       - "uploadHomeOfficeAppealResponse"
       - "uploadAdditionalEvidenceHomeOffice"

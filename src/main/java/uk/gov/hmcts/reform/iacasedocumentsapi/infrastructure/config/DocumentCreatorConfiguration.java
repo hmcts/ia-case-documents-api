@@ -16,6 +16,8 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentUploader;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates.*;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates.letter.*;
 
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.Stf24WeeksUtils.STF_24_WEEKS_REVIEW_DOCUMENT_CREATOR;
+
 @Slf4j
 @Configuration
 public class DocumentCreatorConfiguration {
@@ -2249,5 +2251,25 @@ public class DocumentCreatorConfiguration {
         );
     }
 
-
+    @Bean(STF_24_WEEKS_REVIEW_DOCUMENT_CREATOR)
+    public DocumentCreator<AsylumCase> getStatutoryTimeFrame24WeeksReviewDocumentCreator(
+            @Value("${stf24WeeksCaseReview.contentType}") String contentType,
+            @Value("${stf24WeeksCaseReview.fileExtension}") String fileExtension,
+            @Value("${stf24WeeksCaseReview.fileName}") String fileName,
+            AsylumCaseFileNameQualifier fileNameQualifier,
+            Stf24WeeksCaseReviewTemplate documentTemplate,
+            DocumentGenerator documentGenerator,
+            DocumentUploader documentUploader
+    ) {
+        log.info("contentType {}, fileExtension {},fileName {}", contentType, fileExtension, fileName);
+        return new DocumentCreator<>(
+                contentType,
+                fileExtension,
+                fileName,
+                fileNameQualifier,
+                documentTemplate,
+                documentGenerator,
+                documentUploader
+        );
+    }
 }
