@@ -82,7 +82,7 @@ class Stf24WeeksUtilsTest {
     }
 
     @Test
-    void should_format_home_office_decision_date_to_d_MMM_yyyy_when_present_and_throw_on_missing_or_invalid() {
+    void should_format_home_office_decision_date_to_d_mmm_yyyy_when_present_and_throw_on_missing_or_invalid() {
         when(asylumCase.read(uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.HOME_OFFICE_DECISION_DATE, String.class))
                 .thenReturn(Optional.of("2023-06-02"));
         String formatted = Stf24WeeksUtils.getHomeOfficeDecisionDate(asylumCase);
