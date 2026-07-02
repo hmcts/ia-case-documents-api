@@ -32,7 +32,7 @@ public class Stf24WeeksCaseReviewTemplate implements DocumentTemplate<AsylumCase
     ) {
 
         final Stf24WeeksCaseReviewDocFieldMapper fieldMapper =
-                new Stf24WeeksCaseReviewDocFieldMapper(stringProvider);
+                new Stf24WeeksCaseReviewDocFieldMapper();
 
         return fieldMapper.mapFieldValues(caseDetails);
     }
