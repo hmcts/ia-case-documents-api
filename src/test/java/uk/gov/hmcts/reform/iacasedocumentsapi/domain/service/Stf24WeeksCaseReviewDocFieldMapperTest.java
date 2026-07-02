@@ -183,7 +183,7 @@ class Stf24WeeksCaseReviewDocFieldMapperTest {
 
     @Test
     void should_populate_ooc_fields_when_appeal_out_of_country_is_yes_with_entry_clearance_decision() {
-        Map<String, Object> fieldValues = new HashMap<>();
+
         when(asylumCase.read(uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.APPEAL_OUT_OF_COUNTRY, uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo.class))
                 .thenReturn(Optional.of(uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo.YES));
         when(asylumCase.read(uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.OOC_APPEAL_ADMIN_J, uk.gov.hmcts.reform.iacasedocumentsapi.domain.OutOfCountryCircumstances.class))
@@ -192,7 +192,7 @@ class Stf24WeeksCaseReviewDocFieldMapperTest {
                 .thenReturn(Optional.of(uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo.YES));
         when(asylumCase.read(uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.APPELLANT_IN_UK, uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo.class))
                 .thenReturn(Optional.of(uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo.NO));
-
+        Map<String, Object> fieldValues = new HashMap<>();
         Stf24WeeksCaseReviewDocFieldMapper.addAppealOocFields(asylumCase, fieldValues);
 
         assertEquals("Circumstances of the appellant's out of country appeal", fieldValues.get("outOfCountryDecisionTypeTitle"));
@@ -201,7 +201,7 @@ class Stf24WeeksCaseReviewDocFieldMapperTest {
 
     @Test
     void should_populate_ooc_fields_when_appeal_out_of_country_is_yes_with_leave_uk() {
-        Map<String, Object> fieldValues = new HashMap<>();
+
         when(asylumCase.read(uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.APPEAL_OUT_OF_COUNTRY, uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo.class))
                 .thenReturn(Optional.of(uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo.YES));
         when(asylumCase.read(uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.OOC_APPEAL_ADMIN_J, uk.gov.hmcts.reform.iacasedocumentsapi.domain.OutOfCountryCircumstances.class))
@@ -210,7 +210,7 @@ class Stf24WeeksCaseReviewDocFieldMapperTest {
                 .thenReturn(Optional.of(uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo.YES));
         when(asylumCase.read(uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.APPELLANT_IN_UK, uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo.class))
                 .thenReturn(Optional.of(uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo.NO));
-
+        Map<String, Object> fieldValues = new HashMap<>();
         Stf24WeeksCaseReviewDocFieldMapper.addAppealOocFields(asylumCase, fieldValues);
 
         assertEquals("Circumstances of the appellant's out of country appeal", fieldValues.get("outOfCountryDecisionTypeTitle"));
@@ -231,7 +231,7 @@ class Stf24WeeksCaseReviewDocFieldMapperTest {
 
     @Test
     void should_populate_sponsor_fields_when_has_sponsor_is_yes_and_email_preference() {
-        Map<String, Object> fieldValues = new HashMap<>();
+
         when(asylumCase.read(uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.HAS_SPONSOR, uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo.class))
                 .thenReturn(Optional.of(uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo.YES));
         when(asylumCase.read(uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.SPONSOR_GIVEN_NAMES, String.class))
@@ -244,7 +244,7 @@ class Stf24WeeksCaseReviewDocFieldMapperTest {
                 .thenReturn(Optional.of(uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ContactPreference.WANTS_EMAIL));
         when(asylumCase.read(uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.SPONSOR_EMAIL, String.class))
                 .thenReturn(Optional.of("sponsor@example.com"));
-
+        Map<String, Object> fieldValues = new HashMap<>();
         Stf24WeeksCaseReviewDocFieldMapper.populateSponsorFields(asylumCase, fieldValues);
 
         assertEquals(uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo.YES, fieldValues.get("hasSponsor"));
@@ -257,7 +257,7 @@ class Stf24WeeksCaseReviewDocFieldMapperTest {
 
     @Test
     void should_populate_sponsor_fields_with_mobile_when_contact_preference_not_email() {
-        Map<String, Object> fieldValues = new HashMap<>();
+
         when(asylumCase.read(uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.HAS_SPONSOR, uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo.class))
                 .thenReturn(Optional.of(uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo.YES));
         when(asylumCase.read(uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.SPONSOR_GIVEN_NAMES, String.class))
@@ -270,7 +270,7 @@ class Stf24WeeksCaseReviewDocFieldMapperTest {
                 .thenReturn(Optional.empty());
         when(asylumCase.read(uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.SPONSOR_MOBILE_NUMBER, String.class))
                 .thenReturn(Optional.of("07123456789"));
-
+        Map<String, Object> fieldValues = new HashMap<>();
         Stf24WeeksCaseReviewDocFieldMapper.populateSponsorFields(asylumCase, fieldValues);
 
         assertEquals(uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo.YES, fieldValues.get("hasSponsor"));
@@ -302,7 +302,7 @@ class Stf24WeeksCaseReviewDocFieldMapperTest {
 
     @Test
     void should_populate_appellant_out_of_country_address_when_has_correspondence_address_is_yes() {
-        Map<String, Object> fieldValues = new HashMap<>();
+
         when(asylumCase.read(uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.APPEAL_OUT_OF_COUNTRY, uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo.class))
                 .thenReturn(Optional.of(uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo.YES));
         when(asylumCase.read(uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.OUT_OF_COUNTRY_DECISION_TYPE, uk.gov.hmcts.reform.iacasedocumentsapi.domain.OutOfCountryDecisionType.class))
@@ -313,7 +313,7 @@ class Stf24WeeksCaseReviewDocFieldMapperTest {
                 .thenReturn(Optional.of(uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo.YES));
         when(asylumCase.read(uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.APPELLANT_OUT_OF_COUNTRY_ADDRESS, String.class))
                 .thenReturn(Optional.of("456 Overseas Rd"));
-
+        Map<String, Object> fieldValues = new HashMap<>();
         Stf24WeeksCaseReviewDocFieldMapper.addAppealOocFields(asylumCase, fieldValues);
 
         assertEquals("456 Overseas Rd", fieldValues.get("appellantOutOfCountryAddress"));
@@ -321,7 +321,7 @@ class Stf24WeeksCaseReviewDocFieldMapperTest {
 
     @Test
     void should_populate_appellant_out_of_country_address_empty_when_not_present() {
-        Map<String, Object> fieldValues = new HashMap<>();
+
         when(asylumCase.read(uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.APPEAL_OUT_OF_COUNTRY, uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo.class))
                 .thenReturn(Optional.of(uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo.YES));
         when(asylumCase.read(uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.OUT_OF_COUNTRY_DECISION_TYPE, uk.gov.hmcts.reform.iacasedocumentsapi.domain.OutOfCountryDecisionType.class))
@@ -332,7 +332,7 @@ class Stf24WeeksCaseReviewDocFieldMapperTest {
                 .thenReturn(Optional.of(uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo.YES));
         when(asylumCase.read(uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.APPELLANT_OUT_OF_COUNTRY_ADDRESS, String.class))
                 .thenReturn(Optional.empty());
-
+        Map<String, Object> fieldValues = new HashMap<>();
         Stf24WeeksCaseReviewDocFieldMapper.addAppealOocFields(asylumCase, fieldValues);
 
         assertEquals("", fieldValues.get("appellantOutOfCountryAddress"));
