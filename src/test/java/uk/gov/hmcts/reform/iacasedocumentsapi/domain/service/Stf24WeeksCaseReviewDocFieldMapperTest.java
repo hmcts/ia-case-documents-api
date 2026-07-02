@@ -17,8 +17,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
+
 @MockitoSettings(strictness = Strictness.LENIENT)
 @ExtendWith(MockitoExtension.class)
 class Stf24WeeksCaseReviewDocFieldMapperTest {
@@ -37,6 +40,7 @@ class Stf24WeeksCaseReviewDocFieldMapperTest {
     void setUp() {
         fieldMapper = new Stf24WeeksCaseReviewDocFieldMapper(stringProvider);
     }
+
     @Test
     void should_map_all_stf24_week_field_values_when_all_data_present() {
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
@@ -63,6 +67,7 @@ class Stf24WeeksCaseReviewDocFieldMapperTest {
         assertEquals("1 Dec 2022", result.get("decisionSentDate"));
         assertTrue(result.containsKey("appealReceivedDate"));
     }
+
     @Test
     void should_handle_empty_appellant_names_and_trim_full_name() {
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
