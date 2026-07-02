@@ -28,7 +28,12 @@ import java.util.Optional;
 import static com.google.common.collect.Sets.newHashSet;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.APPEAL_SUBMISSION_DATE;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.COMPLETE_CASE_REVIEW_DATE;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.HOME_OFFICE_DECISION_DATE;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.IS_ADMIN;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.STF_24W_CURRENT_STATUS_AUTO_GENERATED;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.TRIBUNAL_RECEIVED_DATE;
 
 /**
  * Simplified-but-equivalent version of the original test class.
@@ -108,6 +113,10 @@ class Stf24WeeksTestWiremock extends SpringBootIntegrationTest
         setup(cdamEnabled);
 
         AsylumCaseForTest caseData = mockCaseData();
+        caseData.with(STF_24W_CURRENT_STATUS_AUTO_GENERATED, YesOrNo.YES).with(COMPLETE_CASE_REVIEW_DATE, "2002-02-02")
+                .with(APPEAL_SUBMISSION_DATE, "2002-02-02")
+                .with(TRIBUNAL_RECEIVED_DATE, "2002-02-02")
+                .with(HOME_OFFICE_DECISION_DATE, "2002-02-02");
         notCreatedByAdmin(caseData);
 
         Optional<List<IdValue<DocumentWithMetadata>>> docsOpt =
@@ -125,6 +134,8 @@ class Stf24WeeksTestWiremock extends SpringBootIntegrationTest
     void shouldNotCreate24WeeksReviewDocumentIfCaseCreatedByAdmin(boolean cdamEnabled) {
         setup(cdamEnabled);
         AsylumCaseForTest caseData = mockCaseData();
+        caseData.with(STF_24W_CURRENT_STATUS_AUTO_GENERATED, YesOrNo.YES).with(HOME_OFFICE_DECISION_DATE, "2002-02-02");
+        notCreatedByAdmin(caseData);
         createdByAdmin(caseData);
         Optional<List<IdValue<DocumentWithMetadata>>> docsOpt =
                 doCaseReview(caseData).getAsylumCase().read(AsylumCaseDefinition.NOTIFICATION_ATTACHMENT_DOCUMENTS);
