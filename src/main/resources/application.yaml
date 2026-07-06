@@ -641,8 +641,8 @@ bailNoticeOfHearingInitialListing.templateName: ${IA_BAIL_NOTICE_OF_HEARING_INIT
 
 stf24WeeksCaseReview.contentType:  application/pdf
 stf24WeeksCaseReview.fileExtension: PDF
-stf24WeeksCaseReview.fileName: "aipm-detained-in-irc-prison-reinstate-appeal-letter"
-stf24WeeksCaseReview.templateName: ${AIPM_PRISON_IRC_REINSTATE_APPEAL:TB-IAC-PHRD-ENG-001 Appellant v3.docx}
+stf24WeeksCaseReview.fileName: "standard-direction"
+stf24WeeksCaseReview.templateName: ${AIPM_PRISON_STD_STF24_WEEKS_CASE_REVIEW:TB-IAC-STD-ENG-001-STF24Weeks-Review-Appellant-v3.docx}
 
 ccdGatewayUrl: ${CCD_GW_URL:http://localhost:3453}
 
