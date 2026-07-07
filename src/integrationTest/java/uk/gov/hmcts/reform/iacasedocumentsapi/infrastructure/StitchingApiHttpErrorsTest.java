@@ -25,8 +25,6 @@ class StitchingApiHttpErrorsTest extends SpringBootIntegrationTest implements Wi
     @MockitoBean
     private FeatureToggler featureToggler;
 
-    private static final String STITCH_API_PATH = "/api/new-bundle";
-
     @ParameterizedTest
     @ValueSource(booleans = {true, false})
     @WithMockUser(authorities = {"caseworker-ia", "tribunal-caseworker"})
@@ -55,8 +53,9 @@ class StitchingApiHttpErrorsTest extends SpringBootIntegrationTest implements Wi
                     ))
                 .event(Event.GENERATE_HEARING_BUNDLE)))
             .hasMessageContaining("500")
-            .hasMessageContaining("Couldn't create bundle using API: ")
-            .hasMessageContaining(STITCH_API_PATH);
+            .hasMessageContaining("DOCUMENT_SERVICE_ERROR")
+            .hasMessageContaining("Document service error:")
+            .hasMessageContaining("Couldn't create bundle using API:");
 
     }
 
@@ -88,7 +87,8 @@ class StitchingApiHttpErrorsTest extends SpringBootIntegrationTest implements Wi
                     ))
                 .event(Event.GENERATE_HEARING_BUNDLE)))
             .hasMessageContaining("500")
-            .hasMessageContaining("Couldn't create bundle using API: ")
-            .hasMessageContaining(STITCH_API_PATH);
+            .hasMessageContaining("DOCUMENT_SERVICE_ERROR")
+            .hasMessageContaining("Document service error:")
+            .hasMessageContaining("Couldn't create bundle using API:");
     }
 }

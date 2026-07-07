@@ -35,10 +35,19 @@ public class IaCaseDocumentsApiClient {
                         .content(objectMapper.writeValueAsString(callback.build()))
                         .contentType(APPLICATION_JSON_VALUE)
                 ).andReturn();
+
+            int statusCode = response.getResponse().getStatus();
+            if (statusCode != 200) {
+                String errorMessage = response.getResponse().getContentAsString() + " " + statusCode;
+                throw new RuntimeException(errorMessage);
+            }
+
             return objectMapper.readValue(
                 response.getResponse().getContentAsString(),
                 PreSubmitCallbackResponseForTest.class
             );
+        } catch (RuntimeException e) {
+            throw e;
         } catch (Exception e) {
             String message = e.getMessage();
             if (response != null && response.getResponse().getStatus() != 200) {
