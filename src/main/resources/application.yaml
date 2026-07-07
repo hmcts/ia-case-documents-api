@@ -843,6 +843,7 @@ security:
       - "removeLegalRepresentative"
       - "markAppealAsRemitted"
       - "saveNotificationsToDataBail"
+      - "requestRespondentEvidence"
     hearing-centre-admin:
       - "listCase"
       - "submitAppeal"
