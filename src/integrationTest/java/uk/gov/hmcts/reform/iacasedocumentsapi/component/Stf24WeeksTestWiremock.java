@@ -2,8 +2,8 @@ package uk.gov.hmcts.reform.iacasedocumentsapi.component;
 
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import uk.gov.hmcts.reform.iacasedocumentsapi.component.testutils.GivensBuilder;
 import uk.gov.hmcts.reform.iacasedocumentsapi.component.testutils.SpringBootIntegrationTest;
 import uk.gov.hmcts.reform.iacasedocumentsapi.component.testutils.WithDocumentUploadStub;
@@ -41,7 +41,7 @@ import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseD
 class Stf24WeeksTestWiremock extends SpringBootIntegrationTest
         implements WithServiceAuthStub, WithDocumentUploadStub, DocmosisStub, WithIdamStub, GivensBuilder, WithRoleAssignmentStub {
 
-    @MockBean
+    @MockitoBean
     private FeatureToggler featureToggler;
 
     private static AsylumCaseForTest mockCaseData() {
@@ -120,12 +120,12 @@ class Stf24WeeksTestWiremock extends SpringBootIntegrationTest
         notCreatedByAdmin(caseData);
 
         Optional<List<IdValue<DocumentWithMetadata>>> docsOpt =
-                doCaseReview(caseData).getAsylumCase().read(AsylumCaseDefinition.NOTIFICATION_ATTACHMENT_DOCUMENTS);
+                doCaseReview(caseData).getAsylumCase().read(AsylumCaseDefinition.LEGAL_REPRESENTATIVE_DOCUMENTS);
 
         IdValue<DocumentWithMetadata> docValue = docsOpt.get().get(0);
 
         assertThat(docsOpt.get().size()).isEqualTo(1);
-        assertThat(docValue.getValue().getTag()).isEqualTo(DocumentTag.INTERNAL_APPEAL_SUBMISSION);
+        assertThat(docValue.getValue().getTag()).isEqualTo(DocumentTag.STF_24WEEKS_CASE_REVIEW_APPELLANT_DOCUMENT);
     }
 
     @ParameterizedTest
@@ -138,7 +138,7 @@ class Stf24WeeksTestWiremock extends SpringBootIntegrationTest
         notCreatedByAdmin(caseData);
         createdByAdmin(caseData);
         Optional<List<IdValue<DocumentWithMetadata>>> docsOpt =
-                doCaseReview(caseData).getAsylumCase().read(AsylumCaseDefinition.NOTIFICATION_ATTACHMENT_DOCUMENTS);
+                doCaseReview(caseData).getAsylumCase().read(AsylumCaseDefinition.LEGAL_REPRESENTATIVE_DOCUMENTS);
         assertThat(docsOpt).isNotPresent();
     }
 
