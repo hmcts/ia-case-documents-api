@@ -26,7 +26,7 @@ public class InternalDetainedAppealSubmissionOutOfTimeWithFeeTemplate implements
 
     public InternalDetainedAppealSubmissionOutOfTimeWithFeeTemplate(
             @Value("${internalDetainedAppealSubmissionOutOfTimeWithFeeLetter.templateName}") String templateName,
-            @Value("${appellantDaysToWait.letter.afterSubmitAppealWithFeeToPay}") int paymentDueDaysAfterSubmitAppeal,
+            @Value("${appellantDaysToWait.letter.afterSubmitAppealWithFeeToPayDetained}") int paymentDueDaysAfterSubmitAppeal,
             CustomerServicesProvider customerServicesProvider,
             SystemDateProvider systemDateProvider
     ) {

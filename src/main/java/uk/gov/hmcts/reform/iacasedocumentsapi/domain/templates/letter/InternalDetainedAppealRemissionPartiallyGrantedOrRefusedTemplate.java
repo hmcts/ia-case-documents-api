@@ -7,8 +7,7 @@ import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseD
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.REMISSION_DECISION_REASON;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.RemissionDecision.PARTIALLY_APPROVED;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.RemissionDecision.REJECTED;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.convertAsylumCaseFeeValue;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.getAppellantPersonalisation;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.*;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.DateUtils.formatDateForNotificationAttachmentDocument;
 
 import java.time.LocalDate;
@@ -42,7 +41,7 @@ public class InternalDetainedAppealRemissionPartiallyGrantedOrRefusedTemplate im
 
     public InternalDetainedAppealRemissionPartiallyGrantedOrRefusedTemplate(
             @Value("${internalDetainedAppealRemissionPartiallyGrantedOrRefusedLetter.templateName}") String templateName,
-            @Value("${appellantDaysToWait.letter.afterRemissionDecision}") int daysAfterRemissionDecision,
+            @Value("${appellantDaysToWait.letter.afterRemissionDecisionDetained}") int daysAfterRemissionDecision,
             CustomerServicesProvider customerServicesProvider,
             SystemDateProvider systemDateProvider
     ) {

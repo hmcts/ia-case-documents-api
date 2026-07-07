@@ -28,7 +28,7 @@ public class InternalDetainedAppealSubmissionInTimeWithFeeToPayTemplate implemen
 
     public InternalDetainedAppealSubmissionInTimeWithFeeToPayTemplate(
             @Value("${internalDetainedAppealSubmissionInTimeWithFeeToPayLetter.templateName}") String templateName,
-            @Value("${appellantDaysToWait.letter.afterSubmitAppealWithFeeToPay}") int daysAfterSubmitAppeal,
+            @Value("${appellantDaysToWait.letter.afterSubmitAppealWithFeeToPayDetained}") int daysAfterSubmitAppeal,
             CustomerServicesProvider customerServicesProvider,
             SystemDateProvider systemDateProvider
     ) {
