@@ -32,7 +32,7 @@ public class Stf24WeeksUtils {
     public static final int DAYS_42 = 42;
     public static final int DAYS_56 = 56;
     public static final String DAYS_14_FROM_DATE_OF_DIRECTION_KEY = "fourteenDaysFromDateOfDirection";
-    public static final String DAYS_56_FROM_DATE_OF_DIRECTION = "fiftySixDaysFromDateOfDirection";
+    public static final String DAYS_56_FROM_DATE_OF_DIRECTION_KEY = "fiftySixDaysFromDateOfDirection";
     public static final String DAYS_42_FROM_DATE_OF_DIRECTION_KEY = "fortyTwoDaysFromDateOfDirection";
     public static final String DECISION_SENT_DATE = "decisionSentDate";
     public static final String APPEAL_RECEIVED_DATE = "appealReceivedDate";

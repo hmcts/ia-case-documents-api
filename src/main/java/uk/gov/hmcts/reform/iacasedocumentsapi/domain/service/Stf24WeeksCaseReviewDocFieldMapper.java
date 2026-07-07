@@ -17,7 +17,7 @@ import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.Stf24WeeksUtil
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.Stf24WeeksUtils.DAYS_42;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.Stf24WeeksUtils.DAYS_42_FROM_DATE_OF_DIRECTION_KEY;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.Stf24WeeksUtils.DAYS_56;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.Stf24WeeksUtils.DAYS_56_FROM_DATE_OF_DIRECTION;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.Stf24WeeksUtils.DAYS_56_FROM_DATE_OF_DIRECTION_KEY;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.Stf24WeeksUtils.DECISION_SENT_DATE;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.Stf24WeeksUtils.D_MMM_YYYY;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.Stf24WeeksUtils.PRACTICE_DIRECTION;
@@ -46,7 +46,7 @@ public class Stf24WeeksCaseReviewDocFieldMapper {
         fieldValues.put(PRACTICE_DIRECTION, now.format(ofPattern(D_MMM_YYYY)));
         fieldValues.put(DAYS_14_FROM_DATE_OF_DIRECTION_KEY, now.plusDays(DAYS_14).format(ofPattern(D_MMM_YYYY)));
         fieldValues.put(DAYS_42_FROM_DATE_OF_DIRECTION_KEY, now.plusDays(DAYS_42).format(ofPattern(D_MMM_YYYY)));
-        fieldValues.put(DAYS_56_FROM_DATE_OF_DIRECTION, now.plusDays(DAYS_56).format(ofPattern(D_MMM_YYYY)));
+        fieldValues.put(DAYS_56_FROM_DATE_OF_DIRECTION_KEY, now.plusDays(DAYS_56).format(ofPattern(D_MMM_YYYY)));
         String familyName = getAppellantFamilyName(asylumCase);
         String givenNames = getAppellantGivenName(asylumCase);
 

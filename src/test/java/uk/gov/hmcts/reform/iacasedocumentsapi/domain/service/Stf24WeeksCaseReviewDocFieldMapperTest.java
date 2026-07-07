@@ -9,6 +9,7 @@ import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseDetails;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.Stf24WeeksUtils;
 
 import java.time.LocalDate;
 import java.util.Map;
@@ -50,9 +51,9 @@ class Stf24WeeksCaseReviewDocFieldMapperTest {
         Map<String, Object> result = fieldMapper.mapFieldValues(caseDetails);
 
         assertTrue(result.containsKey("practiceDirection"));
-        assertTrue(result.containsKey("14DaysFromDateOfDirection"));
-        assertTrue(result.containsKey("42DaysFromDateOfDirection"));
-        assertTrue(result.containsKey("56DaysFromDateOfDirection"));
+        assertTrue(result.containsKey(Stf24WeeksUtils.DAYS_14_FROM_DATE_OF_DIRECTION_KEY));
+        assertTrue(result.containsKey(Stf24WeeksUtils.DAYS_42_FROM_DATE_OF_DIRECTION_KEY));
+        assertTrue(result.containsKey(Stf24WeeksUtils.DAYS_56_FROM_DATE_OF_DIRECTION_KEY));
         assertEquals("John", result.get("appellantGivenNames"));
         assertEquals("Smith", result.get("appellantFamilyName"));
         assertEquals("John Smith", result.get("appellantFullName"));
@@ -137,9 +138,9 @@ class Stf24WeeksCaseReviewDocFieldMapperTest {
         String expected42Days = today.plusDays(42).format(java.time.format.DateTimeFormatter.ofPattern("d MMM yyyy"));
         String expected56Days = today.plusDays(56).format(java.time.format.DateTimeFormatter.ofPattern("d MMM yyyy"));
 
-        assertEquals(expected14Days, result.get("14DaysFromDateOfDirection"));
-        assertEquals(expected42Days, result.get("42DaysFromDateOfDirection"));
-        assertEquals(expected56Days, result.get("56DaysFromDateOfDirection"));
+        assertEquals(expected14Days, result.get(Stf24WeeksUtils.DAYS_14_FROM_DATE_OF_DIRECTION_KEY));
+        assertEquals(expected42Days, result.get(Stf24WeeksUtils.DAYS_42_FROM_DATE_OF_DIRECTION_KEY));
+        assertEquals(expected56Days, result.get(Stf24WeeksUtils.DAYS_56_FROM_DATE_OF_DIRECTION_KEY));
     }
 
 
