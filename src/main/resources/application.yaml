@@ -646,7 +646,7 @@ bailNoticeOfHearingInitialListing.templateName: ${IA_BAIL_NOTICE_OF_HEARING_INIT
 
 stf24WeeksCaseReview.contentType:  application/pdf
 stf24WeeksCaseReview.fileExtension: PDF
-stf24WeeksCaseReview.fileName: "standard-direction"
+stf24WeeksCaseReview.fileName: "stf-24weeks-case-review-appellant-document"
 stf24WeeksCaseReview.templateName: ${AIPM_PRISON_STD_STF24_WEEKS_CASE_REVIEW:TB-IAC-STD-ENG-001-STF24Weeks-Review-Appellant-v3.docx}
 
 ccdGatewayUrl: ${CCD_GW_URL:http://localhost:3453}

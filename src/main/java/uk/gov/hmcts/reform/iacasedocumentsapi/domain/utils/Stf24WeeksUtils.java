@@ -27,13 +27,13 @@ public class Stf24WeeksUtils {
     public static final String APPELLANT_FULL_NAME = "appellantFullName";
     public static final String PRACTICE_DIRECTION = "practiceDirection";
     public static final String EMPTY_STRING = "";
-    public static final String WEEKS_DEADLINE = "24WeeksDeadline";
+    public static final String WEEKS_DEADLINE = "twentyFourWeeksDeadline";
     public static final int DAYS_14 = 14;
     public static final int DAYS_42 = 42;
     public static final int DAYS_56 = 56;
-    public static final String DAYS_14_FROM_DATE_OF_DIRECTION_KEY = "14DaysFromDateOfDirection";
-    public static final String DAYS_56_FROM_DATE_OF_DIRECTION = "56DaysFromDateOfDirection";
-    public static final String DAYS_42_FROM_DATE_OF_DIRECTION_KEY = "42DaysFromDateOfDirection";
+    public static final String DAYS_14_FROM_DATE_OF_DIRECTION_KEY = "fourteenDaysFromDateOfDirection";
+    public static final String DAYS_56_FROM_DATE_OF_DIRECTION = "fiftySixDaysFromDateOfDirection";
+    public static final String DAYS_42_FROM_DATE_OF_DIRECTION_KEY = "fortyTwoDaysFromDateOfDirection";
     public static final String DECISION_SENT_DATE = "decisionSentDate";
     public static final String APPEAL_RECEIVED_DATE = "appealReceivedDate";
 
