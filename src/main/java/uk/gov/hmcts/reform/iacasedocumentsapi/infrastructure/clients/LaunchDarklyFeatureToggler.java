@@ -10,8 +10,8 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.FeatureToggler;
 @Service
 public class LaunchDarklyFeatureToggler implements FeatureToggler {
 
-    private LDClientInterface ldClient;
-    private UserDetailsProvider userDetailsProvider;
+    private final LDClientInterface ldClient;
+    private final UserDetailsProvider userDetailsProvider;
 
     public LaunchDarklyFeatureToggler(LDClientInterface ldClient,
                                       UserDetailsProvider userDetailsProvider) {

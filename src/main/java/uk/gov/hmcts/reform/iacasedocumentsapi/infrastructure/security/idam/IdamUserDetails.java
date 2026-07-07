@@ -2,7 +2,6 @@ package uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.security.idam;
 
 import static java.util.Objects.requireNonNull;
 
-import java.util.Collections;
 import java.util.List;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.UserDetails;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.UserRole;
@@ -33,7 +32,7 @@ public class IdamUserDetails implements UserDetails {
 
         this.accessToken = accessToken;
         this.id = id;
-        this.roles = roles;
+        this.roles = List.copyOf(roles);
         this.emailAddress = emailAddress;
         this.forename = forename;
         this.surname = surname;
@@ -51,7 +50,7 @@ public class IdamUserDetails implements UserDetails {
 
     @Override
     public List<String> getRoles() {
-        return Collections.unmodifiableList(roles);
+        return roles;
     }
 
     @Override

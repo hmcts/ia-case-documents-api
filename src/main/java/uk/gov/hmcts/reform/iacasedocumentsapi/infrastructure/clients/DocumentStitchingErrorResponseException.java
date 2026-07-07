@@ -5,7 +5,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.enties.em.BundleCas
 
 public class DocumentStitchingErrorResponseException extends DocumentServiceResponseException {
 
-    private PreSubmitCallbackResponse<BundleCaseData> stitchingServiceResponse;
+    private final PreSubmitCallbackResponse<BundleCaseData> stitchingServiceResponse;
 
     public DocumentStitchingErrorResponseException(String message, PreSubmitCallbackResponse<BundleCaseData> stitchingServiceResponse) {
         super(message);

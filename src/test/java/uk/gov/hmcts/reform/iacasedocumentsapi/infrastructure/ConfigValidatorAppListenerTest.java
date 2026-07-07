@@ -1,6 +1,5 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -18,19 +17,11 @@ class ConfigValidatorAppListenerTest {
     @Mock
     private Environment env;
 
-    private ConfigValidatorAppListener configValidatorAppListener;
-
-    @BeforeEach
-    public void setup() {
-        configValidatorAppListener = new ConfigValidatorAppListener();
-        configValidatorAppListener.setEnvironment(env);
-    }
-
     @Test
     @SuppressWarnings("java:S2699")
     void throwsExceptionWhenIaConfigValidatorSecretIsNullSimulateLocal() {
         // Given
-        configValidatorAppListener.setIaConfigValidatorSecret(null);
+        ConfigValidatorAppListener configValidatorAppListener = new ConfigValidatorAppListener(env, null);
         when(env.getProperty(CLUSTER_NAME)).thenReturn(null);
 
         // When
@@ -43,7 +34,7 @@ class ConfigValidatorAppListenerTest {
     @Test
     void throwsExceptionWhenIaConfigValidatorSecretIsNullSimulateCluster() {
         // Given
-        configValidatorAppListener.setIaConfigValidatorSecret(null);
+        ConfigValidatorAppListener configValidatorAppListener = new ConfigValidatorAppListener(env, null);
         when(env.getProperty(CLUSTER_NAME)).thenReturn("cft-preview-01-aks");
 
         // When/Then
@@ -54,7 +45,7 @@ class ConfigValidatorAppListenerTest {
     @Test
     void throwsExceptionWhenIaConfigValidatorSecretIsEmptySimulateLocal() {
         // Given
-        configValidatorAppListener.setIaConfigValidatorSecret("");
+        ConfigValidatorAppListener configValidatorAppListener = new ConfigValidatorAppListener(env, "");
         when(env.getProperty(CLUSTER_NAME)).thenReturn(null);
 
         // When
@@ -67,7 +58,7 @@ class ConfigValidatorAppListenerTest {
     @Test
     void throwsExceptionWhenIaConfigValidatorSecretIsEmptySimulateCluster() {
         // Given
-        configValidatorAppListener.setIaConfigValidatorSecret("");
+        ConfigValidatorAppListener configValidatorAppListener = new ConfigValidatorAppListener(env, "");
         when(env.getProperty(CLUSTER_NAME)).thenReturn("cft-preview-01-aks");
 
 
@@ -80,7 +71,7 @@ class ConfigValidatorAppListenerTest {
     @SuppressWarnings("java:S2699") // suppressing SonarLint warning on assertions as it's ok for this test not to have any
     void runsSuccessfullyWhenIaConfigValidatorSecretsAreCorrectlySetSimulateLocal() {
         // Given
-        configValidatorAppListener.setIaConfigValidatorSecret("secret");
+        ConfigValidatorAppListener configValidatorAppListener = new ConfigValidatorAppListener(env, "secret");
         when(env.getProperty(CLUSTER_NAME)).thenReturn(null);
 
         // When
@@ -95,7 +86,7 @@ class ConfigValidatorAppListenerTest {
     @SuppressWarnings("java:S2699") // suppressing SonarLint warning on assertions as it's ok for this test not to have any
     void runsSuccessfullyWhenIaConfigValidatorSecretsAreCorrectlySetSimulateCluster() {
         // Given
-        configValidatorAppListener.setIaConfigValidatorSecret("secret");
+        ConfigValidatorAppListener configValidatorAppListener = new ConfigValidatorAppListener(env, "secret");
         when(env.getProperty(CLUSTER_NAME)).thenReturn("cft-preview-01-aks");
 
         // When

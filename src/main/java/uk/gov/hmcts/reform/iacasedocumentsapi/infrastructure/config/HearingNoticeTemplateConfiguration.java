@@ -1,6 +1,5 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.config;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -11,8 +10,11 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.CustomerServicesPro
 @Configuration
 public class HearingNoticeTemplateConfiguration {
 
-    @Autowired
-    private CustomerServicesProvider customerServicesProvider;
+    private final CustomerServicesProvider customerServicesProvider;
+
+    public HearingNoticeTemplateConfiguration(CustomerServicesProvider customerServicesProvider) {
+        this.customerServicesProvider = customerServicesProvider;
+    }
 
     @Bean("hearingNoticeTemplate")
     public HearingNoticeTemplate getHearingNoticeTemplate(
