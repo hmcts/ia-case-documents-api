@@ -57,7 +57,7 @@ class Stf24WeeksCaseReviewDocFieldMapperTest {
         assertEquals("John", result.get("appellantGivenNames"));
         assertEquals("Smith", result.get("appellantFamilyName"));
         assertEquals("John Smith", result.get("appellantFullName"));
-        assertEquals("18 Jun 2023", result.get("24WeeksDeadline"));
+        assertEquals("18 Jun 2023", result.get(Stf24WeeksUtils.WEEKS_DEADLINE));
         assertEquals("1 Dec 2022", result.get("decisionSentDate"));
         assertTrue(result.containsKey("appealReceivedDate"));
     }
