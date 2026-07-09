@@ -49,6 +49,8 @@ public class EventTest {
             Arguments.of("changeDirectionDueDate", CaseType.ASYLUM, Event.CHANGE_DIRECTION_DUE_DATE),
             Arguments.of("uploadAdditionalEvidence", CaseType.ASYLUM, Event.UPLOAD_ADDITIONAL_EVIDENCE),
             Arguments.of("listCase", CaseType.ASYLUM, Event.LIST_CASE),
+            Arguments.of("cmrListing", CaseType.ASYLUM, Event.CMR_LISTING),
+            Arguments.of("cmrReListing", CaseType.ASYLUM, Event.CMR_RE_LISTING),
             Arguments.of("createCaseSummary", CaseType.ASYLUM, Event.CREATE_CASE_SUMMARY),
             Arguments.of("revertStateToAwaitingRespondentEvidence", CaseType.ASYLUM, Event.REVERT_STATE_TO_AWAITING_RESPONDENT_EVIDENCE),
             Arguments.of("generateHearingBundle", CaseType.ASYLUM, Event.GENERATE_HEARING_BUNDLE),
