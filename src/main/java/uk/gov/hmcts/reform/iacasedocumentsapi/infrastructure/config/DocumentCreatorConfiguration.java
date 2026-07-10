@@ -944,6 +944,27 @@ public class DocumentCreatorConfiguration {
         );
     }
 
+    @Bean("internalDetainedCmrListing")
+    public DocumentCreator<AsylumCase> getInternalDetainedCmrListingDocumentCreator(
+        @Value("${internalDetainedCmrListingLetter.contentType}") String contentType,
+        @Value("${internalDetainedCmrListingLetter.fileExtension}") String fileExtension,
+        @Value("${internalDetainedCmrListingLetter.fileName}") String fileName,
+        AsylumCaseFileNameQualifier fileNameQualifier,
+        InternalDetainedCmrListingLetterTemplate documentTemplate,
+        DocumentGenerator documentGenerator,
+        DocumentUploader documentUploader
+    ) {
+        return new DocumentCreator<>(
+            contentType,
+            fileExtension,
+            fileName,
+            fileNameQualifier,
+            documentTemplate,
+            documentGenerator,
+            documentUploader
+        );
+    }
+
     @Bean("detainedCmrListingCase")
     public DocumentCreator<AsylumCase> getDetainedCmrListingCaseDocumentCreator(
         @Value("${internalDetainedListCaseLetter.contentType}") String contentType,

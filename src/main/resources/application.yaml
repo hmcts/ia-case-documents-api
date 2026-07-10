@@ -323,6 +323,11 @@ internalDetainedListCaseLetter.fileExtension: PDF
 internalDetainedListCaseLetter.fileName: "detained-appellant-list-case-letter"
 internalDetainedListCaseLetter.templateName: ${IA_INTERNAL_DETAINED_LIST_CASE_LETTER_TEMPLATE:TB-IAC-LET-ENG-00005.docx}
 
+internalDetainedCmrListingLetter.contentType: application/pdf
+internalDetainedCmrListingLetter.fileExtension: PDF
+internalDetainedCmrListingLetter.fileName: "detained-appellant-cmr-listing-letter"
+internalDetainedCmrListingLetter.templateName: ${IA_INTERNAL_DETAINED_LIST_CASE_LETTER_TEMPLATE:TB-IAC-LET-ENG-00005.docx}
+
 internalDetainedRequestHearingRequirements.contentType:  application/pdf
 internalDetainedRequestHearingRequirements.fileExtension: PDF
 internalDetainedRequestHearingRequirements.fileName: "detained-appellant-request-hearing-requirements-letter"

@@ -61,6 +61,7 @@ import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseD
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.APPELLANT_HAS_FIXED_ADDRESS;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.APPELLANT_HAS_FIXED_ADDRESS_ADMIN_J;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.APPELLANT_IN_DETENTION;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.CMR_HEARING_CHANNEL;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.DETENTION_FACILITY;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.DIRECTIONS;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.DIRECTION_EDIT_DATE_DUE;
@@ -975,6 +976,51 @@ public class AsylumCaseUtilsTest {
 
         assertThrows(NullPointerException.class, () -> {
             AsylumCaseUtils.getHearingChannel(asylumCase, defaultValue);
+        });
+    }
+
+    @Test
+    void should_return_cmr_hearing_channel_label_when_present() {
+        String expectedLabel = "In person";
+        when(asylumCase.read(CMR_HEARING_CHANNEL, DynamicList.class)).thenReturn(Optional.of(hearingChannelDynamicList));
+        when(hearingChannelDynamicList.getValue()).thenReturn(hearingChannelValue);
+        when(hearingChannelValue.getLabel()).thenReturn(expectedLabel);
+
+        String result = AsylumCaseUtils.getCmrHearingChannel(asylumCase, "Unknown");
+
+        assertEquals(expectedLabel, result);
+    }
+
+    @Test
+    void should_return_default_value_when_cmr_hearing_channel_not_present() {
+        String defaultValue = "Unknown";
+        when(asylumCase.read(CMR_HEARING_CHANNEL, DynamicList.class)).thenReturn(Optional.empty());
+
+        String result = AsylumCaseUtils.getCmrHearingChannel(asylumCase, defaultValue);
+
+        assertEquals(defaultValue, result);
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"In person", "Video call", "Telephone", "Paper hearing"})
+    void should_return_correct_cmr_hearing_channel_for_different_types(String hearingChannelType) {
+        when(asylumCase.read(CMR_HEARING_CHANNEL, DynamicList.class)).thenReturn(Optional.of(hearingChannelDynamicList));
+        when(hearingChannelDynamicList.getValue()).thenReturn(hearingChannelValue);
+        when(hearingChannelValue.getLabel()).thenReturn(hearingChannelType);
+
+        String result = AsylumCaseUtils.getCmrHearingChannel(asylumCase, "Unknown");
+
+        assertEquals(hearingChannelType, result);
+    }
+
+    @Test
+    void should_throw_exception_when_cmr_hearing_channel_value_is_null() {
+        String defaultValue = "Not specified";
+        when(asylumCase.read(CMR_HEARING_CHANNEL, DynamicList.class)).thenReturn(Optional.of(hearingChannelDynamicList));
+        when(hearingChannelDynamicList.getValue()).thenReturn(null);
+
+        assertThrows(NullPointerException.class, () -> {
+            AsylumCaseUtils.getCmrHearingChannel(asylumCase, defaultValue);
         });
     }
 

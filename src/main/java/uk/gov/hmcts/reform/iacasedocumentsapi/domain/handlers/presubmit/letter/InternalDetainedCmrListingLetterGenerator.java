@@ -1,6 +1,5 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit.letter;
 
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
@@ -23,15 +22,14 @@ import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.Event.*
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.isAcceleratedDetainedAppeal;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.isDetainedInOneOfFacilityTypes;
 
-@Slf4j
 @Component
-public class DetainedCmrListingLetterGenerator implements PreSubmitCallbackHandler<AsylumCase> {
+public class InternalDetainedCmrListingLetterGenerator implements PreSubmitCallbackHandler<AsylumCase> {
 
     private final DocumentCreator<AsylumCase> documentCreator;
     private final DocumentHandler documentHandler;
 
-    public DetainedCmrListingLetterGenerator(
-        @Qualifier("detainedCmrListingCase") DocumentCreator<AsylumCase> documentCreator,
+    public InternalDetainedCmrListingLetterGenerator(
+        @Qualifier("internalDetainedCmrListing") DocumentCreator<AsylumCase> documentCreator,
         DocumentHandler documentHandler
     ) {
         this.documentCreator = documentCreator;
@@ -47,11 +45,6 @@ public class DetainedCmrListingLetterGenerator implements PreSubmitCallbackHandl
 
         AsylumCase asylumCase = callback.getCaseDetails().getCaseData();
 
-        log.info("--------------------");
-        log.info("callback.getEvent(): {}", callback.getEvent());
-        log.info("!isAcceleratedDetainedAppeal(asylumCase): {}", !isAcceleratedDetainedAppeal(asylumCase));
-        log.info("isDetainedInOneOfFacilityTypes(asylumCase, IRC, PRISON): {}", isDetainedInOneOfFacilityTypes(asylumCase));
-        log.info("--------------------");
         return callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
                && (callback.getEvent() == CMR_LISTING || callback.getEvent() == CMR_RE_LISTING)
                && !isAcceleratedDetainedAppeal(asylumCase)

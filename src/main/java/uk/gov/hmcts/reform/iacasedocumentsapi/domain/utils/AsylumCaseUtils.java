@@ -551,6 +551,14 @@ public class AsylumCaseUtils {
             .orElse(defaultValue);
     }
 
+    public static String getCmrHearingChannel(AsylumCase asylumCase, String defaultValue) {
+        Optional<DynamicList> hearingChannelDl = asylumCase.read(CMR_HEARING_CHANNEL, DynamicList.class);
+
+        return hearingChannelDl
+            .map(dynamicList -> dynamicList.getValue().getLabel())
+            .orElse(defaultValue);
+    }
+
     public static boolean isFtpaDecisionOutcomeTypeUnderRule31OrRule32(AsylumCase asylumCase) {
         List<String> rule31And32 = List.of(
             FtpaDecisionOutcomeType.FTPA_REMADE31.toString(),
