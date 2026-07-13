@@ -1,5 +1,6 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit.letter;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
@@ -22,6 +23,7 @@ import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.Event.*
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.isAcceleratedDetainedAppeal;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.isDetainedInOneOfFacilityTypes;
 
+@Slf4j
 @Component
 public class InternalDetainedCmrListingLetterGenerator implements PreSubmitCallbackHandler<AsylumCase> {
 
@@ -45,6 +47,17 @@ public class InternalDetainedCmrListingLetterGenerator implements PreSubmitCallb
 
         AsylumCase asylumCase = callback.getCaseDetails().getCaseData();
 
+        log.info("--------------------------------------");
+        log.info(
+                "callback.getEvent() == CMR_LISTING || callback.getEvent() == CMR_RE_LISTING: {}",
+                callback.getEvent() == CMR_LISTING || callback.getEvent() == CMR_RE_LISTING
+        );
+        log.info("!isAcceleratedDetainedAppeal(asylumCase): {}", !isAcceleratedDetainedAppeal(asylumCase));
+        log.info(
+                "isDetainedInOneOfFacilityTypes(asylumCase, IRC, PRISON): {}",
+                isDetainedInOneOfFacilityTypes(asylumCase, IRC, PRISON)
+        );
+        log.info("--------------------------------------");
         return callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
                && (callback.getEvent() == CMR_LISTING || callback.getEvent() == CMR_RE_LISTING)
                && !isAcceleratedDetainedAppeal(asylumCase)
@@ -64,12 +77,16 @@ public class InternalDetainedCmrListingLetterGenerator implements PreSubmitCallb
 
         Document internalDetainedListCaseLetter = documentCreator.create(caseDetails);
 
+        log.info("--------------------------------------");
+        log.info("Adding internal detained list case letter to asylum case INTERNAL_CMR_LISTING_LETTER");
         documentHandler.addWithMetadataWithoutReplacingExistingDocuments(
             asylumCase,
             internalDetainedListCaseLetter,
             NOTIFICATION_ATTACHMENT_DOCUMENTS,
             DocumentTag.INTERNAL_CMR_LISTING_LETTER
         );
+        log.info("Added internal detained list case letter to asylum case INTERNAL_CMR_LISTING_LETTER");
+        log.info("--------------------------------------");
 
         return new PreSubmitCallbackResponse<>(asylumCase);
     }

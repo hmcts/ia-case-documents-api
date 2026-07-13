@@ -1,5 +1,6 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit.letter;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
@@ -25,6 +26,7 @@ import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DetentionFa
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.Event.*;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.*;
 
+@Slf4j
 @Component
 public class DetainedIrcPrisonCmrListingDocumentBundler implements PreSubmitCallbackHandler<AsylumCase> {
 
@@ -60,6 +62,21 @@ public class DetainedIrcPrisonCmrListingDocumentBundler implements PreSubmitCall
 
         AsylumCase asylumCase = callback.getCaseDetails().getCaseData();
 
+        log.info("--------------------------------------");
+        log.info(
+                "callback.getEvent() == CMR_LISTING || callback.getEvent() == CMR_RE_LISTING: {}",
+                callback.getEvent() == CMR_LISTING || callback.getEvent() == CMR_RE_LISTING
+        );
+        log.info(
+                "isDetainedInOneOfFacilityTypes(asylumCase, PRISON, IRC): {}",
+                isDetainedInOneOfFacilityTypes(asylumCase, PRISON, IRC)
+        );
+        log.info(
+                "!hasBeenSubmittedAsLegalRepresentedInternalCase(asylumCase): {}",
+                !hasBeenSubmittedAsLegalRepresentedInternalCase(asylumCase)
+        );
+        log.info("isEmStitchingEnabled: {}", isEmStitchingEnabled);
+        log.info("--------------------------------------");
         return callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
                && (callback.getEvent() == CMR_LISTING || callback.getEvent() == CMR_RE_LISTING)
                && isDetainedInOneOfFacilityTypes(asylumCase, PRISON, IRC)
