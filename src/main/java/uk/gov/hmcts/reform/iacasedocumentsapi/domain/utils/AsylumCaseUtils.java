@@ -377,7 +377,12 @@ public class AsylumCaseUtils {
 
     public static List<DocumentWithMetadata> getMaybeNotificationAttachmentDocuments(AsylumCase asylumCase, DocumentTag documentTag) {
         Optional<List<IdValue<DocumentWithMetadata>>> maybeLetterNotificationDocuments = asylumCase.read(NOTIFICATION_ATTACHMENT_DOCUMENTS);
-        log.info("maybeLetterNotificationDocuments: {}", maybeLetterNotificationDocuments);
+        log.info("-----maybeLetterNotificationDocuments: {}", maybeLetterNotificationDocuments);
+        log.info("-----documentTag: {}", documentTag);
+        for (IdValue<DocumentWithMetadata> document: maybeLetterNotificationDocuments.orElse(Collections.emptyList())) {
+            log.info("document: {}", document.getValue().getDocument());
+            log.info("tag: {}", document.getValue().getTag());
+        }
 
         return maybeLetterNotificationDocuments
             .orElse(Collections.emptyList())
