@@ -11,7 +11,7 @@ public class HolidayService {
     private final List<LocalDate> holidays;
 
     public HolidayService(List<LocalDate> holidays) {
-        this.holidays = holidays;
+        this.holidays = List.copyOf(holidays);
     }
 
     public boolean isHoliday(ZonedDateTime zonedDateTime) {

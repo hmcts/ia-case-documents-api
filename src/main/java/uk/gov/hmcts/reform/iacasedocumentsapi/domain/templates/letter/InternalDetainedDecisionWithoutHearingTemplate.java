@@ -17,8 +17,8 @@ import java.util.Map;
 @Component
 public class InternalDetainedDecisionWithoutHearingTemplate implements DocumentTemplate<AsylumCase> {
 
-    private String templateName;
-    private CustomerServicesProvider customerServicesProvider;
+    private final String templateName;
+    private final CustomerServicesProvider customerServicesProvider;
 
     public InternalDetainedDecisionWithoutHearingTemplate(
             @Value("${internalDetainedDecisionWithoutHearing.templateName}") String templateName,

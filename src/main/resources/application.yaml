@@ -38,6 +38,11 @@ management:
 
   endpoint.health.probes.enabled: true
 
+logging:
+  level:
+    io.lettuce.core: WARN
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] [%X{correlationId}] [%X{ccdCaseId}] %-5level %logger{36} - %msg%n"
 
 spring:
   main:
@@ -1326,8 +1331,10 @@ appellantDaysToWait:
     afterManageFeeUpdate: 14
     afterSubmitAppeal: 10
     afterSubmitAppealWithFeeToPay: 14
+    afterSubmitAppealWithFeeToPayDetained: 28
     tribunalDocumentToSendTimeline: 4
     afterRemissionDecision: 14
+    afterRemissionDecisionDetained: 28
     appealAfterTribunalDecision: 14
 
 

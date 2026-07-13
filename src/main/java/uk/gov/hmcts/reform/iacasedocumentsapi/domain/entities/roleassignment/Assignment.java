@@ -5,8 +5,10 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -46,7 +48,9 @@ public class Assignment {
                       @JsonProperty("attributes") Map<String, String> attributes) {
         this.id = id;
         this.created = created;
-        this.authorisations = authorisations;
+        this.authorisations = Optional.ofNullable(authorisations)
+                .map(List::copyOf)
+                .orElse(Collections.emptyList());
         this.actorIdType = actorIdType;
         this.actorId = actorId;
         this.roleType = roleType;
@@ -55,7 +59,9 @@ public class Assignment {
         this.classification = classification;
         this.grantType = grantType;
         this.readOnly = readOnly;
-        this.attributes = attributes;
+        this.attributes = Optional.ofNullable(attributes)
+                .map(Map::copyOf)
+                .orElse(Collections.emptyMap());
     }
 
     public String getId() {
