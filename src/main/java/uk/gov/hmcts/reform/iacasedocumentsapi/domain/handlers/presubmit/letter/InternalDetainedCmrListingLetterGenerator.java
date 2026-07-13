@@ -68,7 +68,7 @@ public class InternalDetainedCmrListingLetterGenerator implements PreSubmitCallb
             asylumCase,
             internalDetainedListCaseLetter,
             NOTIFICATION_ATTACHMENT_DOCUMENTS,
-            DocumentTag.INTERNAL_CASE_LISTED_LETTER
+            DocumentTag.INTERNAL_CMR_LISTING_LETTER
         );
 
         return new PreSubmitCallbackResponse<>(asylumCase);

@@ -77,7 +77,7 @@ class InternalDetainedCmrListingLetterGeneratorTest {
         verify(documentHandler, times(1)).addWithMetadataWithoutReplacingExistingDocuments(
             asylumCase, uploadedDocument,
             NOTIFICATION_ATTACHMENT_DOCUMENTS,
-            DocumentTag.INTERNAL_CASE_LISTED_LETTER
+            DocumentTag.INTERNAL_CMR_LISTING_LETTER
         );
     }
 
