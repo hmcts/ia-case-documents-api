@@ -380,9 +380,22 @@ public class AsylumCaseUtils {
         log.info("-----maybeLetterNotificationDocuments: {}", maybeLetterNotificationDocuments);
         log.info("-----documentTag: {}", documentTag);
         for (IdValue<DocumentWithMetadata> document: maybeLetterNotificationDocuments.orElse(Collections.emptyList())) {
-            log.info("document: {}", document.getValue().getDocument());
-            log.info("tag: {}", document.getValue().getTag());
+            log.info("-----document: {}", document.getValue().getDocument());
+            log.info("-----tag: {}", document.getValue().getTag());
         }
+
+        List<DocumentWithMetadata> docs = maybeLetterNotificationDocuments
+                .orElse(Collections.emptyList())
+                .stream()
+                .map(IdValue::getValue)
+                .filter(document -> {
+                    log.info("-----documentTag: {}", documentTag);
+                    log.info("-----document.getTag(): {}", document.getTag());
+                    log.info("-----document.getTag() == documentTag: {}", document.getTag() == documentTag);
+                    return document.getTag() == documentTag;
+                })
+                .collect(Collectors.toList());
+        log.info("-----docs.size: {}", docs.size());
 
         return maybeLetterNotificationDocuments
             .orElse(Collections.emptyList())
