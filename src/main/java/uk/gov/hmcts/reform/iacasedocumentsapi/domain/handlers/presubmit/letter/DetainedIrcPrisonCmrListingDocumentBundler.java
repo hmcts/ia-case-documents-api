@@ -103,6 +103,7 @@ public class DetainedIrcPrisonCmrListingDocumentBundler implements PreSubmitCall
         final String qualifiedDocumentFileName = fileNameQualifier.get(fileName + "." + fileExtension, caseDetails);
 
         List<DocumentWithMetadata> bundleDocuments = getMaybeNotificationAttachmentDocuments(asylumCase, DocumentTag.INTERNAL_CMR_LISTING_LETTER);
+        log.info("bundleDocuments.size: {}", bundleDocuments.size());
 
         Document internalCaseListedLetterBundle = documentBundler.bundleWithoutContentsOrCoverSheets(
             bundleDocuments,

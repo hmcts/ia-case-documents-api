@@ -78,6 +78,8 @@ public class InternalDetainedCmrListingLetterGenerator implements PreSubmitCallb
         Document internalDetainedListCaseLetter = documentCreator.create(caseDetails);
 
         log.info("--------------------------------------");
+        log.info("internalDetainedListCaseLetter: {}", internalDetainedListCaseLetter.getDocumentFilename());
+        log.info("internalDetainedListCaseLetter: {}", internalDetainedListCaseLetter.getDocumentUrl());
         log.info("Adding internal detained list case letter to asylum case INTERNAL_CMR_LISTING_LETTER");
         documentHandler.addWithMetadataWithoutReplacingExistingDocuments(
             asylumCase,
