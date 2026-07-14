@@ -62,6 +62,7 @@ import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseD
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.APPELLANT_HAS_FIXED_ADDRESS_ADMIN_J;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.APPELLANT_IN_DETENTION;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.CMR_HEARING_CHANNEL;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.CMR_IS_REMOTE_HEARING;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.DETENTION_FACILITY;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.DIRECTIONS;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.DIRECTION_EDIT_DATE_DUE;
@@ -458,6 +459,24 @@ public class AsylumCaseUtilsTest {
     void should_return_isRemoteHearing() {
         when(asylumCase.read(IS_REMOTE_HEARING, YesOrNo.class)).thenReturn(Optional.of(YES));
         assertTrue(AsylumCaseUtils.isRemoteHearing(asylumCase));
+    }
+
+    @Test
+    void should_return_isRemoteCmrHearing() {
+        when(asylumCase.read(CMR_IS_REMOTE_HEARING, YesOrNo.class)).thenReturn(Optional.of(YES));
+        assertTrue(AsylumCaseUtils.isRemoteCmrHearing(asylumCase));
+    }
+
+    @Test
+    void should_return_isRemoteCmrHearing_false_when_value_is_no() {
+        when(asylumCase.read(CMR_IS_REMOTE_HEARING, YesOrNo.class)).thenReturn(Optional.of(NO));
+        assertFalse(AsylumCaseUtils.isRemoteCmrHearing(asylumCase));
+    }
+
+    @Test
+    void should_return_isRemoteCmrHearing_false_when_missing_in_case_data() {
+        when(asylumCase.read(CMR_IS_REMOTE_HEARING, YesOrNo.class)).thenReturn(Optional.empty());
+        assertFalse(AsylumCaseUtils.isRemoteCmrHearing(asylumCase));
     }
 
     @Test

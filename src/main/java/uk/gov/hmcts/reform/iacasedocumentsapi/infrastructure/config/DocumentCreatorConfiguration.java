@@ -104,6 +104,27 @@ public class DocumentCreatorConfiguration {
         );
     }
 
+    @Bean("cmrHearingNotice")
+    public DocumentCreator<AsylumCase> getCmrHearingNoticeDocumentCreator(
+        @Value("${cmrHearingNoticeDocument.contentType}") String contentType,
+        @Value("${cmrHearingNoticeDocument.fileExtension}") String fileExtension,
+        @Value("${cmrHearingNoticeDocument.fileName}") String fileName,
+        AsylumCaseFileNameQualifier fileNameQualifier,
+        @Qualifier("cmrHearingNoticeTemplate") CmrHearingNoticeTemplate documentTemplate,
+        DocumentGenerator documentGenerator,
+        DocumentUploader documentUploader
+    ) {
+        return new DocumentCreator<>(
+                contentType,
+                fileExtension,
+                fileName,
+                fileNameQualifier,
+                documentTemplate,
+                documentGenerator,
+                documentUploader
+        );
+    }
+
     @Bean("remoteHearingNotice")
     public DocumentCreator<AsylumCase> getRemoteHearingNoticeDocumentCreator(
         @Value("${remoteHearingNoticeDocument.contentType}") String contentType,
@@ -111,6 +132,27 @@ public class DocumentCreatorConfiguration {
         @Value("${remoteHearingNoticeDocument.fileName}") String fileName,
         AsylumCaseFileNameQualifier fileNameQualifier,
         @Qualifier("remoteHearingNoticeTemplate") HearingNoticeTemplate documentTemplate,
+        DocumentGenerator documentGenerator,
+        DocumentUploader documentUploader
+    ) {
+        return new DocumentCreator<>(
+            contentType,
+            fileExtension,
+            fileName,
+            fileNameQualifier,
+            documentTemplate,
+            documentGenerator,
+            documentUploader
+        );
+    }
+
+    @Bean("remoteCmrHearingNotice")
+    public DocumentCreator<AsylumCase> getRemoteCmrHearingNoticeDocumentCreator(
+        @Value("${remoteCmrHearingNoticeDocument.contentType}") String contentType,
+        @Value("${remoteCmrHearingNoticeDocument.fileExtension}") String fileExtension,
+        @Value("${remoteCmrHearingNoticeDocument.fileName}") String fileName,
+        AsylumCaseFileNameQualifier fileNameQualifier,
+        @Qualifier("remoteCmrHearingNoticeTemplate") CmrHearingNoticeTemplate documentTemplate,
         DocumentGenerator documentGenerator,
         DocumentUploader documentUploader
     ) {
@@ -279,6 +321,27 @@ public class DocumentCreatorConfiguration {
         @Value("${hearingNoticeDocument.fileName}") String fileName,
         AsylumCaseFileNameQualifier fileNameQualifier,
         @Qualifier("adaHearingNoticeTemplate") HearingNoticeTemplate documentTemplate,
+        DocumentGenerator documentGenerator,
+        DocumentUploader documentUploader
+    ) {
+        return new DocumentCreator<>(
+            contentType,
+            fileExtension,
+            fileName,
+            fileNameQualifier,
+            documentTemplate,
+            documentGenerator,
+            documentUploader
+        );
+    }
+
+    @Bean("adaCmrHearingNotice")
+    public DocumentCreator<AsylumCase> getAdaCmrHearingNoticeDocumentCreator(
+        @Value("${hearingNoticeDocument.contentType}") String contentType,
+        @Value("${hearingNoticeDocument.fileExtension}") String fileExtension,
+        @Value("${hearingNoticeDocument.fileName}") String fileName,
+        AsylumCaseFileNameQualifier fileNameQualifier,
+        @Qualifier("adaCmrHearingNoticeTemplate") CmrHearingNoticeTemplate documentTemplate,
         DocumentGenerator documentGenerator,
         DocumentUploader documentUploader
     ) {
