@@ -60,9 +60,10 @@ public class InternalDetainedCmrListingLetterGenerator implements PreSubmitCallb
         );
         log.info("--------------------------------------");
         return callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
-               && (callback.getEvent() == CMR_LISTING || callback.getEvent() == CMR_RE_LISTING)
-               && !isAcceleratedDetainedAppeal(asylumCase)
-               && isDetainedInOneOfFacilityTypes(asylumCase, IRC, PRISON);
+                && (callback.getEvent() == CMR_LISTING || callback.getEvent() == CMR_RE_LISTING)
+                && !isAcceleratedDetainedAppeal(asylumCase)
+                && !isRemoteCmrHearing(asylumCase)
+                && isDetainedInOneOfFacilityTypes(asylumCase, IRC, PRISON);
     }
 
     public PreSubmitCallbackResponse<AsylumCase> handle(

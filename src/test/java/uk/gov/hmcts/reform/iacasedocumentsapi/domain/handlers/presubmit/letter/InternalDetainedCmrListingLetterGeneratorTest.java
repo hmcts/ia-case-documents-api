@@ -63,6 +63,7 @@ class InternalDetainedCmrListingLetterGeneratorTest {
         when(callback.getEvent()).thenReturn(event);
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
         when(asylumCase.read(IS_ACCELERATED_DETAINED_APPEAL, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO));
+        when(asylumCase.read(CMR_IS_REMOTE_HEARING, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO));
         when(asylumCase.read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
         when(asylumCase.read(DETENTION_FACILITY, String.class)).thenReturn(Optional.of("immigrationRemovalCentre"));
 
@@ -87,10 +88,32 @@ class InternalDetainedCmrListingLetterGeneratorTest {
         when(callback.getEvent()).thenReturn(CMR_LISTING);
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
         when(asylumCase.read(IS_ACCELERATED_DETAINED_APPEAL, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO));
+        when(asylumCase.read(CMR_IS_REMOTE_HEARING, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO));
         when(asylumCase.read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
         when(asylumCase.read(DETENTION_FACILITY, String.class)).thenReturn(Optional.of("prison"));
 
         assertTrue(internalDetainedCmrListingLetterGenerator.canHandle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback));
+    }
+
+    @Test
+    public void it_cannot_handle_callback_if_remote_cmr_hearing() {
+
+        for (Event event : Event.values()) {
+
+            when(callback.getEvent()).thenReturn(event);
+            when(callback.getCaseDetails()).thenReturn(caseDetails);
+            when(caseDetails.getCaseData()).thenReturn(asylumCase);
+            when(asylumCase.read(IS_ACCELERATED_DETAINED_APPEAL, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO));
+            when(asylumCase.read(CMR_IS_REMOTE_HEARING, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
+            when(asylumCase.read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
+            when(asylumCase.read(DETENTION_FACILITY, String.class)).thenReturn(Optional.of("immigrationRemovalCentre"));
+
+            for (PreSubmitCallbackStage callbackStage : PreSubmitCallbackStage.values()) {
+                boolean canHandle = internalDetainedCmrListingLetterGenerator.canHandle(callbackStage, callback);
+                assertFalse(canHandle);
+            }
+            reset(callback);
+        }
     }
 
     @Test
