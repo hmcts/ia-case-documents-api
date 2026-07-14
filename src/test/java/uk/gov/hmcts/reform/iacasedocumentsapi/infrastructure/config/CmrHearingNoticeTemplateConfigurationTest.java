@@ -29,7 +29,7 @@ class CmrHearingNoticeTemplateConfigurationTest {
         String templateName = "CMR_HEARING_NOTICE_TEMPLATE.docx";
 
         CmrHearingNoticeTemplate template =
-            configuration.getHearingNoticeTemplate(templateName, stringProvider);
+            configuration.getCmrHearingNoticeTemplate(templateName, stringProvider);
 
         assertThat(template).isNotNull();
         assertThat(template.getName()).isEqualTo(templateName);
@@ -40,7 +40,7 @@ class CmrHearingNoticeTemplateConfigurationTest {
         String templateName = "REMOTE_CMR_HEARING_NOTICE_TEMPLATE.docx";
 
         CmrHearingNoticeTemplate template =
-            configuration.getRemoteHearingNoticeTemplate(templateName, stringProvider);
+            configuration.getRemoteCmrHearingNoticeTemplate(templateName, stringProvider);
 
         assertThat(template).isNotNull();
         assertThat(template.getName()).isEqualTo(templateName);
@@ -51,7 +51,7 @@ class CmrHearingNoticeTemplateConfigurationTest {
         String templateName = "ADA_CMR_HEARING_NOTICE_TEMPLATE.docx";
 
         CmrHearingNoticeTemplate template =
-            configuration.getAdaHearingNoticeTemplate(templateName, stringProvider);
+            configuration.getAdaCmrHearingNoticeTemplate(templateName, stringProvider);
 
         assertThat(template).isNotNull();
         assertThat(template.getName()).isEqualTo(templateName);

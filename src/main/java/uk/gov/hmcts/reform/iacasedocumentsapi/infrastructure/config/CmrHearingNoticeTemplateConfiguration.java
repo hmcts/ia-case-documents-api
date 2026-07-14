@@ -17,19 +17,19 @@ public class CmrHearingNoticeTemplateConfiguration {
     }
 
     @Bean("cmrHearingNoticeTemplate")
-    public CmrHearingNoticeTemplate getHearingNoticeTemplate(
+    public CmrHearingNoticeTemplate getCmrHearingNoticeTemplate(
         @Value("${cmrHearingNoticeDocument.templateName}") String templateName, StringProvider stringProvider) {
         return new CmrHearingNoticeTemplate(templateName, stringProvider, customerServicesProvider);
     }
 
     @Bean("remoteCmrHearingNoticeTemplate")
-    public CmrHearingNoticeTemplate getRemoteHearingNoticeTemplate(
+    public CmrHearingNoticeTemplate getRemoteCmrHearingNoticeTemplate(
             @Value("${remoteCmrHearingNoticeDocument.templateName}") String templateName, StringProvider stringProvider) {
         return new CmrHearingNoticeTemplate(templateName, stringProvider, customerServicesProvider);
     }
 
     @Bean("adaCmrHearingNoticeTemplate")
-    public CmrHearingNoticeTemplate getAdaHearingNoticeTemplate(
+    public CmrHearingNoticeTemplate getAdaCmrHearingNoticeTemplate(
         @Value("${cmrHearingNoticeAdaDocument.templateName}") String templateName, StringProvider stringProvider) {
         return new CmrHearingNoticeTemplate(templateName, stringProvider, customerServicesProvider);
     }
