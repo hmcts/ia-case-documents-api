@@ -10,15 +10,12 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.Dispa
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.PreSubmitCallbackResponse;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.PreSubmitCallbackStage;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.Document;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.PreSubmitCallbackHandler;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.*;
 
 import static java.util.Objects.requireNonNull;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.*;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DetentionFacility.*;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo.NO;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo.YES;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.*;
 
 @Component
@@ -26,18 +23,15 @@ public class CmrListingHearingNoticeCreator implements PreSubmitCallbackHandler<
 
     private final DocumentCreator<AsylumCase> cmrHearingNoticeDocumentCreator;
     private final DocumentCreator<AsylumCase> remoteCmrHearingNoticeDocumentCreator;
-    private final DocumentCreator<AsylumCase> adaCmrHearingNoticeDocumentCreator;
     private final DocumentHandler documentHandler;
 
     public CmrListingHearingNoticeCreator(
         @Qualifier("cmrHearingNotice") DocumentCreator<AsylumCase> cmrHearingNoticeDocumentCreator,
         @Qualifier("remoteCmrHearingNotice") DocumentCreator<AsylumCase> remoteCmrHearingNoticeDocumentCreator,
-        @Qualifier("adaCmrHearingNotice") DocumentCreator<AsylumCase> adaCmrHearingNoticeDocumentCreator,
         DocumentHandler documentHandler
     ) {
         this.cmrHearingNoticeDocumentCreator = cmrHearingNoticeDocumentCreator;
         this.remoteCmrHearingNoticeDocumentCreator = remoteCmrHearingNoticeDocumentCreator;
-        this.adaCmrHearingNoticeDocumentCreator = adaCmrHearingNoticeDocumentCreator;
         this.documentHandler = documentHandler;
     }
 
@@ -98,8 +92,7 @@ public class CmrListingHearingNoticeCreator implements PreSubmitCallbackHandler<
         if (isRemoteCmrHearing(asylumCase)) {
             hearingNotice = remoteCmrHearingNoticeDocumentCreator.create(caseDetails);
         } else {
-            boolean isAda = asylumCase.read(IS_ACCELERATED_DETAINED_APPEAL, YesOrNo.class).orElse(NO) == YES;
-            hearingNotice = isAda ? adaCmrHearingNoticeDocumentCreator.create(caseDetails) : cmrHearingNoticeDocumentCreator.create(caseDetails);
+            hearingNotice = cmrHearingNoticeDocumentCreator.create(caseDetails);
         }
         return hearingNotice;
     }

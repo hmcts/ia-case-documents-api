@@ -27,10 +27,4 @@ public class CmrHearingNoticeTemplateConfiguration {
             @Value("${remoteCmrHearingNoticeDocument.templateName}") String templateName, StringProvider stringProvider) {
         return new CmrHearingNoticeTemplate(templateName, stringProvider, customerServicesProvider);
     }
-
-    @Bean("adaCmrHearingNoticeTemplate")
-    public CmrHearingNoticeTemplate getAdaCmrHearingNoticeTemplate(
-        @Value("${cmrHearingNoticeAdaDocument.templateName}") String templateName, StringProvider stringProvider) {
-        return new CmrHearingNoticeTemplate(templateName, stringProvider, customerServicesProvider);
-    }
 }

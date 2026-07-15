@@ -43,7 +43,6 @@ class CmrListingHearingNoticeCreatorTest {
 
     @Mock private DocumentCreator<AsylumCase> cmrHearingNoticeDocumentCreator;
     @Mock private DocumentCreator<AsylumCase> remoteCmrHearingNoticeDocumentCreator;
-    @Mock private DocumentCreator<AsylumCase> adaCmrHearingNoticeDocumentCreator;
     @Mock private DocumentHandler documentHandler;
 
     @Mock private Callback<AsylumCase> callback;
@@ -60,7 +59,6 @@ class CmrListingHearingNoticeCreatorTest {
             new CmrListingHearingNoticeCreator(
                 cmrHearingNoticeDocumentCreator,
                 remoteCmrHearingNoticeDocumentCreator,
-                adaCmrHearingNoticeDocumentCreator,
                 documentHandler
             );
 
@@ -69,7 +67,6 @@ class CmrListingHearingNoticeCreatorTest {
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
 
         when(asylumCase.read(CMR_IS_REMOTE_HEARING, YesOrNo.class)).thenReturn(Optional.of(NO));
-        when(asylumCase.read(IS_ACCELERATED_DETAINED_APPEAL, YesOrNo.class)).thenReturn(Optional.of(NO));
         when(asylumCase.read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(NO));
     }
 
@@ -86,7 +83,6 @@ class CmrListingHearingNoticeCreatorTest {
 
         verify(cmrHearingNoticeDocumentCreator, times(1)).create(caseDetails);
         verify(remoteCmrHearingNoticeDocumentCreator, never()).create(caseDetails);
-        verify(adaCmrHearingNoticeDocumentCreator, never()).create(caseDetails);
         verify(documentHandler, times(1)).addWithMetadataWithDateTimeWithoutReplacingExistingDocuments(
             asylumCase, uploadedDocument, HEARING_DOCUMENTS, DocumentTag.HEARING_NOTICE);
         verify(documentHandler, never()).addWithMetadataWithoutReplacingExistingDocuments(
@@ -107,26 +103,6 @@ class CmrListingHearingNoticeCreatorTest {
 
         verify(remoteCmrHearingNoticeDocumentCreator, times(1)).create(caseDetails);
         verify(cmrHearingNoticeDocumentCreator, never()).create(caseDetails);
-        verify(adaCmrHearingNoticeDocumentCreator, never()).create(caseDetails);
-        verify(documentHandler, times(1)).addWithMetadataWithDateTimeWithoutReplacingExistingDocuments(
-            asylumCase, uploadedDocument, HEARING_DOCUMENTS, DocumentTag.HEARING_NOTICE);
-    }
-
-    @Test
-    void should_create_ada_cmr_hearing_notice_when_accelerated_detained_appeal() {
-
-        when(asylumCase.read(IS_ACCELERATED_DETAINED_APPEAL, YesOrNo.class)).thenReturn(Optional.of(YES));
-        when(adaCmrHearingNoticeDocumentCreator.create(caseDetails)).thenReturn(uploadedDocument);
-
-        PreSubmitCallbackResponse<AsylumCase> callbackResponse =
-            cmrListingHearingNoticeCreator.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
-
-        assertNotNull(callbackResponse);
-        assertEquals(asylumCase, callbackResponse.getData());
-
-        verify(adaCmrHearingNoticeDocumentCreator, times(1)).create(caseDetails);
-        verify(cmrHearingNoticeDocumentCreator, never()).create(caseDetails);
-        verify(remoteCmrHearingNoticeDocumentCreator, never()).create(caseDetails);
         verify(documentHandler, times(1)).addWithMetadataWithDateTimeWithoutReplacingExistingDocuments(
             asylumCase, uploadedDocument, HEARING_DOCUMENTS, DocumentTag.HEARING_NOTICE);
     }

@@ -45,15 +45,4 @@ class CmrHearingNoticeTemplateConfigurationTest {
         assertThat(template).isNotNull();
         assertThat(template.getName()).isEqualTo(templateName);
     }
-
-    @Test
-    void should_create_ada_cmr_hearing_notice_template() {
-        String templateName = "ADA_CMR_HEARING_NOTICE_TEMPLATE.docx";
-
-        CmrHearingNoticeTemplate template =
-            configuration.getAdaCmrHearingNoticeTemplate(templateName, stringProvider);
-
-        assertThat(template).isNotNull();
-        assertThat(template.getName()).isEqualTo(templateName);
-    }
 }

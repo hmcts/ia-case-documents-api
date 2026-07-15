@@ -64,20 +64,4 @@ class DocumentCreatorConfigurationTest {
 
         assertThat(documentCreator).isNotNull();
     }
-
-    @Test
-    void should_create_ada_cmr_hearing_notice_document_creator() {
-        DocumentCreator<AsylumCase> documentCreator =
-            configuration.getAdaCmrHearingNoticeDocumentCreator(
-                contentType,
-                fileExtension,
-                fileName,
-                fileNameQualifier,
-                cmrHearingNoticeTemplate,
-                documentGenerator,
-                documentUploader
-            );
-
-        assertThat(documentCreator).isNotNull();
-    }
 }
