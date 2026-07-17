@@ -13,7 +13,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentCreator;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentGenerator;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentUploader;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates.CmrHearingNoticeTemplate;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit.letter.InternalCaseListedLetterTemplate;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit.letter.InternalCmrListingLetterTemplate;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates.letter.InternalDetainedCmrListingLetterTemplate;
 
 @ExtendWith(MockitoExtension.class)
@@ -22,7 +22,7 @@ class DocumentCreatorConfigurationTest {
     @Mock private AsylumCaseFileNameQualifier fileNameQualifier;
     @Mock private CmrHearingNoticeTemplate cmrHearingNoticeTemplate;
     @Mock private InternalDetainedCmrListingLetterTemplate internalDetainedCmrListingLetterTemplate;
-    @Mock private InternalCaseListedLetterTemplate internalCaseListedLetterTemplate;
+    @Mock private InternalCmrListingLetterTemplate internalCmrListingLetterTemplate;
     @Mock private DocumentGenerator documentGenerator;
     @Mock private DocumentUploader documentUploader;
 
@@ -93,7 +93,7 @@ class DocumentCreatorConfigurationTest {
                 fileExtension,
                 fileName,
                 fileNameQualifier,
-                internalCaseListedLetterTemplate,
+                internalCmrListingLetterTemplate,
                 documentGenerator,
                 documentUploader
             );
