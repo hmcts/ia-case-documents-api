@@ -27,7 +27,7 @@ public class InternalDetainedCmrListingLetterTemplate implements DocumentTemplat
     private final StringProvider stringProvider;
 
     public InternalDetainedCmrListingLetterTemplate(
-        @Value("${internalDetainedListCaseLetter.templateName}") String templateName,
+        @Value("${internalDetainedCmrListingLetter.templateName}") String templateName,
         CustomerServicesProvider customerServicesProvider,
         StringProvider stringProvider
     ) {
