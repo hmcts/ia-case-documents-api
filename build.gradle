@@ -256,12 +256,12 @@ repositories {
     }
 }
 
-ext["tomcat.version"] = "10.1.56"
+ext["tomcat.version"] = "10.1.57"
 
 dependencyManagement {
     imports {
         mavenBom 'org.springframework.cloud:spring-cloud-dependencies:2025.0.2'
-        mavenBom 'com.fasterxml.jackson:jackson-bom:2.21.4'
+        mavenBom 'com.fasterxml.jackson:jackson-bom:2.21.5'
 
         // CVE-2026-34478
         // CVE-2026-34479
@@ -276,7 +276,7 @@ dependencyManagement {
         // CVE-2026-33870
         // CVE-2026-33871
         // CVE-2025-67735 - from spring-boot-starter-data-redis@3.5.14
-        mavenBom "io.netty:netty-bom:4.2.15.Final"
+        mavenBom "io.netty:netty-bom:4.2.16.Final"
     }
 
     dependencies {
@@ -309,7 +309,7 @@ dependencyManagement {
         // CVE-2026-34481
         // CVE-2026-34477
         // CVE-2025-68161 - from spring-boot-starter-logging@3.5.14
-        dependencySet(group: 'org.apache.logging.log4j', version: '2.25.4') {
+        dependencySet(group: 'org.apache.logging.log4j', version: '2.25.5') {
             entry 'log4j-to-slf4j'
             entry 'log4j-api'
         }
@@ -357,8 +357,8 @@ dependencies {
 
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.security:spring-security-test'
-    testImplementation group: 'net.serenity-bdd', name: 'serenity-rest-assured', version: '5.3.10'
-    testImplementation group: 'net.serenity-bdd', name: 'serenity-spring', version: '5.3.10'
+    testImplementation group: 'net.serenity-bdd', name: 'serenity-rest-assured', version: '5.3.11'
+    testImplementation group: 'net.serenity-bdd', name: 'serenity-spring', version: '5.3.11'
 
 
     testImplementation group: 'com.github.hmcts', name: 'ccd-case-document-am-client', version: '1.7.3'
