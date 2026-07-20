@@ -642,6 +642,9 @@ internalCmrListingLetter.templateName: ${INTERNAL_CASE_LISTED_LETTER_TEMPLATE:TB
 internalCaseListedLetterWithAttachment.fileExtension: PDF
 internalCaseListedLetterWithAttachment.fileName: "internal-case-listed-letter-with-attachment"
 
+cmrListingDetainedOtherLetterWithAttachment.fileExtension: PDF
+cmrListingDetainedOtherLetterWithAttachment.fileName: "cmr-listing-letter-with-attachment"
+
 internalCmrListingLetterWithAttachment.fileExtension: PDF
 internalCmrListingLetterWithAttachment.fileName: "internal-cmr-listing-letter-with-attachment"
 
