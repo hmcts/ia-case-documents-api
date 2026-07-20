@@ -1,10 +1,9 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit.letter;
 
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DocumentTag;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DocumentWithMetadata;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseDetails;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.Callback;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.DispatchPriority;
@@ -12,55 +11,42 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.PreSu
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.PreSubmitCallbackStage;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.Document;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.PreSubmitCallbackHandler;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentBundler;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentCreator;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentHandler;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.FileNameQualifier;
 
-import java.util.List;
+import java.util.Objects;
 
-import static java.util.Objects.requireNonNull;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.LETTER_BUNDLE_DOCUMENTS;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.LETTER_NOTIFICATION_DOCUMENTS;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DetentionFacility.OTHER;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.Event.CMR_LISTING;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.*;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.isDetainedInFacilityType;
 
 @Component
-public class CmrListingDetainedOtherAppellantLetterBundler implements PreSubmitCallbackHandler<AsylumCase> {
+public class CmrListingDetainedOtherAppellantLetterGenerator implements PreSubmitCallbackHandler<AsylumCase> {
 
-    private final String fileExtension;
-    private final String fileName;
-    private final boolean isEmStitchingEnabled;
-    private final FileNameQualifier<AsylumCase> fileNameQualifier;
-    private final DocumentBundler documentBundler;
+    private final DocumentCreator<AsylumCase> documentCreator;
     private final DocumentHandler documentHandler;
 
-    public CmrListingDetainedOtherAppellantLetterBundler(
-        @Value("${cmrListingDetainedOtherLetterWithAttachment.fileExtension}") String fileExtension,
-        @Value("${cmrListingDetainedOtherLetterWithAttachment.fileName}") String fileName,
-        @Value("${featureFlag.isEmStitchingEnabled}") boolean isEmStitchingEnabled,
-        FileNameQualifier<AsylumCase> fileNameQualifier,
-        DocumentBundler documentBundler,
+    public CmrListingDetainedOtherAppellantLetterGenerator(
+        @Qualifier("cmrListingDetainedOtherAppellantLetter") DocumentCreator<AsylumCase> documentCreator,
         DocumentHandler documentHandler
     ) {
-        this.fileExtension = fileExtension;
-        this.fileName = fileName;
-        this.isEmStitchingEnabled = isEmStitchingEnabled;
-        this.fileNameQualifier = fileNameQualifier;
-        this.documentBundler = documentBundler;
+        this.documentCreator = documentCreator;
         this.documentHandler = documentHandler;
     }
 
     @Override
     public DispatchPriority getDispatchPriority() {
-        return DispatchPriority.LATE;
+        return DispatchPriority.EARLY;
     }
 
     public boolean canHandle(
         PreSubmitCallbackStage callbackStage,
         Callback<AsylumCase> callback
     ) {
-        requireNonNull(callbackStage, "callbackStage must not be null");
-        requireNonNull(callback, "callback must not be null");
+        Objects.requireNonNull(callbackStage, "callbackStage must not be null");
+        Objects.requireNonNull(callback, "callback must not be null");
 
         AsylumCase asylumCase = callback.getCaseDetails().getCaseData();
 
@@ -68,8 +54,7 @@ public class CmrListingDetainedOtherAppellantLetterBundler implements PreSubmitC
                && callback.getEvent() == CMR_LISTING
                && isRepJourney(callback.getCaseDetails().getCaseData())
                && !isInternalCase(asylumCase)
-               && isDetainedInFacilityType(asylumCase, OTHER)
-               && isEmStitchingEnabled;
+               && isDetainedInFacilityType(asylumCase, OTHER);
     }
 
     public PreSubmitCallbackResponse<AsylumCase> handle(
@@ -83,21 +68,13 @@ public class CmrListingDetainedOtherAppellantLetterBundler implements PreSubmitC
         final CaseDetails<AsylumCase> caseDetails = callback.getCaseDetails();
         final AsylumCase asylumCase = caseDetails.getCaseData();
 
-        final String qualifiedDocumentFileName = fileNameQualifier.get(fileName + "." + fileExtension, caseDetails);
-
-        List<DocumentWithMetadata> bundleDocuments = getMaybeLetterNotificationDocuments(asylumCase, DocumentTag.INTERNAL_CMR_LISTING_LETTER);
-
-        Document internalCmrListingLetterBundle = documentBundler.bundleWithoutContentsOrCoverSheets(
-            bundleDocuments,
-            "Letter bundle documents",
-            qualifiedDocumentFileName
-        );
+        Document internalCaseListedLetter = documentCreator.create(caseDetails);
 
         documentHandler.addWithMetadataWithoutReplacingExistingDocuments(
             asylumCase,
-            internalCmrListingLetterBundle,
-            LETTER_BUNDLE_DOCUMENTS,
-            DocumentTag.INTERNAL_CMR_LISTING_LETTER_BUNDLE
+            internalCaseListedLetter,
+            LETTER_NOTIFICATION_DOCUMENTS,
+            DocumentTag.INTERNAL_CMR_LISTING_LETTER
         );
 
         return new PreSubmitCallbackResponse<>(asylumCase);
