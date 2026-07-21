@@ -5,6 +5,7 @@ import java.util.Map;
 import com.fasterxml.jackson.core.type.TypeReference;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.OutOfCountryCircumstances;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.OutOfCountryDecisionType;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.HoursMinutes;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.*;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.caselinking.CaseLink;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.enties.em.Bundle;
@@ -203,7 +204,7 @@ public enum AsylumCaseDefinition {
 
     CMR_HEARING_CENTRE_ADDRESS("cmrHearingCentreAddress", new TypeReference<DynamicList>(){}),
 
-    CMR_HEARING_LENGTH("cmrHearingLength", new TypeReference<String>(){}),
+    CMR_HEARING_LENGTH("cmrHearingLength", new TypeReference<HoursMinutes>(){}),
 
     CMR_HEARING_DATE("cmrHearingDate", new TypeReference<String>(){}),
 

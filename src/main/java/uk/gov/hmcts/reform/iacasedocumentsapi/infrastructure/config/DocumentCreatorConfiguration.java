@@ -1808,6 +1808,27 @@ public class DocumentCreatorConfiguration {
         );
     }
 
+    @Bean("cmrListingDetainedOtherAppellantLetter")
+    public DocumentCreator<AsylumCase> getCmrListingDetainedOtherAppellantLetterDocumentCreator(
+        @Value("${cmrListingDetainedOtherAppellantLetter.contentType}") String contentType,
+        @Value("${cmrListingDetainedOtherAppellantLetter.fileExtension}") String fileExtension,
+        @Value("${cmrListingDetainedOtherAppellantLetter.fileName}") String fileName,
+        AsylumCaseFileNameQualifier fileNameQualifier,
+        InternalCmrListingLetterTemplate documentTemplate,
+        DocumentGenerator documentGenerator,
+        DocumentUploader documentUploader
+    ) {
+        return new DocumentCreator<>(
+            contentType,
+            fileExtension,
+            fileName,
+            fileNameQualifier,
+            documentTemplate,
+            documentGenerator,
+            documentUploader
+        );
+    }
+
     @Bean("internalCaseListedLrLetter")
     public DocumentCreator<AsylumCase> getinternalCaseListedlLrLetterDocumentCreator(
         @Value("${internalCaseListedLetter.contentType}") String contentType,

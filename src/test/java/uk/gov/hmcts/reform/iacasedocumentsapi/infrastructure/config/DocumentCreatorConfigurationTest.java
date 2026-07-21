@@ -100,4 +100,20 @@ class DocumentCreatorConfigurationTest {
 
         assertThat(documentCreator).isNotNull();
     }
+
+    @Test
+    void should_create_cmr_listing_detained_other_appellant_letter_document_creator() {
+        DocumentCreator<AsylumCase> documentCreator =
+            configuration.getCmrListingDetainedOtherAppellantLetterDocumentCreator(
+                contentType,
+                fileExtension,
+                fileName,
+                fileNameQualifier,
+                internalCmrListingLetterTemplate,
+                documentGenerator,
+                documentUploader
+            );
+
+        assertThat(documentCreator).isNotNull();
+    }
 }
