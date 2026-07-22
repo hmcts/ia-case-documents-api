@@ -882,6 +882,7 @@ security:
       - "saveNotificationsToData"
       - "manageFeeUpdate"
       - "removeLegalRepresentative"
+      - "requestRespondentEvidence"
     ctsc:
       - "listCase"
       - "submitAppeal"
@@ -913,6 +914,7 @@ security:
       - "saveNotificationsToData"
       - "manageFeeUpdate"
       - "removeLegalRepresentative"
+      - "requestRespondentEvidence"
     ctsc-team-leader:
       - "listCase"
       - "submitAppeal"
@@ -944,6 +946,7 @@ security:
       - "saveNotificationsToData"
       - "manageFeeUpdate"
       - "removeLegalRepresentative"
+      - "requestRespondentEvidence"
     national-business-centre:
       - "listCase"
       - "submitAppeal"
@@ -975,6 +978,7 @@ security:
       - "saveNotificationsToData"
       - "manageFeeUpdate"
       - "removeLegalRepresentative"
+      - "requestRespondentEvidence"
     challenged-access-ctsc:
       - "listCase"
       - "submitAppeal"
@@ -1006,6 +1010,7 @@ security:
       - "saveNotificationsToData"
       - "manageFeeUpdate"
       - "removeLegalRepresentative"
+      - "requestRespondentEvidence"
     challenged-access-admin:
       - "listCase"
       - "submitAppeal"
@@ -1037,6 +1042,7 @@ security:
       - "saveNotificationsToData"
       - "manageFeeUpdate"
       - "removeLegalRepresentative"
+      - "requestRespondentEvidence"
     citizen:
       - "startAppeal"
       - "editAppeal"
