@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit.letter.CmrCancelledAipManualLetterTemplate;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit.letter.InternalCaseListedLetterTemplate;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit.letter.InternalCaseListedLrLetterTemplate;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit.letter.InternalCmrListingLetterTemplate;
@@ -1026,6 +1027,27 @@ public class DocumentCreatorConfiguration {
             documentTemplate,
             documentGenerator,
             documentUploader
+        );
+    }
+
+    @Bean("cmrCancelledAipManualLetter")
+    public DocumentCreator<AsylumCase> getCmrCancelledAipManualDocumentCreator(
+            @Value("${cmrCancelledAipManualLetter.contentType}") String contentType,
+            @Value("${cmrCancelledAipManualLetter.fileExtension}") String fileExtension,
+            @Value("${cmrCancelledAipManualLetter.fileName}") String fileName,
+            AsylumCaseFileNameQualifier fileNameQualifier,
+            CmrCancelledAipManualLetterTemplate documentTemplate,
+            DocumentGenerator documentGenerator,
+            DocumentUploader documentUploader
+    ) {
+        return new DocumentCreator<>(
+                contentType,
+                fileExtension,
+                fileName,
+                fileNameQualifier,
+                documentTemplate,
+                documentGenerator,
+                documentUploader
         );
     }
 
