@@ -46,7 +46,7 @@ public enum DocumentTag {
     APPEAL_REASONS("appealReasons", CaseType.ASYLUM),
     CLARIFYING_QUESTIONS("clarifyingQuestions", CaseType.ASYLUM),
 
-    CRM_HEARING_CANCELLED("crmHearingCancelled", CaseType.ASYLUM),
+    CMR_HEARING_CANCELLED("cmrHearingCancelled", CaseType.ASYLUM),
 
     NOTICE_OF_ADJOURNED_HEARING("noticeOfAdjournedHearing", CaseType.ASYLUM),
 

@@ -49,6 +49,7 @@ public class CmrCancelledAipManualLetterBundler implements PreSubmitCallbackHand
         this.fileNameQualifier = fileNameQualifier;
         this.documentBundler = documentBundler;
         this.documentHandler = documentHandler;
+        log.info("CmrCancelledAipManualLetterBundler initialised");
     }
 
     @Override
@@ -101,7 +102,7 @@ public class CmrCancelledAipManualLetterBundler implements PreSubmitCallbackHand
                 asylumCase,
                 cmrCancelledAipManualLetterBundle,
                 LETTER_BUNDLE_DOCUMENTS,
-                DocumentTag.CRM_HEARING_CANCELLED
+                DocumentTag.CMR_HEARING_CANCELLED
         );
 
         return new PreSubmitCallbackResponse<>(asylumCase);
