@@ -14,6 +14,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentGenerator;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentUploader;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates.CmrHearingNoticeTemplate;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit.letter.InternalCmrListingLetterTemplate;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit.letter.InternalCmrReListingLetterTemplate;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates.letter.InternalDetainedCmrListingLetterTemplate;
 
 @ExtendWith(MockitoExtension.class)
@@ -23,6 +24,7 @@ class DocumentCreatorConfigurationTest {
     @Mock private CmrHearingNoticeTemplate cmrHearingNoticeTemplate;
     @Mock private InternalDetainedCmrListingLetterTemplate internalDetainedCmrListingLetterTemplate;
     @Mock private InternalCmrListingLetterTemplate internalCmrListingLetterTemplate;
+    @Mock private InternalCmrReListingLetterTemplate internalCmrReListingLetterTemplate;
     @Mock private DocumentGenerator documentGenerator;
     @Mock private DocumentUploader documentUploader;
 
@@ -94,6 +96,22 @@ class DocumentCreatorConfigurationTest {
                 fileName,
                 fileNameQualifier,
                 internalCmrListingLetterTemplate,
+                documentGenerator,
+                documentUploader
+            );
+
+        assertThat(documentCreator).isNotNull();
+    }
+
+    @Test
+    void should_create_internal_cmr_re_listing_letter_document_creator() {
+        DocumentCreator<AsylumCase> documentCreator =
+            configuration.getInternalCmrReListingLetterDocumentCreator(
+                contentType,
+                fileExtension,
+                fileName,
+                fileNameQualifier,
+                internalCmrReListingLetterTemplate,
                 documentGenerator,
                 documentUploader
             );

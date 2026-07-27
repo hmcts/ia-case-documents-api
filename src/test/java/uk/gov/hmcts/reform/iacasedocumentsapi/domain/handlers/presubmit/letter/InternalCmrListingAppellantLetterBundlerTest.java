@@ -86,15 +86,16 @@ class InternalCmrListingAppellantLetterBundlerTest {
             documentHandler);
     }
 
-    @Test
-    public void it_can_handle_callback() {
-        when(callback.getEvent()).thenReturn(CMR_LISTING);
+    @ParameterizedTest
+    @EnumSource(value = Event.class, names = {"CMR_LISTING", "CMR_RE_LISTING"})
+    public void it_can_handle_callback(Event event) {
+        when(callback.getEvent()).thenReturn(event);
 
         assertTrue(internalCmrListingAppellantLetterBundler.canHandle(ABOUT_TO_SUBMIT, callback));
     }
 
     @ParameterizedTest
-    @EnumSource(value = Event.class, names = {"CMR_LISTING"}, mode = EnumSource.Mode.EXCLUDE)
+    @EnumSource(value = Event.class, names = {"CMR_LISTING", "CMR_RE_LISTING"}, mode = EnumSource.Mode.EXCLUDE)
     public void it_cannot_handle_callback_for_non_cmr_listing_events(Event event) {
         when(callback.getEvent()).thenReturn(event);
 
@@ -142,9 +143,10 @@ class InternalCmrListingAppellantLetterBundlerTest {
         assertFalse(internalCmrListingAppellantLetterBundler.canHandle(ABOUT_TO_SUBMIT, callback));
     }
 
-    @Test
-    void should_read_and_bundle_letter_notification_documents() {
-        when(callback.getEvent()).thenReturn(CMR_LISTING);
+    @ParameterizedTest
+    @EnumSource(value = Event.class, names = {"CMR_LISTING", "CMR_RE_LISTING"})
+    void should_read_and_bundle_letter_notification_documents(Event event) {
+        when(callback.getEvent()).thenReturn(event);
         when(fileNameQualifier.get(anyString(), eq(caseDetails))).thenReturn("filename");
 
         IdValue<DocumentWithMetadata> doc1 = new IdValue<>("1", createDocumentWithMetadata());
