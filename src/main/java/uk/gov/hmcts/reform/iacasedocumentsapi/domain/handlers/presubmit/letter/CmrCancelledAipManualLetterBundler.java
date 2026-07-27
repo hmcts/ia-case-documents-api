@@ -1,5 +1,6 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit.letter;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
@@ -23,6 +24,7 @@ import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseD
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.Event.CMR_HEARING_CANCELLED;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.*;
 
+@Slf4j
 @Component
 public class CmrCancelledAipManualLetterBundler implements PreSubmitCallbackHandler<AsylumCase> {
 
@@ -62,6 +64,10 @@ public class CmrCancelledAipManualLetterBundler implements PreSubmitCallbackHand
         requireNonNull(callback, "callback must not be null");
 
         AsylumCase asylumCase = callback.getCaseDetails().getCaseData();
+
+        log.info("Checking if CmrCancelledAipManualLetterBundler can handle the callback");
+        log.info("isAipJourney: {}", isAipJourney(asylumCase));
+        log.info("isInternalCase: {}", isInternalCase(asylumCase));
 
         return callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
                 && callback.getEvent() == CMR_HEARING_CANCELLED
