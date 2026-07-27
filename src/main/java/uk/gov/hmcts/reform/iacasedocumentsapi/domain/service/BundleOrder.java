@@ -410,6 +410,7 @@ public class BundleOrder implements Comparator<DocumentWithMetadata> {
                 yield 114;
             }
             case CRM_HEARING_CANCELLED -> {
+                log.warn("CRM_HEARING_CANCELLED tag should not be checked for bundle ordering, document desc: {}", document.getDescription());
                 yield 115;
             }
             case NONE ->  116;

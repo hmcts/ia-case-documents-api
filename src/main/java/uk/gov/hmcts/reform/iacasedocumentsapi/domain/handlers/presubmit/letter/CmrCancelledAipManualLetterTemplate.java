@@ -46,7 +46,7 @@ public class CmrCancelledAipManualLetterTemplate implements DocumentTemplate<Asy
         final HearingCentre hearingCentre =
                 asylumCase
                         .read(CMR_HEARING_CENTRE, HearingCentre.class)
-                        .orElseThrow(() -> new IllegalStateException("listCaseHearingCentre is not present"));
+                        .orElseThrow(() -> new IllegalStateException("hearing centre is not present"));
 
         final Map<String, Object> fieldValues = new HashMap<>();
 
