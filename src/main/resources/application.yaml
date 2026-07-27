@@ -926,6 +926,7 @@ security:
       - "manageFeeUpdate"
       - "removeLegalRepresentative"
       - "requestRespondentEvidence"
+      - "cmrHearingCancelled"
     ctsc:
       - "listCase"
       - "cmrListing"
