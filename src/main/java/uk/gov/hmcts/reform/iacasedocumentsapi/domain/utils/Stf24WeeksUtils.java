@@ -36,7 +36,8 @@ public class Stf24WeeksUtils {
     public static final String DAYS_42_FROM_DATE_OF_DIRECTION_KEY = "fortyTwoDaysFromDateOfDirection";
     public static final String DECISION_SENT_DATE = "decisionSentDate";
     public static final String APPEAL_RECEIVED_DATE = "appealReceivedDate";
-
+    public static final String APPEAL_REFERENCE_NUMBER_KEY = "appealReferenceNumber";
+    public static final String HOME_OFFICE_REFERENCE_NUMBER_KEY = "homeOfficeReferenceNumber";
     private Stf24WeeksUtils() {
 
     }
