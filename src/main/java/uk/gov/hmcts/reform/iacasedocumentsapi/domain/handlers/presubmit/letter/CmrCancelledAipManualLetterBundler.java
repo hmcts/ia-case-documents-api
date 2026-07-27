@@ -66,6 +66,7 @@ public class CmrCancelledAipManualLetterBundler implements PreSubmitCallbackHand
         AsylumCase asylumCase = callback.getCaseDetails().getCaseData();
 
         log.info("Checking if CmrCancelledAipManualLetterBundler can handle the callback");
+        log.info("getEvent: {}", callback.getEvent());
         log.info("isAipJourney: {}", isAipJourney(asylumCase));
         log.info("isInternalCase: {}", isInternalCase(asylumCase));
 
