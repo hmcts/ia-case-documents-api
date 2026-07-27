@@ -92,6 +92,8 @@ public class CmrCancelledAipManualLetterBundler implements PreSubmitCallbackHand
 
         List<DocumentWithMetadata> bundleDocuments = getMaybeLetterNotificationDocuments(asylumCase, DocumentTag.CMR_HEARING_CANCELLED);
 
+        log.info("Found {} documents to bundle", bundleDocuments.size());
+
         Document cmrCancelledAipManualLetterBundle = documentBundler.bundleWithoutContentsOrCoverSheets(
                 bundleDocuments,
                 "Letter bundle documents",
