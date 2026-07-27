@@ -90,7 +90,7 @@ public class CmrCancelledAipManualLetterBundler implements PreSubmitCallbackHand
 
         final String qualifiedDocumentFileName = fileNameQualifier.get(fileName + "." + fileExtension, caseDetails);
 
-        List<DocumentWithMetadata> bundleDocuments = getMaybeLetterNotificationDocuments(asylumCase, DocumentTag.CRM_HEARING_CANCELLED);
+        List<DocumentWithMetadata> bundleDocuments = getMaybeLetterNotificationDocuments(asylumCase, DocumentTag.CMR_HEARING_CANCELLED);
 
         Document cmrCancelledAipManualLetterBundle = documentBundler.bundleWithoutContentsOrCoverSheets(
                 bundleDocuments,
