@@ -652,7 +652,7 @@ cmrListingDetainedOtherAppellantLetter.templateName: ${INTERNAL_CASE_LISTED_LETT
 cmrCancelledAipManualLetter.contentType:  application/pdf
 cmrCancelledAipManualLetter.fileExtension: PDF
 cmrCancelledAipManualLetter.fileName: "cmr-cancelled_aip_letter"
-cmrCancelledAipManualLetter.templateName: ${CMR_CANCELLED_AIP_MANUAL_LETTER_TEMPLATE:TB-IAC-LET-ENG-Internal-record-out-time-decision-final.docx}
+cmrCancelledAipManualLetter.templateName: ${CMR_CANCELLED_AIP_MANUAL_LETTER_TEMPLATE:TB-IAC-LET-ENG-CRM-Cancelled-AIP-Manual.docx}
 
 internalCaseListedLetterWithAttachment.fileExtension: PDF
 internalCaseListedLetterWithAttachment.fileName: "internal-case-listed-letter-with-attachment"

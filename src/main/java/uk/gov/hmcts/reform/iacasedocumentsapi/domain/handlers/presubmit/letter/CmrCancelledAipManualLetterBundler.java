@@ -66,15 +66,14 @@ public class CmrCancelledAipManualLetterBundler implements PreSubmitCallbackHand
 
         AsylumCase asylumCase = callback.getCaseDetails().getCaseData();
 
-        log.info("Checking if CmrCancelledAipManualLetterBundler can handle the callback");
         log.info("getEvent: {} for case reference {}", callback.getEvent(), callback.getCaseDetails().getId());
-        log.info("isAipJourney: {} for case reference: {}", isAipJourney(asylumCase),  callback.getCaseDetails().getId());
-        log.info("isInternalCase: {} for case reference: {}", isInternalCase(asylumCase), callback.getCaseDetails().getId());
+        log.info("isCmrHearingInPersonOrRemote: {} for case reference: {}", isCmrHearingInPersonOrRemote(asylumCase),  callback.getCaseDetails().getId());
+        log.info("hasBeenSubmittedByAppellantInternalCase: {} for case reference: {}", hasBeenSubmittedByAppellantInternalCase(asylumCase), callback.getCaseDetails().getId());
 
         return callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
-                && callback.getEvent() == CMR_HEARING_CANCELLED
-                && isAipJourney(asylumCase)
-                && isInternalCase(asylumCase);
+                && CMR_HEARING_CANCELLED.equals(callback.getEvent())
+                && isCmrHearingInPersonOrRemote(asylumCase)
+                && hasBeenSubmittedByAppellantInternalCase(asylumCase);
     }
 
     public PreSubmitCallbackResponse<AsylumCase> handle(

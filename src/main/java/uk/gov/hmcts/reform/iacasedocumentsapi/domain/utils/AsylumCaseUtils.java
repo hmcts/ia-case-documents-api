@@ -77,10 +77,21 @@ public class AsylumCaseUtils {
         return asylumCase.read(IS_ADMIN, YesOrNo.class).map(isAdmin -> YES == isAdmin).orElse(false);
     }
 
-    public static boolean isAipJourney(AsylumCase asylumCase) {
-        return asylumCase.read(APPELLANTS_REPRESENTATION, YesOrNo.class)
-                .map(yesOrNo -> Objects.equals(YES, yesOrNo))
+    public static boolean isCmrHearingInPersonOrRemote(AsylumCase asylumCase) {
+        return isCmrHearingChannel(asylumCase, "INTER")
+                || isCmrHearingChannel(asylumCase, "VID")
+                || isCmrHearingChannel(asylumCase, "TEL");
+    }
+
+    public static boolean isCmrHearingChannel(AsylumCase asylumCase, String hearingChannelCode) {
+        return asylumCase.read(CMR_HEARING_CHANNEL, DynamicList.class)
+                .map(hearingChannels -> hearingChannels.getValue().getCode().equals(hearingChannelCode))
                 .orElse(false);
+    }
+
+    public static boolean hasBeenSubmittedByAppellantInternalCase(AsylumCase asylumCase) {
+        return asylumCase.read(APPELLANTS_REPRESENTATION, YesOrNo.class)
+                .map(yesOrNo -> YES == yesOrNo).orElse(false);
     }
 
     public static boolean hasAppealBeenSubmittedByAppellantInternalCase(AsylumCase asylumCase) {

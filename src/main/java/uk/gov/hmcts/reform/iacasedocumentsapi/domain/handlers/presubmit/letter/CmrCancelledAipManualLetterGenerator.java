@@ -50,8 +50,8 @@ public class CmrCancelledAipManualLetterGenerator implements PreSubmitCallbackHa
 
         return callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
                 && callback.getEvent() == CMR_HEARING_CANCELLED
-                && isAipJourney(asylumCase)
-                && isInternalCase(asylumCase);
+                && isCmrHearingInPersonOrRemote(asylumCase)
+                && hasBeenSubmittedByAppellantInternalCase(asylumCase);
     }
 
     public PreSubmitCallbackResponse<AsylumCase> handle(
