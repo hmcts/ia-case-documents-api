@@ -791,6 +791,7 @@ security:
       - "manageFeeUpdate"
       - "updateTribunalDecision"
       - "removeLegalRepresentative"
+      - "completeCaseReview"
     senior-tribunal-caseworker:
       - "sendDirection"
       - "changeDirectionDueDate"
@@ -850,7 +851,6 @@ security:
       - "removeLegalRepresentative"
       - "markAppealAsRemitted"
       - "saveNotificationsToDataBail"
-      - "completeCaseReview"
     hearing-centre-admin:
       - "listCase"
       - "submitAppeal"
