@@ -140,6 +140,43 @@ class CmrListingHearingNoticeCreatorTest {
     }
 
     @Test
+    void should_also_append_internal_cmr_listing_letter_to_letter_notification_documents_when_internal_non_detained_case() {
+
+        when(asylumCase.read(IS_ADMIN, YesOrNo.class)).thenReturn(Optional.of(YES));
+        when(asylumCase.read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(NO));
+        when(cmrHearingNoticeDocumentCreator.create(caseDetails)).thenReturn(uploadedDocument);
+
+        PreSubmitCallbackResponse<AsylumCase> callbackResponse =
+            cmrListingHearingNoticeCreator.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
+
+        assertNotNull(callbackResponse);
+        assertEquals(asylumCase, callbackResponse.getData());
+
+        verify(documentHandler, times(1)).addWithMetadataWithoutReplacingExistingDocuments(
+            asylumCase, uploadedDocument, LETTER_NOTIFICATION_DOCUMENTS, DocumentTag.INTERNAL_CMR_LISTING_LETTER);
+    }
+
+    @Test
+    void should_handle_cmr_re_listing_event_the_same_way_as_cmr_listing() {
+
+        when(callback.getEvent()).thenReturn(Event.CMR_RE_LISTING);
+        when(asylumCase.read(IS_ADMIN, YesOrNo.class)).thenReturn(Optional.of(YES));
+        when(asylumCase.read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(NO));
+        when(cmrHearingNoticeDocumentCreator.create(caseDetails)).thenReturn(uploadedDocument);
+
+        PreSubmitCallbackResponse<AsylumCase> callbackResponse =
+            cmrListingHearingNoticeCreator.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
+
+        assertNotNull(callbackResponse);
+        assertEquals(asylumCase, callbackResponse.getData());
+
+        verify(documentHandler, times(1)).addWithMetadataWithDateTimeWithoutReplacingExistingDocuments(
+            asylumCase, uploadedDocument, HEARING_DOCUMENTS, DocumentTag.HEARING_NOTICE);
+        verify(documentHandler, times(1)).addWithMetadataWithoutReplacingExistingDocuments(
+            asylumCase, uploadedDocument, LETTER_NOTIFICATION_DOCUMENTS, DocumentTag.INTERNAL_CMR_LISTING_LETTER);
+    }
+
+    @Test
     void should_not_append_internal_cmr_listing_letter_when_detained_in_other_facility() {
 
         when(asylumCase.read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(YES));
@@ -179,7 +216,7 @@ class CmrListingHearingNoticeCreatorTest {
 
                 boolean canHandle = cmrListingHearingNoticeCreator.canHandle(callbackStage, callback);
 
-                if (event == Event.CMR_LISTING
+                if ((event == Event.CMR_LISTING || event == Event.CMR_RE_LISTING)
                     && callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT) {
                     assertTrue(canHandle);
                 } else {
