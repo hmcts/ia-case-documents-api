@@ -121,7 +121,7 @@ class DocumentTagTest {
         assertEquals("internalDetainedAppealRemittedAipIrcPrisonLetter", DocumentTag.INTERNAL_DETAINED_APPEAL_REMITTED_AIP_IRC_PRISON_LETTER.toString());
         assertEquals("homeOfficeApplicationDecidedLetter", DocumentTag.HOME_OFFICE_APPLICATION_DECIDED_LETTER.toString());
         assertEquals("aipmDetainedInPrisonOrIrcReinstateAppealLetter", DocumentTag.AIPM_DETAINED_IN_PRISON_IRC_REINSTATE_APPEAL_LETTER.toString());
-        assertEquals("cmrHearingCancelled", DocumentTag.CMR_HEARING_CANCELLED.toString());
+        assertEquals("cmrHearingCancelled", DocumentTag.CMR_HEARING_CANCELLED_LETTER.toString());
 
     }
 

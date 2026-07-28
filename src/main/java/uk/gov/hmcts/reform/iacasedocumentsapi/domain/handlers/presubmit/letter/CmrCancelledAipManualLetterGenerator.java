@@ -71,7 +71,7 @@ public class CmrCancelledAipManualLetterGenerator implements PreSubmitCallbackHa
                 asylumCase,
                 cmrCancelledAipManualLetter,
                 LETTER_NOTIFICATION_DOCUMENTS,
-                DocumentTag.CMR_HEARING_CANCELLED
+                DocumentTag.CMR_HEARING_CANCELLED_LETTER
         );
 
         return new PreSubmitCallbackResponse<>(asylumCase);
