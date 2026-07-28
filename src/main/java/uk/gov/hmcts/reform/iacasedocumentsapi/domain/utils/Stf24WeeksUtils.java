@@ -46,9 +46,12 @@ public class Stf24WeeksUtils {
     public static boolean isCaseReviewFor24WeeksCase(Event event, AsylumCase asylumCase) {
         boolean inCountryAppeal = isAppellantInUk(asylumCase);
         boolean hasStf24W = hasStf24WeeksStatus(asylumCase);
-        return event == COMPLETE_CASE_REVIEW
+        boolean is24WeekCase = event == COMPLETE_CASE_REVIEW
                 && inCountryAppeal
                 && hasStf24W;
+        log.info("is24WeekCase {}", is24WeekCase);
+
+        return is24WeekCase;
     }
 
     public static boolean hasStf24WeeksStatus(AsylumCase asylumCase) {
