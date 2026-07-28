@@ -103,7 +103,7 @@ public class CmrCancelledAipManualLetterBundler implements PreSubmitCallbackHand
                 asylumCase,
                 cmrCancelledAipManualLetterBundle,
                 LETTER_BUNDLE_DOCUMENTS,
-                DocumentTag.CMR_HEARING_CANCELLED_LETTER
+                DocumentTag.CMR_HEARING_CANCELLED_LETTER_BUNDLE
         );
 
         return new PreSubmitCallbackResponse<>(asylumCase);

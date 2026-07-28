@@ -413,7 +413,11 @@ public class BundleOrder implements Comparator<DocumentWithMetadata> {
                 log.warn("CMR_HEARING_CANCELLED_LETTER tag should not be checked for bundle ordering, document desc: {}", document.getDescription());
                 yield 115;
             }
-            case NONE ->  116;
+            case CMR_HEARING_CANCELLED_LETTER_BUNDLE -> {
+                log.warn("CMR_HEARING_CANCELLED_LETTER_BUNDLE tag should not be checked for bundle ordering, document desc: {}", document.getDescription());
+                yield 116;
+            }
+            case NONE ->  117;
 
             default ->
                 throw new IllegalStateException("document has unknown tag: " + document.getTag() + ", description: " + document.getDescription());
