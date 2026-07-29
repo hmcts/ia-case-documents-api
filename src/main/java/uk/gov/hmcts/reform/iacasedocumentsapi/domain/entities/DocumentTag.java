@@ -126,6 +126,7 @@ public enum DocumentTag {
     DETAINED_APPEAL_ADJOURN_HEARING_WITHOUT_DATE_IRC_PRISON_LETTER("detainedAppealAdjournHearingWithoutDateIrcPrisonLetter", CaseType.ASYLUM),
     HOME_OFFICE_APPLICATION_DECIDED_LETTER("homeOfficeApplicationDecidedLetter", CaseType.ASYLUM),
     AIPM_DETAINED_IN_PRISON_IRC_REINSTATE_APPEAL_LETTER("aipmDetainedInPrisonOrIrcReinstateAppealLetter", CaseType.ASYLUM),
+    STF_24WEEKS_CASE_REVIEW_APPELLANT_DOCUMENT("stf24WeeksCaseReviewAppeallantDocument", CaseType.ASYLUM),
 
     BAIL_SUBMISSION("bailSubmission", CaseType.BAIL),
     BAIL_EVIDENCE("uploadTheBailEvidenceDocs", CaseType.BAIL),
