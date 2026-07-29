@@ -1,6 +1,7 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.service;
 
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
 import org.apache.commons.io.FileUtils;
 import org.springframework.core.io.ByteArrayResource;
@@ -74,8 +75,15 @@ public class SaveNotificationsToDataPdfService {
                 && !invalidNotificationStatuses.contains(storedNotification.getNotificationStatus())) {
                 String notificationBody = storedNotification.getNotificationBody();
                 String notificationReference = storedNotification.getNotificationReference();
-                Document notificationPdf =
-                    this.createPdf(notificationBody, notificationReference);
+                Document notificationPdf;
+                if (storedNotification.getNotificationDocumentEncoded() != null) {
+                    String encodedPdf = storedNotification.getNotificationDocumentEncoded();
+                    byte[] decodedPdf = Base64.getDecoder().decode(encodedPdf);
+                    notificationPdf = documentUploader.upload(new ByteArrayResource(decodedPdf), PDF_CONTENT_TYPE);
+                } else {
+                    notificationPdf =
+                        this.createPdf(notificationBody, notificationReference);
+                }
                 storedNotification.setNotificationDocument(notificationPdf);
                 notification = new IdValue<>(notification.getId(), storedNotification);
             }
