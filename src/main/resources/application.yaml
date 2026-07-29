@@ -649,6 +649,11 @@ cmrListingDetainedOtherAppellantLetter.fileExtension: PDF
 cmrListingDetainedOtherAppellantLetter.fileName: "cmr-listing-letter"
 cmrListingDetainedOtherAppellantLetter.templateName: ${INTERNAL_CASE_LISTED_LETTER_TEMPLATE:TB-IAC-LET-ENG-Internal-Case-Listed.docx}
 
+cmrCancelledAipManualLetter.contentType:  application/pdf
+cmrCancelledAipManualLetter.fileExtension: PDF
+cmrCancelledAipManualLetter.fileName: "cmr-cancelled_aip_letter"
+cmrCancelledAipManualLetter.templateName: ${CMR_CANCELLED_AIP_MANUAL_LETTER_TEMPLATE:TB-IAC-LET-ENG-CRM-Cancelled-AIP-Manual.docx}
+
 internalCaseListedLetterWithAttachment.fileExtension: PDF
 internalCaseListedLetterWithAttachment.fileName: "internal-case-listed-letter-with-attachment"
 
@@ -921,6 +926,7 @@ security:
       - "manageFeeUpdate"
       - "removeLegalRepresentative"
       - "requestRespondentEvidence"
+      - "cmrHearingCancelled"
     ctsc:
       - "listCase"
       - "cmrListing"
@@ -955,6 +961,7 @@ security:
       - "manageFeeUpdate"
       - "removeLegalRepresentative"
       - "requestRespondentEvidence"
+      - "cmrHearingCancelled"
     ctsc-team-leader:
       - "listCase"
       - "cmrListing"
@@ -983,6 +990,7 @@ security:
       - "uploadAddendumEvidenceAdminOfficer"
       - "createCaseLink"
       - "reinstateAppeal"
+      - "cmrHearingCancelled"
       - "buildCase"
       - "asyncStitchingComplete"
       - "saveNotificationsToData"
@@ -1013,6 +1021,7 @@ security:
       - "recordRemissionDecision"
       - "markAppealAsAda"
       - "applyForFTPAAppellant"
+      - "cmrHearingCancelled"
       - "maintainCaseLinks"
       - "uploadAddendumEvidenceAdminOfficer"
       - "createCaseLink"
@@ -1054,6 +1063,7 @@ security:
       - "buildCase"
       - "asyncStitchingComplete"
       - "saveNotificationsToData"
+      - "cmrHearingCancelled"
       - "manageFeeUpdate"
       - "removeLegalRepresentative"
       - "requestRespondentEvidence"
@@ -1081,6 +1091,7 @@ security:
       - "recordRemissionDecision"
       - "markAppealAsAda"
       - "applyForFTPAAppellant"
+      - "cmrHearingCancelled"
       - "maintainCaseLinks"
       - "uploadAddendumEvidenceAdminOfficer"
       - "createCaseLink"
@@ -1326,6 +1337,7 @@ security:
       - "caseListing"
       - "cmrListing"
       - "cmrReListing"
+      - "cmrHearingCancelled"
       - "recordAdjournmentDetails"
       - "requestHearingRequirementsFeature"
       - "changeHearingCentre"

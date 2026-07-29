@@ -409,7 +409,15 @@ public class BundleOrder implements Comparator<DocumentWithMetadata> {
                 log.warn("AIPM_DETAINED_IN_PRISON_IRC_REINSTATE_APPEAL_LETTER tag should not be checked for bundle ordering, document desc: {}", document.getDescription());
                 yield 114;
             }
-            case NONE ->  115;
+            case CMR_HEARING_CANCELLED_LETTER -> {
+                log.warn("CMR_HEARING_CANCELLED_LETTER tag should not be checked for bundle ordering, document desc: {}", document.getDescription());
+                yield 115;
+            }
+            case CMR_HEARING_CANCELLED_LETTER_BUNDLE -> {
+                log.warn("CMR_HEARING_CANCELLED_LETTER_BUNDLE tag should not be checked for bundle ordering, document desc: {}", document.getDescription());
+                yield 116;
+            }
+            case NONE ->  117;
 
             default ->
                 throw new IllegalStateException("document has unknown tag: " + document.getTag() + ", description: " + document.getDescription());
