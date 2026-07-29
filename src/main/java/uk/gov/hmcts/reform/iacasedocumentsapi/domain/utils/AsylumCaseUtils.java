@@ -297,6 +297,10 @@ public class AsylumCaseUtils {
         return asylumCase.read(CMR_IS_REMOTE_HEARING, YesOrNo.class).orElse(YesOrNo.NO).equals(YesOrNo.YES);
     }
 
+    public static boolean isCmrCase(AsylumCase asylumCase) {
+        return asylumCase.read(CMR_HEARING_CENTRE, YesOrNo.class).isPresent();
+    }
+
     public static boolean isVirtualHearing(AsylumCase asylumCase) {
         return asylumCase.read(IS_VIRTUAL_HEARING, YesOrNo.class).orElse(YesOrNo.NO).equals(YesOrNo.YES)
             || asylumCase.read(LIST_CASE_HEARING_CENTRE, HearingCentre.class)

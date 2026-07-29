@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.HearingCentre;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.CustomerServicesProvider;
 
 @Service
@@ -62,9 +63,16 @@ public class HearingNoticeFieldMapper {
             fieldValues.put("remoteVideoCallTribunalResponse", asylumCase.read(REMOTE_VIDEO_CALL_TRIBUNAL_RESPONSE, String.class).orElse(""));
         }
 
-        fieldValues.put("hearingCentreAddress", isCaseUsingLocationRefData ?
-                asylumCase.read(LIST_CASE_HEARING_CENTRE_ADDRESS, String.class).orElse("")
-                : stringProvider.get("hearingCentreAddress", listedHearingCentre.toString()).orElse("").replaceAll(",\\s*", "\n")
+        fieldValues.put(
+                "hearingCentreAddress",
+                isCaseUsingLocationRefData
+                        ? asylumCase.read(
+                        AsylumCaseUtils.isCmrCase(asylumCase) ? CMR_HEARING_CENTRE_ADDRESS : LIST_CASE_HEARING_CENTRE_ADDRESS,
+                        String.class
+                ).orElse("")
+                        : stringProvider.get("hearingCentreAddress", listedHearingCentre.toString())
+                        .orElse("")
+                        .replaceAll(",\\s*", "\n")
         );
 
         if (isSubmitRequirementsAvailable.isPresent() && isSubmitRequirementsAvailable.get() == YesOrNo.YES) {
