@@ -1,8 +1,8 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.service;
 
-import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
+
 import org.apache.commons.io.FileUtils;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
@@ -12,6 +12,8 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.Document
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Set;
+
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.IdValue;
 
 @Service
@@ -38,7 +40,7 @@ public class SaveNotificationsToDataPdfService {
         File notificationPdf =
             documentToPdfConverter.convertHtmlDocResourceToPdf(resource);
 
-        ByteArrayResource byteArrayResource = getByteArrayResource(
+        ByteArrayResource byteArrayResource = getByteArrayResourceFromFile(
             notificationPdf,
             notificationReference + ".PDF"
         );
@@ -46,7 +48,7 @@ public class SaveNotificationsToDataPdfService {
         return documentUploader.upload(byteArrayResource, PDF_CONTENT_TYPE);
     }
 
-    private ByteArrayResource getByteArrayResource(File notificationPdf, String filename) {
+    private ByteArrayResource getByteArrayResourceFromFile(File notificationPdf, String filename) {
 
         byte[] byteArray;
 
@@ -57,6 +59,17 @@ public class SaveNotificationsToDataPdfService {
             throw new IllegalStateException("Error reading converted pdf");
         }
 
+        return getByteArrayResource(byteArray, filename);
+    }
+
+
+    public Document createLetterPdf(StoredNotification storedNotification, String notificationReference) {
+        byte[] decodedBytes = Base64.getDecoder().decode(storedNotification.getNotificationDocumentEncoded());
+        ByteArrayResource byteArrayResource = getByteArrayResource(decodedBytes, notificationReference + ".PDF");
+        return documentUploader.upload(byteArrayResource, PDF_CONTENT_TYPE);
+    }
+
+    private ByteArrayResource getByteArrayResource(byte[] byteArray, String filename) {
         return new ByteArrayResource(byteArray) {
             @Override
             public String getFilename() {
@@ -65,30 +78,35 @@ public class SaveNotificationsToDataPdfService {
         };
     }
 
-    public List<IdValue<StoredNotification>> generatePdfsForNotifications(List<IdValue<StoredNotification>> existingNotifications) {
-        ArrayList<IdValue<StoredNotification>> newNotifications = new ArrayList<>();
-        List<String> invalidNotificationStatuses = List.of("Cancelled", "Failed", "Technical-failure",
-            "Temporary-failure", "Permanent-failure", "Validation-failed", "Virus-scan-failed");
-        for (IdValue<StoredNotification> notification : existingNotifications) {
-            StoredNotification storedNotification = notification.getValue();
-            if (storedNotification.getNotificationDocument() == null
-                && !invalidNotificationStatuses.contains(storedNotification.getNotificationStatus())) {
-                String notificationBody = storedNotification.getNotificationBody();
-                String notificationReference = storedNotification.getNotificationReference();
-                Document notificationPdf;
-                if (storedNotification.getNotificationDocumentEncoded() != null) {
-                    String encodedPdf = storedNotification.getNotificationDocumentEncoded();
-                    byte[] decodedPdf = Base64.getDecoder().decode(encodedPdf);
-                    notificationPdf = documentUploader.upload(new ByteArrayResource(decodedPdf), PDF_CONTENT_TYPE);
-                } else {
-                    notificationPdf =
-                        this.createPdf(notificationBody, notificationReference);
-                }
-                storedNotification.setNotificationDocument(notificationPdf);
-                notification = new IdValue<>(notification.getId(), storedNotification);
-            }
-            newNotifications.add(notification);
+    private Document generatePdfForNotification(StoredNotification storedNotification) {
+        if (storedNotification.getNotificationDocumentEncoded() != null) {
+            return this.createLetterPdf(storedNotification, storedNotification.getNotificationReference());
+        } else {
+            return this.createPdf(storedNotification.getNotificationBody(), storedNotification.getNotificationReference());
         }
-        return newNotifications;
+    }
+
+    private static final Set<String> INVALID_NOTIFICATION_STATUSES = Set.of(
+        "Cancelled",
+        "Failed",
+        "Technical-failure",
+        "Temporary-failure",
+        "Permanent-failure",
+        "Validation-failed",
+        "Virus-scan-failed"
+    );
+
+    private boolean shouldGeneratePdf(StoredNotification storedNotification) {
+        return storedNotification.getNotificationDocument() == null
+            && !INVALID_NOTIFICATION_STATUSES.contains(storedNotification.getNotificationStatus());
+    }
+
+    public List<IdValue<StoredNotification>> generatePdfsForNotifications(List<IdValue<StoredNotification>> existingNotifications) {
+        existingNotifications.stream()
+            .map(IdValue::getValue)
+            .filter(this::shouldGeneratePdf)
+            .forEach(notification ->
+                notification.setNotificationDocument(generatePdfForNotification(notification)));
+        return existingNotifications;
     }
 }

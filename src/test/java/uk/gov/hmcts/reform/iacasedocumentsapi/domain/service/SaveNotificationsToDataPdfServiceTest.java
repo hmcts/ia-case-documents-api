@@ -190,6 +190,8 @@ class SaveNotificationsToDataPdfServiceTest {
 
         assertNotNull(response.getFirst().getValue().getNotificationDocument());
         assertEquals(pdf, response.getFirst().getValue().getNotificationDocument());
+        verify(documentToPdfConverter).convertHtmlDocResourceToPdf(any());
+        verify(documentUploader).upload(any(), eq("application/pdf"));
     }
 
 
