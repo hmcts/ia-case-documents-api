@@ -75,7 +75,7 @@ public class HearingNoticeFieldMapper {
                 "hearingCentreAddress",
                 isCaseUsingLocationRefData
                         ? asylumCase.read(
-                        AsylumCaseUtils.isCmrCase(asylumCase) ? CMR_HEARING_CENTRE : LIST_CASE_HEARING_CENTRE_ADDRESS,
+                        AsylumCaseUtils.isCmrCase(asylumCase) ? CMR_HEARING_CENTRE_ADDRESS : LIST_CASE_HEARING_CENTRE_ADDRESS,
                         String.class
                 ).orElse("").replaceAll(",\\s*", "\n")
                         : stringProvider.get("hearingCentreAddress", listedHearingCentre.toString())
