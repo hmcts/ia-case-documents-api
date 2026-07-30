@@ -125,8 +125,18 @@ class InternalCmrReListingLetterGeneratorTest {
     public void it_cannot_handle_callback_when_appellant_in_detention() {
         when(callback.getEvent()).thenReturn(CMR_RE_LISTING);
         when(asylumCase.read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(YES));
+        when(asylumCase.read(DETENTION_FACILITY, String.class)).thenReturn(Optional.of("prison"));
 
         assertFalse(internalCmrReListingLetterGenerator.canHandle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback));
+    }
+
+    @Test
+    public void it_can_handle_callback_when_appellant_detained_in_other_facility() {
+        when(callback.getEvent()).thenReturn(CMR_RE_LISTING);
+        when(asylumCase.read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(YES));
+        when(asylumCase.read(DETENTION_FACILITY, String.class)).thenReturn(Optional.of("other"));
+
+        assertTrue(internalCmrReListingLetterGenerator.canHandle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback));
     }
 
     @Test
