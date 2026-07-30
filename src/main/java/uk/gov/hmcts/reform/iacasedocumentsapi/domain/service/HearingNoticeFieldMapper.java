@@ -8,6 +8,8 @@ import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
+
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.HearingCentre;
@@ -15,6 +17,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.CustomerServicesProvider;
 
+@Slf4j
 @Service
 public class HearingNoticeFieldMapper {
 
@@ -62,6 +65,9 @@ public class HearingNoticeFieldMapper {
             fieldValues.put("remoteHearing", "IAC National (Virtual)");
             fieldValues.put("remoteVideoCallTribunalResponse", asylumCase.read(REMOTE_VIDEO_CALL_TRIBUNAL_RESPONSE, String.class).orElse(""));
         }
+
+        log.info("List case hearing centre address: {}", LIST_CASE_HEARING_CENTRE_ADDRESS);
+        log.info("CMR hearing centre address: {}", CMR_HEARING_CENTRE_ADDRESS);
 
         fieldValues.put(
                 "hearingCentreAddress",
