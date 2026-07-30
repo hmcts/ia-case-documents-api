@@ -66,8 +66,10 @@ public class HearingNoticeFieldMapper {
             fieldValues.put("remoteVideoCallTribunalResponse", asylumCase.read(REMOTE_VIDEO_CALL_TRIBUNAL_RESPONSE, String.class).orElse(""));
         }
 
-        log.info("List case hearing centre address: {}", LIST_CASE_HEARING_CENTRE_ADDRESS);
-        log.info("CMR hearing centre address: {}", CMR_HEARING_CENTRE_ADDRESS);
+        String listCaseHearingCentre = asylumCase.read(LIST_CASE_HEARING_CENTRE_ADDRESS, String.class).orElse("");
+        String cmrHearingCentre = asylumCase.read(CMR_HEARING_CENTRE_ADDRESS, String.class).orElse("");
+        log.info("List case hearing centre address: {}", listCaseHearingCentre);
+        log.info("CMR hearing centre address: {}", cmrHearingCentre);
 
         fieldValues.put(
                 "hearingCentreAddress",
