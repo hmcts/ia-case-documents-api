@@ -66,8 +66,8 @@ public class HearingNoticeFieldMapper {
             fieldValues.put("remoteVideoCallTribunalResponse", asylumCase.read(REMOTE_VIDEO_CALL_TRIBUNAL_RESPONSE, String.class).orElse(""));
         }
 
-        String listCaseHearingCentre = asylumCase.read(LIST_CASE_HEARING_CENTRE_ADDRESS, String.class).orElse("");
-        String cmrHearingCentre = asylumCase.read(CMR_HEARING_CENTRE_ADDRESS, String.class).orElse("");
+        String listCaseHearingCentre = asylumCase.read(LIST_CASE_HEARING_CENTRE, String.class).orElse("");
+        String cmrHearingCentre = asylumCase.read(CMR_HEARING_CENTRE, String.class).orElse("");
         log.info("List case hearing centre address: {}", listCaseHearingCentre);
         log.info("CMR hearing centre address: {}", cmrHearingCentre);
 
@@ -75,9 +75,9 @@ public class HearingNoticeFieldMapper {
                 "hearingCentreAddress",
                 isCaseUsingLocationRefData
                         ? asylumCase.read(
-                        AsylumCaseUtils.isCmrCase(asylumCase) ? CMR_HEARING_CENTRE_ADDRESS : LIST_CASE_HEARING_CENTRE_ADDRESS,
+                        AsylumCaseUtils.isCmrCase(asylumCase) ? CMR_HEARING_CENTRE : LIST_CASE_HEARING_CENTRE_ADDRESS,
                         String.class
-                ).orElse("")
+                ).orElse("").replaceAll(",\\s*", "\n")
                         : stringProvider.get("hearingCentreAddress", listedHearingCentre.toString())
                         .orElse("")
                         .replaceAll(",\\s*", "\n")
