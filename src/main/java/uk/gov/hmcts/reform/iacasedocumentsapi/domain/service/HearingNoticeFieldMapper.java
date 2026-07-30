@@ -67,7 +67,7 @@ public class HearingNoticeFieldMapper {
         }
 
         String listCaseHearingCentre = asylumCase.read(LIST_CASE_HEARING_CENTRE, String.class).orElse("");
-        String cmrHearingCentre = asylumCase.read(CMR_HEARING_CENTRE, String.class).orElse("");
+        HearingCentre cmrHearingCentre = asylumCase.read(CMR_HEARING_CENTRE, HearingCentre.class).orElse(null);
         log.info("List case hearing centre address: {}", listCaseHearingCentre);
         log.info("CMR hearing centre address: {}", cmrHearingCentre);
 
