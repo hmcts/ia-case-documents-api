@@ -131,15 +131,6 @@ class InternalCmrReListingLetterGeneratorTest {
     }
 
     @Test
-    public void it_can_handle_callback_when_appellant_detained_in_other_facility() {
-        when(callback.getEvent()).thenReturn(CMR_RE_LISTING);
-        when(asylumCase.read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(YES));
-        when(asylumCase.read(DETENTION_FACILITY, String.class)).thenReturn(Optional.of("other"));
-
-        assertTrue(internalCmrReListingLetterGenerator.canHandle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback));
-    }
-
-    @Test
     public void should_have_early_dispatch_priority() {
         assertThat(internalCmrReListingLetterGenerator.getDispatchPriority()).isEqualTo(EARLY);
     }

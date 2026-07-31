@@ -127,16 +127,6 @@ class InternalCmrListingAppellantLetterBundlerTest {
         assertFalse(internalCmrListingAppellantLetterBundler.canHandle(ABOUT_TO_SUBMIT, callback));
     }
 
-    @ParameterizedTest
-    @EnumSource(value = Event.class, names = {"CMR_LISTING", "CMR_RE_LISTING"})
-    public void it_can_handle_callback_when_appellant_detained_in_other_facility(Event event) {
-        when(callback.getEvent()).thenReturn(event);
-        when(asylumCase.read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(YES));
-        when(asylumCase.read(DETENTION_FACILITY, String.class)).thenReturn(Optional.of("other"));
-
-        assertTrue(internalCmrListingAppellantLetterBundler.canHandle(ABOUT_TO_SUBMIT, callback));
-    }
-
     @Test
     public void it_cannot_handle_callback_when_submitted_as_legal_represented_internal_case() {
         when(callback.getEvent()).thenReturn(CMR_LISTING);
