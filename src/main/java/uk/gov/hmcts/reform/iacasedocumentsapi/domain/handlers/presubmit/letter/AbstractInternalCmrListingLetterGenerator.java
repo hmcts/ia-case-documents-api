@@ -1,7 +1,5 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit.letter;
 
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Component;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DocumentTag;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseDetails;
@@ -18,20 +16,25 @@ import java.util.Objects;
 
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.LETTER_NOTIFICATION_DOCUMENTS;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.Event.CMR_LISTING;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.hasBeenSubmittedAsLegalRepresentedInternalCase;
 
-@Component
-public class InternalCmrListingLrLetterGenerator implements PreSubmitCallbackHandler<AsylumCase> {
+/**
+ * Common behaviour for the letters generated when a case management review hearing is listed.
+ * Subclasses only supply the recipients the letter applies to.
+ */
+public abstract class AbstractInternalCmrListingLetterGenerator implements PreSubmitCallbackHandler<AsylumCase> {
 
     private final DocumentCreator<AsylumCase> documentCreator;
     private final DocumentHandler documentHandler;
+    private final DocumentTag documentTag;
 
-    public InternalCmrListingLrLetterGenerator(
-        @Qualifier("internalCmrListingLrLetter") DocumentCreator<AsylumCase> documentCreator,
-        DocumentHandler documentHandler
+    protected AbstractInternalCmrListingLetterGenerator(
+        DocumentCreator<AsylumCase> documentCreator,
+        DocumentHandler documentHandler,
+        DocumentTag documentTag
     ) {
         this.documentCreator = documentCreator;
         this.documentHandler = documentHandler;
+        this.documentTag = documentTag;
     }
 
     @Override
@@ -50,7 +53,7 @@ public class InternalCmrListingLrLetterGenerator implements PreSubmitCallbackHan
 
         return callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
                && callback.getEvent() == CMR_LISTING
-               && hasBeenSubmittedAsLegalRepresentedInternalCase(asylumCase);
+               && isApplicable(asylumCase);
     }
 
     public PreSubmitCallbackResponse<AsylumCase> handle(
@@ -64,15 +67,17 @@ public class InternalCmrListingLrLetterGenerator implements PreSubmitCallbackHan
         final CaseDetails<AsylumCase> caseDetails = callback.getCaseDetails();
         final AsylumCase asylumCase = caseDetails.getCaseData();
 
-        Document internalCmrListingLrLetter = documentCreator.create(caseDetails);
+        Document letter = documentCreator.create(caseDetails);
 
         documentHandler.addWithMetadataWithoutReplacingExistingDocuments(
             asylumCase,
-            internalCmrListingLrLetter,
+            letter,
             LETTER_NOTIFICATION_DOCUMENTS,
-            DocumentTag.INTERNAL_CMR_LISTING_LR_LETTER
+            documentTag
         );
 
         return new PreSubmitCallbackResponse<>(asylumCase);
     }
+
+    protected abstract boolean isApplicable(AsylumCase asylumCase);
 }

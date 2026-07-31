@@ -11,10 +11,10 @@ import java.util.List;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.getAppellantAddressInCountryOrOoc;
 
 @Component
-public class InternalCmrListingLetterTemplate extends AbstractInternalCmrListingLetterTemplate {
+public class InternalCmrListingNonDetainedAppellantLetterTemplate extends AbstractInternalCmrListingLetterTemplate {
 
-    public InternalCmrListingLetterTemplate(
-        @Value("${internalCmrListingLetter.templateName}") String templateName,
+    public InternalCmrListingNonDetainedAppellantLetterTemplate(
+        @Value("${internalCmrListingAppellantLetter.templateName}") String templateName,
         CustomerServicesProvider customerServicesProvider,
         StringProvider stringProvider) {
         super(templateName, customerServicesProvider, stringProvider);

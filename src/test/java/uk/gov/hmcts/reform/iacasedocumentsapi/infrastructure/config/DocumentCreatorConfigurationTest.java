@@ -13,9 +13,9 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentCreator;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentGenerator;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentUploader;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates.CmrHearingNoticeTemplate;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit.letter.InternalCmrListingAppellantLetterTemplate;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit.letter.InternalCmrListingNonDetainedAppellantLetterTemplate;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit.letter.InternalCmrListingLetterTemplate;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit.letter.InternalCmrListingLrLetterTemplate;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit.letter.InternalCmrListingNonDetainedLrLetterTemplate;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit.letter.InternalCmrReListingLetterTemplate;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates.letter.InternalDetainedCmrListingLetterTemplate;
 
@@ -26,8 +26,8 @@ class DocumentCreatorConfigurationTest {
     @Mock private CmrHearingNoticeTemplate cmrHearingNoticeTemplate;
     @Mock private InternalDetainedCmrListingLetterTemplate internalDetainedCmrListingLetterTemplate;
     @Mock private InternalCmrListingLetterTemplate internalCmrListingLetterTemplate;
-    @Mock private InternalCmrListingLrLetterTemplate internalCmrListingLrLetterTemplate;
-    @Mock private InternalCmrListingAppellantLetterTemplate internalCmrListingAppellantLetterTemplate;
+    @Mock private InternalCmrListingNonDetainedLrLetterTemplate internalCmrListingNonDetainedLrLetterTemplate;
+    @Mock private InternalCmrListingNonDetainedAppellantLetterTemplate internalCmrListingNonDetainedAppellantLetterTemplate;
     @Mock private InternalCmrReListingLetterTemplate internalCmrReListingLetterTemplate;
     @Mock private DocumentGenerator documentGenerator;
     @Mock private DocumentUploader documentUploader;
@@ -115,7 +115,7 @@ class DocumentCreatorConfigurationTest {
                 fileExtension,
                 fileName,
                 fileNameQualifier,
-                internalCmrListingLrLetterTemplate,
+                    internalCmrListingNonDetainedLrLetterTemplate,
                 documentGenerator,
                 documentUploader
             );
@@ -131,7 +131,7 @@ class DocumentCreatorConfigurationTest {
                 fileExtension,
                 fileName,
                 fileNameQualifier,
-                internalCmrListingAppellantLetterTemplate,
+                    internalCmrListingNonDetainedAppellantLetterTemplate,
                 documentGenerator,
                 documentUploader
             );

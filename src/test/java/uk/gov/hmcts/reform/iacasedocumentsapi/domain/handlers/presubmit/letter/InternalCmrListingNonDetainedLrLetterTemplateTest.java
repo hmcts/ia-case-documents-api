@@ -3,19 +3,20 @@ package uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit.letter;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.when;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.ADDRESS_LINE_1_ADMIN_J;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.ADDRESS_LINE_2_ADMIN_J;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.ADDRESS_LINE_3_ADMIN_J;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.APPEAL_REFERENCE_NUMBER;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.APPELLANT_ADDRESS;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.APPELLANT_FAMILY_NAME;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.APPELLANT_GIVEN_NAMES;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.APPELLANT_IN_UK;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.CMR_HEARING_CENTRE;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.CMR_HEARING_CHANNEL;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.CMR_HEARING_DATE;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.COUNTRY_GOV_UK_OOC_ADMIN_J;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.HOME_OFFICE_REFERENCE_NUMBER;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.LEGAL_REP_ADDRESS_U_K;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.LEGAL_REP_HAS_ADDRESS;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.OOC_ADDRESS_LINE_1;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.OOC_ADDRESS_LINE_2;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.OOC_ADDRESS_LINE_3;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.OOC_ADDRESS_LINE_4;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.OOC_LR_COUNTRY_GOV_UK_ADMIN_J;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.formatDateForRendering;
 
 import java.time.LocalDate;
@@ -44,7 +45,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.CustomerServicesPro
 @ExtendWith(MockitoExtension.class)
 @SuppressWarnings("unchecked")
 @MockitoSettings(strictness = Strictness.LENIENT)
-class InternalCmrListingAppellantLetterTemplateTest {
+class InternalCmrListingNonDetainedLrLetterTemplateTest {
 
     @Mock private CaseDetails<AsylumCase> caseDetails;
     @Mock private AsylumCase asylumCase;
@@ -52,9 +53,9 @@ class InternalCmrListingAppellantLetterTemplateTest {
     @Mock private StringProvider stringProvider;
     @Mock private DynamicList hearingChannelDynamicList;
     @Mock private Value hearingChannelValue;
-    @Mock private NationalityFieldValue oocAddressCountry;
+    @Mock private NationalityFieldValue oocLegalRepCountry;
 
-    private InternalCmrListingAppellantLetterTemplate internalCmrListingAppellantLetterTemplate;
+    private InternalCmrListingNonDetainedLrLetterTemplate internalCmrListingNonDetainedLrLetterTemplate;
 
     private final String templateName = "TB-IAC-LET-ENG-00006.docx";
     private final String appealReferenceNumber = "HU/11111/2023";
@@ -69,13 +70,13 @@ class InternalCmrListingAppellantLetterTemplateTest {
     private final String customerServicesTelephone = "0300 123 1711";
     private final String customerServicesEmail = "email@example.com";
     private final String hearingChannelLabel = "In person";
-    private final AddressUk appellantAddress =
-        new AddressUk("123 Street", null, null, "London", null, "W1 1AA", null);
+    private final AddressUk legalRepAddress =
+        new AddressUk("50", "Building name", "Street name", "Town name", null, "XX1 2YY", null);
 
     @BeforeEach
     void setUp() {
-        internalCmrListingAppellantLetterTemplate =
-            new InternalCmrListingAppellantLetterTemplate(
+        internalCmrListingNonDetainedLrLetterTemplate =
+            new InternalCmrListingNonDetainedLrLetterTemplate(
                 templateName,
                 customerServicesProvider,
                 stringProvider);
@@ -83,10 +84,10 @@ class InternalCmrListingAppellantLetterTemplateTest {
 
     @Test
     void should_return_template_name() {
-        assertEquals(templateName, internalCmrListingAppellantLetterTemplate.getName());
+        assertEquals(templateName, internalCmrListingNonDetainedLrLetterTemplate.getName());
     }
 
-    void dataSetUp() {
+    void dataSetUp(boolean legalRepInUk) {
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
 
         when(asylumCase.read(APPEAL_REFERENCE_NUMBER, String.class)).thenReturn(Optional.of(appealReferenceNumber));
@@ -101,17 +102,28 @@ class InternalCmrListingAppellantLetterTemplateTest {
         when(stringProvider.get("hearingCentreAddress", "manchester")).thenReturn(Optional.of(manchesterHearingCentreAddress));
         when(customerServicesProvider.getInternalCustomerServicesTelephone(asylumCase)).thenReturn(customerServicesTelephone);
         when(customerServicesProvider.getInternalCustomerServicesEmail(asylumCase)).thenReturn(customerServicesEmail);
-        when(asylumCase.read(APPELLANT_IN_UK, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
-        when(asylumCase.read(APPELLANT_ADDRESS, AddressUk.class)).thenReturn(Optional.of(appellantAddress));
+
+        if (legalRepInUk) {
+            when(asylumCase.read(LEGAL_REP_HAS_ADDRESS, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
+            when(asylumCase.read(LEGAL_REP_ADDRESS_U_K, AddressUk.class)).thenReturn(Optional.of(legalRepAddress));
+        } else {
+            when(asylumCase.read(LEGAL_REP_HAS_ADDRESS, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO));
+            when(asylumCase.read(OOC_ADDRESS_LINE_1, String.class)).thenReturn(Optional.of("50"));
+            when(asylumCase.read(OOC_ADDRESS_LINE_2, String.class)).thenReturn(Optional.of("Building name"));
+            when(asylumCase.read(OOC_ADDRESS_LINE_3, String.class)).thenReturn(Optional.of("Street name"));
+            when(asylumCase.read(OOC_ADDRESS_LINE_4, String.class)).thenReturn(Optional.of("Town name"));
+            when(asylumCase.read(OOC_LR_COUNTRY_GOV_UK_ADMIN_J, NationalityFieldValue.class)).thenReturn(Optional.of(oocLegalRepCountry));
+            when(oocLegalRepCountry.getCode()).thenReturn(Nationality.ES.name());
+        }
     }
 
     @Test
-    void should_map_case_data_to_template_field_values() {
-        dataSetUp();
+    void should_map_case_data_to_template_field_values_for_legal_rep_in_uk() {
+        dataSetUp(true);
 
-        Map<String, Object> templateFieldValues = internalCmrListingAppellantLetterTemplate.mapFieldValues(caseDetails);
+        Map<String, Object> templateFieldValues = internalCmrListingNonDetainedLrLetterTemplate.mapFieldValues(caseDetails);
 
-        assertEquals(16, templateFieldValues.size());
+        assertEquals(17, templateFieldValues.size());
         assertEquals("[userImage:hmcts.png]", templateFieldValues.get("hmcts"));
         assertEquals(appealReferenceNumber, templateFieldValues.get("appealReferenceNumber"));
         assertEquals(homeOfficeReferenceNumber, templateFieldValues.get("homeOfficeReferenceNumber"));
@@ -125,50 +137,44 @@ class InternalCmrListingAppellantLetterTemplateTest {
         assertEquals(formatDateForRendering(LocalDate.now().toString(), DateTimeFormatter.ofPattern("d MMMM yyyy")),
             templateFieldValues.get("dateLetterSent"));
         assertEquals(hearingChannelLabel, templateFieldValues.get("hearingChannel"));
-        assertEquals("John Doe", templateFieldValues.get("address_line_1"));
-        assertEquals("123 Street", templateFieldValues.get("address_line_2"));
-        assertEquals("London", templateFieldValues.get("address_line_3"));
-        assertEquals("W1 1AA", templateFieldValues.get("address_line_4"));
+        assertEquals("50", templateFieldValues.get("address_line_1"));
+        assertEquals("Building name", templateFieldValues.get("address_line_2"));
+        assertEquals("Street name", templateFieldValues.get("address_line_3"));
+        assertEquals("Town name", templateFieldValues.get("address_line_4"));
+        assertEquals("XX1 2YY", templateFieldValues.get("address_line_5"));
     }
 
     @Test
-    void should_use_out_of_country_address_when_appellant_is_not_in_uk() {
-        dataSetUp();
+    void should_map_case_data_to_template_field_values_for_legal_rep_out_of_country() {
+        dataSetUp(false);
 
-        when(asylumCase.read(APPELLANT_IN_UK, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO));
-        when(asylumCase.read(ADDRESS_LINE_1_ADMIN_J, String.class)).thenReturn(Optional.of("Calle Uno"));
-        when(asylumCase.read(ADDRESS_LINE_2_ADMIN_J, String.class)).thenReturn(Optional.of("Madrid"));
-        when(asylumCase.read(ADDRESS_LINE_3_ADMIN_J, String.class)).thenReturn(Optional.of("28001"));
-        when(asylumCase.read(COUNTRY_GOV_UK_OOC_ADMIN_J, NationalityFieldValue.class)).thenReturn(Optional.of(oocAddressCountry));
-        when(oocAddressCountry.getCode()).thenReturn(Nationality.ES.name());
+        Map<String, Object> templateFieldValues = internalCmrListingNonDetainedLrLetterTemplate.mapFieldValues(caseDetails);
 
-        Map<String, Object> templateFieldValues = internalCmrListingAppellantLetterTemplate.mapFieldValues(caseDetails);
-
-        assertEquals("John Doe", templateFieldValues.get("address_line_1"));
-        assertEquals("Calle Uno", templateFieldValues.get("address_line_2"));
-        assertEquals("Madrid", templateFieldValues.get("address_line_3"));
-        assertEquals("28001", templateFieldValues.get("address_line_4"));
+        assertEquals("50", templateFieldValues.get("address_line_1"));
+        assertEquals("Building name", templateFieldValues.get("address_line_2"));
+        assertEquals("Street name", templateFieldValues.get("address_line_3"));
+        assertEquals("Town name", templateFieldValues.get("address_line_4"));
         assertEquals(Nationality.ES.toString(), templateFieldValues.get("address_line_5"));
     }
 
     @Test
     void should_use_default_hearing_channel_when_missing() {
-        dataSetUp();
+        dataSetUp(true);
 
         when(asylumCase.read(CMR_HEARING_CHANNEL, DynamicList.class)).thenReturn(Optional.empty());
 
-        Map<String, Object> templateFieldValues = internalCmrListingAppellantLetterTemplate.mapFieldValues(caseDetails);
+        Map<String, Object> templateFieldValues = internalCmrListingNonDetainedLrLetterTemplate.mapFieldValues(caseDetails);
 
         assertEquals("Unknown", templateFieldValues.get("hearingChannel"));
     }
 
     @Test
     void should_handle_missing_hearing_date() {
-        dataSetUp();
+        dataSetUp(true);
 
         when(asylumCase.read(CMR_HEARING_DATE, String.class)).thenReturn(Optional.empty());
 
-        Map<String, Object> templateFieldValues = internalCmrListingAppellantLetterTemplate.mapFieldValues(caseDetails);
+        Map<String, Object> templateFieldValues = internalCmrListingNonDetainedLrLetterTemplate.mapFieldValues(caseDetails);
 
         assertEquals("", templateFieldValues.get("hearingDate"));
         assertEquals("", templateFieldValues.get("hearingTime"));
@@ -180,6 +186,6 @@ class InternalCmrListingAppellantLetterTemplateTest {
         when(asylumCase.read(CMR_HEARING_CENTRE, HearingCentre.class)).thenReturn(Optional.empty());
 
         assertThrows(IllegalStateException.class,
-            () -> internalCmrListingAppellantLetterTemplate.mapFieldValues(caseDetails));
+            () -> internalCmrListingNonDetainedLrLetterTemplate.mapFieldValues(caseDetails));
     }
 }

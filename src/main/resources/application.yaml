@@ -673,6 +673,12 @@ cmrListingDetainedOtherLetterWithAttachment.fileName: "cmr-listing-letter-with-a
 internalCmrListingLetterWithAttachment.fileExtension: PDF
 internalCmrListingLetterWithAttachment.fileName: "internal-cmr-listing-letter-with-attachment"
 
+internalCmrListingNonDetainedAppellantLetterWithAttachment.fileExtension: PDF
+internalCmrListingNonDetainedAppellantLetterWithAttachment.fileName: "internal-cmr-listing-appellant-letter-with-attachment"
+
+internalCmrListingNonDetainedLrLetterWithAttachment.fileExtension: PDF
+internalCmrListingNonDetainedLrLetterWithAttachment.fileName: "internal-cmr-listing-lr-letter-with-attachment"
+
 detainedLegalRepRemovedIrcPrisonLetter.contentType: application/pdf
 detainedLegalRepRemovedIrcPrisonLetter.fileExtension: PDF
 detainedLegalRepRemovedIrcPrisonLetter.fileName: "appeal-form"
