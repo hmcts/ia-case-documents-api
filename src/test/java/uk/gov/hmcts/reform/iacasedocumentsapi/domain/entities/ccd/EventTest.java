@@ -112,7 +112,9 @@ public class EventTest {
             Arguments.of("saveNotificationsToData", CaseType.ASYLUM, Event.SAVE_NOTIFICATIONS_TO_DATA),
             Arguments.of("decideFtpaApplication", CaseType.ASYLUM, Event.DECIDE_FTPA_APPLICATION),
             Arguments.of("removeRepresentation", CaseType.ASYLUM, Event.REMOVE_REPRESENTATION),
+            Arguments.of("cmrHearingCancelled",  CaseType.ASYLUM, Event.CMR_HEARING_CANCELLED),
             Arguments.of("removeLegalRepresentative", CaseType.ASYLUM, Event.REMOVE_LEGAL_REPRESENTATIVE),
+            Arguments.of("completeCaseReview", CaseType.ASYLUM, Event.COMPLETE_CASE_REVIEW),
             Arguments.of("unknown", CaseType.UNKNOWN, Event.UNKNOWN)
         );
     }
