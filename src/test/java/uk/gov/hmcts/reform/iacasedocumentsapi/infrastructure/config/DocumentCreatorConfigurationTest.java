@@ -13,7 +13,9 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentCreator;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentGenerator;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentUploader;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates.CmrHearingNoticeTemplate;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit.letter.InternalCmrListingAppellantLetterTemplate;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit.letter.InternalCmrListingLetterTemplate;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit.letter.InternalCmrListingLrLetterTemplate;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit.letter.InternalCmrReListingLetterTemplate;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates.letter.InternalDetainedCmrListingLetterTemplate;
 
@@ -24,6 +26,8 @@ class DocumentCreatorConfigurationTest {
     @Mock private CmrHearingNoticeTemplate cmrHearingNoticeTemplate;
     @Mock private InternalDetainedCmrListingLetterTemplate internalDetainedCmrListingLetterTemplate;
     @Mock private InternalCmrListingLetterTemplate internalCmrListingLetterTemplate;
+    @Mock private InternalCmrListingLrLetterTemplate internalCmrListingLrLetterTemplate;
+    @Mock private InternalCmrListingAppellantLetterTemplate internalCmrListingAppellantLetterTemplate;
     @Mock private InternalCmrReListingLetterTemplate internalCmrReListingLetterTemplate;
     @Mock private DocumentGenerator documentGenerator;
     @Mock private DocumentUploader documentUploader;
@@ -96,6 +100,38 @@ class DocumentCreatorConfigurationTest {
                 fileName,
                 fileNameQualifier,
                 internalCmrListingLetterTemplate,
+                documentGenerator,
+                documentUploader
+            );
+
+        assertThat(documentCreator).isNotNull();
+    }
+
+    @Test
+    void should_create_internal_cmr_listing_lr_letter_document_creator() {
+        DocumentCreator<AsylumCase> documentCreator =
+            configuration.getInternalCmrListingLrLetterDocumentCreator(
+                contentType,
+                fileExtension,
+                fileName,
+                fileNameQualifier,
+                internalCmrListingLrLetterTemplate,
+                documentGenerator,
+                documentUploader
+            );
+
+        assertThat(documentCreator).isNotNull();
+    }
+
+    @Test
+    void should_create_internal_cmr_listing_appellant_letter_document_creator() {
+        DocumentCreator<AsylumCase> documentCreator =
+            configuration.getInternalCmrListingAppellantLetterDocumentCreator(
+                contentType,
+                fileExtension,
+                fileName,
+                fileNameQualifier,
+                internalCmrListingAppellantLetterTemplate,
                 documentGenerator,
                 documentUploader
             );
