@@ -48,7 +48,7 @@ public class CmrListingHearingNoticeCreator implements PreSubmitCallbackHandler<
         requireNonNull(callback, "callback must not be null");
 
         return callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
-            && Event.CMR_LISTING.equals(callback.getEvent());
+            && (Event.CMR_LISTING.equals(callback.getEvent()) || Event.CMR_RE_LISTING.equals(callback.getEvent()));
     }
 
     public PreSubmitCallbackResponse<AsylumCase> handle(
@@ -77,6 +77,16 @@ public class CmrListingHearingNoticeCreator implements PreSubmitCallbackHandler<
                 asylumCase,
                 hearingNotice,
                 NOTIFICATION_ATTACHMENT_DOCUMENTS,
+                DocumentTag.INTERNAL_CMR_LISTING_LETTER
+            );
+        }
+
+        if (isInternalNonDetainedCase(asylumCase)
+            || (isInternalCase(asylumCase) && isDetainedInFacilityType(asylumCase, OTHER))) {
+            documentHandler.addWithMetadataWithoutReplacingExistingDocuments(
+                asylumCase,
+                hearingNotice,
+                LETTER_NOTIFICATION_DOCUMENTS,
                 DocumentTag.INTERNAL_CMR_LISTING_LETTER
             );
         }

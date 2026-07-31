@@ -652,7 +652,7 @@ cmrListingDetainedOtherAppellantLetter.templateName: ${INTERNAL_CASE_LISTED_LETT
 cmrCancelledAipManualLetter.contentType:  application/pdf
 cmrCancelledAipManualLetter.fileExtension: PDF
 cmrCancelledAipManualLetter.fileName: "cmr-cancelled_aip_letter"
-cmrCancelledAipManualLetter.templateName: ${CRM_CANCELLED_AIP_MANUAL_LETTER_TEMPLATE:TB-IAC-LET-ENG-CRM-Cancelled-AIP-Manual.docx}
+cmrCancelledAipManualLetter.templateName: ${CMR_CANCELLED_AIP_MANUAL_LETTER_TEMPLATE:TB-IAC-LET-ENG-CRM-Cancelled-AIP-Manual.docx}
 
 internalCaseListedLetterWithAttachment.fileExtension: PDF
 internalCaseListedLetterWithAttachment.fileName: "internal-case-listed-letter-with-attachment"
@@ -684,6 +684,11 @@ bailNoticeOfHearing.fileName: "hearing-notice"
 bailNoticeOfHearingRelisting.templateName: ${IA_BAIL_NOTICE_OF_HEARING_RELISTING_TEMPLATE:TB-IAC-HNO-ENG-bails-notice-of-hearings-relisted.docx}
 bailNoticeOfHearingConditionalBailRelisting.templateName: ${IA_BAIL_NOTICE_OF_HEARING_RELISTING_TEMPLATE:TB-IAC-HNO-ENG-bails-notice-of-hearings-relisted-conditional-bail.docx}
 bailNoticeOfHearingInitialListing.templateName: ${IA_BAIL_NOTICE_OF_HEARING_INITIAL_LISTING_TEMPLATE:TB-IAC-HNO-ENG-Bails-Notice-of-Hearing.docx}
+
+stf24WeeksCaseReview.contentType:  application/pdf
+stf24WeeksCaseReview.fileExtension: PDF
+stf24WeeksCaseReview.fileName: "stf-24weeks-case-review-appellant-document"
+stf24WeeksCaseReview.templateName: ${AIPM_PRISON_STD_STF24_WEEKS_CASE_REVIEW:TB-IAC-STD-ENG-001-StfTwentyFourWeeks-Review-Appellant-v3.docx}
 
 ccdGatewayUrl: ${CCD_GW_URL:http://localhost:3453}
 
@@ -784,6 +789,7 @@ security:
       - "manageFeeUpdate"
       - "updateTribunalDecision"
       - "removeLegalRepresentative"
+      - "completeCaseReview"
     challenged-access-legal-operations:
       - "sendDirection"
       - "changeDirectionDueDate"
@@ -830,6 +836,7 @@ security:
       - "manageFeeUpdate"
       - "updateTribunalDecision"
       - "removeLegalRepresentative"
+      - "completeCaseReview"
     senior-tribunal-caseworker:
       - "sendDirection"
       - "changeDirectionDueDate"
@@ -876,6 +883,7 @@ security:
       - "manageFeeUpdate"
       - "updateTribunalDecision"
       - "removeLegalRepresentative"
+      - "completeCaseReview"
     # These events are used by the bails service, they will need to be migrated to the admin access management roles - see DIAC-855
     caseworker-ia-admofficer:
       - "submitApplication"
@@ -926,6 +934,7 @@ security:
       - "manageFeeUpdate"
       - "removeLegalRepresentative"
       - "requestRespondentEvidence"
+      - "cmrHearingCancelled"
     ctsc:
       - "listCase"
       - "cmrListing"
@@ -960,6 +969,7 @@ security:
       - "manageFeeUpdate"
       - "removeLegalRepresentative"
       - "requestRespondentEvidence"
+      - "cmrHearingCancelled"
     ctsc-team-leader:
       - "listCase"
       - "cmrListing"
@@ -988,6 +998,7 @@ security:
       - "uploadAddendumEvidenceAdminOfficer"
       - "createCaseLink"
       - "reinstateAppeal"
+      - "cmrHearingCancelled"
       - "buildCase"
       - "asyncStitchingComplete"
       - "saveNotificationsToData"
@@ -1018,6 +1029,7 @@ security:
       - "recordRemissionDecision"
       - "markAppealAsAda"
       - "applyForFTPAAppellant"
+      - "cmrHearingCancelled"
       - "maintainCaseLinks"
       - "uploadAddendumEvidenceAdminOfficer"
       - "createCaseLink"
@@ -1059,6 +1071,7 @@ security:
       - "buildCase"
       - "asyncStitchingComplete"
       - "saveNotificationsToData"
+      - "cmrHearingCancelled"
       - "manageFeeUpdate"
       - "removeLegalRepresentative"
       - "requestRespondentEvidence"
@@ -1086,6 +1099,7 @@ security:
       - "recordRemissionDecision"
       - "markAppealAsAda"
       - "applyForFTPAAppellant"
+      - "cmrHearingCancelled"
       - "maintainCaseLinks"
       - "uploadAddendumEvidenceAdminOfficer"
       - "createCaseLink"
@@ -1331,11 +1345,13 @@ security:
       - "caseListing"
       - "cmrListing"
       - "cmrReListing"
+      - "cmrHearingCancelled"
       - "recordAdjournmentDetails"
       - "requestHearingRequirementsFeature"
       - "changeHearingCentre"
       - "saveNotificationsToData"
       - "saveNotificationsToDataBail"
+      - "completeCaseReview"
     caseworker-ia-homeofficelart:
       - "uploadHomeOfficeAppealResponse"
       - "uploadAdditionalEvidenceHomeOffice"

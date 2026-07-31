@@ -1,5 +1,6 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit.letter;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
@@ -23,6 +24,7 @@ import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseD
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.Event.CMR_HEARING_CANCELLED;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.*;
 
+@Slf4j
 @Component
 public class CmrCancelledAipManualLetterBundler implements PreSubmitCallbackHandler<AsylumCase> {
 
@@ -47,6 +49,7 @@ public class CmrCancelledAipManualLetterBundler implements PreSubmitCallbackHand
         this.fileNameQualifier = fileNameQualifier;
         this.documentBundler = documentBundler;
         this.documentHandler = documentHandler;
+        log.info("CmrCancelledAipManualLetterBundler initialised");
     }
 
     @Override
@@ -63,10 +66,14 @@ public class CmrCancelledAipManualLetterBundler implements PreSubmitCallbackHand
 
         AsylumCase asylumCase = callback.getCaseDetails().getCaseData();
 
+        log.info("getEvent: {} for case reference {}", callback.getEvent(), callback.getCaseDetails().getId());
+        log.info("isCmrHearingInPersonOrRemote: {} for case reference: {}", isCmrHearingInPersonOrRemote(asylumCase),  callback.getCaseDetails().getId());
+        log.info("hasBeenSubmittedByAppellantInternalCase: {} for case reference: {}", hasBeenSubmittedByAppellantInternalCase(asylumCase), callback.getCaseDetails().getId());
+
         return callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
-                && callback.getEvent() == CMR_HEARING_CANCELLED
-                && isAipJourney(asylumCase)
-                && isInternalCase(asylumCase);
+                && CMR_HEARING_CANCELLED.equals(callback.getEvent())
+                && isCmrHearingInPersonOrRemote(asylumCase)
+                && hasBeenSubmittedByAppellantInternalCase(asylumCase);
     }
 
     public PreSubmitCallbackResponse<AsylumCase> handle(
@@ -82,7 +89,9 @@ public class CmrCancelledAipManualLetterBundler implements PreSubmitCallbackHand
 
         final String qualifiedDocumentFileName = fileNameQualifier.get(fileName + "." + fileExtension, caseDetails);
 
-        List<DocumentWithMetadata> bundleDocuments = getMaybeLetterNotificationDocuments(asylumCase, DocumentTag.INTERNAL_CMR_LISTING_LETTER);
+        List<DocumentWithMetadata> bundleDocuments = getMaybeLetterNotificationDocuments(asylumCase, DocumentTag.CMR_HEARING_CANCELLED_LETTER);
+
+        log.info("Found {} documents to bundle", bundleDocuments.size());
 
         Document cmrCancelledAipManualLetterBundle = documentBundler.bundleWithoutContentsOrCoverSheets(
                 bundleDocuments,
@@ -94,7 +103,7 @@ public class CmrCancelledAipManualLetterBundler implements PreSubmitCallbackHand
                 asylumCase,
                 cmrCancelledAipManualLetterBundle,
                 LETTER_BUNDLE_DOCUMENTS,
-                DocumentTag.CRM_HEARING_CANCELLED
+                DocumentTag.CMR_HEARING_CANCELLED_LETTER_BUNDLE
         );
 
         return new PreSubmitCallbackResponse<>(asylumCase);

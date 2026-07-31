@@ -18,8 +18,10 @@ import java.util.Objects;
 import java.util.Optional;
 
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.LETTER_NOTIFICATION_DOCUMENTS;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DetentionFacility.OTHER;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.Event.CMR_RE_LISTING;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.isAppellantInDetention;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.isDetainedInFacilityType;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.isInternalCase;
 
 @Component
@@ -53,7 +55,7 @@ public class InternalCmrReListingLetterGenerator implements PreSubmitCallbackHan
         return callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
                && callback.getEvent() == CMR_RE_LISTING
                && isInternalCase(asylumCase)
-               && !isAppellantInDetention(asylumCase);
+               && (!isAppellantInDetention(asylumCase) || isDetainedInFacilityType(asylumCase, OTHER));
     }
 
     public PreSubmitCallbackResponse<AsylumCase> handle(

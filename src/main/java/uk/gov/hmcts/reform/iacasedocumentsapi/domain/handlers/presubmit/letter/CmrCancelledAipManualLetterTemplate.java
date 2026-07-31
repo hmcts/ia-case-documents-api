@@ -11,6 +11,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.CustomerServicesPro
 
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.CMR_HEARING_CENTRE;
@@ -46,7 +47,7 @@ public class CmrCancelledAipManualLetterTemplate implements DocumentTemplate<Asy
         final HearingCentre hearingCentre =
                 asylumCase
                         .read(CMR_HEARING_CENTRE, HearingCentre.class)
-                        .orElseThrow(() -> new IllegalStateException("listCaseHearingCentre is not present"));
+                        .orElseThrow(() -> new IllegalStateException("hearing centre is not present"));
 
         final Map<String, Object> fieldValues = new HashMap<>();
 
@@ -56,6 +57,13 @@ public class CmrCancelledAipManualLetterTemplate implements DocumentTemplate<Asy
         fieldValues.put("hearingLocation", stringProvider.get("hearingCentreAddress", hearingCentre.toString()).orElse("").replaceAll(",\\s*", "\n"));
         fieldValues.put("hearingDate", formatDateTimeForRendering(asylumCase.read(CMR_HEARING_DATE, String.class).orElse(""), DOCUMENT_DATE_FORMAT));
 
+        List<String> appellantAddress = isAppellantInUk(asylumCase) ?
+                getAppellantAddressAsList(asylumCase) :
+                getAppellantAddressAsListOoc(asylumCase);
+
+        for (int i = 0; i < appellantAddress.size(); i++) {
+            fieldValues.put("address_line_" + (i + 1), appellantAddress.get(i));
+        }
         return fieldValues;
     }
 }
