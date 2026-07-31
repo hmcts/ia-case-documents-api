@@ -81,8 +81,7 @@ public class CmrListingHearingNoticeCreator implements PreSubmitCallbackHandler<
             );
         }
 
-        if (isInternalNonDetainedCase(asylumCase)
-            || (isInternalCase(asylumCase) && isDetainedInFacilityType(asylumCase, OTHER))) {
+        if (isInternalNonDetainedCase(asylumCase)) {
             documentHandler.addWithMetadataWithoutReplacingExistingDocuments(
                 asylumCase,
                 hearingNotice,

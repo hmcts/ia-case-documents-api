@@ -177,39 +177,14 @@ class CmrListingHearingNoticeCreatorTest {
     }
 
     @Test
-    void should_not_append_internal_cmr_listing_letter_when_detained_in_other_facility_and_not_internal_case() {
+    void should_not_append_internal_cmr_listing_letter_when_detained_in_other_facility() {
 
-        when(asylumCase.read(IS_ADMIN, YesOrNo.class)).thenReturn(Optional.of(NO));
         when(asylumCase.read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(YES));
         when(asylumCase.read(DETENTION_FACILITY, String.class)).thenReturn(Optional.of(DetentionFacility.OTHER.getValue()));
         when(cmrHearingNoticeDocumentCreator.create(caseDetails)).thenReturn(uploadedDocument);
 
         cmrListingHearingNoticeCreator.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
 
-        verify(documentHandler, never()).addWithMetadataWithoutReplacingExistingDocuments(
-            asylumCase, uploadedDocument, NOTIFICATION_ATTACHMENT_DOCUMENTS, DocumentTag.INTERNAL_CMR_LISTING_LETTER);
-        verify(documentHandler, never()).addWithMetadataWithoutReplacingExistingDocuments(
-            asylumCase, uploadedDocument, LETTER_NOTIFICATION_DOCUMENTS, DocumentTag.INTERNAL_CMR_LISTING_LETTER);
-    }
-
-    @Test
-    void should_append_internal_cmr_listing_letter_to_letter_notification_documents_when_internal_case_detained_in_other_facility() {
-
-        when(asylumCase.read(IS_ADMIN, YesOrNo.class)).thenReturn(Optional.of(YES));
-        when(asylumCase.read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(YES));
-        when(asylumCase.read(DETENTION_FACILITY, String.class)).thenReturn(Optional.of(DetentionFacility.OTHER.getValue()));
-        when(cmrHearingNoticeDocumentCreator.create(caseDetails)).thenReturn(uploadedDocument);
-
-        PreSubmitCallbackResponse<AsylumCase> callbackResponse =
-            cmrListingHearingNoticeCreator.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
-
-        assertNotNull(callbackResponse);
-        assertEquals(asylumCase, callbackResponse.getData());
-
-        verify(documentHandler, times(1)).addWithMetadataWithDateTimeWithoutReplacingExistingDocuments(
-            asylumCase, uploadedDocument, HEARING_DOCUMENTS, DocumentTag.HEARING_NOTICE);
-        verify(documentHandler, times(1)).addWithMetadataWithoutReplacingExistingDocuments(
-            asylumCase, uploadedDocument, LETTER_NOTIFICATION_DOCUMENTS, DocumentTag.INTERNAL_CMR_LISTING_LETTER);
         verify(documentHandler, never()).addWithMetadataWithoutReplacingExistingDocuments(
             asylumCase, uploadedDocument, NOTIFICATION_ATTACHMENT_DOCUMENTS, DocumentTag.INTERNAL_CMR_LISTING_LETTER);
     }
