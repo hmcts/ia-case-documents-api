@@ -90,6 +90,8 @@ class HearingNoticeUpdatedTemplateProviderTest {
         when(caseDetailsBefore.getCaseData()).thenReturn(asylumCaseBefore);
 
         when(asylumCase.read(SUBMIT_HEARING_REQUIREMENTS_AVAILABLE)).thenReturn(Optional.of(YesOrNo.NO));
+        when(asylumCase.read(CMR_HEARING_CENTRE, HearingCentre.class))
+                .thenReturn(Optional.empty());
 
         when(asylumCase.read(APPEAL_REFERENCE_NUMBER, String.class)).thenReturn(Optional.of(appealReferenceNumber));
         when(asylumCase.read(APPELLANT_GIVEN_NAMES, String.class)).thenReturn(Optional.of(appellantGivenNames));
@@ -150,6 +152,8 @@ class HearingNoticeUpdatedTemplateProviderTest {
         when(caseDetailsBefore.getCaseData()).thenReturn(asylumCaseBefore);
 
         when(asylumCase.read(SUBMIT_HEARING_REQUIREMENTS_AVAILABLE)).thenReturn(Optional.of(YesOrNo.NO));
+        when(asylumCase.read(CMR_HEARING_CENTRE, HearingCentre.class))
+                .thenReturn(Optional.empty());
 
         when(asylumCase.read(APPEAL_REFERENCE_NUMBER, String.class)).thenReturn(Optional.of(appealReferenceNumber));
         when(asylumCase.read(APPELLANT_GIVEN_NAMES, String.class)).thenReturn(Optional.of(appellantGivenNames));
@@ -190,6 +194,8 @@ class HearingNoticeUpdatedTemplateProviderTest {
         when(caseDetailsBefore.getCaseData()).thenReturn(asylumCaseBefore);
 
         when(asylumCase.read(SUBMIT_HEARING_REQUIREMENTS_AVAILABLE)).thenReturn(Optional.of(YesOrNo.NO));
+        when(asylumCase.read(CMR_HEARING_CENTRE, HearingCentre.class))
+                .thenReturn(Optional.empty());
 
         when(asylumCase.read(APPEAL_REFERENCE_NUMBER, String.class)).thenReturn(Optional.of(appealReferenceNumber));
         when(asylumCase.read(APPELLANT_GIVEN_NAMES, String.class)).thenReturn(Optional.of(appellantGivenNames));
@@ -230,6 +236,8 @@ class HearingNoticeUpdatedTemplateProviderTest {
         when(caseDetailsBefore.getCaseData()).thenReturn(asylumCaseBefore);
 
         when(asylumCase.read(SUBMIT_HEARING_REQUIREMENTS_AVAILABLE)).thenReturn(Optional.of(YesOrNo.NO));
+        when(asylumCase.read(CMR_HEARING_CENTRE, HearingCentre.class))
+                .thenReturn(Optional.empty());
 
         when(asylumCase.read(APPEAL_REFERENCE_NUMBER, String.class)).thenReturn(Optional.of(appealReferenceNumber));
         when(asylumCase.read(APPELLANT_GIVEN_NAMES, String.class)).thenReturn(Optional.of(appellantGivenNames));
@@ -270,6 +278,8 @@ class HearingNoticeUpdatedTemplateProviderTest {
         when(caseDetailsBefore.getCaseData()).thenReturn(asylumCaseBefore);
 
         when(asylumCase.read(SUBMIT_HEARING_REQUIREMENTS_AVAILABLE)).thenReturn(Optional.of(YesOrNo.NO));
+        when(asylumCase.read(CMR_HEARING_CENTRE, HearingCentre.class))
+                .thenReturn(Optional.empty());
 
         when(asylumCase.read(APPEAL_REFERENCE_NUMBER, String.class)).thenReturn(Optional.of(appealReferenceNumber));
         when(asylumCase.read(APPELLANT_GIVEN_NAMES, String.class)).thenReturn(Optional.of(appellantGivenNames));
@@ -309,6 +319,8 @@ class HearingNoticeUpdatedTemplateProviderTest {
         when(caseDetailsBefore.getCaseData()).thenReturn(asylumCaseBefore);
 
         when(asylumCase.read(SUBMIT_HEARING_REQUIREMENTS_AVAILABLE)).thenReturn(Optional.of(YesOrNo.NO));
+        when(asylumCase.read(CMR_HEARING_CENTRE, HearingCentre.class))
+                .thenReturn(Optional.empty());
 
         when(asylumCase.read(APPEAL_REFERENCE_NUMBER, String.class)).thenReturn(Optional.of(appealReferenceNumber));
         when(asylumCase.read(APPELLANT_GIVEN_NAMES, String.class)).thenReturn(Optional.of(appellantGivenNames));
@@ -349,6 +361,7 @@ class HearingNoticeUpdatedTemplateProviderTest {
         when(caseDetailsBefore.getCaseData()).thenReturn(asylumCaseBefore);
 
         when(asylumCase.read(SUBMIT_HEARING_REQUIREMENTS_AVAILABLE)).thenReturn(Optional.of(YesOrNo.NO));
+        when(asylumCase.read(CMR_HEARING_CENTRE, HearingCentre.class)).thenReturn(Optional.empty());
 
         when(asylumCase.read(APPEAL_REFERENCE_NUMBER, String.class)).thenReturn(Optional.of(appealReferenceNumber));
         when(asylumCase.read(APPELLANT_GIVEN_NAMES, String.class)).thenReturn(Optional.of(appellantGivenNames));
@@ -389,6 +402,8 @@ class HearingNoticeUpdatedTemplateProviderTest {
         when(caseDetailsBefore.getCaseData()).thenReturn(asylumCaseBefore);
 
         when(asylumCase.read(SUBMIT_HEARING_REQUIREMENTS_AVAILABLE)).thenReturn(Optional.of(YesOrNo.NO));
+        when(asylumCase.read(CMR_HEARING_CENTRE, HearingCentre.class))
+                .thenReturn(Optional.empty());
 
         when(asylumCase.read(APPEAL_REFERENCE_NUMBER, String.class)).thenReturn(Optional.of(appealReferenceNumber));
         when(asylumCase.read(APPELLANT_GIVEN_NAMES, String.class)).thenReturn(Optional.of(appellantGivenNames));
@@ -429,6 +444,8 @@ class HearingNoticeUpdatedTemplateProviderTest {
         when(caseDetailsBefore.getCaseData()).thenReturn(asylumCaseBefore);
 
         when(asylumCase.read(SUBMIT_HEARING_REQUIREMENTS_AVAILABLE)).thenReturn(Optional.of(YesOrNo.NO));
+        when(asylumCase.read(CMR_HEARING_CENTRE, HearingCentre.class))
+                .thenReturn(Optional.empty());
 
         when(asylumCase.read(APPEAL_REFERENCE_NUMBER, String.class)).thenReturn(Optional.of(appealReferenceNumber));
         when(asylumCase.read(APPELLANT_GIVEN_NAMES, String.class)).thenReturn(Optional.of(appellantGivenNames));
@@ -469,6 +486,8 @@ class HearingNoticeUpdatedTemplateProviderTest {
         when(caseDetailsBefore.getCaseData()).thenReturn(asylumCaseBefore);
 
         when(asylumCase.read(SUBMIT_HEARING_REQUIREMENTS_AVAILABLE)).thenReturn(Optional.of(YesOrNo.NO));
+        when(asylumCase.read(CMR_HEARING_CENTRE, HearingCentre.class))
+                .thenReturn(Optional.empty());
 
         when(asylumCase.read(APPEAL_REFERENCE_NUMBER, String.class)).thenReturn(Optional.of(appealReferenceNumber));
         when(asylumCase.read(APPELLANT_GIVEN_NAMES, String.class)).thenReturn(Optional.of(appellantGivenNames));
@@ -509,6 +528,8 @@ class HearingNoticeUpdatedTemplateProviderTest {
         when(caseDetailsBefore.getCaseData()).thenReturn(asylumCaseBefore);
 
         when(asylumCase.read(SUBMIT_HEARING_REQUIREMENTS_AVAILABLE)).thenReturn(Optional.of(YesOrNo.NO));
+        when(asylumCase.read(CMR_HEARING_CENTRE, HearingCentre.class))
+                .thenReturn(Optional.empty());
 
         when(asylumCase.read(APPEAL_REFERENCE_NUMBER, String.class)).thenReturn(Optional.of(appealReferenceNumber));
         when(asylumCase.read(APPELLANT_GIVEN_NAMES, String.class)).thenReturn(Optional.of(appellantGivenNames));
@@ -550,6 +571,8 @@ class HearingNoticeUpdatedTemplateProviderTest {
         when(caseDetailsBefore.getCaseData()).thenReturn(asylumCaseBefore);
 
         when(asylumCase.read(SUBMIT_HEARING_REQUIREMENTS_AVAILABLE)).thenReturn(Optional.of(YesOrNo.NO));
+        when(asylumCase.read(CMR_HEARING_CENTRE, HearingCentre.class))
+                .thenReturn(Optional.empty());
 
         when(asylumCase.read(APPEAL_REFERENCE_NUMBER, String.class)).thenReturn(Optional.of(appealReferenceNumber));
         when(asylumCase.read(APPELLANT_GIVEN_NAMES, String.class)).thenReturn(Optional.of(appellantGivenNames));
@@ -627,6 +650,8 @@ class HearingNoticeUpdatedTemplateProviderTest {
 
         when(asylumCase.read(SUBMIT_HEARING_REQUIREMENTS_AVAILABLE)).thenReturn(Optional.of(YesOrNo.NO));
         when(asylumCase.read(IS_VIRTUAL_HEARING, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO));
+        when(asylumCase.read(CMR_HEARING_CENTRE, HearingCentre.class))
+                .thenReturn(Optional.empty());
         when(asylumCase.read(IS_INTEGRATED, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO));
 
         when(asylumCase.read(APPEAL_REFERENCE_NUMBER, String.class)).thenReturn(Optional.of(appealReferenceNumber));
@@ -669,6 +694,8 @@ class HearingNoticeUpdatedTemplateProviderTest {
         when(caseDetailsBefore.getCaseData()).thenReturn(asylumCaseBefore);
 
         when(asylumCase.read(SUBMIT_HEARING_REQUIREMENTS_AVAILABLE)).thenReturn(Optional.of(YesOrNo.NO));
+        when(asylumCase.read(CMR_HEARING_CENTRE, HearingCentre.class))
+                .thenReturn(Optional.empty());
 
         when(asylumCase.read(APPEAL_REFERENCE_NUMBER, String.class)).thenReturn(Optional.of(appealReferenceNumber));
         when(asylumCase.read(APPELLANT_GIVEN_NAMES, String.class)).thenReturn(Optional.of(appellantGivenNames));
@@ -711,6 +738,8 @@ class HearingNoticeUpdatedTemplateProviderTest {
         when(caseDetailsBefore.getCaseData()).thenReturn(asylumCaseBefore);
 
         when(asylumCase.read(SUBMIT_HEARING_REQUIREMENTS_AVAILABLE)).thenReturn(Optional.of(YesOrNo.NO));
+        when(asylumCase.read(CMR_HEARING_CENTRE, HearingCentre.class))
+                .thenReturn(Optional.empty());
 
         when(asylumCase.read(APPEAL_REFERENCE_NUMBER, String.class)).thenReturn(Optional.of(appealReferenceNumber));
         when(asylumCase.read(APPELLANT_GIVEN_NAMES, String.class)).thenReturn(Optional.of(appellantGivenNames));
@@ -750,6 +779,8 @@ class HearingNoticeUpdatedTemplateProviderTest {
         when(caseDetailsBefore.getCaseData()).thenReturn(asylumCaseBefore);
 
         when(asylumCase.read(SUBMIT_HEARING_REQUIREMENTS_AVAILABLE)).thenReturn(Optional.of(YesOrNo.NO));
+        when(asylumCase.read(CMR_HEARING_CENTRE, HearingCentre.class))
+                .thenReturn(Optional.empty());
 
         when(asylumCase.read(APPEAL_REFERENCE_NUMBER, String.class)).thenReturn(Optional.of(appealReferenceNumber));
         when(asylumCase.read(APPELLANT_GIVEN_NAMES, String.class)).thenReturn(Optional.of(appellantGivenNames));
