@@ -21,6 +21,7 @@ import java.util.List;
 import static java.util.Objects.requireNonNull;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.LETTER_BUNDLE_DOCUMENTS;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.Event.CMR_LISTING;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.Event.CMR_RE_LISTING;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.*;
 
 @Component
@@ -64,7 +65,7 @@ public class InternalCmrListingNonDetainedAppellantLetterBundler implements PreS
         AsylumCase asylumCase = callback.getCaseDetails().getCaseData();
 
         return callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
-               && (callback.getEvent() == CMR_LISTING)
+               && (callback.getEvent() == CMR_LISTING || callback.getEvent() == CMR_RE_LISTING)
                && !isAppellantInDetention(asylumCase)
                && hasBeenSubmittedAsLegalRepresentedInternalCase(asylumCase)
                && isEmStitchingEnabled;

@@ -654,6 +654,16 @@ internalCmrReListingLetter.fileExtension: PDF
 internalCmrReListingLetter.fileName: "internal-cmr-relisting-letter"
 internalCmrReListingLetter.templateName: ${INTERNAL_CMR_RE_LISTING_LETTER_TEMPLATE:TB-IAC-LET-ENG-Internal-Edit-Case-Listing.docx}
 
+internalCmrReListingLrLetter.contentType:  application/pdf
+internalCmrReListingLrLetter.fileExtension: PDF
+internalCmrReListingLrLetter.fileName: "internal-cmr-relisting-lr-letter"
+internalCmrReListingLrLetter.templateName: ${INTERNAL_CMR_RE_LISTING_LETTER_TEMPLATE:TB-IAC-LET-ENG-Internal-Edit-Case-Listing.docx}
+
+internalCmrReListingAppellantLetter.contentType:  application/pdf
+internalCmrReListingAppellantLetter.fileExtension: PDF
+internalCmrReListingAppellantLetter.fileName: "internal-cmr-relisting-appellant-letter"
+internalCmrReListingAppellantLetter.templateName: ${INTERNAL_CMR_RE_LISTING_LETTER_TEMPLATE:TB-IAC-LET-ENG-Internal-Edit-Case-Listing.docx}
+
 cmrListingDetainedOtherAppellantLetter.contentType:  application/pdf
 cmrListingDetainedOtherAppellantLetter.fileExtension: PDF
 cmrListingDetainedOtherAppellantLetter.fileName: "cmr-listing-letter"
