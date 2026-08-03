@@ -45,7 +45,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentHandler;
 @ExtendWith(MockitoExtension.class)
 @SuppressWarnings("unchecked")
 @MockitoSettings(strictness = Strictness.LENIENT)
-class InternalCmrListingNonDetainedOrDetaindInPrisonOrIrcLrLetterGeneratorTest {
+class InternalCmrListingNonDetainedOrDetainedInPrisonOrIrcLrLetterGeneratorTest {
 
     @Mock private DocumentCreator<AsylumCase> documentCreator;
     @Mock private DocumentHandler documentHandler;
@@ -54,12 +54,12 @@ class InternalCmrListingNonDetainedOrDetaindInPrisonOrIrcLrLetterGeneratorTest {
     @Mock private AsylumCase asylumCase;
     @Mock private Document uploadedDocument;
 
-    private InternalCmrListingNonDetainedOrDetaindInPrisonOrIrcLrLetterGenerator internalCmrListingNonDetainedOrDetaindInPrisonOrIrcLrLetterGenerator;
+    private InternalCmrListingNonDetainedOrDetainedInPrisonOrIrcLrLetterGenerator internalCmrListingNonDetainedOrDetaindInPrisonOrIrcLrLetterGenerator;
 
     @BeforeEach
     public void setUp() {
         internalCmrListingNonDetainedOrDetaindInPrisonOrIrcLrLetterGenerator =
-            new InternalCmrListingNonDetainedOrDetaindInPrisonOrIrcLrLetterGenerator(documentCreator, documentHandler);
+            new InternalCmrListingNonDetainedOrDetainedInPrisonOrIrcLrLetterGenerator(documentCreator, documentHandler);
 
         when(callback.getCaseDetails()).thenReturn(caseDetails);
         when(caseDetails.getCaseData()).thenReturn(asylumCase);

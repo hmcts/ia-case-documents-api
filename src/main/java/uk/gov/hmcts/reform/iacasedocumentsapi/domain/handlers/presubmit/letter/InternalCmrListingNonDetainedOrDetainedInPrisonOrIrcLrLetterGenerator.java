@@ -12,9 +12,9 @@ import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DetentionFa
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.*;
 
 @Component
-public class InternalCmrListingNonDetainedOrDetaindInPrisonOrIrcLrLetterGenerator extends AbstractInternalCmrListingLetterGenerator {
+public class InternalCmrListingNonDetainedOrDetainedInPrisonOrIrcLrLetterGenerator extends AbstractInternalCmrListingLetterGenerator {
 
-    public InternalCmrListingNonDetainedOrDetaindInPrisonOrIrcLrLetterGenerator(
+    public InternalCmrListingNonDetainedOrDetainedInPrisonOrIrcLrLetterGenerator(
         @Qualifier("internalCmrListingLrLetter") DocumentCreator<AsylumCase> documentCreator,
         DocumentHandler documentHandler
     ) {
