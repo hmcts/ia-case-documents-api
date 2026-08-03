@@ -1,6 +1,7 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.service;
 
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.*;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.BailCaseFieldDefinition.IS_REMOTE_HEARING;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.formatDateTimeForRendering;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.getAppellantPersonalisation;
 
@@ -66,18 +67,29 @@ public class HearingNoticeFieldMapper {
             fieldValues.put("remoteVideoCallTribunalResponse", asylumCase.read(REMOTE_VIDEO_CALL_TRIBUNAL_RESPONSE, String.class).orElse(""));
         }
 
-        var hearingCentreField = AsylumCaseUtils.isCmrCase(asylumCase)
-                ? CMR_HEARING_CENTRE_ADDRESS
-                : LIST_CASE_HEARING_CENTRE_ADDRESS;
+        String hearingCentreAddress;
 
-        fieldValues.put(
-                "hearingCentreAddress",
-                isCaseUsingLocationRefData
-                        ? asylumCase.read(hearingCentreField, String.class).orElse("")
-                        : stringProvider.get("hearingCentreAddress", listedHearingCentre.toString())
-                        .orElse("")
-                        .replaceAll(",\\s*", "\n")
-        );
+        if (AsylumCaseUtils.isCmrCase(asylumCase)) {
+            HearingCentre hearingCentre = asylumCase
+                    .read(CMR_HEARING_CENTRE, HearingCentre.class)
+                    .orElseThrow(() -> new IllegalStateException("cmrHearingCentre is not present"));
+
+            hearingCentreAddress = stringProvider
+                    .get("hearingCentreAddress", hearingCentre.toString())
+                    .orElse("")
+                    .replaceAll(",\\s*", "\n");
+        } else if (isCaseUsingLocationRefData) {
+            hearingCentreAddress = asylumCase
+                    .read(LIST_CASE_HEARING_CENTRE_ADDRESS, String.class)
+                    .orElse("");
+        } else {
+            hearingCentreAddress = stringProvider
+                    .get("hearingCentreAddress", listedHearingCentre.toString())
+                    .orElse("")
+                    .replaceAll(",\\s*", "\n");
+        }
+
+        fieldValues.put("hearingCentreAddress", hearingCentreAddress);
 
         if (isSubmitRequirementsAvailable.isPresent() && isSubmitRequirementsAvailable.get() == YesOrNo.YES) {
             fieldValues.put("vulnerabilities", asylumCase.read(VULNERABILITIES_TRIBUNAL_RESPONSE, String.class).orElse("No special adjustments are being made to accommodate vulnerabilities"));
