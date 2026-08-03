@@ -118,6 +118,7 @@ public class HearingNoticeFieldMapper {
                     .replaceAll(",\\s*", "\n");
         }
 
+        log.info("Hearing centre address: {}", hearingCentreAddress);
         fieldValues.put("hearingCentreAddress", hearingCentreAddress);
 
         if (isSubmitRequirementsAvailable.isPresent()
