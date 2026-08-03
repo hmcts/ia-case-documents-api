@@ -7,12 +7,14 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DocumentTag;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentCreator;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentHandler;
 
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.hasBeenSubmittedAsLegalRepresentedInternalCase;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DetentionFacility.IRC;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DetentionFacility.PRISON;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.*;
 
 @Component
-public class InternalCmrListingNonDetainedLrLetterGenerator extends AbstractInternalCmrListingLetterGenerator {
+public class InternalCmrListingNonDetainedOrDetaindInPrisonOrIrcLrLetterGenerator extends AbstractInternalCmrListingLetterGenerator {
 
-    public InternalCmrListingNonDetainedLrLetterGenerator(
+    public InternalCmrListingNonDetainedOrDetaindInPrisonOrIrcLrLetterGenerator(
         @Qualifier("internalCmrListingLrLetter") DocumentCreator<AsylumCase> documentCreator,
         DocumentHandler documentHandler
     ) {
@@ -21,6 +23,7 @@ public class InternalCmrListingNonDetainedLrLetterGenerator extends AbstractInte
 
     @Override
     protected boolean isApplicable(AsylumCase asylumCase) {
-        return hasBeenSubmittedAsLegalRepresentedInternalCase(asylumCase);
+        return (!isDetainedAppeal(asylumCase) || isDetainedInOneOfFacilityTypes(asylumCase, IRC, PRISON))
+            && hasBeenSubmittedAsLegalRepresentedInternalCase(asylumCase);
     }
 }
