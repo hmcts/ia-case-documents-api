@@ -95,14 +95,15 @@ public class CmaAppointmentNoticeTemplateTest {
 
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
 
-        when(asylumCase.read(LIST_CASE_HEARING_CENTRE, HearingCentre.class)).thenReturn(Optional.of(MANCHESTER));
+        when(asylumCase.read(CMR_HEARING_CENTRE, HearingCentre.class))
+                .thenReturn(Optional.empty());
 
-
-        when(asylumCase.read(LIST_CASE_HEARING_CENTRE, HearingCentre.class)).thenReturn(Optional.empty());
+        when(asylumCase.read(LIST_CASE_HEARING_CENTRE, HearingCentre.class))
+                .thenReturn(Optional.empty());
 
         assertThatThrownBy(() -> cmaAppointmentNoticeTemplate.mapFieldValues(caseDetails))
-            .isExactlyInstanceOf(IllegalStateException.class)
-            .hasMessage("listCaseHearingCentre is not present");
+                .isExactlyInstanceOf(IllegalStateException.class)
+                .hasMessage("listCaseHearingCentre is not present");
     }
 
     @Test
@@ -111,6 +112,7 @@ public class CmaAppointmentNoticeTemplateTest {
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
 
         when(asylumCase.read(SUBMIT_HEARING_REQUIREMENTS_AVAILABLE)).thenReturn(Optional.of(YesOrNo.YES));
+        when(asylumCase.read(CMR_HEARING_CENTRE, HearingCentre.class)).thenReturn(Optional.empty());
 
         when(asylumCase.read(APPEAL_REFERENCE_NUMBER, String.class)).thenReturn(Optional.of(appealReferenceNumber));
         when(asylumCase.read(APPELLANT_GIVEN_NAMES, String.class)).thenReturn(Optional.of(appellantGivenNames));
@@ -158,6 +160,7 @@ public class CmaAppointmentNoticeTemplateTest {
         when(asylumCase.read(HOME_OFFICE_REFERENCE_NUMBER, String.class)).thenReturn(Optional.of(homeOfficeReferenceNumber));
         when(asylumCase.read(LEGAL_REP_REFERENCE_NUMBER, String.class)).thenReturn(Optional.of(legalRepReferenceNumber));
         when(asylumCase.read(CCD_REFERENCE_NUMBER_FOR_DISPLAY, String.class)).thenReturn(Optional.of(ccdReferenceNumber));
+        when(asylumCase.read(CMR_HEARING_CENTRE, HearingCentre.class)).thenReturn(Optional.empty());
 
         when(asylumCase.read(LIST_CASE_HEARING_DATE, String.class)).thenReturn(Optional.of(hearingDate));
 
@@ -213,6 +216,55 @@ public class CmaAppointmentNoticeTemplateTest {
     }
 
     @Test
+    public void should_map_case_data_to_template_field_values_for_cmr_case() {
+
+        when(caseDetails.getCaseData()).thenReturn(asylumCase);
+
+        when(asylumCase.read(SUBMIT_HEARING_REQUIREMENTS_AVAILABLE)).thenReturn(Optional.of(YesOrNo.YES));
+
+        when(asylumCase.read(APPEAL_REFERENCE_NUMBER, String.class)).thenReturn(Optional.of(appealReferenceNumber));
+        when(asylumCase.read(APPELLANT_GIVEN_NAMES, String.class)).thenReturn(Optional.of(appellantGivenNames));
+        when(asylumCase.read(APPELLANT_FAMILY_NAME, String.class)).thenReturn(Optional.of(appellantFamilyName));
+        when(asylumCase.read(HOME_OFFICE_REFERENCE_NUMBER, String.class)).thenReturn(Optional.of(homeOfficeReferenceNumber));
+        when(asylumCase.read(LEGAL_REP_REFERENCE_NUMBER, String.class)).thenReturn(Optional.of(legalRepReferenceNumber));
+        when(asylumCase.read(CCD_REFERENCE_NUMBER_FOR_DISPLAY, String.class)).thenReturn(Optional.of(ccdReferenceNumber));
+        when(asylumCase.read(LIST_CASE_HEARING_DATE, String.class)).thenReturn(Optional.of(hearingDate));
+        when(asylumCase.read(LIST_CASE_HEARING_CENTRE, HearingCentre.class))
+                .thenReturn(Optional.of(MANCHESTER));
+
+        // CMR
+        when(asylumCase.read(CMR_HEARING_CENTRE, HearingCentre.class)).thenReturn(Optional.of(MANCHESTER));
+
+        when(stringProvider.get("hearingCentreAddress", "manchester"))
+                .thenReturn(Optional.of(manchesterHearingCentreAddress));
+
+        when(asylumCase.read(VULNERABILITIES_TRIBUNAL_RESPONSE, String.class)).thenReturn(Optional.of(vulnerabilitiesTribunalResponse));
+        when(asylumCase.read(MULTIMEDIA_TRIBUNAL_RESPONSE, String.class)).thenReturn(Optional.of(multimediaTribunalResponse));
+        when(asylumCase.read(IN_CAMERA_COURT_TRIBUNAL_RESPONSE, String.class)).thenReturn(Optional.of(inCameraTribunalResponse));
+        when(asylumCase.read(SINGLE_SEX_COURT_TRIBUNAL_RESPONSE, String.class)).thenReturn(Optional.of(singleSexCourtTribunalResponse));
+        when(asylumCase.read(ADDITIONAL_TRIBUNAL_RESPONSE, String.class)).thenReturn(Optional.of(otherHearingRequestTribunalResponse));
+        when(asylumCase.read(PAST_EXPERIENCES_TRIBUNAL_RESPONSE, String.class)).thenReturn(Optional.of(pastExperienceTribunalResponse));
+        when(asylumCase.read(ARIA_LISTING_REFERENCE, String.class)).thenReturn(Optional.of(ariaListingReference));
+        when(asylumCase.read(IS_CASE_USING_LOCATION_REF_DATA, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO));
+        when(asylumCase.read(IS_VIRTUAL_HEARING, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO));
+
+        when(customerServicesProvider.getCustomerServicesTelephone()).thenReturn(customerServicesTelephone);
+        when(customerServicesProvider.getCustomerServicesEmail()).thenReturn(customerServicesEmail);
+
+        when(direction.getExplanation()).thenReturn(directionExplanation);
+        when(directionFinder.findFirst(asylumCase, DirectionTag.REQUEST_CMA_REQUIREMENTS))
+                .thenReturn(Optional.of(direction));
+
+        when(hearingDetailsFinder.getHearingCentreUrl(MANCHESTER)).thenReturn(hearingCentreUrl);
+        when(asylumCase.read(IS_INTEGRATED, YesOrNo.class)).thenReturn(Optional.of(isIntegrated));
+
+        Map<String, Object> templateFieldValues = cmaAppointmentNoticeTemplate.mapFieldValues(caseDetails);
+
+        assertEquals(expectedFormattedManchesterHearingCentreAddress,
+                templateFieldValues.get("hearingCentreAddress"));
+    }
+
+    @Test
     public void should_be_tolerant_of_missing_data() {
 
 
@@ -252,6 +304,7 @@ public class CmaAppointmentNoticeTemplateTest {
         when(asylumCase.read(APPELLANT_GIVEN_NAMES, String.class)).thenReturn(Optional.empty());
         when(asylumCase.read(APPELLANT_FAMILY_NAME, String.class)).thenReturn(Optional.empty());
         when(asylumCase.read(HOME_OFFICE_REFERENCE_NUMBER, String.class)).thenReturn(Optional.empty());
+        when(asylumCase.read(CMR_HEARING_CENTRE, HearingCentre.class)).thenReturn(Optional.empty());
         when(asylumCase.read(LEGAL_REP_REFERENCE_NUMBER, String.class)).thenReturn(Optional.empty());
         when(asylumCase.read(CCD_REFERENCE_NUMBER_FOR_DISPLAY, String.class)).thenReturn(Optional.empty());
         when(asylumCase.read(LIST_CASE_HEARING_DATE, String.class)).thenReturn(Optional.empty());

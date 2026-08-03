@@ -38,75 +38,134 @@ public class HearingNoticeFieldMapper {
 
         final Map<String, Object> fieldValues = new HashMap<>();
 
-        final HearingCentre listedHearingCentre =
-            asylumCase
-                .read(LIST_CASE_HEARING_CENTRE, HearingCentre.class)
+        final boolean isCmrCase = AsylumCaseUtils.isCmrCase(asylumCase);
+
+        final HearingCentre hearingCentre = isCmrCase
+                ? asylumCase.read(CMR_HEARING_CENTRE, HearingCentre.class)
+                .orElseThrow(() -> new IllegalStateException("cmrHearingCentre is not present"))
+                : asylumCase.read(LIST_CASE_HEARING_CENTRE, HearingCentre.class)
                 .orElseThrow(() -> new IllegalStateException("listCaseHearingCentre is not present"));
-        final Optional<YesOrNo> isSubmitRequirementsAvailable = asylumCase.read(SUBMIT_HEARING_REQUIREMENTS_AVAILABLE);
+
+        final Optional<YesOrNo> isSubmitRequirementsAvailable =
+                asylumCase.read(SUBMIT_HEARING_REQUIREMENTS_AVAILABLE);
 
         fieldValues.putAll(getAppellantPersonalisation(asylumCase));
-        fieldValues.put("legalRepReferenceNumber", asylumCase.read(LEGAL_REP_REFERENCE_NUMBER, String.class).orElse(""));
-        fieldValues.put("hearingDate", formatDateTimeForRendering(asylumCase.read(LIST_CASE_HEARING_DATE, String.class).orElse(""), DOCUMENT_DATE_FORMAT));
-        fieldValues.put("hearingTime", formatDateTimeForRendering(asylumCase.read(LIST_CASE_HEARING_DATE, String.class).orElse(""), DOCUMENT_TIME_FORMAT));
+        fieldValues.put("legalRepReferenceNumber",
+                asylumCase.read(LEGAL_REP_REFERENCE_NUMBER, String.class).orElse(""));
+        fieldValues.put("hearingDate",
+                formatDateTimeForRendering(
+                        asylumCase.read(LIST_CASE_HEARING_DATE, String.class).orElse(""),
+                        DOCUMENT_DATE_FORMAT));
+        fieldValues.put("hearingTime",
+                formatDateTimeForRendering(
+                        asylumCase.read(LIST_CASE_HEARING_DATE, String.class).orElse(""),
+                        DOCUMENT_TIME_FORMAT));
 
-        String referenceNumber = asylumCase.read(CCD_REFERENCE_NUMBER_FOR_DISPLAY, String.class).orElse("");
-        fieldValues.put("ccdReferenceNumberForDisplay", referenceNumber);
+        fieldValues.put(
+                "ccdReferenceNumberForDisplay",
+                asylumCase.read(CCD_REFERENCE_NUMBER_FOR_DISPLAY, String.class).orElse("")
+        );
 
-        boolean isCaseUsingLocationRefData = asylumCase.read(IS_CASE_USING_LOCATION_REF_DATA, YesOrNo.class)
-                .orElse(YesOrNo.NO).equals(YesOrNo.YES);
+        boolean isCaseUsingLocationRefData =
+                asylumCase.read(IS_CASE_USING_LOCATION_REF_DATA, YesOrNo.class)
+                        .orElse(YesOrNo.NO)
+                        .equals(YesOrNo.YES);
 
-        //prevent the existing case with previous selected remote hearing when the ref data feature is on with different hearing centre
-        //IS_REMOTE_HEARING is used for the case ref data
-        if ((!isCaseUsingLocationRefData && listedHearingCentre.equals(HearingCentre.REMOTE_HEARING))
-                || (isCaseUsingLocationRefData && asylumCase.read(IS_REMOTE_HEARING, YesOrNo.class).orElse(YesOrNo.NO).equals(YesOrNo.YES))) {
+        // Prevent existing cases with previous selected remote hearing when the ref data feature is on.
+        if ((!isCaseUsingLocationRefData && hearingCentre.equals(HearingCentre.REMOTE_HEARING))
+                || (isCaseUsingLocationRefData
+                && asylumCase.read(IS_REMOTE_HEARING, YesOrNo.class)
+                .orElse(YesOrNo.NO)
+                .equals(YesOrNo.YES))) {
+
             fieldValues.put("remoteHearing", "Remote hearing");
-            fieldValues.put("remoteVideoCallTribunalResponse", asylumCase.read(REMOTE_VIDEO_CALL_TRIBUNAL_RESPONSE, String.class).orElse(""));
-        } else if (asylumCase.read(IS_VIRTUAL_HEARING, YesOrNo.class).orElse(YesOrNo.NO).equals(YesOrNo.YES)) {
+            fieldValues.put(
+                    "remoteVideoCallTribunalResponse",
+                    asylumCase.read(REMOTE_VIDEO_CALL_TRIBUNAL_RESPONSE, String.class).orElse("")
+            );
+
+        } else if (asylumCase.read(IS_VIRTUAL_HEARING, YesOrNo.class)
+                .orElse(YesOrNo.NO)
+                .equals(YesOrNo.YES)) {
+
             fieldValues.put("remoteHearing", "IAC National (Virtual)");
-            fieldValues.put("remoteVideoCallTribunalResponse", asylumCase.read(REMOTE_VIDEO_CALL_TRIBUNAL_RESPONSE, String.class).orElse(""));
+            fieldValues.put(
+                    "remoteVideoCallTribunalResponse",
+                    asylumCase.read(REMOTE_VIDEO_CALL_TRIBUNAL_RESPONSE, String.class).orElse("")
+            );
         }
 
         String hearingCentreAddress;
 
-        if (AsylumCaseUtils.isCmrCase(asylumCase)) {
-            HearingCentre hearingCentre = asylumCase
-                    .read(CMR_HEARING_CENTRE, HearingCentre.class)
-                    .orElseThrow(() -> new IllegalStateException("cmrHearingCentre is not present"));
+        if (isCmrCase) {
 
             hearingCentreAddress = stringProvider
                     .get("hearingCentreAddress", hearingCentre.toString())
                     .orElse("")
                     .replaceAll(",\\s*", "\n");
+
         } else if (isCaseUsingLocationRefData) {
+
             hearingCentreAddress = asylumCase
                     .read(LIST_CASE_HEARING_CENTRE_ADDRESS, String.class)
                     .orElse("");
+
         } else {
+
             hearingCentreAddress = stringProvider
-                    .get("hearingCentreAddress", listedHearingCentre.toString())
+                    .get("hearingCentreAddress", hearingCentre.toString())
                     .orElse("")
                     .replaceAll(",\\s*", "\n");
         }
 
         fieldValues.put("hearingCentreAddress", hearingCentreAddress);
 
-        if (isSubmitRequirementsAvailable.isPresent() && isSubmitRequirementsAvailable.get() == YesOrNo.YES) {
-            fieldValues.put("vulnerabilities", asylumCase.read(VULNERABILITIES_TRIBUNAL_RESPONSE, String.class).orElse("No special adjustments are being made to accommodate vulnerabilities"));
-            fieldValues.put("multimedia", asylumCase.read(MULTIMEDIA_TRIBUNAL_RESPONSE, String.class).orElse("No multimedia equipment is being provided"));
-            fieldValues.put("singleSexCourt", asylumCase.read(SINGLE_SEX_COURT_TRIBUNAL_RESPONSE, String.class).orElse("The court will not be single sex"));
-            fieldValues.put("inCamera", asylumCase.read(IN_CAMERA_COURT_TRIBUNAL_RESPONSE, String.class).orElse("The hearing will be held in public court"));
-            fieldValues.put("otherHearingRequest", asylumCase.read(ADDITIONAL_TRIBUNAL_RESPONSE, String.class).orElse("No other adjustments are being made"));
+        if (isSubmitRequirementsAvailable.isPresent()
+                && isSubmitRequirementsAvailable.get() == YesOrNo.YES) {
+
+            fieldValues.put("vulnerabilities",
+                    asylumCase.read(VULNERABILITIES_TRIBUNAL_RESPONSE, String.class)
+                            .orElse("No special adjustments are being made to accommodate vulnerabilities"));
+            fieldValues.put("multimedia",
+                    asylumCase.read(MULTIMEDIA_TRIBUNAL_RESPONSE, String.class)
+                            .orElse("No multimedia equipment is being provided"));
+            fieldValues.put("singleSexCourt",
+                    asylumCase.read(SINGLE_SEX_COURT_TRIBUNAL_RESPONSE, String.class)
+                            .orElse("The court will not be single sex"));
+            fieldValues.put("inCamera",
+                    asylumCase.read(IN_CAMERA_COURT_TRIBUNAL_RESPONSE, String.class)
+                            .orElse("The hearing will be held in public court"));
+            fieldValues.put("otherHearingRequest",
+                    asylumCase.read(ADDITIONAL_TRIBUNAL_RESPONSE, String.class)
+                            .orElse("No other adjustments are being made"));
+
         } else {
-            fieldValues.put("vulnerabilities", asylumCase.read(LIST_CASE_REQUIREMENTS_VULNERABILITIES, String.class).orElse("No special adjustments are being made to accommodate vulnerabilities"));
-            fieldValues.put("multimedia", asylumCase.read(LIST_CASE_REQUIREMENTS_MULTIMEDIA, String.class).orElse("No multimedia equipment is being provided"));
-            fieldValues.put("singleSexCourt", asylumCase.read(LIST_CASE_REQUIREMENTS_SINGLE_SEX_COURT, String.class).orElse("The court will not be single sex"));
-            fieldValues.put("inCamera", asylumCase.read(LIST_CASE_REQUIREMENTS_IN_CAMERA_COURT, String.class).orElse("The hearing will be held in public court"));
-            fieldValues.put("otherHearingRequest", asylumCase.read(LIST_CASE_REQUIREMENTS_OTHER, String.class).orElse("No other adjustments are being made"));
+
+            fieldValues.put("vulnerabilities",
+                    asylumCase.read(LIST_CASE_REQUIREMENTS_VULNERABILITIES, String.class)
+                            .orElse("No special adjustments are being made to accommodate vulnerabilities"));
+            fieldValues.put("multimedia",
+                    asylumCase.read(LIST_CASE_REQUIREMENTS_MULTIMEDIA, String.class)
+                            .orElse("No multimedia equipment is being provided"));
+            fieldValues.put("singleSexCourt",
+                    asylumCase.read(LIST_CASE_REQUIREMENTS_SINGLE_SEX_COURT, String.class)
+                            .orElse("The court will not be single sex"));
+            fieldValues.put("inCamera",
+                    asylumCase.read(LIST_CASE_REQUIREMENTS_IN_CAMERA_COURT, String.class)
+                            .orElse("The hearing will be held in public court"));
+            fieldValues.put("otherHearingRequest",
+                    asylumCase.read(LIST_CASE_REQUIREMENTS_OTHER, String.class)
+                            .orElse("No other adjustments are being made"));
         }
-        fieldValues.put("ariaListingReference", asylumCase.read(ARIA_LISTING_REFERENCE, String.class).orElse(""));
-        fieldValues.put("customerServicesTelephone", customerServicesProvider.getCustomerServicesTelephone());
-        fieldValues.put("customerServicesEmail", customerServicesProvider.getCustomerServicesEmail());
-        fieldValues.put("isIntegrated", asylumCase.read(IS_INTEGRATED, YesOrNo.class).orElse(YesOrNo.NO));
+
+        fieldValues.put("ariaListingReference",
+                asylumCase.read(ARIA_LISTING_REFERENCE, String.class).orElse(""));
+        fieldValues.put("customerServicesTelephone",
+                customerServicesProvider.getCustomerServicesTelephone());
+        fieldValues.put("customerServicesEmail",
+                customerServicesProvider.getCustomerServicesEmail());
+        fieldValues.put("isIntegrated",
+                asylumCase.read(IS_INTEGRATED, YesOrNo.class).orElse(YesOrNo.NO));
 
         return fieldValues;
     }

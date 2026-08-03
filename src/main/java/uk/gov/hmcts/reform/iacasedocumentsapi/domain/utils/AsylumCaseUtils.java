@@ -315,7 +315,7 @@ public class AsylumCaseUtils {
     }
 
     public static boolean isCmrCase(AsylumCase asylumCase) {
-        return asylumCase.read(CMR_HEARING_CENTRE, YesOrNo.class).isPresent();
+        return asylumCase.read(CMR_HEARING_CENTRE, HearingCentre.class).isPresent();
     }
 
     public static boolean isVirtualHearing(AsylumCase asylumCase) {
