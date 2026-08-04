@@ -1,6 +1,5 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit.letter;
 
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
@@ -24,9 +23,8 @@ import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseD
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.Event.CMR_HEARING_CANCELLED;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.*;
 
-@Slf4j
 @Component
-public class CmrCancelledAipManualLetterBundler implements PreSubmitCallbackHandler<AsylumCase> {
+public class CmrCancelledLrManualLetterBundler implements PreSubmitCallbackHandler<AsylumCase> {
 
     private final String fileExtension;
     private final String fileName;
@@ -35,9 +33,9 @@ public class CmrCancelledAipManualLetterBundler implements PreSubmitCallbackHand
     private final DocumentBundler documentBundler;
     private final DocumentHandler documentHandler;
 
-    public CmrCancelledAipManualLetterBundler(
-            @Value("${cmrCancelledAipManualLetter.fileExtension}") String fileExtension,
-            @Value("${cmrCancelledAipManualLetter.fileName}") String fileName,
+    public CmrCancelledLrManualLetterBundler(
+            @Value("${cmrCancelledLrManualLetter.fileExtension}") String fileExtension,
+            @Value("${cmrCancelledLrManualLetter.fileName}") String fileName,
             @Value("${featureFlag.isEmStitchingEnabled}") boolean isEmStitchingEnabled,
             FileNameQualifier<AsylumCase> fileNameQualifier,
             DocumentBundler documentBundler,
@@ -49,7 +47,6 @@ public class CmrCancelledAipManualLetterBundler implements PreSubmitCallbackHand
         this.fileNameQualifier = fileNameQualifier;
         this.documentBundler = documentBundler;
         this.documentHandler = documentHandler;
-        log.info("CmrCancelledAipManualLetterBundler initialised");
     }
 
     @Override
@@ -66,14 +63,12 @@ public class CmrCancelledAipManualLetterBundler implements PreSubmitCallbackHand
 
         AsylumCase asylumCase = callback.getCaseDetails().getCaseData();
 
-        log.info("getEvent: {} for case reference {}", callback.getEvent(), callback.getCaseDetails().getId());
-        log.info("isCmrHearingInPersonOrRemote: {} for case reference: {}", isCmrHearingInPersonOrRemote(asylumCase),  callback.getCaseDetails().getId());
-        log.info("hasBeenSubmittedByAppellantInternalCase: {} for case reference: {}", hasBeenSubmittedByAppellantInternalCase(asylumCase), callback.getCaseDetails().getId());
-
         return callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
-                && CMR_HEARING_CANCELLED.equals(callback.getEvent())
+                && callback.getEvent() == CMR_HEARING_CANCELLED
                 && isCmrHearingInPersonOrRemote(asylumCase)
-                && hasBeenSubmittedByAppellantInternalCase(asylumCase);
+                && isRepJourney(asylumCase)
+                && isInternalCase(asylumCase)
+                && !isAppellantInDetention(asylumCase);
     }
 
     public PreSubmitCallbackResponse<AsylumCase> handle(
@@ -89,11 +84,9 @@ public class CmrCancelledAipManualLetterBundler implements PreSubmitCallbackHand
 
         final String qualifiedDocumentFileName = fileNameQualifier.get(fileName + "." + fileExtension, caseDetails);
 
-        List<DocumentWithMetadata> bundleDocuments = getMaybeLetterNotificationDocuments(asylumCase, DocumentTag.CMR_HEARING_CANCELLED_LETTER);
+        List<DocumentWithMetadata> bundleDocuments = getMaybeLetterNotificationDocuments(asylumCase, DocumentTag.CMR_HEARING_CANCELLED_LR_LETTER);
 
-        log.info("Found {} documents to bundle", bundleDocuments.size());
-
-        Document cmrCancelledAipManualLetterBundle = documentBundler.bundleWithoutContentsOrCoverSheets(
+        Document cmrCancelledLrManualLetterBundle = documentBundler.bundleWithoutContentsOrCoverSheets(
                 bundleDocuments,
                 "Letter bundle documents",
                 qualifiedDocumentFileName
@@ -101,9 +94,9 @@ public class CmrCancelledAipManualLetterBundler implements PreSubmitCallbackHand
 
         documentHandler.addWithMetadataWithoutReplacingExistingDocuments(
                 asylumCase,
-                cmrCancelledAipManualLetterBundle,
+                cmrCancelledLrManualLetterBundle,
                 LETTER_BUNDLE_DOCUMENTS,
-                DocumentTag.CMR_HEARING_CANCELLED_LETTER_BUNDLE
+                DocumentTag.CMR_HEARING_CANCELLED_LR_LETTER_BUNDLE
         );
 
         return new PreSubmitCallbackResponse<>(asylumCase);

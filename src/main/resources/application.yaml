@@ -649,10 +649,15 @@ cmrListingDetainedOtherAppellantLetter.fileExtension: PDF
 cmrListingDetainedOtherAppellantLetter.fileName: "cmr-listing-letter"
 cmrListingDetainedOtherAppellantLetter.templateName: ${INTERNAL_CASE_LISTED_LETTER_TEMPLATE:TB-IAC-LET-ENG-Internal-Case-Listed.docx}
 
-cmrCancelledAipManualLetter.contentType:  application/pdf
-cmrCancelledAipManualLetter.fileExtension: PDF
-cmrCancelledAipManualLetter.fileName: "cmr-cancelled_aip_letter"
-cmrCancelledAipManualLetter.templateName: ${CMR_CANCELLED_AIP_MANUAL_LETTER_TEMPLATE:TB-IAC-LET-ENG-CRM-Cancelled-AIP-Manual.docx}
+cmrCancelledAppellantManualLetter.contentType:  application/pdf
+cmrCancelledAppellantManualLetter.fileExtension: PDF
+cmrCancelledAppellantManualLetter.fileName: "cmr-cancelled_aip_letter"
+cmrCancelledAppellantManualLetter.templateName: ${CMR_CANCELLED_AIP_MANUAL_LETTER_TEMPLATE:TB-IAC-LET-ENG-CRM-Cancelled-AIP-Manual.docx}
+
+cmrCancelledLrManualLetter.contentType:  application/pdf
+cmrCancelledLrManualLetter.fileExtension: PDF
+cmrCancelledLrManualLetter.fileName: "cmr-cancelled_lr_letter"
+cmrCancelledLrManualLetter.templateName: ${CRM_CANCELLED_LR_MANUAL_LETTER_TEMPLATE:TB-IAC-LET-ENG-CRM-Cancelled-AIP-Manual.docx}
 
 internalCaseListedLetterWithAttachment.fileExtension: PDF
 internalCaseListedLetterWithAttachment.fileName: "internal-case-listed-letter-with-attachment"
