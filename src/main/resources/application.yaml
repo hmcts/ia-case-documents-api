@@ -634,6 +634,16 @@ internalCaseListedLetter.fileExtension: PDF
 internalCaseListedLetter.fileName: "internal-case-listed-letter"
 internalCaseListedLetter.templateName: ${INTERNAL_CASE_LISTED_LETTER_TEMPLATE:TB-IAC-LET-ENG-Internal-Case-Listed.docx}
 
+internalCmrListingLrLetter.contentType:  application/pdf
+internalCmrListingLrLetter.fileExtension: PDF
+internalCmrListingLrLetter.fileName: "internal-cmr-listing-lr-letter"
+internalCmrListingLrLetter.templateName: ${INTERNAL_CASE_LISTED_LETTER_TEMPLATE:TB-IAC-LET-ENG-Internal-Case-Listed.docx}
+
+internalCmrListingAppellantLetter.contentType:  application/pdf
+internalCmrListingAppellantLetter.fileExtension: PDF
+internalCmrListingAppellantLetter.fileName: "internal-cmr-listing-appellant-letter"
+internalCmrListingAppellantLetter.templateName: ${INTERNAL_CASE_LISTED_LETTER_TEMPLATE:TB-IAC-LET-ENG-Internal-Case-Listed.docx}
+
 internalCmrListingLetter.contentType:  application/pdf
 internalCmrListingLetter.fileExtension: PDF
 internalCmrListingLetter.fileName: "internal-cmr-listing-letter"
@@ -662,6 +672,12 @@ cmrListingDetainedOtherLetterWithAttachment.fileName: "cmr-listing-letter-with-a
 
 internalCmrListingLetterWithAttachment.fileExtension: PDF
 internalCmrListingLetterWithAttachment.fileName: "internal-cmr-listing-letter-with-attachment"
+
+internalCmrListingNonDetainedAppellantLetterWithAttachment.fileExtension: PDF
+internalCmrListingNonDetainedAppellantLetterWithAttachment.fileName: "internal-cmr-listing-appellant-letter-with-attachment"
+
+internalCmrListingNonDetainedLrLetterWithAttachment.fileExtension: PDF
+internalCmrListingNonDetainedLrLetterWithAttachment.fileName: "internal-cmr-listing-lr-letter-with-attachment"
 
 detainedLegalRepRemovedIrcPrisonLetter.contentType: application/pdf
 detainedLegalRepRemovedIrcPrisonLetter.fileExtension: PDF
