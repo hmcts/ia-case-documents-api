@@ -35,6 +35,7 @@ import org.mockito.quality.Strictness;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DocumentTag;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DocumentWithMetadata;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.HearingCentre;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseDetails;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.Event;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.Callback;
@@ -46,6 +47,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentBundler;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentHandler;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.FileNameQualifier;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.StringProvider;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.SystemDateProvider;
 
 @ExtendWith(MockitoExtension.class)
@@ -56,6 +58,7 @@ class InternalCmrListingAppellantLetterBundlerTest {
     @Mock private CaseDetails<AsylumCase> caseDetails;
     @Mock private AsylumCase asylumCase;
     @Mock private FileNameQualifier<AsylumCase> fileNameQualifier;
+    @Mock private StringProvider stringProvider;
     @Mock private DocumentBundler documentBundler;
     @Mock private DocumentHandler documentHandler;
     @Mock private Document bundleDocument;
@@ -83,7 +86,8 @@ class InternalCmrListingAppellantLetterBundlerTest {
             isEmStitchingEnabled,
             fileNameQualifier,
             documentBundler,
-            documentHandler);
+            documentHandler,
+            stringProvider);
     }
 
     @ParameterizedTest
@@ -164,6 +168,7 @@ class InternalCmrListingAppellantLetterBundlerTest {
         IdValue<DocumentWithMetadata> doc2 = new IdValue<>("2", createDocumentWithMetadata());
 
         when(asylumCase.read(LETTER_NOTIFICATION_DOCUMENTS)).thenReturn(Optional.of(List.of(doc1, doc2)));
+        when(asylumCase.read(LIST_CASE_HEARING_CENTRE, HearingCentre.class)).thenReturn(Optional.of(HearingCentre.TAYLOR_HOUSE));
         when(documentBundler.bundleWithoutContentsOrCoverSheets(
             anyList(),
             eq("Letter bundle documents"),
