@@ -95,32 +95,13 @@ public class HearingNoticeFieldMapper {
             );
         }
 
-        String hearingCentreAddress;
+        final HearingCentre listedHearingCentre =
+                asylumCase
+                        .read(CMR_HEARING_CENTRE, HearingCentre.class)
+                        .orElseThrow(() -> new IllegalStateException("listCaseHearingCentre is not present"));
 
-        if (isCmrCase) {
+        fieldValues.put("hearingCentreAddress", stringProvider.get("hearingCentreAddress", listedHearingCentre.toString()).orElse("").replaceAll(",\\s*", "\n"));
 
-            hearingCentreAddress = stringProvider
-                    .get("hearingCentreAddress", hearingCentre.toString())
-                    .orElse("")
-                    .replaceAll(",\\s*", "\n");
-
-        } else if (isCaseUsingLocationRefData) {
-
-            hearingCentreAddress = asylumCase
-                    .read(LIST_CASE_HEARING_CENTRE_ADDRESS, String.class)
-                    .orElse("");
-
-        } else {
-
-            hearingCentreAddress = stringProvider
-                    .get("hearingCentreAddress", hearingCentre.toString())
-                    .orElse("")
-                    .replaceAll(",\\s*", "\n");
-        }
-
-        log.info("isCmrCase: {}", isCmrCase);
-        log.info("Hearing centre address: {}", hearingCentreAddress);
-        fieldValues.put("hearingCentreAddress", hearingCentreAddress);
 
         if (isSubmitRequirementsAvailable.isPresent()
                 && isSubmitRequirementsAvailable.get() == YesOrNo.YES) {
