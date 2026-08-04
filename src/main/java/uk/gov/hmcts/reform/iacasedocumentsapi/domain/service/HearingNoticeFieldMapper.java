@@ -120,7 +120,6 @@ public class HearingNoticeFieldMapper {
 
         log.info("isCmrCase: {}", isCmrCase);
         log.info("Hearing centre address: {}", hearingCentreAddress);
-        log.info("Sponsor name: {}", asylumCase.read(SPONSOR_GIVEN_NAMES, String.class).orElse(""));
         fieldValues.put("hearingCentreAddress", hearingCentreAddress);
 
         if (isSubmitRequirementsAvailable.isPresent()
