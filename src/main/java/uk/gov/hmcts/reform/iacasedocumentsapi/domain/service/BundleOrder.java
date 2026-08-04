@@ -417,6 +417,14 @@ public class BundleOrder implements Comparator<DocumentWithMetadata> {
                 log.warn("CMR_HEARING_CANCELLED_LETTER_BUNDLE tag should not be checked for bundle ordering, document desc: {}", document.getDescription());
                 yield 116;
             }
+            case CMR_HEARING_CANCELLED_LR_LETTER -> {
+                log.warn("CMR_HEARING_CANCELLED_LR_LETTER tag should not be checked for bundle ordering, document desc: {}", document.getDescription());
+                yield 115;
+            }
+            case CMR_HEARING_CANCELLED_LR_LETTER_BUNDLE -> {
+                log.warn("CMR_HEARING_CANCELLED_LR_LETTER_BUNDLE tag should not be checked for bundle ordering, document desc: {}", document.getDescription());
+                yield 116;
+            }
             case STF_24WEEKS_CASE_REVIEW_APPELLANT_DOCUMENT -> {
                 log.warn("STF_24WEEKS_CASE_REVIEW_APPELLANT_DOCUMENT tag should not be checked for bundle ordering, document desc: {}", document.getDescription());
                 yield 113;
