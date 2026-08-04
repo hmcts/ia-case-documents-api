@@ -50,16 +50,27 @@ public class HearingNoticeFieldMapper {
                 asylumCase.read(SUBMIT_HEARING_REQUIREMENTS_AVAILABLE);
 
         fieldValues.putAll(getAppellantPersonalisation(asylumCase));
-        fieldValues.put("legalRepReferenceNumber",
-                asylumCase.read(LEGAL_REP_REFERENCE_NUMBER, String.class).orElse(""));
-        fieldValues.put("hearingDate",
+
+        fieldValues.put(
+                "legalRepReferenceNumber",
+                asylumCase.read(LEGAL_REP_REFERENCE_NUMBER, String.class).orElse("")
+        );
+
+        fieldValues.put(
+                "hearingDate",
                 formatDateTimeForRendering(
                         asylumCase.read(LIST_CASE_HEARING_DATE, String.class).orElse(""),
-                        DOCUMENT_DATE_FORMAT));
-        fieldValues.put("hearingTime",
+                        DOCUMENT_DATE_FORMAT
+                )
+        );
+
+        fieldValues.put(
+                "hearingTime",
                 formatDateTimeForRendering(
                         asylumCase.read(LIST_CASE_HEARING_DATE, String.class).orElse(""),
-                        DOCUMENT_TIME_FORMAT));
+                        DOCUMENT_TIME_FORMAT
+                )
+        );
 
         fieldValues.put(
                 "ccdReferenceNumberForDisplay",
@@ -71,7 +82,6 @@ public class HearingNoticeFieldMapper {
                         .orElse(YesOrNo.NO)
                         .equals(YesOrNo.YES);
 
-        // Prevent existing cases with previous selected remote hearing when the ref data feature is on.
         if ((!isCaseUsingLocationRefData && hearingCentre.equals(HearingCentre.REMOTE_HEARING))
                 || (isCaseUsingLocationRefData
                 && asylumCase.read(IS_REMOTE_HEARING, YesOrNo.class)
@@ -95,13 +105,23 @@ public class HearingNoticeFieldMapper {
             );
         }
 
-        final HearingCentre listedHearingCentre =
-                asylumCase
-                        .read(CMR_HEARING_CENTRE, HearingCentre.class)
-                        .orElseThrow(() -> new IllegalStateException("listCaseHearingCentre is not present"));
-
-        fieldValues.put("hearingCentreAddress", stringProvider.get("hearingCentreAddress", listedHearingCentre.toString()).orElse("").replaceAll(",\\s*", "\n"));
-
+        if (isCmrCase) {
+            fieldValues.put(
+                    "hearingCentreAddress",
+                    stringProvider.get("hearingCentreAddress", hearingCentre.toString())
+                            .orElse("")
+                            .replaceAll(",\\s*", "\n")
+            );
+        } else {
+            fieldValues.put(
+                    "hearingCentreAddress",
+                    isCaseUsingLocationRefData
+                            ? asylumCase.read(LIST_CASE_HEARING_CENTRE_ADDRESS, String.class).orElse("")
+                            : stringProvider.get("hearingCentreAddress", hearingCentre.toString())
+                            .orElse("")
+                            .replaceAll(",\\s*", "\n")
+            );
+        }
 
         if (isSubmitRequirementsAvailable.isPresent()
                 && isSubmitRequirementsAvailable.get() == YesOrNo.YES) {
@@ -141,14 +161,22 @@ public class HearingNoticeFieldMapper {
                             .orElse("No other adjustments are being made"));
         }
 
-        fieldValues.put("ariaListingReference",
-                asylumCase.read(ARIA_LISTING_REFERENCE, String.class).orElse(""));
-        fieldValues.put("customerServicesTelephone",
-                customerServicesProvider.getCustomerServicesTelephone());
-        fieldValues.put("customerServicesEmail",
-                customerServicesProvider.getCustomerServicesEmail());
-        fieldValues.put("isIntegrated",
-                asylumCase.read(IS_INTEGRATED, YesOrNo.class).orElse(YesOrNo.NO));
+        fieldValues.put(
+                "ariaListingReference",
+                asylumCase.read(ARIA_LISTING_REFERENCE, String.class).orElse("")
+        );
+        fieldValues.put(
+                "customerServicesTelephone",
+                customerServicesProvider.getCustomerServicesTelephone()
+        );
+        fieldValues.put(
+                "customerServicesEmail",
+                customerServicesProvider.getCustomerServicesEmail()
+        );
+        fieldValues.put(
+                "isIntegrated",
+                asylumCase.read(IS_INTEGRATED, YesOrNo.class).orElse(YesOrNo.NO)
+        );
 
         return fieldValues;
     }
