@@ -1,12 +1,15 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.service;
 
 import java.util.Optional;
+
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.Resource;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseData;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseDetails;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.Document;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates.DocumentTemplate;
 
+@Slf4j
 public class DocumentCreator<T extends CaseData> {
 
     private final String documentContentType;
@@ -48,6 +51,7 @@ public class DocumentCreator<T extends CaseData> {
         final String qualifiedDocumentFileName = fileNameQualifier.get(documentFileName, caseDetails);
         final String templateName = documentTemplate.getName();
 
+        log.info("======================DocumentCreator: {}", qualifiedDocumentFileName);
         Resource documentResource =
             documentGenerator.generate(
                 qualifiedDocumentFileName,

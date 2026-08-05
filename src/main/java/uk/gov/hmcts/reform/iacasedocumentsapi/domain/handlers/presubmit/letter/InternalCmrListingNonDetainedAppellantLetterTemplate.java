@@ -16,7 +16,8 @@ public class InternalCmrListingNonDetainedAppellantLetterTemplate extends Abstra
     public InternalCmrListingNonDetainedAppellantLetterTemplate(
         @Value("${internalCmrListingAppellantLetter.templateName}") String templateName,
         CustomerServicesProvider customerServicesProvider,
-        StringProvider stringProvider) {
+        StringProvider stringProvider
+    ) {
         super(templateName, customerServicesProvider, stringProvider);
     }
 

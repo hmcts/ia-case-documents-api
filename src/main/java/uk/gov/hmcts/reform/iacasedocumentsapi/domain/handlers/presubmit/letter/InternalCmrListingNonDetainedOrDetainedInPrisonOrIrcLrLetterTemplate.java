@@ -16,7 +16,8 @@ public class InternalCmrListingNonDetainedOrDetainedInPrisonOrIrcLrLetterTemplat
     public InternalCmrListingNonDetainedOrDetainedInPrisonOrIrcLrLetterTemplate(
         @Value("${internalCmrListingLrLetter.templateName}") String templateName,
         CustomerServicesProvider customerServicesProvider,
-        StringProvider stringProvider) {
+        StringProvider stringProvider
+    ) {
         super(templateName, customerServicesProvider, stringProvider);
     }
 
