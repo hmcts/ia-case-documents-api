@@ -22,6 +22,7 @@ import static java.util.Objects.requireNonNull;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.LETTER_BUNDLE_DOCUMENTS;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DetentionFacility.OTHER;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.Event.CMR_LISTING;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.Event.CMR_RE_LISTING;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.*;
 
 @Component
@@ -65,7 +66,7 @@ public class CmrListingDetainedOtherAppellantLetterBundler implements PreSubmitC
         AsylumCase asylumCase = callback.getCaseDetails().getCaseData();
 
         return callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
-               && callback.getEvent() == CMR_LISTING
+               && (callback.getEvent() == CMR_LISTING || callback.getEvent() == CMR_RE_LISTING)
                && isRepJourney(callback.getCaseDetails().getCaseData())
                && !isInternalCase(asylumCase)
                && isDetainedInFacilityType(asylumCase, OTHER)

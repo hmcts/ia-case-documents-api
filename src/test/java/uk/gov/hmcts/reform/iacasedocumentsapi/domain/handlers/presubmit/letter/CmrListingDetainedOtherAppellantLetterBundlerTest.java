@@ -14,6 +14,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.*;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.Event.CMR_LISTING;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.Event.CMR_RE_LISTING;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.DispatchPriority.LATE;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.PreSubmitCallbackStage.ABOUT_TO_START;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.PreSubmitCallbackStage.ABOUT_TO_SUBMIT;
@@ -88,15 +89,16 @@ class CmrListingDetainedOtherAppellantLetterBundlerTest {
             documentHandler);
     }
 
-    @Test
-    public void it_can_handle_callback() {
-        when(callback.getEvent()).thenReturn(CMR_LISTING);
+    @ParameterizedTest
+    @EnumSource(value = Event.class, names = {"CMR_LISTING", "CMR_RE_LISTING"})
+    public void it_can_handle_callback(Event event) {
+        when(callback.getEvent()).thenReturn(event);
 
         assertTrue(cmrListingDetainedOtherAppellantLetterBundler.canHandle(ABOUT_TO_SUBMIT, callback));
     }
 
     @ParameterizedTest
-    @EnumSource(value = Event.class, names = {"CMR_LISTING"}, mode = EnumSource.Mode.EXCLUDE)
+    @EnumSource(value = Event.class, names = {"CMR_LISTING", "CMR_RE_LISTING"}, mode = EnumSource.Mode.EXCLUDE)
     public void it_cannot_handle_callback_for_non_cmr_listing_events(Event event) {
         when(callback.getEvent()).thenReturn(event);
 
