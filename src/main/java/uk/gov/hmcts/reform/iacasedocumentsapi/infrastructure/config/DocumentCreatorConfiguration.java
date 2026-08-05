@@ -2251,6 +2251,27 @@ public class DocumentCreatorConfiguration {
         );
     }
 
+    @Bean("stf24WeeksRemovalDecisionDocumentCreator")
+    public DocumentCreator<AsylumCase> stf24WeeksRemovalDecisionDocumentCreator(
+        @Value("${stf24WeeksRemovalDecision.contentType}") String contentType,
+        @Value("${stf24WeeksRemovalDecision.fileExtension}") String fileExtension,
+        @Value("${stf24WeeksRemovalDecision.fileName}") String fileName,
+        AsylumCaseFileNameQualifier fileNameQualifier,
+        Stf24WeeksRemovalDecisionTemplate documentTemplate,
+        DocumentGenerator documentGenerator,
+        DocumentUploader documentUploader
+    ) {
+        return new DocumentCreator<>(
+            contentType,
+            fileExtension,
+            fileName,
+            fileNameQualifier,
+            documentTemplate,
+            documentGenerator,
+            documentUploader
+        );
+    }
+
     @Bean(STF_24_WEEKS_REVIEW_DOCUMENT_CREATOR)
     public DocumentCreator<AsylumCase> getStatutoryTimeFrame24WeeksReviewDocumentCreator(
             @Value("${stf24WeeksCaseReview.contentType}") String contentType,

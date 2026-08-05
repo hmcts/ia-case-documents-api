@@ -649,6 +649,11 @@ stf24WeeksCaseReview.fileExtension: PDF
 stf24WeeksCaseReview.fileName: "stf-24weeks-case-review-appellant-document"
 stf24WeeksCaseReview.templateName: ${AIPM_PRISON_STD_STF24_WEEKS_CASE_REVIEW:TB-IAC-STD-ENG-001-StfTwentyFourWeeks-Review-Appellant-v3.docx}
 
+stf24WeeksRemovalDecision.contentType:  application/pdf
+stf24WeeksRemovalDecision.fileExtension: PDF
+stf24WeeksRemovalDecision.fileName: "stf-24weeks-removal-notice-of-decision"
+stf24WeeksRemovalDecision.templateName: ${STF24_WEEKS_REMOVAL_DECISION_DOCUMENT:TB-IAC-DEC-ENG-02000.docx}
+
 ccdGatewayUrl: ${CCD_GW_URL:http://localhost:3453}
 
 docmosis.accessKey: ${DOCMOSIS_ACCESS_KEY}

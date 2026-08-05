@@ -122,11 +122,12 @@ class DocumentTagTest {
         assertEquals("homeOfficeApplicationDecidedLetter", DocumentTag.HOME_OFFICE_APPLICATION_DECIDED_LETTER.toString());
         assertEquals("aipmDetainedInPrisonOrIrcReinstateAppealLetter", DocumentTag.AIPM_DETAINED_IN_PRISON_IRC_REINSTATE_APPEAL_LETTER.toString());
         assertEquals("stf24WeeksCaseReviewAppeallantDocument", DocumentTag.STF_24WEEKS_CASE_REVIEW_APPELLANT_DOCUMENT.toString());
+        assertEquals("stf24WeeksRemovalDecisionDocument", DocumentTag.STF_24WEEKS_REMOVAL_DECISION_DOCUMENT.toString());
 
     }
 
     @Test
     public void if_this_test_fails_it_is_because_it_needs_updating_with_your_changes() {
-        assertEquals(124, DocumentTag.values().length);
+        assertEquals(125, DocumentTag.values().length);
     }
 }

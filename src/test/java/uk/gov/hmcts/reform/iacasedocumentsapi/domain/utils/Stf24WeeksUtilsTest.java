@@ -105,6 +105,7 @@ class Stf24WeeksUtilsTest {
                 .thenReturn(Optional.of("Smith"));
         assertEquals("John", Stf24WeeksUtils.getAppellantGivenName(asylumCase));
         assertEquals("Smith", Stf24WeeksUtils.getAppellantFamilyName(asylumCase));
+        assertEquals("John Smith", Stf24WeeksUtils.getAppellantFullName(asylumCase));
 
         when(asylumCase.read(uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.APPELLANT_GIVEN_NAMES, String.class))
                 .thenReturn(Optional.empty());
@@ -112,6 +113,7 @@ class Stf24WeeksUtilsTest {
                 .thenReturn(Optional.empty());
         assertEquals("", Stf24WeeksUtils.getAppellantGivenName(asylumCase));
         assertEquals("", Stf24WeeksUtils.getAppellantFamilyName(asylumCase));
+        assertEquals("", Stf24WeeksUtils.getAppellantFullName(asylumCase));
     }
 
     @Test

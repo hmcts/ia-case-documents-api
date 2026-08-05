@@ -73,6 +73,10 @@ public class Stf24WeeksUtils {
         return asylumCase.read(AsylumCaseDefinition.APPELLANT_FAMILY_NAME, String.class).orElse(EMPTY_STRING);
     }
 
+    public static String getAppellantFullName(AsylumCase asylumCase) {
+        return (getAppellantGivenName(asylumCase) + " " + getAppellantFamilyName(asylumCase)).trim();
+    }
+
     public static String populateStatutoryTimeFrame24wDate(AsylumCase asylumCase) {
         String tribunalReceivedDate = getCaseDateDate(asylumCase, TRIBUNAL_RECEIVED_DATE);
         String stf24WeeksAddedToDate;
