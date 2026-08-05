@@ -13,7 +13,7 @@ import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseD
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.APPELLANT_IN_DETENTION;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.DETENTION_FACILITY;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.IS_ADMIN;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.LETTER_NOTIFICATION_DOCUMENTS;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.LETTER_BUNDLE_DOCUMENTS;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.Event.CMR_LISTING;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.DispatchPriority.EARLY;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo.NO;
@@ -68,7 +68,7 @@ class InternalCmrListingNonDetainedOrDetainedInPrisonOrIrcLrLetterGeneratorTest 
     }
 
     @Test
-    public void should_create_internal_cmr_listing_lr_letter_and_append_to_letter_notification_documents() {
+    public void should_create_internal_cmr_listing_lr_letter_and_append_to_letter_bundle_documents() {
         when(callback.getEvent()).thenReturn(CMR_LISTING);
         when(documentCreator.create(caseDetails)).thenReturn(uploadedDocument);
 
@@ -80,7 +80,7 @@ class InternalCmrListingNonDetainedOrDetainedInPrisonOrIrcLrLetterGeneratorTest 
 
         verify(documentCreator, times(1)).create(caseDetails);
         verify(documentHandler, times(1)).addWithMetadataWithoutReplacingExistingDocuments(
-            asylumCase, uploadedDocument, LETTER_NOTIFICATION_DOCUMENTS, DocumentTag.INTERNAL_CMR_LISTING_LR_LETTER);
+            asylumCase, uploadedDocument, LETTER_BUNDLE_DOCUMENTS, DocumentTag.INTERNAL_CMR_LISTING_LR_LETTER);
     }
 
     @Test
