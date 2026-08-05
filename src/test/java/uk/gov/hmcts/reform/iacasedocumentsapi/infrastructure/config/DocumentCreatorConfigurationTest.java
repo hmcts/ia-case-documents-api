@@ -90,7 +90,7 @@ class DocumentCreatorConfigurationTest {
     @Test
     void should_create_internal_cmr_listing_letter_document_creator() {
         DocumentCreator<AsylumCase> documentCreator =
-            configuration.getinternalCmrListingLetterDocumentCreator(
+            configuration.getInternalCmrListingLetterDocumentCreator(
                 contentType,
                 fileExtension,
                 fileName,
