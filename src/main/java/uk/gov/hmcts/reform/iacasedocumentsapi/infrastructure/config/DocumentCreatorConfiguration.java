@@ -1912,6 +1912,49 @@ public class DocumentCreatorConfiguration {
         );
     }
 
+    @Bean("internalCmrListingLrLetter")
+    public DocumentCreator<AsylumCase> getInternalCmrListingLrLetterDocumentCreator(
+        @Value("${internalCmrListingLrLetter.contentType}") String contentType,
+        @Value("${internalCmrListingLrLetter.fileExtension}") String fileExtension,
+        @Value("${internalCmrListingLrLetter.fileName}") String fileName,
+        AsylumCaseFileNameQualifier fileNameQualifier,
+        InternalCmrListingNonDetainedLrLetterTemplate documentTemplate,
+        DocumentGenerator documentGenerator,
+        DocumentUploader documentUploader
+    ) {
+        return new DocumentCreator<>(
+            contentType,
+            fileExtension,
+            fileName,
+            fileNameQualifier,
+            documentTemplate,
+            documentGenerator,
+            documentUploader
+        );
+    }
+
+
+    @Bean("internalCmrListingAppellantLetter")
+    public DocumentCreator<AsylumCase> getInternalCmrListingAppellantLetterDocumentCreator(
+        @Value("${internalCmrListingAppellantLetter.contentType}") String contentType,
+        @Value("${internalCmrListingAppellantLetter.fileExtension}") String fileExtension,
+        @Value("${internalCmrListingAppellantLetter.fileName}") String fileName,
+        AsylumCaseFileNameQualifier fileNameQualifier,
+        InternalCmrListingNonDetainedAppellantLetterTemplate documentTemplate,
+        DocumentGenerator documentGenerator,
+        DocumentUploader documentUploader
+    ) {
+        return new DocumentCreator<>(
+            contentType,
+            fileExtension,
+            fileName,
+            fileNameQualifier,
+            documentTemplate,
+            documentGenerator,
+            documentUploader
+        );
+    }
+
     @Bean("internalOutOfTimeDecisionLetter")
     public DocumentCreator<AsylumCase> getinternalOutOfTimeDecisionLetterDocumentCreator(
         @Value("${internalOutOfTimeDecisionLetter.contentType}") String contentType,
