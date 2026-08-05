@@ -1,5 +1,6 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit.letter;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
@@ -12,6 +13,7 @@ import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DetentionFa
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.*;
 
 @Component
+@Slf4j
 public class InternalCmrListingNonDetainedOrDetainedInPrisonOrIrcLrLetterGenerator extends AbstractInternalCmrListingLetterGenerator {
 
     public InternalCmrListingNonDetainedOrDetainedInPrisonOrIrcLrLetterGenerator(
@@ -23,6 +25,9 @@ public class InternalCmrListingNonDetainedOrDetainedInPrisonOrIrcLrLetterGenerat
 
     @Override
     protected boolean isApplicable(AsylumCase asylumCase) {
+        log.info("----------------InternalCmrListingNonDetainedOrDetainedInPrisonOrIrcLrLetterGenerator1");
+        log.info("----------------isApplicable(asylumCase): {}", isApplicable(asylumCase));
+        log.info("----------------InternalCmrListingNonDetainedOrDetainedInPrisonOrIrcLrLetterGenerator2");
         return (!isDetainedAppeal(asylumCase) || isDetainedInOneOfFacilityTypes(asylumCase, IRC, PRISON))
             && hasBeenSubmittedAsLegalRepresentedInternalCase(asylumCase);
     }

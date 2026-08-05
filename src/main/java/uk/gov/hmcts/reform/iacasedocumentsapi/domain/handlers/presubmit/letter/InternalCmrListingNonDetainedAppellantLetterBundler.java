@@ -94,6 +94,11 @@ public class InternalCmrListingNonDetainedAppellantLetterBundler implements PreS
         final String qualifiedDocumentFileName = fileNameQualifier.get(fileName + "." + fileExtension, caseDetails);
 
         List<DocumentWithMetadata> bundleDocuments = getMaybeLetterNotificationDocuments(asylumCase, DocumentTag.INTERNAL_CMR_LISTING_APPELLANT_LETTER);
+        log.info(
+                "===================InternalCmrListingNonDetainedAppellantLetterBundler retrieved notification document, tag: {}, bundleDocuments.size(): {}",
+                DocumentTag.INTERNAL_CMR_LISTING_APPELLANT_LETTER,
+                bundleDocuments.size()
+        );
 
         Document internalCaseListedLetterBundle = documentBundler.bundleWithoutContentsOrCoverSheets(
             bundleDocuments,

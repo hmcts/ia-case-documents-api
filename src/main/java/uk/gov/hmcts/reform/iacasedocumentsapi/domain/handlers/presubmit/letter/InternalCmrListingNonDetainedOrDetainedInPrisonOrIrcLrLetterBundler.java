@@ -1,5 +1,6 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit.letter;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
@@ -26,6 +27,7 @@ import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.Event.C
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.*;
 
 @Component
+@Slf4j
 public class InternalCmrListingNonDetainedOrDetainedInPrisonOrIrcLrLetterBundler implements PreSubmitCallbackHandler<AsylumCase> {
 
     private final String fileExtension;
@@ -86,6 +88,11 @@ public class InternalCmrListingNonDetainedOrDetainedInPrisonOrIrcLrLetterBundler
         final String qualifiedDocumentFileName = fileNameQualifier.get(fileName + "." + fileExtension, caseDetails);
 
         List<DocumentWithMetadata> bundleDocuments = getMaybeLetterNotificationDocuments(asylumCase, DocumentTag.INTERNAL_CMR_LISTING_LR_LETTER);
+        log.info(
+                "===================InternalCmrListingNonDetainedOrDetainedInPrisonOrIrcLrLetterBundler retrieved notification document, tag: {}, bundleDocuments.size(): {}",
+                DocumentTag.INTERNAL_CMR_LISTING_LR_LETTER,
+                bundleDocuments.size()
+        );
 
         Document internalCaseListedLetterBundle = documentBundler.bundleWithoutContentsOrCoverSheets(
             bundleDocuments,

@@ -1,5 +1,6 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit.letter;
 
+import lombok.extern.slf4j.Slf4j;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DocumentTag;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseDetails;
@@ -17,6 +18,7 @@ import java.util.Objects;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.LETTER_NOTIFICATION_DOCUMENTS;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.Event.CMR_LISTING;
 
+@Slf4j
 public abstract class AbstractInternalCmrListingLetterGenerator implements PreSubmitCallbackHandler<AsylumCase> {
 
     private final DocumentCreator<AsylumCase> documentCreator;
@@ -65,6 +67,7 @@ public abstract class AbstractInternalCmrListingLetterGenerator implements PreSu
 
         Document letter = documentCreator.create(caseDetails);
 
+        log.info("===================adding document field: {}, tag: {}", LETTER_NOTIFICATION_DOCUMENTS.value(), documentTag);
         documentHandler.addWithMetadataWithoutReplacingExistingDocuments(
             asylumCase,
             letter,
