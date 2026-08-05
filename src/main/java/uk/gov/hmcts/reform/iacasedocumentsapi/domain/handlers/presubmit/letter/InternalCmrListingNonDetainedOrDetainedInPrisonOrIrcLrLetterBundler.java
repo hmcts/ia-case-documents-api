@@ -20,11 +20,13 @@ import java.util.List;
 
 import static java.util.Objects.requireNonNull;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.LETTER_BUNDLE_DOCUMENTS;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DetentionFacility.IRC;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DetentionFacility.PRISON;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.Event.CMR_LISTING;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.*;
 
 @Component
-public class InternalCmrListingNonDetainedLrLetterBundler implements PreSubmitCallbackHandler<AsylumCase> {
+public class InternalCmrListingNonDetainedOrDetainedInPrisonOrIrcLrLetterBundler implements PreSubmitCallbackHandler<AsylumCase> {
 
     private final String fileExtension;
     private final String fileName;
@@ -33,7 +35,7 @@ public class InternalCmrListingNonDetainedLrLetterBundler implements PreSubmitCa
     private final DocumentBundler documentBundler;
     private final DocumentHandler documentHandler;
 
-    public InternalCmrListingNonDetainedLrLetterBundler(
+    public InternalCmrListingNonDetainedOrDetainedInPrisonOrIrcLrLetterBundler(
         @Value("${internalCmrListingNonDetainedLrLetterWithAttachment.fileExtension}") String fileExtension,
         @Value("${internalCmrListingNonDetainedLrLetterWithAttachment.fileName}") String fileName,
         @Value("${featureFlag.isEmStitchingEnabled}") boolean isEmStitchingEnabled,
@@ -64,10 +66,10 @@ public class InternalCmrListingNonDetainedLrLetterBundler implements PreSubmitCa
         AsylumCase asylumCase = callback.getCaseDetails().getCaseData();
 
         return callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
-               && (callback.getEvent() == CMR_LISTING)
-               && !isAppellantInDetention(asylumCase)
-               && hasBeenSubmittedAsLegalRepresentedInternalCase(asylumCase)
-               && isEmStitchingEnabled;
+                && (callback.getEvent() == CMR_LISTING)
+                && (!isDetainedAppeal(asylumCase) || isDetainedInOneOfFacilityTypes(asylumCase, IRC, PRISON))
+                && hasBeenSubmittedAsLegalRepresentedInternalCase(asylumCase)
+                && isEmStitchingEnabled;
     }
 
     public PreSubmitCallbackResponse<AsylumCase> handle(

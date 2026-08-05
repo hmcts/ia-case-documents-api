@@ -64,10 +64,11 @@ public class InternalCmrListingNonDetainedAppellantLetterBundler implements PreS
         AsylumCase asylumCase = callback.getCaseDetails().getCaseData();
 
         return callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
-               && (callback.getEvent() == CMR_LISTING)
-               && !isAppellantInDetention(asylumCase)
-               && hasBeenSubmittedAsLegalRepresentedInternalCase(asylumCase)
-               && isEmStitchingEnabled;
+                && (callback.getEvent() == CMR_LISTING)
+                && !isAppellantInDetention(asylumCase)
+                && !isDetainedAppeal(asylumCase)
+                && hasBeenSubmittedAsLegalRepresentedInternalCase(asylumCase)
+                && isEmStitchingEnabled;
     }
 
     public PreSubmitCallbackResponse<AsylumCase> handle(
