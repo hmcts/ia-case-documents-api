@@ -79,6 +79,12 @@ public class CmrListingHearingNoticeCreator implements PreSubmitCallbackHandler<
                 NOTIFICATION_ATTACHMENT_DOCUMENTS,
                 DocumentTag.INTERNAL_CMR_LISTING_LETTER
             );
+            documentHandler.addWithMetadataWithoutReplacingExistingDocuments(
+                asylumCase,
+                hearingNotice,
+                NOTIFICATION_ATTACHMENT_DOCUMENTS,
+                DocumentTag.INTERNAL_CMR_LISTING_LR_LETTER
+            );
         }
 
         if (isInternalNonDetainedCase(asylumCase)
@@ -88,6 +94,12 @@ public class CmrListingHearingNoticeCreator implements PreSubmitCallbackHandler<
                 hearingNotice,
                 LETTER_NOTIFICATION_DOCUMENTS,
                 DocumentTag.INTERNAL_CMR_LISTING_LETTER
+            );
+            documentHandler.addWithMetadataWithoutReplacingExistingDocuments(
+                asylumCase,
+                hearingNotice,
+                LETTER_NOTIFICATION_DOCUMENTS,
+                DocumentTag.INTERNAL_CMR_LISTING_LR_LETTER
             );
         }
 
