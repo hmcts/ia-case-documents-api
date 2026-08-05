@@ -17,10 +17,6 @@ import java.util.Objects;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.LETTER_NOTIFICATION_DOCUMENTS;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.Event.CMR_LISTING;
 
-/**
- * Common behaviour for the letters generated when a case management review hearing is listed.
- * Subclasses only supply the recipients the letter applies to.
- */
 public abstract class AbstractInternalCmrListingLetterGenerator implements PreSubmitCallbackHandler<AsylumCase> {
 
     private final DocumentCreator<AsylumCase> documentCreator;
