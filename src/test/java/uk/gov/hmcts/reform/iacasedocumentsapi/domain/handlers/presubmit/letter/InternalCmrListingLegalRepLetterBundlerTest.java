@@ -199,6 +199,27 @@ class InternalCmrListingLegalRepLetterBundlerTest {
     }
 
     @Test
+    void should_qualify_bundle_file_name_from_injected_file_name_and_extension() {
+
+        try (MockedStatic<uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils> mocked =
+                     mockStatic(uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.class, CALLS_REAL_METHODS)) {
+
+            mocked.when(() -> hasBeenSubmittedAsLegalRepresentedInternalCase(asylumCase))
+                    .thenReturn(true);
+
+            handler.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
+
+            verify(fileNameQualifier).get("internal-letter.pdf", caseDetails);
+
+            verify(documentBundler, times(2)).bundleWithoutContentsOrCoverSheets(
+                    anyList(),
+                    eq("Letter bundle documents"),
+                    eq("qualified.pdf")
+            );
+        }
+    }
+
+    @Test
     void should_bundle_detained_case() {
 
         List<DocumentWithMetadata> appellantDocs = List.of(mock(DocumentWithMetadata.class));

@@ -41,7 +41,7 @@ public class InternalCmrListingLegalRepLetterBundler implements PreSubmitCallbac
 
     public InternalCmrListingLegalRepLetterBundler(
         @Value("${internalCaseListedLetterWithAttachment.fileExtension}") String fileExtension,
-        @Value("${internalCaseListedLetterWithAttachment.fileName}") String fileName,
+        @Value("${internalCmrListingLetterWithAttachment.fileName}") String fileName,
         @Value("${featureFlag.isEmStitchingEnabled}") boolean isEmStitchingEnabled,
         FileNameQualifier<AsylumCase> fileNameQualifier,
         DocumentBundler documentBundler,
