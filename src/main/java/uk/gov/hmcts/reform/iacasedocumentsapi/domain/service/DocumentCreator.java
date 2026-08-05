@@ -1,5 +1,6 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.service;
 
+import java.io.IOException;
 import java.util.Optional;
 
 import lombok.extern.slf4j.Slf4j;
@@ -62,6 +63,11 @@ public class DocumentCreator<T extends CaseData> {
                     .orElse(documentTemplate.mapFieldValues(caseDetails))
             );
 
+        try {
+            log.info("======================documentResource.contentLength(): {}", documentResource.contentLength());
+        } catch (IOException e) {
+            log.info("Exception occurred while creating a document: {}", e.getMessage());
+        }
         return documentUploader.upload(documentResource, documentContentType);
     }
 }
