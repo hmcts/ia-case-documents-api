@@ -9,6 +9,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo;
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.APPEAL_REFERENCE_NUMBER;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.HOME_OFFICE_REFERENCE_NUMBER;
@@ -42,8 +43,11 @@ public class Stf24WeeksRemovalDecisionTemplate implements DocumentTemplate<Asylu
         fieldValues.put("appealReferenceNumber", asylumCase.read(APPEAL_REFERENCE_NUMBER, String.class).orElse(""));
         fieldValues.put("appellantFullName", getAppellantFullName(asylumCase));
         fieldValues.put("homeOfficeReferenceNumber", asylumCase.read(HOME_OFFICE_REFERENCE_NUMBER, String.class).orElse(""));
-        fieldValues.put("legalRepRefTitle", "Legal representative reference");
-        fieldValues.put("legalRepReferenceNumber", asylumCase.read(LEGAL_REP_REFERENCE_NUMBER, String.class).orElse(""));
+        Optional<String> legalRepReference = asylumCase.read(LEGAL_REP_REFERENCE_NUMBER, String.class);
+        if (legalRepReference.isPresent() && !legalRepReference.get().isEmpty()) {
+            fieldValues.put("legalRepReferenceNumber", legalRepReference.get());
+            fieldValues.put("legalRepRefTitle", "Legal representative reference");
+        }
 
         if (asylumCase.read(IS_REMOVAL_OF_24W_APPLICATION_REFUSED, YesOrNo.class).orElse(YesOrNo.NO) == YesOrNo.YES) {
             fieldValues.put("suitability", "suitable");
