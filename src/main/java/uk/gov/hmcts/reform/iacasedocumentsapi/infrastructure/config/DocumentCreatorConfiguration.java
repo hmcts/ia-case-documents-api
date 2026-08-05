@@ -1918,7 +1918,7 @@ public class DocumentCreatorConfiguration {
         @Value("${internalCmrListingLrLetter.fileExtension}") String fileExtension,
         @Value("${internalCmrListingLrLetter.fileName}") String fileName,
         AsylumCaseFileNameQualifier fileNameQualifier,
-        InternalCmrListingNonDetainedLrLetterTemplate documentTemplate,
+        InternalCmrListingNonDetainedOrDetainedInPrisonOrIrcLrLetterTemplate documentTemplate,
         DocumentGenerator documentGenerator,
         DocumentUploader documentUploader
     ) {
