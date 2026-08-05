@@ -26,7 +26,8 @@ public class InternalCmrListingNonDetainedOrDetainedInPrisonOrIrcLrLetterGenerat
     @Override
     protected boolean isApplicable(AsylumCase asylumCase) {
         log.info("----------------InternalCmrListingNonDetainedOrDetainedInPrisonOrIrcLrLetterGenerator1");
-        log.info("----------------isApplicable(asylumCase): {}", isApplicable(asylumCase));
+        log.info("----------------!isDetainedAppeal(asylumCase) || isDetainedInOneOfFacilityTypes(asylumCase, IRC, PRISON): {}", !isDetainedAppeal(asylumCase) || isDetainedInOneOfFacilityTypes(asylumCase, IRC, PRISON));
+        log.info("----------------hasBeenSubmittedAsLegalRepresentedInternalCase(asylumCase): {}", hasBeenSubmittedAsLegalRepresentedInternalCase(asylumCase));
         log.info("----------------InternalCmrListingNonDetainedOrDetainedInPrisonOrIrcLrLetterGenerator2");
         return (!isDetainedAppeal(asylumCase) || isDetainedInOneOfFacilityTypes(asylumCase, IRC, PRISON))
             && hasBeenSubmittedAsLegalRepresentedInternalCase(asylumCase);
