@@ -15,7 +15,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentUploader;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates.CmrHearingNoticeTemplate;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit.letter.InternalCmrListingNonDetainedAppellantLetterTemplate;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit.letter.InternalCmrListingLetterTemplate;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit.letter.InternalCmrListingNonDetainedLrLetterTemplate;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit.letter.InternalCmrListingNonDetainedOrDetainedInPrisonOrIrcLrLetterTemplate;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit.letter.InternalCmrReListingLetterTemplate;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates.letter.InternalDetainedCmrListingLetterTemplate;
 
@@ -26,7 +26,7 @@ class DocumentCreatorConfigurationTest {
     @Mock private CmrHearingNoticeTemplate cmrHearingNoticeTemplate;
     @Mock private InternalDetainedCmrListingLetterTemplate internalDetainedCmrListingLetterTemplate;
     @Mock private InternalCmrListingLetterTemplate internalCmrListingLetterTemplate;
-    @Mock private InternalCmrListingNonDetainedLrLetterTemplate internalCmrListingNonDetainedLrLetterTemplate;
+    @Mock private InternalCmrListingNonDetainedOrDetainedInPrisonOrIrcLrLetterTemplate internalCmrListingNonDetainedOrDetainedInPrisonOrIrcLrLetterTemplate;
     @Mock private InternalCmrListingNonDetainedAppellantLetterTemplate internalCmrListingNonDetainedAppellantLetterTemplate;
     @Mock private InternalCmrReListingLetterTemplate internalCmrReListingLetterTemplate;
     @Mock private DocumentGenerator documentGenerator;
@@ -115,7 +115,7 @@ class DocumentCreatorConfigurationTest {
                 fileExtension,
                 fileName,
                 fileNameQualifier,
-                    internalCmrListingNonDetainedLrLetterTemplate,
+                    internalCmrListingNonDetainedOrDetainedInPrisonOrIrcLrLetterTemplate,
                 documentGenerator,
                 documentUploader
             );

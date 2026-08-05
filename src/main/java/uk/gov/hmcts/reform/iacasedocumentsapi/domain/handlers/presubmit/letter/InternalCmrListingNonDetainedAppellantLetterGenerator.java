@@ -8,6 +8,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentCreator;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentHandler;
 
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.hasBeenSubmittedAsLegalRepresentedInternalCase;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.isDetainedAppeal;
 
 @Component
 public class InternalCmrListingNonDetainedAppellantLetterGenerator extends AbstractInternalCmrListingLetterGenerator {
@@ -21,6 +22,7 @@ public class InternalCmrListingNonDetainedAppellantLetterGenerator extends Abstr
 
     @Override
     protected boolean isApplicable(AsylumCase asylumCase) {
-        return hasBeenSubmittedAsLegalRepresentedInternalCase(asylumCase);
+        return !isDetainedAppeal(asylumCase)
+            && hasBeenSubmittedAsLegalRepresentedInternalCase(asylumCase);
     }
 }

@@ -17,6 +17,7 @@ class StoredNotificationTest {
     private final String notificationBody = "someBody";
     private final String notificationReference = "someReference";
     private final String notificationSubject = "someSubject";
+    private final String notificationDocEncoded = "someEncoded";
     private final Document document = mock(Document.class);
 
     private StoredNotification storedNotification;
@@ -30,6 +31,7 @@ class StoredNotificationTest {
                 .notificationSentTo(notificationSentTo)
                 .notificationBody(notificationBody)
                 .notificationMethod(notificationMethod)
+                .notificationDocumentEncoded(notificationDocEncoded)
                 .notificationStatus(notificationStatus)
                 .notificationReference(notificationReference)
                 .notificationSubject(notificationSubject)
@@ -43,6 +45,7 @@ class StoredNotificationTest {
         assertThat(storedNotification.getNotificationSentTo()).isEqualTo(notificationSentTo);
         assertThat(storedNotification.getNotificationStatus()).isEqualTo(notificationStatus);
         assertThat(storedNotification.getNotificationBody()).isEqualTo(notificationBody);
+        assertThat(storedNotification.getNotificationDocumentEncoded()).isEqualTo(notificationDocEncoded);
         assertThat(storedNotification.getNotificationDateSent()).isEqualTo(notificationDateSent);
         assertThat(storedNotification.getNotificationReference()).isEqualTo(notificationReference);
         assertThat(storedNotification.getNotificationSubject()).isEqualTo(notificationSubject);

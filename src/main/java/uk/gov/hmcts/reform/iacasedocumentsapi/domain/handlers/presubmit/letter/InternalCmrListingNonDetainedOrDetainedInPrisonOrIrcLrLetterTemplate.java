@@ -11,9 +11,9 @@ import java.util.List;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.getLegalRepAddressInCountryOrOoc;
 
 @Component
-public class InternalCmrListingNonDetainedLrLetterTemplate extends AbstractInternalCmrListingLetterTemplate {
+public class InternalCmrListingNonDetainedOrDetainedInPrisonOrIrcLrLetterTemplate extends AbstractInternalCmrListingLetterTemplate {
 
-    public InternalCmrListingNonDetainedLrLetterTemplate(
+    public InternalCmrListingNonDetainedOrDetainedInPrisonOrIrcLrLetterTemplate(
         @Value("${internalCmrListingLrLetter.templateName}") String templateName,
         CustomerServicesProvider customerServicesProvider,
         StringProvider stringProvider) {
