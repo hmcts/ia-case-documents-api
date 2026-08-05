@@ -223,12 +223,12 @@ class InternalCmrListingLrLetterGeneratorTest {
             verify(documentCreator).create(caseDetails);
 
             verify(documentHandler)
-                    .addWithMetadataWithoutReplacingExistingDocuments(
-                            asylumCase,
-                            document,
-                            LETTER_NOTIFICATION_DOCUMENTS,
-                            DocumentTag.INTERNAL_CMR_LISTING_LR_LETTER
-                    );
+                .addWithMetadataWithoutReplacingExistingDocuments(
+                    asylumCase,
+                    document,
+                    LETTER_NOTIFICATION_DOCUMENTS,
+                    DocumentTag.INTERNAL_CMR_LISTING_LR_LETTER
+            );
         }
     }
 }
