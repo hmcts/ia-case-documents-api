@@ -63,7 +63,7 @@ class InternalCmrListingLetterGeneratorTest {
     }
 
     @Test
-    public void should_create_internal_cmr_listing_letter_and_append_to_letter_bundle_documents() {
+    public void should_create_internal_cmr_listing_letter_and_append_to_letter_notification_documents() {
         when(callback.getEvent()).thenReturn(CMR_LISTING);
         when(documentCreator.create(caseDetails)).thenReturn(uploadedDocument);
 
@@ -75,7 +75,7 @@ class InternalCmrListingLetterGeneratorTest {
 
         verify(documentCreator, times(1)).create(caseDetails);
         verify(documentHandler, times(1)).addWithMetadataWithoutReplacingExistingDocuments(
-            asylumCase, uploadedDocument, LETTER_BUNDLE_DOCUMENTS, DocumentTag.INTERNAL_CMR_LISTING_LETTER);
+            asylumCase, uploadedDocument, LETTER_NOTIFICATION_DOCUMENTS, DocumentTag.INTERNAL_CMR_LISTING_LETTER);
     }
 
     @Test

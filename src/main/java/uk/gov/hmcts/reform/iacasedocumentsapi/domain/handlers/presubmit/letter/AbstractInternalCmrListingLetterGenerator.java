@@ -14,7 +14,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentHandler;
 
 import java.util.Objects;
 
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.LETTER_BUNDLE_DOCUMENTS;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.LETTER_NOTIFICATION_DOCUMENTS;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.Event.CMR_LISTING;
 
 /**
@@ -72,7 +72,7 @@ public abstract class AbstractInternalCmrListingLetterGenerator implements PreSu
         documentHandler.addWithMetadataWithoutReplacingExistingDocuments(
             asylumCase,
             letter,
-            LETTER_BUNDLE_DOCUMENTS,
+            LETTER_NOTIFICATION_DOCUMENTS,
             documentTag
         );
 
