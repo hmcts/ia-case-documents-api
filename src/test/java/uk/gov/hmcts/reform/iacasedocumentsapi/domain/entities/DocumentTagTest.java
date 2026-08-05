@@ -128,6 +128,7 @@ class DocumentTagTest {
         assertEquals("homeOfficeApplicationDecidedLetter", DocumentTag.HOME_OFFICE_APPLICATION_DECIDED_LETTER.toString());
         assertEquals("aipmDetainedInPrisonOrIrcReinstateAppealLetter", DocumentTag.AIPM_DETAINED_IN_PRISON_IRC_REINSTATE_APPEAL_LETTER.toString());
         assertEquals("cmrHearingCancelledLetter", DocumentTag.CMR_HEARING_CANCELLED_LETTER.toString());
+        assertEquals("cmrHearingCancelledLrLetter", DocumentTag.CMR_HEARING_CANCELLED_LR_LETTER.toString());
         assertEquals("stf24WeeksCaseReviewAppeallantDocument", DocumentTag.STF_24WEEKS_CASE_REVIEW_APPELLANT_DOCUMENT.toString());
 
     }

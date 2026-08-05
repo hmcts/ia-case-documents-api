@@ -17,17 +17,18 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentHandler;
 import java.util.Objects;
 
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.LETTER_NOTIFICATION_DOCUMENTS;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DetentionFacility.OTHER;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.Event.CMR_HEARING_CANCELLED;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.*;
 
 @Component
-public class CmrCancelledAipManualLetterGenerator implements PreSubmitCallbackHandler<AsylumCase> {
+public class CmrCancelledAppellantManualLetterGenerator implements PreSubmitCallbackHandler<AsylumCase> {
 
     private final DocumentCreator<AsylumCase> documentCreator;
     private final DocumentHandler documentHandler;
 
-    public CmrCancelledAipManualLetterGenerator(
-            @Qualifier("cmrCancelledAipManualLetter") DocumentCreator<AsylumCase> documentCreator,
+    public CmrCancelledAppellantManualLetterGenerator(
+            @Qualifier("cmrCancelledAppellantManualLetter") DocumentCreator<AsylumCase> documentCreator,
             DocumentHandler documentHandler
     ) {
         this.documentCreator = documentCreator;
@@ -51,7 +52,7 @@ public class CmrCancelledAipManualLetterGenerator implements PreSubmitCallbackHa
         return callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
                 && callback.getEvent() == CMR_HEARING_CANCELLED
                 && isCmrHearingInPersonOrRemote(asylumCase)
-                && hasBeenSubmittedByAppellantInternalCase(asylumCase);
+                && ((isInternalCase(asylumCase) && !isAppellantInDetention(asylumCase)) || isDetainedInFacilityType(asylumCase, OTHER));
     }
 
     public PreSubmitCallbackResponse<AsylumCase> handle(
@@ -65,11 +66,11 @@ public class CmrCancelledAipManualLetterGenerator implements PreSubmitCallbackHa
         final CaseDetails<AsylumCase> caseDetails = callback.getCaseDetails();
         final AsylumCase asylumCase = caseDetails.getCaseData();
 
-        Document cmrCancelledAipManualLetter = documentCreator.create(caseDetails);
+        Document cmrCancelledAppellantManualLetter = documentCreator.create(caseDetails);
 
         documentHandler.addWithMetadataWithoutReplacingExistingDocuments(
                 asylumCase,
-                cmrCancelledAipManualLetter,
+                cmrCancelledAppellantManualLetter,
                 LETTER_NOTIFICATION_DOCUMENTS,
                 DocumentTag.CMR_HEARING_CANCELLED_LETTER
         );
