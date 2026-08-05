@@ -47,9 +47,7 @@ public enum DocumentTag {
     CLARIFYING_QUESTIONS("clarifyingQuestions", CaseType.ASYLUM),
 
     CMR_HEARING_CANCELLED_LETTER("cmrHearingCancelledLetter", CaseType.ASYLUM),
-    CMR_HEARING_CANCELLED_LETTER_BUNDLE("cmrHearingCancelledLetterBundle", CaseType.ASYLUM),
     CMR_HEARING_CANCELLED_LR_LETTER("cmrHearingCancelledLrLetter", CaseType.ASYLUM),
-    CMR_HEARING_CANCELLED_LR_LETTER_BUNDLE("cmrHearingCancelledLrLetterBundle", CaseType.ASYLUM),
 
     NOTICE_OF_ADJOURNED_HEARING("noticeOfAdjournedHearing", CaseType.ASYLUM),
 
