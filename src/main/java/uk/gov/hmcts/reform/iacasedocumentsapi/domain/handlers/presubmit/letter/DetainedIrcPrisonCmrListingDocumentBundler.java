@@ -64,8 +64,8 @@ public class DetainedIrcPrisonCmrListingDocumentBundler implements PreSubmitCall
 
         log.info("--------------------------------------");
         log.info(
-                "callback.getEvent() == CMR_LISTING || callback.getEvent() == CMR_RE_LISTING: {}",
-                callback.getEvent() == CMR_LISTING || callback.getEvent() == CMR_RE_LISTING
+                "callback.getEvent() == CMR_LISTING: {}",
+                callback.getEvent() == CMR_LISTING
         );
         log.info(
                 "isDetainedInOneOfFacilityTypes(asylumCase, PRISON, IRC): {}",
@@ -74,7 +74,7 @@ public class DetainedIrcPrisonCmrListingDocumentBundler implements PreSubmitCall
         log.info("isEmStitchingEnabled: {}", isEmStitchingEnabled);
         log.info("--------------------------------------");
         return callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
-               && (callback.getEvent() == CMR_LISTING || callback.getEvent() == CMR_RE_LISTING)
+               && callback.getEvent() == CMR_LISTING
                && isDetainedInOneOfFacilityTypes(asylumCase, PRISON, IRC)
                && isEmStitchingEnabled;
     }
