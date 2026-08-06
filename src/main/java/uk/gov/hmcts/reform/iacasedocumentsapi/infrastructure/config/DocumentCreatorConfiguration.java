@@ -14,7 +14,6 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit.letter.I
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit.letter.InternalCmrListingNonDetainedLrLetterTemplate;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit.letter.InternalCmrReListingLetterTemplate;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit.letter.InternalCmrReListingLrLetterTemplate;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit.letter.InternalCmrReListingAppellantLetterTemplate;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit.letter.InternalRecordOutOfTimeDecisionLetterTemplate;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.AsylumCaseFileNameQualifier;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentCreator;
@@ -1865,27 +1864,6 @@ public class DocumentCreatorConfiguration {
         @Value("${internalCmrReListingLrLetter.fileName}") String fileName,
         AsylumCaseFileNameQualifier fileNameQualifier,
         InternalCmrReListingLrLetterTemplate documentTemplate,
-        DocumentGenerator documentGenerator,
-        DocumentUploader documentUploader
-    ) {
-        return new DocumentCreator<>(
-            contentType,
-            fileExtension,
-            fileName,
-            fileNameQualifier,
-            documentTemplate,
-            documentGenerator,
-            documentUploader
-        );
-    }
-
-    @Bean("internalCmrReListingAppellantLetter")
-    public DocumentCreator<AsylumCase> getInternalCmrReListingAppellantLetterDocumentCreator(
-        @Value("${internalCmrReListingAppellantLetter.contentType}") String contentType,
-        @Value("${internalCmrReListingAppellantLetter.fileExtension}") String fileExtension,
-        @Value("${internalCmrReListingAppellantLetter.fileName}") String fileName,
-        AsylumCaseFileNameQualifier fileNameQualifier,
-        InternalCmrReListingAppellantLetterTemplate documentTemplate,
         DocumentGenerator documentGenerator,
         DocumentUploader documentUploader
     ) {
