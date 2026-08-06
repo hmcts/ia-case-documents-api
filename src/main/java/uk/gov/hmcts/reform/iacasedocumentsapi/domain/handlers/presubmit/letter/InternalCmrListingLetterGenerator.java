@@ -19,9 +19,7 @@ import java.util.Objects;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.LETTER_NOTIFICATION_DOCUMENTS;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DetentionFacility.OTHER;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.Event.CMR_LISTING;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.isAppellantInDetention;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.isDetainedInFacilityType;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.isInternalCase;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.*;
 
 @Component
 public class InternalCmrListingLetterGenerator implements PreSubmitCallbackHandler<AsylumCase> {
@@ -30,8 +28,8 @@ public class InternalCmrListingLetterGenerator implements PreSubmitCallbackHandl
     private final DocumentHandler documentHandler;
 
     public InternalCmrListingLetterGenerator(
-            @Qualifier("internalCmrListingLetter") DocumentCreator<AsylumCase> documentCreator,
-            DocumentHandler documentHandler
+        @Qualifier("internalCmrListingLetter") DocumentCreator<AsylumCase> documentCreator,
+        DocumentHandler documentHandler
     ) {
         this.documentCreator = documentCreator;
         this.documentHandler = documentHandler;
@@ -52,14 +50,14 @@ public class InternalCmrListingLetterGenerator implements PreSubmitCallbackHandl
         AsylumCase asylumCase = callback.getCaseDetails().getCaseData();
 
         return callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
-                && callback.getEvent() == CMR_LISTING
-                && isInternalCase(asylumCase)
-                && (!isAppellantInDetention(asylumCase) || isDetainedInFacilityType(asylumCase, OTHER));
+            && callback.getEvent() == CMR_LISTING
+            && hasBeenSubmittedAsLegalRepresentedInternalCase(asylumCase)
+            && (!isAppellantInDetention(asylumCase) || isDetainedInFacilityType(asylumCase, OTHER));
     }
 
     public PreSubmitCallbackResponse<AsylumCase> handle(
-            PreSubmitCallbackStage callbackStage,
-            Callback<AsylumCase> callback
+        PreSubmitCallbackStage callbackStage,
+        Callback<AsylumCase> callback
     ) {
         if (!canHandle(callbackStage, callback)) {
             throw new IllegalStateException("Cannot handle callback");
@@ -71,10 +69,10 @@ public class InternalCmrListingLetterGenerator implements PreSubmitCallbackHandl
         Document internalCaseListedLetter = documentCreator.create(caseDetails);
 
         documentHandler.addWithMetadataWithoutReplacingExistingDocuments(
-                asylumCase,
-                internalCaseListedLetter,
-                LETTER_NOTIFICATION_DOCUMENTS,
-                DocumentTag.INTERNAL_CMR_LISTING_LETTER
+            asylumCase,
+            internalCaseListedLetter,
+            LETTER_NOTIFICATION_DOCUMENTS,
+            DocumentTag.INTERNAL_CMR_LISTING_LETTER
         );
 
         return new PreSubmitCallbackResponse<>(asylumCase);

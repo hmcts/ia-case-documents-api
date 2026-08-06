@@ -101,9 +101,9 @@ public class InternalCmrListingLegalRepLetterBundler implements PreSubmitCallbac
             try {
                 RequestContextHolder.setRequestAttributes(requestAttributes);
                 return documentBundler.bundleWithoutContentsOrCoverSheets(
-                        bundleDocuments,
-                        "Letter bundle documents",
-                        qualifiedDocumentFileName
+                    bundleDocuments,
+                    "Letter bundle documents",
+                    qualifiedDocumentFileName
                 );
             } finally {
                 RequestContextHolder.resetRequestAttributes();
@@ -115,9 +115,9 @@ public class InternalCmrListingLegalRepLetterBundler implements PreSubmitCallbac
             try {
                 RequestContextHolder.setRequestAttributes(requestAttributes);
                 return documentBundler.bundleWithoutContentsOrCoverSheets(
-                        bundleDocumentsLR,
-                        "Letter bundle documents",
-                        qualifiedDocumentFileName
+                    bundleDocumentsLR,
+                    "Letter bundle documents",
+                    qualifiedDocumentFileName
                 );
             } finally {
                 RequestContextHolder.resetRequestAttributes();
