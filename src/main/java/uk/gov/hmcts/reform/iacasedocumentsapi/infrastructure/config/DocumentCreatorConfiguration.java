@@ -6,12 +6,13 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit.letter.CmrCancelledAipManualLetterTemplate;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit.letter.CmrCancelledAppellantManualLetterTemplate;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit.letter.CmrCancelledLrManualLetterTemplate;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit.letter.InternalCaseListedLetterTemplate;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit.letter.InternalCaseListedLrLetterTemplate;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit.letter.InternalCmrListingNonDetainedAppellantLetterTemplate;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit.letter.InternalCmrListingLetterTemplate;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit.letter.InternalCmrListingNonDetainedLrLetterTemplate;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit.letter.InternalCmrListingNonDetainedOrDetainedInPrisonOrIrcLrLetterTemplate;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit.letter.InternalCmrReListingLetterTemplate;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit.letter.InternalCmrReListingLrLetterTemplate;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit.letter.InternalRecordOutOfTimeDecisionLetterTemplate;
@@ -1036,13 +1037,34 @@ public class DocumentCreatorConfiguration {
         );
     }
 
-    @Bean("cmrCancelledAipManualLetter")
-    public DocumentCreator<AsylumCase> getCmrCancelledAipManualDocumentCreator(
-            @Value("${cmrCancelledAipManualLetter.contentType}") String contentType,
-            @Value("${cmrCancelledAipManualLetter.fileExtension}") String fileExtension,
-            @Value("${cmrCancelledAipManualLetter.fileName}") String fileName,
+    @Bean("cmrCancelledAppellantManualLetter")
+    public DocumentCreator<AsylumCase> getCmrCancelledAppellantManualDocumentCreator(
+            @Value("${cmrCancelledAppellantManualLetter.contentType}") String contentType,
+            @Value("${cmrCancelledAppellantManualLetter.fileExtension}") String fileExtension,
+            @Value("${cmrCancelledAppellantManualLetter.fileName}") String fileName,
             AsylumCaseFileNameQualifier fileNameQualifier,
-            CmrCancelledAipManualLetterTemplate documentTemplate,
+            CmrCancelledAppellantManualLetterTemplate documentTemplate,
+            DocumentGenerator documentGenerator,
+            DocumentUploader documentUploader
+    ) {
+        return new DocumentCreator<>(
+                contentType,
+                fileExtension,
+                fileName,
+                fileNameQualifier,
+                documentTemplate,
+                documentGenerator,
+                documentUploader
+        );
+    }
+
+    @Bean("cmrCancelledLrManualLetter")
+    public DocumentCreator<AsylumCase> getCmrCancelledLrManualDocumentCreator(
+            @Value("${cmrCancelledLrManualLetter.contentType}") String contentType,
+            @Value("${cmrCancelledLrManualLetter.fileExtension}") String fileExtension,
+            @Value("${cmrCancelledLrManualLetter.fileName}") String fileName,
+            AsylumCaseFileNameQualifier fileNameQualifier,
+            CmrCancelledLrManualLetterTemplate documentTemplate,
             DocumentGenerator documentGenerator,
             DocumentUploader documentUploader
     ) {
@@ -1926,7 +1948,7 @@ public class DocumentCreatorConfiguration {
         @Value("${internalCmrListingLrLetter.fileExtension}") String fileExtension,
         @Value("${internalCmrListingLrLetter.fileName}") String fileName,
         AsylumCaseFileNameQualifier fileNameQualifier,
-        InternalCmrListingNonDetainedLrLetterTemplate documentTemplate,
+        InternalCmrListingNonDetainedOrDetainedInPrisonOrIrcLrLetterTemplate documentTemplate,
         DocumentGenerator documentGenerator,
         DocumentUploader documentUploader
     ) {
