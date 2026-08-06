@@ -11,6 +11,7 @@
         "replacements": {
           "journeyType": "aip",
           "isAdmin": "Yes",
+          "appellantsRepresentation": "No",
           "appellantInDetention": "No",
           "cmrHearingCentre": "taylorHouse",
           "cmrHearingDate": "2024-12-31T12:34:56",
