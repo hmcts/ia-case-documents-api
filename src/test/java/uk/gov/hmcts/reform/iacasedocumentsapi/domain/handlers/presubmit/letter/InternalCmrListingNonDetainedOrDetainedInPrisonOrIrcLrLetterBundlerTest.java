@@ -38,6 +38,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DetentionFacility;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DocumentTag;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DocumentWithMetadata;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseDetails;
@@ -55,7 +56,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.SystemDateProvider;
 
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
-class InternalCmrListingNonDetainedLrLetterBundlerTest {
+class InternalCmrListingNonDetainedOrDetainedInPrisonOrIrcLrLetterBundlerTest {
 
     @Mock private Callback<AsylumCase> callback;
     @Mock private CaseDetails<AsylumCase> caseDetails;
@@ -68,11 +69,11 @@ class InternalCmrListingNonDetainedLrLetterBundlerTest {
     private final String fileExtension = "PDF";
     private final String fileName = "some-file-name";
 
-    private InternalCmrListingNonDetainedLrLetterBundler internalCmrListingNonDetainedLrLetterBundler;
+    private InternalCmrListingNonDetainedOrDetainedInPrisonOrIrcLrLetterBundler internalCmrListingNonDetainedOrDetainedInPrisonOrIrcLrLetterBundler;
 
     @BeforeEach
     public void setUp() {
-        internalCmrListingNonDetainedLrLetterBundler = buildBundler(true);
+        internalCmrListingNonDetainedOrDetainedInPrisonOrIrcLrLetterBundler = buildBundler(true);
 
         when(callback.getCaseDetails()).thenReturn(caseDetails);
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
@@ -81,8 +82,8 @@ class InternalCmrListingNonDetainedLrLetterBundlerTest {
         when(asylumCase.read(APPELLANTS_REPRESENTATION, YesOrNo.class)).thenReturn(Optional.of(NO));
     }
 
-    private InternalCmrListingNonDetainedLrLetterBundler buildBundler(boolean isEmStitchingEnabled) {
-        return new InternalCmrListingNonDetainedLrLetterBundler(
+    private InternalCmrListingNonDetainedOrDetainedInPrisonOrIrcLrLetterBundler buildBundler(boolean isEmStitchingEnabled) {
+        return new InternalCmrListingNonDetainedOrDetainedInPrisonOrIrcLrLetterBundler(
             fileExtension,
             fileName,
             isEmStitchingEnabled,
@@ -96,7 +97,7 @@ class InternalCmrListingNonDetainedLrLetterBundlerTest {
     public void it_can_handle_callback(Event event) {
         when(callback.getEvent()).thenReturn(event);
 
-        assertTrue(internalCmrListingNonDetainedLrLetterBundler.canHandle(ABOUT_TO_SUBMIT, callback));
+        assertTrue(internalCmrListingNonDetainedOrDetainedInPrisonOrIrcLrLetterBundler.canHandle(ABOUT_TO_SUBMIT, callback));
     }
 
     @ParameterizedTest
@@ -104,7 +105,7 @@ class InternalCmrListingNonDetainedLrLetterBundlerTest {
     public void it_cannot_handle_callback_for_non_cmr_listing_events(Event event) {
         when(callback.getEvent()).thenReturn(event);
 
-        assertFalse(internalCmrListingNonDetainedLrLetterBundler.canHandle(ABOUT_TO_SUBMIT, callback));
+        assertFalse(internalCmrListingNonDetainedOrDetainedInPrisonOrIrcLrLetterBundler.canHandle(ABOUT_TO_SUBMIT, callback));
     }
 
     @ParameterizedTest
@@ -112,7 +113,7 @@ class InternalCmrListingNonDetainedLrLetterBundlerTest {
     public void it_cannot_handle_callback_for_wrong_stage(PreSubmitCallbackStage stage) {
         when(callback.getEvent()).thenReturn(CMR_LISTING);
 
-        assertFalse(internalCmrListingNonDetainedLrLetterBundler.canHandle(stage, callback));
+        assertFalse(internalCmrListingNonDetainedOrDetainedInPrisonOrIrcLrLetterBundler.canHandle(stage, callback));
     }
 
     @Test
@@ -120,24 +121,34 @@ class InternalCmrListingNonDetainedLrLetterBundlerTest {
         when(callback.getEvent()).thenReturn(CMR_LISTING);
         when(asylumCase.read(IS_ADMIN, YesOrNo.class)).thenReturn(Optional.of(NO));
 
-        assertFalse(internalCmrListingNonDetainedLrLetterBundler.canHandle(ABOUT_TO_SUBMIT, callback));
+        assertFalse(internalCmrListingNonDetainedOrDetainedInPrisonOrIrcLrLetterBundler.canHandle(ABOUT_TO_SUBMIT, callback));
+    }
+
+    @ParameterizedTest
+    @EnumSource(value = DetentionFacility.class, names = {"PRISON", "IRC"})
+    public void it_can_handle_callback_when_appellant_detained_in_prison_or_irc(DetentionFacility detentionFacility) {
+        when(callback.getEvent()).thenReturn(CMR_LISTING);
+        when(asylumCase.read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(YES));
+        when(asylumCase.read(DETENTION_FACILITY, String.class)).thenReturn(Optional.of(detentionFacility.getValue()));
+
+        assertTrue(internalCmrListingNonDetainedOrDetainedInPrisonOrIrcLrLetterBundler.canHandle(ABOUT_TO_SUBMIT, callback));
     }
 
     @Test
-    public void it_cannot_handle_callback_when_appellant_in_detention() {
+    public void it_cannot_handle_callback_when_appellant_in_detention_without_a_facility() {
         when(callback.getEvent()).thenReturn(CMR_LISTING);
         when(asylumCase.read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(YES));
 
-        assertFalse(internalCmrListingNonDetainedLrLetterBundler.canHandle(ABOUT_TO_SUBMIT, callback));
+        assertFalse(internalCmrListingNonDetainedOrDetainedInPrisonOrIrcLrLetterBundler.canHandle(ABOUT_TO_SUBMIT, callback));
     }
 
     @Test
     public void it_cannot_handle_callback_when_appellant_detained_in_other_facility() {
         when(callback.getEvent()).thenReturn(CMR_LISTING);
         when(asylumCase.read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(YES));
-        when(asylumCase.read(DETENTION_FACILITY, String.class)).thenReturn(Optional.of("other"));
+        when(asylumCase.read(DETENTION_FACILITY, String.class)).thenReturn(Optional.of(DetentionFacility.OTHER.getValue()));
 
-        assertFalse(internalCmrListingNonDetainedLrLetterBundler.canHandle(ABOUT_TO_SUBMIT, callback));
+        assertFalse(internalCmrListingNonDetainedOrDetainedInPrisonOrIrcLrLetterBundler.canHandle(ABOUT_TO_SUBMIT, callback));
     }
 
     @Test
@@ -145,16 +156,16 @@ class InternalCmrListingNonDetainedLrLetterBundlerTest {
         when(callback.getEvent()).thenReturn(CMR_LISTING);
         when(asylumCase.read(APPELLANTS_REPRESENTATION, YesOrNo.class)).thenReturn(Optional.of(YES));
 
-        assertFalse(internalCmrListingNonDetainedLrLetterBundler.canHandle(ABOUT_TO_SUBMIT, callback));
+        assertFalse(internalCmrListingNonDetainedOrDetainedInPrisonOrIrcLrLetterBundler.canHandle(ABOUT_TO_SUBMIT, callback));
     }
 
     @Test
     public void it_cannot_handle_callback_when_stitching_flag_is_false() {
         when(callback.getEvent()).thenReturn(CMR_LISTING);
 
-        internalCmrListingNonDetainedLrLetterBundler = buildBundler(false);
+        internalCmrListingNonDetainedOrDetainedInPrisonOrIrcLrLetterBundler = buildBundler(false);
 
-        assertFalse(internalCmrListingNonDetainedLrLetterBundler.canHandle(ABOUT_TO_SUBMIT, callback));
+        assertFalse(internalCmrListingNonDetainedOrDetainedInPrisonOrIrcLrLetterBundler.canHandle(ABOUT_TO_SUBMIT, callback));
     }
 
     @Test
@@ -173,7 +184,7 @@ class InternalCmrListingNonDetainedLrLetterBundlerTest {
         )).thenReturn(bundleDocument);
 
         PreSubmitCallbackResponse<AsylumCase> response =
-            internalCmrListingNonDetainedLrLetterBundler.handle(ABOUT_TO_SUBMIT, callback);
+            internalCmrListingNonDetainedOrDetainedInPrisonOrIrcLrLetterBundler.handle(ABOUT_TO_SUBMIT, callback);
 
         assertNotNull(response);
         assertEquals(asylumCase, response.getData());
@@ -185,30 +196,30 @@ class InternalCmrListingNonDetainedLrLetterBundlerTest {
 
     @Test
     void should_have_late_dispatch_priority() {
-        assertThat(internalCmrListingNonDetainedLrLetterBundler.getDispatchPriority()).isEqualTo(LATE);
+        assertThat(internalCmrListingNonDetainedOrDetainedInPrisonOrIrcLrLetterBundler.getDispatchPriority()).isEqualTo(LATE);
     }
 
     @Test
     public void handling_should_throw_if_cannot_actually_handle() {
         when(callback.getEvent()).thenReturn(CMR_LISTING);
 
-        assertThatThrownBy(() -> internalCmrListingNonDetainedLrLetterBundler.handle(ABOUT_TO_START, callback))
+        assertThatThrownBy(() -> internalCmrListingNonDetainedOrDetainedInPrisonOrIrcLrLetterBundler.handle(ABOUT_TO_START, callback))
             .hasMessage("Cannot handle callback")
             .isExactlyInstanceOf(IllegalStateException.class);
 
         when(callback.getEvent()).thenReturn(Event.START_APPEAL);
-        assertThatThrownBy(() -> internalCmrListingNonDetainedLrLetterBundler.handle(ABOUT_TO_SUBMIT, callback))
+        assertThatThrownBy(() -> internalCmrListingNonDetainedOrDetainedInPrisonOrIrcLrLetterBundler.handle(ABOUT_TO_SUBMIT, callback))
             .hasMessage("Cannot handle callback")
             .isExactlyInstanceOf(IllegalStateException.class);
     }
 
     @Test
     public void should_not_allow_null_arguments() {
-        assertThatThrownBy(() -> internalCmrListingNonDetainedLrLetterBundler.canHandle(null, callback))
+        assertThatThrownBy(() -> internalCmrListingNonDetainedOrDetainedInPrisonOrIrcLrLetterBundler.canHandle(null, callback))
             .hasMessage("callbackStage must not be null")
             .isExactlyInstanceOf(NullPointerException.class);
 
-        assertThatThrownBy(() -> internalCmrListingNonDetainedLrLetterBundler.canHandle(ABOUT_TO_SUBMIT, null))
+        assertThatThrownBy(() -> internalCmrListingNonDetainedOrDetainedInPrisonOrIrcLrLetterBundler.canHandle(ABOUT_TO_SUBMIT, null))
             .hasMessage("callback must not be null")
             .isExactlyInstanceOf(NullPointerException.class);
     }
