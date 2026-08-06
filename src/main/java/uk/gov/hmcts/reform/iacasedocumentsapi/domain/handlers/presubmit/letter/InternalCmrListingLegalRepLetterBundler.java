@@ -132,14 +132,14 @@ public class InternalCmrListingLegalRepLetterBundler implements PreSubmitCallbac
                     asylumCase,
                     appellantLrBundleFuture.join(),
                     NOTIFICATION_ATTACHMENT_DOCUMENTS,
-                    DocumentTag.INTERNAL_CMR_LISTING_LR_LETTER
+                    DocumentTag.INTERNAL_CMR_LISTING_LETTER_BUNDLE
                 );
             } else {
                 documentHandler.addWithMetadataWithoutReplacingExistingDocuments(
                     asylumCase,
                     appellantLrBundleFuture.join(),
                     LETTER_BUNDLE_DOCUMENTS,
-                    DocumentTag.INTERNAL_CMR_LISTING_LR_LETTER_BUNDLE
+                    DocumentTag.INTERNAL_CMR_LISTING_LETTER_BUNDLE
                 );
             }
         }

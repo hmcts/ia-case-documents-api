@@ -28,7 +28,7 @@ public class InternalCmrListingLrLetterGenerator implements PreSubmitCallbackHan
     private final DocumentHandler documentHandler;
 
     public InternalCmrListingLrLetterGenerator(
-        @Qualifier("internalCmrListingLetter") DocumentCreator<AsylumCase> documentCreator,
+        @Qualifier("internalCmrListingLrLetter") DocumentCreator<AsylumCase> documentCreator,
         DocumentHandler documentHandler
     ) {
         this.documentCreator = documentCreator;

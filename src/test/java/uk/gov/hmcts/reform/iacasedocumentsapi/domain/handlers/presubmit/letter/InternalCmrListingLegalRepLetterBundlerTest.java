@@ -184,7 +184,14 @@ class InternalCmrListingLegalRepLetterBundlerTest {
                     eq("qualified.pdf")
             );
 
-            verify(documentHandler, times(2)).addWithMetadataWithoutReplacingExistingDocuments(
+            verify(documentHandler).addWithMetadataWithoutReplacingExistingDocuments(
+                    asylumCase,
+                    bundledDocument,
+                    LETTER_BUNDLE_DOCUMENTS,
+                    DocumentTag.INTERNAL_CMR_LISTING_LETTER_BUNDLE
+            );
+
+            verify(documentHandler).addWithMetadataWithoutReplacingExistingDocuments(
                     asylumCase,
                     bundledDocument,
                     LETTER_BUNDLE_DOCUMENTS,
@@ -258,7 +265,7 @@ class InternalCmrListingLegalRepLetterBundlerTest {
                     asylumCase,
                     bundledDocument,
                     NOTIFICATION_ATTACHMENT_DOCUMENTS,
-                    DocumentTag.INTERNAL_CMR_LISTING_LR_LETTER
+                    DocumentTag.INTERNAL_CMR_LISTING_LETTER_BUNDLE
             );
 
             verify(documentHandler).addWithMetadataWithoutReplacingExistingDocuments(
