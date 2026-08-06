@@ -170,7 +170,7 @@ class InternalCmrListingLegalRepLetterBundlerTest {
                     .thenReturn(false);
 
             mocked.when(() ->
-                            getMaybeLetterNotificationDocuments(asylumCase, DocumentTag.INTERNAL_CASE_LISTED_LETTER))
+                            getMaybeLetterNotificationDocuments(asylumCase, DocumentTag.INTERNAL_CMR_LISTING_LR_LETTER))
                     .thenReturn(appellantDocs);
 
             mocked.when(() ->
@@ -181,6 +181,18 @@ class InternalCmrListingLegalRepLetterBundlerTest {
                     handler.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
 
             assertNotNull(response);
+
+            verify(documentBundler).bundleWithoutContentsOrCoverSheets(
+                    eq(appellantDocs),
+                    eq("Letter bundle documents"),
+                    eq("qualified.pdf")
+            );
+
+            verify(documentBundler).bundleWithoutContentsOrCoverSheets(
+                    eq(lrDocs),
+                    eq("Letter bundle documents"),
+                    eq("qualified.pdf")
+            );
 
             verify(documentHandler).addWithMetadataWithoutReplacingExistingDocuments(
                     asylumCase,
@@ -235,7 +247,7 @@ class InternalCmrListingLegalRepLetterBundlerTest {
                     .thenReturn(true);
 
             mocked.when(() ->
-                            getMaybeNotificationAttachmentDocuments(asylumCase, DocumentTag.INTERNAL_CASE_LISTED_LETTER))
+                            getMaybeNotificationAttachmentDocuments(asylumCase, DocumentTag.INTERNAL_CMR_LISTING_LR_LETTER))
                     .thenReturn(appellantDocs);
 
             mocked.when(() ->
@@ -245,6 +257,18 @@ class InternalCmrListingLegalRepLetterBundlerTest {
             handler.handle(
                     PreSubmitCallbackStage.ABOUT_TO_SUBMIT,
                     callback
+            );
+
+            verify(documentBundler).bundleWithoutContentsOrCoverSheets(
+                    eq(appellantDocs),
+                    eq("Letter bundle documents"),
+                    eq("qualified.pdf")
+            );
+
+            verify(documentBundler).bundleWithoutContentsOrCoverSheets(
+                    eq(lrDocs),
+                    eq("Letter bundle documents"),
+                    eq("qualified.pdf")
             );
 
             verify(documentHandler).addWithMetadataWithoutReplacingExistingDocuments(

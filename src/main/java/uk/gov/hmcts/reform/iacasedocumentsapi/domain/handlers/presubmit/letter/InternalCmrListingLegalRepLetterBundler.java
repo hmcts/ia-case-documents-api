@@ -92,9 +92,9 @@ public class InternalCmrListingLegalRepLetterBundler implements PreSubmitCallbac
         List<DocumentWithMetadata> bundleDocuments;
 
         if (isDetainedInOneOfFacilityTypes(asylumCase, PRISON, IRC)) {
-            bundleDocuments = getMaybeNotificationAttachmentDocuments(asylumCase, DocumentTag.INTERNAL_CASE_LISTED_LETTER);
+            bundleDocuments = getMaybeNotificationAttachmentDocuments(asylumCase, DocumentTag.INTERNAL_CMR_LISTING_LR_LETTER);
         } else {
-            bundleDocuments = getMaybeLetterNotificationDocuments(asylumCase, DocumentTag.INTERNAL_CASE_LISTED_LETTER);
+            bundleDocuments = getMaybeLetterNotificationDocuments(asylumCase, DocumentTag.INTERNAL_CMR_LISTING_LR_LETTER);
         }
 
         CompletableFuture<Document> appellantLrBundleFuture = CompletableFuture.supplyAsync(() -> {
