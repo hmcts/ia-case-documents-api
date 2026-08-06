@@ -110,7 +110,7 @@ public class InternalCmrListingLegalRepLetterBundler implements PreSubmitCallbac
             }
         });
 
-        List<DocumentWithMetadata> bundleDocumentsLR = getMaybeLetterNotificationDocuments(asylumCase, DocumentTag.INTERNAL_CASE_LISTED_LR_LETTER);
+        List<DocumentWithMetadata> bundleDocumentsLR = getMaybeLetterNotificationDocuments(asylumCase, DocumentTag.INTERNAL_CMR_LISTING_LR_LETTER);
         CompletableFuture<Document> legalRepLrBundleFuture = CompletableFuture.supplyAsync(() -> {
             try {
                 RequestContextHolder.setRequestAttributes(requestAttributes);
@@ -139,7 +139,7 @@ public class InternalCmrListingLegalRepLetterBundler implements PreSubmitCallbac
                     asylumCase,
                     appellantLrBundleFuture.join(),
                     LETTER_BUNDLE_DOCUMENTS,
-                    DocumentTag.INTERNAL_CASE_LISTED_LETTER_BUNDLE
+                    DocumentTag.INTERNAL_CMR_LISTING_LR_LETTER_BUNDLE
                 );
             }
         }
@@ -149,7 +149,7 @@ public class InternalCmrListingLegalRepLetterBundler implements PreSubmitCallbac
                 asylumCase,
                 legalRepLrBundleFuture.join(),
                 LETTER_BUNDLE_DOCUMENTS,
-                DocumentTag.INTERNAL_CASE_LISTED_LR_LETTER_BUNDLE
+                DocumentTag.INTERNAL_CMR_LISTING_LR_LETTER_BUNDLE
             );
         }
 

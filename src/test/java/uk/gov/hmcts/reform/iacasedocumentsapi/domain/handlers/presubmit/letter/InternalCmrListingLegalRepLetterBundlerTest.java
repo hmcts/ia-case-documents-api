@@ -157,7 +157,6 @@ class InternalCmrListingLegalRepLetterBundlerTest {
     @Test
     void should_bundle_non_detained_case() {
 
-        List<DocumentWithMetadata> appellantDocs = List.of(mock(DocumentWithMetadata.class));
         List<DocumentWithMetadata> lrDocs = List.of(mock(DocumentWithMetadata.class));
 
         try (MockedStatic<uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils> mocked =
@@ -171,10 +170,6 @@ class InternalCmrListingLegalRepLetterBundlerTest {
 
             mocked.when(() ->
                             getMaybeLetterNotificationDocuments(asylumCase, DocumentTag.INTERNAL_CMR_LISTING_LR_LETTER))
-                    .thenReturn(appellantDocs);
-
-            mocked.when(() ->
-                            getMaybeLetterNotificationDocuments(asylumCase, DocumentTag.INTERNAL_CASE_LISTED_LR_LETTER))
                     .thenReturn(lrDocs);
 
             PreSubmitCallbackResponse<AsylumCase> response =
@@ -182,30 +177,18 @@ class InternalCmrListingLegalRepLetterBundlerTest {
 
             assertNotNull(response);
 
-            verify(documentBundler).bundleWithoutContentsOrCoverSheets(
-                    eq(appellantDocs),
-                    eq("Letter bundle documents"),
-                    eq("qualified.pdf")
-            );
-
-            verify(documentBundler).bundleWithoutContentsOrCoverSheets(
+            // both futures read the same tag, so the same documents are bundled twice
+            verify(documentBundler, times(2)).bundleWithoutContentsOrCoverSheets(
                     eq(lrDocs),
                     eq("Letter bundle documents"),
                     eq("qualified.pdf")
             );
 
-            verify(documentHandler).addWithMetadataWithoutReplacingExistingDocuments(
+            verify(documentHandler, times(2)).addWithMetadataWithoutReplacingExistingDocuments(
                     asylumCase,
                     bundledDocument,
                     LETTER_BUNDLE_DOCUMENTS,
-                    DocumentTag.INTERNAL_CASE_LISTED_LETTER_BUNDLE
-            );
-
-            verify(documentHandler).addWithMetadataWithoutReplacingExistingDocuments(
-                    asylumCase,
-                    bundledDocument,
-                    LETTER_BUNDLE_DOCUMENTS,
-                    DocumentTag.INTERNAL_CASE_LISTED_LR_LETTER_BUNDLE
+                    DocumentTag.INTERNAL_CMR_LISTING_LR_LETTER_BUNDLE
             );
         }
     }
@@ -234,7 +217,7 @@ class InternalCmrListingLegalRepLetterBundlerTest {
     @Test
     void should_bundle_detained_case() {
 
-        List<DocumentWithMetadata> appellantDocs = List.of(mock(DocumentWithMetadata.class));
+        List<DocumentWithMetadata> attachmentDocs = List.of(mock(DocumentWithMetadata.class));
         List<DocumentWithMetadata> lrDocs = List.of(mock(DocumentWithMetadata.class));
 
         try (MockedStatic<uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils> mocked =
@@ -248,10 +231,10 @@ class InternalCmrListingLegalRepLetterBundlerTest {
 
             mocked.when(() ->
                             getMaybeNotificationAttachmentDocuments(asylumCase, DocumentTag.INTERNAL_CMR_LISTING_LR_LETTER))
-                    .thenReturn(appellantDocs);
+                    .thenReturn(attachmentDocs);
 
             mocked.when(() ->
-                            getMaybeLetterNotificationDocuments(asylumCase, DocumentTag.INTERNAL_CASE_LISTED_LR_LETTER))
+                            getMaybeLetterNotificationDocuments(asylumCase, DocumentTag.INTERNAL_CMR_LISTING_LR_LETTER))
                     .thenReturn(lrDocs);
 
             handler.handle(
@@ -260,7 +243,7 @@ class InternalCmrListingLegalRepLetterBundlerTest {
             );
 
             verify(documentBundler).bundleWithoutContentsOrCoverSheets(
-                    eq(appellantDocs),
+                    eq(attachmentDocs),
                     eq("Letter bundle documents"),
                     eq("qualified.pdf")
             );
@@ -282,7 +265,7 @@ class InternalCmrListingLegalRepLetterBundlerTest {
                     asylumCase,
                     bundledDocument,
                     LETTER_BUNDLE_DOCUMENTS,
-                    DocumentTag.INTERNAL_CASE_LISTED_LR_LETTER_BUNDLE
+                    DocumentTag.INTERNAL_CMR_LISTING_LR_LETTER_BUNDLE
             );
         }
     }
