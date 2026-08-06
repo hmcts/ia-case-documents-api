@@ -51,8 +51,7 @@ public class CmrCancelledLrManualLetterGenerator implements PreSubmitCallbackHan
         return callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
                 && callback.getEvent() == CMR_HEARING_CANCELLED
                 && isCmrHearingInPersonOrRemote(asylumCase)
-                && isRepJourney(asylumCase)
-                && isInternalCase(asylumCase);
+                && hasBeenSubmittedAsLegalRepresentedInternalCase(asylumCase);
     }
 
     public PreSubmitCallbackResponse<AsylumCase> handle(
