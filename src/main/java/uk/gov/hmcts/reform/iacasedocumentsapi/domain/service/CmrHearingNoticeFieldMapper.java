@@ -1,5 +1,6 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.service;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.HearingCentre;
@@ -15,6 +16,7 @@ import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseD
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.formatDateTimeForRendering;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.getAppellantPersonalisation;
 
+@Slf4j
 @Service
 public class CmrHearingNoticeFieldMapper {
 
@@ -64,9 +66,11 @@ public class CmrHearingNoticeFieldMapper {
         }
 
         fieldValues.put("hearingCentreAddress", isCaseUsingLocationRefData ?
-                asylumCase.read(CMR_HEARING_CENTRE_ADDRESS, String.class).orElse("")
+                asylumCase.read(CMR_HEARING_CENTRE, String.class).orElse("")
                 : stringProvider.get("hearingCentreAddress", listedHearingCentre.toString()).orElse("").replaceAll(",\\s*", "\n")
         );
+        log.info("Hearing centre address: {}", fieldValues.get("hearingCentreAddress"));
+        log.info("Hearing centre address: {}", asylumCase.read(CMR_HEARING_CENTRE, String.class).orElse(""));
 
         if (isSubmitRequirementsAvailable.isPresent() && isSubmitRequirementsAvailable.get() == YesOrNo.YES) {
             fieldValues.put("vulnerabilities", asylumCase.read(VULNERABILITIES_TRIBUNAL_RESPONSE, String.class).orElse("No special adjustments are being made to accommodate vulnerabilities"));
