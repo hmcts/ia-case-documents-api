@@ -1,6 +1,5 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit.letter;
 
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
@@ -21,12 +20,13 @@ import java.util.List;
 
 import static java.util.Objects.requireNonNull;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.LETTER_BUNDLE_DOCUMENTS;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.Event.CMR_HEARING_CANCELLED;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DetentionFacility.IRC;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DetentionFacility.PRISON;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.Event.CMR_LISTING;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.*;
 
-@Slf4j
 @Component
-public class CmrCancelledAipManualLetterBundler implements PreSubmitCallbackHandler<AsylumCase> {
+public class InternalCmrListingNonDetainedOrDetainedInPrisonOrIrcLrLetterBundler implements PreSubmitCallbackHandler<AsylumCase> {
 
     private final String fileExtension;
     private final String fileName;
@@ -35,13 +35,13 @@ public class CmrCancelledAipManualLetterBundler implements PreSubmitCallbackHand
     private final DocumentBundler documentBundler;
     private final DocumentHandler documentHandler;
 
-    public CmrCancelledAipManualLetterBundler(
-            @Value("${cmrCancelledAipManualLetter.fileExtension}") String fileExtension,
-            @Value("${cmrCancelledAipManualLetter.fileName}") String fileName,
-            @Value("${featureFlag.isEmStitchingEnabled}") boolean isEmStitchingEnabled,
-            FileNameQualifier<AsylumCase> fileNameQualifier,
-            DocumentBundler documentBundler,
-            DocumentHandler documentHandler
+    public InternalCmrListingNonDetainedOrDetainedInPrisonOrIrcLrLetterBundler(
+        @Value("${internalCmrListingNonDetainedLrLetterWithAttachment.fileExtension}") String fileExtension,
+        @Value("${internalCmrListingNonDetainedLrLetterWithAttachment.fileName}") String fileName,
+        @Value("${featureFlag.isEmStitchingEnabled}") boolean isEmStitchingEnabled,
+        FileNameQualifier<AsylumCase> fileNameQualifier,
+        DocumentBundler documentBundler,
+        DocumentHandler documentHandler
     ) {
         this.fileExtension = fileExtension;
         this.fileName = fileName;
@@ -49,7 +49,6 @@ public class CmrCancelledAipManualLetterBundler implements PreSubmitCallbackHand
         this.fileNameQualifier = fileNameQualifier;
         this.documentBundler = documentBundler;
         this.documentHandler = documentHandler;
-        log.info("CmrCancelledAipManualLetterBundler initialised");
     }
 
     @Override
@@ -58,27 +57,24 @@ public class CmrCancelledAipManualLetterBundler implements PreSubmitCallbackHand
     }
 
     public boolean canHandle(
-            PreSubmitCallbackStage callbackStage,
-            Callback<AsylumCase> callback
+        PreSubmitCallbackStage callbackStage,
+        Callback<AsylumCase> callback
     ) {
         requireNonNull(callbackStage, "callbackStage must not be null");
         requireNonNull(callback, "callback must not be null");
 
         AsylumCase asylumCase = callback.getCaseDetails().getCaseData();
 
-        log.info("getEvent: {} for case reference {}", callback.getEvent(), callback.getCaseDetails().getId());
-        log.info("isCmrHearingInPersonOrRemote: {} for case reference: {}", isCmrHearingInPersonOrRemote(asylumCase),  callback.getCaseDetails().getId());
-        log.info("hasBeenSubmittedByAppellantInternalCase: {} for case reference: {}", hasBeenSubmittedByAppellantInternalCase(asylumCase), callback.getCaseDetails().getId());
-
         return callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
-                && CMR_HEARING_CANCELLED.equals(callback.getEvent())
-                && isCmrHearingInPersonOrRemote(asylumCase)
-                && hasBeenSubmittedByAppellantInternalCase(asylumCase);
+                && (callback.getEvent() == CMR_LISTING)
+                && (!isDetainedAppeal(asylumCase) || isDetainedInOneOfFacilityTypes(asylumCase, IRC, PRISON))
+                && hasBeenSubmittedAsLegalRepresentedInternalCase(asylumCase)
+                && isEmStitchingEnabled;
     }
 
     public PreSubmitCallbackResponse<AsylumCase> handle(
-            PreSubmitCallbackStage callbackStage,
-            Callback<AsylumCase> callback
+        PreSubmitCallbackStage callbackStage,
+        Callback<AsylumCase> callback
     ) {
         if (!canHandle(callbackStage, callback)) {
             throw new IllegalStateException("Cannot handle callback");
@@ -89,21 +85,19 @@ public class CmrCancelledAipManualLetterBundler implements PreSubmitCallbackHand
 
         final String qualifiedDocumentFileName = fileNameQualifier.get(fileName + "." + fileExtension, caseDetails);
 
-        List<DocumentWithMetadata> bundleDocuments = getMaybeLetterNotificationDocuments(asylumCase, DocumentTag.CMR_HEARING_CANCELLED_LETTER);
+        List<DocumentWithMetadata> bundleDocuments = getMaybeLetterNotificationDocuments(asylumCase, DocumentTag.INTERNAL_CMR_LISTING_LR_LETTER);
 
-        log.info("Found {} documents to bundle", bundleDocuments.size());
-
-        Document cmrCancelledAipManualLetterBundle = documentBundler.bundleWithoutContentsOrCoverSheets(
-                bundleDocuments,
-                "Letter bundle documents",
-                qualifiedDocumentFileName
+        Document internalCaseListedLetterBundle = documentBundler.bundleWithoutContentsOrCoverSheets(
+            bundleDocuments,
+            "Letter bundle documents",
+            qualifiedDocumentFileName
         );
 
         documentHandler.addWithMetadataWithoutReplacingExistingDocuments(
-                asylumCase,
-                cmrCancelledAipManualLetterBundle,
-                LETTER_BUNDLE_DOCUMENTS,
-                DocumentTag.CMR_HEARING_CANCELLED_LETTER_BUNDLE
+            asylumCase,
+            internalCaseListedLetterBundle,
+            LETTER_BUNDLE_DOCUMENTS,
+            DocumentTag.INTERNAL_CMR_LISTING_LR_LETTER_BUNDLE
         );
 
         return new PreSubmitCallbackResponse<>(asylumCase);

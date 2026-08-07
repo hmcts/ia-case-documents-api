@@ -45,7 +45,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.CustomerServicesPro
 @ExtendWith(MockitoExtension.class)
 @SuppressWarnings("unchecked")
 @MockitoSettings(strictness = Strictness.LENIENT)
-class InternalCmrListingNonDetainedLrLetterTemplateTest {
+class InternalCmrListingNonDetainedOrDetainedInPrisonOrIrcLrLetterTemplateTest {
 
     @Mock private CaseDetails<AsylumCase> caseDetails;
     @Mock private AsylumCase asylumCase;
@@ -55,7 +55,7 @@ class InternalCmrListingNonDetainedLrLetterTemplateTest {
     @Mock private Value hearingChannelValue;
     @Mock private NationalityFieldValue oocLegalRepCountry;
 
-    private InternalCmrListingNonDetainedLrLetterTemplate internalCmrListingNonDetainedLrLetterTemplate;
+    private InternalCmrListingNonDetainedOrDetainedInPrisonOrIrcLrLetterTemplate internalCmrListingNonDetainedOrDetainedInPrisonOrIrcLrLetterTemplate;
 
     private final String templateName = "TB-IAC-LET-ENG-00006.docx";
     private final String appealReferenceNumber = "HU/11111/2023";
@@ -75,8 +75,8 @@ class InternalCmrListingNonDetainedLrLetterTemplateTest {
 
     @BeforeEach
     void setUp() {
-        internalCmrListingNonDetainedLrLetterTemplate =
-            new InternalCmrListingNonDetainedLrLetterTemplate(
+        internalCmrListingNonDetainedOrDetainedInPrisonOrIrcLrLetterTemplate =
+            new InternalCmrListingNonDetainedOrDetainedInPrisonOrIrcLrLetterTemplate(
                 templateName,
                 customerServicesProvider,
                 stringProvider);
@@ -84,7 +84,7 @@ class InternalCmrListingNonDetainedLrLetterTemplateTest {
 
     @Test
     void should_return_template_name() {
-        assertEquals(templateName, internalCmrListingNonDetainedLrLetterTemplate.getName());
+        assertEquals(templateName, internalCmrListingNonDetainedOrDetainedInPrisonOrIrcLrLetterTemplate.getName());
     }
 
     void dataSetUp(boolean legalRepInUk) {
@@ -121,7 +121,7 @@ class InternalCmrListingNonDetainedLrLetterTemplateTest {
     void should_map_case_data_to_template_field_values_for_legal_rep_in_uk() {
         dataSetUp(true);
 
-        Map<String, Object> templateFieldValues = internalCmrListingNonDetainedLrLetterTemplate.mapFieldValues(caseDetails);
+        Map<String, Object> templateFieldValues = internalCmrListingNonDetainedOrDetainedInPrisonOrIrcLrLetterTemplate.mapFieldValues(caseDetails);
 
         assertEquals(17, templateFieldValues.size());
         assertEquals("[userImage:hmcts.png]", templateFieldValues.get("hmcts"));
@@ -148,7 +148,7 @@ class InternalCmrListingNonDetainedLrLetterTemplateTest {
     void should_map_case_data_to_template_field_values_for_legal_rep_out_of_country() {
         dataSetUp(false);
 
-        Map<String, Object> templateFieldValues = internalCmrListingNonDetainedLrLetterTemplate.mapFieldValues(caseDetails);
+        Map<String, Object> templateFieldValues = internalCmrListingNonDetainedOrDetainedInPrisonOrIrcLrLetterTemplate.mapFieldValues(caseDetails);
 
         assertEquals("50", templateFieldValues.get("address_line_1"));
         assertEquals("Building name", templateFieldValues.get("address_line_2"));
@@ -163,7 +163,7 @@ class InternalCmrListingNonDetainedLrLetterTemplateTest {
 
         when(asylumCase.read(CMR_HEARING_CHANNEL, DynamicList.class)).thenReturn(Optional.empty());
 
-        Map<String, Object> templateFieldValues = internalCmrListingNonDetainedLrLetterTemplate.mapFieldValues(caseDetails);
+        Map<String, Object> templateFieldValues = internalCmrListingNonDetainedOrDetainedInPrisonOrIrcLrLetterTemplate.mapFieldValues(caseDetails);
 
         assertEquals("Unknown", templateFieldValues.get("hearingChannel"));
     }
@@ -174,7 +174,7 @@ class InternalCmrListingNonDetainedLrLetterTemplateTest {
 
         when(asylumCase.read(CMR_HEARING_DATE, String.class)).thenReturn(Optional.empty());
 
-        Map<String, Object> templateFieldValues = internalCmrListingNonDetainedLrLetterTemplate.mapFieldValues(caseDetails);
+        Map<String, Object> templateFieldValues = internalCmrListingNonDetainedOrDetainedInPrisonOrIrcLrLetterTemplate.mapFieldValues(caseDetails);
 
         assertEquals("", templateFieldValues.get("hearingDate"));
         assertEquals("", templateFieldValues.get("hearingTime"));
@@ -186,6 +186,6 @@ class InternalCmrListingNonDetainedLrLetterTemplateTest {
         when(asylumCase.read(CMR_HEARING_CENTRE, HearingCentre.class)).thenReturn(Optional.empty());
 
         assertThrows(IllegalStateException.class,
-            () -> internalCmrListingNonDetainedLrLetterTemplate.mapFieldValues(caseDetails));
+            () -> internalCmrListingNonDetainedOrDetainedInPrisonOrIrcLrLetterTemplate.mapFieldValues(caseDetails));
     }
 }

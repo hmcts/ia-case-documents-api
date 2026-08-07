@@ -38,6 +38,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DetentionFacility;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DocumentTag;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DocumentWithMetadata;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseDetails;
@@ -130,11 +131,12 @@ class InternalCmrListingNonDetainedAppellantLetterBundlerTest {
         assertFalse(internalCmrListingNonDetainedAppellantLetterBundler.canHandle(ABOUT_TO_SUBMIT, callback));
     }
 
-    @Test
-    public void it_cannot_handle_callback_when_appellant_detained_in_other_facility() {
+    @ParameterizedTest
+    @EnumSource(value = DetentionFacility.class)
+    public void it_cannot_handle_callback_for_any_detention_facility(DetentionFacility detentionFacility) {
         when(callback.getEvent()).thenReturn(CMR_LISTING);
         when(asylumCase.read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(YES));
-        when(asylumCase.read(DETENTION_FACILITY, String.class)).thenReturn(Optional.of("other"));
+        when(asylumCase.read(DETENTION_FACILITY, String.class)).thenReturn(Optional.of(detentionFacility.getValue()));
 
         assertFalse(internalCmrListingNonDetainedAppellantLetterBundler.canHandle(ABOUT_TO_SUBMIT, callback));
     }

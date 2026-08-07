@@ -1,5 +1,6 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.service;
 
+import java.util.Base64;
 import java.util.List;
 import org.apache.commons.io.FileUtils;
 import org.junit.jupiter.api.BeforeEach;
@@ -189,6 +190,45 @@ class SaveNotificationsToDataPdfServiceTest {
 
         assertNotNull(response.getFirst().getValue().getNotificationDocument());
         assertEquals(pdf, response.getFirst().getValue().getNotificationDocument());
+        verify(documentToPdfConverter).convertHtmlDocResourceToPdf(any());
+        verify(documentUploader).upload(any(), eq("application/pdf"));
+    }
+
+
+    @Test
+    void should_generate_and_add_document_to_notification_for_letter() {
+        byte[] pdfBytes = "PDF content".getBytes();
+        String encodedPdfFile = Base64.getEncoder().encodeToString(pdfBytes);
+        StoredNotification storedNotification =
+            StoredNotification.builder()
+                .notificationId(notificationId)
+                .notificationDateSent("2024-01-01")
+                .notificationSentTo(email)
+                .notificationBody("<div>" + body + "</div>")
+                .notificationMethod("Letter")
+                .notificationDocumentEncoded(encodedPdfFile)
+                .notificationStatus(status)
+                .notificationReference(reference)
+                .notificationSubject(subject)
+                .build();
+        List<IdValue<StoredNotification>> storedNotifications =
+            List.of(new IdValue<>(reference, storedNotification));
+
+        when(documentUploader.upload(any(), any())).thenReturn(pdf);
+
+        List<IdValue<StoredNotification>> response =
+            saveNotificationsToDataPdfService.generatePdfsForNotifications(storedNotifications);
+
+        assertEquals(1, response.size());
+        for (IdValue<StoredNotification> idValue : response) {
+            assertEquals(reference, idValue.getId());
+            assertEquals(storedNotification, idValue.getValue());
+        }
+
+        assertNotNull(response.getFirst().getValue().getNotificationDocument());
+        assertEquals(pdf, response.getFirst().getValue().getNotificationDocument());
+        verify(documentToPdfConverter, never()).convertHtmlDocResourceToPdf(any());
+        verify(documentUploader).upload(new ByteArrayResource(pdfBytes), "application/pdf");
     }
 
     private File createPdfFile() throws IOException {
