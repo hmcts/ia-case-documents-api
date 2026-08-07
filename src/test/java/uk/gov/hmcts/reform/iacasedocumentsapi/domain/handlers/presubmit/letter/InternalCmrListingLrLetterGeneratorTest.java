@@ -76,6 +76,9 @@ class InternalCmrListingLrLetterGeneratorTest {
             mocked.when(() -> isAppellantInDetention(asylumCase))
                     .thenReturn(false);
 
+            mocked.when(() -> hasBeenSubmittedAsLegalRepresentedInternalCase(asylumCase))
+                    .thenReturn(true);
+
             assertTrue(handler.canHandle(
                     PreSubmitCallbackStage.ABOUT_TO_SUBMIT,
                     callback
@@ -98,7 +101,32 @@ class InternalCmrListingLrLetterGeneratorTest {
             mocked.when(() -> isDetainedInFacilityType(asylumCase, OTHER))
                     .thenReturn(true);
 
+            mocked.when(() -> hasBeenSubmittedAsLegalRepresentedInternalCase(asylumCase))
+                    .thenReturn(true);
+
             assertTrue(handler.canHandle(
+                    PreSubmitCallbackStage.ABOUT_TO_SUBMIT,
+                    callback
+            ));
+        }
+    }
+
+    @Test
+    void should_not_handle_when_not_legally_represented() {
+
+        try (MockedStatic<uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils> mocked =
+                     mockStatic(uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.class, CALLS_REAL_METHODS)) {
+
+            mocked.when(() -> isInternalCase(asylumCase))
+                    .thenReturn(true);
+
+            mocked.when(() -> isAppellantInDetention(asylumCase))
+                    .thenReturn(false);
+
+            mocked.when(() -> hasBeenSubmittedAsLegalRepresentedInternalCase(asylumCase))
+                    .thenReturn(false);
+
+            assertFalse(handler.canHandle(
                     PreSubmitCallbackStage.ABOUT_TO_SUBMIT,
                     callback
             ));
@@ -211,6 +239,9 @@ class InternalCmrListingLrLetterGeneratorTest {
 
             mocked.when(() -> isAppellantInDetention(asylumCase))
                     .thenReturn(false);
+
+            mocked.when(() -> hasBeenSubmittedAsLegalRepresentedInternalCase(asylumCase))
+                    .thenReturn(true);
 
             PreSubmitCallbackResponse<AsylumCase> response =
                     handler.handle(
