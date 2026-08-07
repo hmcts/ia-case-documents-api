@@ -1,5 +1,7 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit.letter;
 
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.HearingCentre;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseDetails;
@@ -13,31 +15,22 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.CMR_HEARING_CENTRE;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.CMR_HEARING_DATE;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.formatDateForRendering;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.formatDateTimeForRendering;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.getAppellantPersonalisation;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.getCmrHearingChannel;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.*;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.*;
 
-/**
- * Common field mapping for the letters generated when a case management review hearing is listed.
- * Subclasses only supply the address the letter is sent to.
- */
-public abstract class AbstractInternalCmrListingLetterTemplate implements DocumentTemplate<AsylumCase> {
-
-    private static final DateTimeFormatter DOCUMENT_DATE_FORMAT = DateTimeFormatter.ofPattern("d MMMM yyyy");
-    private static final DateTimeFormatter DOCUMENT_TIME_FORMAT = DateTimeFormatter.ofPattern("HHmm");
+@Component
+public class InternalCmrListingLrLetterTemplate implements DocumentTemplate<AsylumCase> {
 
     private final String templateName;
     private final CustomerServicesProvider customerServicesProvider;
     private final StringProvider stringProvider;
+    private static final DateTimeFormatter DOCUMENT_DATE_FORMAT = DateTimeFormatter.ofPattern("d MMMM yyyy");
+    private static final DateTimeFormatter DOCUMENT_TIME_FORMAT = DateTimeFormatter.ofPattern("HHmm");
 
-    protected AbstractInternalCmrListingLetterTemplate(
-        String templateName,
+    public InternalCmrListingLrLetterTemplate(
+        @Value("${internalCaseListedLetter.templateName}") String templateName,
         CustomerServicesProvider customerServicesProvider,
-        StringProvider stringProvider
-    ) {
+        StringProvider stringProvider) {
         this.templateName = templateName;
         this.customerServicesProvider = customerServicesProvider;
         this.stringProvider = stringProvider;
@@ -48,7 +41,6 @@ public abstract class AbstractInternalCmrListingLetterTemplate implements Docume
         return templateName;
     }
 
-    @Override
     public Map<String, Object> mapFieldValues(
         CaseDetails<AsylumCase> caseDetails
     ) {
@@ -56,11 +48,11 @@ public abstract class AbstractInternalCmrListingLetterTemplate implements Docume
         final HearingCentre listedHearingCentre =
             asylumCase
                 .read(CMR_HEARING_CENTRE, HearingCentre.class)
-                .orElseThrow(() -> new IllegalStateException("cmrHearingCentre is not present"));
+                .orElseThrow(() -> new IllegalStateException("listCaseHearingCentre is not present"));
 
         final Map<String, Object> fieldValues = new HashMap<>();
 
-        fieldValues.putAll(getAppellantPersonalisation(asylumCase));
+        fieldValues.putAll(getLegalRepPersonalisation(asylumCase));
         fieldValues.put("customerServicesTelephone", customerServicesProvider.getInternalCustomerServicesTelephone(asylumCase));
         fieldValues.put("customerServicesEmail", customerServicesProvider.getInternalCustomerServicesEmail(asylumCase));
         fieldValues.put("hearingLocation", stringProvider.get("hearingCentreAddress", listedHearingCentre.toString()).orElse("").replaceAll(",\\s*", "\n"));
@@ -69,13 +61,13 @@ public abstract class AbstractInternalCmrListingLetterTemplate implements Docume
         fieldValues.put("dateLetterSent", formatDateForRendering(LocalDate.now().toString(), DOCUMENT_DATE_FORMAT));
         fieldValues.put("hearingChannel", getCmrHearingChannel(asylumCase, "Unknown"));
 
-        List<String> recipientAddress = getRecipientAddress(asylumCase);
+        List<String> legalRepAddress = legalRepInCountryAppeal(asylumCase)
+                ? getLegalRepresentativeAddressAsList(asylumCase)
+                : getLegalRepresentativeAddressOocAsList(asylumCase);
 
-        for (int i = 0; i < recipientAddress.size(); i++) {
-            fieldValues.put("address_line_" + (i + 1), recipientAddress.get(i));
+        for (int i = 0; i < legalRepAddress.size(); i++) {
+            fieldValues.put("address_line_" + (i + 1), legalRepAddress.get(i));
         }
         return fieldValues;
     }
-
-    protected abstract List<String> getRecipientAddress(AsylumCase asylumCase);
 }
