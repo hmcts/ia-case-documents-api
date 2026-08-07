@@ -71,6 +71,7 @@ public class CmrHearingNoticeFieldMapper {
         );
         log.info("Hearing centre address: {}", fieldValues.get("hearingCentreAddress"));
         log.info("Hearing centre address: {}", asylumCase.read(CMR_HEARING_CENTRE, String.class).orElse(""));
+        log.info("Legal representative: {}", fieldValues.get("legalRepReferenceNumber"));
 
         if (isSubmitRequirementsAvailable.isPresent() && isSubmitRequirementsAvailable.get() == YesOrNo.YES) {
             fieldValues.put("vulnerabilities", asylumCase.read(VULNERABILITIES_TRIBUNAL_RESPONSE, String.class).orElse("No special adjustments are being made to accommodate vulnerabilities"));
