@@ -2,6 +2,8 @@ package uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit.letter;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import org.springframework.web.context.request.RequestAttributes;
+import org.springframework.web.context.request.RequestContextHolder;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DocumentTag;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DocumentWithMetadata;
@@ -17,17 +19,18 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentHandler;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.FileNameQualifier;
 
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 import static java.util.Objects.requireNonNull;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.LETTER_BUNDLE_DOCUMENTS;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.NOTIFICATION_ATTACHMENT_DOCUMENTS;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DetentionFacility.IRC;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DetentionFacility.PRISON;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.Event.CMR_LISTING;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.Event.CMR_RE_LISTING;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.*;
 
 @Component
-public class InternalCmrListingNonDetainedOrDetainedInPrisonOrIrcLrLetterBundler implements PreSubmitCallbackHandler<AsylumCase> {
+public class InternalCmrListingLegalRepLetterBundler implements PreSubmitCallbackHandler<AsylumCase> {
 
     private final String fileExtension;
     private final String fileName;
@@ -36,9 +39,9 @@ public class InternalCmrListingNonDetainedOrDetainedInPrisonOrIrcLrLetterBundler
     private final DocumentBundler documentBundler;
     private final DocumentHandler documentHandler;
 
-    public InternalCmrListingNonDetainedOrDetainedInPrisonOrIrcLrLetterBundler(
-        @Value("${internalCmrListingNonDetainedLrLetterWithAttachment.fileExtension}") String fileExtension,
-        @Value("${internalCmrListingNonDetainedLrLetterWithAttachment.fileName}") String fileName,
+    public InternalCmrListingLegalRepLetterBundler(
+        @Value("${internalCaseListedLetterWithAttachment.fileExtension}") String fileExtension,
+        @Value("${internalCmrListingLetterWithAttachment.fileName}") String fileName,
         @Value("${featureFlag.isEmStitchingEnabled}") boolean isEmStitchingEnabled,
         FileNameQualifier<AsylumCase> fileNameQualifier,
         DocumentBundler documentBundler,
@@ -67,8 +70,7 @@ public class InternalCmrListingNonDetainedOrDetainedInPrisonOrIrcLrLetterBundler
         AsylumCase asylumCase = callback.getCaseDetails().getCaseData();
 
         return callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
-               && (callback.getEvent() == CMR_LISTING || callback.getEvent() == CMR_RE_LISTING)
-               && (!isDetainedAppeal(asylumCase) || isDetainedInOneOfFacilityTypes(asylumCase, IRC, PRISON))
+               && callback.getEvent() == CMR_LISTING
                && hasBeenSubmittedAsLegalRepresentedInternalCase(asylumCase)
                && isEmStitchingEnabled;
     }
@@ -84,22 +86,72 @@ public class InternalCmrListingNonDetainedOrDetainedInPrisonOrIrcLrLetterBundler
         final CaseDetails<AsylumCase> caseDetails = callback.getCaseDetails();
         final AsylumCase asylumCase = caseDetails.getCaseData();
 
+        RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();
+
         final String qualifiedDocumentFileName = fileNameQualifier.get(fileName + "." + fileExtension, caseDetails);
+        List<DocumentWithMetadata> bundleDocuments;
 
-        List<DocumentWithMetadata> bundleDocuments = getMaybeLetterNotificationDocuments(asylumCase, DocumentTag.INTERNAL_CMR_LISTING_LR_LETTER);
+        if (isDetainedInOneOfFacilityTypes(asylumCase, PRISON, IRC)) {
+            bundleDocuments = getMaybeNotificationAttachmentDocuments(asylumCase, DocumentTag.INTERNAL_CMR_LISTING_LR_LETTER);
+        } else {
+            bundleDocuments = getMaybeLetterNotificationDocuments(asylumCase, DocumentTag.INTERNAL_CMR_LISTING_LR_LETTER);
+        }
 
-        Document internalCaseListedLetterBundle = documentBundler.bundleWithoutContentsOrCoverSheets(
-            bundleDocuments,
-            "Letter bundle documents",
-            qualifiedDocumentFileName
-        );
+        CompletableFuture<Document> appellantLrBundleFuture = CompletableFuture.supplyAsync(() -> {
+            try {
+                RequestContextHolder.setRequestAttributes(requestAttributes);
+                return documentBundler.bundleWithoutContentsOrCoverSheets(
+                    bundleDocuments,
+                    "Letter bundle documents",
+                    qualifiedDocumentFileName
+                );
+            } finally {
+                RequestContextHolder.resetRequestAttributes();
+            }
+        });
 
-        documentHandler.addWithMetadataWithoutReplacingExistingDocuments(
-            asylumCase,
-            internalCaseListedLetterBundle,
-            LETTER_BUNDLE_DOCUMENTS,
-            DocumentTag.INTERNAL_CMR_LISTING_LR_LETTER_BUNDLE
-        );
+        List<DocumentWithMetadata> bundleDocumentsLR = getMaybeLetterNotificationDocuments(asylumCase, DocumentTag.INTERNAL_CMR_LISTING_LR_LETTER);
+        CompletableFuture<Document> legalRepLrBundleFuture = CompletableFuture.supplyAsync(() -> {
+            try {
+                RequestContextHolder.setRequestAttributes(requestAttributes);
+                return documentBundler.bundleWithoutContentsOrCoverSheets(
+                    bundleDocumentsLR,
+                    "Letter bundle documents",
+                    qualifiedDocumentFileName
+                );
+            } finally {
+                RequestContextHolder.resetRequestAttributes();
+            }
+        });
+
+        CompletableFuture.allOf(appellantLrBundleFuture, legalRepLrBundleFuture).join();
+
+        if (appellantLrBundleFuture != null) {
+            if (isDetainedInOneOfFacilityTypes(asylumCase, PRISON, IRC)) {
+                documentHandler.addWithMetadataWithoutReplacingExistingDocuments(
+                    asylumCase,
+                    appellantLrBundleFuture.join(),
+                    NOTIFICATION_ATTACHMENT_DOCUMENTS,
+                    DocumentTag.INTERNAL_CMR_LISTING_LETTER_BUNDLE
+                );
+            } else {
+                documentHandler.addWithMetadataWithoutReplacingExistingDocuments(
+                    asylumCase,
+                    appellantLrBundleFuture.join(),
+                    LETTER_BUNDLE_DOCUMENTS,
+                    DocumentTag.INTERNAL_CMR_LISTING_LETTER_BUNDLE
+                );
+            }
+        }
+
+        if (legalRepLrBundleFuture != null) {
+            documentHandler.addWithMetadataWithoutReplacingExistingDocuments(
+                asylumCase,
+                legalRepLrBundleFuture.join(),
+                LETTER_BUNDLE_DOCUMENTS,
+                DocumentTag.INTERNAL_CMR_LISTING_LR_LETTER_BUNDLE
+            );
+        }
 
         return new PreSubmitCallbackResponse<>(asylumCase);
     }

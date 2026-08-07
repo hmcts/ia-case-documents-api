@@ -66,10 +66,11 @@ public class InternalCmrListingAppellantLetterBundler implements PreSubmitCallba
         AsylumCase asylumCase = callback.getCaseDetails().getCaseData();
 
         return callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
-               && (callback.getEvent() == CMR_LISTING || callback.getEvent() == CMR_RE_LISTING)
-               && (isInternalCase(asylumCase) && !isAppellantInDetention(asylumCase) || isDetainedInFacilityType(asylumCase, OTHER))
-               && !hasBeenSubmittedAsLegalRepresentedInternalCase(asylumCase)
-               && isEmStitchingEnabled;
+            && (callback.getEvent() == CMR_LISTING || callback.getEvent() == CMR_RE_LISTING)
+            && isInternalCase(asylumCase)
+            && (!isAppellantInDetention(asylumCase) || isDetainedInFacilityType(asylumCase, OTHER))
+            && !hasBeenSubmittedAsLegalRepresentedInternalCase(asylumCase)
+            && isEmStitchingEnabled;
     }
 
     public PreSubmitCallbackResponse<AsylumCase> handle(
