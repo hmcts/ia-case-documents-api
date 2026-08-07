@@ -1935,9 +1935,9 @@ public class DocumentCreatorConfiguration {
 
     @Bean("internalCmrListingLrLetter")
     public DocumentCreator<AsylumCase> getInternalCmrListinglLrLetterDocumentCreator(
-        @Value("${internalCaseListedLetter.contentType}") String contentType,
-        @Value("${internalCaseListedLetter.fileExtension}") String fileExtension,
-        @Value("${internalCaseListedLetter.fileName}") String fileName,
+        @Value("${internalCmrListingLrLetter.contentType}") String contentType,
+        @Value("${internalCmrListingLrLetter.fileExtension}") String fileExtension,
+        @Value("${internalCmrListingLrLetter.fileName}") String fileName,
         AsylumCaseFileNameQualifier fileNameQualifier,
         InternalCmrListingLrLetterTemplate documentTemplate,
         DocumentGenerator documentGenerator,
