@@ -13,9 +13,8 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentCreator;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentGenerator;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentUploader;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates.CmrHearingNoticeTemplate;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit.letter.InternalCmrListingNonDetainedAppellantLetterTemplate;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit.letter.InternalCmrListingLetterTemplate;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit.letter.InternalCmrListingNonDetainedOrDetainedInPrisonOrIrcLrLetterTemplate;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit.letter.InternalCmrListingLrLetterTemplate;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit.letter.InternalCmrReListingLetterTemplate;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates.letter.InternalDetainedCmrListingLetterTemplate;
 
@@ -26,8 +25,7 @@ class DocumentCreatorConfigurationTest {
     @Mock private CmrHearingNoticeTemplate cmrHearingNoticeTemplate;
     @Mock private InternalDetainedCmrListingLetterTemplate internalDetainedCmrListingLetterTemplate;
     @Mock private InternalCmrListingLetterTemplate internalCmrListingLetterTemplate;
-    @Mock private InternalCmrListingNonDetainedOrDetainedInPrisonOrIrcLrLetterTemplate internalCmrListingNonDetainedOrDetainedInPrisonOrIrcLrLetterTemplate;
-    @Mock private InternalCmrListingNonDetainedAppellantLetterTemplate internalCmrListingNonDetainedAppellantLetterTemplate;
+    @Mock private InternalCmrListingLrLetterTemplate internalCmrListingLrLetterTemplate;
     @Mock private InternalCmrReListingLetterTemplate internalCmrReListingLetterTemplate;
     @Mock private DocumentGenerator documentGenerator;
     @Mock private DocumentUploader documentUploader;
@@ -94,7 +92,7 @@ class DocumentCreatorConfigurationTest {
     @Test
     void should_create_internal_cmr_listing_letter_document_creator() {
         DocumentCreator<AsylumCase> documentCreator =
-            configuration.getinternalCmrListingLetterDocumentCreator(
+            configuration.getInternalCmrListingLetterDocumentCreator(
                 contentType,
                 fileExtension,
                 fileName,
@@ -110,28 +108,12 @@ class DocumentCreatorConfigurationTest {
     @Test
     void should_create_internal_cmr_listing_lr_letter_document_creator() {
         DocumentCreator<AsylumCase> documentCreator =
-            configuration.getInternalCmrListingLrLetterDocumentCreator(
+            configuration.getInternalCmrListinglLrLetterDocumentCreator(
                 contentType,
                 fileExtension,
                 fileName,
                 fileNameQualifier,
-                    internalCmrListingNonDetainedOrDetainedInPrisonOrIrcLrLetterTemplate,
-                documentGenerator,
-                documentUploader
-            );
-
-        assertThat(documentCreator).isNotNull();
-    }
-
-    @Test
-    void should_create_internal_cmr_listing_appellant_letter_document_creator() {
-        DocumentCreator<AsylumCase> documentCreator =
-            configuration.getInternalCmrListingAppellantLetterDocumentCreator(
-                contentType,
-                fileExtension,
-                fileName,
-                fileNameQualifier,
-                    internalCmrListingNonDetainedAppellantLetterTemplate,
+                internalCmrListingLrLetterTemplate,
                 documentGenerator,
                 documentUploader
             );

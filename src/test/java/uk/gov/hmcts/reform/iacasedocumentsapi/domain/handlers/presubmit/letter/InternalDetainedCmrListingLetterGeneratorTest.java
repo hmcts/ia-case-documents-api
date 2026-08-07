@@ -5,14 +5,11 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.*;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.Event.CMR_LISTING;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.Event.CMR_RE_LISTING;
 
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.EnumSource;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
@@ -56,11 +53,10 @@ class InternalDetainedCmrListingLetterGeneratorTest {
             );
     }
 
-    @ParameterizedTest
-    @EnumSource(value = Event.class, names = {"CMR_LISTING", "CMR_RE_LISTING"})
-    public void should_create_detained_cmr_listing_pdf_and_append_to_notifications_documents(Event event) {
+    @Test
+    public void should_create_detained_cmr_listing_pdf_and_append_to_notifications_documents() {
         when(callback.getCaseDetails()).thenReturn(caseDetails);
-        when(callback.getEvent()).thenReturn(event);
+        when(callback.getEvent()).thenReturn(CMR_LISTING);
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
         when(asylumCase.read(IS_ACCELERATED_DETAINED_APPEAL, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO));
         when(asylumCase.read(CMR_IS_REMOTE_HEARING, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO));
@@ -199,7 +195,7 @@ class InternalDetainedCmrListingLetterGeneratorTest {
 
         for (Event event : Event.values()) {
 
-            if (event == CMR_LISTING || event == CMR_RE_LISTING) {
+            if (event == CMR_LISTING) {
                 continue;
             }
 

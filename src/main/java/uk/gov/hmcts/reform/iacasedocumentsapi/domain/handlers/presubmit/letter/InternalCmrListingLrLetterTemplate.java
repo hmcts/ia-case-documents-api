@@ -19,7 +19,7 @@ import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseD
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.*;
 
 @Component
-public class InternalCmrListingLetterTemplate implements DocumentTemplate<AsylumCase> {
+public class InternalCmrListingLrLetterTemplate implements DocumentTemplate<AsylumCase> {
 
     private final String templateName;
     private final CustomerServicesProvider customerServicesProvider;
@@ -27,11 +27,10 @@ public class InternalCmrListingLetterTemplate implements DocumentTemplate<Asylum
     private static final DateTimeFormatter DOCUMENT_DATE_FORMAT = DateTimeFormatter.ofPattern("d MMMM yyyy");
     private static final DateTimeFormatter DOCUMENT_TIME_FORMAT = DateTimeFormatter.ofPattern("HHmm");
 
-    public InternalCmrListingLetterTemplate(
-        @Value("${internalCmrListingLetter.templateName}") String templateName,
+    public InternalCmrListingLrLetterTemplate(
+        @Value("${internalCaseListedLetter.templateName}") String templateName,
         CustomerServicesProvider customerServicesProvider,
-        StringProvider stringProvider
-    ) {
+        StringProvider stringProvider) {
         this.templateName = templateName;
         this.customerServicesProvider = customerServicesProvider;
         this.stringProvider = stringProvider;
@@ -43,17 +42,17 @@ public class InternalCmrListingLetterTemplate implements DocumentTemplate<Asylum
     }
 
     public Map<String, Object> mapFieldValues(
-            CaseDetails<AsylumCase> caseDetails
+        CaseDetails<AsylumCase> caseDetails
     ) {
         final AsylumCase asylumCase = caseDetails.getCaseData();
         final HearingCentre listedHearingCentre =
-                asylumCase
-                        .read(CMR_HEARING_CENTRE, HearingCentre.class)
-                        .orElseThrow(() -> new IllegalStateException("listCaseHearingCentre is not present"));
+            asylumCase
+                .read(CMR_HEARING_CENTRE, HearingCentre.class)
+                .orElseThrow(() -> new IllegalStateException("listCaseHearingCentre is not present"));
 
         final Map<String, Object> fieldValues = new HashMap<>();
 
-        fieldValues.putAll(getAppellantPersonalisation(asylumCase));
+        fieldValues.putAll(getLegalRepPersonalisation(asylumCase));
         fieldValues.put("customerServicesTelephone", customerServicesProvider.getInternalCustomerServicesTelephone(asylumCase));
         fieldValues.put("customerServicesEmail", customerServicesProvider.getInternalCustomerServicesEmail(asylumCase));
         fieldValues.put("hearingLocation", stringProvider.get("hearingCentreAddress", listedHearingCentre.toString()).orElse("").replaceAll(",\\s*", "\n"));
@@ -62,12 +61,12 @@ public class InternalCmrListingLetterTemplate implements DocumentTemplate<Asylum
         fieldValues.put("dateLetterSent", formatDateForRendering(LocalDate.now().toString(), DOCUMENT_DATE_FORMAT));
         fieldValues.put("hearingChannel", getCmrHearingChannel(asylumCase, "Unknown"));
 
-        List<String> appellantAddress = isAppellantInUk(asylumCase) ?
-                getAppellantAddressAsList(asylumCase) :
-                getAppellantAddressAsListOoc(asylumCase);
+        List<String> legalRepAddress = legalRepInCountryAppeal(asylumCase)
+                ? getLegalRepresentativeAddressAsList(asylumCase)
+                : getLegalRepresentativeAddressOocAsList(asylumCase);
 
-        for (int i = 0; i < appellantAddress.size(); i++) {
-            fieldValues.put("address_line_" + (i + 1), appellantAddress.get(i));
+        for (int i = 0; i < legalRepAddress.size(); i++) {
+            fieldValues.put("address_line_" + (i + 1), legalRepAddress.get(i));
         }
         return fieldValues;
     }

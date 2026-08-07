@@ -3,90 +3,25 @@ package uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit.letter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.HearingCentre;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseDetails;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.StringProvider;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates.DocumentTemplate;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.CustomerServicesProvider;
 
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.*;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.*;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.getAppellantAddressInCountryOrOoc;
 
 @Component
-public class InternalCmrReListingLetterTemplate implements DocumentTemplate<AsylumCase> {
-
-    private final String templateName;
-    private final CustomerServicesProvider customerServicesProvider;
-    private final StringProvider stringProvider;
-    private static final DateTimeFormatter DOCUMENT_DATE_FORMAT = DateTimeFormatter.ofPattern("d MMMM yyyy");
-    private static final DateTimeFormatter DOCUMENT_TIME_FORMAT = DateTimeFormatter.ofPattern("hh:mm a");
+public class InternalCmrReListingLetterTemplate extends AbstractInternalCmrReListingLetterTemplate {
 
     public InternalCmrReListingLetterTemplate(
         @Value("${internalCmrReListingLetter.templateName}") String templateName,
         CustomerServicesProvider customerServicesProvider,
         StringProvider stringProvider) {
-        this.templateName = templateName;
-        this.customerServicesProvider = customerServicesProvider;
-        this.stringProvider = stringProvider;
+        super(templateName, customerServicesProvider, stringProvider);
     }
 
     @Override
-    public String getName() {
-        return templateName;
-    }
-
-    @Override
-    public Map<String, Object> mapFieldValues(
-        CaseDetails<AsylumCase> caseDetails,
-        CaseDetails<AsylumCase> caseDetailsBefore
-    ) {
-        final AsylumCase asylumCase = caseDetails.getCaseData();
-        final AsylumCase asylumCaseBefore = caseDetailsBefore.getCaseData();
-
-        final HearingCentre hearingCentre =
-            asylumCase
-                .read(CMR_HEARING_CENTRE, HearingCentre.class)
-                .orElseThrow(() -> new IllegalStateException("cmrHearingCentre is not present"));
-
-        final HearingCentre hearingCentreBefore =
-            asylumCaseBefore
-                .read(CMR_HEARING_CENTRE, HearingCentre.class)
-                .orElseThrow(() -> new IllegalStateException("cmrHearingCentre (before) is not present"));
-
-        final String hearingCentreNameBefore =
-            stringProvider
-                .get("hearingCentreName", hearingCentreBefore.toString())
-                .orElseThrow(() -> new IllegalStateException("cmrHearingCentre (before) is not present"));
-
-        final Map<String, Object> fieldValues = new HashMap<>(getAppellantPersonalisation(asylumCase));
-
-        fieldValues.put("customerServicesTelephone", customerServicesProvider.getInternalCustomerServicesTelephone(asylumCase));
-        fieldValues.put("customerServicesEmail", customerServicesProvider.getInternalCustomerServicesEmail(asylumCase));
-        fieldValues.put("dateLetterSent", formatDateForRendering(LocalDate.now().toString(), DOCUMENT_DATE_FORMAT));
-
-        fieldValues.put("hearingCentreAddress", stringProvider.get("hearingCentreAddress", hearingCentre.toString()).orElse("").replaceAll(",\\s*", "\n"));
-        fieldValues.put("hearingDate", formatDateTimeForRendering(asylumCase.read(CMR_HEARING_DATE, String.class).orElse(""), DOCUMENT_DATE_FORMAT));
-        fieldValues.put("hearingTime", formatDateTimeForRendering(asylumCase.read(CMR_HEARING_DATE, String.class).orElse(""), DOCUMENT_TIME_FORMAT));
-        fieldValues.put("hearingChannel", getCmrHearingChannel(asylumCase, "Unknown"));
-
-        fieldValues.put("oldHearingCentre", hearingCentreNameBefore);
-        fieldValues.put("oldHearingDate", formatDateTimeForRendering(asylumCaseBefore.read(CMR_HEARING_DATE, String.class).orElse(""), DOCUMENT_DATE_FORMAT));
-        fieldValues.put("oldHearingTime", formatDateTimeForRendering(asylumCaseBefore.read(CMR_HEARING_DATE, String.class).orElse(""), DOCUMENT_TIME_FORMAT));
-        fieldValues.put("oldHearingChannel", getCmrHearingChannel(asylumCaseBefore, "Unknown"));
-
-        List<String> appellantAddress = isAppellantInUk(asylumCase) ?
-            getAppellantAddressAsList(asylumCase) :
-            getAppellantAddressAsListOoc(asylumCase);
-
-        for (int i = 0; i < appellantAddress.size(); i++) {
-            fieldValues.put("address_line_" + (i + 1), appellantAddress.get(i));
-        }
-        return fieldValues;
+    protected List<String> getRecipientAddress(AsylumCase asylumCase) {
+        return getAppellantAddressInCountryOrOoc(asylumCase);
     }
 }

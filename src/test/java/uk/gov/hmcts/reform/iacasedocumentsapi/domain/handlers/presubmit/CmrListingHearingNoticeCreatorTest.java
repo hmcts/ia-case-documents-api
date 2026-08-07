@@ -157,6 +157,67 @@ class CmrListingHearingNoticeCreatorTest {
     }
 
     @Test
+    void should_append_internal_cmr_listing_lr_letter_when_submitted_as_legal_represented_internal_case() {
+
+        when(asylumCase.read(IS_ADMIN, YesOrNo.class)).thenReturn(Optional.of(YES));
+        when(asylumCase.read(APPELLANTS_REPRESENTATION, YesOrNo.class)).thenReturn(Optional.of(NO));
+        when(cmrHearingNoticeDocumentCreator.create(caseDetails)).thenReturn(uploadedDocument);
+
+        PreSubmitCallbackResponse<AsylumCase> callbackResponse =
+            cmrListingHearingNoticeCreator.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
+
+        assertNotNull(callbackResponse);
+
+        verify(documentHandler, times(1)).addWithMetadataWithoutReplacingExistingDocuments(
+            asylumCase, uploadedDocument, LETTER_NOTIFICATION_DOCUMENTS, DocumentTag.INTERNAL_CMR_LISTING_LR_LETTER);
+    }
+
+    @Test
+    void should_append_internal_cmr_listing_lr_letter_when_legal_represented_and_detained_in_irc_or_prison() {
+
+        when(asylumCase.read(IS_ADMIN, YesOrNo.class)).thenReturn(Optional.of(YES));
+        when(asylumCase.read(APPELLANTS_REPRESENTATION, YesOrNo.class)).thenReturn(Optional.of(NO));
+        when(asylumCase.read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(YES));
+        when(asylumCase.read(DETENTION_FACILITY, String.class)).thenReturn(Optional.of(DetentionFacility.IRC.getValue()));
+        when(cmrHearingNoticeDocumentCreator.create(caseDetails)).thenReturn(uploadedDocument);
+
+        cmrListingHearingNoticeCreator.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
+
+        // the LR letter now goes to letter notification documents, not the detained attachment documents
+        verify(documentHandler, times(1)).addWithMetadataWithoutReplacingExistingDocuments(
+            asylumCase, uploadedDocument, LETTER_NOTIFICATION_DOCUMENTS, DocumentTag.INTERNAL_CMR_LISTING_LR_LETTER);
+
+        verify(documentHandler, never()).addWithMetadataWithoutReplacingExistingDocuments(
+            asylumCase, uploadedDocument, NOTIFICATION_ATTACHMENT_DOCUMENTS, DocumentTag.INTERNAL_CMR_LISTING_LR_LETTER);
+    }
+
+    @Test
+    void should_not_append_internal_cmr_listing_lr_letter_when_appellant_is_not_legally_represented() {
+
+        when(asylumCase.read(IS_ADMIN, YesOrNo.class)).thenReturn(Optional.of(YES));
+        when(asylumCase.read(APPELLANTS_REPRESENTATION, YesOrNo.class)).thenReturn(Optional.of(YES));
+        when(cmrHearingNoticeDocumentCreator.create(caseDetails)).thenReturn(uploadedDocument);
+
+        cmrListingHearingNoticeCreator.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
+
+        verify(documentHandler, never()).addWithMetadataWithoutReplacingExistingDocuments(
+            asylumCase, uploadedDocument, LETTER_NOTIFICATION_DOCUMENTS, DocumentTag.INTERNAL_CMR_LISTING_LR_LETTER);
+    }
+
+    @Test
+    void should_not_append_internal_cmr_listing_lr_letter_when_not_internal_case() {
+
+        when(asylumCase.read(IS_ADMIN, YesOrNo.class)).thenReturn(Optional.of(NO));
+        when(asylumCase.read(APPELLANTS_REPRESENTATION, YesOrNo.class)).thenReturn(Optional.of(NO));
+        when(cmrHearingNoticeDocumentCreator.create(caseDetails)).thenReturn(uploadedDocument);
+
+        cmrListingHearingNoticeCreator.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
+
+        verify(documentHandler, never()).addWithMetadataWithoutReplacingExistingDocuments(
+            asylumCase, uploadedDocument, LETTER_NOTIFICATION_DOCUMENTS, DocumentTag.INTERNAL_CMR_LISTING_LR_LETTER);
+    }
+
+    @Test
     void should_handle_cmr_re_listing_event_the_same_way_as_cmr_listing() {
 
         when(callback.getEvent()).thenReturn(Event.CMR_RE_LISTING);

@@ -98,8 +98,6 @@ public enum DocumentTag {
     INTERNAL_CMR_LISTING_LETTER_BUNDLE("internalCmrListingLetterBundle", CaseType.ASYLUM),
     INTERNAL_CMR_LISTING_LR_LETTER("internalCmrListingLrLetter", CaseType.ASYLUM),
     INTERNAL_CMR_LISTING_LR_LETTER_BUNDLE("internalCmrListingLrLetterBundle", CaseType.ASYLUM),
-    INTERNAL_CMR_LISTING_APPELLANT_LETTER("internalCmrListingAppellantLetter", CaseType.ASYLUM),
-    INTERNAL_CMR_LISTING_APPELLANT_LETTER_BUNDLE("internalCmrListingAppellantLetterBundle", CaseType.ASYLUM),
     INTERNAL_CASE_LISTED_LR_LETTER("internalCaseListedLrLetter", CaseType.ASYLUM),
     INTERNAL_CASE_LISTED_LR_LETTER_BUNDLE("internalCaseListedLrLetterBundle", CaseType.ASYLUM),
     APPEAL_WAS_NOT_SUBMITTED_SUPPORTING_DOCUMENT("appealWasNotSubmittedSupportingDocument", CaseType.ASYLUM),

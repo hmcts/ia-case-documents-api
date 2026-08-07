@@ -17,7 +17,6 @@ import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseD
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.IS_ADMIN;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.NOTIFICATION_ATTACHMENT_DOCUMENTS;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.Event.CMR_LISTING;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.Event.CMR_RE_LISTING;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.DispatchPriority.LATEST;
 
 import java.util.Optional;
@@ -88,11 +87,10 @@ class DetainedIrcPrisonCmrListingDocumentBundlerTest {
         assertEquals(LATEST, detainedIrcPrisonCmrListingDocumentBundler.getDispatchPriority());
     }
 
-    @ParameterizedTest
-    @EnumSource(value = Event.class, names = {"CMR_LISTING", "CMR_RE_LISTING"})
-    void should_create_bundle_and_append_to_notification_documents(Event event) {
+    @Test
+    void should_create_bundle_and_append_to_notification_documents() {
         when(callback.getCaseDetails()).thenReturn(caseDetails);
-        when(callback.getEvent()).thenReturn(event);
+        when(callback.getEvent()).thenReturn(CMR_LISTING);
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
         when(asylumCase.read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
         when(asylumCase.read(DETENTION_FACILITY, String.class)).thenReturn(Optional.of("immigrationRemovalCentre"));
@@ -240,7 +238,7 @@ class DetainedIrcPrisonCmrListingDocumentBundlerTest {
     void it_cannot_handle_callback_for_non_cmr_events_and_stages() {
         for (Event event : Event.values()) {
 
-            if (event == CMR_LISTING || event == CMR_RE_LISTING) {
+            if (event == CMR_LISTING) {
                 continue;
             }
 
