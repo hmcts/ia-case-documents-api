@@ -1,7 +1,5 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit.letter;
 
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Component;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DocumentTag;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseDetails;
@@ -17,22 +15,27 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentHandler;
 import java.util.Objects;
 
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.LETTER_NOTIFICATION_DOCUMENTS;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DetentionFacility.OTHER;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.Event.CMR_LISTING;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.*;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.Event.CMR_RE_LISTING;
 
-@Component
-public class InternalCmrListingLetterGenerator implements PreSubmitCallbackHandler<AsylumCase> {
+/**
+ * Common behaviour for the letters generated when a case management review hearing is re-listed.
+ * Subclasses only supply the case condition that makes them applicable and the recipient-specific
+ * document tag/creator.
+ */
+public abstract class AbstractInternalCmrReListingLetterGenerator implements PreSubmitCallbackHandler<AsylumCase> {
 
     private final DocumentCreator<AsylumCase> documentCreator;
     private final DocumentHandler documentHandler;
+    private final DocumentTag documentTag;
 
-    public InternalCmrListingLetterGenerator(
-        @Qualifier("internalCmrListingLetter") DocumentCreator<AsylumCase> documentCreator,
-        DocumentHandler documentHandler
+    protected AbstractInternalCmrReListingLetterGenerator(
+        DocumentCreator<AsylumCase> documentCreator,
+        DocumentHandler documentHandler,
+        DocumentTag documentTag
     ) {
         this.documentCreator = documentCreator;
         this.documentHandler = documentHandler;
+        this.documentTag = documentTag;
     }
 
     @Override
@@ -41,8 +44,8 @@ public class InternalCmrListingLetterGenerator implements PreSubmitCallbackHandl
     }
 
     public boolean canHandle(
-            PreSubmitCallbackStage callbackStage,
-            Callback<AsylumCase> callback
+        PreSubmitCallbackStage callbackStage,
+        Callback<AsylumCase> callback
     ) {
         Objects.requireNonNull(callbackStage, "callbackStage must not be null");
         Objects.requireNonNull(callback, "callback must not be null");
@@ -50,9 +53,8 @@ public class InternalCmrListingLetterGenerator implements PreSubmitCallbackHandl
         AsylumCase asylumCase = callback.getCaseDetails().getCaseData();
 
         return callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
-            && callback.getEvent() == CMR_LISTING
-            && hasBeenSubmittedAsLegalRepresentedInternalCase(asylumCase)
-            && (!isAppellantInDetention(asylumCase) || isDetainedInFacilityType(asylumCase, OTHER));
+               && callback.getEvent() == CMR_RE_LISTING
+               && isApplicable(asylumCase);
     }
 
     public PreSubmitCallbackResponse<AsylumCase> handle(
@@ -65,16 +67,20 @@ public class InternalCmrListingLetterGenerator implements PreSubmitCallbackHandl
 
         final CaseDetails<AsylumCase> caseDetails = callback.getCaseDetails();
         final AsylumCase asylumCase = caseDetails.getCaseData();
+        final CaseDetails<AsylumCase> caseDetailsBefore = callback.getCaseDetailsBefore()
+            .orElseThrow(() -> new IllegalStateException("previous case data is not present"));
 
-        Document internalCaseListedLetter = documentCreator.create(caseDetails);
+        Document letter = documentCreator.create(caseDetails, caseDetailsBefore);
 
         documentHandler.addWithMetadataWithoutReplacingExistingDocuments(
             asylumCase,
-            internalCaseListedLetter,
+            letter,
             LETTER_NOTIFICATION_DOCUMENTS,
-            DocumentTag.INTERNAL_CMR_LISTING_LETTER
+            documentTag
         );
 
         return new PreSubmitCallbackResponse<>(asylumCase);
     }
+
+    protected abstract boolean isApplicable(AsylumCase asylumCase);
 }

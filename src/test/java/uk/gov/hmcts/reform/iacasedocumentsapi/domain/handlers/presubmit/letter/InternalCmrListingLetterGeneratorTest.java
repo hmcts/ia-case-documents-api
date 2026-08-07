@@ -59,6 +59,7 @@ class InternalCmrListingLetterGeneratorTest {
         when(callback.getCaseDetails()).thenReturn(caseDetails);
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
         when(asylumCase.read(IS_ADMIN, YesOrNo.class)).thenReturn(Optional.of(YES));
+        when(asylumCase.read(APPELLANTS_REPRESENTATION, YesOrNo.class)).thenReturn(Optional.of(NO));
         when(asylumCase.read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(NO));
     }
 
@@ -105,6 +106,22 @@ class InternalCmrListingLetterGeneratorTest {
     public void it_cannot_handle_callback_when_not_internal_case() {
         when(callback.getEvent()).thenReturn(CMR_LISTING);
         when(asylumCase.read(IS_ADMIN, YesOrNo.class)).thenReturn(Optional.of(NO));
+
+        assertFalse(internalCmrListingLetterGenerator.canHandle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback));
+    }
+
+    @Test
+    public void it_cannot_handle_callback_when_appellant_is_not_legally_represented() {
+        when(callback.getEvent()).thenReturn(CMR_LISTING);
+        when(asylumCase.read(APPELLANTS_REPRESENTATION, YesOrNo.class)).thenReturn(Optional.of(YES));
+
+        assertFalse(internalCmrListingLetterGenerator.canHandle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback));
+    }
+
+    @Test
+    public void it_cannot_handle_callback_when_appellants_representation_is_missing() {
+        when(callback.getEvent()).thenReturn(CMR_LISTING);
+        when(asylumCase.read(APPELLANTS_REPRESENTATION, YesOrNo.class)).thenReturn(Optional.empty());
 
         assertFalse(internalCmrListingLetterGenerator.canHandle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback));
     }

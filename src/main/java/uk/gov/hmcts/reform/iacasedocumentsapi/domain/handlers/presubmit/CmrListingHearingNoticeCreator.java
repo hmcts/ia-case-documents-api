@@ -91,6 +91,15 @@ public class CmrListingHearingNoticeCreator implements PreSubmitCallbackHandler<
             );
         }
 
+        if (hasBeenSubmittedAsLegalRepresentedInternalCase(asylumCase)) {
+            documentHandler.addWithMetadataWithoutReplacingExistingDocuments(
+                asylumCase,
+                hearingNotice,
+                LETTER_NOTIFICATION_DOCUMENTS,
+                DocumentTag.INTERNAL_CMR_LISTING_LR_LETTER
+            );
+        }
+
         return new PreSubmitCallbackResponse<>(asylumCase);
     }
 
