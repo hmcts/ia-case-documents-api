@@ -8,13 +8,13 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.CustomerServicesPro
 
 import java.util.List;
 
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.getAppellantAddressInCountryOrOoc;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.getLegalRepAddressInCountryOrOoc;
 
 @Component
-public class InternalCmrReListingLetterTemplate extends AbstractInternalCmrReListingLetterTemplate {
+public class InternalCmrReListingLrLetterTemplate extends AbstractInternalCmrReListingLetterTemplate {
 
-    public InternalCmrReListingLetterTemplate(
-        @Value("${internalCmrReListingLetter.templateName}") String templateName,
+    public InternalCmrReListingLrLetterTemplate(
+        @Value("${internalCmrReListingLrLetter.templateName}") String templateName,
         CustomerServicesProvider customerServicesProvider,
         StringProvider stringProvider) {
         super(templateName, customerServicesProvider, stringProvider);
@@ -22,6 +22,6 @@ public class InternalCmrReListingLetterTemplate extends AbstractInternalCmrReLis
 
     @Override
     protected List<String> getRecipientAddress(AsylumCase asylumCase) {
-        return getAppellantAddressInCountryOrOoc(asylumCase);
+        return getLegalRepAddressInCountryOrOoc(asylumCase);
     }
 }
