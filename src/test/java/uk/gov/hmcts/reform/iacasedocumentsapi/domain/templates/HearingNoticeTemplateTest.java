@@ -75,8 +75,6 @@ public class HearingNoticeTemplateTest {
     public void should_map_case_data_to_template_field_values() {
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
         when(asylumCase.read(LIST_CASE_HEARING_CENTRE, HearingCentre.class)).thenReturn(Optional.of(HearingCentre.MANCHESTER));
-        when(asylumCase.read(CMR_HEARING_CENTRE, HearingCentre.class))
-                .thenReturn(Optional.empty());
         when(stringProvider.get("hearingCentreAddress", "manchester")).thenReturn(Optional.of(manchesterHearingCentreAddress));
 
         when(asylumCase.read(APPEAL_REFERENCE_NUMBER, String.class)).thenReturn(Optional.of(appealReferenceNumber));
@@ -131,8 +129,6 @@ public class HearingNoticeTemplateTest {
     public void should_be_tolerant_of_missing_data() {
 
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
-        when(asylumCase.read(CMR_HEARING_CENTRE, HearingCentre.class))
-                .thenReturn(Optional.empty());
         when(asylumCase.read(LIST_CASE_HEARING_CENTRE, HearingCentre.class)).thenReturn(Optional.of(HearingCentre.MANCHESTER));
         when(stringProvider.get("hearingCentreAddress", "manchester")).thenReturn(Optional.of(manchesterHearingCentreAddress));
 
