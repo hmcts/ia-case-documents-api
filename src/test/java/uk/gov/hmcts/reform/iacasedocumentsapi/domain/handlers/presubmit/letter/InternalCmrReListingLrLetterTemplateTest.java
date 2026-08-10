@@ -49,8 +49,8 @@ class InternalCmrReListingLrLetterTemplateTest {
     private final String templateName = "TB-IAC-LET-ENG-Internal-Edit-Case-Listing.docx";
     private final String appealReferenceNumber = "HU/11111/2023";
     private final String homeOfficeReferenceNumber = "A1234567/001";
-    private final String appellantGivenNames = "John";
-    private final String appellantFamilyName = "Doe";
+    private final String legalRepGivenNames = "Jane";
+    private final String legalRepFamilyName = "Smith";
     private final String cmrHearingDate = "2023-08-14T14:30:00.000";
     private final String formattedCmrHearingDate = "14 August 2023";
     private final String formattedCmrHearingTime =
@@ -89,8 +89,8 @@ class InternalCmrReListingLrLetterTemplateTest {
 
         when(asylumCase.read(APPEAL_REFERENCE_NUMBER, String.class)).thenReturn(Optional.of(appealReferenceNumber));
         when(asylumCase.read(HOME_OFFICE_REFERENCE_NUMBER, String.class)).thenReturn(Optional.of(homeOfficeReferenceNumber));
-        when(asylumCase.read(APPELLANT_GIVEN_NAMES, String.class)).thenReturn(Optional.of(appellantGivenNames));
-        when(asylumCase.read(APPELLANT_FAMILY_NAME, String.class)).thenReturn(Optional.of(appellantFamilyName));
+        when(asylumCase.read(LEGAL_REP_GIVEN_NAME, String.class)).thenReturn(Optional.of(legalRepGivenNames));
+        when(asylumCase.read(LEGAL_REP_FAMILY_NAME_PAPER_J, String.class)).thenReturn(Optional.of(legalRepFamilyName));
         when(asylumCase.read(CMR_HEARING_CENTRE, HearingCentre.class)).thenReturn(Optional.of(HearingCentre.MANCHESTER));
         when(asylumCase.read(CMR_HEARING_DATE, String.class)).thenReturn(Optional.of(cmrHearingDate));
         when(asylumCase.read(CMR_HEARING_CHANNEL, DynamicList.class)).thenReturn(Optional.of(hearingChannelDynamicList));
@@ -119,8 +119,8 @@ class InternalCmrReListingLrLetterTemplateTest {
 
         assertEquals(appealReferenceNumber, templateFieldValues.get("appealReferenceNumber"));
         assertEquals(homeOfficeReferenceNumber, templateFieldValues.get("homeOfficeReferenceNumber"));
-        assertEquals(appellantGivenNames, templateFieldValues.get("appellantGivenNames"));
-        assertEquals(appellantFamilyName, templateFieldValues.get("appellantFamilyName"));
+        assertEquals(legalRepGivenNames, templateFieldValues.get("appellantGivenNames"));
+        assertEquals(legalRepFamilyName, templateFieldValues.get("appellantFamilyName"));
         assertEquals(customerServicesTelephone, templateFieldValues.get("customerServicesTelephone"));
         assertEquals(customerServicesEmail, templateFieldValues.get("customerServicesEmail"));
         assertEquals(formatDateForRendering(LocalDate.now().toString(), DateTimeFormatter.ofPattern("d MMMM yyyy")),
