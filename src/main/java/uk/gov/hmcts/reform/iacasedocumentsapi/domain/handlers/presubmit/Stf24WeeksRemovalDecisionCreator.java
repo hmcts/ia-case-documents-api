@@ -66,7 +66,7 @@ public class Stf24WeeksRemovalDecisionCreator implements PreSubmitCallbackHandle
             ? DocumentTag.STF_24WEEKS_REMOVAL_DECISION_DOCUMENT
             : DocumentTag.STF_24WEEKS_REMOVAL_REFUSED_DECISION_DOCUMENT;
         Document appealSubmission = stf24WeeksRemovalDecisionDocumentCreator.create(caseDetails);
-        documentHandler.addWithMetadataWithoutReplacingExistingDocuments(
+        documentHandler.addWithMetadataWithDateTimeWithoutReplacingExistingDocuments(
             asylumCase,
             appealSubmission,
             LEGAL_REPRESENTATIVE_DOCUMENTS,

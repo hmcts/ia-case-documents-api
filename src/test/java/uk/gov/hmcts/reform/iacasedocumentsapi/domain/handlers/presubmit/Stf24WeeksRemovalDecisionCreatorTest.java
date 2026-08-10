@@ -134,14 +134,14 @@ class Stf24WeeksRemovalDecisionCreatorTest {
 
         assertNotNull(response);
         assertEquals(asylumCase, response.getData());
-        verify(documentHandler).addWithMetadataWithoutReplacingExistingDocuments(
+        verify(documentHandler).addWithMetadataWithDateTimeWithoutReplacingExistingDocuments(
             asylumCase,
             mockDocument,
             LEGAL_REPRESENTATIVE_DOCUMENTS,
             DocumentTag.STF_24WEEKS_REMOVAL_DECISION_DOCUMENT
         );
 
-        verify(documentHandler, never()).addWithMetadataWithoutReplacingExistingDocuments(
+        verify(documentHandler, never()).addWithMetadataWithDateTimeWithoutReplacingExistingDocuments(
             asylumCase,
             mockDocument,
             LETTER_NOTIFICATION_DOCUMENTS,
@@ -164,14 +164,14 @@ class Stf24WeeksRemovalDecisionCreatorTest {
 
         assertNotNull(response);
         assertEquals(asylumCase, response.getData());
-        verify(documentHandler).addWithMetadataWithoutReplacingExistingDocuments(
+        verify(documentHandler).addWithMetadataWithDateTimeWithoutReplacingExistingDocuments(
             asylumCase,
             mockDocument,
             LEGAL_REPRESENTATIVE_DOCUMENTS,
             DocumentTag.STF_24WEEKS_REMOVAL_DECISION_DOCUMENT
         );
 
-        verify(documentHandler, never()).addWithMetadataWithoutReplacingExistingDocuments(
+        verify(documentHandler, never()).addWithMetadataWithDateTimeWithoutReplacingExistingDocuments(
             asylumCase,
             mockDocument,
             LETTER_NOTIFICATION_DOCUMENTS,
@@ -196,14 +196,14 @@ class Stf24WeeksRemovalDecisionCreatorTest {
 
         assertNotNull(response);
         assertEquals(asylumCase, response.getData());
-        verify(documentHandler).addWithMetadataWithoutReplacingExistingDocuments(
+        verify(documentHandler).addWithMetadataWithDateTimeWithoutReplacingExistingDocuments(
             asylumCase,
             mockDocument,
             LEGAL_REPRESENTATIVE_DOCUMENTS,
             DocumentTag.STF_24WEEKS_REMOVAL_REFUSED_DECISION_DOCUMENT
         );
 
-        verify(documentHandler, never()).addWithMetadataWithoutReplacingExistingDocuments(
+        verify(documentHandler, never()).addWithMetadataWithDateTimeWithoutReplacingExistingDocuments(
             asylumCase,
             mockDocument,
             LETTER_NOTIFICATION_DOCUMENTS,
