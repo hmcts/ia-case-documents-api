@@ -60,7 +60,7 @@ class CmrListingDetainedOtherAppellantLetterGeneratorTest {
         when(callback.getCaseDetails()).thenReturn(caseDetails);
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
         when(asylumCase.read(JOURNEY_TYPE, JourneyType.class)).thenReturn(Optional.of(JourneyType.REP));
-        when(asylumCase.read(IS_ADMIN, YesOrNo.class)).thenReturn(Optional.of(NO));
+        when(asylumCase.read(IS_ADMIN, YesOrNo.class)).thenReturn(Optional.of(YES));
         when(asylumCase.read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(YES));
         when(asylumCase.read(DETENTION_FACILITY, String.class)).thenReturn(Optional.of("other"));
     }
@@ -105,19 +105,19 @@ class CmrListingDetainedOtherAppellantLetterGeneratorTest {
     }
 
     @Test
-    public void it_cannot_handle_callback_when_not_rep_journey() {
+    public void it_can_handle_callback_when_not_rep_journey() {
         when(callback.getEvent()).thenReturn(CMR_LISTING);
         when(asylumCase.read(JOURNEY_TYPE, JourneyType.class)).thenReturn(Optional.of(JourneyType.AIP));
 
-        assertFalse(cmrListingDetainedOtherAppellantLetterGenerator.canHandle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback));
+        assertTrue(cmrListingDetainedOtherAppellantLetterGenerator.canHandle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback));
     }
 
     @Test
-    public void it_cannot_handle_callback_when_internal_case() {
+    public void it_can_handle_callback_when_internal_case() {
         when(callback.getEvent()).thenReturn(CMR_LISTING);
         when(asylumCase.read(IS_ADMIN, YesOrNo.class)).thenReturn(Optional.of(YES));
 
-        assertFalse(cmrListingDetainedOtherAppellantLetterGenerator.canHandle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback));
+        assertTrue(cmrListingDetainedOtherAppellantLetterGenerator.canHandle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback));
     }
 
     @Test
