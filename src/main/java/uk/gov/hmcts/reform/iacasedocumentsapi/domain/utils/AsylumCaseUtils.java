@@ -181,6 +181,7 @@ public class AsylumCaseUtils {
                 .<String, String>builder()
                 .put("appealReferenceNumber", asylumCase.read(APPEAL_REFERENCE_NUMBER, String.class).orElse(""))
                 .put("homeOfficeReferenceNumber", asylumCase.read(HOME_OFFICE_REFERENCE_NUMBER, String.class).orElse(""))
+                .put("legalRepReferenceNumber", asylumCase.read(LEGAL_REP_REFERENCE_NUMBER, String.class).orElse(""))
                 .put("appellantGivenNames", asylumCase.read(LEGAL_REP_GIVEN_NAME, String.class).orElse(""))
                 .put("appellantFamilyName", asylumCase.read(LEGAL_REP_FAMILY_NAME_PAPER_J, String.class).orElse(""))
                 .build();
