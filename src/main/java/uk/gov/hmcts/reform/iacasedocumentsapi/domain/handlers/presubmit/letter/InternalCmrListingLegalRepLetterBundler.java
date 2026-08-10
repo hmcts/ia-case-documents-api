@@ -27,7 +27,6 @@ import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseD
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DetentionFacility.IRC;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DetentionFacility.PRISON;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.Event.CMR_LISTING;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.Event.CMR_RE_LISTING;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.*;
 
 @Component
@@ -41,8 +40,8 @@ public class InternalCmrListingLegalRepLetterBundler implements PreSubmitCallbac
     private final DocumentHandler documentHandler;
 
     public InternalCmrListingLegalRepLetterBundler(
-        @Value("${internalCaseListedLetterWithAttachment.fileExtension}") String fileExtension,
-        @Value("${internalCmrListingLetterWithAttachment.fileName}") String fileName,
+        @Value("${internalCmrListingLrLetterWithAttachment.fileExtension}") String fileExtension,
+        @Value("${internalCmrListingLrLetterWithAttachment.fileName}") String fileName,
         @Value("${featureFlag.isEmStitchingEnabled}") boolean isEmStitchingEnabled,
         FileNameQualifier<AsylumCase> fileNameQualifier,
         DocumentBundler documentBundler,
@@ -71,7 +70,7 @@ public class InternalCmrListingLegalRepLetterBundler implements PreSubmitCallbac
         AsylumCase asylumCase = callback.getCaseDetails().getCaseData();
 
         return callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
-               && (callback.getEvent() == CMR_LISTING || callback.getEvent() == CMR_RE_LISTING)
+               && callback.getEvent() == CMR_LISTING
                && hasBeenSubmittedAsLegalRepresentedInternalCase(asylumCase)
                && isEmStitchingEnabled;
     }
@@ -90,6 +89,7 @@ public class InternalCmrListingLegalRepLetterBundler implements PreSubmitCallbac
         RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();
 
         final String qualifiedDocumentFileName = fileNameQualifier.get(fileName + "." + fileExtension, caseDetails);
+
         List<DocumentWithMetadata> bundleDocuments;
 
         if (isDetainedInOneOfFacilityTypes(asylumCase, PRISON, IRC)) {

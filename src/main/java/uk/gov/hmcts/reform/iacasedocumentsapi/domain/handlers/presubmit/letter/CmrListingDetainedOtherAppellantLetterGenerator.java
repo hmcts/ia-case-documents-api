@@ -52,8 +52,6 @@ public class CmrListingDetainedOtherAppellantLetterGenerator implements PreSubmi
 
         return callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
                && callback.getEvent() == CMR_LISTING
-               && isRepJourney(callback.getCaseDetails().getCaseData())
-               && !isInternalCase(asylumCase)
                && isDetainedInFacilityType(asylumCase, OTHER);
     }
 

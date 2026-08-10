@@ -1,27 +1,5 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit.letter;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.ArgumentMatchers.anyList;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.*;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.Event.CMR_LISTING;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.DispatchPriority.LATE;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.PreSubmitCallbackStage.ABOUT_TO_START;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.PreSubmitCallbackStage.ABOUT_TO_SUBMIT;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo.NO;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo.YES;
-
-import java.util.List;
-import java.util.Optional;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -48,9 +26,25 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentHandler;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.FileNameQualifier;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.SystemDateProvider;
 
+import java.util.List;
+import java.util.Optional;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.Mockito.*;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.*;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.Event.CMR_RE_LISTING;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.DispatchPriority.LATE;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.PreSubmitCallbackStage.ABOUT_TO_START;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.PreSubmitCallbackStage.ABOUT_TO_SUBMIT;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo.NO;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo.YES;
+
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
-class InternalCmrListingAppellantLetterBundlerTest {
+class InternalCmrReListingAppellantLetterBundlerTest {
 
     @Mock private Callback<AsylumCase> callback;
     @Mock private CaseDetails<AsylumCase> caseDetails;
@@ -63,11 +57,11 @@ class InternalCmrListingAppellantLetterBundlerTest {
     private final String fileExtension = "PDF";
     private final String fileName = "some-file-name";
 
-    private InternalCmrListingAppellantLetterBundler internalCmrListingAppellantLetterBundler;
+    private InternalCmrReListingAppellantLetterBundler internalCmrReListingAppellantLetterBundler;
 
     @BeforeEach
     public void setUp() {
-        internalCmrListingAppellantLetterBundler = buildBundler(true);
+        internalCmrReListingAppellantLetterBundler = buildBundler(true);
 
         when(callback.getCaseDetails()).thenReturn(caseDetails);
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
@@ -76,8 +70,8 @@ class InternalCmrListingAppellantLetterBundlerTest {
         when(asylumCase.read(APPELLANTS_REPRESENTATION, YesOrNo.class)).thenReturn(Optional.of(YES));
     }
 
-    private InternalCmrListingAppellantLetterBundler buildBundler(boolean isEmStitchingEnabled) {
-        return new InternalCmrListingAppellantLetterBundler(
+    private InternalCmrReListingAppellantLetterBundler buildBundler(boolean isEmStitchingEnabled) {
+        return new InternalCmrReListingAppellantLetterBundler(
             fileExtension,
             fileName,
             isEmStitchingEnabled,
@@ -87,95 +81,95 @@ class InternalCmrListingAppellantLetterBundlerTest {
     }
 
     @ParameterizedTest
-    @EnumSource(value = Event.class, names = {"CMR_LISTING"})
+    @EnumSource(value = Event.class, names = {"CMR_RE_LISTING"})
     public void it_can_handle_callback(Event event) {
         when(callback.getEvent()).thenReturn(event);
 
-        assertTrue(internalCmrListingAppellantLetterBundler.canHandle(ABOUT_TO_SUBMIT, callback));
+        assertTrue(internalCmrReListingAppellantLetterBundler.canHandle(ABOUT_TO_SUBMIT, callback));
     }
 
     @ParameterizedTest
-    @EnumSource(value = Event.class, names = {"CMR_LISTING"}, mode = EnumSource.Mode.EXCLUDE)
+    @EnumSource(value = Event.class, names = {"CMR_RE_LISTING"}, mode = EnumSource.Mode.EXCLUDE)
     public void it_cannot_handle_callback_for_non_cmr_listing_events(Event event) {
         when(callback.getEvent()).thenReturn(event);
 
-        assertFalse(internalCmrListingAppellantLetterBundler.canHandle(ABOUT_TO_SUBMIT, callback));
+        assertFalse(internalCmrReListingAppellantLetterBundler.canHandle(ABOUT_TO_SUBMIT, callback));
     }
 
     @ParameterizedTest
     @EnumSource(value = PreSubmitCallbackStage.class, names = {"ABOUT_TO_SUBMIT"}, mode = EnumSource.Mode.EXCLUDE)
     public void it_cannot_handle_callback_for_wrong_stage(PreSubmitCallbackStage stage) {
-        when(callback.getEvent()).thenReturn(CMR_LISTING);
+        when(callback.getEvent()).thenReturn(CMR_RE_LISTING);
 
-        assertFalse(internalCmrListingAppellantLetterBundler.canHandle(stage, callback));
+        assertFalse(internalCmrReListingAppellantLetterBundler.canHandle(stage, callback));
     }
 
     @Test
     public void it_cannot_handle_callback_when_not_internal_case() {
-        when(callback.getEvent()).thenReturn(CMR_LISTING);
+        when(callback.getEvent()).thenReturn(CMR_RE_LISTING);
         when(asylumCase.read(IS_ADMIN, YesOrNo.class)).thenReturn(Optional.of(NO));
 
-        assertFalse(internalCmrListingAppellantLetterBundler.canHandle(ABOUT_TO_SUBMIT, callback));
+        assertFalse(internalCmrReListingAppellantLetterBundler.canHandle(ABOUT_TO_SUBMIT, callback));
     }
 
     @Test
     public void it_can_handle_callback_when_appellant_in_detention() {
-        when(callback.getEvent()).thenReturn(CMR_LISTING);
+        when(callback.getEvent()).thenReturn(CMR_RE_LISTING);
         when(asylumCase.read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(YES));
         when(asylumCase.read(DETENTION_FACILITY, String.class)).thenReturn(Optional.of("prison"));
 
-        assertTrue(internalCmrListingAppellantLetterBundler.canHandle(ABOUT_TO_SUBMIT, callback));
+        assertTrue(internalCmrReListingAppellantLetterBundler.canHandle(ABOUT_TO_SUBMIT, callback));
     }
 
     @ParameterizedTest
-    @EnumSource(value = Event.class, names = {"CMR_LISTING"})
+    @EnumSource(value = Event.class, names = {"CMR_RE_LISTING"})
     public void it_can_handle_callback_when_appellant_detained_in_other_facility(Event event) {
         when(callback.getEvent()).thenReturn(event);
         when(asylumCase.read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(YES));
         when(asylumCase.read(DETENTION_FACILITY, String.class)).thenReturn(Optional.of("other"));
 
-        assertTrue(internalCmrListingAppellantLetterBundler.canHandle(ABOUT_TO_SUBMIT, callback));
+        assertTrue(internalCmrReListingAppellantLetterBundler.canHandle(ABOUT_TO_SUBMIT, callback));
     }
 
     @Test
     public void it_cannot_handle_callback_when_detained_in_other_facility_and_not_internal_case() {
-        when(callback.getEvent()).thenReturn(CMR_LISTING);
+        when(callback.getEvent()).thenReturn(CMR_RE_LISTING);
         when(asylumCase.read(IS_ADMIN, YesOrNo.class)).thenReturn(Optional.of(NO));
         when(asylumCase.read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(YES));
         when(asylumCase.read(DETENTION_FACILITY, String.class)).thenReturn(Optional.of("other"));
 
-        assertFalse(internalCmrListingAppellantLetterBundler.canHandle(ABOUT_TO_SUBMIT, callback));
+        assertFalse(internalCmrReListingAppellantLetterBundler.canHandle(ABOUT_TO_SUBMIT, callback));
     }
 
     @Test
     public void it_cannot_handle_callback_when_detained_in_prison_or_irc_and_not_internal_case() {
-        when(callback.getEvent()).thenReturn(CMR_LISTING);
+        when(callback.getEvent()).thenReturn(CMR_RE_LISTING);
         when(asylumCase.read(IS_ADMIN, YesOrNo.class)).thenReturn(Optional.of(NO));
         when(asylumCase.read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(YES));
         when(asylumCase.read(DETENTION_FACILITY, String.class)).thenReturn(Optional.of("prison"));
 
-        assertFalse(internalCmrListingAppellantLetterBundler.canHandle(ABOUT_TO_SUBMIT, callback));
+        assertFalse(internalCmrReListingAppellantLetterBundler.canHandle(ABOUT_TO_SUBMIT, callback));
     }
 
     @Test
     public void it_cannot_handle_callback_when_submitted_as_legal_represented_internal_case() {
-        when(callback.getEvent()).thenReturn(CMR_LISTING);
+        when(callback.getEvent()).thenReturn(CMR_RE_LISTING);
         when(asylumCase.read(APPELLANTS_REPRESENTATION, YesOrNo.class)).thenReturn(Optional.of(NO));
 
-        assertFalse(internalCmrListingAppellantLetterBundler.canHandle(ABOUT_TO_SUBMIT, callback));
+        assertFalse(internalCmrReListingAppellantLetterBundler.canHandle(ABOUT_TO_SUBMIT, callback));
     }
 
     @Test
     public void it_cannot_handle_callback_when_stitching_flag_is_false() {
-        when(callback.getEvent()).thenReturn(CMR_LISTING);
+        when(callback.getEvent()).thenReturn(CMR_RE_LISTING);
 
-        internalCmrListingAppellantLetterBundler = buildBundler(false);
+        internalCmrReListingAppellantLetterBundler = buildBundler(false);
 
-        assertFalse(internalCmrListingAppellantLetterBundler.canHandle(ABOUT_TO_SUBMIT, callback));
+        assertFalse(internalCmrReListingAppellantLetterBundler.canHandle(ABOUT_TO_SUBMIT, callback));
     }
 
     @ParameterizedTest
-    @EnumSource(value = Event.class, names = {"CMR_LISTING"})
+    @EnumSource(value = Event.class, names = {"CMR_RE_LISTING"})
     void should_read_and_bundle_letter_notification_documents(Event event) {
         when(callback.getEvent()).thenReturn(event);
         when(fileNameQualifier.get(anyString(), eq(caseDetails))).thenReturn("filename");
@@ -191,40 +185,40 @@ class InternalCmrListingAppellantLetterBundlerTest {
         )).thenReturn(bundleDocument);
 
         PreSubmitCallbackResponse<AsylumCase> response =
-            internalCmrListingAppellantLetterBundler.handle(ABOUT_TO_SUBMIT, callback);
+                internalCmrReListingAppellantLetterBundler.handle(ABOUT_TO_SUBMIT, callback);
 
         assertNotNull(response);
         assertEquals(asylumCase, response.getData());
         verify(documentHandler, times(1)).addWithMetadataWithoutReplacingExistingDocuments(
-            asylumCase, bundleDocument, LETTER_BUNDLE_DOCUMENTS, DocumentTag.INTERNAL_CMR_LISTING_LETTER_BUNDLE);
+            asylumCase, bundleDocument, LETTER_BUNDLE_DOCUMENTS, DocumentTag.INTERNAL_CMR_RE_LISTING_LETTER_BUNDLE);
     }
 
     @Test
     void should_have_late_dispatch_priority() {
-        assertThat(internalCmrListingAppellantLetterBundler.getDispatchPriority()).isEqualTo(LATE);
+        assertThat(internalCmrReListingAppellantLetterBundler.getDispatchPriority()).isEqualTo(LATE);
     }
 
     @Test
     public void handling_should_throw_if_cannot_actually_handle() {
-        when(callback.getEvent()).thenReturn(CMR_LISTING);
+        when(callback.getEvent()).thenReturn(CMR_RE_LISTING);
 
-        assertThatThrownBy(() -> internalCmrListingAppellantLetterBundler.handle(ABOUT_TO_START, callback))
+        assertThatThrownBy(() -> internalCmrReListingAppellantLetterBundler.handle(ABOUT_TO_START, callback))
             .hasMessage("Cannot handle callback")
             .isExactlyInstanceOf(IllegalStateException.class);
 
         when(callback.getEvent()).thenReturn(Event.START_APPEAL);
-        assertThatThrownBy(() -> internalCmrListingAppellantLetterBundler.handle(ABOUT_TO_SUBMIT, callback))
+        assertThatThrownBy(() -> internalCmrReListingAppellantLetterBundler.handle(ABOUT_TO_SUBMIT, callback))
             .hasMessage("Cannot handle callback")
             .isExactlyInstanceOf(IllegalStateException.class);
     }
 
     @Test
     public void should_not_allow_null_arguments() {
-        assertThatThrownBy(() -> internalCmrListingAppellantLetterBundler.canHandle(null, callback))
+        assertThatThrownBy(() -> internalCmrReListingAppellantLetterBundler.canHandle(null, callback))
             .hasMessage("callbackStage must not be null")
             .isExactlyInstanceOf(NullPointerException.class);
 
-        assertThatThrownBy(() -> internalCmrListingAppellantLetterBundler.canHandle(ABOUT_TO_SUBMIT, null))
+        assertThatThrownBy(() -> internalCmrReListingAppellantLetterBundler.canHandle(ABOUT_TO_SUBMIT, null))
             .hasMessage("callback must not be null")
             .isExactlyInstanceOf(NullPointerException.class);
     }
@@ -238,6 +232,6 @@ class InternalCmrListingAppellantLetterBundlerTest {
     private DocumentWithMetadata createDocumentWithMetadata() {
         return new DocumentWithMetadata(createDocumentWithDescription(),
             RandomStringUtils.secure().nextAlphabetic(20),
-            new SystemDateProvider().now().toString(), DocumentTag.INTERNAL_CMR_LISTING_LETTER, "test");
+            new SystemDateProvider().now().toString(), DocumentTag.INTERNAL_CMR_RE_LISTING_LETTER, "test");
     }
 }

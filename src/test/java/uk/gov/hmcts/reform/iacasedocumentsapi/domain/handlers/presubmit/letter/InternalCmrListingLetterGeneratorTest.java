@@ -111,19 +111,19 @@ class InternalCmrListingLetterGeneratorTest {
     }
 
     @Test
-    public void it_cannot_handle_callback_when_appellant_is_not_legally_represented() {
+    public void it_can_handle_callback_when_appellant_is_not_legally_represented() {
         when(callback.getEvent()).thenReturn(CMR_LISTING);
         when(asylumCase.read(APPELLANTS_REPRESENTATION, YesOrNo.class)).thenReturn(Optional.of(YES));
 
-        assertFalse(internalCmrListingLetterGenerator.canHandle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback));
+        assertTrue(internalCmrListingLetterGenerator.canHandle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback));
     }
 
     @Test
-    public void it_cannot_handle_callback_when_appellants_representation_is_missing() {
+    public void it_can_handle_callback_when_appellants_representation_is_missing() {
         when(callback.getEvent()).thenReturn(CMR_LISTING);
         when(asylumCase.read(APPELLANTS_REPRESENTATION, YesOrNo.class)).thenReturn(Optional.empty());
 
-        assertFalse(internalCmrListingLetterGenerator.canHandle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback));
+        assertTrue(internalCmrListingLetterGenerator.canHandle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback));
     }
 
     @Test
@@ -136,12 +136,12 @@ class InternalCmrListingLetterGeneratorTest {
     }
 
     @Test
-    public void it_can_handle_callback_when_appellant_detained_in_other_facility() {
+    public void it_cannot_handle_callback_when_appellant_detained_in_other_facility() {
         when(callback.getEvent()).thenReturn(CMR_LISTING);
         when(asylumCase.read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(YES));
         when(asylumCase.read(DETENTION_FACILITY, String.class)).thenReturn(Optional.of("other"));
 
-        assertTrue(internalCmrListingLetterGenerator.canHandle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback));
+        assertFalse(internalCmrListingLetterGenerator.canHandle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback));
     }
 
     @Test

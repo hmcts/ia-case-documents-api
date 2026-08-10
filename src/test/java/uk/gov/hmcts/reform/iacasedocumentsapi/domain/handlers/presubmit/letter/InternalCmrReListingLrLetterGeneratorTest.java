@@ -82,7 +82,7 @@ class InternalCmrReListingLrLetterGeneratorTest {
 
         verify(documentCreator, times(1)).create(caseDetails, caseDetailsBefore);
         verify(documentHandler, times(1)).addWithMetadataWithoutReplacingExistingDocuments(
-            asylumCase, uploadedDocument, LETTER_NOTIFICATION_DOCUMENTS, DocumentTag.INTERNAL_CMR_LISTING_LR_LETTER);
+            asylumCase, uploadedDocument, LETTER_NOTIFICATION_DOCUMENTS, DocumentTag.INTERNAL_CMR_RE_LISTING_LR_LETTER);
     }
 
     @Test
