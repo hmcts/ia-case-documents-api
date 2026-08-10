@@ -61,13 +61,15 @@ public class Stf24WeeksRemovalDecisionCreator implements PreSubmitCallbackHandle
 
         final CaseDetails<AsylumCase> caseDetails = callback.getCaseDetails();
         final AsylumCase asylumCase = caseDetails.getCaseData();
-
+        DocumentTag tag = callback.getEvent() == Event.REMOVE_STATUTORY_TIMEFRAME_24_WEEKS
+            ? DocumentTag.STF_24WEEKS_REMOVAL_DECISION_DOCUMENT
+            : DocumentTag.STF_24WEEKS_REMOVAL_REFUSED_DECISION_DOCUMENT;
         Document appealSubmission = stf24WeeksRemovalDecisionDocumentCreator.create(caseDetails);
         documentHandler.addWithMetadataWithoutReplacingExistingDocuments(
             asylumCase,
             appealSubmission,
             LEGAL_REPRESENTATIVE_DOCUMENTS,
-            DocumentTag.STF_24WEEKS_REMOVAL_DECISION_DOCUMENT
+            tag
         );
 
         if (isInternalCase(asylumCase)) {
@@ -75,7 +77,7 @@ public class Stf24WeeksRemovalDecisionCreator implements PreSubmitCallbackHandle
                 asylumCase,
                 appealSubmission,
                 LETTER_NOTIFICATION_DOCUMENTS,
-                DocumentTag.STF_24WEEKS_REMOVAL_DECISION_DOCUMENT
+                tag
             );
         }
 

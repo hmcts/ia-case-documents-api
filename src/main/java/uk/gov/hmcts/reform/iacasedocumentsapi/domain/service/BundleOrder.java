@@ -409,8 +409,12 @@ public class BundleOrder implements Comparator<DocumentWithMetadata> {
                 log.warn("STF_24WEEKS_REMOVAL_DECISION_DOCUMENT tag should not be checked for bundle ordering, document desc: {}", document.getDescription());
                 yield 114;
             }
+            case STF_24WEEKS_REMOVAL_REFUSED_DECISION_DOCUMENT -> {
+                log.warn("STF_24WEEKS_REMOVAL_REFUSED_DECISION_DOCUMENT tag should not be checked for bundle ordering, document desc: {}", document.getDescription());
+                yield 154;
+            }
 
-            case NONE ->  115;
+            case NONE ->  116;
 
             default ->
                 throw new IllegalStateException("document has unknown tag: " + document.getTag() + ", description: " + document.getDescription());

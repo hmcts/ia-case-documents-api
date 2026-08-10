@@ -175,4 +175,34 @@ class Stf24WeeksRemovalDecisionCreatorTest {
             DocumentTag.STF_24WEEKS_REMOVAL_DECISION_DOCUMENT
         );
     }
+
+    @Test
+    void if_refused_then_use_correct_tag() {
+        when(callback.getEvent()).thenReturn(Event.DECIDE_AN_APPLICATION);
+        when(callback.getCaseDetails()).thenReturn(caseDetails);
+        when(caseDetails.getCaseData()).thenReturn(asylumCase);
+        when(stf24WeeksRemovalDecisionDocumentCreator.create(caseDetails)).thenReturn(mockDocument);
+        when(asylumCase.read(IS_REMOVAL_OF_24W_APPLICATION_REFUSED, YesOrNo.class))
+            .thenReturn(Optional.of(YesOrNo.YES));
+        when(asylumCase.read(IS_ADMIN, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
+
+        PreSubmitCallbackResponse<AsylumCase> response = stf24WeeksRemovalDecisionCreator.handle(
+            PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
+
+        assertNotNull(response);
+        assertEquals(asylumCase, response.getData());
+        verify(documentHandler).addWithMetadataWithoutReplacingExistingDocuments(
+            asylumCase,
+            mockDocument,
+            LEGAL_REPRESENTATIVE_DOCUMENTS,
+            DocumentTag.STF_24WEEKS_REMOVAL_REFUSED_DECISION_DOCUMENT
+        );
+
+        verify(documentHandler, never()).addWithMetadataWithoutReplacingExistingDocuments(
+            asylumCase,
+            mockDocument,
+            LETTER_NOTIFICATION_DOCUMENTS,
+            DocumentTag.STF_24WEEKS_REMOVAL_REFUSED_DECISION_DOCUMENT
+        );
+    }
 }
