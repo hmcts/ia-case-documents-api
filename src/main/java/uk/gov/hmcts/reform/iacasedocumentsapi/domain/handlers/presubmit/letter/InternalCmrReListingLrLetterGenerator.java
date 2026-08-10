@@ -19,7 +19,7 @@ public class InternalCmrReListingLrLetterGenerator extends AbstractInternalCmrRe
         @Qualifier("internalCmrReListingLrLetter") DocumentCreator<AsylumCase> documentCreator,
         DocumentHandler documentHandler
     ) {
-        super(documentCreator, documentHandler, DocumentTag.INTERNAL_CMR_LISTING_LR_LETTER);
+        super(documentCreator, documentHandler, DocumentTag.INTERNAL_CMR_RE_LISTING_LR_LETTER);
     }
 
     @Override

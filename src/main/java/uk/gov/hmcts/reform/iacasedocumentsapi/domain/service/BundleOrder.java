@@ -275,28 +275,28 @@ public class BundleOrder implements Comparator<DocumentWithMetadata> {
                 log.warn("INTERNAL_CASE_LISTED_LETTER_BUNDLE tag should not be checked for bundle ordering, document desc: {}", document.getDescription());
                 yield 83;
             }
-            case INTERNAL_CMR_LISTING_LETTER -> {
-                log.warn("INTERNAL_CMR_LISTING_LETTER_BUNDLE tag should not be checked for bundle ordering, document desc: {}", document.getDescription());
-                yield 84;
-            }
-            case INTERNAL_CMR_LISTING_LETTER_BUNDLE -> {
-                log.warn("INTERNAL_CMR_LISTING_LETTER_BUNDLE tag should not be checked for bundle ordering, document desc: {}", document.getDescription());
-                yield 85;
-            }
-            case INTERNAL_CMR_LISTING_LR_LETTER -> {
-                log.warn("INTERNAL_CMR_LISTING_LR_LETTER_BUNDLE tag should not be checked for bundle ordering, document desc: {}", document.getDescription());
-                yield 86;
-            }
-            case INTERNAL_CMR_LISTING_LR_LETTER_BUNDLE -> {
-                log.warn("INTERNAL_CMR_LISTING_LR_LETTER_BUNDLE tag should not be checked for bundle ordering, document desc: {}", document.getDescription());
-                yield 87;
-            }
             case INTERNAL_CASE_LISTED_LR_LETTER -> {
                 log.warn("INTERNAL_CASE_LISTED_LR_LETTER tag should not be checked for bundle ordering, document desc: {}", document.getDescription());
-                yield 88;
+                yield 84;
             }
             case INTERNAL_CASE_LISTED_LR_LETTER_BUNDLE -> {
                 log.warn("INTERNAL_CASE_LISTED_LR_LETTER_BUNDLE tag should not be checked for bundle ordering, document desc: {}", document.getDescription());
+                yield 85;
+            }
+            case INTERNAL_CMR_LISTING_LETTER -> {
+                log.warn("INTERNAL_CMR_LISTING_LETTER_BUNDLE tag should not be checked for bundle ordering, document desc: {}", document.getDescription());
+                yield 86;
+            }
+            case INTERNAL_CMR_LISTING_LETTER_BUNDLE -> {
+                log.warn("INTERNAL_CMR_LISTING_LETTER_BUNDLE tag should not be checked for bundle ordering, document desc: {}", document.getDescription());
+                yield 87;
+            }
+            case INTERNAL_CMR_LISTING_LR_LETTER -> {
+                log.warn("INTERNAL_CMR_LISTING_LR_LETTER_BUNDLE tag should not be checked for bundle ordering, document desc: {}", document.getDescription());
+                yield 88;
+            }
+            case INTERNAL_CMR_LISTING_LR_LETTER_BUNDLE -> {
+                log.warn("INTERNAL_CMR_LISTING_LR_LETTER_BUNDLE tag should not be checked for bundle ordering, document desc: {}", document.getDescription());
                 yield 89;
             }
             case INTERNAL_OUT_OF_TIME_DECISION_LETTER -> {
@@ -323,113 +323,129 @@ public class BundleOrder implements Comparator<DocumentWithMetadata> {
                 log.warn("INTERNAL_EDIT_CASE_LISTING_LR_LETTER_BUNDLE tag should not be checked for bundle ordering, document desc: {}", document.getDescription());
                 yield 95;
             }
+            case INTERNAL_CMR_RE_LISTING_LETTER -> {
+                log.warn("INTERNAL_CMR_LISTING_LETTER_BUNDLE tag should not be checked for bundle ordering, document desc: {}", document.getDescription());
+                yield 96;
+            }
+            case INTERNAL_CMR_RE_LISTING_LETTER_BUNDLE -> {
+                log.warn("INTERNAL_CMR_LISTING_LETTER_BUNDLE tag should not be checked for bundle ordering, document desc: {}", document.getDescription());
+                yield 97;
+            }
+            case INTERNAL_CMR_RE_LISTING_LR_LETTER -> {
+                log.warn("INTERNAL_CMR_LISTING_LR_LETTER_BUNDLE tag should not be checked for bundle ordering, document desc: {}", document.getDescription());
+                yield 98;
+            }
+            case INTERNAL_CMR_RE_LISTING_LR_LETTER_BUNDLE -> {
+                log.warn("INTERNAL_CMR_LISTING_LR_LETTER_BUNDLE tag should not be checked for bundle ordering, document desc: {}", document.getDescription());
+                yield 99;
+            }
             case INTERNAL_DETAINED_MANAGE_FEE_UPDATE_LETTER -> {
                 log.warn("INTERNAL_DETAINED_MANAGE_FEE_UPDATE_LETTER tag should not be checked for bundle ordering, document desc: {}", document.getDescription());
-                yield 96;
+                yield 100;
             }
             case INTERNAL_DETAINED_APPEAL_SUBMITTED_OUT_OF_TIME_WITH_EXEMPTION_LETTER -> {
                 log.warn("INTERNAL_DETAINED_APPEAL_SUBMITTED_OUT_OF_TIME_WITH_EXEMPTION_LETTER tag should not be checked for bundle ordering, document desc: {}", document.getDescription());
-                yield 97;
+                yield 101;
             }
             case INTERNAL_DETAINED_APPEAL_SUBMITTED_IN_TIME_WITH_FEE_TO_PAY_LETTER -> {
                 log.warn("INTERNAL_DETAINED_APPEAL_SUBMITTED_IN_TIME_WITH_FEE_TO_PAY_LETTER tag should not be checked for bundle ordering, document desc: {}", document.getDescription());
-                yield 98;
+                yield 102;
             }
             case INTERNAL_DETAINED_PRISON_IRC_APPEAL_SUBMISSION -> {
                 log.warn("INTERNAL_DETAINED_PRISON_IRC_APPEAL_SUBMISSION tag should not be checked for bundle ordering, document desc: {}", document.getDescription());
-                yield 99;
+                yield 103;
             }
             case INTERNAL_DETAINED_OUT_OF_TIME_DECISION_ALLOWED_LETTER -> {
                 log.warn("INTERNAL_DETAINED_OUT_OF_TIME_DECISION_ALLOWED_LETTER tag should not be checked for bundle ordering, document desc: {}", document.getDescription());
-                yield 100;
+                yield 104;
             }
             case INTERNAL_DETAINED_APPEAL_HO_UPLOAD_BUNDLE_APPELLANT_LETTER -> {
                 log.warn("INTERNAL_DETAINED_APPEAL_HO_UPLOAD_BUNDLE_APPELLANT_LETTER tag should not be checked for bundle ordering, document desc: {}", document.getDescription());
-                yield 101;
+                yield 105;
             }
             case INTERNAL_DETAINED_OUT_OF_TIME_REMISSION_IRC_PRISON_LETTER -> {
                 log.warn("INTERNAL_DETAINED_OUT_OF_TIME_REMISSION_IRC_PRISON_LETTER tag should not be checked for bundle ordering, document desc: {}", document.getDescription());
-                yield 102;
+                yield 106;
             }
             case INTERNAL_DETAINED_APPEAL_SUBMITTED_OUT_OF_TIME_WITH_FEE_LETTER -> {
                 log.warn("INTERNAL_DETAINED_APPEAL_SUBMITTED_OUT_OF_TIME_WITH_FEE_LETTER tag should not be checked for bundle ordering, document desc: {}", document.getDescription());
-                yield 103;
+                yield 107;
             }
             case INTERNAL_DETAINED_OUT_OF_TIME_REMISSION_GRANTED_IRC_PRISON_LETTER -> {
                 log.warn("INTERNAL_DETAINED_OUT_OF_TIME_REMISSION_GRANTED_IRC_PRISON_LETTER tag should not be checked for bundle ordering, document desc: {}", document.getDescription());
-                yield 104;
+                yield 108;
             }
             case INTERNAL_DETAINED_APPEAL_REMISSION_PARTIALLY_GRANTED_OR_REFUSED_TEMPLATE_LETTER -> {
                 log.warn(
                     "INTERNAL_DETAINED_APPEAL_REMISSION_PARTIALLY_GRANTED_OR_REFUSED_TEMPLATE_LETTER tag should not be checked for bundle ordering, document desc: {}",
                     document.getDescription());
-                yield 105;
+                yield 109;
             }
             case DETAINED_LEGAL_REP_REMOVED_IRC_PRISON_LETTER -> {
                 log.warn("DETAINED_LEGAL_REP_REMOVED_IRC_PRISON_LETTER tag should not be checked for bundle ordering, document desc: {}", document.getDescription());
-                yield 106;
+                yield 110;
             }
             case INTERNAL_DETAINED_LATE_REMISSION_PARTIALLY_GRANTED_OR_REFUSED_TEMPLATE_LETTER -> {
                 log.warn("INTERNAL_DETAINED_LATE_REMISSION_PARTIALLY_GRANTED_OR_REFUSED_TEMPLATE_LETTER tag should not be checked for bundle ordering, document desc: {}", document.getDescription());
-                yield 107;
+                yield 111;
             }
             case INTERNAL_DETAINED_APPEAL_UPDATE_TRIBUNAL_DECISION_RULE_31_IRC_PRISON_LETTER -> {
                 log.warn("INTERNAL_DETAINED_APPEAL_UPDATE_TRIBUNAL_DECISION_RULE_31_IRC_PRISON_LETTER tag should not be checked for bundle ordering, document desc: {}", document.getDescription());
-                yield 108;
+                yield 112;
             }
             case INTERNAL_DETAINED_APPEAL_SUBMITTED_WITH_EXEMPTION_LETTER -> {
                 log.warn("INTERNAL_DETAINED_APPEAL_SUBMITTED_WITH_EXEMPTION_LETTER tag should not be checked for bundle ordering, document desc: {}", document.getDescription());
-                yield 109;
+                yield 113;
             }
             case INTERNAL_DETAINED_LATE_REMISSION_GRANTED_TEMPLATE_LETTER -> {
                 log.warn("INTERNAL_DETAINED_LATE_REMISSION_GRANTED_TEMPLATE_LETTER tag should not be checked for bundle ordering, document desc: {}", document.getDescription());
-                yield 110;
+                yield 114;
             }
             case INTERNAL_DETAINED_LATE_REMISSION_REFUSED_TEMPLATE_LETTER -> {
                 log.warn("INTERNAL_DETAINED_LATE_REMISSION_REFUSED_TEMPLATE_LETTER tag should not be checked for bundle ordering, document desc: {}", document.getDescription());
-                yield 111;
+                yield 115;
             }            
             case DETAINED_APPEAL_ADJOURN_HEARING_WITHOUT_DATE_IRC_PRISON_LETTER -> {
                 log.warn("INTERNAL_DETAINED_APPEAL_ADJOURN_HEARING_WITHOUT_A_DATE_LETTER tag should not be checked for bundle ordering, document desc: {}", document.getDescription());
-                yield 112;
+                yield 116;
             }
             case INTERNAL_DETAINED_APPEAL_REMISSION_GRANTED_IN_TIME_LETTER -> {
                 log.warn("INTERNAL_DETAINED_APPEAL_REMISSION_GRANTED_IN_TIME_LETTER tag should not be checked for bundle ordering, document desc: {}", document.getDescription());
-                yield 113;
+                yield 117;
             }
             case INTERNAL_DETAINED_APPEAL_REMITTED_AIP_IRC_PRISON_LETTER -> {
                 log.warn("INTERNAL_DETAINED_APPEAL_REMITTED_AIP_IRC_PRISON_LETTER tag should not be checked for bundle ordering, document desc: {}", document.getDescription());
-                yield 114;
+                yield 118;
             }
             case INTERNAL_DETAINED_IRC_PRISON_FTPA_DISPOSED_RULES_31_OR_32_LETTER -> {
                 log.warn("INTERNAL_DETAINED_IRC_PRISON_FTPA_DISPOSED_RULES_31_OR_32_LETTER tag should not be checked for bundle ordering, document desc: {}", document.getDescription());
-                yield 115;
+                yield 119;
             }
             case HOME_OFFICE_APPLICATION_DECIDED_LETTER -> {
                 log.warn("HOME_OFFICE_APPLICATION_DECIDED_LETTER tag should not be checked for bundle ordering, document desc: {}", document.getDescription());
-                yield 116;
+                yield 120;
             }
             case INTERNAL_DETAINED_DECISION_WITHOUT_HEARING -> {
                 log.warn("INTERNAL_DETAINED_DECISION_WITHOUT_HEARING tag should not be checked for bundle ordering, document desc: {}", document.getDescription());
-                yield 117;
+                yield 121;
             }
             case AIPM_DETAINED_IN_PRISON_IRC_REINSTATE_APPEAL_LETTER -> {
                 log.warn("AIPM_DETAINED_IN_PRISON_IRC_REINSTATE_APPEAL_LETTER tag should not be checked for bundle ordering, document desc: {}", document.getDescription());
-                yield 118;
+                yield 122;
             }
             case CMR_HEARING_CANCELLED_LETTER -> {
                 log.warn("CMR_HEARING_CANCELLED_LETTER tag should not be checked for bundle ordering, document desc: {}", document.getDescription());
-                yield 119;
+                yield 123;
             }
             case CMR_HEARING_CANCELLED_LR_LETTER -> {
                 log.warn("CMR_HEARING_CANCELLED_LR_LETTER tag should not be checked for bundle ordering, document desc: {}", document.getDescription());
-                yield 120;
+                yield 124;
             }
             case STF_24WEEKS_CASE_REVIEW_APPELLANT_DOCUMENT -> {
                 log.warn("STF_24WEEKS_CASE_REVIEW_APPELLANT_DOCUMENT tag should not be checked for bundle ordering, document desc: {}", document.getDescription());
-                yield 121;
+                yield 125;
             }
-            case NONE ->  122;
+            case NONE ->  126;
 
             default ->
                 throw new IllegalStateException("document has unknown tag: " + document.getTag() + ", description: " + document.getDescription());
