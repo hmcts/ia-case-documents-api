@@ -157,6 +157,7 @@ class InternalCmrListingLegalRepLetterBundlerTest {
     @Test
     void should_bundle_non_detained_case() {
 
+        List<DocumentWithMetadata> appellantDocs = List.of(mock(DocumentWithMetadata.class));
         List<DocumentWithMetadata> lrDocs = List.of(mock(DocumentWithMetadata.class));
 
         try (MockedStatic<uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils> mocked =
@@ -169,6 +170,10 @@ class InternalCmrListingLegalRepLetterBundlerTest {
                     .thenReturn(false);
 
             mocked.when(() ->
+                            getMaybeLetterNotificationDocuments(asylumCase, DocumentTag.INTERNAL_CMR_LISTING_LETTER))
+                    .thenReturn(appellantDocs);
+
+            mocked.when(() ->
                             getMaybeLetterNotificationDocuments(asylumCase, DocumentTag.INTERNAL_CMR_LISTING_LR_LETTER))
                     .thenReturn(lrDocs);
 
@@ -177,8 +182,13 @@ class InternalCmrListingLegalRepLetterBundlerTest {
 
             assertNotNull(response);
 
-            // both futures read the same tag, so the same documents are bundled twice
-            verify(documentBundler, times(2)).bundleWithoutContentsOrCoverSheets(
+            verify(documentBundler).bundleWithoutContentsOrCoverSheets(
+                    eq(appellantDocs),
+                    eq("Letter bundle documents"),
+                    eq("qualified.pdf")
+            );
+
+            verify(documentBundler).bundleWithoutContentsOrCoverSheets(
                     eq(lrDocs),
                     eq("Letter bundle documents"),
                     eq("qualified.pdf")
@@ -237,7 +247,7 @@ class InternalCmrListingLegalRepLetterBundlerTest {
                     .thenReturn(true);
 
             mocked.when(() ->
-                            getMaybeNotificationAttachmentDocuments(asylumCase, DocumentTag.INTERNAL_CMR_LISTING_LR_LETTER))
+                            getMaybeNotificationAttachmentDocuments(asylumCase, DocumentTag.INTERNAL_CMR_LISTING_LETTER))
                     .thenReturn(attachmentDocs);
 
             mocked.when(() ->
