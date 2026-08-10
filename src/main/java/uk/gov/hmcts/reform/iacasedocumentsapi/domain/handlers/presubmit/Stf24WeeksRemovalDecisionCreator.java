@@ -21,6 +21,7 @@ import static java.util.Objects.requireNonNull;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.IS_REMOVAL_OF_24W_APPLICATION_REFUSED;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.LEGAL_REPRESENTATIVE_DOCUMENTS;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.LETTER_NOTIFICATION_DOCUMENTS;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.REMOVAL_OF_24W_DECISION_JUDGE;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.isInternalCase;
 
 @Slf4j
@@ -80,7 +81,8 @@ public class Stf24WeeksRemovalDecisionCreator implements PreSubmitCallbackHandle
                 tag
             );
         }
-
+        asylumCase.clear(IS_REMOVAL_OF_24W_APPLICATION_REFUSED);
+        asylumCase.clear(REMOVAL_OF_24W_DECISION_JUDGE);
         return new PreSubmitCallbackResponse<>(asylumCase);
     }
 }

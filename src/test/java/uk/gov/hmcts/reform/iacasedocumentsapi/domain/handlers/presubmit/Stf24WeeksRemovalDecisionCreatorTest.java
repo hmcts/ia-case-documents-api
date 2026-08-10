@@ -33,6 +33,7 @@ import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseD
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.IS_REMOVAL_OF_24W_APPLICATION_REFUSED;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.LEGAL_REPRESENTATIVE_DOCUMENTS;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.LETTER_NOTIFICATION_DOCUMENTS;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.REMOVAL_OF_24W_DECISION_JUDGE;
 
 @ExtendWith(MockitoExtension.class)
 class Stf24WeeksRemovalDecisionCreatorTest {
@@ -146,6 +147,8 @@ class Stf24WeeksRemovalDecisionCreatorTest {
             LETTER_NOTIFICATION_DOCUMENTS,
             DocumentTag.STF_24WEEKS_REMOVAL_DECISION_DOCUMENT
         );
+        verify(asylumCase).clear(IS_REMOVAL_OF_24W_APPLICATION_REFUSED);
+        verify(asylumCase).clear(REMOVAL_OF_24W_DECISION_JUDGE);
     }
 
     @Test
@@ -174,6 +177,8 @@ class Stf24WeeksRemovalDecisionCreatorTest {
             LETTER_NOTIFICATION_DOCUMENTS,
             DocumentTag.STF_24WEEKS_REMOVAL_DECISION_DOCUMENT
         );
+        verify(asylumCase).clear(IS_REMOVAL_OF_24W_APPLICATION_REFUSED);
+        verify(asylumCase).clear(REMOVAL_OF_24W_DECISION_JUDGE);
     }
 
     @Test
@@ -204,5 +209,7 @@ class Stf24WeeksRemovalDecisionCreatorTest {
             LETTER_NOTIFICATION_DOCUMENTS,
             DocumentTag.STF_24WEEKS_REMOVAL_REFUSED_DECISION_DOCUMENT
         );
+        verify(asylumCase).clear(IS_REMOVAL_OF_24W_APPLICATION_REFUSED);
+        verify(asylumCase).clear(REMOVAL_OF_24W_DECISION_JUDGE);
     }
 }
