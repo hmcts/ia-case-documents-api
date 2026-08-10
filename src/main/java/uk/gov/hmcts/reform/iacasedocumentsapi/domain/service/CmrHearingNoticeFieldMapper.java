@@ -42,7 +42,10 @@ public class CmrHearingNoticeFieldMapper {
         final Optional<YesOrNo> isSubmitRequirementsAvailable = asylumCase.read(SUBMIT_HEARING_REQUIREMENTS_AVAILABLE);
 
         fieldValues.putAll(getAppellantPersonalisation(asylumCase));
-        fieldValues.put("legalRepReferenceNumber", asylumCase.read(LEGAL_REP_REFERENCE_NUMBER, String.class).orElse(""));
+        fieldValues.put("legalRepReferenceNumber",
+            asylumCase.read(LEGAL_REP_REFERENCE_NUMBER, String.class)
+                .orElse(asylumCase.read(LEGAL_REP_REF_NUMBER_PAPER_J, String.class).orElse(""))
+        );
         fieldValues.put("hearingDate", formatDateTimeForRendering(asylumCase.read(CMR_HEARING_DATE, String.class).orElse(""), DOCUMENT_DATE_FORMAT));
         fieldValues.put("hearingTime", formatDateTimeForRendering(asylumCase.read(CMR_HEARING_DATE, String.class).orElse(""), DOCUMENT_TIME_FORMAT));
 

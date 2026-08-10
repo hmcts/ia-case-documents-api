@@ -32,8 +32,6 @@ import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseD
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.LEGAL_REP_GIVEN_NAME;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.LEGAL_REP_ADDRESS_U_K;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.LEGAL_REP_HAS_ADDRESS;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.LEGAL_REP_REFERENCE_NUMBER;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.LEGAL_REP_REF_NUMBER_PAPER_J;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.LIST_CASE_HEARING_CENTRE;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.LIST_CASE_HEARING_DATE;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.OOC_ADDRESS_LINE_1;
@@ -61,8 +59,6 @@ class InternalCaseListedLrLetterTemplateTest {
     private String appellantGivenNames = "John";
     private String appellantFamilyName = "Smith";
     private String homeOfficeReferenceNumber = "123654";
-    private String legalRepReferenceNumber = "LR/12345";
-    private String legalRepReferenceNumberPaperJ = "PAPER-J-REF";
     private String appealReferenceNumber = "HU/11111/2022";
     private final String templateName = "templateName";
     private final String logo = "[userImage:hmcts.png]";
@@ -101,7 +97,6 @@ class InternalCaseListedLrLetterTemplateTest {
         assertEquals(appellantGivenNames, fieldValuesMap.get("appellantGivenNames"));
         assertEquals(appellantFamilyName, fieldValuesMap.get("appellantFamilyName"));
         assertEquals(homeOfficeReferenceNumber, fieldValuesMap.get("homeOfficeReferenceNumber"));
-        assertEquals(legalRepReferenceNumber, fieldValuesMap.get("legalRepReferenceNumber"));
         assertEquals(telephoneNumber, fieldValuesMap.get("customerServicesTelephone"));
         assertEquals(formattedListCaseHearingDate, fieldValuesMap.get("hearingDate"));
         assertEquals(formattedListCaseHearingTime, fieldValuesMap.get("hearingTime"));
@@ -124,7 +119,6 @@ class InternalCaseListedLrLetterTemplateTest {
         assertEquals(appellantGivenNames, fieldValuesMap.get("appellantGivenNames"));
         assertEquals(appellantFamilyName, fieldValuesMap.get("appellantFamilyName"));
         assertEquals(homeOfficeReferenceNumber, fieldValuesMap.get("homeOfficeReferenceNumber"));
-        assertEquals(legalRepReferenceNumber, fieldValuesMap.get("legalRepReferenceNumber"));
         assertEquals(telephoneNumber, fieldValuesMap.get("customerServicesTelephone"));
         assertEquals(formattedListCaseHearingDate, fieldValuesMap.get("hearingDate"));
         assertEquals(formattedListCaseHearingTime, fieldValuesMap.get("hearingTime"));
@@ -144,7 +138,6 @@ class InternalCaseListedLrLetterTemplateTest {
         when(asylumCase.read(LEGAL_REP_GIVEN_NAME, String.class)).thenReturn(Optional.of(appellantGivenNames));
         when(asylumCase.read(LEGAL_REP_FAMILY_NAME_PAPER_J, String.class)).thenReturn(Optional.of(appellantFamilyName));
         when(asylumCase.read(HOME_OFFICE_REFERENCE_NUMBER, String.class)).thenReturn(Optional.of(homeOfficeReferenceNumber));
-        when(asylumCase.read(LEGAL_REP_REFERENCE_NUMBER, String.class)).thenReturn(Optional.of(legalRepReferenceNumber));
         when(asylumCase.read(LIST_CASE_HEARING_DATE, String.class)).thenReturn(Optional.of(listCaseHearingDate));
         when(asylumCase.read(LIST_CASE_HEARING_CENTRE, HearingCentre.class)).thenReturn(Optional.of(HearingCentre.MANCHESTER));
         when(stringProvider.get("hearingCentreAddress", "manchester")).thenReturn(Optional.of(manchesterHearingCentreAddress));
@@ -167,37 +160,5 @@ class InternalCaseListedLrLetterTemplateTest {
             when(asylumCase.read(OOC_LR_COUNTRY_GOV_UK_ADMIN_J, NationalityFieldValue.class)).thenReturn(Optional.of(nationalityOoc));
             when(nationalityOoc.getCode()).thenReturn(Nationality.ES.name());
         }
-    }
-
-    @Test
-    void should_fall_back_to_paper_j_legal_rep_reference_when_primary_is_missing() {
-        dataSetup(true);
-        when(asylumCase.read(LEGAL_REP_REFERENCE_NUMBER, String.class)).thenReturn(Optional.empty());
-        when(asylumCase.read(LEGAL_REP_REF_NUMBER_PAPER_J, String.class)).thenReturn(Optional.of(legalRepReferenceNumberPaperJ));
-
-        fieldValuesMap = internalCaseListedLrLetterTemplate.mapFieldValues(caseDetails);
-
-        assertEquals(legalRepReferenceNumberPaperJ, fieldValuesMap.get("legalRepReferenceNumber"));
-    }
-
-    @Test
-    void should_prefer_primary_legal_rep_reference_over_paper_j() {
-        dataSetup(true);
-        when(asylumCase.read(LEGAL_REP_REF_NUMBER_PAPER_J, String.class)).thenReturn(Optional.of(legalRepReferenceNumberPaperJ));
-
-        fieldValuesMap = internalCaseListedLrLetterTemplate.mapFieldValues(caseDetails);
-
-        assertEquals(legalRepReferenceNumber, fieldValuesMap.get("legalRepReferenceNumber"));
-    }
-
-    @Test
-    void should_be_empty_when_both_legal_rep_references_are_missing() {
-        dataSetup(true);
-        when(asylumCase.read(LEGAL_REP_REFERENCE_NUMBER, String.class)).thenReturn(Optional.empty());
-        when(asylumCase.read(LEGAL_REP_REF_NUMBER_PAPER_J, String.class)).thenReturn(Optional.empty());
-
-        fieldValuesMap = internalCaseListedLrLetterTemplate.mapFieldValues(caseDetails);
-
-        assertEquals("", fieldValuesMap.get("legalRepReferenceNumber"));
     }
 }

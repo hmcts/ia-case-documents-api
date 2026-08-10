@@ -47,7 +47,6 @@ public class InternalEditCaseListingLrLetterTemplateTest {
     private String appellantGivenNames = "Talha";
     private String appellantFamilyName = "Awan";
     private String homeOfficeReferenceNumber = "A1234567/001";
-    private String legalRepReferenceNumber = "LR/12345";
     private String customerServicesEmail = "customer.services@example.com";
     private final String customerServicesTelephone = "0300 123 1711";
     private String addressLine1 = "50";
@@ -94,7 +93,6 @@ public class InternalEditCaseListingLrLetterTemplateTest {
         assertEquals(appellantGivenNames, templateFieldValues.get("appellantGivenNames"));
         assertEquals(appellantFamilyName, templateFieldValues.get("appellantFamilyName"));
         assertEquals(homeOfficeReferenceNumber, templateFieldValues.get("homeOfficeReferenceNumber"));
-        assertEquals(legalRepReferenceNumber, templateFieldValues.get("legalRepReferenceNumber"));
         assertEquals(customerServicesTelephone, customerServicesProvider.getInternalCustomerServicesTelephone(asylumCase));
         assertEquals(customerServicesEmail, customerServicesProvider.getInternalCustomerServicesEmail(asylumCase));
         assertEquals(LocalDate.now().format(DateTimeFormatter.ofPattern("d MMMM yyyy")), templateFieldValues.get("dateLetterSent"));
@@ -120,7 +118,6 @@ public class InternalEditCaseListingLrLetterTemplateTest {
         assertEquals(appellantGivenNames, templateFieldValues.get("appellantGivenNames"));
         assertEquals(appellantFamilyName, templateFieldValues.get("appellantFamilyName"));
         assertEquals(homeOfficeReferenceNumber, templateFieldValues.get("homeOfficeReferenceNumber"));
-        assertEquals(legalRepReferenceNumber, templateFieldValues.get("legalRepReferenceNumber"));
         assertEquals(customerServicesTelephone, customerServicesProvider.getInternalCustomerServicesTelephone(asylumCase));
         assertEquals(customerServicesEmail, customerServicesProvider.getInternalCustomerServicesEmail(asylumCase));
         assertEquals(LocalDate.now().format(DateTimeFormatter.ofPattern("d MMMM yyyy")), templateFieldValues.get("dateLetterSent"));
@@ -155,7 +152,6 @@ public class InternalEditCaseListingLrLetterTemplateTest {
         when(asylumCase.read(LEGAL_REP_GIVEN_NAME, String.class)).thenReturn(Optional.of(appellantGivenNames));
         when(asylumCase.read(LEGAL_REP_FAMILY_NAME_PAPER_J, String.class)).thenReturn(Optional.of(appellantFamilyName));
         when(asylumCase.read(HOME_OFFICE_REFERENCE_NUMBER, String.class)).thenReturn(Optional.of(homeOfficeReferenceNumber));
-        when(asylumCase.read(LEGAL_REP_REFERENCE_NUMBER, String.class)).thenReturn(Optional.of(legalRepReferenceNumber));
         when(asylumCase.read(LIST_CASE_HEARING_DATE, String.class)).thenReturn(Optional.of(hearingDate));
         when(asylumCase.read(APPELLANT_ADDRESS, AddressUk.class)).thenReturn(Optional.of(address));
         when(asylumCase.read(APPELLANT_IN_UK, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
