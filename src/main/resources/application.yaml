@@ -679,10 +679,10 @@ internalCmrListingLrLetterWithAttachment.fileExtension: PDF
 internalCmrListingLrLetterWithAttachment.fileName: "internal-cmr-listing-appellant-lr-letter-with-attachment"
 
 internalCmrReListingLetterWithAttachment.fileExtension: PDF
-internalCmrReListingLetterWithAttachment.fileName: "internal-cmr-re-listing-letter-with-attachment"
+internalCmrReListingLetterWithAttachment.fileName: "internal-cmr-relisting-letter-with-attachment"
 
 internalCmrReListingLrLetterWithAttachment.fileExtension: PDF
-internalCmrReListingLrLetterWithAttachment.fileName: "internal-cmr-re-listing-appellant-lr-letter-with-attachment"
+internalCmrReListingLrLetterWithAttachment.fileName: "internal-cmr-relisting-appellant-lr-letter-with-attachment"
 
 
 detainedLegalRepRemovedIrcPrisonLetter.contentType: application/pdf
