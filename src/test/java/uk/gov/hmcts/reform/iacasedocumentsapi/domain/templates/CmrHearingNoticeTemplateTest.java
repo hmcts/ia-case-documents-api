@@ -107,7 +107,7 @@ class CmrHearingNoticeTemplateTest {
 
         Map<String, Object> templateFieldValues = cmrHearingNoticeTemplate.mapFieldValues(caseDetails);
 
-        assertEquals(19, templateFieldValues.size());
+        assertEquals(20, templateFieldValues.size());
         assertEquals("[userImage:hmcts.png]", templateFieldValues.get("hmcts"));
         assertEquals(appealReferenceNumber, templateFieldValues.get("appealReferenceNumber"));
         assertEquals(appellantGivenNames, templateFieldValues.get("appellantGivenNames"));
