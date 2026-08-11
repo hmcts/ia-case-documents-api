@@ -37,6 +37,7 @@ class CmrHearingNoticeTemplateTest {
     private final String appellantFamilyName = "Awan";
     private final String homeOfficeReferenceNumber = "A1234567/001";
     private final String legalRepReferenceNumber = "OUR-REF";
+    private final String legalRepReferenceNumberPaperJ = "PAPER-J-REF";
     private final String ccdReferenceNumber = "1234-5678-9012-3456";
     private final String hearingDate = "2020-12-25T12:34:56";
     private final String manchesterHearingCentreAddress = "Manchester, 123 Somewhere, North";
@@ -126,5 +127,50 @@ class CmrHearingNoticeTemplateTest {
         assertEquals(YesOrNo.NO, templateFieldValues.get("isIntegrated"));
         assertEquals(customerServicesTelephone, templateFieldValues.get("customerServicesTelephone"));
         assertEquals(customerServicesEmail, templateFieldValues.get("customerServicesEmail"));
+    }
+
+    @Test
+    void should_fall_back_to_paper_j_legal_rep_reference_when_primary_is_missing() {
+
+        legalRepReferenceDataSetUp();
+        when(asylumCase.read(LEGAL_REP_REFERENCE_NUMBER, String.class)).thenReturn(Optional.empty());
+        when(asylumCase.read(LEGAL_REP_REF_NUMBER_PAPER_J, String.class)).thenReturn(Optional.of(legalRepReferenceNumberPaperJ));
+
+        Map<String, Object> templateFieldValues = cmrHearingNoticeTemplate.mapFieldValues(caseDetails);
+
+        assertEquals(legalRepReferenceNumberPaperJ, templateFieldValues.get("legalRepReferenceNumber"));
+    }
+
+    @Test
+    void should_prefer_primary_legal_rep_reference_over_paper_j() {
+
+        legalRepReferenceDataSetUp();
+        when(asylumCase.read(LEGAL_REP_REFERENCE_NUMBER, String.class)).thenReturn(Optional.of(legalRepReferenceNumber));
+        when(asylumCase.read(LEGAL_REP_REF_NUMBER_PAPER_J, String.class)).thenReturn(Optional.of(legalRepReferenceNumberPaperJ));
+
+        Map<String, Object> templateFieldValues = cmrHearingNoticeTemplate.mapFieldValues(caseDetails);
+
+        assertEquals(legalRepReferenceNumber, templateFieldValues.get("legalRepReferenceNumber"));
+    }
+
+    @Test
+    void should_be_empty_when_both_legal_rep_references_are_missing() {
+
+        legalRepReferenceDataSetUp();
+        when(asylumCase.read(LEGAL_REP_REFERENCE_NUMBER, String.class)).thenReturn(Optional.empty());
+        when(asylumCase.read(LEGAL_REP_REF_NUMBER_PAPER_J, String.class)).thenReturn(Optional.empty());
+
+        Map<String, Object> templateFieldValues = cmrHearingNoticeTemplate.mapFieldValues(caseDetails);
+
+        assertEquals("", templateFieldValues.get("legalRepReferenceNumber"));
+    }
+
+    private void legalRepReferenceDataSetUp() {
+        when(caseDetails.getCaseData()).thenReturn(asylumCase);
+        when(asylumCase.read(CMR_HEARING_CENTRE, HearingCentre.class)).thenReturn(Optional.of(HearingCentre.MANCHESTER));
+        when(stringProvider.get("hearingCentreAddress", "manchester")).thenReturn(Optional.of(manchesterHearingCentreAddress));
+        when(asylumCase.read(IS_CASE_USING_LOCATION_REF_DATA, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO));
+        when(asylumCase.read(SUBMIT_HEARING_REQUIREMENTS_AVAILABLE)).thenReturn(Optional.of(YesOrNo.NO));
+        when(asylumCase.read(IS_INTEGRATED, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO));
     }
 }
