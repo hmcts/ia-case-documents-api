@@ -97,7 +97,7 @@ class CmrListingDetainedOtherAppellantLetterTemplateTest {
         Map<String, Object> templateFieldValues =
             cmrListingDetainedOtherAppellantLetterTemplate.mapFieldValues(caseDetails);
 
-        assertEquals(16, templateFieldValues.size());
+        assertEquals(17, templateFieldValues.size());
         assertEquals("[userImage:hmcts.png]", templateFieldValues.get("hmcts"));
         assertEquals(appealReferenceNumber, templateFieldValues.get("appealReferenceNumber"));
         assertEquals(homeOfficeReferenceNumber, templateFieldValues.get("homeOfficeReferenceNumber"));
