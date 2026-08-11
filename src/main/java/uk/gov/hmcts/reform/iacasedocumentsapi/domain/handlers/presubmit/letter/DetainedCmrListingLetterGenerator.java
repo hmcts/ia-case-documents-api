@@ -26,13 +26,13 @@ import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtil
 
 @Slf4j
 @Component
-public class InternalDetainedCmrListingLetterGenerator implements PreSubmitCallbackHandler<AsylumCase> {
+public class DetainedCmrListingLetterGenerator implements PreSubmitCallbackHandler<AsylumCase> {
 
     private final DocumentCreator<AsylumCase> documentCreator;
     private final DocumentHandler documentHandler;
 
-    public InternalDetainedCmrListingLetterGenerator(
-        @Qualifier("internalDetainedCmrListing") DocumentCreator<AsylumCase> documentCreator,
+    public DetainedCmrListingLetterGenerator(
+        @Qualifier("detainedCmrListing") DocumentCreator<AsylumCase> documentCreator,
         DocumentHandler documentHandler
     ) {
         this.documentCreator = documentCreator;

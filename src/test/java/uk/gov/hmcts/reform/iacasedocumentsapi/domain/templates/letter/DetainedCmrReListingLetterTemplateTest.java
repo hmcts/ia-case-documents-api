@@ -27,7 +27,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.CustomerServicesPro
 @ExtendWith(MockitoExtension.class)
 @SuppressWarnings("unchecked")
 @MockitoSettings(strictness = Strictness.LENIENT)
-public class InternalDetainedCmrListingLetterTemplateTest {
+public class DetainedCmrReListingLetterTemplateTest {
 
     @Mock private CaseDetails<AsylumCase> caseDetails;
     @Mock private CaseDetails<AsylumCase> caseDetailsBefore;
@@ -40,7 +40,7 @@ public class InternalDetainedCmrListingLetterTemplateTest {
     @Mock private Value hearingChannelValue;
     @Mock private Value oldHearingChannelValue;
 
-    private InternalDetainedCmrListingLetterTemplate internalDetainedCmrListingLetterTemplate;
+    private DetainedCmrReListingLetterTemplate detainedCmrReListingLetterTemplate;
 
     private final String templateName = "TB-IAC-LET-ENG-00005.docx";
     private final String appealReferenceNumber = "HU/11111/2023";
@@ -61,8 +61,8 @@ public class InternalDetainedCmrListingLetterTemplateTest {
 
     @BeforeEach
     void setUp() {
-        internalDetainedCmrListingLetterTemplate =
-            new InternalDetainedCmrListingLetterTemplate(
+        detainedCmrReListingLetterTemplate =
+            new DetainedCmrReListingLetterTemplate(
                 templateName,
                 customerServicesProvider,
                 stringProvider
@@ -71,7 +71,7 @@ public class InternalDetainedCmrListingLetterTemplateTest {
 
     @Test
     void should_return_template_name() {
-        assertEquals(templateName, internalDetainedCmrListingLetterTemplate.getName());
+        assertEquals(templateName, detainedCmrReListingLetterTemplate.getName());
     }
 
     void dataSetUp() {
@@ -84,7 +84,7 @@ public class InternalDetainedCmrListingLetterTemplateTest {
         when(asylumCase.read(CCD_REFERENCE_NUMBER_FOR_DISPLAY, String.class)).thenReturn(Optional.of(ccdReferenceNumber));
         when(asylumCase.read(CMR_HEARING_CENTRE, HearingCentre.class)).thenReturn(Optional.of(HearingCentre.MANCHESTER));
         when(asylumCase.read(CMR_HEARING_DATE, String.class)).thenReturn(Optional.of(cmrHearingDate));
-        when(asylumCase.read(CMR_HEARING_CHANNEL, DynamicList.class)).thenReturn(Optional.of(hearingChannelDynamicList));
+        when(asylumCase.read(HEARING_CHANNEL, DynamicList.class)).thenReturn(Optional.of(hearingChannelDynamicList));
         when(hearingChannelDynamicList.getValue()).thenReturn(hearingChannelValue);
         when(hearingChannelValue.getLabel()).thenReturn(hearingChannelLabel);
         when(stringProvider.get("hearingCentreAddress", "manchester")).thenReturn(Optional.of(manchesterHearingCentreAddress));
@@ -96,9 +96,9 @@ public class InternalDetainedCmrListingLetterTemplateTest {
     void should_map_case_data_to_template_field_values() {
         dataSetUp();
 
-        Map<String, Object> templateFieldValues = internalDetainedCmrListingLetterTemplate.mapFieldValues(caseDetails);
+        Map<String, Object> templateFieldValues = detainedCmrReListingLetterTemplate.mapFieldValues(caseDetails);
 
-        assertEquals(14, templateFieldValues.size());
+        assertEquals(16, templateFieldValues.size());
         assertEquals("[userImage:hmcts.png]", templateFieldValues.get("hmcts"));
         assertEquals(appealReferenceNumber, templateFieldValues.get("appealReferenceNumber"));
         assertEquals(homeOfficeReferenceNumber, templateFieldValues.get("homeOfficeReferenceNumber"));
@@ -121,12 +121,13 @@ public class InternalDetainedCmrListingLetterTemplateTest {
         dataSetUp();
 
         when(caseDetailsBefore.getCaseData()).thenReturn(asylumCaseBefore);
-        when(asylumCaseBefore.read(CMR_HEARING_CHANNEL, DynamicList.class)).thenReturn(Optional.of(oldHearingChannelDynamicList));
+        when(asylumCaseBefore.read(HEARING_CHANNEL, DynamicList.class)).thenReturn(Optional.of(oldHearingChannelDynamicList));
+        when(asylumCaseBefore.read(CMR_HEARING_CENTRE, HearingCentre.class)).thenReturn(Optional.of(HearingCentre.MANCHESTER));
         when(oldHearingChannelDynamicList.getValue()).thenReturn(oldHearingChannelValue);
         when(oldHearingChannelValue.getLabel()).thenReturn(oldHearingChannelLabel);
 
         Map<String, Object> templateFieldValues =
-            internalDetainedCmrListingLetterTemplate.mapFieldValues(caseDetails, caseDetailsBefore);
+            detainedCmrReListingLetterTemplate.mapFieldValues(caseDetails, caseDetailsBefore);
 
         assertEquals(hearingChannelLabel, templateFieldValues.get("hearingChannel"));
         assertEquals(oldHearingChannelLabel, templateFieldValues.get("oldHearingChannel"));
@@ -136,9 +137,9 @@ public class InternalDetainedCmrListingLetterTemplateTest {
     void should_use_default_hearing_channel_when_missing() {
         dataSetUp();
 
-        when(asylumCase.read(CMR_HEARING_CHANNEL, DynamicList.class)).thenReturn(Optional.empty());
+        when(asylumCase.read(HEARING_CHANNEL, DynamicList.class)).thenReturn(Optional.empty());
 
-        Map<String, Object> templateFieldValues = internalDetainedCmrListingLetterTemplate.mapFieldValues(caseDetails);
+        Map<String, Object> templateFieldValues = detainedCmrReListingLetterTemplate.mapFieldValues(caseDetails);
 
         assertEquals("Unknown", templateFieldValues.get("hearingChannel"));
         assertEquals("Unknown", templateFieldValues.get("oldHearingChannel"));
@@ -150,7 +151,7 @@ public class InternalDetainedCmrListingLetterTemplateTest {
 
         when(asylumCase.read(CMR_HEARING_DATE, String.class)).thenReturn(Optional.empty());
 
-        Map<String, Object> templateFieldValues = internalDetainedCmrListingLetterTemplate.mapFieldValues(caseDetails);
+        Map<String, Object> templateFieldValues = detainedCmrReListingLetterTemplate.mapFieldValues(caseDetails);
 
         assertEquals("", templateFieldValues.get("hearingDate"));
         assertEquals("", templateFieldValues.get("hearingTime"));
@@ -162,6 +163,6 @@ public class InternalDetainedCmrListingLetterTemplateTest {
         when(asylumCase.read(CMR_HEARING_CENTRE, HearingCentre.class)).thenReturn(Optional.empty());
 
         assertThrows(IllegalStateException.class,
-            () -> internalDetainedCmrListingLetterTemplate.mapFieldValues(caseDetails));
+            () -> detainedCmrReListingLetterTemplate.mapFieldValues(caseDetails));
     }
 }
