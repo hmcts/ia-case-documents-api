@@ -3,7 +3,10 @@ package uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.*;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.formatDateForRendering;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Map;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
@@ -34,6 +37,7 @@ class CmrHearingNoticeTemplateTest {
 
     private final String appealReferenceNumber = "RP/11111/2020";
     private final String appellantGivenNames = "Talha";
+    private final String dateLetterSent = "25122020";
     private final String appellantFamilyName = "Awan";
     private final String homeOfficeReferenceNumber = "A1234567/001";
     private final String legalRepReferenceNumber = "OUR-REF";
@@ -107,8 +111,10 @@ class CmrHearingNoticeTemplateTest {
 
         Map<String, Object> templateFieldValues = cmrHearingNoticeTemplate.mapFieldValues(caseDetails);
 
-        assertEquals(19, templateFieldValues.size());
+        assertEquals(20, templateFieldValues.size());
         assertEquals("[userImage:hmcts.png]", templateFieldValues.get("hmcts"));
+        assertEquals(formatDateForRendering(LocalDate.now().toString(), DateTimeFormatter.ofPattern("d MMM yyyy")),
+                templateFieldValues.get("dateLetterSent"));
         assertEquals(appealReferenceNumber, templateFieldValues.get("appealReferenceNumber"));
         assertEquals(appellantGivenNames, templateFieldValues.get("appellantGivenNames"));
         assertEquals(appellantFamilyName, templateFieldValues.get("appellantFamilyName"));

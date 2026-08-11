@@ -98,7 +98,7 @@ class CmrHearingNoticeFieldMapperTest {
 
         Map<String, Object> templateFieldValues = cmrHearingNoticeFieldMapper.mapFields(asylumCase);
 
-        assertEquals(19, templateFieldValues.size());
+        assertEquals(20, templateFieldValues.size());
         assertEquals("[userImage:hmcts.png]", templateFieldValues.get("hmcts"));
         assertEquals(appealReferenceNumber, templateFieldValues.get("appealReferenceNumber"));
         assertEquals(appellantGivenNames, templateFieldValues.get("appellantGivenNames"));
@@ -132,7 +132,7 @@ class CmrHearingNoticeFieldMapperTest {
 
         Map<String, Object> templateFieldValues = cmrHearingNoticeFieldMapper.mapFields(asylumCase);
 
-        assertEquals(19, templateFieldValues.size());
+        assertEquals(20, templateFieldValues.size());
         assertEquals(caseOfficerReviewedVulnerabilities, templateFieldValues.get("vulnerabilities"));
         assertEquals(caseOfficerReviewedMultimedia, templateFieldValues.get("multimedia"));
         assertEquals(caseOfficerReviewedSingleSexCourt, templateFieldValues.get("singleSexCourt"));
@@ -199,7 +199,7 @@ class CmrHearingNoticeFieldMapperTest {
 
         Map<String, Object> templateFieldValues = cmrHearingNoticeFieldMapper.mapFields(asylumCase);
 
-        assertEquals(19, templateFieldValues.size());
+        assertEquals(20, templateFieldValues.size());
         assertEquals("", templateFieldValues.get("appealReferenceNumber"));
         assertEquals("", templateFieldValues.get("appellantGivenNames"));
         assertEquals("", templateFieldValues.get("appellantFamilyName"));
