@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DocumentTag;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.MakeAnApplication;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseDetails;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.Event;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.Callback;
@@ -12,15 +13,24 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.Dispa
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.PreSubmitCallbackResponse;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.PreSubmitCallbackStage;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.Document;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.IdValue;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.PreSubmitCallbackHandler;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentCreator;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentHandler;
 
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
+
 import static java.util.Objects.requireNonNull;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.IS_REMOVAL_OF_24W_APPLICATION_REFUSED;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.LEGAL_REPRESENTATIVE_DOCUMENTS;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.LETTER_NOTIFICATION_DOCUMENTS;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.MAKE_AN_APPLICATIONS;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.REMOVAL_OF_24W_DECISION_JUDGE;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.isInternalCase;
 
@@ -65,10 +75,15 @@ public class Stf24WeeksRemovalDecisionCreator implements PreSubmitCallbackHandle
         DocumentTag tag = callback.getEvent() == Event.REMOVE_STATUTORY_TIMEFRAME_24_WEEKS
             ? DocumentTag.STF_24WEEKS_REMOVAL_DECISION_DOCUMENT
             : DocumentTag.STF_24WEEKS_REMOVAL_REFUSED_DECISION_DOCUMENT;
-        Document appealSubmission = stf24WeeksRemovalDecisionDocumentCreator.create(caseDetails);
+        Document document = stf24WeeksRemovalDecisionDocumentCreator.create(caseDetails);
+
+        final CaseDetails<AsylumCase> caseDetailsBefore = callback.getCaseDetailsBefore().orElse(caseDetails);
+        final AsylumCase asylumCaseBefore = caseDetailsBefore.getCaseData();
+        setDecidedApplicationRefusal24wRemovalDoc(asylumCase, asylumCaseBefore, document);
+
         documentHandler.addWithMetadataWithDateTimeWithoutReplacingExistingDocuments(
             asylumCase,
-            appealSubmission,
+            document,
             LEGAL_REPRESENTATIVE_DOCUMENTS,
             tag
         );
@@ -76,7 +91,7 @@ public class Stf24WeeksRemovalDecisionCreator implements PreSubmitCallbackHandle
         if (isInternalCase(asylumCase)) {
             documentHandler.addWithMetadata(
                 asylumCase,
-                appealSubmission,
+                document,
                 LETTER_NOTIFICATION_DOCUMENTS,
                 tag
             );
@@ -84,6 +99,23 @@ public class Stf24WeeksRemovalDecisionCreator implements PreSubmitCallbackHandle
         asylumCase.clear(IS_REMOVAL_OF_24W_APPLICATION_REFUSED);
         asylumCase.clear(REMOVAL_OF_24W_DECISION_JUDGE);
         return new PreSubmitCallbackResponse<>(asylumCase);
+    }
+
+    public void setDecidedApplicationRefusal24wRemovalDoc(AsylumCase asylumCase, AsylumCase asylumCaseBefore, Document document) {
+        Optional<List<IdValue<MakeAnApplication>>> applicationsOpt = asylumCase.read(MAKE_AN_APPLICATIONS);
+        Optional<List<IdValue<MakeAnApplication>>> applicationsBeforeOpt = asylumCaseBefore.read(MAKE_AN_APPLICATIONS);
+        List<IdValue<MakeAnApplication>> applications = applicationsOpt.orElse(Collections.emptyList());
+        List<IdValue<MakeAnApplication>> applicationsBefore = applicationsBeforeOpt.orElse(Collections.emptyList());
+        Map<String, String> applicationsBeforeDecisionMap = new HashMap<>();
+        applicationsBefore.forEach(idValue ->
+            applicationsBeforeDecisionMap.put(idValue.getId(), idValue.getValue().getDecision()));
+
+        applications.stream()
+            .filter(idValue -> !Objects.equals(applicationsBeforeDecisionMap.get(idValue.getId()),
+                idValue.getValue().getDecision())).findAny()
+            .map(IdValue::getValue)
+            .ifPresent(applicationDecided ->
+                applicationDecided.setRefusalOfRemoval24wDocument(document));
     }
 }
 
