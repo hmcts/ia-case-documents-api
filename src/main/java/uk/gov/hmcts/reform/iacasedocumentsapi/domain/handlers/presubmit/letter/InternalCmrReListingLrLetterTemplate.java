@@ -7,8 +7,10 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.StringProvider;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.CustomerServicesProvider;
 
 import java.util.List;
+import java.util.Map;
 
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.getLegalRepAddressInCountryOrOoc;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.getLegalRepPersonalisation;
 
 @Component
 public class InternalCmrReListingLrLetterTemplate extends AbstractInternalCmrReListingLetterTemplate {
@@ -23,5 +25,10 @@ public class InternalCmrReListingLrLetterTemplate extends AbstractInternalCmrReL
     @Override
     protected List<String> getRecipientAddress(AsylumCase asylumCase) {
         return getLegalRepAddressInCountryOrOoc(asylumCase);
+    }
+
+    @Override
+    protected Map<String, String> getPersonalisation(AsylumCase asylumCase) {
+        return getLegalRepPersonalisation(asylumCase);
     }
 }
