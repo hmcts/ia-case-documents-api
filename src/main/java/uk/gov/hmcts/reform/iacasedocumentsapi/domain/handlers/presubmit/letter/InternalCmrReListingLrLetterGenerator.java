@@ -24,7 +24,6 @@ public class InternalCmrReListingLrLetterGenerator extends AbstractInternalCmrRe
 
     @Override
     protected boolean isApplicable(AsylumCase asylumCase) {
-        return hasBeenSubmittedAsLegalRepresentedInternalCase(asylumCase)
-               && (!isAppellantInDetention(asylumCase) || isDetainedInFacilityType(asylumCase, OTHER));
+        return hasBeenSubmittedAsLegalRepresentedInternalCase(asylumCase);
     }
 }
