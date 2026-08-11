@@ -21,7 +21,7 @@ import java.util.Objects;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.NOTIFICATION_ATTACHMENT_DOCUMENTS;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DetentionFacility.IRC;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DetentionFacility.PRISON;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.Event.CMR_LISTING;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.Event.CMR_RE_LISTING;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.*;
 
 @Slf4j
@@ -48,19 +48,8 @@ public class DetainedCmrReListingLetterGenerator implements PreSubmitCallbackHan
 
         AsylumCase asylumCase = callback.getCaseDetails().getCaseData();
 
-        log.info("--------------------------------------");
-        log.info(
-                "callback.getEvent() == CMR_LISTING: {}",
-                callback.getEvent() == CMR_LISTING
-        );
-        log.info("!isAcceleratedDetainedAppeal(asylumCase): {}", !isAcceleratedDetainedAppeal(asylumCase));
-        log.info(
-                "isDetainedInOneOfFacilityTypes(asylumCase, IRC, PRISON): {}",
-                isDetainedInOneOfFacilityTypes(asylumCase, IRC, PRISON)
-        );
-        log.info("--------------------------------------");
         return callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
-                && callback.getEvent() == CMR_LISTING
+                && callback.getEvent() == CMR_RE_LISTING
                 && isDetainedInOneOfFacilityTypes(asylumCase, IRC, PRISON);
     }
 
@@ -75,23 +64,17 @@ public class DetainedCmrReListingLetterGenerator implements PreSubmitCallbackHan
         final CaseDetails<AsylumCase> caseDetails = callback.getCaseDetails();
         final AsylumCase asylumCase = caseDetails.getCaseData();
 
-        Document internalDetainedListCaseLetter = documentCreator.create(caseDetails);
+        Document detainedCmrReListLetter = documentCreator.create(caseDetails);
 
-        log.info("--------------------------------------");
-        log.info("internalDetainedListCaseLetter: {}", internalDetainedListCaseLetter.getDocumentFilename());
-        log.info("internalDetainedListCaseLetter: {}", internalDetainedListCaseLetter.getDocumentUrl());
-        log.info("Adding internal detained list case letter to asylum case INTERNAL_CMR_LISTING_LETTER");
         documentHandler.addWithMetadataWithoutReplacingExistingDocuments(
             asylumCase,
-            internalDetainedListCaseLetter,
+                detainedCmrReListLetter,
             NOTIFICATION_ATTACHMENT_DOCUMENTS,
-            DocumentTag.INTERNAL_CMR_LISTING_LETTER
+            DocumentTag.INTERNAL_CMR_RE_LISTING_LETTER
         );
-        log.info("Added internal detained list case letter to asylum case INTERNAL_CMR_LISTING_LETTER");
+
         List<DocumentWithMetadata> bundleDocuments =
-                getMaybeNotificationAttachmentDocuments(asylumCase, DocumentTag.INTERNAL_CMR_LISTING_LETTER);
-        log.info("bundleDocuments.size: {}", bundleDocuments.size());
-        log.info("--------------------------------------");
+                getMaybeNotificationAttachmentDocuments(asylumCase, DocumentTag.INTERNAL_CMR_RE_LISTING_LETTER);
 
         return new PreSubmitCallbackResponse<>(asylumCase);
     }

@@ -82,8 +82,8 @@ public class DetainedCmrReListingLetterTemplate implements DocumentTemplate<Asyl
                         .replaceAll(",\\s*", "\n")
         );
 
-        String oldHearingChannel = getHearingChannel(asylumCaseBefore, "Unknown");
-        String newHearingChannel = getHearingChannel(asylumCase, "Unknown");
+        String oldHearingChannel = getCmrHearingChannel(asylumCaseBefore, "Unknown");
+        String newHearingChannel = getCmrHearingChannel(asylumCase, "Unknown");
 
         fieldValues.put("oldHearingChannel", oldHearingChannel);
         fieldValues.put("hearingChannel", newHearingChannel);

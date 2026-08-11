@@ -84,7 +84,7 @@ public class DetainedCmrReListingLetterTemplateTest {
         when(asylumCase.read(CCD_REFERENCE_NUMBER_FOR_DISPLAY, String.class)).thenReturn(Optional.of(ccdReferenceNumber));
         when(asylumCase.read(CMR_HEARING_CENTRE, HearingCentre.class)).thenReturn(Optional.of(HearingCentre.MANCHESTER));
         when(asylumCase.read(CMR_HEARING_DATE, String.class)).thenReturn(Optional.of(cmrHearingDate));
-        when(asylumCase.read(HEARING_CHANNEL, DynamicList.class)).thenReturn(Optional.of(hearingChannelDynamicList));
+        when(asylumCase.read(CMR_HEARING_CHANNEL, DynamicList.class)).thenReturn(Optional.of(hearingChannelDynamicList));
         when(hearingChannelDynamicList.getValue()).thenReturn(hearingChannelValue);
         when(hearingChannelValue.getLabel()).thenReturn(hearingChannelLabel);
         when(stringProvider.get("hearingCentreAddress", "manchester")).thenReturn(Optional.of(manchesterHearingCentreAddress));
@@ -121,7 +121,7 @@ public class DetainedCmrReListingLetterTemplateTest {
         dataSetUp();
 
         when(caseDetailsBefore.getCaseData()).thenReturn(asylumCaseBefore);
-        when(asylumCaseBefore.read(HEARING_CHANNEL, DynamicList.class)).thenReturn(Optional.of(oldHearingChannelDynamicList));
+        when(asylumCaseBefore.read(CMR_HEARING_CHANNEL, DynamicList.class)).thenReturn(Optional.of(oldHearingChannelDynamicList));
         when(asylumCaseBefore.read(CMR_HEARING_CENTRE, HearingCentre.class)).thenReturn(Optional.of(HearingCentre.MANCHESTER));
         when(oldHearingChannelDynamicList.getValue()).thenReturn(oldHearingChannelValue);
         when(oldHearingChannelValue.getLabel()).thenReturn(oldHearingChannelLabel);
@@ -137,7 +137,7 @@ public class DetainedCmrReListingLetterTemplateTest {
     void should_use_default_hearing_channel_when_missing() {
         dataSetUp();
 
-        when(asylumCase.read(HEARING_CHANNEL, DynamicList.class)).thenReturn(Optional.empty());
+        when(asylumCase.read(CMR_HEARING_CHANNEL, DynamicList.class)).thenReturn(Optional.empty());
 
         Map<String, Object> templateFieldValues = detainedCmrReListingLetterTemplate.mapFieldValues(caseDetails);
 

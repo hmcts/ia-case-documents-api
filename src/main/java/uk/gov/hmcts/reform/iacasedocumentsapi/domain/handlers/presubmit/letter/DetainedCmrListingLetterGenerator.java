@@ -48,17 +48,6 @@ public class DetainedCmrListingLetterGenerator implements PreSubmitCallbackHandl
 
         AsylumCase asylumCase = callback.getCaseDetails().getCaseData();
 
-        log.info("--------------------------------------");
-        log.info(
-                "callback.getEvent() == CMR_LISTING: {}",
-                callback.getEvent() == CMR_LISTING
-        );
-        log.info("!isAcceleratedDetainedAppeal(asylumCase): {}", !isAcceleratedDetainedAppeal(asylumCase));
-        log.info(
-                "isDetainedInOneOfFacilityTypes(asylumCase, IRC, PRISON): {}",
-                isDetainedInOneOfFacilityTypes(asylumCase, IRC, PRISON)
-        );
-        log.info("--------------------------------------");
         return callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
                 && callback.getEvent() == CMR_LISTING
                 && isDetainedInOneOfFacilityTypes(asylumCase, IRC, PRISON);
@@ -77,21 +66,15 @@ public class DetainedCmrListingLetterGenerator implements PreSubmitCallbackHandl
 
         Document internalDetainedListCaseLetter = documentCreator.create(caseDetails);
 
-        log.info("--------------------------------------");
-        log.info("internalDetainedListCaseLetter: {}", internalDetainedListCaseLetter.getDocumentFilename());
-        log.info("internalDetainedListCaseLetter: {}", internalDetainedListCaseLetter.getDocumentUrl());
-        log.info("Adding internal detained list case letter to asylum case INTERNAL_CMR_LISTING_LETTER");
         documentHandler.addWithMetadataWithoutReplacingExistingDocuments(
             asylumCase,
             internalDetainedListCaseLetter,
             NOTIFICATION_ATTACHMENT_DOCUMENTS,
             DocumentTag.INTERNAL_CMR_LISTING_LETTER
         );
-        log.info("Added internal detained list case letter to asylum case INTERNAL_CMR_LISTING_LETTER");
+
         List<DocumentWithMetadata> bundleDocuments =
                 getMaybeNotificationAttachmentDocuments(asylumCase, DocumentTag.INTERNAL_CMR_LISTING_LETTER);
-        log.info("bundleDocuments.size: {}", bundleDocuments.size());
-        log.info("--------------------------------------");
 
         return new PreSubmitCallbackResponse<>(asylumCase);
     }
