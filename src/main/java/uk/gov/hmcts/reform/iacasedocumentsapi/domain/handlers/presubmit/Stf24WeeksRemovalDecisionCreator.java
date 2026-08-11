@@ -116,6 +116,7 @@ public class Stf24WeeksRemovalDecisionCreator implements PreSubmitCallbackHandle
             .map(IdValue::getValue)
             .ifPresent(applicationDecided ->
                 applicationDecided.setRefusalOfRemoval24wDocument(document));
+        asylumCase.write(MAKE_AN_APPLICATIONS, applications);
     }
 }
 
