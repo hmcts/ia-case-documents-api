@@ -27,6 +27,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 import static java.util.Objects.requireNonNull;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.DECIDE_AN_APPLICATION_ID;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.IS_REMOVAL_OF_24W_APPLICATION_REFUSED;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.LEGAL_REPRESENTATIVE_DOCUMENTS;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.LETTER_NOTIFICATION_DOCUMENTS;
@@ -77,9 +78,9 @@ public class Stf24WeeksRemovalDecisionCreator implements PreSubmitCallbackHandle
             : DocumentTag.STF_24WEEKS_REMOVAL_REFUSED_DECISION_DOCUMENT;
         Document document = stf24WeeksRemovalDecisionDocumentCreator.create(caseDetails);
 
-        final CaseDetails<AsylumCase> caseDetailsBefore = callback.getCaseDetailsBefore().orElse(caseDetails);
-        final AsylumCase asylumCaseBefore = caseDetailsBefore.getCaseData();
-        setDecidedApplicationRefusal24wRemovalDoc(asylumCase, asylumCaseBefore, document);
+        if (callback.getEvent() == Event.DECIDE_AN_APPLICATION) {
+            setDecidedApplicationRefusal24wRemovalDoc(asylumCase, document);
+        }
 
         documentHandler.addWithMetadataWithDateTimeWithoutReplacingExistingDocuments(
             asylumCase,
@@ -101,22 +102,21 @@ public class Stf24WeeksRemovalDecisionCreator implements PreSubmitCallbackHandle
         return new PreSubmitCallbackResponse<>(asylumCase);
     }
 
-    public void setDecidedApplicationRefusal24wRemovalDoc(AsylumCase asylumCase, AsylumCase asylumCaseBefore, Document document) {
-        Optional<List<IdValue<MakeAnApplication>>> applicationsOpt = asylumCase.read(MAKE_AN_APPLICATIONS);
-        Optional<List<IdValue<MakeAnApplication>>> applicationsBeforeOpt = asylumCaseBefore.read(MAKE_AN_APPLICATIONS);
-        List<IdValue<MakeAnApplication>> applications = applicationsOpt.orElse(Collections.emptyList());
-        List<IdValue<MakeAnApplication>> applicationsBefore = applicationsBeforeOpt.orElse(Collections.emptyList());
-        Map<String, String> applicationsBeforeDecisionMap = new HashMap<>();
-        applicationsBefore.forEach(idValue ->
-            applicationsBeforeDecisionMap.put(idValue.getId(), idValue.getValue().getDecision()));
+    public void setDecidedApplicationRefusal24wRemovalDoc(AsylumCase asylumCase, Document document) {
+        String decidedApplicationId = asylumCase.read(DECIDE_AN_APPLICATION_ID, String.class).orElse(null);
 
-        applications.stream()
-            .filter(idValue -> !Objects.equals(applicationsBeforeDecisionMap.get(idValue.getId()),
-                idValue.getValue().getDecision())).findAny()
-            .map(IdValue::getValue)
-            .ifPresent(applicationDecided ->
-                applicationDecided.setRefusalOfRemoval24wDocument(document));
-        asylumCase.write(MAKE_AN_APPLICATIONS, applications);
+        if (decidedApplicationId != null) {
+            Optional<List<IdValue<MakeAnApplication>>> applications = asylumCase.read(MAKE_AN_APPLICATIONS);
+
+            IdValue<MakeAnApplication> applicationIdValue = applications
+                .orElse(Collections.emptyList())
+                .stream()
+                .filter(app -> app.getId().equals(decidedApplicationId))
+                .findFirst()
+                .orElseThrow(() -> new IllegalStateException("The decided application is not present in make an applications list"));
+            applicationIdValue.getValue().setRefusalOfRemoval24wDocument(document);
+            asylumCase.write(MAKE_AN_APPLICATIONS, applications);
+        }
     }
 }
 

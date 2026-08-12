@@ -34,6 +34,7 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.DECIDE_AN_APPLICATION_ID;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.IS_ADMIN;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.IS_REMOVAL_OF_24W_APPLICATION_REFUSED;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.LEGAL_REPRESENTATIVE_DOCUMENTS;
@@ -55,8 +56,6 @@ class Stf24WeeksRemovalDecisionCreatorTest {
     private CaseDetails<AsylumCase> caseDetails;
     @Mock
     private AsylumCase asylumCase;
-    @Mock
-    private AsylumCase asylumCaseBefore;
     @Mock
     private Document mockDocument;
     @Mock
@@ -168,7 +167,6 @@ class Stf24WeeksRemovalDecisionCreatorTest {
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
         when(stf24WeeksRemovalDecisionDocumentCreator.create(caseDetails)).thenReturn(mockDocument);
         when(asylumCase.read(IS_ADMIN, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
-        when(asylumCase.read(MAKE_AN_APPLICATIONS)).thenReturn(Optional.empty());
 
         PreSubmitCallbackResponse<AsylumCase> response = stf24WeeksRemovalDecisionCreator.handle(
             PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
@@ -201,7 +199,8 @@ class Stf24WeeksRemovalDecisionCreatorTest {
         when(asylumCase.read(IS_REMOVAL_OF_24W_APPLICATION_REFUSED, YesOrNo.class))
             .thenReturn(Optional.of(YesOrNo.YES));
         when(asylumCase.read(IS_ADMIN, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
-        when(asylumCase.read(MAKE_AN_APPLICATIONS)).thenReturn(Optional.empty());
+        when(asylumCase.read(DECIDE_AN_APPLICATION_ID, String.class)).thenReturn(Optional.empty());
+
 
         PreSubmitCallbackResponse<AsylumCase> response = stf24WeeksRemovalDecisionCreator.handle(
             PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
@@ -226,26 +225,17 @@ class Stf24WeeksRemovalDecisionCreatorTest {
     }
 
     @Test
-    void setDecidedApplicationRefusal24wRemovalDoc_sets_document_when_application_decision_changes() {
-        MakeAnApplication applicationBefore = new MakeAnApplication();
-        applicationBefore.setDecision("Pending");
-
-        when(application.getDecision()).thenReturn("Refused");
-
-        IdValue<MakeAnApplication> applicationBeforeIdValue =
-            new IdValue<>("123", applicationBefore);
+    void setDecidedApplicationRefusal24wRemovalDoc_sets_document_when_decide_application_id_matches() {
         IdValue<MakeAnApplication> applicationIdValue =
             new IdValue<>("123", application);
-
+        when(asylumCase.read(DECIDE_AN_APPLICATION_ID, String.class))
+            .thenReturn(Optional.of("123"));
         when(asylumCase.read(MAKE_AN_APPLICATIONS))
             .thenReturn(Optional.of(List.of(applicationIdValue)));
 
-        when(asylumCaseBefore.read(MAKE_AN_APPLICATIONS))
-            .thenReturn(Optional.of(List.of(applicationBeforeIdValue)));
 
         stf24WeeksRemovalDecisionCreator.setDecidedApplicationRefusal24wRemovalDoc(
             asylumCase,
-            asylumCaseBefore,
             mockDocument
         );
 
@@ -253,107 +243,61 @@ class Stf24WeeksRemovalDecisionCreatorTest {
     }
 
     @Test
-    void setDecidedApplicationRefusal24wRemovalDoc_does_not_set_document_when_application_decision_has_not_changed() {
-        MakeAnApplication applicationBefore = new MakeAnApplication();
-        applicationBefore.setDecision("Refused");
-
-        when(application.getDecision()).thenReturn("Refused");
-
-        IdValue<MakeAnApplication> applicationBeforeIdValue =
-            new IdValue<>("123", applicationBefore);
+    void setDecidedApplicationRefusal24wRemovalDoc_throws_when_decide_application_id_no_match() {
         IdValue<MakeAnApplication> applicationIdValue =
             new IdValue<>("123", application);
-
+        when(asylumCase.read(DECIDE_AN_APPLICATION_ID, String.class))
+            .thenReturn(Optional.of("345"));
         when(asylumCase.read(MAKE_AN_APPLICATIONS))
             .thenReturn(Optional.of(List.of(applicationIdValue)));
 
-        when(asylumCaseBefore.read(MAKE_AN_APPLICATIONS))
-            .thenReturn(Optional.of(List.of(applicationBeforeIdValue)));
 
-        stf24WeeksRemovalDecisionCreator.setDecidedApplicationRefusal24wRemovalDoc(
-            asylumCase,
-            asylumCaseBefore,
-            mockDocument
-        );
+        IllegalStateException exception = assertThrows(IllegalStateException.class,
+            () -> stf24WeeksRemovalDecisionCreator.setDecidedApplicationRefusal24wRemovalDoc(
+                asylumCase,
+                mockDocument
+            ));
 
         verify(application, never()).setRefusalOfRemoval24wDocument(mockDocument);
+        assertEquals("The decided application is not present in make an applications list", exception.getMessage());
     }
 
     @Test
-    void setDecidedApplicationRefusal24wRemovalDoc_sets_document_only_on_changed_application() {
-        MakeAnApplication unchangedApplicationBefore = new MakeAnApplication();
-        unchangedApplicationBefore.setDecision("Refused");
+    void setDecidedApplicationRefusal24wRemovalDoc_sets_document_only_decided_application() {
+        MakeAnApplication undecidedApplication = mock(MakeAnApplication.class);
+        MakeAnApplication decidedApplication = mock(MakeAnApplication.class);
 
-        MakeAnApplication unchangedApplication = mock(MakeAnApplication.class);
-        when(unchangedApplication.getDecision()).thenReturn("Refused");
-
-        MakeAnApplication changedApplicationBefore = new MakeAnApplication();
-        changedApplicationBefore.setDecision("Pending");
-
-        MakeAnApplication changedApplication = mock(MakeAnApplication.class);
-        when(changedApplication.getDecision()).thenReturn("Refused");
-
-        IdValue<MakeAnApplication> unchangedBefore =
-            new IdValue<>("123", unchangedApplicationBefore);
         IdValue<MakeAnApplication> unchanged =
-            new IdValue<>("123", unchangedApplication);
+            new IdValue<>("123", undecidedApplication);
 
-        IdValue<MakeAnApplication> changedBefore =
-            new IdValue<>("456", changedApplicationBefore);
         IdValue<MakeAnApplication> changed =
-            new IdValue<>("456", changedApplication);
-
+            new IdValue<>("456", decidedApplication);
+        when(asylumCase.read(DECIDE_AN_APPLICATION_ID, String.class))
+            .thenReturn(Optional.of("456"));
         when(asylumCase.read(MAKE_AN_APPLICATIONS))
             .thenReturn(Optional.of(List.of(unchanged, changed)));
 
-        when(asylumCaseBefore.read(MAKE_AN_APPLICATIONS))
-            .thenReturn(Optional.of(List.of(unchangedBefore, changedBefore)));
 
         stf24WeeksRemovalDecisionCreator.setDecidedApplicationRefusal24wRemovalDoc(
             asylumCase,
-            asylumCaseBefore,
             mockDocument
         );
 
-        verify(changedApplication).setRefusalOfRemoval24wDocument(mockDocument);
-        verify(unchangedApplication, never()).setRefusalOfRemoval24wDocument(mockDocument);
+        verify(decidedApplication).setRefusalOfRemoval24wDocument(mockDocument);
+        verify(undecidedApplication, never()).setRefusalOfRemoval24wDocument(mockDocument);
     }
 
     @Test
-    void setDecidedApplicationRefusal24wRemovalDoc_does_nothing_when_current_applications_are_empty() {
+    void setDecidedApplicationRefusal24wRemovalDoc_does_nothing_when_no_decide_application_id() {
 
-        when(asylumCase.read(MAKE_AN_APPLICATIONS))
-            .thenReturn(Optional.empty());
-        when(asylumCaseBefore.read(MAKE_AN_APPLICATIONS))
+        when(asylumCase.read(DECIDE_AN_APPLICATION_ID, String.class))
             .thenReturn(Optional.empty());
 
         stf24WeeksRemovalDecisionCreator.setDecidedApplicationRefusal24wRemovalDoc(
             asylumCase,
-            asylumCaseBefore,
             mockDocument
         );
 
         verifyNoInteractions(mockDocument);
-    }
-
-    @Test
-    void setDecidedApplicationRefusal24wRemovalDoc_sets_document_when_application_is_new() {
-        when(application.getDecision()).thenReturn("Refused");
-
-        IdValue<MakeAnApplication> applicationIdValue =
-            new IdValue<>("123", application);
-
-        when(asylumCase.read(MAKE_AN_APPLICATIONS))
-            .thenReturn(Optional.of(List.of(applicationIdValue)));
-        when(asylumCaseBefore.read(MAKE_AN_APPLICATIONS))
-            .thenReturn(Optional.empty());
-
-        stf24WeeksRemovalDecisionCreator.setDecidedApplicationRefusal24wRemovalDoc(
-            asylumCase,
-            asylumCaseBefore,
-            mockDocument
-        );
-
-        verify(application).setRefusalOfRemoval24wDocument(mockDocument);
     }
 }
