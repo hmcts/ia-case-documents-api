@@ -159,4 +159,16 @@ class Stf24WeeksUtilsTest {
         IllegalStateException ex = assertThrows(IllegalStateException.class, () -> Stf24WeeksUtils.getAppealReceivedDate(asylumCase));
         assertEquals("Received date  is not present", ex.getMessage());
     }
+
+    @Test
+    void getCompleteCaseReviewDate_should_return_formatted_date_when_present_and_throw_when_missing() {
+        when(asylumCase.read(uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.COMPLETE_CASE_REVIEW_DATE, String.class))
+                .thenReturn(Optional.of("2023-05-10"));
+        assertEquals("10 May 2023", Stf24WeeksUtils.getCompleteCaseReviewDate(asylumCase));
+
+        when(asylumCase.read(uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.COMPLETE_CASE_REVIEW_DATE, String.class))
+                .thenReturn(Optional.empty());
+        IllegalStateException ex = assertThrows(IllegalStateException.class, () -> Stf24WeeksUtils.getCompleteCaseReviewDate(asylumCase));
+        assertEquals("Complete case review date is not present", ex.getMessage());
+    }
 }

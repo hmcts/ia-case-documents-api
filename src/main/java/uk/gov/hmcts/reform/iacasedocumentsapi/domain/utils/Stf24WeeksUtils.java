@@ -110,4 +110,11 @@ public class Stf24WeeksUtils {
         return LocalDate.parse(appealReceivedDate).format(DateTimeFormatter.ofPattern(D_MMM_YYYY));
     }
 
+    public static String getCompleteCaseReviewDate(AsylumCase asylumCase) {
+        final String reviewDate = asylumCase
+            .read(AsylumCaseDefinition.COMPLETE_CASE_REVIEW_DATE, String.class)
+            .orElseThrow(() -> new IllegalStateException("Complete CaseReview Date is not present"));
+        return LocalDate.parse(reviewDate).format(DateTimeFormatter.ofPattern(D_MMM_YYYY));
+    }
+
 }

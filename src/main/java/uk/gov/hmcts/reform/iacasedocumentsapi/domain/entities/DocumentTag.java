@@ -123,7 +123,16 @@ public enum DocumentTag {
     AIPM_DETAINED_IN_PRISON_IRC_REINSTATE_APPEAL_LETTER("aipmDetainedInPrisonOrIrcReinstateAppealLetter", CaseType.ASYLUM),
     STF_24WEEKS_CASE_REVIEW_APPELLANT_DOCUMENT("stf24WeeksCaseReviewAppeallantDocument", CaseType.ASYLUM),
     STF_24WEEKS_REMOVAL_DECISION_DOCUMENT("stf24WeeksRemovalDecisionDocument", CaseType.ASYLUM),
+    STF_24WEEKS_REMOVAL_DECISION_LETTER("stf24WeeksRemovalDecisionLetter", CaseType.ASYLUM),
+    STF_24WEEKS_REMOVAL_DECISION_LETTER_BUNDLE("stf24WeeksRemovalDecisionLetterBundle", CaseType.ASYLUM),
+    STF_24WEEKS_REMOVAL_DECISION_LETTER_LR("stf24WeeksRemovalDecisionLetterLr", CaseType.ASYLUM),
+    STF_24WEEKS_REMOVAL_DECISION_LETTER_LR_BUNDLE("stf24WeeksRemovalDecisionLetterLrBundle", CaseType.ASYLUM),
     STF_24WEEKS_REMOVAL_REFUSED_DECISION_DOCUMENT("stf24WeeksRemovalRefusedDecisionDocument", CaseType.ASYLUM),
+    STF_24WEEKS_REMOVAL_REFUSED_DECISION_LETTER("stf24WeeksRemovalRefusedDecisionDocumentLetter", CaseType.ASYLUM),
+    STF_24WEEKS_REMOVAL_REFUSED_DECISION_LETTER_BUNDLE("stf24WeeksRemovalRefusedDecisionDocumentLetterBundle", CaseType.ASYLUM),
+    STF_24WEEKS_REMOVAL_REFUSED_DECISION_LETTER_LR("stf24WeeksRemovalRefusedDecisionDocumentLetterLr", CaseType.ASYLUM),
+    STF_24WEEKS_REMOVAL_REFUSED_DECISION_LETTER_LR_BUNDLE("stf24WeeksRemovalRefusedDecisionDocumentLetterLrBundle", CaseType.ASYLUM),
+
 
     BAIL_SUBMISSION("bailSubmission", CaseType.BAIL),
     BAIL_EVIDENCE("uploadTheBailEvidenceDocs", CaseType.BAIL),
