@@ -128,10 +128,10 @@ public enum DocumentTag {
     STF_24WEEKS_REMOVAL_DECISION_LETTER_LR("stf24WeeksRemovalDecisionLetterLr", CaseType.ASYLUM),
     STF_24WEEKS_REMOVAL_DECISION_LETTER_LR_BUNDLE("stf24WeeksRemovalDecisionLetterLrBundle", CaseType.ASYLUM),
     STF_24WEEKS_REMOVAL_REFUSED_DECISION_DOCUMENT("stf24WeeksRemovalRefusedDecisionDocument", CaseType.ASYLUM),
-    STF_24WEEKS_REMOVAL_REFUSED_DECISION_LETTER("stf24WeeksRemovalRefusedDecisionDocumentLetter", CaseType.ASYLUM),
-    STF_24WEEKS_REMOVAL_REFUSED_DECISION_LETTER_BUNDLE("stf24WeeksRemovalRefusedDecisionDocumentLetterBundle", CaseType.ASYLUM),
-    STF_24WEEKS_REMOVAL_REFUSED_DECISION_LETTER_LR("stf24WeeksRemovalRefusedDecisionDocumentLetterLr", CaseType.ASYLUM),
-    STF_24WEEKS_REMOVAL_REFUSED_DECISION_LETTER_LR_BUNDLE("stf24WeeksRemovalRefusedDecisionDocumentLetterLrBundle", CaseType.ASYLUM),
+    STF_24WEEKS_REMOVAL_REFUSED_DECISION_LETTER("stf24WeeksRemovalRefusedDecisionLetter", CaseType.ASYLUM),
+    STF_24WEEKS_REMOVAL_REFUSED_DECISION_LETTER_BUNDLE("stf24WeeksRemovalRefusedDecisionLetterBundle", CaseType.ASYLUM),
+    STF_24WEEKS_REMOVAL_REFUSED_DECISION_LETTER_LR("stf24WeeksRemovalRefusedDecisionLetterLr", CaseType.ASYLUM),
+    STF_24WEEKS_REMOVAL_REFUSED_DECISION_LETTER_LR_BUNDLE("stf24WeeksRemovalRefusedDecisionLetterLrBundle", CaseType.ASYLUM),
 
 
     BAIL_SUBMISSION("bailSubmission", CaseType.BAIL),
