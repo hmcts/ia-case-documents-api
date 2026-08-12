@@ -409,9 +409,41 @@ public class BundleOrder implements Comparator<DocumentWithMetadata> {
                 log.warn("STF_24WEEKS_REMOVAL_DECISION_DOCUMENT tag should not be checked for bundle ordering, document desc: {}", document.getDescription());
                 yield 114;
             }
+            case STF_24WEEKS_REMOVAL_DECISION_LETTER -> {
+                log.warn("STF_24WEEKS_REMOVAL_DECISION_LETTER tag should not be checked for bundle ordering, document desc: {}", document.getDescription());
+                yield 115;
+            }
+            case STF_24WEEKS_REMOVAL_DECISION_LETTER_BUNDLE -> {
+                log.warn("STF_24WEEKS_REMOVAL_DECISION_LETTER_BUNDLE tag should not be checked for bundle ordering, document desc: {}", document.getDescription());
+                yield 116;
+            }
+            case STF_24WEEKS_REMOVAL_DECISION_LETTER_LR -> {
+                log.warn("STF_24WEEKS_REMOVAL_DECISION_LETTER_LR tag should not be checked for bundle ordering, document desc: {}", document.getDescription());
+                yield 117;
+            }
+            case STF_24WEEKS_REMOVAL_DECISION_LETTER_LR_BUNDLE -> {
+                log.warn("STF_24WEEKS_REMOVAL_DECISION_LETTER_LR_BUNDLE tag should not be checked for bundle ordering, document desc: {}", document.getDescription());
+                yield 118;
+            }
             case STF_24WEEKS_REMOVAL_REFUSED_DECISION_DOCUMENT -> {
                 log.warn("STF_24WEEKS_REMOVAL_REFUSED_DECISION_DOCUMENT tag should not be checked for bundle ordering, document desc: {}", document.getDescription());
-                yield 154;
+                yield 119;
+            }
+            case STF_24WEEKS_REMOVAL_REFUSED_DECISION_LETTER -> {
+                log.warn("STF_24WEEKS_REMOVAL_REFUSED_DECISION_LETTER tag should not be checked for bundle ordering, document desc: {}", document.getDescription());
+                yield 120;
+            }
+            case STF_24WEEKS_REMOVAL_REFUSED_DECISION_LETTER_BUNDLE -> {
+                log.warn("STF_24WEEKS_REMOVAL_REFUSED_DECISION_LETTER_BUNDLE tag should not be checked for bundle ordering, document desc: {}", document.getDescription());
+                yield 121;
+            }
+            case STF_24WEEKS_REMOVAL_REFUSED_DECISION_LETTER_LR -> {
+                log.warn("STF_24WEEKS_REMOVAL_REFUSED_DECISION_LETTER_LR tag should not be checked for bundle ordering, document desc: {}", document.getDescription());
+                yield 122;
+            }
+            case STF_24WEEKS_REMOVAL_REFUSED_DECISION_LETTER_LR_BUNDLE -> {
+                log.warn("STF_24WEEKS_REMOVAL_REFUSED_DECISION_LETTER_LR_BUNDLE tag should not be checked for bundle ordering, document desc: {}", document.getDescription());
+                yield 123;
             }
 
             case NONE ->  116;
