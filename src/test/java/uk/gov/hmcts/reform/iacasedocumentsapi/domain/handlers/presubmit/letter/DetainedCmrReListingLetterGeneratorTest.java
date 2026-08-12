@@ -1,12 +1,5 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit.letter;
 
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.*;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.Event.CMR_LISTING;
-
-import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -26,12 +19,20 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentCreator;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentHandler;
 
+import java.util.Optional;
+
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.*;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.Event.CMR_RE_LISTING;
+
 @ExtendWith(MockitoExtension.class)
 @SuppressWarnings("unchecked")
 @MockitoSettings(strictness = Strictness.LENIENT)
-class InternalDetainedCmrListingLetterGeneratorTest {
+class DetainedCmrReListingLetterGeneratorTest {
     @Mock
-    private DocumentCreator<AsylumCase> internalDetainedCmrListingCaseLetterCreator;
+    private DocumentCreator<AsylumCase> detainedCmrReListingCaseLetterCreator;
     @Mock
     private DocumentHandler documentHandler;
     @Mock
@@ -42,13 +43,13 @@ class InternalDetainedCmrListingLetterGeneratorTest {
     private AsylumCase asylumCase;
     @Mock
     private Document uploadedDocument;
-    private InternalDetainedCmrListingLetterGenerator internalDetainedCmrListingLetterGenerator;
+    private DetainedCmrReListingLetterGenerator detainedCmrReListingLetterGenerator;
 
     @BeforeEach
     public void setUp() {
-        internalDetainedCmrListingLetterGenerator =
-            new InternalDetainedCmrListingLetterGenerator(
-                internalDetainedCmrListingCaseLetterCreator,
+        detainedCmrReListingLetterGenerator =
+            new DetainedCmrReListingLetterGenerator(
+                    detainedCmrReListingCaseLetterCreator,
                 documentHandler
             );
     }
@@ -56,17 +57,17 @@ class InternalDetainedCmrListingLetterGeneratorTest {
     @Test
     public void should_create_detained_cmr_listing_pdf_and_append_to_notifications_documents() {
         when(callback.getCaseDetails()).thenReturn(caseDetails);
-        when(callback.getEvent()).thenReturn(CMR_LISTING);
+        when(callback.getEvent()).thenReturn(CMR_RE_LISTING);
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
         when(asylumCase.read(IS_ACCELERATED_DETAINED_APPEAL, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO));
         when(asylumCase.read(CMR_IS_REMOTE_HEARING, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO));
         when(asylumCase.read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
         when(asylumCase.read(DETENTION_FACILITY, String.class)).thenReturn(Optional.of("immigrationRemovalCentre"));
 
-        when(internalDetainedCmrListingCaseLetterCreator.create(caseDetails)).thenReturn(uploadedDocument);
+        when(detainedCmrReListingCaseLetterCreator.create(caseDetails)).thenReturn(uploadedDocument);
 
         PreSubmitCallbackResponse<AsylumCase> callbackResponse =
-            internalDetainedCmrListingLetterGenerator.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
+                detainedCmrReListingLetterGenerator.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
 
         assertNotNull(callbackResponse);
         assertEquals(asylumCase, callbackResponse.getData());
@@ -74,39 +75,39 @@ class InternalDetainedCmrListingLetterGeneratorTest {
         verify(documentHandler, times(1)).addWithMetadataWithoutReplacingExistingDocuments(
             asylumCase, uploadedDocument,
             NOTIFICATION_ATTACHMENT_DOCUMENTS,
-            DocumentTag.INTERNAL_CMR_LISTING_LETTER
+            DocumentTag.INTERNAL_CMR_RE_LISTING_LETTER
         );
     }
 
     @Test
     public void it_can_handle_callback_for_prison_facility() {
         when(callback.getCaseDetails()).thenReturn(caseDetails);
-        when(callback.getEvent()).thenReturn(CMR_LISTING);
+        when(callback.getEvent()).thenReturn(CMR_RE_LISTING);
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
         when(asylumCase.read(IS_ACCELERATED_DETAINED_APPEAL, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO));
         when(asylumCase.read(CMR_IS_REMOTE_HEARING, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO));
         when(asylumCase.read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
         when(asylumCase.read(DETENTION_FACILITY, String.class)).thenReturn(Optional.of("prison"));
 
-        assertTrue(internalDetainedCmrListingLetterGenerator.canHandle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback));
+        assertTrue(detainedCmrReListingLetterGenerator.canHandle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback));
     }
 
 
     @Test
     public void handling_should_throw_if_cannot_actually_handle() {
         when(callback.getCaseDetails()).thenReturn(caseDetails);
-        when(callback.getEvent()).thenReturn(CMR_LISTING);
+        when(callback.getEvent()).thenReturn(CMR_RE_LISTING);
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
         when(asylumCase.read(IS_ACCELERATED_DETAINED_APPEAL, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO));
         when(asylumCase.read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
         when(asylumCase.read(DETENTION_FACILITY, String.class)).thenReturn(Optional.of("immigrationRemovalCentre"));
 
-        assertThatThrownBy(() -> internalDetainedCmrListingLetterGenerator.handle(PreSubmitCallbackStage.ABOUT_TO_START, callback))
+        assertThatThrownBy(() -> detainedCmrReListingLetterGenerator.handle(PreSubmitCallbackStage.ABOUT_TO_START, callback))
             .hasMessage("Cannot handle callback")
             .isExactlyInstanceOf(IllegalStateException.class);
 
         when(callback.getEvent()).thenReturn(Event.SUBMIT_APPEAL);
-        assertThatThrownBy(() -> internalDetainedCmrListingLetterGenerator.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback))
+        assertThatThrownBy(() -> detainedCmrReListingLetterGenerator.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback))
             .hasMessage("Cannot handle callback")
             .isExactlyInstanceOf(IllegalStateException.class);
     }
@@ -124,7 +125,7 @@ class InternalDetainedCmrListingLetterGeneratorTest {
             when(asylumCase.read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO));
 
             for (PreSubmitCallbackStage callbackStage : PreSubmitCallbackStage.values()) {
-                boolean canHandle = internalDetainedCmrListingLetterGenerator.canHandle(callbackStage, callback);
+                boolean canHandle = detainedCmrReListingLetterGenerator.canHandle(callbackStage, callback);
                 assertFalse(canHandle);
             }
             reset(callback);
@@ -144,7 +145,7 @@ class InternalDetainedCmrListingLetterGeneratorTest {
             when(asylumCase.read(DETENTION_FACILITY, String.class)).thenReturn(Optional.of("other"));
 
             for (PreSubmitCallbackStage callbackStage : PreSubmitCallbackStage.values()) {
-                boolean canHandle = internalDetainedCmrListingLetterGenerator.canHandle(callbackStage, callback);
+                boolean canHandle = detainedCmrReListingLetterGenerator.canHandle(callbackStage, callback);
                 assertFalse(canHandle);
             }
             reset(callback);
@@ -156,7 +157,7 @@ class InternalDetainedCmrListingLetterGeneratorTest {
 
         for (Event event : Event.values()) {
 
-            if (event == CMR_LISTING) {
+            if (event == CMR_RE_LISTING) {
                 continue;
             }
 
@@ -167,7 +168,7 @@ class InternalDetainedCmrListingLetterGeneratorTest {
             when(asylumCase.read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
             when(asylumCase.read(DETENTION_FACILITY, String.class)).thenReturn(Optional.of("immigrationRemovalCentre"));
 
-            boolean canHandle = internalDetainedCmrListingLetterGenerator.canHandle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
+            boolean canHandle = detainedCmrReListingLetterGenerator.canHandle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
             assertFalse(canHandle);
 
             reset(callback);
@@ -177,19 +178,19 @@ class InternalDetainedCmrListingLetterGeneratorTest {
     @Test
     public void should_not_allow_null_arguments() {
 
-        assertThatThrownBy(() -> internalDetainedCmrListingLetterGenerator.canHandle(null, callback))
+        assertThatThrownBy(() -> detainedCmrReListingLetterGenerator.canHandle(null, callback))
             .hasMessage("callbackStage must not be null")
             .isExactlyInstanceOf(NullPointerException.class);
 
-        assertThatThrownBy(() -> internalDetainedCmrListingLetterGenerator.canHandle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, null))
+        assertThatThrownBy(() -> detainedCmrReListingLetterGenerator.canHandle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, null))
             .hasMessage("callback must not be null")
             .isExactlyInstanceOf(NullPointerException.class);
 
-        assertThatThrownBy(() -> internalDetainedCmrListingLetterGenerator.handle(null, callback))
+        assertThatThrownBy(() -> detainedCmrReListingLetterGenerator.handle(null, callback))
             .hasMessage("callbackStage must not be null")
             .isExactlyInstanceOf(NullPointerException.class);
 
-        assertThatThrownBy(() -> internalDetainedCmrListingLetterGenerator.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, null))
+        assertThatThrownBy(() -> detainedCmrReListingLetterGenerator.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, null))
             .hasMessage("callback must not be null")
             .isExactlyInstanceOf(NullPointerException.class);
     }

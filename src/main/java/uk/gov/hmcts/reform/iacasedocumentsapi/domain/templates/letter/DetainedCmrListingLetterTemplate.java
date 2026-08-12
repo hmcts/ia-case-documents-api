@@ -27,7 +27,7 @@ public class DetainedCmrListingLetterTemplate implements DocumentTemplate<Asylum
     private final StringProvider stringProvider;
 
     public DetainedCmrListingLetterTemplate(
-        @Value("${internalDetainedListCaseLetter.templateName}") String templateName,
+        @Value("${detainedCmrListingLetter.templateName}") String templateName,
         CustomerServicesProvider customerServicesProvider,
         StringProvider stringProvider
     ) {
@@ -56,7 +56,9 @@ public class DetainedCmrListingLetterTemplate implements DocumentTemplate<Asylum
 
         final Map<String, Object> fieldValues = new HashMap<>();
 
-        final HearingCentre listedHearingCentre = asylumCase.read(CMR_HEARING_CENTRE, HearingCentre.class)
+        final HearingCentre listedHearingCentre =
+            asylumCase
+                .read(CMR_HEARING_CENTRE, HearingCentre.class)
                 .orElseThrow(() -> new IllegalStateException("listCaseHearingCentre is not present"));
 
         fieldValues.putAll(getAppellantPersonalisation(asylumCase));
@@ -72,8 +74,8 @@ public class DetainedCmrListingLetterTemplate implements DocumentTemplate<Asylum
                 .replaceAll(",\\s*", "\n")
         );
 
-        String oldHearingChannel = getHearingChannel(asylumCaseBefore, "Unknown");
-        String newHearingChannel = getHearingChannel(asylumCase, "Unknown");
+        String oldHearingChannel = getCmrHearingChannel(asylumCaseBefore, "Unknown");
+        String newHearingChannel = getCmrHearingChannel(asylumCase, "Unknown");
 
         fieldValues.put("oldHearingChannel", oldHearingChannel);
         fieldValues.put("hearingChannel", newHearingChannel);
