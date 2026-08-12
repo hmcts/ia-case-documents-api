@@ -55,6 +55,8 @@ public class CmrHearingNoticeFieldMapper {
         String referenceNumber = asylumCase.read(CCD_REFERENCE_NUMBER_FOR_DISPLAY, String.class).orElse("");
         fieldValues.put("ccdReferenceNumberForDisplay", referenceNumber);
 
+        fieldValues.put("hearingType", "Interim Hearing");
+
         boolean isCaseUsingLocationRefData = asylumCase.read(IS_CASE_USING_LOCATION_REF_DATA, YesOrNo.class)
                 .orElse(YesOrNo.NO).equals(YesOrNo.YES);
 
