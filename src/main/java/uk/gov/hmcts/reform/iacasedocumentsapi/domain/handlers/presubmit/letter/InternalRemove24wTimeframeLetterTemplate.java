@@ -26,7 +26,7 @@ public class InternalRemove24wTimeframeLetterTemplate implements DocumentTemplat
     private final CustomerServicesProvider customerServicesProvider;
 
     public InternalRemove24wTimeframeLetterTemplate(
-        @Value("${internalRemove24wTimeframeLetterTemplate.templateName}") String templateName,
+        @Value("${internalRemove24wTimeframeLetter.templateName}") String templateName,
         CustomerServicesProvider customerServicesProvider) {
         this.templateName = templateName;
         this.customerServicesProvider = customerServicesProvider;

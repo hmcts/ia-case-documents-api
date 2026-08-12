@@ -26,7 +26,7 @@ public class InternalRefusalOfRemoval24wTimeframeApplicationLrLetterTemplate imp
     private final CustomerServicesProvider customerServicesProvider;
 
     public InternalRefusalOfRemoval24wTimeframeApplicationLrLetterTemplate(
-        @Value("${internalRemove24wTimeframeLetterTemplate.templateName}") String templateName,
+        @Value("${internalRefusalOfRemoval24wTimeframeApplicationLetter.templateName}") String templateName,
         CustomerServicesProvider customerServicesProvider) {
         this.templateName = templateName;
         this.customerServicesProvider = customerServicesProvider;
