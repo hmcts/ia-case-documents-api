@@ -10,6 +10,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit.letter.I
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit.letter.InternalCaseListedLrLetterTemplate;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit.letter.InternalRecordOutOfTimeDecisionLetterTemplate;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit.letter.InternalRefusalOfRemoval24wTimeframeApplicationLetterTemplate;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit.letter.InternalRefusalOfRemoval24wTimeframeApplicationLrLetterTemplate;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit.letter.InternalRemove24wTimeframeLetterTemplate;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit.letter.InternalRemove24wTimeframeLrLetterTemplate;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.AsylumCaseFileNameQualifier;
@@ -1785,7 +1786,7 @@ public class DocumentCreatorConfiguration {
         @Value("${internalRefusalOfRemoval24wTimeframeApplicationLetter.fileExtension}") String fileExtension,
         @Value("${internalRefusalOfRemoval24wTimeframeApplicationLetter.fileName}") String fileName,
         AsylumCaseFileNameQualifier fileNameQualifier,
-        InternalRefusalOfRemoval24wTimeframeApplicationLetterTemplate documentTemplate,
+        InternalRefusalOfRemoval24wTimeframeApplicationLrLetterTemplate documentTemplate,
         DocumentGenerator documentGenerator,
         DocumentUploader documentUploader
     ) {

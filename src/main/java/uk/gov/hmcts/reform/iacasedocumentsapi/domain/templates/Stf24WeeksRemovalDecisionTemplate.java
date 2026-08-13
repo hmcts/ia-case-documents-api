@@ -40,6 +40,7 @@ public class Stf24WeeksRemovalDecisionTemplate implements DocumentTemplate<Asylu
         final AsylumCase asylumCase = caseDetails.getCaseData();
         final Map<String, Object> fieldValues = new HashMap<>();
 
+        fieldValues.put("hmcts", "[userImage:hmcts.png]");
         fieldValues.put("appealReferenceNumber", asylumCase.read(APPEAL_REFERENCE_NUMBER, String.class).orElse(""));
         fieldValues.put("appellantFullName", getAppellantFullName(asylumCase));
         fieldValues.put("homeOfficeReferenceNumber", asylumCase.read(HOME_OFFICE_REFERENCE_NUMBER, String.class).orElse(""));
