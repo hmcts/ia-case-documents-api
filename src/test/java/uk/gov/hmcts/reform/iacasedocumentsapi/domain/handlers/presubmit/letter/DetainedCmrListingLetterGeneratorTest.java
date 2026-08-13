@@ -152,6 +152,29 @@ class DetainedCmrListingLetterGeneratorTest {
     }
 
     @Test
+    public void it_cannot_handle_callback_for_non_cmr_events() {
+
+        for (Event event : Event.values()) {
+
+            if (event == CMR_LISTING) {
+                continue;
+            }
+
+            when(callback.getEvent()).thenReturn(event);
+            when(callback.getCaseDetails()).thenReturn(caseDetails);
+            when(caseDetails.getCaseData()).thenReturn(asylumCase);
+            when(asylumCase.read(IS_ACCELERATED_DETAINED_APPEAL, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO));
+            when(asylumCase.read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
+            when(asylumCase.read(DETENTION_FACILITY, String.class)).thenReturn(Optional.of("immigrationRemovalCentre"));
+
+            boolean canHandle = detainedCmrListingLetterGenerator.canHandle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
+            assertFalse(canHandle);
+
+            reset(callback);
+        }
+    }
+
+    @Test
     public void should_not_allow_null_arguments() {
 
         assertThatThrownBy(() -> detainedCmrListingLetterGenerator.canHandle(null, callback))

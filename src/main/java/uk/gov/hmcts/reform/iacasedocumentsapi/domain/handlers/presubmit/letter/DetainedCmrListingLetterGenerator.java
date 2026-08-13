@@ -50,7 +50,7 @@ public class DetainedCmrListingLetterGenerator implements PreSubmitCallbackHandl
         AsylumCase asylumCase = callback.getCaseDetails().getCaseData();
 
         return callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
-                && (Event.CMR_LISTING.equals(callback.getEvent()) || Event.CMR_RE_LISTING.equals(callback.getEvent()))
+                && Event.CMR_LISTING.equals(callback.getEvent())
                 && isDetainedInOneOfFacilityTypes(asylumCase, IRC, PRISON);
     }
 

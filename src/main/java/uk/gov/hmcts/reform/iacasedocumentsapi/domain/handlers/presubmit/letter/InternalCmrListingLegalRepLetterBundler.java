@@ -70,7 +70,7 @@ public class InternalCmrListingLegalRepLetterBundler implements PreSubmitCallbac
         AsylumCase asylumCase = callback.getCaseDetails().getCaseData();
 
         return callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
-               && (Event.CMR_LISTING.equals(callback.getEvent()) || Event.CMR_RE_LISTING.equals(callback.getEvent()))
+               && Event.CMR_LISTING.equals(callback.getEvent())
                && hasBeenSubmittedAsLegalRepresentedInternalCase(asylumCase)
                && isEmStitchingEnabled;
     }
