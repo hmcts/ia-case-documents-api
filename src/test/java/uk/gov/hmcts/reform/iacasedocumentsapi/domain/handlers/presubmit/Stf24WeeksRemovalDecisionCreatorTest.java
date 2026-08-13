@@ -37,9 +37,9 @@ import static org.mockito.Mockito.when;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.DECIDE_AN_APPLICATION_ID;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.IS_ADMIN;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.IS_REMOVAL_OF_24W_APPLICATION_REFUSED;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.LEGAL_REPRESENTATIVE_DOCUMENTS;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.LETTER_NOTIFICATION_DOCUMENTS;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.MAKE_AN_APPLICATIONS;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.TRIBUNAL_DOCUMENTS;
 
 @ExtendWith(MockitoExtension.class)
 class Stf24WeeksRemovalDecisionCreatorTest {
@@ -131,7 +131,7 @@ class Stf24WeeksRemovalDecisionCreatorTest {
     }
 
     @Test
-    void if_not_internal_case_then_add_document_to_legal_rep_documents() {
+    void if_not_internal_case_then_add_document_to_tribunal_documents() {
         when(callback.getEvent()).thenReturn(Event.REMOVE_STATUTORY_TIMEFRAME_24_WEEKS);
         when(callback.getCaseDetails()).thenReturn(caseDetails);
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
@@ -145,7 +145,7 @@ class Stf24WeeksRemovalDecisionCreatorTest {
         verify(documentHandler).addWithMetadataWithDateTimeWithoutReplacingExistingDocuments(
             asylumCase,
             mockDocument,
-            LEGAL_REPRESENTATIVE_DOCUMENTS,
+            TRIBUNAL_DOCUMENTS,
             DocumentTag.STF_24WEEKS_REMOVAL_DECISION_DOCUMENT
         );
 
@@ -173,7 +173,7 @@ class Stf24WeeksRemovalDecisionCreatorTest {
         verify(documentHandler).addWithMetadataWithDateTimeWithoutReplacingExistingDocuments(
             asylumCase,
             mockDocument,
-            LEGAL_REPRESENTATIVE_DOCUMENTS,
+            TRIBUNAL_DOCUMENTS,
             DocumentTag.STF_24WEEKS_REMOVAL_DECISION_DOCUMENT
         );
 
@@ -205,7 +205,7 @@ class Stf24WeeksRemovalDecisionCreatorTest {
         verify(documentHandler).addWithMetadataWithDateTimeWithoutReplacingExistingDocuments(
             asylumCase,
             mockDocument,
-            LEGAL_REPRESENTATIVE_DOCUMENTS,
+            TRIBUNAL_DOCUMENTS,
             DocumentTag.STF_24WEEKS_REMOVAL_REFUSED_DECISION_DOCUMENT
         );
 
