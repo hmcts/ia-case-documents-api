@@ -6,6 +6,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DocumentTag;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DocumentWithMetadata;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseDetails;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.Event;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.Callback;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.DispatchPriority;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.PreSubmitCallbackResponse;
@@ -22,7 +23,6 @@ import static java.util.Objects.requireNonNull;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.LETTER_BUNDLE_DOCUMENTS;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.NOTIFICATION_ATTACHMENT_DOCUMENTS;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DetentionFacility.*;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.Event.CMR_LISTING;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.*;
 
 @Component
@@ -66,7 +66,7 @@ public class InternalCmrListingAppellantLetterBundler implements PreSubmitCallba
         AsylumCase asylumCase = callback.getCaseDetails().getCaseData();
 
         return callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
-            && callback.getEvent() == CMR_LISTING
+            && (Event.CMR_LISTING.equals(callback.getEvent()) || Event.CMR_RE_LISTING.equals(callback.getEvent()))
             && isInternalCase(asylumCase)
             && !hasBeenSubmittedAsLegalRepresentedInternalCase(asylumCase)
             && isEmStitchingEnabled;

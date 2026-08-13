@@ -7,6 +7,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DocumentTag;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DocumentWithMetadata;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseDetails;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.Event;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.Callback;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.PreSubmitCallbackResponse;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.PreSubmitCallbackStage;
@@ -49,7 +50,7 @@ public class DetainedCmrListingLetterGenerator implements PreSubmitCallbackHandl
         AsylumCase asylumCase = callback.getCaseDetails().getCaseData();
 
         return callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
-                && callback.getEvent() == CMR_LISTING
+                && (Event.CMR_LISTING.equals(callback.getEvent()) || Event.CMR_RE_LISTING.equals(callback.getEvent()))
                 && isDetainedInOneOfFacilityTypes(asylumCase, IRC, PRISON);
     }
 
