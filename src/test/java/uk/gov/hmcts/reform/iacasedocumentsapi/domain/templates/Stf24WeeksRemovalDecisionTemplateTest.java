@@ -23,6 +23,7 @@ import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseD
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.HOME_OFFICE_REFERENCE_NUMBER;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.IS_REMOVAL_OF_24W_APPLICATION_REFUSED;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.LEGAL_REP_REFERENCE_NUMBER;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.LEGAL_REP_REF_NUMBER_PAPER_J;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.REMOVAL_OF_24W_DECISION_JUDGE;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.REMOVAL_OF_24W_DECISION_REASON;
 
@@ -63,6 +64,7 @@ class Stf24WeeksRemovalDecisionTemplateTest {
         when(asylumCase.read(HOME_OFFICE_REFERENCE_NUMBER, String.class)).thenReturn(Optional.of(homeOfficeReferenceNumber));
         String legalRepReferenceNumber = "some-ref";
         when(asylumCase.read(LEGAL_REP_REFERENCE_NUMBER, String.class)).thenReturn(Optional.of(legalRepReferenceNumber));
+        when(asylumCase.read(LEGAL_REP_REF_NUMBER_PAPER_J, String.class)).thenReturn(Optional.empty());
         when(asylumCase.read(IS_REMOVAL_OF_24W_APPLICATION_REFUSED, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
         String removalReason = "This is the reason for the removal of 24 week decision";
         when(asylumCase.read(REMOVAL_OF_24W_DECISION_REASON, String.class)).thenReturn(Optional.of(removalReason));
@@ -70,7 +72,7 @@ class Stf24WeeksRemovalDecisionTemplateTest {
         when(asylumCase.read(REMOVAL_OF_24W_DECISION_JUDGE, String.class)).thenReturn(Optional.of(judgeName));
 
         Map<String, Object> templateFieldValues = stf24WeekTemplate.mapFieldValues(caseDetails);
-        assertEquals(10, templateFieldValues.size());
+        assertEquals(11, templateFieldValues.size());
 
         assertEquals(appealReferenceNumber, templateFieldValues.get("appealReferenceNumber"));
         assertEquals(appellantGivenNames + " " + appellantFamilyName,
@@ -101,11 +103,12 @@ class Stf24WeeksRemovalDecisionTemplateTest {
         String removalReason = "This is the reason for the removal of 24 week decision";
         when(asylumCase.read(REMOVAL_OF_24W_DECISION_REASON, String.class)).thenReturn(Optional.of(removalReason));
         when(asylumCase.read(LEGAL_REP_REFERENCE_NUMBER, String.class)).thenReturn(Optional.empty());
+        when(asylumCase.read(LEGAL_REP_REF_NUMBER_PAPER_J, String.class)).thenReturn(Optional.empty());
         String judgeName = "some name";
         when(asylumCase.read(REMOVAL_OF_24W_DECISION_JUDGE, String.class)).thenReturn(Optional.of(judgeName));
 
         Map<String, Object> templateFieldValues = stf24WeekTemplate.mapFieldValues(caseDetails);
-        assertEquals(8, templateFieldValues.size());
+        assertEquals(9, templateFieldValues.size());
 
         assertEquals(appealReferenceNumber, templateFieldValues.get("appealReferenceNumber"));
         assertEquals(appellantGivenNames + " " + appellantFamilyName,
@@ -127,7 +130,7 @@ class Stf24WeeksRemovalDecisionTemplateTest {
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
 
         Map<String, Object> templateFieldValues = stf24WeekTemplate.mapFieldValues(caseDetails);
-        assertEquals(8, templateFieldValues.size());
+        assertEquals(9, templateFieldValues.size());
 
         assertEquals("", templateFieldValues.get("appealReferenceNumber"));
         assertEquals("", templateFieldValues.get("appellantFullName"));

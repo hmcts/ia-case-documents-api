@@ -15,6 +15,7 @@ import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseD
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.HOME_OFFICE_REFERENCE_NUMBER;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.IS_REMOVAL_OF_24W_APPLICATION_REFUSED;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.LEGAL_REP_REFERENCE_NUMBER;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.LEGAL_REP_REF_NUMBER_PAPER_J;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.REMOVAL_OF_24W_DECISION_JUDGE;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.REMOVAL_OF_24W_DECISION_REASON;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.Stf24WeeksUtils.getAppellantFullName;
@@ -44,9 +45,10 @@ public class Stf24WeeksRemovalDecisionTemplate implements DocumentTemplate<Asylu
         fieldValues.put("appealReferenceNumber", asylumCase.read(APPEAL_REFERENCE_NUMBER, String.class).orElse(""));
         fieldValues.put("appellantFullName", getAppellantFullName(asylumCase));
         fieldValues.put("homeOfficeReferenceNumber", asylumCase.read(HOME_OFFICE_REFERENCE_NUMBER, String.class).orElse(""));
-        Optional<String> legalRepReference = asylumCase.read(LEGAL_REP_REFERENCE_NUMBER, String.class);
-        if (legalRepReference.isPresent() && !legalRepReference.get().isEmpty()) {
-            fieldValues.put("legalRepReferenceNumber", legalRepReference.get());
+        String legalRepReference = asylumCase.read(LEGAL_REP_REFERENCE_NUMBER, String.class)
+            .orElse(asylumCase.read(LEGAL_REP_REF_NUMBER_PAPER_J, String.class).orElse(""));
+        if (!legalRepReference.isEmpty()) {
+            fieldValues.put("legalRepReferenceNumber", legalRepReference);
             fieldValues.put("legalRepRefTitle", "Legal representative reference");
         }
 

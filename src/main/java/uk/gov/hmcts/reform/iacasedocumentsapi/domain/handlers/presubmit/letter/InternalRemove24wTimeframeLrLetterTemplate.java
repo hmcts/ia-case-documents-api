@@ -13,6 +13,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.LEGAL_REP_REFERENCE_NUMBER;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.LEGAL_REP_REF_NUMBER_PAPER_J;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.getLegalRepAddressInCountryOrOoc;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.getLegalRepPersonalisation;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.DateUtils.formatDateForNotificationAttachmentDocument;
@@ -47,8 +49,9 @@ public class InternalRemove24wTimeframeLrLetterTemplate implements DocumentTempl
         fieldValues.put("appellantNameField", "\nAppellant name: " +
             asylumCase.read(AsylumCaseDefinition.APPELLANT_GIVEN_NAMES, String.class).orElse("")
             + " " + asylumCase.read(AsylumCaseDefinition.APPELLANT_FAMILY_NAME, String.class).orElse(""));
-        fieldValues.put("legalRepRefPlusTitle", "\nYour reference: "
-            + asylumCase.read(AsylumCaseDefinition.LEGAL_REP_REFERENCE_NUMBER, String.class).orElse(""));
+        String legalRepReference = asylumCase.read(LEGAL_REP_REFERENCE_NUMBER, String.class)
+            .orElse(asylumCase.read(LEGAL_REP_REF_NUMBER_PAPER_J, String.class).orElse(""));
+        fieldValues.put("legalRepRefPlusTitle", "\nYour reference: " + legalRepReference);
 
         setCompleteCaseReviewContentForRemoval(asylumCase, fieldValues);
 
