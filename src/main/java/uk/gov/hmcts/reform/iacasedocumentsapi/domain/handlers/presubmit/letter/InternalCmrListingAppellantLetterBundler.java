@@ -67,9 +67,9 @@ public class InternalCmrListingAppellantLetterBundler implements PreSubmitCallba
 
         return callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
             && callback.getEvent() == CMR_LISTING
-            && ((isInternalCase(asylumCase)
-            && !hasBeenSubmittedAsLegalRepresentedInternalCase(asylumCase))
-                || isDetainedInFacilityType(asylumCase, OTHER))
+            && !hasBeenSubmittedAsLegalRepresentedInternalCase(asylumCase)
+            && (isInternalCase(asylumCase)
+            || isDetainedInFacilityType(asylumCase, OTHER))
             && isEmStitchingEnabled;
     }
 
