@@ -34,14 +34,18 @@ public class InternalCmrListingLegalRepLetterBundler implements PreSubmitCallbac
 
     private final String fileExtension;
     private final String fileName;
+    private final String lrFileExtension;
+    private final String lrFileName;
     private final boolean isEmStitchingEnabled;
     private final FileNameQualifier<AsylumCase> fileNameQualifier;
     private final DocumentBundler documentBundler;
     private final DocumentHandler documentHandler;
 
     public InternalCmrListingLegalRepLetterBundler(
-        @Value("${internalCmrListingLrLetterWithAttachment.fileExtension}") String fileExtension,
-        @Value("${internalCmrListingLrLetterWithAttachment.fileName}") String fileName,
+        @Value("${internalCmrListingLetterWithAttachment.fileExtension}") String fileExtension,
+        @Value("${internalCmrListingLetterWithAttachment.fileName}") String fileName,
+        @Value("${internalCmrListingLrLetterWithAttachment.fileExtension}") String lrFileExtension,
+        @Value("${internalCmrListingLrLetterWithAttachment.fileName}") String lrFileName,
         @Value("${featureFlag.isEmStitchingEnabled}") boolean isEmStitchingEnabled,
         FileNameQualifier<AsylumCase> fileNameQualifier,
         DocumentBundler documentBundler,
@@ -49,6 +53,8 @@ public class InternalCmrListingLegalRepLetterBundler implements PreSubmitCallbac
     ) {
         this.fileExtension = fileExtension;
         this.fileName = fileName;
+        this.lrFileExtension = lrFileExtension;
+        this.lrFileName = lrFileName;
         this.isEmStitchingEnabled = isEmStitchingEnabled;
         this.fileNameQualifier = fileNameQualifier;
         this.documentBundler = documentBundler;
@@ -89,6 +95,7 @@ public class InternalCmrListingLegalRepLetterBundler implements PreSubmitCallbac
         RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();
 
         final String qualifiedDocumentFileName = fileNameQualifier.get(fileName + "." + fileExtension, caseDetails);
+        final String qualifiedLrDocumentFileName = fileNameQualifier.get(lrFileName + "." + lrFileExtension, caseDetails);
 
         List<DocumentWithMetadata> bundleDocuments;
 
@@ -118,7 +125,7 @@ public class InternalCmrListingLegalRepLetterBundler implements PreSubmitCallbac
                 return documentBundler.bundleWithoutContentsOrCoverSheets(
                     bundleDocumentsLR,
                     "Letter bundle documents",
-                    qualifiedDocumentFileName
+                    qualifiedLrDocumentFileName
                 );
             } finally {
                 RequestContextHolder.resetRequestAttributes();

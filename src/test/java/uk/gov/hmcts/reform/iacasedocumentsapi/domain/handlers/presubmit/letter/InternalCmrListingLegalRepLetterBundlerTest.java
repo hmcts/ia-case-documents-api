@@ -53,6 +53,8 @@ class InternalCmrListingLegalRepLetterBundlerTest {
         handler = new InternalCmrListingLegalRepLetterBundler(
                 "pdf",
                 "internal-letter",
+                "pdf",
+                "internal-lr-letter",
                 true,
                 fileNameQualifier,
                 documentBundler,
@@ -63,8 +65,10 @@ class InternalCmrListingLegalRepLetterBundlerTest {
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
         when(callback.getEvent()).thenReturn(CMR_LISTING);
 
-        when(fileNameQualifier.get(anyString(), eq(caseDetails)))
-                .thenReturn("qualified.pdf");
+        when(fileNameQualifier.get("internal-letter.pdf", caseDetails))
+                .thenReturn("qualified-appellant.pdf");
+        when(fileNameQualifier.get("internal-lr-letter.pdf", caseDetails))
+                .thenReturn("qualified-lr.pdf");
 
         when(documentBundler.bundleWithoutContentsOrCoverSheets(anyList(), anyString(), anyString()))
                 .thenReturn(bundledDocument);
@@ -185,13 +189,13 @@ class InternalCmrListingLegalRepLetterBundlerTest {
             verify(documentBundler).bundleWithoutContentsOrCoverSheets(
                     eq(appellantDocs),
                     eq("Letter bundle documents"),
-                    eq("qualified.pdf")
+                    eq("qualified-appellant.pdf")
             );
 
             verify(documentBundler).bundleWithoutContentsOrCoverSheets(
                     eq(lrDocs),
                     eq("Letter bundle documents"),
-                    eq("qualified.pdf")
+                    eq("qualified-lr.pdf")
             );
 
             verify(documentHandler).addWithMetadataWithoutReplacingExistingDocuments(
@@ -222,11 +226,18 @@ class InternalCmrListingLegalRepLetterBundlerTest {
             handler.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
 
             verify(fileNameQualifier).get("internal-letter.pdf", caseDetails);
+            verify(fileNameQualifier).get("internal-lr-letter.pdf", caseDetails);
 
-            verify(documentBundler, times(2)).bundleWithoutContentsOrCoverSheets(
+            verify(documentBundler).bundleWithoutContentsOrCoverSheets(
                     anyList(),
                     eq("Letter bundle documents"),
-                    eq("qualified.pdf")
+                    eq("qualified-appellant.pdf")
+            );
+
+            verify(documentBundler).bundleWithoutContentsOrCoverSheets(
+                    anyList(),
+                    eq("Letter bundle documents"),
+                    eq("qualified-lr.pdf")
             );
         }
     }
@@ -262,13 +273,13 @@ class InternalCmrListingLegalRepLetterBundlerTest {
             verify(documentBundler).bundleWithoutContentsOrCoverSheets(
                     eq(attachmentDocs),
                     eq("Letter bundle documents"),
-                    eq("qualified.pdf")
+                    eq("qualified-appellant.pdf")
             );
 
             verify(documentBundler).bundleWithoutContentsOrCoverSheets(
                     eq(lrDocs),
                     eq("Letter bundle documents"),
-                    eq("qualified.pdf")
+                    eq("qualified-lr.pdf")
             );
 
             verify(documentHandler).addWithMetadataWithoutReplacingExistingDocuments(
