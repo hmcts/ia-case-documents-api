@@ -60,7 +60,7 @@ class SaveNotificationsToDataBailHandlerTest {
         when(callback.getCaseDetails()).thenReturn(caseDetails);
         when(caseDetails.getCaseData()).thenReturn(bailCase);
         when(bailCase.read(NOTIFICATIONS)).thenReturn(Optional.of(mockNotificationList));
-        when(saveNotificationsToDataPdfService.generatePdfsForNotifications(mockNotificationList))
+        when(saveNotificationsToDataPdfService.generatePdfsForNotifications(mockNotificationList, bailCase))
             .thenReturn(mockChangedList);
 
         saveNotificationsToDataBailHandler.handle(ABOUT_TO_SUBMIT, callback);

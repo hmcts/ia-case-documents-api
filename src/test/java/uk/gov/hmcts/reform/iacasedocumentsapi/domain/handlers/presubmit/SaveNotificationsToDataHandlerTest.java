@@ -57,7 +57,7 @@ class SaveNotificationsToDataHandlerTest {
         when(callback.getCaseDetails()).thenReturn(caseDetails);
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
         when(asylumCase.read(NOTIFICATIONS)).thenReturn(Optional.of(mockNotificationList));
-        when(saveNotificationsToDataPdfService.generatePdfsForNotifications(mockNotificationList))
+        when(saveNotificationsToDataPdfService.generatePdfsForNotifications(mockNotificationList, asylumCase))
             .thenReturn(mockChangedList);
 
         saveNotificationsToDataHandler.handle(ABOUT_TO_SUBMIT, callback);

@@ -55,7 +55,7 @@ public class SaveNotificationsToDataBailHandler implements PreSubmitCallbackHand
             bailCase.read(BailCaseFieldDefinition.NOTIFICATIONS);
 
         List<IdValue<StoredNotification>> newNotifications =
-            saveNotificationsToDataPdfService.generatePdfsForNotifications(existingNotifications.orElse(emptyList()));
+            saveNotificationsToDataPdfService.generatePdfsForNotifications(existingNotifications.orElse(emptyList()), bailCase);
 
         bailCase.write(BailCaseFieldDefinition.NOTIFICATIONS, newNotifications);
 

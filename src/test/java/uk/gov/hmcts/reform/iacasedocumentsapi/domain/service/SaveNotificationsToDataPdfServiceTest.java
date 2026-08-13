@@ -13,6 +13,7 @@ import org.mockito.MockedStatic;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.StoredNotification;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.Document;
 
@@ -37,9 +38,14 @@ class SaveNotificationsToDataPdfServiceTest {
     @Mock
     private DocumentUploader documentUploader;
     @Mock
+    private DocumentHandler documentHandler;
+
+    @Mock
     private DocumentToPdfConverter documentToPdfConverter;
     @Mock
     private StoredNotification mockedStoredNotification;
+    @Mock
+    private AsylumCase asylumCase;
 
     private final String reference = "test-reference";
     private final String subject = "someSubject";
@@ -54,7 +60,7 @@ class SaveNotificationsToDataPdfServiceTest {
     @BeforeEach
     public void setUp() {
         saveNotificationsToDataPdfService =
-            new SaveNotificationsToDataPdfService(documentUploader, documentToPdfConverter);
+            new SaveNotificationsToDataPdfService(documentUploader, documentToPdfConverter, documentHandler);
     }
 
     @Test
@@ -88,7 +94,7 @@ class SaveNotificationsToDataPdfServiceTest {
     @Test
     void should_write_empty_list_if_no_stored_notifications() {
         List<IdValue<StoredNotification>> response =
-            saveNotificationsToDataPdfService.generatePdfsForNotifications(emptyList());
+            saveNotificationsToDataPdfService.generatePdfsForNotifications(emptyList(), asylumCase);
         assertEquals(0, response.size());
     }
 
@@ -110,7 +116,7 @@ class SaveNotificationsToDataPdfServiceTest {
             List.of(new IdValue<>(reference, storedNotification));
 
         List<IdValue<StoredNotification>> response =
-            saveNotificationsToDataPdfService.generatePdfsForNotifications(storedNotifications);
+            saveNotificationsToDataPdfService.generatePdfsForNotifications(storedNotifications, asylumCase);
         assertEquals(1, response.size());
         assertEquals(storedNotifications, response);
     }
@@ -134,7 +140,7 @@ class SaveNotificationsToDataPdfServiceTest {
             List.of(new IdValue<>(reference, storedNotification));
 
         List<IdValue<StoredNotification>> response =
-            saveNotificationsToDataPdfService.generatePdfsForNotifications(storedNotifications);
+            saveNotificationsToDataPdfService.generatePdfsForNotifications(storedNotifications, asylumCase);
         assertEquals(1, response.size());
         assertEquals(storedNotifications, response);
     }
@@ -150,7 +156,7 @@ class SaveNotificationsToDataPdfServiceTest {
         when(documentUploader.upload(any(), any())).thenReturn(pdf);
 
         List<IdValue<StoredNotification>> response =
-            saveNotificationsToDataPdfService.generatePdfsForNotifications(storedNotifications);
+            saveNotificationsToDataPdfService.generatePdfsForNotifications(storedNotifications, asylumCase);
 
         verify(mockedStoredNotification, times(1)).setNotificationDocument(pdf);
         assertEquals(1, response.size());
@@ -180,7 +186,7 @@ class SaveNotificationsToDataPdfServiceTest {
         when(documentUploader.upload(any(), any())).thenReturn(pdf);
 
         List<IdValue<StoredNotification>> response =
-            saveNotificationsToDataPdfService.generatePdfsForNotifications(storedNotifications);
+            saveNotificationsToDataPdfService.generatePdfsForNotifications(storedNotifications, asylumCase);
 
         assertEquals(1, response.size());
         for (IdValue<StoredNotification> idValue : response) {
@@ -217,7 +223,7 @@ class SaveNotificationsToDataPdfServiceTest {
         when(documentUploader.upload(any(), any())).thenReturn(pdf);
 
         List<IdValue<StoredNotification>> response =
-            saveNotificationsToDataPdfService.generatePdfsForNotifications(storedNotifications);
+            saveNotificationsToDataPdfService.generatePdfsForNotifications(storedNotifications, asylumCase);
 
         assertEquals(1, response.size());
         for (IdValue<StoredNotification> idValue : response) {

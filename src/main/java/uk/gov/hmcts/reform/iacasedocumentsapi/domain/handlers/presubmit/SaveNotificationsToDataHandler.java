@@ -56,7 +56,7 @@ public class SaveNotificationsToDataHandler implements PreSubmitCallbackHandler<
             asylumCase.read(NOTIFICATIONS);
 
         List<IdValue<StoredNotification>> newNotifications =
-            saveNotificationsToDataPdfService.generatePdfsForNotifications(existingNotifications.orElse(emptyList()));
+            saveNotificationsToDataPdfService.generatePdfsForNotifications(existingNotifications.orElse(emptyList()), asylumCase);
 
         asylumCase.write(NOTIFICATIONS, newNotifications);
 
