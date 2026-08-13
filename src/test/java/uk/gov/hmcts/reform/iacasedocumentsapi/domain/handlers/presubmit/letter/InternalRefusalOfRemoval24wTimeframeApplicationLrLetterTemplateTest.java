@@ -159,6 +159,7 @@ class InternalRefusalOfRemoval24wTimeframeApplicationLrLetterTemplateTest {
 
         when(asylumCase.read(LEGAL_REP_HAS_ADDRESS, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
         when(asylumCase.read(LEGAL_REP_REFERENCE_NUMBER, String.class)).thenReturn(Optional.of("123"));
+        when(application.getDecisionMaker()).thenReturn("Judge");
         fieldValuesMap = template.mapFieldValues(caseDetails);
         assertEquals(logo, fieldValuesMap.get("hmcts"));
         assertEquals(appealReferenceNumber, fieldValuesMap.get("appealReferenceNumber"));
@@ -167,6 +168,9 @@ class InternalRefusalOfRemoval24wTimeframeApplicationLrLetterTemplateTest {
         assertEquals(homeOfficeReferenceNumber, fieldValuesMap.get("homeOfficeReferenceNumber"));
         assertEquals(telephoneNumber, fieldValuesMap.get("customerServicesTelephone"));
         assertEquals(email, fieldValuesMap.get("customerServicesEmail"));
+        assertEquals("Judge", fieldValuesMap.get("decisionMaker"));
+        assertEquals("\nAppellant name: " + appellantGivenNames + " " + appellantFamilyName,
+            fieldValuesMap.get("appellantNameField"));
         assertEquals("\nYour reference: 123", fieldValuesMap.get("legalRepRefPlusTitle"));
         assertEquals(LocalDate.now().format(DateTimeFormatter.ofPattern("d MMM yyyy")), fieldValuesMap.get("dateLetterSent"));
         assertEquals(lrAddressLine1, fieldValuesMap.get("address_line_1"));
@@ -184,6 +188,7 @@ class InternalRefusalOfRemoval24wTimeframeApplicationLrLetterTemplateTest {
         when(asylumCase.read(APPELLANTS_REPRESENTATION, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO));
         when(asylumCase.read(IS_ADMIN, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
         when(asylumCase.read(LEGAL_REP_REFERENCE_NUMBER, String.class)).thenReturn(Optional.of("123"));
+        when(application.getDecisionMaker()).thenReturn("Another User");
 
         fieldValuesMap = template.mapFieldValues(caseDetails);
         assertEquals(logo, fieldValuesMap.get("hmcts"));
@@ -193,7 +198,8 @@ class InternalRefusalOfRemoval24wTimeframeApplicationLrLetterTemplateTest {
         assertEquals(homeOfficeReferenceNumber, fieldValuesMap.get("homeOfficeReferenceNumber"));
         assertEquals(telephoneNumber, fieldValuesMap.get("customerServicesTelephone"));
         assertEquals(email, fieldValuesMap.get("customerServicesEmail"));
-        assertEquals("Appellant name: " + appellantGivenNames + " " + appellantFamilyName,
+        assertEquals("Another User", fieldValuesMap.get("decisionMaker"));
+        assertEquals("\nAppellant name: " + appellantGivenNames + " " + appellantFamilyName,
             fieldValuesMap.get("appellantNameField"));
         assertEquals("\nYour reference: 123", fieldValuesMap.get("legalRepRefPlusTitle"));
         assertEquals(LocalDate.now().format(DateTimeFormatter.ofPattern("d MMM yyyy")), fieldValuesMap.get("dateLetterSent"));

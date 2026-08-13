@@ -25,6 +25,7 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.ADDRESS_LINE_1_ADMIN_J;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.ADDRESS_LINE_2_ADMIN_J;
@@ -150,13 +151,13 @@ class InternalRemove24wTimeframeLetterTemplateTest {
 
         when(asylumCase.read(DECIDE_AN_APPLICATION_ID, String.class)).thenReturn(Optional.of("123"));
         when(asylumCase.read(MAKE_AN_APPLICATIONS)).thenReturn(Optional.of(List.of(new IdValue<>("123", application))));
-        when(asylumCase.read(COMPLETE_CASE_REVIEW_DATE, String.class)).thenReturn(Optional.of("2024-06-01"));
     }
 
     @Test
     void should_populate_template_correctly() {
         when(asylumCase.read(APPELLANTS_REPRESENTATION, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
         when(asylumCase.read(APPELLANT_IN_UK, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
+        when(asylumCase.read(COMPLETE_CASE_REVIEW_DATE, String.class)).thenReturn(Optional.of("2024-06-01"));
 
         fieldValuesMap = template.mapFieldValues(caseDetails);
         assertEquals(logo, fieldValuesMap.get("hmcts"));
@@ -167,7 +168,8 @@ class InternalRemove24wTimeframeLetterTemplateTest {
         assertEquals(telephoneNumber, fieldValuesMap.get("customerServicesTelephone"));
         assertEquals(email, fieldValuesMap.get("customerServicesEmail"));
         assertNull(fieldValuesMap.get("legalRepRefPlusTitle"));
-        assertEquals("1 Jun 2024", fieldValuesMap.get("completeCaseReviewDate"));
+        assertTrue(((String) fieldValuesMap.get("completeCaseReviewDependentContent"))
+            .contains("1 Jun 2024"));
         assertEquals(LocalDate.now().format(DateTimeFormatter.ofPattern("d MMM yyyy")), fieldValuesMap.get("dateLetterSent"));
         assertEquals(appellantGivenNames + " " + appellantFamilyName, fieldValuesMap.get("address_line_1"));
         assertEquals(addressLine1, fieldValuesMap.get("address_line_2"));
@@ -179,11 +181,11 @@ class InternalRemove24wTimeframeLetterTemplateTest {
 
     @Test
     void should_populate_template_correctly_with_lr() {
-
         when(asylumCase.read(APPELLANTS_REPRESENTATION, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO));
         when(asylumCase.read(IS_ADMIN, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
         when(asylumCase.read(LEGAL_REP_HAS_ADDRESS, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
         when(asylumCase.read(LEGAL_REP_REFERENCE_NUMBER, String.class)).thenReturn(Optional.of("123"));
+        when(asylumCase.read(COMPLETE_CASE_REVIEW_DATE, String.class)).thenReturn(Optional.empty());
         fieldValuesMap = template.mapFieldValues(caseDetails);
         assertEquals(logo, fieldValuesMap.get("hmcts"));
         assertEquals(appealReferenceNumber, fieldValuesMap.get("appealReferenceNumber"));
@@ -191,8 +193,9 @@ class InternalRemove24wTimeframeLetterTemplateTest {
         assertEquals(appellantFamilyName, fieldValuesMap.get("appellantFamilyName"));
         assertEquals(homeOfficeReferenceNumber, fieldValuesMap.get("homeOfficeReferenceNumber"));
         assertEquals(telephoneNumber, fieldValuesMap.get("customerServicesTelephone"));
+        assertNull(fieldValuesMap.get("completeCaseReviewDependentContent"));
         assertEquals(email, fieldValuesMap.get("customerServicesEmail"));
-        assertEquals("Legal Rep reference: 123", fieldValuesMap.get("legalRepRefPlusTitle"));
+        assertEquals("\nLegal Rep reference: 123", fieldValuesMap.get("legalRepRefPlusTitle"));
         assertEquals(LocalDate.now().format(DateTimeFormatter.ofPattern("d MMM yyyy")), fieldValuesMap.get("dateLetterSent"));
         assertEquals(appellantGivenNames + " " + appellantFamilyName, fieldValuesMap.get("address_line_1"));
         assertEquals(addressLine1, fieldValuesMap.get("address_line_2"));

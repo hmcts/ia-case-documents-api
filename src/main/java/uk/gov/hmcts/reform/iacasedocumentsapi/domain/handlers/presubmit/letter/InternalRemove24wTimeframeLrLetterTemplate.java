@@ -16,7 +16,7 @@ import java.util.Map;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.getLegalRepAddressInCountryOrOoc;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.getLegalRepPersonalisation;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.DateUtils.formatDateForNotificationAttachmentDocument;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.Stf24WeeksUtils.getCompleteCaseReviewDate;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.Stf24WeeksUtils.setCompleteCaseReviewContentForRemoval;
 
 @Component
 public class InternalRemove24wTimeframeLrLetterTemplate implements DocumentTemplate<AsylumCase> {
@@ -44,13 +44,13 @@ public class InternalRemove24wTimeframeLrLetterTemplate implements DocumentTempl
         final Map<String, Object> fieldValues = new HashMap<>(getLegalRepPersonalisation(asylumCase));
         fieldValues.put("dateLetterSent", formatDateForNotificationAttachmentDocument(LocalDate.now()));
 
-        fieldValues.put("appellantNameField", "Appellant name: " +
+        fieldValues.put("appellantNameField", "\nAppellant name: " +
             asylumCase.read(AsylumCaseDefinition.APPELLANT_GIVEN_NAMES, String.class).orElse("")
             + " " + asylumCase.read(AsylumCaseDefinition.APPELLANT_FAMILY_NAME, String.class).orElse(""));
         fieldValues.put("legalRepRefPlusTitle", "\nYour reference: "
             + asylumCase.read(AsylumCaseDefinition.LEGAL_REP_REFERENCE_NUMBER, String.class).orElse(""));
 
-        fieldValues.put("completeCaseReviewDate", getCompleteCaseReviewDate(asylumCase));
+        setCompleteCaseReviewContentForRemoval(asylumCase, fieldValues);
 
         fieldValues.put("customerServicesTelephone", customerServicesProvider.getInternalCustomerServicesTelephone(asylumCase));
         fieldValues.put("customerServicesEmail", customerServicesProvider.getInternalCustomerServicesEmail(asylumCase));

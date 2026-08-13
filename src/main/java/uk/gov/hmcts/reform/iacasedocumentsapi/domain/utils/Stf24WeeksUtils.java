@@ -8,6 +8,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.Map;
 import java.util.Optional;
 
 import static java.time.LocalDate.parse;
@@ -110,11 +111,13 @@ public class Stf24WeeksUtils {
         return LocalDate.parse(appealReceivedDate).format(DateTimeFormatter.ofPattern(D_MMM_YYYY));
     }
 
-    public static String getCompleteCaseReviewDate(AsylumCase asylumCase) {
-        final String reviewDate = asylumCase
+    public static void setCompleteCaseReviewContentForRemoval(AsylumCase asylumCase, Map<String, Object> fieldValues) {
+        asylumCase
             .read(AsylumCaseDefinition.COMPLETE_CASE_REVIEW_DATE, String.class)
-            .orElseThrow(() -> new IllegalStateException("Complete case review date is not present"));
-        return LocalDate.parse(reviewDate).format(DateTimeFormatter.ofPattern(D_MMM_YYYY));
+            .map(date -> LocalDate.parse(date).format(DateTimeFormatter.ofPattern(D_MMM_YYYY)))
+            .ifPresent(completeCaseReviewDate -> fieldValues.put("completeCaseReviewDependentContent",
+                "\nThe Pre-hearing Review and Directions sent to you on " + completeCaseReviewDate
+                    + " will no longer apply and you must now follow any new directions and "
+                    + "timescales sent by the Tribunal."));
     }
-
 }

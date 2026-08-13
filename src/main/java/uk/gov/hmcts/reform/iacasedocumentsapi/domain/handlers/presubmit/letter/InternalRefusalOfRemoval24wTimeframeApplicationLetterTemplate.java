@@ -46,6 +46,7 @@ public class InternalRefusalOfRemoval24wTimeframeApplicationLetterTemplate imple
 
         final Map<String, Object> fieldValues = new HashMap<>(getAppellantPersonalisation(asylumCase));
         fieldValues.put("dateLetterSent", formatDateForNotificationAttachmentDocument(LocalDate.now()));
+        fieldValues.put("decisionMaker", application.getDecisionMaker());
         if ("Respondent".equals(application.getApplicantRole())) {
             fieldValues.put("whoseApplicationHeading", "A Home Office");
             fieldValues.put("whoseApplication", "the Home Office's");
@@ -54,7 +55,7 @@ public class InternalRefusalOfRemoval24wTimeframeApplicationLetterTemplate imple
             fieldValues.put("whoseApplication", "your");
         }
         if (hasBeenSubmittedAsLegalRepresentedInternalCase(asylumCase)) {
-            fieldValues.put("legalRepRefPlusTitle", "Legal Rep reference: "
+            fieldValues.put("legalRepRefPlusTitle", "\nLegal Rep reference: "
                 + asylumCase.read(AsylumCaseDefinition.LEGAL_REP_REFERENCE_NUMBER, String.class).orElse(""));
         }
 

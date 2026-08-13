@@ -23,6 +23,8 @@ import java.util.Map;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.ADDRESS_LINE_1_ADMIN_J;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.ADDRESS_LINE_2_ADMIN_J;
@@ -153,14 +155,14 @@ class InternalRemove24wTimeframeLrLetterTemplateTest {
 
         when(asylumCase.read(DECIDE_AN_APPLICATION_ID, String.class)).thenReturn(Optional.of("123"));
         when(asylumCase.read(MAKE_AN_APPLICATIONS)).thenReturn(Optional.of(List.of(new IdValue<>("123", application))));
-        when(asylumCase.read(COMPLETE_CASE_REVIEW_DATE, String.class)).thenReturn(Optional.of("2024-06-01"));
     }
 
     @Test
     void should_populate_template_correctly() {
-
         when(asylumCase.read(LEGAL_REP_HAS_ADDRESS, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
         when(asylumCase.read(LEGAL_REP_REFERENCE_NUMBER, String.class)).thenReturn(Optional.of("123"));
+        when(asylumCase.read(COMPLETE_CASE_REVIEW_DATE, String.class)).thenReturn(Optional.of("2024-06-01"));
+
         fieldValuesMap = template.mapFieldValues(caseDetails);
         assertEquals(logo, fieldValuesMap.get("hmcts"));
         assertEquals(appealReferenceNumber, fieldValuesMap.get("appealReferenceNumber"));
@@ -169,7 +171,10 @@ class InternalRemove24wTimeframeLrLetterTemplateTest {
         assertEquals(homeOfficeReferenceNumber, fieldValuesMap.get("homeOfficeReferenceNumber"));
         assertEquals(telephoneNumber, fieldValuesMap.get("customerServicesTelephone"));
         assertEquals(email, fieldValuesMap.get("customerServicesEmail"));
-        assertEquals("1 Jun 2024", fieldValuesMap.get("completeCaseReviewDate"));
+        assertTrue(((String) fieldValuesMap.get("completeCaseReviewDependentContent"))
+            .contains("1 Jun 2024"));
+        assertEquals("\nAppellant name: " + appellantGivenNames + " " + appellantFamilyName,
+            fieldValuesMap.get("appellantNameField"));
         assertEquals("\nYour reference: 123", fieldValuesMap.get("legalRepRefPlusTitle"));
         assertEquals(LocalDate.now().format(DateTimeFormatter.ofPattern("d MMM yyyy")), fieldValuesMap.get("dateLetterSent"));
         assertEquals(lrAddressLine1, fieldValuesMap.get("address_line_1"));
@@ -187,6 +192,7 @@ class InternalRemove24wTimeframeLrLetterTemplateTest {
         when(asylumCase.read(APPELLANTS_REPRESENTATION, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO));
         when(asylumCase.read(IS_ADMIN, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
         when(asylumCase.read(LEGAL_REP_REFERENCE_NUMBER, String.class)).thenReturn(Optional.of("123"));
+        when(asylumCase.read(COMPLETE_CASE_REVIEW_DATE, String.class)).thenReturn(Optional.empty());
 
         fieldValuesMap = template.mapFieldValues(caseDetails);
         assertEquals(logo, fieldValuesMap.get("hmcts"));
@@ -196,9 +202,9 @@ class InternalRemove24wTimeframeLrLetterTemplateTest {
         assertEquals(homeOfficeReferenceNumber, fieldValuesMap.get("homeOfficeReferenceNumber"));
         assertEquals(telephoneNumber, fieldValuesMap.get("customerServicesTelephone"));
         assertEquals(email, fieldValuesMap.get("customerServicesEmail"));
-        assertEquals("Appellant name: " + appellantGivenNames + " " + appellantFamilyName,
+        assertNull(fieldValuesMap.get("completeCaseReviewDependentContent"));
+        assertEquals("\nAppellant name: " + appellantGivenNames + " " + appellantFamilyName,
             fieldValuesMap.get("appellantNameField"));
-        assertEquals("1 Jun 2024", fieldValuesMap.get("completeCaseReviewDate"));
         assertEquals("\nYour reference: 123", fieldValuesMap.get("legalRepRefPlusTitle"));
         assertEquals(LocalDate.now().format(DateTimeFormatter.ofPattern("d MMM yyyy")), fieldValuesMap.get("dateLetterSent"));
         assertEquals(lrOccAddressLine1, fieldValuesMap.get("address_line_1"));

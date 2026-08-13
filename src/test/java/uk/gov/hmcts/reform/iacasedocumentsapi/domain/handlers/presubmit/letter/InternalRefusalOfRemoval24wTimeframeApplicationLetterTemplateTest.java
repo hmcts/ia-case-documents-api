@@ -219,7 +219,7 @@ class InternalRefusalOfRemoval24wTimeframeApplicationLetterTemplateTest {
         assertEquals(email, fieldValuesMap.get("customerServicesEmail"));
         assertEquals("Your", fieldValuesMap.get("whoseApplicationHeading"));
         assertEquals("your", fieldValuesMap.get("whoseApplication"));
-        assertEquals("Legal Rep reference: 123", fieldValuesMap.get("legalRepRefPlusTitle"));
+        assertEquals("\nLegal Rep reference: 123", fieldValuesMap.get("legalRepRefPlusTitle"));
         assertEquals(LocalDate.now().format(DateTimeFormatter.ofPattern("d MMM yyyy")), fieldValuesMap.get("dateLetterSent"));
         assertEquals(appellantGivenNames + " " + appellantFamilyName, fieldValuesMap.get("address_line_1"));
         assertEquals(addressLine1, fieldValuesMap.get("address_line_2"));
