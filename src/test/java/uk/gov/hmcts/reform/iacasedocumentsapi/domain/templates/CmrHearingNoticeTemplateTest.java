@@ -3,7 +3,10 @@ package uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.*;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.formatDateForRendering;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Map;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
@@ -34,9 +37,11 @@ class CmrHearingNoticeTemplateTest {
 
     private final String appealReferenceNumber = "RP/11111/2020";
     private final String appellantGivenNames = "Talha";
+    private final String dateLetterSent = "25122020";
     private final String appellantFamilyName = "Awan";
     private final String homeOfficeReferenceNumber = "A1234567/001";
     private final String legalRepReferenceNumber = "OUR-REF";
+    private final String legalRepReferenceNumberPaperJ = "PAPER-J-REF";
     private final String ccdReferenceNumber = "1234-5678-9012-3456";
     private final String hearingDate = "2020-12-25T12:34:56";
     private final String manchesterHearingCentreAddress = "Manchester, 123 Somewhere, North";
@@ -106,8 +111,10 @@ class CmrHearingNoticeTemplateTest {
 
         Map<String, Object> templateFieldValues = cmrHearingNoticeTemplate.mapFieldValues(caseDetails);
 
-        assertEquals(19, templateFieldValues.size());
+        assertEquals(21, templateFieldValues.size());
         assertEquals("[userImage:hmcts.png]", templateFieldValues.get("hmcts"));
+        assertEquals(formatDateForRendering(LocalDate.now().toString(), DateTimeFormatter.ofPattern("d MMM yyyy")),
+                templateFieldValues.get("dateLetterSent"));
         assertEquals(appealReferenceNumber, templateFieldValues.get("appealReferenceNumber"));
         assertEquals(appellantGivenNames, templateFieldValues.get("appellantGivenNames"));
         assertEquals(appellantFamilyName, templateFieldValues.get("appellantFamilyName"));
@@ -126,5 +133,50 @@ class CmrHearingNoticeTemplateTest {
         assertEquals(YesOrNo.NO, templateFieldValues.get("isIntegrated"));
         assertEquals(customerServicesTelephone, templateFieldValues.get("customerServicesTelephone"));
         assertEquals(customerServicesEmail, templateFieldValues.get("customerServicesEmail"));
+    }
+
+    @Test
+    void should_fall_back_to_paper_j_legal_rep_reference_when_primary_is_missing() {
+
+        legalRepReferenceDataSetUp();
+        when(asylumCase.read(LEGAL_REP_REFERENCE_NUMBER, String.class)).thenReturn(Optional.empty());
+        when(asylumCase.read(LEGAL_REP_REF_NUMBER_PAPER_J, String.class)).thenReturn(Optional.of(legalRepReferenceNumberPaperJ));
+
+        Map<String, Object> templateFieldValues = cmrHearingNoticeTemplate.mapFieldValues(caseDetails);
+
+        assertEquals(legalRepReferenceNumberPaperJ, templateFieldValues.get("legalRepReferenceNumber"));
+    }
+
+    @Test
+    void should_prefer_primary_legal_rep_reference_over_paper_j() {
+
+        legalRepReferenceDataSetUp();
+        when(asylumCase.read(LEGAL_REP_REFERENCE_NUMBER, String.class)).thenReturn(Optional.of(legalRepReferenceNumber));
+        when(asylumCase.read(LEGAL_REP_REF_NUMBER_PAPER_J, String.class)).thenReturn(Optional.of(legalRepReferenceNumberPaperJ));
+
+        Map<String, Object> templateFieldValues = cmrHearingNoticeTemplate.mapFieldValues(caseDetails);
+
+        assertEquals(legalRepReferenceNumber, templateFieldValues.get("legalRepReferenceNumber"));
+    }
+
+    @Test
+    void should_be_empty_when_both_legal_rep_references_are_missing() {
+
+        legalRepReferenceDataSetUp();
+        when(asylumCase.read(LEGAL_REP_REFERENCE_NUMBER, String.class)).thenReturn(Optional.empty());
+        when(asylumCase.read(LEGAL_REP_REF_NUMBER_PAPER_J, String.class)).thenReturn(Optional.empty());
+
+        Map<String, Object> templateFieldValues = cmrHearingNoticeTemplate.mapFieldValues(caseDetails);
+
+        assertEquals("", templateFieldValues.get("legalRepReferenceNumber"));
+    }
+
+    private void legalRepReferenceDataSetUp() {
+        when(caseDetails.getCaseData()).thenReturn(asylumCase);
+        when(asylumCase.read(CMR_HEARING_CENTRE, HearingCentre.class)).thenReturn(Optional.of(HearingCentre.MANCHESTER));
+        when(stringProvider.get("hearingCentreAddress", "manchester")).thenReturn(Optional.of(manchesterHearingCentreAddress));
+        when(asylumCase.read(IS_CASE_USING_LOCATION_REF_DATA, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO));
+        when(asylumCase.read(SUBMIT_HEARING_REQUIREMENTS_AVAILABLE)).thenReturn(Optional.of(YesOrNo.NO));
+        when(asylumCase.read(IS_INTEGRATED, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO));
     }
 }

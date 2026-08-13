@@ -97,7 +97,7 @@ hearingNoticeDocument.templateName: ${IA_HEARING_NOTICE_TEMPLATE:TB-IAC-HNO-ENG-
 cmrHearingNoticeDocument.contentType: application/pdf
 cmrHearingNoticeDocument.fileExtension: PDF
 cmrHearingNoticeDocument.fileName: "hearing-notice"
-cmrHearingNoticeDocument.templateName: ${IA_HEARING_NOTICE_TEMPLATE:TB-IAC-HNO-ENG-00241-Notice-Of-Hearing.docx}
+cmrHearingNoticeDocument.templateName: ${IA_HEARING_NOTICE_TEMPLATE:TB-IAC-HNO-ENG-00241-updated.docx}
 
 hearingNoticeAdaDocument.templateName: ${IA_ADA_HEARING_NOTICE_TEMPLATE:TB-IAC-HNO-ENG-ADA-0001.docx}
 
@@ -333,10 +333,10 @@ internalDetainedListCaseLetter.fileExtension: PDF
 internalDetainedListCaseLetter.fileName: "detained-appellant-list-case-letter"
 internalDetainedListCaseLetter.templateName: ${IA_INTERNAL_DETAINED_LIST_CASE_LETTER_TEMPLATE:TB-IAC-LET-ENG-00005.docx}
 
-internalDetainedCmrListingLetter.contentType: application/pdf
-internalDetainedCmrListingLetter.fileExtension: PDF
-internalDetainedCmrListingLetter.fileName: "detained-appellant-cmr-listing-letter"
-internalDetainedCmrListingLetter.templateName: ${IA_INTERNAL_DETAINED_LIST_CASE_LETTER_TEMPLATE:TB-IAC-LET-ENG-00005.docx}
+detainedCmrListingLetter.contentType: application/pdf
+detainedCmrListingLetter.fileExtension: PDF
+detainedCmrListingLetter.fileName: "detained-appellant-cmr-listing-letter"
+detainedCmrListingLetter.templateName: ${IA_INTERNAL_DETAINED_LIST_CASE_LETTER_TEMPLATE:TB-IAC-LET-ENG-00005.docx}
 
 internalDetainedRequestHearingRequirements.contentType:  application/pdf
 internalDetainedRequestHearingRequirements.fileExtension: PDF
@@ -352,6 +352,11 @@ internalDetainedEditCaseListingLetter.contentType: application/pdf
 internalDetainedEditCaseListingLetter.fileExtension: PDF
 internalDetainedEditCaseListingLetter.fileName: "detained-appellant-edit-case-listing-letter"
 internalDetainedEditCaseListingLetter.templateName: ${IA_INTERNAL_DETAINED_EDIT_CASE_LISTING_LETTER_TEMPLATE:TB-IAC-HNO-ENG-00700.docx}
+
+detainedCmrReListingLetter.contentType: application/pdf
+detainedCmrReListingLetter.fileExtension: PDF
+detainedCmrReListingLetter.fileName: "detained-appellant-cmr-relisting-letter"
+detainedCmrReListingLetter.templateName: ${IA_INTERNAL_DETAINED_EDIT_CASE_LISTING_LETTER_TEMPLATE:TB-IAC-HNO-ENG-00700.docx}
 
 internalDetainedManageFeeUpdateLetter.contentType: application/pdf
 internalDetainedManageFeeUpdateLetter.fileExtension: PDF
@@ -634,20 +639,15 @@ internalCaseListedLetter.fileExtension: PDF
 internalCaseListedLetter.fileName: "internal-case-listed-letter"
 internalCaseListedLetter.templateName: ${INTERNAL_CASE_LISTED_LETTER_TEMPLATE:TB-IAC-LET-ENG-Internal-Case-Listed.docx}
 
-internalCmrListingLrLetter.contentType:  application/pdf
-internalCmrListingLrLetter.fileExtension: PDF
-internalCmrListingLrLetter.fileName: "internal-cmr-listing-lr-letter"
-internalCmrListingLrLetter.templateName: ${INTERNAL_CASE_LISTED_LETTER_TEMPLATE:TB-IAC-LET-ENG-Internal-Case-Listed.docx}
-
-internalCmrListingAppellantLetter.contentType:  application/pdf
-internalCmrListingAppellantLetter.fileExtension: PDF
-internalCmrListingAppellantLetter.fileName: "internal-cmr-listing-appellant-letter"
-internalCmrListingAppellantLetter.templateName: ${INTERNAL_CASE_LISTED_LETTER_TEMPLATE:TB-IAC-LET-ENG-Internal-Case-Listed.docx}
-
 internalCmrListingLetter.contentType:  application/pdf
 internalCmrListingLetter.fileExtension: PDF
 internalCmrListingLetter.fileName: "internal-cmr-listing-letter"
 internalCmrListingLetter.templateName: ${INTERNAL_CASE_LISTED_LETTER_TEMPLATE:TB-IAC-LET-ENG-Internal-Case-Listed.docx}
+
+internalCmrListingLrLetter.contentType:  application/pdf
+internalCmrListingLrLetter.fileExtension: PDF
+internalCmrListingLrLetter.fileName: "internal-cmr-listing-lr-letter"
+internalCmrListingLrLetter.templateName: ${INTERNAL_CASE_LISTED_LETTER_TEMPLATE:TB-IAC-LET-ENG-Internal-Case-Listed.docx}
 
 internalCmrReListingLetter.contentType:  application/pdf
 internalCmrReListingLetter.fileExtension: PDF
@@ -658,16 +658,6 @@ internalCmrReListingLrLetter.contentType:  application/pdf
 internalCmrReListingLrLetter.fileExtension: PDF
 internalCmrReListingLrLetter.fileName: "internal-cmr-relisting-lr-letter"
 internalCmrReListingLrLetter.templateName: ${INTERNAL_CMR_RE_LISTING_LETTER_TEMPLATE:TB-IAC-LET-ENG-Internal-Edit-Case-Listing.docx}
-
-internalCmrReListingAppellantLetter.contentType:  application/pdf
-internalCmrReListingAppellantLetter.fileExtension: PDF
-internalCmrReListingAppellantLetter.fileName: "internal-cmr-relisting-appellant-letter"
-internalCmrReListingAppellantLetter.templateName: ${INTERNAL_CMR_RE_LISTING_LETTER_TEMPLATE:TB-IAC-LET-ENG-Internal-Edit-Case-Listing.docx}
-
-cmrListingDetainedOtherAppellantLetter.contentType:  application/pdf
-cmrListingDetainedOtherAppellantLetter.fileExtension: PDF
-cmrListingDetainedOtherAppellantLetter.fileName: "cmr-listing-letter"
-cmrListingDetainedOtherAppellantLetter.templateName: ${INTERNAL_CASE_LISTED_LETTER_TEMPLATE:TB-IAC-LET-ENG-Internal-Case-Listed.docx}
 
 cmrCancelledAppellantManualLetter.contentType:  application/pdf
 cmrCancelledAppellantManualLetter.fileExtension: PDF
@@ -682,17 +672,18 @@ cmrCancelledLrManualLetter.templateName: ${CRM_CANCELLED_LR_MANUAL_LETTER_TEMPLA
 internalCaseListedLetterWithAttachment.fileExtension: PDF
 internalCaseListedLetterWithAttachment.fileName: "internal-case-listed-letter-with-attachment"
 
-cmrListingDetainedOtherLetterWithAttachment.fileExtension: PDF
-cmrListingDetainedOtherLetterWithAttachment.fileName: "cmr-listing-letter-with-attachment"
-
 internalCmrListingLetterWithAttachment.fileExtension: PDF
 internalCmrListingLetterWithAttachment.fileName: "internal-cmr-listing-letter-with-attachment"
 
-internalCmrListingNonDetainedAppellantLetterWithAttachment.fileExtension: PDF
-internalCmrListingNonDetainedAppellantLetterWithAttachment.fileName: "internal-cmr-listing-appellant-letter-with-attachment"
+internalCmrListingLrLetterWithAttachment.fileExtension: PDF
+internalCmrListingLrLetterWithAttachment.fileName: "internal-cmr-listing-appellant-lr-letter-with-attachment"
 
-internalCmrListingNonDetainedLrLetterWithAttachment.fileExtension: PDF
-internalCmrListingNonDetainedLrLetterWithAttachment.fileName: "internal-cmr-listing-lr-letter-with-attachment"
+internalCmrReListingLetterWithAttachment.fileExtension: PDF
+internalCmrReListingLetterWithAttachment.fileName: "internal-cmr-relisting-letter-with-attachment"
+
+internalCmrReListingLrLetterWithAttachment.fileExtension: PDF
+internalCmrReListingLrLetterWithAttachment.fileName: "internal-cmr-relisting-appellant-lr-letter-with-attachment"
+
 
 detainedLegalRepRemovedIrcPrisonLetter.contentType: application/pdf
 detainedLegalRepRemovedIrcPrisonLetter.fileExtension: PDF

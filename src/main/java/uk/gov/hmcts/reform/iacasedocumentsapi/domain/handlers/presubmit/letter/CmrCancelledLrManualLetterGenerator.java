@@ -16,7 +16,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentHandler;
 
 import java.util.Objects;
 
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.LETTER_NOTIFICATION_DOCUMENTS;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.LETTER_BUNDLE_DOCUMENTS;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.Event.CMR_HEARING_CANCELLED;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.*;
 
@@ -51,8 +51,7 @@ public class CmrCancelledLrManualLetterGenerator implements PreSubmitCallbackHan
         return callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
                 && callback.getEvent() == CMR_HEARING_CANCELLED
                 && isCmrHearingInPersonOrRemote(asylumCase)
-                && isRepJourney(asylumCase)
-                && isInternalCase(asylumCase);
+                && hasBeenSubmittedAsLegalRepresentedInternalCase(asylumCase);
     }
 
     public PreSubmitCallbackResponse<AsylumCase> handle(
@@ -71,7 +70,7 @@ public class CmrCancelledLrManualLetterGenerator implements PreSubmitCallbackHan
         documentHandler.addWithMetadataWithoutReplacingExistingDocuments(
                 asylumCase,
                 cmrCancelledLrManualLetter,
-                LETTER_NOTIFICATION_DOCUMENTS,
+                LETTER_BUNDLE_DOCUMENTS,
                 DocumentTag.CMR_HEARING_CANCELLED_LR_LETTER
         );
 

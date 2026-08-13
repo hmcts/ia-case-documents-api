@@ -98,7 +98,7 @@ class CmrHearingNoticeFieldMapperTest {
 
         Map<String, Object> templateFieldValues = cmrHearingNoticeFieldMapper.mapFields(asylumCase);
 
-        assertEquals(19, templateFieldValues.size());
+        assertEquals(21, templateFieldValues.size());
         assertEquals("[userImage:hmcts.png]", templateFieldValues.get("hmcts"));
         assertEquals(appealReferenceNumber, templateFieldValues.get("appealReferenceNumber"));
         assertEquals(appellantGivenNames, templateFieldValues.get("appellantGivenNames"));
@@ -132,7 +132,7 @@ class CmrHearingNoticeFieldMapperTest {
 
         Map<String, Object> templateFieldValues = cmrHearingNoticeFieldMapper.mapFields(asylumCase);
 
-        assertEquals(19, templateFieldValues.size());
+        assertEquals(21, templateFieldValues.size());
         assertEquals(caseOfficerReviewedVulnerabilities, templateFieldValues.get("vulnerabilities"));
         assertEquals(caseOfficerReviewedMultimedia, templateFieldValues.get("multimedia"));
         assertEquals(caseOfficerReviewedSingleSexCourt, templateFieldValues.get("singleSexCourt"));
@@ -158,7 +158,7 @@ class CmrHearingNoticeFieldMapperTest {
         when(asylumCase.read(IS_CASE_USING_LOCATION_REF_DATA, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
         when(asylumCase.read(IS_REMOTE_HEARING, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
         when(asylumCase.read(REMOTE_VIDEO_CALL_TRIBUNAL_RESPONSE, String.class)).thenReturn(Optional.of("agreed for remote hearing"));
-        when(asylumCase.read(LIST_CASE_HEARING_CENTRE_ADDRESS, String.class)).thenReturn(Optional.of(manchesterRefDataAddress));
+        when(asylumCase.read(CMR_HEARING_CENTRE, String.class)).thenReturn(Optional.of(manchesterRefDataAddress));
 
         Map<String, Object> templateFieldValues = cmrHearingNoticeFieldMapper.mapFields(asylumCase);
 
@@ -199,7 +199,7 @@ class CmrHearingNoticeFieldMapperTest {
 
         Map<String, Object> templateFieldValues = cmrHearingNoticeFieldMapper.mapFields(asylumCase);
 
-        assertEquals(19, templateFieldValues.size());
+        assertEquals(21, templateFieldValues.size());
         assertEquals("", templateFieldValues.get("appealReferenceNumber"));
         assertEquals("", templateFieldValues.get("appellantGivenNames"));
         assertEquals("", templateFieldValues.get("appellantFamilyName"));

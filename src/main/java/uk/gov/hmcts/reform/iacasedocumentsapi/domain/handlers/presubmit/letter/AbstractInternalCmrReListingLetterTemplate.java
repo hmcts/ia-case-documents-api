@@ -71,7 +71,7 @@ public abstract class AbstractInternalCmrReListingLetterTemplate implements Docu
                 .get("hearingCentreName", hearingCentreBefore.toString())
                 .orElseThrow(() -> new IllegalStateException("cmrHearingCentre (before) is not present"));
 
-        final Map<String, Object> fieldValues = new HashMap<>(getAppellantPersonalisation(asylumCase));
+        final Map<String, Object> fieldValues = new HashMap<>(getPersonalisation(asylumCase));
 
         fieldValues.put("customerServicesTelephone", customerServicesProvider.getInternalCustomerServicesTelephone(asylumCase));
         fieldValues.put("customerServicesEmail", customerServicesProvider.getInternalCustomerServicesEmail(asylumCase));
@@ -96,4 +96,8 @@ public abstract class AbstractInternalCmrReListingLetterTemplate implements Docu
     }
 
     protected abstract List<String> getRecipientAddress(AsylumCase asylumCase);
+
+    protected Map<String, String> getPersonalisation(AsylumCase asylumCase) {
+        return getAppellantPersonalisation(asylumCase);
+    }
 }

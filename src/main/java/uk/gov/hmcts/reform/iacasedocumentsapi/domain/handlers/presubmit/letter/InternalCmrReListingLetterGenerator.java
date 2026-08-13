@@ -19,12 +19,12 @@ public class InternalCmrReListingLetterGenerator extends AbstractInternalCmrReLi
         @Qualifier("internalCmrReListingLetter") DocumentCreator<AsylumCase> documentCreator,
         DocumentHandler documentHandler
     ) {
-        super(documentCreator, documentHandler, DocumentTag.INTERNAL_CMR_LISTING_LETTER);
+        super(documentCreator, documentHandler, DocumentTag.INTERNAL_CMR_RE_LISTING_LETTER);
     }
 
     @Override
     protected boolean isApplicable(AsylumCase asylumCase) {
-        return isInternalCase(asylumCase)
-               && (!isAppellantInDetention(asylumCase) || isDetainedInFacilityType(asylumCase, OTHER));
+        return ((isInternalCase(asylumCase)
+               && !isAppellantInDetention(asylumCase)) || isDetainedInFacilityType(asylumCase, OTHER));
     }
 }

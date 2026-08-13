@@ -20,12 +20,14 @@ import java.util.List;
 
 import static java.util.Objects.requireNonNull;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.LETTER_BUNDLE_DOCUMENTS;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.Event.CMR_LISTING;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.NOTIFICATION_ATTACHMENT_DOCUMENTS;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DetentionFacility.IRC;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DetentionFacility.PRISON;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.Event.CMR_RE_LISTING;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.*;
 
 @Component
-public class InternalCmrListingNonDetainedAppellantLetterBundler implements PreSubmitCallbackHandler<AsylumCase> {
+public class InternalCmrReListingAppellantLetterBundler implements PreSubmitCallbackHandler<AsylumCase> {
 
     private final String fileExtension;
     private final String fileName;
@@ -34,9 +36,9 @@ public class InternalCmrListingNonDetainedAppellantLetterBundler implements PreS
     private final DocumentBundler documentBundler;
     private final DocumentHandler documentHandler;
 
-    public InternalCmrListingNonDetainedAppellantLetterBundler(
-        @Value("${internalCmrListingNonDetainedAppellantLetterWithAttachment.fileExtension}") String fileExtension,
-        @Value("${internalCmrListingNonDetainedAppellantLetterWithAttachment.fileName}") String fileName,
+    public InternalCmrReListingAppellantLetterBundler(
+        @Value("${internalCmrReListingLetterWithAttachment.fileExtension}") String fileExtension,
+        @Value("${internalCmrReListingLetterWithAttachment.fileName}") String fileName,
         @Value("${featureFlag.isEmStitchingEnabled}") boolean isEmStitchingEnabled,
         FileNameQualifier<AsylumCase> fileNameQualifier,
         DocumentBundler documentBundler,
@@ -65,10 +67,10 @@ public class InternalCmrListingNonDetainedAppellantLetterBundler implements PreS
         AsylumCase asylumCase = callback.getCaseDetails().getCaseData();
 
         return callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
-               && (callback.getEvent() == CMR_LISTING || callback.getEvent() == CMR_RE_LISTING)
-               && !isAppellantInDetention(asylumCase)
-               && hasBeenSubmittedAsLegalRepresentedInternalCase(asylumCase)
-               && isEmStitchingEnabled;
+            && callback.getEvent() == CMR_RE_LISTING
+            && isInternalCase(asylumCase)
+            && !hasBeenSubmittedAsLegalRepresentedInternalCase(asylumCase)
+            && isEmStitchingEnabled;
     }
 
     public PreSubmitCallbackResponse<AsylumCase> handle(
@@ -84,7 +86,13 @@ public class InternalCmrListingNonDetainedAppellantLetterBundler implements PreS
 
         final String qualifiedDocumentFileName = fileNameQualifier.get(fileName + "." + fileExtension, caseDetails);
 
-        List<DocumentWithMetadata> bundleDocuments = getMaybeLetterNotificationDocuments(asylumCase, DocumentTag.INTERNAL_CMR_LISTING_APPELLANT_LETTER);
+        List<DocumentWithMetadata> bundleDocuments;
+
+        if (isDetainedInOneOfFacilityTypes(asylumCase, PRISON, IRC)) {
+            bundleDocuments = getMaybeNotificationAttachmentDocuments(asylumCase, DocumentTag.INTERNAL_CMR_RE_LISTING_LETTER);
+        } else {
+            bundleDocuments = getMaybeLetterNotificationDocuments(asylumCase, DocumentTag.INTERNAL_CMR_RE_LISTING_LETTER);
+        }
 
         Document internalCaseListedLetterBundle = documentBundler.bundleWithoutContentsOrCoverSheets(
             bundleDocuments,
@@ -92,13 +100,21 @@ public class InternalCmrListingNonDetainedAppellantLetterBundler implements PreS
             qualifiedDocumentFileName
         );
 
-        documentHandler.addWithMetadataWithoutReplacingExistingDocuments(
-            asylumCase,
-            internalCaseListedLetterBundle,
-            LETTER_BUNDLE_DOCUMENTS,
-            DocumentTag.INTERNAL_CMR_LISTING_APPELLANT_LETTER_BUNDLE
-        );
-
+        if (isDetainedInOneOfFacilityTypes(asylumCase, PRISON, IRC)) {
+            documentHandler.addWithMetadataWithoutReplacingExistingDocuments(
+                    asylumCase,
+                    internalCaseListedLetterBundle,
+                    NOTIFICATION_ATTACHMENT_DOCUMENTS,
+                    DocumentTag.INTERNAL_CMR_RE_LISTING_LETTER_BUNDLE
+            );
+        } else {
+            documentHandler.addWithMetadataWithoutReplacingExistingDocuments(
+                    asylumCase,
+                    internalCaseListedLetterBundle,
+                    LETTER_BUNDLE_DOCUMENTS,
+                    DocumentTag.INTERNAL_CMR_RE_LISTING_LETTER_BUNDLE
+            );
+        }
         return new PreSubmitCallbackResponse<>(asylumCase);
     }
 }

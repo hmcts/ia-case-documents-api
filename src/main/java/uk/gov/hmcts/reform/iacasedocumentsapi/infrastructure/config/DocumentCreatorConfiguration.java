@@ -6,16 +6,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit.letter.CmrCancelledAipManualLetterTemplate;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit.letter.InternalCaseListedLetterTemplate;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit.letter.InternalCaseListedLrLetterTemplate;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit.letter.InternalCmrListingNonDetainedAppellantLetterTemplate;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit.letter.InternalCmrListingLetterTemplate;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit.letter.InternalCmrListingNonDetainedLrLetterTemplate;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit.letter.InternalCmrReListingLetterTemplate;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit.letter.InternalCmrReListingLrLetterTemplate;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit.letter.InternalCmrReListingAppellantLetterTemplate;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit.letter.InternalRecordOutOfTimeDecisionLetterTemplate;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit.letter.*;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.AsylumCaseFileNameQualifier;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentCreator;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentGenerator;
@@ -995,32 +986,11 @@ public class DocumentCreatorConfiguration {
         );
     }
 
-    @Bean("internalDetainedCmrListing")
-    public DocumentCreator<AsylumCase> getInternalDetainedCmrListingDocumentCreator(
-        @Value("${internalDetainedCmrListingLetter.contentType}") String contentType,
-        @Value("${internalDetainedCmrListingLetter.fileExtension}") String fileExtension,
-        @Value("${internalDetainedCmrListingLetter.fileName}") String fileName,
-        AsylumCaseFileNameQualifier fileNameQualifier,
-        InternalDetainedCmrListingLetterTemplate documentTemplate,
-        DocumentGenerator documentGenerator,
-        DocumentUploader documentUploader
-    ) {
-        return new DocumentCreator<>(
-            contentType,
-            fileExtension,
-            fileName,
-            fileNameQualifier,
-            documentTemplate,
-            documentGenerator,
-            documentUploader
-        );
-    }
-
-    @Bean("detainedCmrListingCase")
-    public DocumentCreator<AsylumCase> getDetainedCmrListingCaseDocumentCreator(
-        @Value("${internalDetainedListCaseLetter.contentType}") String contentType,
-        @Value("${internalDetainedListCaseLetter.fileExtension}") String fileExtension,
-        @Value("${internalDetainedListCaseLetter.fileName}") String fileName,
+    @Bean("detainedCmrListing")
+    public DocumentCreator<AsylumCase> getDetainedCmrListingDocumentCreator(
+        @Value("${detainedCmrListingLetter.contentType}") String contentType,
+        @Value("${detainedCmrListingLetter.fileExtension}") String fileExtension,
+        @Value("${detainedCmrListingLetter.fileName}") String fileName,
         AsylumCaseFileNameQualifier fileNameQualifier,
         DetainedCmrListingLetterTemplate documentTemplate,
         DocumentGenerator documentGenerator,
@@ -1037,13 +1007,55 @@ public class DocumentCreatorConfiguration {
         );
     }
 
-    @Bean("cmrCancelledAipManualLetter")
-    public DocumentCreator<AsylumCase> getCmrCancelledAipManualDocumentCreator(
-            @Value("${cmrCancelledAipManualLetter.contentType}") String contentType,
-            @Value("${cmrCancelledAipManualLetter.fileExtension}") String fileExtension,
-            @Value("${cmrCancelledAipManualLetter.fileName}") String fileName,
+    @Bean("detainedCmrReListing")
+    public DocumentCreator<AsylumCase> getDetainedCmrReListingDocumentCreator(
+        @Value("${detainedCmrReListingLetter.contentType}") String contentType,
+        @Value("${detainedCmrReListingLetter.fileExtension}") String fileExtension,
+        @Value("${detainedCmrReListingLetter.fileName}") String fileName,
+        AsylumCaseFileNameQualifier fileNameQualifier,
+        DetainedCmrReListingLetterTemplate documentTemplate,
+        DocumentGenerator documentGenerator,
+        DocumentUploader documentUploader
+    ) {
+        return new DocumentCreator<>(
+            contentType,
+            fileExtension,
+            fileName,
+            fileNameQualifier,
+            documentTemplate,
+            documentGenerator,
+            documentUploader
+        );
+    }
+
+    @Bean("cmrCancelledAppellantManualLetter")
+    public DocumentCreator<AsylumCase> getCmrCancelledAppellantManualDocumentCreator(
+            @Value("${cmrCancelledAppellantManualLetter.contentType}") String contentType,
+            @Value("${cmrCancelledAppellantManualLetter.fileExtension}") String fileExtension,
+            @Value("${cmrCancelledAppellantManualLetter.fileName}") String fileName,
             AsylumCaseFileNameQualifier fileNameQualifier,
-            CmrCancelledAipManualLetterTemplate documentTemplate,
+            CmrCancelledAppellantManualLetterTemplate documentTemplate,
+            DocumentGenerator documentGenerator,
+            DocumentUploader documentUploader
+    ) {
+        return new DocumentCreator<>(
+                contentType,
+                fileExtension,
+                fileName,
+                fileNameQualifier,
+                documentTemplate,
+                documentGenerator,
+                documentUploader
+        );
+    }
+
+    @Bean("cmrCancelledLrManualLetter")
+    public DocumentCreator<AsylumCase> getCmrCancelledLrManualDocumentCreator(
+            @Value("${cmrCancelledLrManualLetter.contentType}") String contentType,
+            @Value("${cmrCancelledLrManualLetter.fileExtension}") String fileExtension,
+            @Value("${cmrCancelledLrManualLetter.fileName}") String fileName,
+            AsylumCaseFileNameQualifier fileNameQualifier,
+            CmrCancelledLrManualLetterTemplate documentTemplate,
             DocumentGenerator documentGenerator,
             DocumentUploader documentUploader
     ) {
@@ -1817,7 +1829,7 @@ public class DocumentCreatorConfiguration {
     }
 
     @Bean("internalCmrListingLetter")
-    public DocumentCreator<AsylumCase> getinternalCmrListingLetterDocumentCreator(
+    public DocumentCreator<AsylumCase> getInternalCmrListingLetterDocumentCreator(
         @Value("${internalCmrListingLetter.contentType}") String contentType,
         @Value("${internalCmrListingLetter.fileExtension}") String fileExtension,
         @Value("${internalCmrListingLetter.fileName}") String fileName,
@@ -1879,48 +1891,6 @@ public class DocumentCreatorConfiguration {
         );
     }
 
-    @Bean("internalCmrReListingAppellantLetter")
-    public DocumentCreator<AsylumCase> getInternalCmrReListingAppellantLetterDocumentCreator(
-        @Value("${internalCmrReListingAppellantLetter.contentType}") String contentType,
-        @Value("${internalCmrReListingAppellantLetter.fileExtension}") String fileExtension,
-        @Value("${internalCmrReListingAppellantLetter.fileName}") String fileName,
-        AsylumCaseFileNameQualifier fileNameQualifier,
-        InternalCmrReListingAppellantLetterTemplate documentTemplate,
-        DocumentGenerator documentGenerator,
-        DocumentUploader documentUploader
-    ) {
-        return new DocumentCreator<>(
-            contentType,
-            fileExtension,
-            fileName,
-            fileNameQualifier,
-            documentTemplate,
-            documentGenerator,
-            documentUploader
-        );
-    }
-
-    @Bean("cmrListingDetainedOtherAppellantLetter")
-    public DocumentCreator<AsylumCase> getCmrListingDetainedOtherAppellantLetterDocumentCreator(
-        @Value("${cmrListingDetainedOtherAppellantLetter.contentType}") String contentType,
-        @Value("${cmrListingDetainedOtherAppellantLetter.fileExtension}") String fileExtension,
-        @Value("${cmrListingDetainedOtherAppellantLetter.fileName}") String fileName,
-        AsylumCaseFileNameQualifier fileNameQualifier,
-        InternalCmrListingLetterTemplate documentTemplate,
-        DocumentGenerator documentGenerator,
-        DocumentUploader documentUploader
-    ) {
-        return new DocumentCreator<>(
-            contentType,
-            fileExtension,
-            fileName,
-            fileNameQualifier,
-            documentTemplate,
-            documentGenerator,
-            documentUploader
-        );
-    }
-
     @Bean("internalCaseListedLrLetter")
     public DocumentCreator<AsylumCase> getinternalCaseListedlLrLetterDocumentCreator(
         @Value("${internalCaseListedLetter.contentType}") String contentType,
@@ -1943,34 +1913,12 @@ public class DocumentCreatorConfiguration {
     }
 
     @Bean("internalCmrListingLrLetter")
-    public DocumentCreator<AsylumCase> getInternalCmrListingLrLetterDocumentCreator(
+    public DocumentCreator<AsylumCase> getInternalCmrListinglLrLetterDocumentCreator(
         @Value("${internalCmrListingLrLetter.contentType}") String contentType,
         @Value("${internalCmrListingLrLetter.fileExtension}") String fileExtension,
         @Value("${internalCmrListingLrLetter.fileName}") String fileName,
         AsylumCaseFileNameQualifier fileNameQualifier,
-        InternalCmrListingNonDetainedLrLetterTemplate documentTemplate,
-        DocumentGenerator documentGenerator,
-        DocumentUploader documentUploader
-    ) {
-        return new DocumentCreator<>(
-            contentType,
-            fileExtension,
-            fileName,
-            fileNameQualifier,
-            documentTemplate,
-            documentGenerator,
-            documentUploader
-        );
-    }
-
-
-    @Bean("internalCmrListingAppellantLetter")
-    public DocumentCreator<AsylumCase> getInternalCmrListingAppellantLetterDocumentCreator(
-        @Value("${internalCmrListingAppellantLetter.contentType}") String contentType,
-        @Value("${internalCmrListingAppellantLetter.fileExtension}") String fileExtension,
-        @Value("${internalCmrListingAppellantLetter.fileName}") String fileName,
-        AsylumCaseFileNameQualifier fileNameQualifier,
-        InternalCmrListingNonDetainedAppellantLetterTemplate documentTemplate,
+        InternalCmrListingLrLetterTemplate documentTemplate,
         DocumentGenerator documentGenerator,
         DocumentUploader documentUploader
     ) {
