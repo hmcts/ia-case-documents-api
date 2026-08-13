@@ -87,6 +87,14 @@ class InternalCmrListingLetterGeneratorTest {
     }
 
     @ParameterizedTest
+    @EnumSource(value = Event.class, names = {"CMR_LISTING"}, mode = EnumSource.Mode.EXCLUDE)
+    public void it_cannot_handle_callback_for_non_cmr_listing_events(Event event) {
+        when(callback.getEvent()).thenReturn(event);
+
+        assertFalse(internalCmrListingLetterGenerator.canHandle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback));
+    }
+
+    @ParameterizedTest
     @EnumSource(value = PreSubmitCallbackStage.class, names = {"ABOUT_TO_SUBMIT"}, mode = EnumSource.Mode.EXCLUDE)
     public void it_cannot_handle_callback_for_wrong_stage(PreSubmitCallbackStage stage) {
         when(callback.getEvent()).thenReturn(CMR_LISTING);
