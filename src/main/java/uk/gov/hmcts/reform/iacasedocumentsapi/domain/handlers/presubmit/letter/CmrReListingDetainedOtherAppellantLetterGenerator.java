@@ -16,10 +16,10 @@ import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtil
 public class CmrReListingDetainedOtherAppellantLetterGenerator extends AbstractInternalCmrReListingLetterGenerator {
 
     public CmrReListingDetainedOtherAppellantLetterGenerator(
-        @Qualifier("internalCmrReListingAppellantLetter") DocumentCreator<AsylumCase> documentCreator,
+        @Qualifier("cmrReListingDetainedOtherAppellantLetter") DocumentCreator<AsylumCase> documentCreator,
         DocumentHandler documentHandler
     ) {
-        super(documentCreator, documentHandler, DocumentTag.INTERNAL_CMR_LISTING_LETTER);
+        super(documentCreator, documentHandler, DocumentTag.INTERNAL_CMR_RE_LISTING_LETTER);
     }
 
     @Override

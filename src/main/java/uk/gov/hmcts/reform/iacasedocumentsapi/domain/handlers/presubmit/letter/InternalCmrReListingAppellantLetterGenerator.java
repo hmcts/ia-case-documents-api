@@ -16,7 +16,7 @@ public class InternalCmrReListingAppellantLetterGenerator extends AbstractIntern
         @Qualifier("internalCmrReListingAppellantLetter") DocumentCreator<AsylumCase> documentCreator,
         DocumentHandler documentHandler
     ) {
-        super(documentCreator, documentHandler, DocumentTag.INTERNAL_CMR_LISTING_APPELLANT_LETTER);
+        super(documentCreator, documentHandler, DocumentTag.INTERNAL_CMR_RE_LISTING_LETTER);
     }
 
     @Override

@@ -1891,6 +1891,48 @@ public class DocumentCreatorConfiguration {
         );
     }
 
+    @Bean("internalCmrReListingAppellantLetter")
+    public DocumentCreator<AsylumCase> getInternalCmrReListingAppellantLetterDocumentCreator(
+        @Value("${internalCmrReListingAppellantLetter.contentType}") String contentType,
+        @Value("${internalCmrReListingAppellantLetter.fileExtension}") String fileExtension,
+        @Value("${internalCmrReListingAppellantLetter.fileName}") String fileName,
+        AsylumCaseFileNameQualifier fileNameQualifier,
+        InternalCmrReListingAppellantLetterTemplate documentTemplate,
+        DocumentGenerator documentGenerator,
+        DocumentUploader documentUploader
+    ) {
+        return new DocumentCreator<>(
+            contentType,
+            fileExtension,
+            fileName,
+            fileNameQualifier,
+            documentTemplate,
+            documentGenerator,
+            documentUploader
+        );
+    }
+
+    @Bean("cmrReListingDetainedOtherAppellantLetter")
+    public DocumentCreator<AsylumCase> getCmrReListingDetainedOtherAppellantLetterDocumentCreator(
+        @Value("${cmrReListingDetainedOtherAppellantLetter.contentType}") String contentType,
+        @Value("${cmrReListingDetainedOtherAppellantLetter.fileExtension}") String fileExtension,
+        @Value("${cmrReListingDetainedOtherAppellantLetter.fileName}") String fileName,
+        AsylumCaseFileNameQualifier fileNameQualifier,
+        CmrReListingDetainedOtherAppellantLetterTemplate documentTemplate,
+        DocumentGenerator documentGenerator,
+        DocumentUploader documentUploader
+    ) {
+        return new DocumentCreator<>(
+            contentType,
+            fileExtension,
+            fileName,
+            fileNameQualifier,
+            documentTemplate,
+            documentGenerator,
+            documentUploader
+        );
+    }
+
     @Bean("internalCaseListedLrLetter")
     public DocumentCreator<AsylumCase> getinternalCaseListedlLrLetterDocumentCreator(
         @Value("${internalCaseListedLetter.contentType}") String contentType,
