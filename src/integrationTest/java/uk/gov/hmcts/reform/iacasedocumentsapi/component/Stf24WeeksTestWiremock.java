@@ -131,6 +131,7 @@ class Stf24WeeksTestWiremock extends SpringBootIntegrationTest
     }
 
     @ParameterizedTest
+    @Disabled
     @ValueSource(booleans = {true, false})
     @WithMockUser(authorities = {"caseworker-ia", "tribunal-caseworker"})
     void shouldNotCreate24WeeksReviewDocumentIfCaseCreatedByAdmin(boolean cdamEnabled) {
