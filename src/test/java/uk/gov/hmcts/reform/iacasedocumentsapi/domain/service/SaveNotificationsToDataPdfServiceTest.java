@@ -14,6 +14,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DocumentTag;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.StoredNotification;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.Document;
 
@@ -26,6 +28,7 @@ import static java.util.Collections.emptyList;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -39,7 +42,6 @@ class SaveNotificationsToDataPdfServiceTest {
     private DocumentUploader documentUploader;
     @Mock
     private DocumentHandler documentHandler;
-
     @Mock
     private DocumentToPdfConverter documentToPdfConverter;
     @Mock
@@ -214,7 +216,7 @@ class SaveNotificationsToDataPdfServiceTest {
                 .notificationMethod("Letter")
                 .notificationDocumentEncoded(encodedPdfFile)
                 .notificationStatus(status)
-                .notificationReference(reference)
+                .notificationReference("STATUTORY_TIMEFRAME_24WEEKS_CASE_REVIEW_APPELLANT_LETTER")
                 .notificationSubject(subject)
                 .build();
         List<IdValue<StoredNotification>> storedNotifications =
@@ -235,6 +237,8 @@ class SaveNotificationsToDataPdfServiceTest {
         assertEquals(pdf, response.getFirst().getValue().getNotificationDocument());
         verify(documentToPdfConverter, never()).convertHtmlDocResourceToPdf(any());
         verify(documentUploader).upload(new ByteArrayResource(pdfBytes), "application/pdf");
+        verify(documentHandler).addWithMetadata(asylumCase, pdf, AsylumCaseDefinition.TRIBUNAL_DOCUMENTS, DocumentTag.STF_24WEEKS_CASE_REVIEW_APPELLANT_DOCUMENT);
+        assertNull(response.getFirst().getValue().getNotificationDocumentEncoded());
     }
 
     private File createPdfFile() throws IOException {
