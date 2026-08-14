@@ -160,6 +160,7 @@ class InternalRefusalOfRemoval24wTimeframeApplicationLrLetterTemplateTest {
         when(asylumCase.read(LEGAL_REP_HAS_ADDRESS, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
         when(asylumCase.read(LEGAL_REP_REFERENCE_NUMBER, String.class)).thenReturn(Optional.of("123"));
         when(application.getDecisionMaker()).thenReturn("Judge");
+        when(application.getApplicant()).thenReturn("Respondent");
         fieldValuesMap = template.mapFieldValues(caseDetails);
         assertEquals(logo, fieldValuesMap.get("hmcts"));
         assertEquals(appealReferenceNumber, fieldValuesMap.get("appealReferenceNumber"));
@@ -169,6 +170,8 @@ class InternalRefusalOfRemoval24wTimeframeApplicationLrLetterTemplateTest {
         assertEquals(telephoneNumber, fieldValuesMap.get("customerServicesTelephone"));
         assertEquals(email, fieldValuesMap.get("customerServicesEmail"));
         assertEquals("Judge", fieldValuesMap.get("decisionMaker"));
+        assertEquals("A Home Office", fieldValuesMap.get("whoseApplicationHeading"));
+        assertEquals("the Home Office's", fieldValuesMap.get("whoseApplication"));
         assertEquals("\nAppellant name: " + appellantGivenNames + " " + appellantFamilyName,
             fieldValuesMap.get("appellantNameField"));
         assertEquals("\nYour reference: 123", fieldValuesMap.get("legalRepRefPlusTitle"));
@@ -199,6 +202,8 @@ class InternalRefusalOfRemoval24wTimeframeApplicationLrLetterTemplateTest {
         assertEquals(telephoneNumber, fieldValuesMap.get("customerServicesTelephone"));
         assertEquals(email, fieldValuesMap.get("customerServicesEmail"));
         assertEquals("Another User", fieldValuesMap.get("decisionMaker"));
+        assertEquals("Your", fieldValuesMap.get("whoseApplicationHeading"));
+        assertEquals("your", fieldValuesMap.get("whoseApplication"));
         assertEquals("\nAppellant name: " + appellantGivenNames + " " + appellantFamilyName,
             fieldValuesMap.get("appellantNameField"));
         assertEquals("\nYour reference: 123", fieldValuesMap.get("legalRepRefPlusTitle"));

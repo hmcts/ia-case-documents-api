@@ -48,7 +48,7 @@ public class InternalRefusalOfRemoval24wTimeframeApplicationLrLetterTemplate imp
         final Map<String, Object> fieldValues = new HashMap<>(getLegalRepPersonalisation(asylumCase));
         fieldValues.put("dateLetterSent", formatDateForNotificationAttachmentDocument(LocalDate.now()));
         fieldValues.put("decisionMaker", application.getDecisionMaker());
-        if ("Respondent".equals(application.getApplicantRole())) {
+        if ("Respondent".equals(application.getApplicant())) {
             fieldValues.put("whoseApplicationHeading", "A Home Office");
             fieldValues.put("whoseApplication", "the Home Office's");
         } else {

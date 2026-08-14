@@ -180,7 +180,7 @@ class InternalRefusalOfRemoval24wTimeframeApplicationLetterTemplateTest {
 
         when(asylumCase.read(APPELLANTS_REPRESENTATION, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
         when(asylumCase.read(APPELLANT_IN_UK, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO));
-        when(application.getApplicantRole()).thenReturn("Respondent");
+        when(application.getApplicant()).thenReturn("Respondent");
 
         fieldValuesMap = internalRefusalOfRemoval24wTimeframeApplicationLetterTemplate.mapFieldValues(caseDetails);
         assertEquals(logo, fieldValuesMap.get("hmcts"));
