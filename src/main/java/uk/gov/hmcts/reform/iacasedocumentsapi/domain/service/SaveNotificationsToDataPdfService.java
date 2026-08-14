@@ -93,7 +93,7 @@ public class SaveNotificationsToDataPdfService {
                     letterToDocumentType.getDocumentType(),
                     letterToDocumentType.getDocumentTag()
             );
-            log.info("Uploaded notification document for notification reference: {}", "w");
+            log.info("Notification meta data added successfully with {}", letterToDocumentType);
         } else {
             throw new IllegalArgumentException("Unsupported case type for document tag: " + letterToDocumentType.getDocumentTag().getCaseType());
         }
@@ -142,7 +142,7 @@ public class SaveNotificationsToDataPdfService {
 
     @Getter
     private enum LetterToDocumentType {
-        STATUTORY_TIMEFRAME_24WEEKS_CASE_REVIEW_APPELLANT_LETTER("24 weeks case review",
+        STATUTORY_TIMEFRAME_24WEEKS_CASE_REVIEW_APPELLANT_LETTER("24 weeks case review appellant letter",
                 AsylumCaseDefinition.TRIBUNAL_DOCUMENTS, DocumentTag.STF_24WEEKS_CASE_REVIEW_APPELLANT_DOCUMENT);
 
         private final String fileName;
