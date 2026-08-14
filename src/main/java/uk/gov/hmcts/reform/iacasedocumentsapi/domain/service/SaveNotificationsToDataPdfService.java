@@ -83,10 +83,12 @@ public class SaveNotificationsToDataPdfService {
         byte[] decodedBytes = Base64.getDecoder().decode(storedNotification.getNotificationDocumentEncoded());
         LetterToDocumentType letterToDocumentType = getDocumentTypeFromNotificationReference(storedNotification.getNotificationReference());
         ByteArrayResource byteArrayResource = getByteArrayResource(decodedBytes, letterToDocumentType.getFileName() + ".PDF");
+        storedNotification.setNotificationDocumentEncoded(null); // Clear the encoded document after decoding
         Document document = documentUploader.upload(byteArrayResource, PDF_CONTENT_TYPE);
         if (letterToDocumentType.getDocumentTag().getCaseType().equals(CaseType.ASYLUM)) {
+            AsylumCase asylumCase = (AsylumCase) caseData;
             documentHandler.addWithMetadata(
-                    (AsylumCase) caseData,
+                    asylumCase,
                     document,
                     letterToDocumentType.getDocumentType(),
                     letterToDocumentType.getDocumentTag()
@@ -109,8 +111,10 @@ public class SaveNotificationsToDataPdfService {
 
     private Document generatePdfForNotification(StoredNotification storedNotification, CaseData caseData) {
         if (storedNotification.getNotificationDocumentEncoded() != null) {
+            log.info("Encoded notification reference: {}", storedNotification.getNotificationReference());
             return this.createLetterPdf(storedNotification, caseData);
         } else {
+            log.info("Non encoded notification reference: {}", storedNotification.getNotificationReference());
             return this.createPdf(storedNotification.getNotificationBody(), storedNotification.getNotificationReference());
         }
     }
