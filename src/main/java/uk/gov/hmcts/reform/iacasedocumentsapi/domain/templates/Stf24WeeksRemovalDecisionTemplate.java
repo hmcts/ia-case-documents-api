@@ -15,7 +15,7 @@ import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseD
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.IS_REMOVAL_OF_24W_APPLICATION_REFUSED;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.LEGAL_REP_REFERENCE_NUMBER;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.LEGAL_REP_REF_NUMBER_PAPER_J;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.REMOVAL_OF_24W_DECISION_JUDGE;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.REMOVAL_OF_24W_DECISION_DECISION_MAKER;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.REMOVAL_OF_24W_DECISION_REASON;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.Stf24WeeksUtils.getAppellantFullName;
 
@@ -61,7 +61,7 @@ public class Stf24WeeksRemovalDecisionTemplate implements DocumentTemplate<Asylu
                 + " statutory 24 week timeline and will be processed under the standard appeal process.");
         }
         fieldValues.put("suitabilityReason", asylumCase.read(REMOVAL_OF_24W_DECISION_REASON, String.class).orElse(""));
-        fieldValues.put("judgeName", asylumCase.read(REMOVAL_OF_24W_DECISION_JUDGE, String.class).orElse(""));
+        fieldValues.put("decisionMaker", asylumCase.read(REMOVAL_OF_24W_DECISION_DECISION_MAKER, String.class).orElse(""));
         fieldValues.put("decisionDate", LocalDate.now().toString());
         return fieldValues;
     }

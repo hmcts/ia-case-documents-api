@@ -24,7 +24,7 @@ import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseD
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.IS_REMOVAL_OF_24W_APPLICATION_REFUSED;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.LEGAL_REP_REFERENCE_NUMBER;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.LEGAL_REP_REF_NUMBER_PAPER_J;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.REMOVAL_OF_24W_DECISION_JUDGE;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.REMOVAL_OF_24W_DECISION_DECISION_MAKER;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.REMOVAL_OF_24W_DECISION_REASON;
 
 @ExtendWith(MockitoExtension.class)
@@ -68,8 +68,8 @@ class Stf24WeeksRemovalDecisionTemplateTest {
         when(asylumCase.read(IS_REMOVAL_OF_24W_APPLICATION_REFUSED, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
         String removalReason = "This is the reason for the removal of 24 week decision";
         when(asylumCase.read(REMOVAL_OF_24W_DECISION_REASON, String.class)).thenReturn(Optional.of(removalReason));
-        String judgeName = "some name";
-        when(asylumCase.read(REMOVAL_OF_24W_DECISION_JUDGE, String.class)).thenReturn(Optional.of(judgeName));
+        String decisionMaker = "some name";
+        when(asylumCase.read(REMOVAL_OF_24W_DECISION_DECISION_MAKER, String.class)).thenReturn(Optional.of(decisionMaker));
 
         Map<String, Object> templateFieldValues = stf24WeekTemplate.mapFieldValues(caseDetails);
         assertEquals(11, templateFieldValues.size());
@@ -84,7 +84,7 @@ class Stf24WeeksRemovalDecisionTemplateTest {
         assertEquals("Therefore this appeal will continue to be processed under the "
             + "accelerated statutory 24 week timeline.", templateFieldValues.get("postAmble"));
         assertEquals(removalReason, templateFieldValues.get("suitabilityReason"));
-        assertEquals(judgeName, templateFieldValues.get("judgeName"));
+        assertEquals(decisionMaker, templateFieldValues.get("decisionMaker"));
         assertNotNull(templateFieldValues.get("decisionDate"));
     }
 
@@ -104,8 +104,8 @@ class Stf24WeeksRemovalDecisionTemplateTest {
         when(asylumCase.read(REMOVAL_OF_24W_DECISION_REASON, String.class)).thenReturn(Optional.of(removalReason));
         when(asylumCase.read(LEGAL_REP_REFERENCE_NUMBER, String.class)).thenReturn(Optional.empty());
         when(asylumCase.read(LEGAL_REP_REF_NUMBER_PAPER_J, String.class)).thenReturn(Optional.empty());
-        String judgeName = "some name";
-        when(asylumCase.read(REMOVAL_OF_24W_DECISION_JUDGE, String.class)).thenReturn(Optional.of(judgeName));
+        String decisionMaker = "some name";
+        when(asylumCase.read(REMOVAL_OF_24W_DECISION_DECISION_MAKER, String.class)).thenReturn(Optional.of(decisionMaker));
 
         Map<String, Object> templateFieldValues = stf24WeekTemplate.mapFieldValues(caseDetails);
         assertEquals(9, templateFieldValues.size());
@@ -121,7 +121,7 @@ class Stf24WeeksRemovalDecisionTemplateTest {
                 + "statutory 24 week timeline and will be processed under the standard appeal process.",
             templateFieldValues.get("postAmble"));
         assertEquals(removalReason, templateFieldValues.get("suitabilityReason"));
-        assertEquals(judgeName, templateFieldValues.get("judgeName"));
+        assertEquals(decisionMaker, templateFieldValues.get("decisionMaker"));
         assertNotNull(templateFieldValues.get("decisionDate"));
     }
 
@@ -142,7 +142,7 @@ class Stf24WeeksRemovalDecisionTemplateTest {
                 + "statutory 24 week timeline and will be processed under the standard appeal process.",
             templateFieldValues.get("postAmble"));
         assertEquals("", templateFieldValues.get("suitabilityReason"));
-        assertEquals("", templateFieldValues.get("judgeName"));
+        assertEquals("", templateFieldValues.get("decisionMaker"));
         assertNotNull(templateFieldValues.get("decisionDate"));
     }
 }
