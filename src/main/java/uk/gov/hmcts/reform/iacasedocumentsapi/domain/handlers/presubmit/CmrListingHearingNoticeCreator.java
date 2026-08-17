@@ -81,13 +81,15 @@ public class CmrListingHearingNoticeCreator implements PreSubmitCallbackHandler<
             );
         }
 
+        boolean isReListing = Event.CMR_RE_LISTING.equals(callback.getEvent());
+
         if (isInternalNonDetainedCase(asylumCase)
             || (isInternalCase(asylumCase) && isDetainedInFacilityType(asylumCase, OTHER))) {
             documentHandler.addWithMetadataWithoutReplacingExistingDocuments(
                 asylumCase,
                 hearingNotice,
                 LETTER_NOTIFICATION_DOCUMENTS,
-                DocumentTag.INTERNAL_CMR_LISTING_LETTER
+                isReListing ? DocumentTag.INTERNAL_CMR_RE_LISTING_LETTER : DocumentTag.INTERNAL_CMR_LISTING_LETTER
             );
         }
 
@@ -96,7 +98,7 @@ public class CmrListingHearingNoticeCreator implements PreSubmitCallbackHandler<
                 asylumCase,
                 hearingNotice,
                 LETTER_NOTIFICATION_DOCUMENTS,
-                DocumentTag.INTERNAL_CMR_LISTING_LR_LETTER
+                isReListing ? DocumentTag.INTERNAL_CMR_RE_LISTING_LR_LETTER : DocumentTag.INTERNAL_CMR_LISTING_LR_LETTER
             );
         }
 
