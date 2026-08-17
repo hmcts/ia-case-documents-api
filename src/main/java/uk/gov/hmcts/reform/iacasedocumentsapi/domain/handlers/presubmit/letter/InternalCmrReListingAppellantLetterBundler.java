@@ -21,8 +21,7 @@ import java.util.List;
 import static java.util.Objects.requireNonNull;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.LETTER_BUNDLE_DOCUMENTS;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.NOTIFICATION_ATTACHMENT_DOCUMENTS;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DetentionFacility.IRC;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DetentionFacility.PRISON;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DetentionFacility.*;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.Event.CMR_RE_LISTING;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.*;
 
@@ -68,8 +67,9 @@ public class InternalCmrReListingAppellantLetterBundler implements PreSubmitCall
 
         return callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
             && callback.getEvent() == CMR_RE_LISTING
-            && isInternalCase(asylumCase)
             && !hasBeenSubmittedAsLegalRepresentedInternalCase(asylumCase)
+            && (isInternalCase(asylumCase)
+            || isDetainedInFacilityType(asylumCase, OTHER))
             && isEmStitchingEnabled;
     }
 
