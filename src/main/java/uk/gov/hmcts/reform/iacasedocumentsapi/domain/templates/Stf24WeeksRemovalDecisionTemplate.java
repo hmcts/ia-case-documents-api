@@ -23,6 +23,11 @@ import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.Stf24WeeksUtil
 public class Stf24WeeksRemovalDecisionTemplate implements DocumentTemplate<AsylumCase> {
 
     private final String templateName;
+    public static String removalRefusal = "It has been determined that this appeal is suitable to continue to be "
+        + "processed under the 24 week statutory timeframe";
+    public static String removalAccepted = "It has been determined that it is not reasonably practicable for this"
+        + " appeal to be concluded within 24 weeks of the date that it was instituted and therefore this appeal will "
+        + "no longer be processed under the 24 week statutory timeframe.";
 
     public Stf24WeeksRemovalDecisionTemplate(
         @Value("${stf24WeeksRemovalDecision.templateName}") String templateName
@@ -51,15 +56,9 @@ public class Stf24WeeksRemovalDecisionTemplate implements DocumentTemplate<Asylu
             fieldValues.put("legalRepRefTitle", "Legal representative reference");
         }
 
-        if (asylumCase.read(IS_REMOVAL_OF_24W_APPLICATION_REFUSED, YesOrNo.class).orElse(YesOrNo.NO) == YesOrNo.YES) {
-            fieldValues.put("suitability", "suitable");
-            fieldValues.put("postAmble", "Therefore this appeal will continue to be processed under the accelerated"
-                + " statutory 24 week timeline.");
-        } else {
-            fieldValues.put("suitability", "unsuitable");
-            fieldValues.put("postAmble", "Therefore this appeal will no longer be processed under the accelerated"
-                + " statutory 24 week timeline and will be processed under the standard appeal process.");
-        }
+        boolean isRefused = asylumCase.read(IS_REMOVAL_OF_24W_APPLICATION_REFUSED, YesOrNo.class)
+            .orElse(YesOrNo.NO) == YesOrNo.YES;
+        fieldValues.put("preAmble", isRefused ? removalRefusal : removalAccepted);
         fieldValues.put("suitabilityReason", asylumCase.read(REMOVAL_OF_24W_DECISION_REASON, String.class).orElse(""));
         fieldValues.put("decisionMaker", asylumCase.read(REMOVAL_OF_24W_DECISION_DECISION_MAKER, String.class).orElse(""));
         fieldValues.put("decisionDate", LocalDate.now().toString());

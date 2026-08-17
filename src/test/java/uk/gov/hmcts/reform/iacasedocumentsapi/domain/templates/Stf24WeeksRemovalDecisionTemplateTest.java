@@ -26,6 +26,8 @@ import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseD
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.LEGAL_REP_REF_NUMBER_PAPER_J;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.REMOVAL_OF_24W_DECISION_DECISION_MAKER;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.REMOVAL_OF_24W_DECISION_REASON;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates.Stf24WeeksRemovalDecisionTemplate.removalAccepted;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates.Stf24WeeksRemovalDecisionTemplate.removalRefusal;
 
 @ExtendWith(MockitoExtension.class)
 class Stf24WeeksRemovalDecisionTemplateTest {
@@ -72,7 +74,7 @@ class Stf24WeeksRemovalDecisionTemplateTest {
         when(asylumCase.read(REMOVAL_OF_24W_DECISION_DECISION_MAKER, String.class)).thenReturn(Optional.of(decisionMaker));
 
         Map<String, Object> templateFieldValues = stf24WeekTemplate.mapFieldValues(caseDetails);
-        assertEquals(11, templateFieldValues.size());
+        assertEquals(10, templateFieldValues.size());
 
         assertEquals(appealReferenceNumber, templateFieldValues.get("appealReferenceNumber"));
         assertEquals(appellantGivenNames + " " + appellantFamilyName,
@@ -80,9 +82,7 @@ class Stf24WeeksRemovalDecisionTemplateTest {
         assertEquals(homeOfficeReferenceNumber, templateFieldValues.get("homeOfficeReferenceNumber"));
         assertEquals(legalRepReferenceNumber, templateFieldValues.get("legalRepReferenceNumber"));
         assertEquals("Legal representative reference", templateFieldValues.get("legalRepRefTitle"));
-        assertEquals("suitable", templateFieldValues.get("suitability"));
-        assertEquals("Therefore this appeal will continue to be processed under the "
-            + "accelerated statutory 24 week timeline.", templateFieldValues.get("postAmble"));
+        assertEquals(removalRefusal, templateFieldValues.get("preAmble"));
         assertEquals(removalReason, templateFieldValues.get("suitabilityReason"));
         assertEquals(decisionMaker, templateFieldValues.get("decisionMaker"));
         assertNotNull(templateFieldValues.get("decisionDate"));
@@ -108,7 +108,7 @@ class Stf24WeeksRemovalDecisionTemplateTest {
         when(asylumCase.read(REMOVAL_OF_24W_DECISION_DECISION_MAKER, String.class)).thenReturn(Optional.of(decisionMaker));
 
         Map<String, Object> templateFieldValues = stf24WeekTemplate.mapFieldValues(caseDetails);
-        assertEquals(9, templateFieldValues.size());
+        assertEquals(8, templateFieldValues.size());
 
         assertEquals(appealReferenceNumber, templateFieldValues.get("appealReferenceNumber"));
         assertEquals(appellantGivenNames + " " + appellantFamilyName,
@@ -116,10 +116,7 @@ class Stf24WeeksRemovalDecisionTemplateTest {
         assertEquals(homeOfficeReferenceNumber, templateFieldValues.get("homeOfficeReferenceNumber"));
         assertNull(templateFieldValues.get("legalRepReferenceNumber"));
         assertNull(templateFieldValues.get("legalRepRefTitle"));
-        assertEquals("unsuitable", templateFieldValues.get("suitability"));
-        assertEquals("Therefore this appeal will no longer be processed under the accelerated "
-                + "statutory 24 week timeline and will be processed under the standard appeal process.",
-            templateFieldValues.get("postAmble"));
+        assertEquals(removalAccepted, templateFieldValues.get("preAmble"));
         assertEquals(removalReason, templateFieldValues.get("suitabilityReason"));
         assertEquals(decisionMaker, templateFieldValues.get("decisionMaker"));
         assertNotNull(templateFieldValues.get("decisionDate"));
@@ -130,17 +127,14 @@ class Stf24WeeksRemovalDecisionTemplateTest {
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
 
         Map<String, Object> templateFieldValues = stf24WeekTemplate.mapFieldValues(caseDetails);
-        assertEquals(9, templateFieldValues.size());
+        assertEquals(8, templateFieldValues.size());
 
         assertEquals("", templateFieldValues.get("appealReferenceNumber"));
         assertEquals("", templateFieldValues.get("appellantFullName"));
         assertEquals("", templateFieldValues.get("homeOfficeReferenceNumber"));
         assertNull(templateFieldValues.get("legalRepReferenceNumber"));
         assertNull(templateFieldValues.get("legalRepRefTitle"));
-        assertEquals("unsuitable", templateFieldValues.get("suitability"));
-        assertEquals("Therefore this appeal will no longer be processed under the accelerated "
-                + "statutory 24 week timeline and will be processed under the standard appeal process.",
-            templateFieldValues.get("postAmble"));
+        assertEquals(removalAccepted, templateFieldValues.get("preAmble"));
         assertEquals("", templateFieldValues.get("suitabilityReason"));
         assertEquals("", templateFieldValues.get("decisionMaker"));
         assertNotNull(templateFieldValues.get("decisionDate"));
