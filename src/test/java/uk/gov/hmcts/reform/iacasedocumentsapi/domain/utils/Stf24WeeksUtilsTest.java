@@ -36,7 +36,7 @@ class Stf24WeeksUtilsTest {
     }
 
     @ParameterizedTest
-    @EnumSource(value = Event.class, names = {"COMPLETE_CASE_REVIEW", "RESEND_TIMELINE_NOTICE"})
+    @EnumSource(value = Event.class, names = {"COMPLETE_CASE_REVIEW", "SEND_LATE_TIMELINE_NOTICE"})
     void should_return_true_for_case_review_when_event_valid_appellant_in_uk_and_stf24_status_yes(Event event) {
         when(asylumCase.read(AsylumCaseDefinition.APPELLANT_IN_UK, YesOrNo.class))
                 .thenReturn(Optional.of(YesOrNo.YES));
@@ -50,7 +50,7 @@ class Stf24WeeksUtilsTest {
 
 
     @ParameterizedTest
-    @EnumSource(value = Event.class, names = {"COMPLETE_CASE_REVIEW", "RESEND_TIMELINE_NOTICE"}, mode = EnumSource.Mode.EXCLUDE)
+    @EnumSource(value = Event.class, names = {"COMPLETE_CASE_REVIEW", "SEND_LATE_TIMELINE_NOTICE"}, mode = EnumSource.Mode.EXCLUDE)
     void should_return_true_for_case_review_when_event_invalid_appellant_in_uk_and_stf24_status_yes(Event event) {
         when(asylumCase.read(AsylumCaseDefinition.APPELLANT_IN_UK, YesOrNo.class))
             .thenReturn(Optional.of(YesOrNo.YES));

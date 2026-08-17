@@ -112,7 +112,7 @@ public class EventTest {
             Arguments.of("removeRepresentation", CaseType.ASYLUM, Event.REMOVE_REPRESENTATION),
             Arguments.of("removeLegalRepresentative", CaseType.ASYLUM, Event.REMOVE_LEGAL_REPRESENTATIVE),
             Arguments.of("completeCaseReview", CaseType.ASYLUM, Event.COMPLETE_CASE_REVIEW),
-            Arguments.of("resendTimelineNotice", CaseType.ASYLUM, Event.RESEND_TIMELINE_NOTICE),
+            Arguments.of("sendLateTimelineNotice", CaseType.ASYLUM, Event.SEND_LATE_TIMELINE_NOTICE),
             Arguments.of("unknown", CaseType.UNKNOWN, Event.UNKNOWN)
         );
     }

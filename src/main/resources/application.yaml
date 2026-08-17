@@ -747,7 +747,7 @@ security:
       - "updateTribunalDecision"
       - "removeLegalRepresentative"
       - "completeCaseReview"
-      - "resendTimelineNotice"
+      - "sendLateTimelineNotice"
     challenged-access-legal-operations:
       - "sendDirection"
       - "changeDirectionDueDate"
@@ -793,7 +793,7 @@ security:
       - "updateTribunalDecision"
       - "removeLegalRepresentative"
       - "completeCaseReview"
-      - "resendTimelineNotice"
+      - "sendLateTimelineNotice"
     senior-tribunal-caseworker:
       - "sendDirection"
       - "changeDirectionDueDate"
@@ -839,7 +839,7 @@ security:
       - "updateTribunalDecision"
       - "removeLegalRepresentative"
       - "completeCaseReview"
-      - "resendTimelineNotice"
+      - "sendLateTimelineNotice"
     # These events are used by the bails service, they will need to be migrated to the admin access management roles - see DIAC-855
     caseworker-ia-admofficer:
       - "submitApplication"
@@ -1285,7 +1285,7 @@ security:
       - "saveNotificationsToData"
       - "saveNotificationsToDataBail"
       - "completeCaseReview"
-      - "resendTimelineNotice"
+      - "sendLateTimelineNotice"
     caseworker-ia-homeofficelart:
       - "uploadHomeOfficeAppealResponse"
       - "uploadAdditionalEvidenceHomeOffice"

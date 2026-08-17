@@ -18,7 +18,7 @@ import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseD
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.STF_24W_CURRENT_STATUS_AUTO_GENERATED;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.TRIBUNAL_RECEIVED_DATE;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.Event.COMPLETE_CASE_REVIEW;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.Event.RESEND_TIMELINE_NOTICE;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.Event.SEND_LATE_TIMELINE_NOTICE;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo.YES;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.isAppellantInUk;
 
@@ -46,7 +46,7 @@ public class Stf24WeeksUtils {
     public static boolean isCaseReviewFor24WeeksCase(Event event, AsylumCase asylumCase) {
         boolean inCountryAppeal = isAppellantInUk(asylumCase);
         boolean hasStf24W = hasStf24WeeksStatus(asylumCase);
-        return List.of(RESEND_TIMELINE_NOTICE, COMPLETE_CASE_REVIEW).contains(event)
+        return List.of(SEND_LATE_TIMELINE_NOTICE, COMPLETE_CASE_REVIEW).contains(event)
             && inCountryAppeal
             && hasStf24W;
     }
