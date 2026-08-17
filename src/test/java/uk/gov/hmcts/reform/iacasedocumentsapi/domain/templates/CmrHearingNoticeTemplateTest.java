@@ -34,6 +34,8 @@ class CmrHearingNoticeTemplateTest {
     @Mock private CaseDetails<AsylumCase> caseDetails;
     @Mock private AsylumCase asylumCase;
     @Mock private CustomerServicesProvider customerServicesProvider;
+    @Mock private CaseDetails<AsylumCase> caseDetailsBefore;
+    @Mock private AsylumCase asylumCaseBefore;
 
     private final String appealReferenceNumber = "RP/11111/2020";
     private final String appellantGivenNames = "Talha";
@@ -65,6 +67,7 @@ class CmrHearingNoticeTemplateTest {
     @BeforeEach
     public void setUp() {
 
+        when(caseDetailsBefore.getCaseData()).thenReturn(asylumCaseBefore);
         cmrHearingNoticeTemplate =
             new CmrHearingNoticeTemplate(
                 templateName,
@@ -109,9 +112,9 @@ class CmrHearingNoticeTemplateTest {
         when(customerServicesProvider.getCustomerServicesTelephone()).thenReturn(customerServicesTelephone);
         when(customerServicesProvider.getCustomerServicesEmail()).thenReturn(customerServicesEmail);
 
-        Map<String, Object> templateFieldValues = cmrHearingNoticeTemplate.mapFieldValues(caseDetails);
+        Map<String, Object> templateFieldValues = cmrHearingNoticeTemplate.mapFieldValues(caseDetails, caseDetailsBefore);;
 
-        assertEquals(21, templateFieldValues.size());
+        assertEquals(22, templateFieldValues.size());
         assertEquals("[userImage:hmcts.png]", templateFieldValues.get("hmcts"));
         assertEquals(formatDateForRendering(LocalDate.now().toString(), DateTimeFormatter.ofPattern("d MMM yyyy")),
                 templateFieldValues.get("dateLetterSent"));
@@ -142,7 +145,7 @@ class CmrHearingNoticeTemplateTest {
         when(asylumCase.read(LEGAL_REP_REFERENCE_NUMBER, String.class)).thenReturn(Optional.empty());
         when(asylumCase.read(LEGAL_REP_REF_NUMBER_PAPER_J, String.class)).thenReturn(Optional.of(legalRepReferenceNumberPaperJ));
 
-        Map<String, Object> templateFieldValues = cmrHearingNoticeTemplate.mapFieldValues(caseDetails);
+        Map<String, Object> templateFieldValues = cmrHearingNoticeTemplate.mapFieldValues(caseDetails, caseDetailsBefore);
 
         assertEquals(legalRepReferenceNumberPaperJ, templateFieldValues.get("legalRepReferenceNumber"));
     }
@@ -154,7 +157,7 @@ class CmrHearingNoticeTemplateTest {
         when(asylumCase.read(LEGAL_REP_REFERENCE_NUMBER, String.class)).thenReturn(Optional.of(legalRepReferenceNumber));
         when(asylumCase.read(LEGAL_REP_REF_NUMBER_PAPER_J, String.class)).thenReturn(Optional.of(legalRepReferenceNumberPaperJ));
 
-        Map<String, Object> templateFieldValues = cmrHearingNoticeTemplate.mapFieldValues(caseDetails);
+        Map<String, Object> templateFieldValues = cmrHearingNoticeTemplate.mapFieldValues(caseDetails, caseDetailsBefore);
 
         assertEquals(legalRepReferenceNumber, templateFieldValues.get("legalRepReferenceNumber"));
     }
@@ -166,7 +169,7 @@ class CmrHearingNoticeTemplateTest {
         when(asylumCase.read(LEGAL_REP_REFERENCE_NUMBER, String.class)).thenReturn(Optional.empty());
         when(asylumCase.read(LEGAL_REP_REF_NUMBER_PAPER_J, String.class)).thenReturn(Optional.empty());
 
-        Map<String, Object> templateFieldValues = cmrHearingNoticeTemplate.mapFieldValues(caseDetails);
+        Map<String, Object> templateFieldValues = cmrHearingNoticeTemplate.mapFieldValues(caseDetails, caseDetailsBefore);
 
         assertEquals("", templateFieldValues.get("legalRepReferenceNumber"));
     }

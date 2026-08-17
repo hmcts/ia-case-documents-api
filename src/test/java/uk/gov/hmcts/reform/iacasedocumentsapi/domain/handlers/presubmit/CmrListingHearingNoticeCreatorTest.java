@@ -234,8 +234,6 @@ class CmrListingHearingNoticeCreatorTest {
         verify(documentHandler, times(1)).addWithMetadataWithDateTimeWithoutReplacingExistingDocuments(
             asylumCase, uploadedDocument, HEARING_DOCUMENTS, DocumentTag.HEARING_NOTICE);
         verify(documentHandler, times(1)).addWithMetadataWithoutReplacingExistingDocuments(
-            asylumCase, uploadedDocument, LETTER_NOTIFICATION_DOCUMENTS, DocumentTag.INTERNAL_CMR_RE_LISTING_LETTER);
-        verify(documentHandler, never()).addWithMetadataWithoutReplacingExistingDocuments(
             asylumCase, uploadedDocument, LETTER_NOTIFICATION_DOCUMENTS, DocumentTag.INTERNAL_CMR_LISTING_LETTER);
     }
 

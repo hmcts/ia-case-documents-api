@@ -3,6 +3,7 @@ package uk.gov.hmcts.reform.iacasedocumentsapi.domain.service;
 import org.springframework.stereotype.Service;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.HearingCentre;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseDetails;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.CustomerServicesProvider;
 
@@ -33,15 +34,43 @@ public class CmrHearingNoticeFieldMapper {
         this.customerServicesProvider = customerServicesProvider;
     }
 
-    public Map<String, Object> mapFields(AsylumCase asylumCase) {
+    public Map<String, Object> mapFields(AsylumCase asylumCase, CaseDetails<AsylumCase> caseDetailsBefore) {
 
         final Map<String, Object> fieldValues = new HashMap<>();
+
+        final AsylumCase asylumCaseBefore =
+                caseDetailsBefore.getCaseData();
 
         final HearingCentre listedHearingCentre =
             asylumCase
                 .read(CMR_HEARING_CENTRE, HearingCentre.class)
                 .orElseThrow(() -> new IllegalStateException("listCaseHearingCentre is not present"));
         final Optional<YesOrNo> isSubmitRequirementsAvailable = asylumCase.read(SUBMIT_HEARING_REQUIREMENTS_AVAILABLE);
+
+        final Optional<HearingCentre> listedHearingCentreBefore =
+                asylumCaseBefore.read(LIST_CASE_HEARING_CENTRE, HearingCentre.class);
+
+        final String hearingDateBefore =
+                asylumCaseBefore.read(LIST_CASE_HEARING_DATE, String.class).orElse("");
+
+        boolean isRelisted = listedHearingCentreBefore.isPresent()
+                && !hearingDateBefore.isEmpty();
+
+        fieldValues.put("relisted", isRelisted);
+
+        if (isRelisted) {
+            final String hearingCentreNameBefore =
+                    stringProvider
+                            .get("hearingCentreName", listedHearingCentreBefore.get().toString())
+                            .orElseThrow(() -> new IllegalStateException(
+                                    "listCaseHearingCentre (before) is not present"));
+
+            fieldValues.put("oldHearingCentre", hearingCentreNameBefore);
+            fieldValues.put(
+                    "oldHearingDate",
+                    formatDateTimeForRendering(hearingDateBefore, DOCUMENT_DATE_FORMAT)
+            );
+        }
 
         fieldValues.putAll(getAppellantPersonalisation(asylumCase));
         fieldValues.put("dateLetterSent", formatDateForNotificationAttachmentDocument(LocalDate.now()));

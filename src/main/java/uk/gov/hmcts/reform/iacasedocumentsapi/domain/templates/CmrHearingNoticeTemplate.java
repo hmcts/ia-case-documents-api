@@ -27,7 +27,8 @@ public class CmrHearingNoticeTemplate implements DocumentTemplate<AsylumCase> {
 
     @Override
     public Map<String, Object> mapFieldValues(
-        CaseDetails<AsylumCase> caseDetails
+        CaseDetails<AsylumCase> caseDetails,
+        CaseDetails<AsylumCase> caseDetailsBefore
     ) {
         final AsylumCase asylumCase =
             caseDetails.getCaseData();
@@ -35,6 +36,7 @@ public class CmrHearingNoticeTemplate implements DocumentTemplate<AsylumCase> {
         final CmrHearingNoticeFieldMapper fieldMapper =
             new CmrHearingNoticeFieldMapper(stringProvider, customerServicesProvider);
 
-        return fieldMapper.mapFields(asylumCase);
+        return fieldMapper.mapFields(asylumCase, caseDetailsBefore
+        );
     }
 }
