@@ -91,6 +91,7 @@ public enum Event {
     REMOVE_REPRESENTATION("removeRepresentation", CaseType.ASYLUM),
     REMOVE_LEGAL_REPRESENTATIVE("removeLegalRepresentative", CaseType.ASYLUM),
     COMPLETE_CASE_REVIEW("completeCaseReview", CaseType.ASYLUM),
+    RESEND_TIMELINE_NOTICE("resendTimelineNotice", CaseType.ASYLUM),
     @JsonEnumDefaultValue
     UNKNOWN("unknown", CaseType.UNKNOWN);
 
