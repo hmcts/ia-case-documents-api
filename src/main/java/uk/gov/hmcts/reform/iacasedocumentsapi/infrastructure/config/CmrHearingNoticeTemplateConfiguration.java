@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.StringProvider;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates.CmrHearingNoticeTemplate;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates.CmrRelistedHearingNoticeTemplate;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.CustomerServicesProvider;
 
 @Configuration
@@ -20,6 +21,12 @@ public class CmrHearingNoticeTemplateConfiguration {
     public CmrHearingNoticeTemplate getCmrHearingNoticeTemplate(
         @Value("${cmrHearingNoticeDocument.templateName}") String templateName, StringProvider stringProvider) {
         return new CmrHearingNoticeTemplate(templateName, stringProvider, customerServicesProvider);
+    }
+
+    @Bean("cmrRelistedHearingNoticeTemplate")
+    public CmrRelistedHearingNoticeTemplate getCmrRelistedHearingNoticeTemplate(
+            @Value("${cmrRelistedHearingNoticeDocument.templateName}") String templateName, StringProvider stringProvider) {
+        return new CmrRelistedHearingNoticeTemplate(templateName, stringProvider, customerServicesProvider);
     }
 
     @Bean("remoteCmrHearingNoticeTemplate")
