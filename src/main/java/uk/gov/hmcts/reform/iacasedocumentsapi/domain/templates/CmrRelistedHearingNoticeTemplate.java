@@ -1,5 +1,6 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseDetails;
@@ -17,7 +18,7 @@ public class CmrRelistedHearingNoticeTemplate implements DocumentTemplate<Asylum
     private final CustomerServicesProvider customerServicesProvider;
 
     public CmrRelistedHearingNoticeTemplate(
-            String templateName,
+            @Value("${cmrRelistedHearingNoticeDocument.templateName}") String templateName,
             StringProvider stringProvider,
             CustomerServicesProvider customerServicesProvider) {
         this.templateName = templateName;
