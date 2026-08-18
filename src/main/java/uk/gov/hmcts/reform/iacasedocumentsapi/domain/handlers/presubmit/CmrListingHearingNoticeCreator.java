@@ -73,7 +73,7 @@ public class CmrListingHearingNoticeCreator implements PreSubmitCallbackHandler<
         );
 
         if (isDetainedInOneOfFacilityTypes(asylumCase, IRC, PRISON)) {
-            documentHandler.addWithMetadataWithoutReplacingExistingDocuments(
+            documentHandler.addWithMetadata(
                 asylumCase,
                 hearingNotice,
                 NOTIFICATION_ATTACHMENT_DOCUMENTS,

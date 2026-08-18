@@ -22,7 +22,10 @@ public class AppointmentRequirementsFieldMapper {
 
         final Map<String, Object> fieldValues = new HashMap<>();
         fieldValues.putAll(getAppellantPersonalisation(asylumCase));
-        fieldValues.put("legalRepReferenceNumber", asylumCase.read(LEGAL_REP_REFERENCE_NUMBER, String.class).orElse(""));
+        fieldValues.put("legalRepReferenceNumber",
+                asylumCase.read(LEGAL_REP_REFERENCE_NUMBER, String.class)
+                        .orElse(asylumCase.read(LEGAL_REP_REF_NUMBER_PAPER_J, String.class).orElse(""))
+        );
         fieldValues.put("isInterpreterServicesNeeded", asylumCase.read(IS_INTERPRETER_SERVICES_NEEDED, YesOrNo.class).orElse(YesOrNo.NO));
 
         Optional<List<IdValue<InterpreterLanguage>>> interpreterLanguage = asylumCase.read(INTERPRETER_LANGUAGE);

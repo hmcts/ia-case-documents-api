@@ -1,6 +1,7 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates;
 
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.LEGAL_REP_REFERENCE_NUMBER;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.LEGAL_REP_REF_NUMBER_PAPER_J;
 
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Value;
@@ -32,8 +33,10 @@ public class UpdatedTribunalDecisionAndReasonsCoverLetterTemplate implements Doc
 
         final Map<String, Object> fieldValues = templateHelper.getCommonMapFieldValues(caseDetails);
 
-        fieldValues.put("legalRepReferenceNumber", asylumCase.read(LEGAL_REP_REFERENCE_NUMBER, String.class)
-                .orElse(""));
+        fieldValues.put("legalRepReferenceNumber",
+                asylumCase.read(LEGAL_REP_REFERENCE_NUMBER, String.class)
+                        .orElse(asylumCase.read(LEGAL_REP_REF_NUMBER_PAPER_J, String.class).orElse(""))
+        );
 
         return fieldValues;
     }

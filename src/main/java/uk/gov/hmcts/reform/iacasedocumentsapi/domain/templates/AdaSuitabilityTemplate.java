@@ -37,7 +37,10 @@ public class AdaSuitabilityTemplate implements DocumentTemplate<AsylumCase> {
 
         fieldValues.put("hmcts", "[userImage:decisionsandreasons.png]");
         fieldValues.put("appealReferenceNumber", asylumCase.read(APPEAL_REFERENCE_NUMBER, String.class).orElse(""));
-        fieldValues.put("legalRepReferenceNumber", asylumCase.read(LEGAL_REP_REFERENCE_NUMBER, String.class).orElse(""));
+        fieldValues.put("legalRepReferenceNumber",
+                asylumCase.read(LEGAL_REP_REFERENCE_NUMBER, String.class)
+                        .orElse(asylumCase.read(LEGAL_REP_REF_NUMBER_PAPER_J, String.class).orElse(""))
+        );
         fieldValues.put("homeOfficeReferenceNumber", asylumCase.read(HOME_OFFICE_REFERENCE_NUMBER, String.class).orElse(""));
 
         final String givenName = asylumCase.read(APPELLANT_GIVEN_NAMES, String.class).orElse("");

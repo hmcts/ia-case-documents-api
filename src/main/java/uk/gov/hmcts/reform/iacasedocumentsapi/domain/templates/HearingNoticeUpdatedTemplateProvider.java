@@ -79,7 +79,8 @@ public class HearingNoticeUpdatedTemplateProvider {
         String referenceNumber = asylumCase.read(CCD_REFERENCE_NUMBER_FOR_DISPLAY, String.class).orElse("");
         fieldValues.put("ccdReferenceNumberForDisplay", referenceNumber);
 
-        String legalRepReferenceNumber = asylumCase.read(LEGAL_REP_REFERENCE_NUMBER, String.class).orElse("");
+        String legalRepReferenceNumber = asylumCase.read(LEGAL_REP_REFERENCE_NUMBER, String.class)
+                .orElse(asylumCase.read(LEGAL_REP_REF_NUMBER_PAPER_J, String.class).orElse(""));
         fieldValues.put("legalRepReferenceNumber", legalRepReferenceNumber);
 
         return fieldValues;

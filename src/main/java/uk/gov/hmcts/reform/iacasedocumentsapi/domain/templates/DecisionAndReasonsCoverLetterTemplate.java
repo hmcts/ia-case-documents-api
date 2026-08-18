@@ -38,7 +38,10 @@ public class DecisionAndReasonsCoverLetterTemplate implements DocumentTemplate<A
 
         final Map<String, Object> fieldValues = new HashMap<>();
         fieldValues.putAll(getAppellantPersonalisation(asylumCase));
-        fieldValues.put("legalRepReferenceNumber", asylumCase.read(LEGAL_REP_REFERENCE_NUMBER, String.class).orElse(""));
+        fieldValues.put("legalRepReferenceNumber",
+                asylumCase.read(LEGAL_REP_REFERENCE_NUMBER, String.class)
+                        .orElse(asylumCase.read(LEGAL_REP_REF_NUMBER_PAPER_J, String.class).orElse(""))
+        );
         fieldValues.put("allowed", asylumCase.read(IS_DECISION_ALLOWED, AppealDecision.class)
             .map(appealDecision -> appealDecision.equals(ALLOWED) ? "Yes" : "No")
             .orElseThrow(() -> new IllegalStateException("appeal decision must be present")));
