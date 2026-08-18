@@ -218,7 +218,7 @@ class CmrListingHearingNoticeCreatorTest {
     }
 
     @Test
-    void should_handle_cmr_re_listing_event_the_same_way_as_cmr_listing() {
+    void should_tag_hearing_notice_with_re_listing_letter_tag_for_cmr_re_listing_event() {
 
         when(callback.getEvent()).thenReturn(Event.CMR_RE_LISTING);
         when(asylumCase.read(IS_ADMIN, YesOrNo.class)).thenReturn(Optional.of(YES));
@@ -234,7 +234,26 @@ class CmrListingHearingNoticeCreatorTest {
         verify(documentHandler, times(1)).addWithMetadataWithDateTimeWithoutReplacingExistingDocuments(
             asylumCase, uploadedDocument, HEARING_DOCUMENTS, DocumentTag.HEARING_NOTICE);
         verify(documentHandler, times(1)).addWithMetadataWithoutReplacingExistingDocuments(
+            asylumCase, uploadedDocument, LETTER_NOTIFICATION_DOCUMENTS, DocumentTag.INTERNAL_CMR_RE_LISTING_LETTER);
+        verify(documentHandler, never()).addWithMetadataWithoutReplacingExistingDocuments(
             asylumCase, uploadedDocument, LETTER_NOTIFICATION_DOCUMENTS, DocumentTag.INTERNAL_CMR_LISTING_LETTER);
+    }
+
+    @Test
+    void should_tag_hearing_notice_with_re_listing_lr_letter_tag_when_legal_represented_internal_case() {
+
+        when(callback.getEvent()).thenReturn(Event.CMR_RE_LISTING);
+        when(asylumCase.read(IS_ADMIN, YesOrNo.class)).thenReturn(Optional.of(YES));
+        when(asylumCase.read(APPELLANTS_REPRESENTATION, YesOrNo.class)).thenReturn(Optional.of(NO));
+        when(asylumCase.read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(NO));
+        when(cmrHearingNoticeDocumentCreator.create(caseDetails)).thenReturn(uploadedDocument);
+
+        cmrListingHearingNoticeCreator.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
+
+        verify(documentHandler, times(1)).addWithMetadataWithoutReplacingExistingDocuments(
+            asylumCase, uploadedDocument, LETTER_NOTIFICATION_DOCUMENTS, DocumentTag.INTERNAL_CMR_RE_LISTING_LR_LETTER);
+        verify(documentHandler, never()).addWithMetadataWithoutReplacingExistingDocuments(
+            asylumCase, uploadedDocument, LETTER_NOTIFICATION_DOCUMENTS, DocumentTag.INTERNAL_CMR_LISTING_LR_LETTER);
     }
 
     @Test
