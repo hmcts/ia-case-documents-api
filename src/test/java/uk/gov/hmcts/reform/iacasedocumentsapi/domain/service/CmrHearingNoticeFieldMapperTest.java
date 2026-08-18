@@ -17,7 +17,6 @@ import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.HearingCentre;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseDetails;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.CustomerServicesProvider;
 
@@ -28,8 +27,6 @@ class CmrHearingNoticeFieldMapperTest {
     @Mock private StringProvider stringProvider;
     @Mock private AsylumCase asylumCase;
     @Mock private CustomerServicesProvider customerServicesProvider;
-    @Mock private CaseDetails<AsylumCase> caseDetailsBefore;
-    @Mock private AsylumCase asylumCaseBefore;
 
     private final String appealReferenceNumber = "RP/11111/2020";
     private final String appellantGivenNames = "Talha";
@@ -70,7 +67,6 @@ class CmrHearingNoticeFieldMapperTest {
         cmrHearingNoticeFieldMapper =
             new CmrHearingNoticeFieldMapper(stringProvider, customerServicesProvider);
 
-        when(caseDetailsBefore.getCaseData()).thenReturn(asylumCaseBefore);
         when(asylumCase.read(APPEAL_REFERENCE_NUMBER, String.class)).thenReturn(Optional.of(appealReferenceNumber));
         when(asylumCase.read(APPELLANT_GIVEN_NAMES, String.class)).thenReturn(Optional.of(appellantGivenNames));
         when(asylumCase.read(APPELLANT_FAMILY_NAME, String.class)).thenReturn(Optional.of(appellantFamilyName));
@@ -100,9 +96,9 @@ class CmrHearingNoticeFieldMapperTest {
     @Test
     void should_map_case_data_to_template_field_values() {
 
-        Map<String, Object> templateFieldValues = cmrHearingNoticeFieldMapper.mapFields(asylumCase, caseDetailsBefore);
+        Map<String, Object> templateFieldValues = cmrHearingNoticeFieldMapper.mapFields(asylumCase);
 
-        assertEquals(22, templateFieldValues.size());
+        assertEquals(21, templateFieldValues.size());
         assertEquals("[userImage:hmcts.png]", templateFieldValues.get("hmcts"));
         assertEquals(appealReferenceNumber, templateFieldValues.get("appealReferenceNumber"));
         assertEquals(appellantGivenNames, templateFieldValues.get("appellantGivenNames"));
@@ -134,9 +130,9 @@ class CmrHearingNoticeFieldMapperTest {
         when(asylumCase.read(IN_CAMERA_COURT_TRIBUNAL_RESPONSE, String.class)).thenReturn(Optional.of(caseOfficerReviewedInCamera));
         when(asylumCase.read(ADDITIONAL_TRIBUNAL_RESPONSE, String.class)).thenReturn(Optional.of(caseOfficerReviewedOther));
 
-        Map<String, Object> templateFieldValues = cmrHearingNoticeFieldMapper.mapFields(asylumCase, caseDetailsBefore);
+        Map<String, Object> templateFieldValues = cmrHearingNoticeFieldMapper.mapFields(asylumCase);
 
-        assertEquals(22, templateFieldValues.size());
+        assertEquals(21, templateFieldValues.size());
         assertEquals(caseOfficerReviewedVulnerabilities, templateFieldValues.get("vulnerabilities"));
         assertEquals(caseOfficerReviewedMultimedia, templateFieldValues.get("multimedia"));
         assertEquals(caseOfficerReviewedSingleSexCourt, templateFieldValues.get("singleSexCourt"));
@@ -150,7 +146,7 @@ class CmrHearingNoticeFieldMapperTest {
         when(asylumCase.read(CMR_HEARING_CENTRE, HearingCentre.class)).thenReturn(Optional.of(HearingCentre.REMOTE_HEARING));
         when(asylumCase.read(REMOTE_VIDEO_CALL_TRIBUNAL_RESPONSE, String.class)).thenReturn(Optional.of("Remote hearing agreed"));
 
-        Map<String, Object> templateFieldValues = cmrHearingNoticeFieldMapper.mapFields(asylumCase, caseDetailsBefore);
+        Map<String, Object> templateFieldValues = cmrHearingNoticeFieldMapper.mapFields(asylumCase);
 
         assertEquals("Remote hearing", templateFieldValues.get("remoteHearing"));
         assertEquals("Remote hearing agreed", templateFieldValues.get("remoteVideoCallTribunalResponse"));
@@ -164,7 +160,7 @@ class CmrHearingNoticeFieldMapperTest {
         when(asylumCase.read(REMOTE_VIDEO_CALL_TRIBUNAL_RESPONSE, String.class)).thenReturn(Optional.of("agreed for remote hearing"));
         when(asylumCase.read(CMR_HEARING_CENTRE, String.class)).thenReturn(Optional.of(manchesterRefDataAddress));
 
-        Map<String, Object> templateFieldValues = cmrHearingNoticeFieldMapper.mapFields(asylumCase, caseDetailsBefore);
+        Map<String, Object> templateFieldValues = cmrHearingNoticeFieldMapper.mapFields(asylumCase);
 
         assertEquals("Remote hearing", templateFieldValues.get("remoteHearing"));
         assertEquals("agreed for remote hearing", templateFieldValues.get("remoteVideoCallTribunalResponse"));
@@ -177,7 +173,7 @@ class CmrHearingNoticeFieldMapperTest {
         when(asylumCase.read(IS_VIRTUAL_HEARING, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
         when(asylumCase.read(REMOTE_VIDEO_CALL_TRIBUNAL_RESPONSE, String.class)).thenReturn(Optional.of("Remote hearing agreed"));
 
-        Map<String, Object> templateFieldValues = cmrHearingNoticeFieldMapper.mapFields(asylumCase, caseDetailsBefore);
+        Map<String, Object> templateFieldValues = cmrHearingNoticeFieldMapper.mapFields(asylumCase);
 
         assertEquals("IAC National (Virtual)", templateFieldValues.get("remoteHearing"));
         assertEquals("Remote hearing agreed", templateFieldValues.get("remoteVideoCallTribunalResponse"));
@@ -201,9 +197,9 @@ class CmrHearingNoticeFieldMapperTest {
         when(asylumCase.read(LIST_CASE_REQUIREMENTS_OTHER, String.class)).thenReturn(Optional.empty());
         when(asylumCase.read(IS_INTEGRATED, YesOrNo.class)).thenReturn(Optional.empty());
 
-        Map<String, Object> templateFieldValues = cmrHearingNoticeFieldMapper.mapFields(asylumCase, caseDetailsBefore);
+        Map<String, Object> templateFieldValues = cmrHearingNoticeFieldMapper.mapFields(asylumCase);
 
-        assertEquals(22, templateFieldValues.size());
+        assertEquals(21, templateFieldValues.size());
         assertEquals("", templateFieldValues.get("appealReferenceNumber"));
         assertEquals("", templateFieldValues.get("appellantGivenNames"));
         assertEquals("", templateFieldValues.get("appellantFamilyName"));
@@ -225,7 +221,7 @@ class CmrHearingNoticeFieldMapperTest {
 
         when(asylumCase.read(CMR_HEARING_CENTRE, HearingCentre.class)).thenReturn(Optional.empty());
 
-        assertThatThrownBy(() -> cmrHearingNoticeFieldMapper.mapFields(asylumCase, caseDetailsBefore))
+        assertThatThrownBy(() -> cmrHearingNoticeFieldMapper.mapFields(asylumCase))
             .hasMessage("listCaseHearingCentre is not present")
             .isExactlyInstanceOf(IllegalStateException.class);
     }
