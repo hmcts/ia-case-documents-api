@@ -1070,6 +1070,27 @@ public class DocumentCreatorConfiguration {
         );
     }
 
+    @Bean("cmrCancelledAppellantDetainedLetter")
+    public DocumentCreator<AsylumCase> getCmrCancelledAppellantDetainedDocumentCreator(
+            @Value("${cmrCancelledAppellantDetainedLetter.contentType}") String contentType,
+            @Value("${cmrCancelledAppellantDetainedLetter.fileExtension}") String fileExtension,
+            @Value("${cmrCancelledAppellantDetainedLetter.fileName}") String fileName,
+            AsylumCaseFileNameQualifier fileNameQualifier,
+            CmrCancelledAppellantDetainedLetterTemplate documentTemplate,
+            DocumentGenerator documentGenerator,
+            DocumentUploader documentUploader
+    ) {
+        return new DocumentCreator<>(
+                contentType,
+                fileExtension,
+                fileName,
+                fileNameQualifier,
+                documentTemplate,
+                documentGenerator,
+                documentUploader
+        );
+    }
+
     @Bean("cmrCancelledLrManualLetter")
     public DocumentCreator<AsylumCase> getCmrCancelledLrManualDocumentCreator(
             @Value("${cmrCancelledLrManualLetter.contentType}") String contentType,
