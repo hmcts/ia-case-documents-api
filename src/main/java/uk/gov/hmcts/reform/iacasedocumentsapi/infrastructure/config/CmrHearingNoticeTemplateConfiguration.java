@@ -22,6 +22,12 @@ public class CmrHearingNoticeTemplateConfiguration {
         return new CmrHearingNoticeTemplate(templateName, stringProvider, customerServicesProvider);
     }
 
+    @Bean("cmrRelistedHearingNoticeTemplate")
+    public CmrHearingNoticeTemplate getCmrRelistedHearingNoticeTemplate(
+            @Value("${cmrRelistedHearingNoticeDocument.templateName}") String templateName, StringProvider stringProvider) {
+        return new CmrHearingNoticeTemplate(templateName, stringProvider, customerServicesProvider);
+    }
+
     @Bean("remoteCmrHearingNoticeTemplate")
     public CmrHearingNoticeTemplate getRemoteCmrHearingNoticeTemplate(
             @Value("${remoteCmrHearingNoticeDocument.templateName}") String templateName, StringProvider stringProvider) {
