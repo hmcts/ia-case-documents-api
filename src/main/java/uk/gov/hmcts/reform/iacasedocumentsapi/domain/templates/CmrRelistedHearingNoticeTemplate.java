@@ -1,6 +1,5 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates;
 
-import org.springframework.stereotype.Component;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseDetails;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.CmrRelistedHearingNoticeFieldMapper;
@@ -9,7 +8,6 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.CustomerServicesPro
 
 import java.util.Map;
 
-@Component
 public class CmrRelistedHearingNoticeTemplate implements DocumentTemplate<AsylumCase> {
 
     private final String templateName;
