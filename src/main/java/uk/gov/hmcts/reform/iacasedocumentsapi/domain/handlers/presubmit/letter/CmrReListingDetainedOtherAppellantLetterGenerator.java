@@ -7,10 +7,9 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DocumentTag;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentCreator;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentHandler;
 
+
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DetentionFacility.OTHER;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.isDetainedInFacilityType;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.isInternalCase;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.isRepJourney;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.*;
 
 @Component
 public class CmrReListingDetainedOtherAppellantLetterGenerator extends AbstractInternalCmrReListingLetterGenerator {
