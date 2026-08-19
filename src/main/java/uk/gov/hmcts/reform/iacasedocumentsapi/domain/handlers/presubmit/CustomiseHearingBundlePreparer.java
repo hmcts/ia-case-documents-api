@@ -58,9 +58,11 @@ public class CustomiseHearingBundlePreparer implements PreSubmitCallbackHandler<
         boolean isAipJourney = asylumCase
             .read(JOURNEY_TYPE, JourneyType.class)
             .map(type -> type == AIP).orElse(false);
-        boolean isOrWasAda = asylumCase.read(SUITABILITY_REVIEW_DECISION).isPresent();
         boolean isRemittedPath = asylumCase.read(SOURCE_OF_REMITTAL, String.class).isPresent();
-        Map<AsylumCaseDefinition, AsylumCaseDefinition> mappingFields = getMappingFields(isCaseReheard, isOrWasAda, isUpdatedBundle, isRemittedPath);
+        boolean shouldIncTribunalDocs = asylumCase.read(SUITABILITY_REVIEW_DECISION).isPresent()
+            || asylumCase.read(STF_24W_PREVIOUS_STATUS_WAS_YES_AUTO_GENERATED, YesOrNo.class).orElse(YesOrNo.NO)
+            .equals(YesOrNo.YES);
+        Map<AsylumCaseDefinition, AsylumCaseDefinition> mappingFields = getMappingFields(isCaseReheard, shouldIncTribunalDocs, isUpdatedBundle, isRemittedPath);
         mappingFields.forEach((sourceField, targetField) ->
             populateCustomCollections(asylumCase, sourceField, targetField, isAipJourney)
         );
@@ -238,7 +240,7 @@ public class CustomiseHearingBundlePreparer implements PreSubmitCallbackHandler<
 
     }
 
-    private Map<AsylumCaseDefinition, AsylumCaseDefinition> getMappingFields(boolean isReheardCase, boolean isOrWasAda, boolean isUpdatedBundle, boolean isRemittedFeature) {
+    private Map<AsylumCaseDefinition, AsylumCaseDefinition> getMappingFields(boolean isReheardCase, boolean shouldIncTribunalDocs, boolean isUpdatedBundle, boolean isRemittedFeature) {
         Map<AsylumCaseDefinition, AsylumCaseDefinition> fieldMapping;
         if (isReheardCase) {
             fieldMapping = new HashMap<>(Map.of(
@@ -260,7 +262,7 @@ public class CustomiseHearingBundlePreparer implements PreSubmitCallbackHandler<
             if (isUpdatedBundle) {
                 fieldMapping.put(ADDENDUM_EVIDENCE_DOCUMENTS, CUSTOM_APP_ADDENDUM_EVIDENCE_DOCS);
             }
-            if (isOrWasAda) {
+            if (shouldIncTribunalDocs) {
                 //With Tribunal Documents
                 fieldMapping.put(TRIBUNAL_DOCUMENTS, CUSTOM_TRIBUNAL_DOCUMENTS);
             }

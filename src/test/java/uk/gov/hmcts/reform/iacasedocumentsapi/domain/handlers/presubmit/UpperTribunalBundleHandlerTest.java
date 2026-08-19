@@ -11,11 +11,12 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.ValueSource;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
@@ -39,11 +40,16 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.enties.em.Bundle;
 @MockitoSettings(strictness = Strictness.WARN)
 class UpperTribunalBundleHandlerTest {
 
-    @Mock private EmBundleRequestExecutor emBundleRequestExecutor;
-    @Mock private Callback<AsylumCase> callback;
-    @Mock private CaseDetails<AsylumCase> caseDetails;
-    @Mock private AsylumCase asylumCase;
-    @Mock private PreSubmitCallbackResponse<AsylumCase> callbackResponse;
+    @Mock
+    private EmBundleRequestExecutor emBundleRequestExecutor;
+    @Mock
+    private Callback<AsylumCase> callback;
+    @Mock
+    private CaseDetails<AsylumCase> caseDetails;
+    @Mock
+    private AsylumCase asylumCase;
+    @Mock
+    private PreSubmitCallbackResponse<AsylumCase> callbackResponse;
 
     private String emBundlerUrl = "bundleurl";
     private String emBundlerStitchUri = "stitchingUri";
@@ -74,11 +80,20 @@ class UpperTribunalBundleHandlerTest {
     }
 
     @ParameterizedTest
-    @ValueSource(strings = {"", "SUITABLE", "UNSUITABLE"})
-    void should_successfully_handle_the_callback(String maybeDecision) {
+    @CsvSource(value = {
+        "'',NO,false",
+        "SUITABLE,NO,true",
+        "UNSUITABLE,NO,true",
+        "'',YES,true",
+        "SUITABLE,YES,true",
+        "UNSUITABLE,YES,true"})
+    void should_successfully_handle_the_callback(String maybeDecision, YesOrNo is24w, boolean shouldHaveTribunalDocs) {
 
         when(asylumCase.read(SUITABILITY_REVIEW_DECISION)).thenReturn(maybeDecision.isEmpty()
-                ? Optional.empty() : Optional.of(AdaSuitabilityReviewDecision.valueOf(maybeDecision)));
+            ? Optional.empty() : Optional.of(AdaSuitabilityReviewDecision.valueOf(maybeDecision)));
+        when(asylumCase.read(STF_24W_PREVIOUS_STATUS_WAS_YES_AUTO_GENERATED, YesOrNo.class))
+            .thenReturn(Optional.of(is24w));
+
         PreSubmitCallbackResponse<AsylumCase> callbackResponse =
             upperTribunalBundleHandler.handle(ABOUT_TO_SUBMIT, callback);
 
@@ -91,7 +106,7 @@ class UpperTribunalBundleHandlerTest {
         verify(asylumCase).write(AsylumCaseDefinition.HMCTS, "[userImage:hmcts.png]");
         verify(asylumCase).clear(AsylumCaseDefinition.CASE_BUNDLES);
         verify(asylumCase).write(AsylumCaseDefinition.BUNDLE_CONFIGURATION,
-                maybeDecision.isEmpty() ? "iac-upper-tribunal-bundle-config.yaml" : "iac-upper-tribunal-bundle-inc-tribunal-config.yaml");
+            shouldHaveTribunalDocs ? "iac-upper-tribunal-bundle-inc-tribunal-config.yaml" : "iac-upper-tribunal-bundle-config.yaml");
         verify(asylumCase).write(AsylumCaseDefinition.BUNDLE_FILE_NAME_PREFIX, "PA 50002 2020");
     }
 
