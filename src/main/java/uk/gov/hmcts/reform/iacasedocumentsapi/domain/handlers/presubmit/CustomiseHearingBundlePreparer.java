@@ -189,11 +189,13 @@ public class CustomiseHearingBundlePreparer implements PreSubmitCallbackHandler<
         }
     }
 
-    private List<IdValue<DocumentWithDescription>> handleCustomTribunalDocsTargetField(
+    protected List<IdValue<DocumentWithDescription>> handleCustomTribunalDocsTargetField(
         IdValue<DocumentWithMetadata> documentWithMetadata,
         DocumentWithDescription newDocumentWithDescription,
         List<IdValue<DocumentWithDescription>> customDocuments) {
-        if (documentWithMetadata.getValue().getTag() == DocumentTag.ADA_SUITABILITY) {
+        if (Set.of(DocumentTag.ADA_SUITABILITY,
+            DocumentTag.STF_24WEEKS_REMOVAL_DECISION_DOCUMENT,
+            DocumentTag.STF_24WEEKS_REMOVAL_REFUSED_DECISION_DOCUMENT).contains(documentWithMetadata.getValue().getTag())) {
             return documentWithDescriptionAppender.append(newDocumentWithDescription, customDocuments);
         } else {
             return customDocuments;
@@ -227,9 +229,12 @@ public class CustomiseHearingBundlePreparer implements PreSubmitCallbackHandler<
                 customDocuments = handleLegalRepSourceField(documentWithMetadata, newDocumentWithDescription, customDocuments, isAipJourney);
             } else {
                 customDocuments = switch (targetField) {
-                    case CUSTOM_APP_ADDENDUM_EVIDENCE_DOCS -> handleCustomAddendumDocsTargetField(documentWithMetadata, newDocumentWithDescription, customDocuments, "The appellant");
-                    case CUSTOM_RESP_ADDENDUM_EVIDENCE_DOCS -> handleCustomAddendumDocsTargetField(documentWithMetadata, newDocumentWithDescription, customDocuments, "The respondent");
-                    case CUSTOM_TRIBUNAL_DOCUMENTS -> handleCustomTribunalDocsTargetField(documentWithMetadata, newDocumentWithDescription, customDocuments);
+                    case CUSTOM_APP_ADDENDUM_EVIDENCE_DOCS ->
+                        handleCustomAddendumDocsTargetField(documentWithMetadata, newDocumentWithDescription, customDocuments, "The appellant");
+                    case CUSTOM_RESP_ADDENDUM_EVIDENCE_DOCS ->
+                        handleCustomAddendumDocsTargetField(documentWithMetadata, newDocumentWithDescription, customDocuments, "The respondent");
+                    case CUSTOM_TRIBUNAL_DOCUMENTS ->
+                        handleCustomTribunalDocsTargetField(documentWithMetadata, newDocumentWithDescription, customDocuments);
                     default -> documentWithDescriptionAppender.append(newDocumentWithDescription, customDocuments);
                 };
             }
