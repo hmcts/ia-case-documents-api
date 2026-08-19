@@ -99,6 +99,11 @@ cmrHearingNoticeDocument.fileExtension: PDF
 cmrHearingNoticeDocument.fileName: "hearing-notice"
 cmrHearingNoticeDocument.templateName: ${IA_HEARING_NOTICE_TEMPLATE:TB-IAC-HNO-ENG-00241-updated.docx}
 
+cmrRelistedHearingNoticeDocument.contentType: application/pdf
+cmrRelistedHearingNoticeDocument.fileExtension: PDF
+cmrRelistedHearingNoticeDocument.fileName: "hearing-notice"
+cmrRelistedHearingNoticeDocument.templateName: ${IA_HEARING_NOTICE_TEMPLATE:TB-IAC-HNO-ENG-00241-relisted.docx}
+
 hearingNoticeAdaDocument.templateName: ${IA_ADA_HEARING_NOTICE_TEMPLATE:TB-IAC-HNO-ENG-ADA-0001.docx}
 
 remoteHearingNoticeDocument.contentType: application/pdf
@@ -663,6 +668,11 @@ cmrCancelledAppellantManualLetter.contentType:  application/pdf
 cmrCancelledAppellantManualLetter.fileExtension: PDF
 cmrCancelledAppellantManualLetter.fileName: "cmr-cancelled_aip_letter"
 cmrCancelledAppellantManualLetter.templateName: ${CMR_CANCELLED_AIP_MANUAL_LETTER_TEMPLATE:TB-IAC-LET-ENG-CRM-Cancelled-AIP-Manual.docx}
+
+cmrCancelledAppellantDetainedLetter.contentType:  application/pdf
+cmrCancelledAppellantDetainedLetter.fileExtension: PDF
+cmrCancelledAppellantDetainedLetter.fileName: "cmr-cancelled_aip_letter"
+cmrCancelledAppellantDetainedLetter.templateName: ${CMR_CANCELLED_AIP_MANUAL_LETTER_TEMPLATE:TB-IAC-LET-ENG-CRM-Cancelled-AIP-Manual.docx}
 
 cmrCancelledLrManualLetter.contentType:  application/pdf
 cmrCancelledLrManualLetter.fileExtension: PDF

@@ -22,15 +22,18 @@ import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtil
 public class CmrListingHearingNoticeCreator implements PreSubmitCallbackHandler<AsylumCase> {
 
     private final DocumentCreator<AsylumCase> cmrHearingNoticeDocumentCreator;
+    private final DocumentCreator<AsylumCase> cmrRelistedHearingNoticeDocumentCreator;
     private final DocumentCreator<AsylumCase> remoteCmrHearingNoticeDocumentCreator;
     private final DocumentHandler documentHandler;
 
     public CmrListingHearingNoticeCreator(
         @Qualifier("cmrHearingNotice") DocumentCreator<AsylumCase> cmrHearingNoticeDocumentCreator,
+        @Qualifier("cmrRelistedHearingNotice") DocumentCreator<AsylumCase> cmrRelistedHearingNoticeDocumentCreator,
         @Qualifier("remoteCmrHearingNotice") DocumentCreator<AsylumCase> remoteCmrHearingNoticeDocumentCreator,
         DocumentHandler documentHandler
     ) {
         this.cmrHearingNoticeDocumentCreator = cmrHearingNoticeDocumentCreator;
+        this.cmrRelistedHearingNoticeDocumentCreator = cmrRelistedHearingNoticeDocumentCreator;
         this.remoteCmrHearingNoticeDocumentCreator = remoteCmrHearingNoticeDocumentCreator;
         this.documentHandler = documentHandler;
     }
@@ -64,7 +67,7 @@ public class CmrListingHearingNoticeCreator implements PreSubmitCallbackHandler<
 
         Document hearingNotice;
 
-        hearingNotice = getHearingNotice(asylumCase, caseDetails);
+        hearingNotice = getHearingNotice(asylumCase, caseDetails, callback);
         documentHandler.addWithMetadataWithDateTimeWithoutReplacingExistingDocuments(
             asylumCase,
             hearingNotice,
@@ -85,21 +88,39 @@ public class CmrListingHearingNoticeCreator implements PreSubmitCallbackHandler<
 
         if (isInternalNonDetainedCase(asylumCase)
             || (isInternalCase(asylumCase) && isDetainedInFacilityType(asylumCase, OTHER))) {
-            documentHandler.addWithMetadataWithoutReplacingExistingDocuments(
-                asylumCase,
-                hearingNotice,
-                LETTER_NOTIFICATION_DOCUMENTS,
-                isReListing ? DocumentTag.INTERNAL_CMR_RE_LISTING_LETTER : DocumentTag.INTERNAL_CMR_LISTING_LETTER
-            );
+            if (isReListing) {
+                documentHandler.addWithMetadataWithoutReplacingExistingDocuments(
+                        asylumCase,
+                        hearingNotice,
+                        LETTER_NOTIFICATION_DOCUMENTS,
+                        DocumentTag.INTERNAL_CMR_RE_LISTING_LETTER
+                );
+            } else {
+                documentHandler.addWithMetadataWithoutReplacingExistingDocuments(
+                        asylumCase,
+                        hearingNotice,
+                        LETTER_NOTIFICATION_DOCUMENTS,
+                        DocumentTag.INTERNAL_CMR_LISTING_LETTER
+                );
+            }
         }
 
         if (hasBeenSubmittedAsLegalRepresentedInternalCase(asylumCase)) {
-            documentHandler.addWithMetadataWithoutReplacingExistingDocuments(
-                asylumCase,
-                hearingNotice,
-                LETTER_NOTIFICATION_DOCUMENTS,
-                isReListing ? DocumentTag.INTERNAL_CMR_RE_LISTING_LR_LETTER : DocumentTag.INTERNAL_CMR_LISTING_LR_LETTER
-            );
+            if (isReListing) {
+                documentHandler.addWithMetadataWithoutReplacingExistingDocuments(
+                        asylumCase,
+                        hearingNotice,
+                        LETTER_NOTIFICATION_DOCUMENTS,
+                        DocumentTag.INTERNAL_CMR_RE_LISTING_LR_LETTER
+                );
+            } else {
+                documentHandler.addWithMetadataWithoutReplacingExistingDocuments(
+                        asylumCase,
+                        hearingNotice,
+                        LETTER_NOTIFICATION_DOCUMENTS,
+                        DocumentTag.INTERNAL_CMR_LISTING_LR_LETTER
+                );
+            }
         }
 
         return new PreSubmitCallbackResponse<>(asylumCase);
@@ -107,11 +128,21 @@ public class CmrListingHearingNoticeCreator implements PreSubmitCallbackHandler<
 
     private Document getHearingNotice(
         AsylumCase asylumCase,
-        CaseDetails<AsylumCase> caseDetails
+        CaseDetails<AsylumCase> caseDetails,
+        Callback<AsylumCase> callback
     ) {
+
+        boolean isReListing = Event.CMR_RE_LISTING.equals(callback.getEvent());
+
         Document hearingNotice;
         if (isRemoteCmrHearing(asylumCase)) {
             hearingNotice = remoteCmrHearingNoticeDocumentCreator.create(caseDetails);
+        } else if (isReListing) {
+            hearingNotice = cmrRelistedHearingNoticeDocumentCreator.create(caseDetails, callback.getCaseDetailsBefore()
+                    .orElseThrow(() -> new IllegalStateException(
+                            "Case details before are not present for CMR re-listing"
+                    )));
+
         } else {
             hearingNotice = cmrHearingNoticeDocumentCreator.create(caseDetails);
         }

@@ -125,6 +125,27 @@ public class DocumentCreatorConfiguration {
         );
     }
 
+    @Bean("cmrRelistedHearingNotice")
+    public DocumentCreator<AsylumCase> getCmrRelistedHearingNoticeDocumentCreator(
+            @Value("${cmrRelistedHearingNoticeDocument.contentType}") String contentType,
+            @Value("${cmrRelistedHearingNoticeDocument.fileExtension}") String fileExtension,
+            @Value("${cmrRelistedHearingNoticeDocument.fileName}") String fileName,
+            AsylumCaseFileNameQualifier fileNameQualifier,
+            @Qualifier("cmrRelistedHearingNoticeTemplate") CmrRelistedHearingNoticeTemplate documentTemplate,
+            DocumentGenerator documentGenerator,
+            DocumentUploader documentUploader
+    ) {
+        return new DocumentCreator<>(
+                contentType,
+                fileExtension,
+                fileName,
+                fileNameQualifier,
+                documentTemplate,
+                documentGenerator,
+                documentUploader
+        );
+    }
+
     @Bean("remoteHearingNotice")
     public DocumentCreator<AsylumCase> getRemoteHearingNoticeDocumentCreator(
         @Value("${remoteHearingNoticeDocument.contentType}") String contentType,
@@ -1035,6 +1056,27 @@ public class DocumentCreatorConfiguration {
             @Value("${cmrCancelledAppellantManualLetter.fileName}") String fileName,
             AsylumCaseFileNameQualifier fileNameQualifier,
             CmrCancelledAppellantManualLetterTemplate documentTemplate,
+            DocumentGenerator documentGenerator,
+            DocumentUploader documentUploader
+    ) {
+        return new DocumentCreator<>(
+                contentType,
+                fileExtension,
+                fileName,
+                fileNameQualifier,
+                documentTemplate,
+                documentGenerator,
+                documentUploader
+        );
+    }
+
+    @Bean("cmrCancelledAppellantDetainedLetter")
+    public DocumentCreator<AsylumCase> getCmrCancelledAppellantDetainedDocumentCreator(
+            @Value("${cmrCancelledAppellantDetainedLetter.contentType}") String contentType,
+            @Value("${cmrCancelledAppellantDetainedLetter.fileExtension}") String fileExtension,
+            @Value("${cmrCancelledAppellantDetainedLetter.fileName}") String fileName,
+            AsylumCaseFileNameQualifier fileNameQualifier,
+            CmrCancelledAppellantDetainedLetterTemplate documentTemplate,
             DocumentGenerator documentGenerator,
             DocumentUploader documentUploader
     ) {
