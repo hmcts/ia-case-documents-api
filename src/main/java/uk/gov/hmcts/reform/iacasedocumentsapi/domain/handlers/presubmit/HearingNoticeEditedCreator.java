@@ -39,6 +39,7 @@ public class HearingNoticeEditedCreator implements PreSubmitCallbackHandler<Asyl
     private final DocumentCreator<AsylumCase> hearingNoticeUpdatedDetailsDocumentCreator;
     private final DocumentCreator<AsylumCase> remoteHearingNoticeUpdatedDetailsDocumentCreator;
     private final DocumentCreator<AsylumCase> adaHearingNoticeUpdatedDetailsDocumentCreator;
+    private final DocumentCreator<AsylumCase> stf24WeeksHearingNoticeUpdatedDetailsDocumentCreator;
     private final DocumentHandler documentHandler;
     private final HearingDetailsFinder hearingDetailsFinder;
     private final FeatureToggler featureToggler;
@@ -51,6 +52,7 @@ public class HearingNoticeEditedCreator implements PreSubmitCallbackHandler<Asyl
         @Qualifier("hearingNoticeUpdatedDetails") DocumentCreator<AsylumCase> hearingNoticeUpdatedDetailsDocumentCreator,
         @Qualifier("remoteHearingNoticeUpdatedDetails") DocumentCreator<AsylumCase> remoteHearingNoticeUpdatedDetailsDocumentCreator,
         @Qualifier("adaHearingNoticeUpdatedDetails") DocumentCreator<AsylumCase> adaHearingNoticeUpdatedDetailsDocumentCreator,
+        @Qualifier("stf24WeeksHearingNoticeDocumentCreator") DocumentCreator<AsylumCase> stf24WeeksHearingNoticeUpdatedDetailsDocumentCreator,
         DocumentHandler documentHandler,
         HearingDetailsFinder hearingDetailsFinder,
         FeatureToggler featureToggler,
@@ -62,6 +64,7 @@ public class HearingNoticeEditedCreator implements PreSubmitCallbackHandler<Asyl
         this.hearingNoticeUpdatedDetailsDocumentCreator = hearingNoticeUpdatedDetailsDocumentCreator;
         this.remoteHearingNoticeUpdatedDetailsDocumentCreator = remoteHearingNoticeUpdatedDetailsDocumentCreator;
         this.adaHearingNoticeUpdatedDetailsDocumentCreator = adaHearingNoticeUpdatedDetailsDocumentCreator;
+        this.stf24WeeksHearingNoticeUpdatedDetailsDocumentCreator = stf24WeeksHearingNoticeUpdatedDetailsDocumentCreator;
         this.documentHandler = documentHandler;
         this.hearingDetailsFinder = hearingDetailsFinder;
         this.featureToggler = featureToggler;
@@ -113,6 +116,8 @@ public class HearingNoticeEditedCreator implements PreSubmitCallbackHandler<Asyl
             boolean isAda = asylumCase.read(IS_ACCELERATED_DETAINED_APPEAL, YesOrNo.class).orElse(NO) == YES;
             boolean isCaseUsingLocationRefData = asylumCase.read(IS_CASE_USING_LOCATION_REF_DATA, YesOrNo.class)
                 .orElse(YesOrNo.NO).equals(YesOrNo.YES);
+            boolean is24Weeks = asylumCase.read(STF_24W_CURRENT_STATUS_AUTO_GENERATED, YesOrNo.class)
+                .orElse(YesOrNo.NO).equals(YesOrNo.YES);
 
             //prevent the existing case with previous selected remote hearing when the ref data feature is on with different hearing centre
             //IS_REMOTE_HEARING is used for the case ref data
@@ -126,7 +131,11 @@ public class HearingNoticeEditedCreator implements PreSubmitCallbackHandler<Asyl
                 if (isAda) {
                     generateDocument(caseDetails, asylumCase, caseDetailsBefore, adaHearingNoticeUpdatedDetailsDocumentCreator);
                 } else {
-                    generateDocument(caseDetails, asylumCase, caseDetailsBefore, hearingNoticeUpdatedRequirementsDocumentCreator);
+                    if (is24Weeks) {
+                        generateDocument(caseDetails, asylumCase, caseDetailsBefore, stf24WeeksHearingNoticeUpdatedDetailsDocumentCreator);
+                    } else {
+                        generateDocument(caseDetails, asylumCase, caseDetailsBefore, hearingNoticeUpdatedRequirementsDocumentCreator);
+                    }
                 }
             } else {
                 if (isAda) {

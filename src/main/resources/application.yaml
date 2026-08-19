@@ -649,6 +649,11 @@ stf24WeeksCaseReview.fileExtension: PDF
 stf24WeeksCaseReview.fileName: "stf-24weeks-case-review-appellant-document"
 stf24WeeksCaseReview.templateName: ${AIPM_PRISON_STD_STF24_WEEKS_CASE_REVIEW:TB-IAC-STD-ENG-001-StfTwentyFourWeeks-Review-Appellant-v3.docx}
 
+stf24WeeksHearingNoticeDocument.contentType: application/pdf
+stf24WeeksHearingNoticeDocument.fileExtension: PDF
+stf24WeeksHearingNoticeDocument.fileName: "stf-24weeks-hearing-notice"
+stf24WeeksHearingNoticeDocument.templateName: ${STF24_WEEKS_IA_HEARING_NOTICE_TEMPLATE:TB-IAC-HNO-ENG-00072-STF24W-V2.docx}
+
 ccdGatewayUrl: ${CCD_GW_URL:http://localhost:3453}
 
 docmosis.accessKey: ${DOCMOSIS_ACCESS_KEY}

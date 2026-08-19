@@ -2272,4 +2272,26 @@ public class DocumentCreatorConfiguration {
                 documentUploader
         );
     }
+
+    @Bean("stf24WeeksHearingNoticeDocumentCreator")
+    public DocumentCreator<AsylumCase> getStatutoryTimeFrame24WeeksHearingNoticeDocumentCreator(
+            @Value("${stf24WeeksHearingNoticeDocument.contentType}") String contentType,
+            @Value("${stf24WeeksHearingNoticeDocument.fileExtension}") String fileExtension,
+            @Value("${stf24WeeksHearingNoticeDocument.fileName}") String fileName,
+            AsylumCaseFileNameQualifier fileNameQualifier,
+            Stf24WeeksHearingNoticeTemplate documentTemplate,
+            DocumentGenerator documentGenerator,
+            DocumentUploader documentUploader
+    ) {
+        log.info("contentType {}, fileExtension {},fileName {}", contentType, fileExtension, fileName);
+        return new DocumentCreator<>(
+                contentType,
+                fileExtension,
+                fileName,
+                fileNameQualifier,
+                documentTemplate,
+                documentGenerator,
+                documentUploader
+        );
+    }
 }
