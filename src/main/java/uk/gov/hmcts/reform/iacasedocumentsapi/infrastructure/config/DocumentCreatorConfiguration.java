@@ -2273,7 +2273,7 @@ public class DocumentCreatorConfiguration {
         );
     }
 
-    @Bean("stf24WeeksHearingNoticeDocumentCreator")
+    @Bean("stf24WeeksHearingNotice")
     public DocumentCreator<AsylumCase> getStatutoryTimeFrame24WeeksHearingNoticeDocumentCreator(
             @Value("${stf24WeeksHearingNoticeDocument.contentType}") String contentType,
             @Value("${stf24WeeksHearingNoticeDocument.fileExtension}") String fileExtension,

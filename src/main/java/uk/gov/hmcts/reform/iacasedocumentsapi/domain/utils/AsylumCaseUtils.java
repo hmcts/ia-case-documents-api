@@ -627,6 +627,10 @@ public class AsylumCaseUtils {
         return (startsWithVowelSound ? "An " : "A ") + trimmedNoun;
     }
 
+    public static boolean is24WeeksCase(AsylumCase asylumCase) {
+        return asylumCase.read(STF_24W_CURRENT_STATUS_AUTO_GENERATED, YesOrNo.class).orElse(YesOrNo.NO).equals(YesOrNo.YES);
+    }
+
     private static String getAppellantName(AsylumCase asylumCase) {
         String appellantGivenNames = asylumCase.read(AsylumCaseDefinition.APPELLANT_GIVEN_NAMES, String.class).orElse("");
         String appellantFamilyName = asylumCase.read(AsylumCaseDefinition.APPELLANT_FAMILY_NAME, String.class).orElse("");

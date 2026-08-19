@@ -54,9 +54,9 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.FeatureToggler;
 class HearingNoticeCreatorTest {
 
     @Mock private DocumentCreator<AsylumCase> hearingNoticeDocumentCreator;
-    @Mock private DocumentCreator<AsylumCase> endAppealAppellantNoticeDocumentCreator;
     @Mock private DocumentCreator<AsylumCase> remoteHearingNoticeDocumentCreator;
     @Mock private DocumentCreator<AsylumCase> adaHearingNoticeDocumentCreator;
+    @Mock private DocumentCreator<AsylumCase> stf24WeeksHearingNoticeDocumentCreator;
     @Mock private DocumentHandler documentHandler;
 
     @Mock private Callback<AsylumCase> callback;
@@ -93,6 +93,7 @@ class HearingNoticeCreatorTest {
                 hearingNoticeDocumentCreator,
                 remoteHearingNoticeDocumentCreator,
                 adaHearingNoticeDocumentCreator,
+                stf24WeeksHearingNoticeDocumentCreator,
                 documentHandler,
                 featureToggler,
                 documentReceiver,
@@ -313,6 +314,29 @@ class HearingNoticeCreatorTest {
         verify(hearingNoticeDocumentCreator, times(1)).create(caseDetails);
         verify(documentHandler, times(1)).addWithMetadataWithoutReplacingExistingDocuments(asylumCase, uploadedDocument, LETTER_NOTIFICATION_DOCUMENTS, DocumentTag.INTERNAL_CASE_LISTED_LR_LETTER);
     }
+
+    @Test
+    void should_create_stf24w_hearing_notice_pdf_and_append_to_legal_representative_documents_for_the_case() {
+
+        when(callback.getCaseDetails()).thenReturn(caseDetails);
+        when(callback.getEvent()).thenReturn(Event.LIST_CASE);
+        when(caseDetails.getCaseData()).thenReturn(asylumCase);
+        when(stf24WeeksHearingNoticeDocumentCreator.create(caseDetails)).thenReturn(uploadedDocument);
+        when(asylumCase.read(LIST_CASE_HEARING_CENTRE, HearingCentre.class)).thenReturn(Optional.of(HearingCentre.TAYLOR_HOUSE));
+        when(asylumCase.read(IS_REHEARD_APPEAL_ENABLED, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO));
+        when(asylumCase.read(IS_CASE_USING_LOCATION_REF_DATA, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO));
+        when(asylumCase.read(STF_24W_CURRENT_STATUS_AUTO_GENERATED, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
+
+        PreSubmitCallbackResponse<AsylumCase> callbackResponse =
+            hearingNoticeCreator.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
+
+        assertNotNull(callbackResponse);
+        assertEquals(asylumCase, callbackResponse.getData());
+
+        verify(stf24WeeksHearingNoticeDocumentCreator, times(1)).create(caseDetails);
+        verify(documentHandler, times(1)).addWithMetadataWithDateTimeWithoutReplacingExistingDocuments(asylumCase, uploadedDocument, HEARING_DOCUMENTS, DocumentTag.STF_24WEEKS_HEARING_NOTICE_DOCUMENT);
+    }
+
 
     @Test
     void handling_should_throw_if_cannot_actually_handle() {

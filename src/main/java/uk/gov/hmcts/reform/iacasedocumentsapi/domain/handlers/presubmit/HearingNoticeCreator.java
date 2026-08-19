@@ -52,6 +52,7 @@ public class HearingNoticeCreator implements PreSubmitCallbackHandler<AsylumCase
     private final DocumentCreator<AsylumCase> hearingNoticeDocumentCreator;
     private final DocumentCreator<AsylumCase> remoteHearingNoticeDocumentCreator;
     private final DocumentCreator<AsylumCase> adaHearingNoticeDocumentCreator;
+    private final DocumentCreator<AsylumCase> stf24WeeksHearingNoticeDocumentCreator;
     private final DocumentHandler documentHandler;
     private final FeatureToggler featureToggler;
     private final DocumentReceiver documentReceiver;
@@ -62,6 +63,7 @@ public class HearingNoticeCreator implements PreSubmitCallbackHandler<AsylumCase
         @Qualifier("hearingNotice") DocumentCreator<AsylumCase> hearingNoticeDocumentCreator,
         @Qualifier("remoteHearingNotice") DocumentCreator<AsylumCase> remoteHearingNoticeDocumentCreator,
         @Qualifier("adaHearingNotice") DocumentCreator<AsylumCase> adaHearingNoticeDocumentCreator,
+        @Qualifier("stf24WeeksHearingNotice") DocumentCreator<AsylumCase> stf24WeeksHearingNoticeDocumentCreator,
         DocumentHandler documentHandler,
         FeatureToggler featureToggler,
         DocumentReceiver documentReceiver,
@@ -71,6 +73,7 @@ public class HearingNoticeCreator implements PreSubmitCallbackHandler<AsylumCase
         this.hearingNoticeDocumentCreator = hearingNoticeDocumentCreator;
         this.remoteHearingNoticeDocumentCreator = remoteHearingNoticeDocumentCreator;
         this.adaHearingNoticeDocumentCreator = adaHearingNoticeDocumentCreator;
+        this.stf24WeeksHearingNoticeDocumentCreator = stf24WeeksHearingNoticeDocumentCreator;
         this.documentHandler = documentHandler;
         this.featureToggler = featureToggler;
         this.documentReceiver = documentReceiver;
@@ -133,7 +136,7 @@ public class HearingNoticeCreator implements PreSubmitCallbackHandler<AsylumCase
                 asylumCase,
                 hearingNotice,
                 HEARING_DOCUMENTS,
-                DocumentTag.HEARING_NOTICE
+                is24WeeksCase(asylumCase) ? DocumentTag.STF_24WEEKS_HEARING_NOTICE_DOCUMENT : DocumentTag.HEARING_NOTICE
             );
 
             if (isInternalNonDetainedCase(asylumCase) || isDetainedInFacilityType(asylumCase, OTHER)) {
@@ -174,7 +177,13 @@ public class HearingNoticeCreator implements PreSubmitCallbackHandler<AsylumCase
             hearingNotice = remoteHearingNoticeDocumentCreator.create(caseDetails);
         } else {
             boolean isAda = asylumCase.read(IS_ACCELERATED_DETAINED_APPEAL, YesOrNo.class).orElse(NO) == YES;
-            hearingNotice = isAda ? adaHearingNoticeDocumentCreator.create(caseDetails) : hearingNoticeDocumentCreator.create(caseDetails);
+            if (is24WeeksCase(asylumCase)) {
+                hearingNotice = stf24WeeksHearingNoticeDocumentCreator.create(caseDetails);
+            } else if (isAda) {
+                hearingNotice = adaHearingNoticeDocumentCreator.create(caseDetails);
+            } else {
+                hearingNotice = hearingNoticeDocumentCreator.create(caseDetails);
+            }
         }
         return hearingNotice;
     }
