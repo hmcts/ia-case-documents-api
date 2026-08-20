@@ -73,7 +73,6 @@ class InternalReview24wTimeframeLetterTemplateTest {
     private String lrOccAddressLine2 = "Lr Building name OCC";
     private String lrOccAddressLine3 = "Lr Street name OCC";
     private String lrOccAddressLine4 = "XXX YYY";
-    private String lrOccCountry = "Australia";
 
     private InternalReview24wTimeframeLetterTemplate template;
     private Map<String, Object> fieldValuesMap;

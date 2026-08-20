@@ -47,8 +47,6 @@ class InternalReview24wTimeframeLetterGeneratorTest {
     private AsylumCase asylumCase;
     @Mock
     private Document uploadedDocument;
-    @Mock
-    private Document uploadedLrDocument;
 
     private InternalReview24wTimeframeLetterGenerator generator;
 
@@ -119,7 +117,6 @@ class InternalReview24wTimeframeLetterGeneratorTest {
     }
 
 
-
     @Test
     void handle_creates_letter_and_appends_to_documents() {
         when(callback.getCaseDetails()).thenReturn(caseDetails);
@@ -128,8 +125,6 @@ class InternalReview24wTimeframeLetterGeneratorTest {
         when(asylumCase.read(IS_ADMIN, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
         when(asylumCase.read(APPELLANTS_REPRESENTATION, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
         when(asylumCase.read(STF_24W_CURRENT_STATUS_AUTO_GENERATED, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
-
-//        Optional<YesOrNo> read = asylumCase.read(STF_24W_CURRENT_STATUS_AUTO_GENERATED, YesOrNo.class);
         when(documentCreator.create(caseDetails)).thenReturn(uploadedDocument);
 
         PreSubmitCallbackResponse<AsylumCase> callbackResponse =
