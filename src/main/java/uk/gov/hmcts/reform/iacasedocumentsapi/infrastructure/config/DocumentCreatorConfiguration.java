@@ -188,6 +188,27 @@ public class DocumentCreatorConfiguration {
         );
     }
 
+    @Bean("remoteCmrRelistedHearingNotice")
+    public DocumentCreator<AsylumCase> getRemoteCmrRelistedHearingNoticeDocumentCreator(
+            @Value("${remoteCmrRelistedHearingNoticeDocument.contentType}") String contentType,
+            @Value("${remoteCmrRelistedHearingNoticeDocument.fileExtension}") String fileExtension,
+            @Value("${remoteCmrRelistedHearingNoticeDocument.fileName}") String fileName,
+            AsylumCaseFileNameQualifier fileNameQualifier,
+            @Qualifier("remoteCmrRelistedHearingNoticeTemplate") CmrRelistedHearingNoticeTemplate documentTemplate,
+            DocumentGenerator documentGenerator,
+            DocumentUploader documentUploader
+    ) {
+        return new DocumentCreator<>(
+                contentType,
+                fileExtension,
+                fileName,
+                fileNameQualifier,
+                documentTemplate,
+                documentGenerator,
+                documentUploader
+        );
+    }
+
     @Bean("hearingNoticeAdjournedWithoutDate")
     public DocumentCreator<AsylumCase> getHearingNoticeAdjournedWithoutDateDocumentCreator(
         @Value("${hearingNoticeAdjournedWithoutDateDocument.contentType}") String contentType,
