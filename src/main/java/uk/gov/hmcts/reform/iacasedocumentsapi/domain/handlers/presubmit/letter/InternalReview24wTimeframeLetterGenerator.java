@@ -66,7 +66,7 @@ public class InternalReview24wTimeframeLetterGenerator implements PreSubmitCallb
         documentHandler.addWithMetadataWithoutReplacingExistingDocuments(
                 asylumCase,
                 letter, TRIBUNAL_DOCUMENTS,
-                DocumentTag.STF_24WEEKS_CASE_REVIEW_APPELLANT_DOCUMENT
+                DocumentTag.STF_24WEEKS_CASE_REVIEW_APPELLANT_LETTER
         );
 
 
