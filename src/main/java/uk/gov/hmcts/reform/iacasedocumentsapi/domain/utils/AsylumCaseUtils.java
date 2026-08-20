@@ -374,6 +374,20 @@ public class AsylumCaseUtils {
             .collect(Collectors.toList());
     }
 
+
+    public static List<DocumentWithMetadata> getLatestLetterNotificationDocument(AsylumCase asylumCase, DocumentTag documentTag) {
+        Optional<List<IdValue<DocumentWithMetadata>>> maybeLetterNotificationDocuments = asylumCase.read(LETTER_NOTIFICATION_DOCUMENTS);
+
+        return maybeLetterNotificationDocuments
+            .orElse(Collections.emptyList())
+            .stream()
+            .map(IdValue::getValue)
+            .filter(document -> document.getTag() == documentTag)
+            .findFirst()
+            .map(List::of)
+            .orElse(Collections.emptyList());
+    }
+
     public static List<DocumentWithMetadata> getMaybeNotificationAttachmentDocuments(AsylumCase asylumCase, DocumentTag documentTag) {
         Optional<List<IdValue<DocumentWithMetadata>>> maybeLetterNotificationDocuments = asylumCase.read(NOTIFICATION_ATTACHMENT_DOCUMENTS);
 
