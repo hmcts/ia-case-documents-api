@@ -95,7 +95,7 @@ public class RemoteCmrReListingAppellantLetterBundler implements PreSubmitCallba
             bundleDocuments = getMaybeLetterNotificationDocuments(asylumCase, DocumentTag.REMOTE_CMR_RE_LISTING_LETTER);
         }
 
-        Document internalCaseListedLetterBundle = documentBundler.bundleWithoutContentsOrCoverSheets(
+        Document remoteCaseListedLetterBundle = documentBundler.bundleWithoutContentsOrCoverSheets(
                 bundleDocuments,
                 "Letter bundle documents",
                 qualifiedDocumentFileName
@@ -104,14 +104,14 @@ public class RemoteCmrReListingAppellantLetterBundler implements PreSubmitCallba
         if (isDetainedInOneOfFacilityTypes(asylumCase, PRISON, IRC)) {
             documentHandler.addWithMetadataWithoutReplacingExistingDocuments(
                     asylumCase,
-                    internalCaseListedLetterBundle,
+                    remoteCaseListedLetterBundle,
                     NOTIFICATION_ATTACHMENT_DOCUMENTS,
-                    DocumentTag.INTERNAL_CMR_RE_LISTING_LETTER_BUNDLE
+                    DocumentTag.REMOTE_CMR_RE_LISTING_LETTER_BUNDLE
             );
         } else {
             documentHandler.addWithMetadataWithoutReplacingExistingDocuments(
                     asylumCase,
-                    internalCaseListedLetterBundle,
+                    remoteCaseListedLetterBundle,
                     LETTER_BUNDLE_DOCUMENTS,
                     DocumentTag.INTERNAL_CMR_RE_LISTING_LETTER_BUNDLE
             );
