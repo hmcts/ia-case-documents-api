@@ -104,6 +104,11 @@ cmrRelistedHearingNoticeDocument.fileExtension: PDF
 cmrRelistedHearingNoticeDocument.fileName: "hearing-notice"
 cmrRelistedHearingNoticeDocument.templateName: ${IA_HEARING_NOTICE_TEMPLATE:TB-IAC-HNO-ENG-00241-relisted.docx}
 
+remoteCmrRelistedHearingNoticeDocument.contentType: application/pdf
+remoteCmrRelistedHearingNoticeDocument.fileExtension: PDF
+remoteCmrRelistedHearingNoticeDocument.fileName: "hearing-notice"
+remoteCmrRelistedHearingNoticeDocument.templateName: ${IA_HEARING_NOTICE_TEMPLATE:TB-IAC-HNO-ENG-00241-relisted.docx}
+
 hearingNoticeAdaDocument.templateName: ${IA_ADA_HEARING_NOTICE_TEMPLATE:TB-IAC-HNO-ENG-ADA-0001.docx}
 
 remoteHearingNoticeDocument.contentType: application/pdf
@@ -114,7 +119,7 @@ remoteHearingNoticeDocument.templateName: ${IA_REMOTE_HEARING_NOTICE_TEMPLATE:TB
 remoteCmrHearingNoticeDocument.contentType: application/pdf
 remoteCmrHearingNoticeDocument.fileExtension: PDF
 remoteCmrHearingNoticeDocument.fileName: "hearing-notice"
-remoteCmrHearingNoticeDocument.templateName: ${IA_REMOTE_HEARING_NOTICE_TEMPLATE:TB-IAC-HNO-ENG-00680-Notice-Of-Hearing-Remote.docx}
+remoteCmrHearingNoticeDocument.templateName: ${IA_REMOTE_HEARING_NOTICE_TEMPLATE:TB-IAC-HNO-ENG-00680-Notice-Of-Hearing-Remote-CMR.docx}
 
 hearingNoticeAdjournedWithoutDateDocument.contentType: application/pdf
 hearingNoticeAdjournedWithoutDateDocument.fileExtension: PDF

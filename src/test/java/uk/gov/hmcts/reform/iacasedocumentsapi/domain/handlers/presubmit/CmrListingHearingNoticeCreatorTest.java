@@ -44,6 +44,7 @@ class CmrListingHearingNoticeCreatorTest {
     @Mock private DocumentCreator<AsylumCase> cmrHearingNoticeDocumentCreator;
     @Mock private DocumentCreator<AsylumCase> cmrRelistedHearingNoticeDocumentCreator;
     @Mock private DocumentCreator<AsylumCase> remoteCmrHearingNoticeDocumentCreator;
+    @Mock private DocumentCreator<AsylumCase> remoteCmrRelistedHearingNoticeDocumentCreator;
     @Mock private DocumentHandler documentHandler;
 
     @Mock private Callback<AsylumCase> callback;
@@ -62,6 +63,7 @@ class CmrListingHearingNoticeCreatorTest {
                 cmrHearingNoticeDocumentCreator,
                 cmrRelistedHearingNoticeDocumentCreator,
                 remoteCmrHearingNoticeDocumentCreator,
+                remoteCmrRelistedHearingNoticeDocumentCreator,
                 documentHandler
             );
 

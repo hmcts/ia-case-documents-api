@@ -38,7 +38,7 @@ class BundleOrderTest {
             .map(DocumentWithMetadata::getTag)
             .toList();
 
-        assertEquals(127, sortedTags.size());
+        assertEquals(135, sortedTags.size());
 
         List<DocumentTag> documentTagList = Arrays.asList(
             DocumentTag.CASE_SUMMARY,
@@ -155,6 +155,13 @@ class BundleOrderTest {
             DocumentTag.AIPM_DETAINED_IN_PRISON_IRC_REINSTATE_APPEAL_LETTER,
             DocumentTag.CMR_HEARING_CANCELLED_LETTER,
             DocumentTag.CMR_HEARING_CANCELLED_LR_LETTER,
+            DocumentTag.REMOTE_CMR_LISTING_LETTER_BUNDLE,
+            DocumentTag.REMOTE_CMR_LISTING_LR_LETTER_BUNDLE,
+            DocumentTag.REMOTE_CMR_RE_LISTING_LETTER_BUNDLE,
+            DocumentTag.REMOTE_CMR_RE_LISTING_LR_LETTER_BUNDLE,
+            DocumentTag.REMOTE_CMR_LISTING_LETTER,
+            DocumentTag.REMOTE_CMR_RE_LISTING_LETTER,
+            DocumentTag.REMOTE_CMR_LISTING_LR_LETTER,
             DocumentTag.STF_24WEEKS_CASE_REVIEW_APPELLANT_DOCUMENT,
             DocumentTag.NONE
         );
