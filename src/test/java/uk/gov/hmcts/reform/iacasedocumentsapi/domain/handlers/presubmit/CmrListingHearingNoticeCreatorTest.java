@@ -42,11 +42,13 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentHandler;
 class CmrListingHearingNoticeCreatorTest {
 
     @Mock private DocumentCreator<AsylumCase> cmrHearingNoticeDocumentCreator;
+    @Mock private DocumentCreator<AsylumCase> cmrRelistedHearingNoticeDocumentCreator;
     @Mock private DocumentCreator<AsylumCase> remoteCmrHearingNoticeDocumentCreator;
     @Mock private DocumentHandler documentHandler;
 
     @Mock private Callback<AsylumCase> callback;
     @Mock private CaseDetails<AsylumCase> caseDetails;
+    @Mock private CaseDetails<AsylumCase> caseDetailsBefore;
     @Mock private AsylumCase asylumCase;
     @Mock private Document uploadedDocument;
 
@@ -58,12 +60,14 @@ class CmrListingHearingNoticeCreatorTest {
         cmrListingHearingNoticeCreator =
             new CmrListingHearingNoticeCreator(
                 cmrHearingNoticeDocumentCreator,
+                cmrRelistedHearingNoticeDocumentCreator,
                 remoteCmrHearingNoticeDocumentCreator,
                 documentHandler
             );
 
         when(callback.getCaseDetails()).thenReturn(caseDetails);
         when(callback.getEvent()).thenReturn(Event.CMR_LISTING);
+        when(callback.getCaseDetailsBefore()).thenReturn(Optional.of(caseDetailsBefore));
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
 
         when(asylumCase.read(CMR_IS_REMOTE_HEARING, YesOrNo.class)).thenReturn(Optional.of(NO));
@@ -223,20 +227,47 @@ class CmrListingHearingNoticeCreatorTest {
         when(callback.getEvent()).thenReturn(Event.CMR_RE_LISTING);
         when(asylumCase.read(IS_ADMIN, YesOrNo.class)).thenReturn(Optional.of(YES));
         when(asylumCase.read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(NO));
-        when(cmrHearingNoticeDocumentCreator.create(caseDetails)).thenReturn(uploadedDocument);
+        when(cmrRelistedHearingNoticeDocumentCreator.create(caseDetails, caseDetailsBefore))
+                .thenReturn(uploadedDocument);
 
         PreSubmitCallbackResponse<AsylumCase> callbackResponse =
-            cmrListingHearingNoticeCreator.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
+                cmrListingHearingNoticeCreator.handle(
+                        PreSubmitCallbackStage.ABOUT_TO_SUBMIT,
+                        callback
+                );
 
         assertNotNull(callbackResponse);
         assertEquals(asylumCase, callbackResponse.getData());
 
-        verify(documentHandler, times(1)).addWithMetadataWithDateTimeWithoutReplacingExistingDocuments(
-            asylumCase, uploadedDocument, HEARING_DOCUMENTS, DocumentTag.HEARING_NOTICE);
-        verify(documentHandler, times(1)).addWithMetadataWithoutReplacingExistingDocuments(
-            asylumCase, uploadedDocument, LETTER_NOTIFICATION_DOCUMENTS, DocumentTag.INTERNAL_CMR_RE_LISTING_LETTER);
-        verify(documentHandler, never()).addWithMetadataWithoutReplacingExistingDocuments(
-            asylumCase, uploadedDocument, LETTER_NOTIFICATION_DOCUMENTS, DocumentTag.INTERNAL_CMR_LISTING_LETTER);
+        verify(cmrRelistedHearingNoticeDocumentCreator, times(1))
+                .create(caseDetails, caseDetailsBefore);
+
+        verify(cmrHearingNoticeDocumentCreator, never())
+                .create(caseDetails);
+
+        verify(documentHandler, times(1))
+                .addWithMetadataWithDateTimeWithoutReplacingExistingDocuments(
+                        asylumCase,
+                        uploadedDocument,
+                        HEARING_DOCUMENTS,
+                        DocumentTag.HEARING_NOTICE
+        );
+
+        verify(documentHandler, times(1))
+                .addWithMetadataWithoutReplacingExistingDocuments(
+                        asylumCase,
+                        uploadedDocument,
+                        LETTER_NOTIFICATION_DOCUMENTS,
+                        DocumentTag.INTERNAL_CMR_RE_LISTING_LETTER
+        );
+
+        verify(documentHandler, never())
+                .addWithMetadataWithoutReplacingExistingDocuments(
+                        asylumCase,
+                        uploadedDocument,
+                        LETTER_NOTIFICATION_DOCUMENTS,
+                        DocumentTag.INTERNAL_CMR_LISTING_LETTER
+        );
     }
 
     @Test
@@ -246,14 +277,30 @@ class CmrListingHearingNoticeCreatorTest {
         when(asylumCase.read(IS_ADMIN, YesOrNo.class)).thenReturn(Optional.of(YES));
         when(asylumCase.read(APPELLANTS_REPRESENTATION, YesOrNo.class)).thenReturn(Optional.of(NO));
         when(asylumCase.read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(NO));
-        when(cmrHearingNoticeDocumentCreator.create(caseDetails)).thenReturn(uploadedDocument);
-
+        when(cmrRelistedHearingNoticeDocumentCreator.create(caseDetails, caseDetailsBefore))
+                .thenReturn(uploadedDocument);
         cmrListingHearingNoticeCreator.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
 
         verify(documentHandler, times(1)).addWithMetadataWithoutReplacingExistingDocuments(
             asylumCase, uploadedDocument, LETTER_NOTIFICATION_DOCUMENTS, DocumentTag.INTERNAL_CMR_RE_LISTING_LR_LETTER);
         verify(documentHandler, never()).addWithMetadataWithoutReplacingExistingDocuments(
             asylumCase, uploadedDocument, LETTER_NOTIFICATION_DOCUMENTS, DocumentTag.INTERNAL_CMR_LISTING_LR_LETTER);
+    }
+
+    @Test
+    void should_throw_when_case_details_before_are_not_present_for_re_listing() {
+
+        when(callback.getEvent()).thenReturn(Event.CMR_RE_LISTING);
+        when(callback.getCaseDetailsBefore()).thenReturn(Optional.empty());
+
+        assertThatThrownBy(() ->
+                cmrListingHearingNoticeCreator.handle(
+                        PreSubmitCallbackStage.ABOUT_TO_SUBMIT,
+                        callback
+                )
+        )
+                .isExactlyInstanceOf(IllegalStateException.class)
+                .hasMessage("Case details before are not present for CMR re-listing");
     }
 
     @Test
