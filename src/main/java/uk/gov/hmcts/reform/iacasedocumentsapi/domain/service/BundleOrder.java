@@ -439,6 +439,14 @@ public class BundleOrder implements Comparator<DocumentWithMetadata> {
                 log.warn("STF_24WEEKS_REMOVAL_REFUSED_DECISION_LETTER_LR_BUNDLE tag should not be checked for bundle ordering, document desc: {}", document.getDescription());
                 yield 123;
             }
+            case STF_24WEEKS_CASE_REVIEW_APPELLANT_LETTER -> {
+                log.warn("STF_24WEEKS_CASE_REVIEW_APPELLANT_LETTER tag should not be checked for bundle ordering, document desc: {}", document.getDescription());
+                yield 124;
+            }
+            case STF_24WEEKS_CASE_REVIEW_LETTER_BUNDLE -> {
+                log.warn("STF_24WEEKS_CASE_REVIEW_LETTER_BUNDLE tag should not be checked for bundle ordering, document desc: {}", document.getDescription());
+                yield 124;
+            }
 
             case NONE ->  116;
 

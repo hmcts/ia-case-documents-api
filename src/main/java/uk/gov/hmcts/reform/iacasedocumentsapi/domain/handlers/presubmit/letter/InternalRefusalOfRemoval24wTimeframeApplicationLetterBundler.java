@@ -28,7 +28,6 @@ import static java.util.Objects.requireNonNull;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.IS_REMOVAL_OF_24W_APPLICATION_REFUSED;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.LETTER_BUNDLE_DOCUMENTS;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.getLatestLetterNotificationDocument;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.getMaybeLetterNotificationDocuments;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.hasBeenSubmittedAsLegalRepresentedInternalCase;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.isInternalCase;
 
@@ -43,12 +42,12 @@ public class InternalRefusalOfRemoval24wTimeframeApplicationLetterBundler implem
     private final DocumentHandler documentHandler;
 
     public InternalRefusalOfRemoval24wTimeframeApplicationLetterBundler(
-        @Value("${internalRefusalOfRemoval24wTimeframeApplicationLetterWithAttachment.fileExtension}") String fileExtension,
-        @Value("${internalRefusalOfRemoval24wTimeframeApplicationLetterWithAttachment.fileName}") String fileName,
-        @Value("${featureFlag.isEmStitchingEnabled}") boolean isEmStitchingEnabled,
-        FileNameQualifier<AsylumCase> fileNameQualifier,
-        DocumentBundler documentBundler,
-        DocumentHandler documentHandler
+            @Value("${internalRefusalOfRemoval24wTimeframeApplicationLetterWithAttachment.fileExtension}") String fileExtension,
+            @Value("${internalRefusalOfRemoval24wTimeframeApplicationLetterWithAttachment.fileName}") String fileName,
+            @Value("${featureFlag.isEmStitchingEnabled}") boolean isEmStitchingEnabled,
+            FileNameQualifier<AsylumCase> fileNameQualifier,
+            DocumentBundler documentBundler,
+            DocumentHandler documentHandler
     ) {
         this.fileExtension = fileExtension;
         this.fileName = fileName;
@@ -64,8 +63,8 @@ public class InternalRefusalOfRemoval24wTimeframeApplicationLetterBundler implem
     }
 
     public boolean canHandle(
-        PreSubmitCallbackStage callbackStage,
-        Callback<AsylumCase> callback
+            PreSubmitCallbackStage callbackStage,
+            Callback<AsylumCase> callback
     ) {
         requireNonNull(callbackStage, "callbackStage must not be null");
         requireNonNull(callback, "callback must not be null");
@@ -73,15 +72,15 @@ public class InternalRefusalOfRemoval24wTimeframeApplicationLetterBundler implem
         AsylumCase asylumCase = callback.getCaseDetails().getCaseData();
 
         return callback.getEvent() == Event.DECIDE_AN_APPLICATION
-            && isInternalCase(asylumCase)
-            && asylumCase.read(IS_REMOVAL_OF_24W_APPLICATION_REFUSED, YesOrNo.class).orElse(YesOrNo.NO)
-            .equals(YesOrNo.YES)
-            && isEmStitchingEnabled;
+                && isInternalCase(asylumCase)
+                && asylumCase.read(IS_REMOVAL_OF_24W_APPLICATION_REFUSED, YesOrNo.class).orElse(YesOrNo.NO)
+                .equals(YesOrNo.YES)
+                && isEmStitchingEnabled;
     }
 
     public PreSubmitCallbackResponse<AsylumCase> handle(
-        PreSubmitCallbackStage callbackStage,
-        Callback<AsylumCase> callback
+            PreSubmitCallbackStage callbackStage,
+            Callback<AsylumCase> callback
     ) {
         if (!canHandle(callbackStage, callback)) {
             throw new IllegalStateException("Cannot handle callback");
@@ -101,9 +100,9 @@ public class InternalRefusalOfRemoval24wTimeframeApplicationLetterBundler implem
             try {
                 RequestContextHolder.setRequestAttributes(requestAttributes);
                 return documentBundler.bundleWithoutContentsOrCoverSheets(
-                    bundleDocuments,
-                    "Letter bundle documents",
-                    qualifiedDocumentFileName
+                        bundleDocuments,
+                        "Letter bundle documents",
+                        qualifiedDocumentFileName
                 );
             } finally {
                 RequestContextHolder.resetRequestAttributes();
@@ -118,9 +117,9 @@ public class InternalRefusalOfRemoval24wTimeframeApplicationLetterBundler implem
                 try {
                     RequestContextHolder.setRequestAttributes(requestAttributes);
                     return documentBundler.bundleWithoutContentsOrCoverSheets(
-                        bundleDocumentsLR,
-                        "Letter bundle documents",
-                        qualifiedDocumentFileName
+                            bundleDocumentsLR,
+                            "Letter bundle documents",
+                            qualifiedDocumentFileName
                     );
                 } finally {
                     RequestContextHolder.resetRequestAttributes();
@@ -129,20 +128,20 @@ public class InternalRefusalOfRemoval24wTimeframeApplicationLetterBundler implem
             CompletableFuture.allOf(appellantLrBundleFuture, legalRepLrBundleFuture).join();
 
             documentHandler.addWithMetadataWithoutReplacingExistingDocuments(
-                asylumCase,
-                legalRepLrBundleFuture.join(),
-                LETTER_BUNDLE_DOCUMENTS,
-                DocumentTag.STF_24WEEKS_REMOVAL_REFUSED_DECISION_LETTER_LR_BUNDLE
+                    asylumCase,
+                    legalRepLrBundleFuture.join(),
+                    LETTER_BUNDLE_DOCUMENTS,
+                    DocumentTag.STF_24WEEKS_REMOVAL_REFUSED_DECISION_LETTER_LR_BUNDLE
             );
         } else {
             CompletableFuture.allOf(appellantLrBundleFuture).join();
         }
 
         documentHandler.addWithMetadataWithoutReplacingExistingDocuments(
-            asylumCase,
-            appellantLrBundleFuture.join(),
-            LETTER_BUNDLE_DOCUMENTS,
-            DocumentTag.STF_24WEEKS_REMOVAL_REFUSED_DECISION_LETTER_BUNDLE
+                asylumCase,
+                appellantLrBundleFuture.join(),
+                LETTER_BUNDLE_DOCUMENTS,
+                DocumentTag.STF_24WEEKS_REMOVAL_REFUSED_DECISION_LETTER_BUNDLE
         );
 
 

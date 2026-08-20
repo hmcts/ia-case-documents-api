@@ -121,7 +121,9 @@ class DocumentTagTest {
         assertEquals("internalDetainedAppealRemittedAipIrcPrisonLetter", DocumentTag.INTERNAL_DETAINED_APPEAL_REMITTED_AIP_IRC_PRISON_LETTER.toString());
         assertEquals("homeOfficeApplicationDecidedLetter", DocumentTag.HOME_OFFICE_APPLICATION_DECIDED_LETTER.toString());
         assertEquals("aipmDetainedInPrisonOrIrcReinstateAppealLetter", DocumentTag.AIPM_DETAINED_IN_PRISON_IRC_REINSTATE_APPEAL_LETTER.toString());
+        assertEquals("stf24WeeksCaseReviewAppeallantLetter", DocumentTag.STF_24WEEKS_CASE_REVIEW_APPELLANT_LETTER.toString());
         assertEquals("stf24WeeksCaseReviewAppeallantDocument", DocumentTag.STF_24WEEKS_CASE_REVIEW_APPELLANT_DOCUMENT.toString());
+        assertEquals("stf24WeeksCaseReviewLetterBundle", DocumentTag.STF_24WEEKS_CASE_REVIEW_LETTER_BUNDLE.toString());
         assertEquals("stf24WeeksRemovalDecisionDocument", DocumentTag.STF_24WEEKS_REMOVAL_DECISION_DOCUMENT.toString());
         assertEquals("stf24WeeksRemovalDecisionLetter", DocumentTag.STF_24WEEKS_REMOVAL_DECISION_LETTER.toString());
         assertEquals("stf24WeeksRemovalDecisionLetterBundle", DocumentTag.STF_24WEEKS_REMOVAL_DECISION_LETTER_BUNDLE.toString());
@@ -137,6 +139,6 @@ class DocumentTagTest {
 
     @Test
     public void if_this_test_fails_it_is_because_it_needs_updating_with_your_changes() {
-        assertEquals(134, DocumentTag.values().length);
+        assertEquals(136, DocumentTag.values().length);
     }
 }
