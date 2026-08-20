@@ -113,7 +113,7 @@ public class RemoteCmrReListingAppellantLetterBundler implements PreSubmitCallba
                     asylumCase,
                     remoteCaseListedLetterBundle,
                     LETTER_BUNDLE_DOCUMENTS,
-                    DocumentTag.INTERNAL_CMR_RE_LISTING_LETTER_BUNDLE
+                    DocumentTag.REMOTE_CMR_RE_LISTING_LETTER_BUNDLE
             );
         }
         return new PreSubmitCallbackResponse<>(asylumCase);
