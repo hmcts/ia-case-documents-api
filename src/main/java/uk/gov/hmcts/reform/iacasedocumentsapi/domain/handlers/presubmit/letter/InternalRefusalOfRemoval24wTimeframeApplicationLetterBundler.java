@@ -27,6 +27,7 @@ import java.util.concurrent.CompletableFuture;
 import static java.util.Objects.requireNonNull;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.IS_REMOVAL_OF_24W_APPLICATION_REFUSED;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.LETTER_BUNDLE_DOCUMENTS;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.getLatestLetterNotificationDocument;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.getMaybeLetterNotificationDocuments;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.hasBeenSubmittedAsLegalRepresentedInternalCase;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.isInternalCase;
@@ -93,8 +94,8 @@ public class InternalRefusalOfRemoval24wTimeframeApplicationLetterBundler implem
 
         final String qualifiedDocumentFileName = fileNameQualifier.get(fileName + "." + fileExtension, caseDetails);
         List<DocumentWithMetadata> bundleDocuments = new ArrayList<>();
-        bundleDocuments.addAll(getMaybeLetterNotificationDocuments(asylumCase, DocumentTag.STF_24WEEKS_REMOVAL_REFUSED_DECISION_LETTER));
-        bundleDocuments.addAll(getMaybeLetterNotificationDocuments(asylumCase, DocumentTag.STF_24WEEKS_REMOVAL_REFUSED_DECISION_DOCUMENT));
+        bundleDocuments.addAll(getLatestLetterNotificationDocument(asylumCase, DocumentTag.STF_24WEEKS_REMOVAL_REFUSED_DECISION_LETTER));
+        bundleDocuments.addAll(getLatestLetterNotificationDocument(asylumCase, DocumentTag.STF_24WEEKS_REMOVAL_REFUSED_DECISION_DOCUMENT));
 
         CompletableFuture<Document> appellantLrBundleFuture = CompletableFuture.supplyAsync(() -> {
             try {
@@ -110,8 +111,8 @@ public class InternalRefusalOfRemoval24wTimeframeApplicationLetterBundler implem
         });
         if (hasBeenSubmittedAsLegalRepresentedInternalCase(asylumCase)) {
             List<DocumentWithMetadata> bundleDocumentsLR = new ArrayList<>();
-            bundleDocumentsLR.addAll(getMaybeLetterNotificationDocuments(asylumCase, DocumentTag.STF_24WEEKS_REMOVAL_REFUSED_DECISION_LETTER_LR));
-            bundleDocumentsLR.addAll(getMaybeLetterNotificationDocuments(asylumCase, DocumentTag.STF_24WEEKS_REMOVAL_REFUSED_DECISION_DOCUMENT));
+            bundleDocumentsLR.addAll(getLatestLetterNotificationDocument(asylumCase, DocumentTag.STF_24WEEKS_REMOVAL_REFUSED_DECISION_LETTER_LR));
+            bundleDocumentsLR.addAll(getLatestLetterNotificationDocument(asylumCase, DocumentTag.STF_24WEEKS_REMOVAL_REFUSED_DECISION_DOCUMENT));
 
             CompletableFuture<Document> legalRepLrBundleFuture = CompletableFuture.supplyAsync(() -> {
                 try {

@@ -405,10 +405,7 @@ public class BundleOrder implements Comparator<DocumentWithMetadata> {
                 log.warn("STF_24WEEKS_CASE_REVIEW_APPELLANT_DOCUMENT tag should not be checked for bundle ordering, document desc: {}", document.getDescription());
                 yield 113;
             }
-            case STF_24WEEKS_REMOVAL_DECISION_DOCUMENT -> {
-                log.warn("STF_24WEEKS_REMOVAL_DECISION_DOCUMENT tag should not be checked for bundle ordering, document desc: {}", document.getDescription());
-                yield 114;
-            }
+            case STF_24WEEKS_REMOVAL_DECISION_DOCUMENT -> 114;
             case STF_24WEEKS_REMOVAL_DECISION_LETTER -> {
                 log.warn("STF_24WEEKS_REMOVAL_DECISION_LETTER tag should not be checked for bundle ordering, document desc: {}", document.getDescription());
                 yield 115;
@@ -425,10 +422,7 @@ public class BundleOrder implements Comparator<DocumentWithMetadata> {
                 log.warn("STF_24WEEKS_REMOVAL_DECISION_LETTER_LR_BUNDLE tag should not be checked for bundle ordering, document desc: {}", document.getDescription());
                 yield 118;
             }
-            case STF_24WEEKS_REMOVAL_REFUSED_DECISION_DOCUMENT -> {
-                log.warn("STF_24WEEKS_REMOVAL_REFUSED_DECISION_DOCUMENT tag should not be checked for bundle ordering, document desc: {}", document.getDescription());
-                yield 119;
-            }
+            case STF_24WEEKS_REMOVAL_REFUSED_DECISION_DOCUMENT -> 119;
             case STF_24WEEKS_REMOVAL_REFUSED_DECISION_LETTER -> {
                 log.warn("STF_24WEEKS_REMOVAL_REFUSED_DECISION_LETTER tag should not be checked for bundle ordering, document desc: {}", document.getDescription());
                 yield 120;
