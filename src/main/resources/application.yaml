@@ -690,6 +690,9 @@ internalCaseListedLetterWithAttachment.fileName: "internal-case-listed-letter-wi
 internalCmrListingLetterWithAttachment.fileExtension: PDF
 internalCmrListingLetterWithAttachment.fileName: "internal-cmr-listing-letter-with-attachment"
 
+internalCmrListingLrLetterWithAttachment.fileExtension: PDF
+internalCmrListingLrLetterWithAttachment.fileName: "internal-cmr-listing-appellant-lr-letter-with-attachment"
+
 remoteCmrListingLetterWithAttachment.fileExtension: PDF
 remoteCmrListingLetterWithAttachment.fileName: "remote-cmr-listing-letter-with-attachment"
 
