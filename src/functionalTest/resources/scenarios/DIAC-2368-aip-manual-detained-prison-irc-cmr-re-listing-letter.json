@@ -65,9 +65,9 @@
           "AddressLine1": "5",
           "AddressLine2": "Example Street"
         },
-        "letterBundleDocuments": [
+        "notificationAttachmentDocuments": [
           {
-            "id": "1",
+            "id": "3",
             "value": {
               "document": {
                 "document_url": "$/http.+\/documents/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/",
