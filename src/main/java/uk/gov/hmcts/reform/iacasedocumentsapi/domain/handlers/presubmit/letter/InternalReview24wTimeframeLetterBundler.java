@@ -70,7 +70,7 @@ public class InternalReview24wTimeframeLetterBundler implements PreSubmitCallbac
 
         AsylumCase asylumCase = callback.getCaseDetails().getCaseData();
 
-        return callback.getEvent() == Event.REMOVE_STATUTORY_TIMEFRAME_24_WEEKS
+        return callback.getEvent() == Event.COMPLETE_CASE_REVIEW
                 && isInternalCase(asylumCase)
                 && isEmStitchingEnabled;
     }
