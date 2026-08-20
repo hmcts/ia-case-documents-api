@@ -122,6 +122,8 @@ public enum DocumentTag {
     HOME_OFFICE_APPLICATION_DECIDED_LETTER("homeOfficeApplicationDecidedLetter", CaseType.ASYLUM),
     AIPM_DETAINED_IN_PRISON_IRC_REINSTATE_APPEAL_LETTER("aipmDetainedInPrisonOrIrcReinstateAppealLetter", CaseType.ASYLUM),
     STF_24WEEKS_CASE_REVIEW_APPELLANT_DOCUMENT("stf24WeeksCaseReviewAppeallantDocument", CaseType.ASYLUM),
+    STF_24WEEKS_CASE_REVIEW_APPELLANT_LETTER("stf24WeeksCaseReviewAppeallantLetter", CaseType.ASYLUM),
+    STF_24WEEKS_CASE_REVIEW_LETTER_BUNDLE("stf24WeeksCaseReviewLetterBundle", CaseType.ASYLUM),
     STF_24WEEKS_REMOVAL_DECISION_DOCUMENT("stf24WeeksRemovalDecisionDocument", CaseType.ASYLUM),
     STF_24WEEKS_REMOVAL_DECISION_LETTER("stf24WeeksRemovalDecisionLetter", CaseType.ASYLUM),
     STF_24WEEKS_REMOVAL_DECISION_LETTER_BUNDLE("stf24WeeksRemovalDecisionLetterBundle", CaseType.ASYLUM),

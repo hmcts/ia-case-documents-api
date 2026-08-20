@@ -665,6 +665,11 @@ stf24WeeksCaseReview.fileExtension: PDF
 stf24WeeksCaseReview.fileName: "stf-24weeks-case-review-appellant-document"
 stf24WeeksCaseReview.templateName: ${AIPM_PRISON_STD_STF24_WEEKS_CASE_REVIEW:TB-IAC-STD-ENG-001-StfTwentyFourWeeks-Review-Appellant-v3.docx}
 
+#For bundler
+stf24WeeksCaseReviewLetter.fileExtension: PDF
+stf24WeeksCaseReviewLetter.fileName: "24w-timeframe-review-letter"
+
+
 stf24WeeksRemovalDecision.contentType:  application/pdf
 stf24WeeksRemovalDecision.fileExtension: PDF
 stf24WeeksRemovalDecision.fileName: "stf-24weeks-removal-notice-of-decision"
