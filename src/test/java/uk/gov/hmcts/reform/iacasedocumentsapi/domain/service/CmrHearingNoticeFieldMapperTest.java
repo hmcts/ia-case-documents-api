@@ -156,7 +156,7 @@ class CmrHearingNoticeFieldMapperTest {
     void should_use_remote_hearing_centre_when_ref_data_feature_is_on() {
 
         when(asylumCase.read(IS_CASE_USING_LOCATION_REF_DATA, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
-        when(asylumCase.read(IS_REMOTE_HEARING, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
+        when(asylumCase.read(CMR_IS_REMOTE_HEARING, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
         when(asylumCase.read(REMOTE_VIDEO_CALL_TRIBUNAL_RESPONSE, String.class)).thenReturn(Optional.of("agreed for remote hearing"));
         when(asylumCase.read(CMR_HEARING_CENTRE_ADDRESS, String.class)).thenReturn(Optional.of(manchesterRefDataAddress));
 
