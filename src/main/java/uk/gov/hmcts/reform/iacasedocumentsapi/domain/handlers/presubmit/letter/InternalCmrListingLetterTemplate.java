@@ -3,7 +3,7 @@ package uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit.letter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.HearingCentre;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DynamicList;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseDetails;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.StringProvider;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates.DocumentTemplate;
@@ -46,17 +46,16 @@ public class InternalCmrListingLetterTemplate implements DocumentTemplate<Asylum
             CaseDetails<AsylumCase> caseDetails
     ) {
         final AsylumCase asylumCase = caseDetails.getCaseData();
-        final HearingCentre listedHearingCentre =
-                asylumCase
-                        .read(CMR_HEARING_CENTRE_ADDRESS, HearingCentre.class)
-                        .orElseThrow(() -> new IllegalStateException("listCaseHearingCentre is not present"));
+        final DynamicList cmrHearingCentreAddress = asylumCase.read(CMR_HEARING_CENTRE_ADDRESS, DynamicList.class)
+                .orElseThrow(() -> new IllegalStateException("cmrHearingCentreAddress is not present"));
+        final String listedHearingCentre = cmrHearingCentreAddress.getValue().getLabel();
 
         final Map<String, Object> fieldValues = new HashMap<>();
 
         fieldValues.putAll(getAppellantPersonalisation(asylumCase));
         fieldValues.put("customerServicesTelephone", customerServicesProvider.getInternalCustomerServicesTelephone(asylumCase));
         fieldValues.put("customerServicesEmail", customerServicesProvider.getInternalCustomerServicesEmail(asylumCase));
-        fieldValues.put("hearingLocation", stringProvider.get("hearingCentreAddress", listedHearingCentre.toString()).orElse("").replaceAll(",\\s*", "\n"));
+        fieldValues.put("hearingLocation", listedHearingCentre);
         fieldValues.put("hearingDate", formatDateTimeForRendering(asylumCase.read(CMR_HEARING_DATE, String.class).orElse(""), DOCUMENT_DATE_FORMAT));
         fieldValues.put("hearingTime", formatDateTimeForRendering(asylumCase.read(CMR_HEARING_DATE, String.class).orElse(""), DOCUMENT_TIME_FORMAT));
         fieldValues.put("dateLetterSent", formatDateForRendering(LocalDate.now().toString(), DOCUMENT_DATE_FORMAT));
