@@ -19,6 +19,7 @@ import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DynamicList;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.HearingCentre;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.Value;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseDetails;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.AddressUk;
@@ -37,8 +38,6 @@ class InternalCmrListingLetterTemplateTest {
     @Mock private StringProvider stringProvider;
     @Mock private DynamicList hearingChannelDynamicList;
     @Mock private Value hearingChannelValue;
-    @Mock private DynamicList hearingCentreAddressDynamicList;
-    @Mock private Value hearingCentreAddressValue;
 
     private InternalCmrListingLetterTemplate internalCmrListingLetterTemplate;
 
@@ -50,20 +49,21 @@ class InternalCmrListingLetterTemplateTest {
     private final String cmrHearingDate = "2023-08-14T14:30:00.000";
     private final String formattedCmrHearingDate = "14 August 2023";
     private final String formattedCmrHearingTime = "1430";
-    private final String manchesterHearingCentreAddress = "Manchester\n123 Somewhere\nNorth";
+    private final String manchesterHearingCentreAddress = "Manchester, 123 Somewhere, North";
+    private final String formattedManchesterHearingCentreAddress = "Manchester\n123 Somewhere\nNorth";
     private final String customerServicesTelephone = "0300 123 1711";
     private final String customerServicesEmail = "email@example.com";
     private final String hearingChannelLabel = "In person";
     private final AddressUk appellantAddress =
-        new AddressUk("123 Street", null, null, "London", null, "W1 1AA", null);
+            new AddressUk("123 Street", null, null, "London", null, "W1 1AA", null);
 
     @BeforeEach
     void setUp() {
         internalCmrListingLetterTemplate =
-            new InternalCmrListingLetterTemplate(
-                templateName,
-                customerServicesProvider,
-                stringProvider);
+                new InternalCmrListingLetterTemplate(
+                        templateName,
+                        customerServicesProvider,
+                        stringProvider);
     }
 
     @Test
@@ -78,13 +78,12 @@ class InternalCmrListingLetterTemplateTest {
         when(asylumCase.read(HOME_OFFICE_REFERENCE_NUMBER, String.class)).thenReturn(Optional.of(homeOfficeReferenceNumber));
         when(asylumCase.read(APPELLANT_GIVEN_NAMES, String.class)).thenReturn(Optional.of(appellantGivenNames));
         when(asylumCase.read(APPELLANT_FAMILY_NAME, String.class)).thenReturn(Optional.of(appellantFamilyName));
-        when(asylumCase.read(CMR_HEARING_CENTRE_ADDRESS, DynamicList.class)).thenReturn(Optional.of(hearingCentreAddressDynamicList));
-        when(hearingCentreAddressDynamicList.getValue()).thenReturn(hearingCentreAddressValue);
-        when(hearingCentreAddressValue.getLabel()).thenReturn(manchesterHearingCentreAddress);
+        when(asylumCase.read(CMR_HEARING_CENTRE, HearingCentre.class)).thenReturn(Optional.of(HearingCentre.MANCHESTER));
         when(asylumCase.read(CMR_HEARING_DATE, String.class)).thenReturn(Optional.of(cmrHearingDate));
         when(asylumCase.read(CMR_HEARING_CHANNEL, DynamicList.class)).thenReturn(Optional.of(hearingChannelDynamicList));
         when(hearingChannelDynamicList.getValue()).thenReturn(hearingChannelValue);
         when(hearingChannelValue.getLabel()).thenReturn(hearingChannelLabel);
+        when(stringProvider.get("hearingCentreAddress", "manchester")).thenReturn(Optional.of(manchesterHearingCentreAddress));
         when(customerServicesProvider.getInternalCustomerServicesTelephone(asylumCase)).thenReturn(customerServicesTelephone);
         when(customerServicesProvider.getInternalCustomerServicesEmail(asylumCase)).thenReturn(customerServicesEmail);
         when(asylumCase.read(APPELLANT_IN_UK, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
@@ -105,11 +104,11 @@ class InternalCmrListingLetterTemplateTest {
         assertEquals(appellantFamilyName, templateFieldValues.get("appellantFamilyName"));
         assertEquals(customerServicesTelephone, templateFieldValues.get("customerServicesTelephone"));
         assertEquals(customerServicesEmail, templateFieldValues.get("customerServicesEmail"));
-        assertEquals(manchesterHearingCentreAddress, templateFieldValues.get("hearingLocation"));
+        assertEquals(formattedManchesterHearingCentreAddress, templateFieldValues.get("hearingLocation"));
         assertEquals(formattedCmrHearingDate, templateFieldValues.get("hearingDate"));
         assertEquals(formattedCmrHearingTime, templateFieldValues.get("hearingTime"));
         assertEquals(formatDateForRendering(LocalDate.now().toString(), DateTimeFormatter.ofPattern("d MMMM yyyy")),
-            templateFieldValues.get("dateLetterSent"));
+                templateFieldValues.get("dateLetterSent"));
         assertEquals(hearingChannelLabel, templateFieldValues.get("hearingChannel"));
         assertEquals("John Doe", templateFieldValues.get("address_line_1"));
         assertEquals("123 Street", templateFieldValues.get("address_line_2"));
@@ -141,11 +140,11 @@ class InternalCmrListingLetterTemplateTest {
     }
 
     @Test
-    void should_throw_when_cmr_hearing_centre_address_is_missing() {
+    void should_throw_when_cmr_hearing_centre_is_missing() {
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
-        when(asylumCase.read(CMR_HEARING_CENTRE_ADDRESS, DynamicList.class)).thenReturn(Optional.empty());
+        when(asylumCase.read(CMR_HEARING_CENTRE, HearingCentre.class)).thenReturn(Optional.empty());
 
         assertThrows(IllegalStateException.class,
-            () -> internalCmrListingLetterTemplate.mapFieldValues(caseDetails));
+                () -> internalCmrListingLetterTemplate.mapFieldValues(caseDetails));
     }
 }
