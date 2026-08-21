@@ -1933,6 +1933,49 @@ public class DocumentCreatorConfiguration {
         );
     }
 
+    @Bean("remoteCmrListingLetter")
+    public DocumentCreator<AsylumCase> getRemoteCmrListingLetterDocumentCreator(
+            @Value("${remoteCmrListingLetter.contentType}") String contentType,
+            @Value("${remoteCmrListingLetter.fileExtension}") String fileExtension,
+            @Value("${remoteCmrListingLetter.fileName}") String fileName,
+            AsylumCaseFileNameQualifier fileNameQualifier,
+            RemoteCmrListingLetterTemplate documentTemplate,
+            DocumentGenerator documentGenerator,
+            DocumentUploader documentUploader
+    ) {
+        return new DocumentCreator<>(
+                contentType,
+                fileExtension,
+                fileName,
+                fileNameQualifier,
+                documentTemplate,
+                documentGenerator,
+                documentUploader
+        );
+    }
+
+    @Bean("remoteCmrReListingLetter")
+    public DocumentCreator<AsylumCase> getRemoteCmrReListingLetterDocumentCreator(
+            @Value("${remoteCmrReListingLetter.contentType}") String contentType,
+            @Value("${remoteCmrReListingLetter.fileExtension}") String fileExtension,
+            @Value("${remoteCmrReListingLetter.fileName}") String fileName,
+            AsylumCaseFileNameQualifier fileNameQualifier,
+            RemoteCmrReListingLetterTemplate documentTemplate,
+            DocumentGenerator documentGenerator,
+            DocumentUploader documentUploader
+    ) {
+        return new DocumentCreator<>(
+                contentType,
+                fileExtension,
+                fileName,
+                fileNameQualifier,
+                documentTemplate,
+                documentGenerator,
+                documentUploader
+        );
+    }
+
+
     @Bean("internalCmrReListingLrLetter")
     public DocumentCreator<AsylumCase> getInternalCmrReListingLrLetterDocumentCreator(
         @Value("${internalCmrReListingLrLetter.contentType}") String contentType,
