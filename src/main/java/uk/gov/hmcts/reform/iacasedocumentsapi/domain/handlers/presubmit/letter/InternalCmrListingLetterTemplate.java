@@ -48,7 +48,7 @@ public class InternalCmrListingLetterTemplate implements DocumentTemplate<Asylum
         final AsylumCase asylumCase = caseDetails.getCaseData();
         final HearingCentre listedHearingCentre =
                 asylumCase
-                        .read(CMR_HEARING_CENTRE, HearingCentre.class)
+                        .read(CMR_HEARING_CENTRE_ADDRESS, HearingCentre.class)
                         .orElseThrow(() -> new IllegalStateException("listCaseHearingCentre is not present"));
 
         final Map<String, Object> fieldValues = new HashMap<>();

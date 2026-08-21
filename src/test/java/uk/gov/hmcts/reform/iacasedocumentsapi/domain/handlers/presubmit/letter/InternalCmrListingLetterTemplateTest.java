@@ -78,7 +78,7 @@ class InternalCmrListingLetterTemplateTest {
         when(asylumCase.read(HOME_OFFICE_REFERENCE_NUMBER, String.class)).thenReturn(Optional.of(homeOfficeReferenceNumber));
         when(asylumCase.read(APPELLANT_GIVEN_NAMES, String.class)).thenReturn(Optional.of(appellantGivenNames));
         when(asylumCase.read(APPELLANT_FAMILY_NAME, String.class)).thenReturn(Optional.of(appellantFamilyName));
-        when(asylumCase.read(CMR_HEARING_CENTRE, HearingCentre.class)).thenReturn(Optional.of(HearingCentre.MANCHESTER));
+        when(asylumCase.read(CMR_HEARING_CENTRE_ADDRESS, HearingCentre.class)).thenReturn(Optional.of(HearingCentre.MANCHESTER));
         when(asylumCase.read(CMR_HEARING_DATE, String.class)).thenReturn(Optional.of(cmrHearingDate));
         when(asylumCase.read(CMR_HEARING_CHANNEL, DynamicList.class)).thenReturn(Optional.of(hearingChannelDynamicList));
         when(hearingChannelDynamicList.getValue()).thenReturn(hearingChannelValue);
@@ -140,9 +140,9 @@ class InternalCmrListingLetterTemplateTest {
     }
 
     @Test
-    void should_throw_when_cmr_hearing_centre_is_missing() {
+    void should_throw_when_cmr_hearing_centre_address_is_missing() {
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
-        when(asylumCase.read(CMR_HEARING_CENTRE, HearingCentre.class)).thenReturn(Optional.empty());
+        when(asylumCase.read(CMR_HEARING_CENTRE_ADDRESS, HearingCentre.class)).thenReturn(Optional.empty());
 
         assertThrows(IllegalStateException.class,
             () -> internalCmrListingLetterTemplate.mapFieldValues(caseDetails));
