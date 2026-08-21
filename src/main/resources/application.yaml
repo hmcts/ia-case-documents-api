@@ -97,7 +97,7 @@ hearingNoticeDocument.templateName: ${IA_HEARING_NOTICE_TEMPLATE:TB-IAC-HNO-ENG-
 cmrHearingNoticeDocument.contentType: application/pdf
 cmrHearingNoticeDocument.fileExtension: PDF
 cmrHearingNoticeDocument.fileName: "hearing-notice"
-cmrHearingNoticeDocument.templateName: ${IA_HEARING_NOTICE_TEMPLATE:TB-IAC-HNO-ENG-00241-updated.docx}
+cmrHearingNoticeDocument.templateName: ${IA_HEARING_NOTICE_TEMPLATE:TB-IAC-HNO-ENG-00241.docx}
 
 cmrRelistedHearingNoticeDocument.contentType: application/pdf
 cmrRelistedHearingNoticeDocument.fileExtension: PDF
