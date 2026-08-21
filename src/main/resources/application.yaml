@@ -671,8 +671,8 @@ cmrCancelledAppellantManualLetter.templateName: ${CMR_CANCELLED_AIP_MANUAL_LETTE
 
 cmrCancelledAppellantDetainedLetter.contentType:  application/pdf
 cmrCancelledAppellantDetainedLetter.fileExtension: PDF
-cmrCancelledAppellantDetainedLetter.fileName: "cmr-cancelled_aip_letter"
-cmrCancelledAppellantDetainedLetter.templateName: ${CMR_CANCELLED_AIP_MANUAL_LETTER_TEMPLATE:TB-IAC-LET-ENG-CRM-Cancelled-AIP-Manual.docx}
+cmrCancelledAppellantDetainedLetter.fileName: "cmr-cancelled_detained_letter"
+cmrCancelledAppellantDetainedLetter.templateName: ${CMR_CANCELLED_DETAINED_LETTER_TEMPLATE:TB-IAC-LET-ENG-CMR-Cancelled-Detained-Prison-Irc.docx}
 
 cmrCancelledLrManualLetter.contentType:  application/pdf
 cmrCancelledLrManualLetter.fileExtension: PDF
