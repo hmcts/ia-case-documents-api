@@ -667,17 +667,17 @@ internalCmrReListingLetter.templateName: ${INTERNAL_CMR_RE_LISTING_LETTER_TEMPLA
 remoteCmrListingLetter.contentType:  application/pdf
 remoteCmrListingLetter.fileExtension: PDF
 remoteCmrListingLetter.fileName: "remote-cmr-listing-letter"
-remoteCmrListingLetter.templateName: ${REMOTE_CMR_LISTING_LETTER_TEMPLATE:TB-IAC-LET-ENG-Remote-CMR-Listing.docx}
+remoteCmrListingLetter.templateName: ${REMOTE_CMR_LISTING_LETTER_TEMPLATE:TB-IAC-LET-ENG-INTERNAL-CMR-Listing.docx}
 
 remoteCmrListingLrLetter.contentType:  application/pdf
 remoteCmrListingLrLetter.fileExtension: PDF
 remoteCmrListingLrLetter.fileName: "remote-cmr-listing-lr-letter"
-remoteCmrListingLrLetter.templateName: ${REMOTE_CMR_LISTING_LETTER_TEMPLATE:TB-IAC-LET-ENG-Remote-CMR-Listing.docx}
+remoteCmrListingLrLetter.templateName: ${REMOTE_CMR_LISTING_LETTER_TEMPLATE:TB-IAC-LET-ENG-INTERNAL-CMR-Listing.docx}
 
 remoteCmrReListingLetter.contentType:  application/pdf
 remoteCmrReListingLetter.fileExtension: PDF
 remoteCmrReListingLetter.fileName: "remote-cmr-relisting-letter"
-remoteCmrReListingLetter.templateName: ${REMOTE_CMR_RE_LISTING_LETTER_TEMPLATE:TB-IAC-LET-ENG-Remote-CMR-Re-Listing.docx}
+remoteCmrReListingLetter.templateName: ${REMOTE_CMR_RE_LISTING_LETTER_TEMPLATE:TB-IAC-LET-ENG-INTERNAL-CMR-Re-Listing.docx}
 
 internalCmrReListingLrLetter.contentType:  application/pdf
 internalCmrReListingLrLetter.fileExtension: PDF
