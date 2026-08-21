@@ -16,6 +16,7 @@ import java.util.Objects;
 
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.LETTER_NOTIFICATION_DOCUMENTS;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.Event.CMR_RE_LISTING;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.isRemoteCmrHearing;
 
 /**
  * Common behaviour for the letters generated when a case management review hearing is re-listed.
@@ -54,6 +55,7 @@ public abstract class AbstractInternalCmrReListingLetterGenerator implements Pre
 
         return callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
                && callback.getEvent() == CMR_RE_LISTING
+                && !isRemoteCmrHearing(asylumCase)
                && isApplicable(asylumCase);
     }
 
