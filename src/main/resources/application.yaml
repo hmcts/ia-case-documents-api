@@ -96,12 +96,12 @@ hearingNoticeDocument.templateName: ${IA_HEARING_NOTICE_TEMPLATE:TB-IAC-HNO-ENG-
 
 cmrHearingNoticeDocument.contentType: application/pdf
 cmrHearingNoticeDocument.fileExtension: PDF
-cmrHearingNoticeDocument.fileName: "hearing-notice"
-cmrHearingNoticeDocument.templateName: ${IA_HEARING_NOTICE_TEMPLATE:TB-IAC-HNO-ENG-00241-updated.docx}
+cmrHearingNoticeDocument.fileName: "interim-hearing-notice"
+cmrHearingNoticeDocument.templateName: ${IA_HEARING_NOTICE_TEMPLATE:TB-IAC-HNO-ENG-00241-CMR-Notice-Of-Hearing.docx}
 
 cmrRelistedHearingNoticeDocument.contentType: application/pdf
 cmrRelistedHearingNoticeDocument.fileExtension: PDF
-cmrRelistedHearingNoticeDocument.fileName: "hearing-notice"
+cmrRelistedHearingNoticeDocument.fileName: "interim-hearing-notice"
 cmrRelistedHearingNoticeDocument.templateName: ${IA_HEARING_NOTICE_TEMPLATE:TB-IAC-HNO-ENG-00241-relisted.docx}
 
 remoteCmrRelistedHearingNoticeDocument.contentType: application/pdf
@@ -118,7 +118,7 @@ remoteHearingNoticeDocument.templateName: ${IA_REMOTE_HEARING_NOTICE_TEMPLATE:TB
 
 remoteCmrHearingNoticeDocument.contentType: application/pdf
 remoteCmrHearingNoticeDocument.fileExtension: PDF
-remoteCmrHearingNoticeDocument.fileName: "hearing-notice"
+remoteCmrHearingNoticeDocument.fileName: "interim-hearing-notice"
 remoteCmrHearingNoticeDocument.templateName: ${IA_REMOTE_HEARING_NOTICE_TEMPLATE:TB-IAC-HNO-ENG-00680-Notice-Of-Hearing-Remote-CMR.docx}
 
 hearingNoticeAdjournedWithoutDateDocument.contentType: application/pdf
@@ -691,8 +691,8 @@ cmrCancelledAppellantManualLetter.templateName: ${CMR_CANCELLED_AIP_MANUAL_LETTE
 
 cmrCancelledAppellantDetainedLetter.contentType:  application/pdf
 cmrCancelledAppellantDetainedLetter.fileExtension: PDF
-cmrCancelledAppellantDetainedLetter.fileName: "cmr-cancelled_aip_letter"
-cmrCancelledAppellantDetainedLetter.templateName: ${CMR_CANCELLED_AIP_MANUAL_LETTER_TEMPLATE:TB-IAC-LET-ENG-CRM-Cancelled-AIP-Manual.docx}
+cmrCancelledAppellantDetainedLetter.fileName: "cmr-cancelled_detained_letter"
+cmrCancelledAppellantDetainedLetter.templateName: ${CMR_CANCELLED_DETAINED_LETTER_TEMPLATE:TB-IAC-LET-ENG-CMR-Cancelled-Detained-Prison-Irc.docx}
 
 cmrCancelledLrManualLetter.contentType:  application/pdf
 cmrCancelledLrManualLetter.fileExtension: PDF
@@ -719,7 +719,6 @@ internalCmrReListingLetterWithAttachment.fileName: "internal-cmr-relisting-lette
 
 internalCmrReListingLrLetterWithAttachment.fileExtension: PDF
 internalCmrReListingLrLetterWithAttachment.fileName: "internal-cmr-relisting-appellant-lr-letter-with-attachment"
-
 
 detainedLegalRepRemovedIrcPrisonLetter.contentType: application/pdf
 detainedLegalRepRemovedIrcPrisonLetter.fileExtension: PDF
