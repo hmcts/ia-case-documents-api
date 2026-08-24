@@ -10,18 +10,20 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.StringProvider;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates.CmrHearingNoticeTemplate;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.CustomerServicesProvider;
+import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.HearingDetailsFinder;
 
 @ExtendWith(MockitoExtension.class)
 class CmrHearingNoticeTemplateConfigurationTest {
 
     @Mock private CustomerServicesProvider customerServicesProvider;
+    @Mock private HearingDetailsFinder hearingDetailsFinder;
     @Mock private StringProvider stringProvider;
 
     private CmrHearingNoticeTemplateConfiguration configuration;
 
     @BeforeEach
     void setUp() {
-        configuration = new CmrHearingNoticeTemplateConfiguration(customerServicesProvider);
+        configuration = new CmrHearingNoticeTemplateConfiguration(customerServicesProvider, hearingDetailsFinder);
     }
 
     @Test
