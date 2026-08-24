@@ -361,7 +361,7 @@ internalDetainedEditCaseListingLetter.templateName: ${IA_INTERNAL_DETAINED_EDIT_
 detainedCmrReListingLetter.contentType: application/pdf
 detainedCmrReListingLetter.fileExtension: PDF
 detainedCmrReListingLetter.fileName: "detained-appellant-cmr-relisting-letter"
-detainedCmrReListingLetter.templateName: ${IA_INTERNAL_DETAINED_EDIT_CASE_LISTING_LETTER_TEMPLATE:TB-IAC-HNO-ENG-00700.docx}
+detainedCmrReListingLetter.templateName: ${IA_INTERNAL_DETAINED_EDIT_CASE_LISTING_LETTER_TEMPLATE:TB-IAC-LET-ENG-Internal-Edit-Case-Listing.docx}
 
 internalDetainedManageFeeUpdateLetter.contentType: application/pdf
 internalDetainedManageFeeUpdateLetter.fileExtension: PDF
