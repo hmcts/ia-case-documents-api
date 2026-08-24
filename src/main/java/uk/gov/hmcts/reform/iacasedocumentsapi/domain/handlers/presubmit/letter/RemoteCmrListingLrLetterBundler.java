@@ -26,7 +26,7 @@ import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.Event.C
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.*;
 
 @Component
-public class RemoteCmrListingAppellantLetterBundler implements PreSubmitCallbackHandler<AsylumCase> {
+public class RemoteCmrListingLrLetterBundler implements PreSubmitCallbackHandler<AsylumCase> {
 
     private final String fileExtension;
     private final String fileName;
@@ -35,7 +35,7 @@ public class RemoteCmrListingAppellantLetterBundler implements PreSubmitCallback
     private final DocumentBundler documentBundler;
     private final DocumentHandler documentHandler;
 
-    public RemoteCmrListingAppellantLetterBundler(
+    public RemoteCmrListingLrLetterBundler(
             @Value("${remoteCmrListingLetterWithAttachment.fileExtension}") String fileExtension,
             @Value("${remoteCmrListingLetterWithAttachment.fileName}") String fileName,
             @Value("${featureFlag.isEmStitchingEnabled}") boolean isEmStitchingEnabled,
@@ -67,10 +67,10 @@ public class RemoteCmrListingAppellantLetterBundler implements PreSubmitCallback
 
         return callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
                 && callback.getEvent() == CMR_LISTING
-                && !hasBeenSubmittedAsLegalRepresentedInternalCase(asylumCase)
-                && (isInternalCase(asylumCase)
-                || !isDetainedAppeal(asylumCase))
                 && isRemoteCmrHearing(asylumCase)
+                && !isInternalCase(callback.getCaseDetails().getCaseData())
+                && isRepJourney(callback.getCaseDetails().getCaseData())
+                && !isAppellantInDetention(asylumCase)
                 && isEmStitchingEnabled;
     }
 
@@ -90,9 +90,9 @@ public class RemoteCmrListingAppellantLetterBundler implements PreSubmitCallback
         List<DocumentWithMetadata> bundleDocuments;
 
         if (isDetainedInOneOfFacilityTypes(asylumCase, PRISON, IRC)) {
-            bundleDocuments = getMaybeNotificationAttachmentDocuments(asylumCase, DocumentTag.REMOTE_CMR_LISTING_LETTER);
+            bundleDocuments = getMaybeNotificationAttachmentDocuments(asylumCase, DocumentTag.REMOTE_CMR_LISTING_LR_LETTER);
         } else {
-            bundleDocuments = getMaybeLetterNotificationDocuments(asylumCase, DocumentTag.REMOTE_CMR_LISTING_LETTER);
+            bundleDocuments = getMaybeLetterNotificationDocuments(asylumCase, DocumentTag.REMOTE_CMR_LISTING_LR_LETTER);
         }
 
         Document internalCaseListedLetterBundle = documentBundler.bundleWithoutContentsOrCoverSheets(
@@ -106,14 +106,14 @@ public class RemoteCmrListingAppellantLetterBundler implements PreSubmitCallback
                     asylumCase,
                     internalCaseListedLetterBundle,
                     NOTIFICATION_ATTACHMENT_DOCUMENTS,
-                    DocumentTag.REMOTE_CMR_LISTING_LETTER_BUNDLE
+                    DocumentTag.REMOTE_CMR_LISTING_LR_LETTER_BUNDLE
             );
         } else {
             documentHandler.addWithMetadataWithoutReplacingExistingDocuments(
                     asylumCase,
                     internalCaseListedLetterBundle,
                     LETTER_BUNDLE_DOCUMENTS,
-                    DocumentTag.REMOTE_CMR_LISTING_LETTER_BUNDLE
+                    DocumentTag.REMOTE_CMR_LISTING_LR_LETTER_BUNDLE
             );
         }
         return new PreSubmitCallbackResponse<>(asylumCase);

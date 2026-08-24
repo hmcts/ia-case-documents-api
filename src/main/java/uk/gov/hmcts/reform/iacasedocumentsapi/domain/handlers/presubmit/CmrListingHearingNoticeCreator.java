@@ -25,6 +25,8 @@ public class CmrListingHearingNoticeCreator implements PreSubmitCallbackHandler<
     private final DocumentCreator<AsylumCase> cmrRelistedHearingNoticeDocumentCreator;
     private final DocumentCreator<AsylumCase> remoteCmrHearingNoticeDocumentCreator;
     private final DocumentCreator<AsylumCase> remoteCmrRelistedHearingNoticeDocumentCreator;
+    private final DocumentCreator<AsylumCase> remoteCmrLrHearingNoticeDocumentCreator;
+    private final DocumentCreator<AsylumCase> remoteCmrLrRelistedHearingNoticeDocumentCreator;
     private final DocumentHandler documentHandler;
 
     public CmrListingHearingNoticeCreator(
@@ -32,12 +34,16 @@ public class CmrListingHearingNoticeCreator implements PreSubmitCallbackHandler<
             @Qualifier("cmrRelistedHearingNotice") DocumentCreator<AsylumCase> cmrRelistedHearingNoticeDocumentCreator,
             @Qualifier("remoteCmrHearingNotice") DocumentCreator<AsylumCase> remoteCmrHearingNoticeDocumentCreator,
             @Qualifier("remoteCmrRelistedHearingNotice") DocumentCreator<AsylumCase> remoteCmrRelistedHearingNoticeDocumentCreator,
+            @Qualifier("remoteCmrLrHearingNotice") DocumentCreator<AsylumCase> remoteCmrLrHearingNoticeDocumentCreator,
+            @Qualifier("remoteCmrLrRelistedHearingNotice") DocumentCreator<AsylumCase> remoteCmrLrRelistedHearingNoticeDocumentCreator,
             DocumentHandler documentHandler
     ) {
         this.cmrHearingNoticeDocumentCreator = cmrHearingNoticeDocumentCreator;
         this.cmrRelistedHearingNoticeDocumentCreator = cmrRelistedHearingNoticeDocumentCreator;
         this.remoteCmrHearingNoticeDocumentCreator = remoteCmrHearingNoticeDocumentCreator;
         this.remoteCmrRelistedHearingNoticeDocumentCreator = remoteCmrRelistedHearingNoticeDocumentCreator;
+        this.remoteCmrLrHearingNoticeDocumentCreator = remoteCmrLrHearingNoticeDocumentCreator;
+        this.remoteCmrLrRelistedHearingNoticeDocumentCreator = remoteCmrLrRelistedHearingNoticeDocumentCreator;
         this.documentHandler = documentHandler;
     }
 
@@ -184,6 +190,8 @@ public class CmrListingHearingNoticeCreator implements PreSubmitCallbackHandler<
     ) {
         boolean isReListing = Event.CMR_RE_LISTING.equals(callback.getEvent());
         boolean isRemote = isRemoteCmrHearing(asylumCase);
+        boolean isLegalRepresentative =
+                hasBeenSubmittedAsLegalRepresentedInternalCase(asylumCase);
 
         if (isReListing) {
             CaseDetails<AsylumCase> caseDetailsBefore = callback.getCaseDetailsBefore()
@@ -191,13 +199,30 @@ public class CmrListingHearingNoticeCreator implements PreSubmitCallbackHandler<
                             "Case details before are not present for CMR re-listing"
                     ));
 
-            return isRemote
-                    ? remoteCmrRelistedHearingNoticeDocumentCreator.create(caseDetails, caseDetailsBefore)
-                    : cmrRelistedHearingNoticeDocumentCreator.create(caseDetails, caseDetailsBefore);
+            if (isRemote) {
+                return isLegalRepresentative
+                        ? remoteCmrLrRelistedHearingNoticeDocumentCreator.create(
+                        caseDetails,
+                        caseDetailsBefore
+                )
+                        : remoteCmrRelistedHearingNoticeDocumentCreator.create(
+                        caseDetails,
+                        caseDetailsBefore
+                );
+            }
+
+            return cmrRelistedHearingNoticeDocumentCreator.create(
+                    caseDetails,
+                    caseDetailsBefore
+            );
         }
 
-        return isRemote
-                ? remoteCmrHearingNoticeDocumentCreator.create(caseDetails)
-                : cmrHearingNoticeDocumentCreator.create(caseDetails);
+        if (isRemote) {
+            return isLegalRepresentative
+                    ? remoteCmrLrHearingNoticeDocumentCreator.create(caseDetails)
+                    : remoteCmrHearingNoticeDocumentCreator.create(caseDetails);
+        }
+
+        return cmrHearingNoticeDocumentCreator.create(caseDetails);
     }
 }

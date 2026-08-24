@@ -22,11 +22,11 @@ import static java.util.Objects.requireNonNull;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.LETTER_BUNDLE_DOCUMENTS;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.NOTIFICATION_ATTACHMENT_DOCUMENTS;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DetentionFacility.*;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.Event.CMR_LISTING;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.Event.CMR_RE_LISTING;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.*;
 
 @Component
-public class RemoteCmrListingAppellantLetterBundler implements PreSubmitCallbackHandler<AsylumCase> {
+public class RemoteCmrLrReListingLetterBundler implements PreSubmitCallbackHandler<AsylumCase> {
 
     private final String fileExtension;
     private final String fileName;
@@ -35,9 +35,9 @@ public class RemoteCmrListingAppellantLetterBundler implements PreSubmitCallback
     private final DocumentBundler documentBundler;
     private final DocumentHandler documentHandler;
 
-    public RemoteCmrListingAppellantLetterBundler(
-            @Value("${remoteCmrListingLetterWithAttachment.fileExtension}") String fileExtension,
-            @Value("${remoteCmrListingLetterWithAttachment.fileName}") String fileName,
+    public RemoteCmrLrReListingLetterBundler(
+            @Value("${remoteCmrLrReListingLetterWithAttachment.fileExtension}") String fileExtension,
+            @Value("${remoteCmrLrReListingLetterWithAttachment.fileName}") String fileName,
             @Value("${featureFlag.isEmStitchingEnabled}") boolean isEmStitchingEnabled,
             FileNameQualifier<AsylumCase> fileNameQualifier,
             DocumentBundler documentBundler,
@@ -66,11 +66,11 @@ public class RemoteCmrListingAppellantLetterBundler implements PreSubmitCallback
         AsylumCase asylumCase = callback.getCaseDetails().getCaseData();
 
         return callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
-                && callback.getEvent() == CMR_LISTING
-                && !hasBeenSubmittedAsLegalRepresentedInternalCase(asylumCase)
-                && (isInternalCase(asylumCase)
-                || !isDetainedAppeal(asylumCase))
+                && callback.getEvent() == CMR_RE_LISTING
                 && isRemoteCmrHearing(asylumCase)
+                && !isInternalCase(callback.getCaseDetails().getCaseData())
+                && isRepJourney(callback.getCaseDetails().getCaseData())
+                && !isAppellantInDetention(asylumCase)
                 && isEmStitchingEnabled;
     }
 
@@ -90,9 +90,9 @@ public class RemoteCmrListingAppellantLetterBundler implements PreSubmitCallback
         List<DocumentWithMetadata> bundleDocuments;
 
         if (isDetainedInOneOfFacilityTypes(asylumCase, PRISON, IRC)) {
-            bundleDocuments = getMaybeNotificationAttachmentDocuments(asylumCase, DocumentTag.REMOTE_CMR_LISTING_LETTER);
+            bundleDocuments = getMaybeNotificationAttachmentDocuments(asylumCase, DocumentTag.REMOTE_CMR_RE_LISTING_LR_LETTER);
         } else {
-            bundleDocuments = getMaybeLetterNotificationDocuments(asylumCase, DocumentTag.REMOTE_CMR_LISTING_LETTER);
+            bundleDocuments = getMaybeLetterNotificationDocuments(asylumCase, DocumentTag.REMOTE_CMR_RE_LISTING_LR_LETTER);
         }
 
         Document internalCaseListedLetterBundle = documentBundler.bundleWithoutContentsOrCoverSheets(
@@ -106,14 +106,14 @@ public class RemoteCmrListingAppellantLetterBundler implements PreSubmitCallback
                     asylumCase,
                     internalCaseListedLetterBundle,
                     NOTIFICATION_ATTACHMENT_DOCUMENTS,
-                    DocumentTag.REMOTE_CMR_LISTING_LETTER_BUNDLE
+                    DocumentTag.REMOTE_CMR_RE_LISTING_LR_LETTER_BUNDLE
             );
         } else {
             documentHandler.addWithMetadataWithoutReplacingExistingDocuments(
                     asylumCase,
                     internalCaseListedLetterBundle,
                     LETTER_BUNDLE_DOCUMENTS,
-                    DocumentTag.REMOTE_CMR_LISTING_LETTER_BUNDLE
+                    DocumentTag.REMOTE_CMR_RE_LISTING_LR_LETTER_BUNDLE
             );
         }
         return new PreSubmitCallbackResponse<>(asylumCase);

@@ -40,4 +40,16 @@ public class CmrHearingNoticeTemplateConfiguration {
             @Value("${remoteCmrRelistedHearingNoticeDocument.templateName}") String templateName, StringProvider stringProvider) {
         return new CmrRelistedHearingNoticeTemplate(templateName, stringProvider, customerServicesProvider);
     }
+
+    @Bean("remoteCmrLrHearingNoticeTemplate")
+    public CmrHearingNoticeTemplate getRemoteCmrLrHearingNoticeTemplate(
+            @Value("${remoteCmrLrHearingNoticeDocument.templateName}") String templateName, StringProvider stringProvider) {
+        return new CmrHearingNoticeTemplate(templateName, stringProvider, customerServicesProvider);
+    }
+
+    @Bean("remoteCmrLrRelistedHearingNoticeTemplate")
+    public CmrRelistedHearingNoticeTemplate getRemoteCmrLrRelistedHearingNoticeTemplate(
+            @Value("${remoteCmrLrRelistedHearingNoticeDocument.templateName}") String templateName, StringProvider stringProvider) {
+        return new CmrRelistedHearingNoticeTemplate(templateName, stringProvider, customerServicesProvider);
+    }
 }

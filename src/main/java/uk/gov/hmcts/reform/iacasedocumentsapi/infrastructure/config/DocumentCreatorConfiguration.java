@@ -1975,6 +1975,47 @@ public class DocumentCreatorConfiguration {
         );
     }
 
+    @Bean("remoteCmrLrListingLetter")
+    public DocumentCreator<AsylumCase> getRemoteCmrLrListingLetterDocumentCreator(
+            @Value("${remoteCmrLrListingLetter.contentType}") String contentType,
+            @Value("${remoteCmrLrListingLetter.fileExtension}") String fileExtension,
+            @Value("${remoteCmrLrListingLetter.fileName}") String fileName,
+            AsylumCaseFileNameQualifier fileNameQualifier,
+            RemoteCmrLrListingLetterTemplate documentTemplate,
+            DocumentGenerator documentGenerator,
+            DocumentUploader documentUploader
+    ) {
+        return new DocumentCreator<>(
+                contentType,
+                fileExtension,
+                fileName,
+                fileNameQualifier,
+                documentTemplate,
+                documentGenerator,
+                documentUploader
+        );
+    }
+
+    @Bean("remoteCmrLrReListingLetter")
+    public DocumentCreator<AsylumCase> getRemoteCmrLrReListingLetterDocumentCreator(
+            @Value("${remoteCmrLrReListingLetter.contentType}") String contentType,
+            @Value("${remoteCmrLrReListingLetter.fileExtension}") String fileExtension,
+            @Value("${remoteCmrLrReListingLetter.fileName}") String fileName,
+            AsylumCaseFileNameQualifier fileNameQualifier,
+            RemoteCmrLrReListingLetterTemplate documentTemplate,
+            DocumentGenerator documentGenerator,
+            DocumentUploader documentUploader
+    ) {
+        return new DocumentCreator<>(
+                contentType,
+                fileExtension,
+                fileName,
+                fileNameQualifier,
+                documentTemplate,
+                documentGenerator,
+                documentUploader
+        );
+    }
 
     @Bean("internalCmrReListingLrLetter")
     public DocumentCreator<AsylumCase> getInternalCmrReListingLrLetterDocumentCreator(
