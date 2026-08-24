@@ -136,7 +136,7 @@ public class HearingNoticeCreator implements PreSubmitCallbackHandler<AsylumCase
                 asylumCase,
                 hearingNotice,
                 HEARING_DOCUMENTS,
-                is24WeeksCase(asylumCase) ? DocumentTag.STF_24WEEKS_HEARING_NOTICE_DOCUMENT : DocumentTag.HEARING_NOTICE
+                DocumentTag.HEARING_NOTICE
             );
 
             if (isInternalNonDetainedCase(asylumCase) || isDetainedInFacilityType(asylumCase, OTHER)) {

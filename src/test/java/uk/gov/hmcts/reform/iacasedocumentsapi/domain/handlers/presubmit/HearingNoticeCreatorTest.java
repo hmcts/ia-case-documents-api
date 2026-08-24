@@ -334,7 +334,7 @@ class HearingNoticeCreatorTest {
         assertEquals(asylumCase, callbackResponse.getData());
 
         verify(stf24WeeksHearingNoticeDocumentCreator, times(1)).create(caseDetails);
-        verify(documentHandler, times(1)).addWithMetadataWithDateTimeWithoutReplacingExistingDocuments(asylumCase, uploadedDocument, HEARING_DOCUMENTS, DocumentTag.STF_24WEEKS_HEARING_NOTICE_DOCUMENT);
+        verify(documentHandler, times(1)).addWithMetadataWithDateTimeWithoutReplacingExistingDocuments(asylumCase, uploadedDocument, HEARING_DOCUMENTS, DocumentTag.HEARING_NOTICE);
     }
 
     @Test
@@ -358,7 +358,7 @@ class HearingNoticeCreatorTest {
 
         verify(stf24WeeksHearingNoticeDocumentCreator, times(1)).create(caseDetails);
         verify(remoteHearingNoticeDocumentCreator, times(0)).create(caseDetails);
-        verify(documentHandler, times(1)).addWithMetadataWithDateTimeWithoutReplacingExistingDocuments(asylumCase, uploadedDocument, HEARING_DOCUMENTS, DocumentTag.STF_24WEEKS_HEARING_NOTICE_DOCUMENT);
+        verify(documentHandler, times(1)).addWithMetadataWithDateTimeWithoutReplacingExistingDocuments(asylumCase, uploadedDocument, HEARING_DOCUMENTS, DocumentTag.HEARING_NOTICE);
     }
 
 
