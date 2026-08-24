@@ -381,7 +381,7 @@ class CmrListingHearingNoticeCreatorTest {
                         uploadedDocument,
                         HEARING_DOCUMENTS,
                         DocumentTag.HEARING_NOTICE
-                );
+        );
 
         verify(documentHandler, times(1))
                 .addWithMetadataWithoutReplacingExistingDocuments(
@@ -389,7 +389,7 @@ class CmrListingHearingNoticeCreatorTest {
                         uploadedDocument,
                         LETTER_NOTIFICATION_DOCUMENTS,
                         DocumentTag.INTERNAL_CMR_LISTING_LR_LETTER
-                );
+        );
     }
 
     @Test
@@ -429,7 +429,7 @@ class CmrListingHearingNoticeCreatorTest {
                         uploadedDocument,
                         HEARING_DOCUMENTS,
                         DocumentTag.HEARING_NOTICE
-                );
+        );
 
         verify(documentHandler, times(1))
                 .addWithMetadataWithoutReplacingExistingDocuments(
@@ -437,7 +437,7 @@ class CmrListingHearingNoticeCreatorTest {
                         uploadedDocument,
                         LETTER_NOTIFICATION_DOCUMENTS,
                         DocumentTag.INTERNAL_CMR_RE_LISTING_LR_LETTER
-                );
+        );
     }
 
     @Test
