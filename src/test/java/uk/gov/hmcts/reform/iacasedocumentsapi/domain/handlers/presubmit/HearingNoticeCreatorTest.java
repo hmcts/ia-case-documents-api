@@ -337,6 +337,30 @@ class HearingNoticeCreatorTest {
         verify(documentHandler, times(1)).addWithMetadataWithDateTimeWithoutReplacingExistingDocuments(asylumCase, uploadedDocument, HEARING_DOCUMENTS, DocumentTag.STF_24WEEKS_HEARING_NOTICE_DOCUMENT);
     }
 
+    @Test
+    void should_create_stf24w_hearing_notice_pdf_and_append_to_legal_representative_documents_for_the_case_when_remote_hearing() {
+
+        when(callback.getCaseDetails()).thenReturn(caseDetails);
+        when(callback.getEvent()).thenReturn(Event.LIST_CASE);
+        when(caseDetails.getCaseData()).thenReturn(asylumCase);
+        when(stf24WeeksHearingNoticeDocumentCreator.create(caseDetails)).thenReturn(uploadedDocument);
+        when(asylumCase.read(LIST_CASE_HEARING_CENTRE, HearingCentre.class)).thenReturn(Optional.of(HearingCentre.REMOTE_HEARING));
+        when(asylumCase.read(IS_REHEARD_APPEAL_ENABLED, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO));
+        when(asylumCase.read(IS_CASE_USING_LOCATION_REF_DATA, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO));
+        when(asylumCase.read(STF_24W_CURRENT_STATUS_AUTO_GENERATED, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
+        when(asylumCase.read(IS_REMOTE_HEARING, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
+
+        PreSubmitCallbackResponse<AsylumCase> callbackResponse =
+            hearingNoticeCreator.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
+
+        assertNotNull(callbackResponse);
+        assertEquals(asylumCase, callbackResponse.getData());
+
+        verify(stf24WeeksHearingNoticeDocumentCreator, times(1)).create(caseDetails);
+        verify(remoteHearingNoticeDocumentCreator, times(0)).create(caseDetails);
+        verify(documentHandler, times(1)).addWithMetadataWithDateTimeWithoutReplacingExistingDocuments(asylumCase, uploadedDocument, HEARING_DOCUMENTS, DocumentTag.STF_24WEEKS_HEARING_NOTICE_DOCUMENT);
+    }
+
 
     @Test
     void handling_should_throw_if_cannot_actually_handle() {

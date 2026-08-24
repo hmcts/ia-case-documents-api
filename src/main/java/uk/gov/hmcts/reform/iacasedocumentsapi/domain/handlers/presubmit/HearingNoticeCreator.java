@@ -171,19 +171,15 @@ public class HearingNoticeCreator implements PreSubmitCallbackHandler<AsylumCase
 
     private Document getHearingNotice(boolean isCaseUsingLocationRefData, HearingCentre listCaseHearingCentre, AsylumCase asylumCase, CaseDetails<AsylumCase> caseDetails) {
         Document hearingNotice;
-        if ((!isCaseUsingLocationRefData && listCaseHearingCentre.equals(HearingCentre.REMOTE_HEARING))
+        if (is24WeeksCase(asylumCase)) {
+            hearingNotice = stf24WeeksHearingNoticeDocumentCreator.create(caseDetails);
+        } else if ((!isCaseUsingLocationRefData && listCaseHearingCentre.equals(HearingCentre.REMOTE_HEARING))
             || (isCaseUsingLocationRefData && isRemoteHearing(asylumCase))
             || isVirtualHearing(asylumCase)) {
             hearingNotice = remoteHearingNoticeDocumentCreator.create(caseDetails);
         } else {
             boolean isAda = asylumCase.read(IS_ACCELERATED_DETAINED_APPEAL, YesOrNo.class).orElse(NO) == YES;
-            if (is24WeeksCase(asylumCase)) {
-                hearingNotice = stf24WeeksHearingNoticeDocumentCreator.create(caseDetails);
-            } else if (isAda) {
-                hearingNotice = adaHearingNoticeDocumentCreator.create(caseDetails);
-            } else {
-                hearingNotice = hearingNoticeDocumentCreator.create(caseDetails);
-            }
+            hearingNotice = isAda ? adaHearingNoticeDocumentCreator.create(caseDetails) : hearingNoticeDocumentCreator.create(caseDetails);
         }
         return hearingNotice;
     }
