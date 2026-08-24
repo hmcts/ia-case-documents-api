@@ -51,7 +51,7 @@ public class RemoteCmrLrListingLetterGenerator implements PreSubmitCallbackHandl
         return callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
                 && callback.getEvent() == CMR_LISTING
                 && isRemoteCmrHearing(asylumCase)
-                && !isInternalCase(callback.getCaseDetails().getCaseData())
+                && ((isInternalCase(asylumCase) && !isAppellantInDetention(asylumCase)))
                 && isRepJourney(callback.getCaseDetails().getCaseData())
                 && !isAppellantInDetention(asylumCase);
     }

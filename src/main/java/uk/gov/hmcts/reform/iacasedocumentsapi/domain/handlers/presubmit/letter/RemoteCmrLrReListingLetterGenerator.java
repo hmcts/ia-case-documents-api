@@ -17,6 +17,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentHandler;
 import java.util.Objects;
 
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.LETTER_NOTIFICATION_DOCUMENTS;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.Event.CMR_LISTING;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.Event.CMR_RE_LISTING;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.*;
 
@@ -51,7 +52,7 @@ public class RemoteCmrLrReListingLetterGenerator implements PreSubmitCallbackHan
         return callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
                 && callback.getEvent() == CMR_RE_LISTING
                 && isRemoteCmrHearing(asylumCase)
-                && !isInternalCase(callback.getCaseDetails().getCaseData())
+                && ((isInternalCase(asylumCase) && !isAppellantInDetention(asylumCase)))
                 && isRepJourney(callback.getCaseDetails().getCaseData())
                 && !isAppellantInDetention(asylumCase);
     }
