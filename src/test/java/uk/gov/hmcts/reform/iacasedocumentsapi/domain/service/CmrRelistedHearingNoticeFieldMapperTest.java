@@ -22,6 +22,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.HearingCentre;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseDetails;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.CustomerServicesProvider;
+import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.HearingDetailsFinder;
 
 @ExtendWith(MockitoExtension.class)
 @SuppressWarnings("unchecked")
@@ -30,6 +31,7 @@ class CmrRelistedHearingNoticeFieldMapperTest {
 
     @Mock private StringProvider stringProvider;
     @Mock private CustomerServicesProvider customerServicesProvider;
+    @Mock private HearingDetailsFinder hearingDetailsFinder;
     @Mock private CaseDetails<AsylumCase> caseDetails;
     @Mock private CaseDetails<AsylumCase> caseDetailsBefore;
     @Mock private AsylumCase asylumCase;
@@ -75,7 +77,7 @@ class CmrRelistedHearingNoticeFieldMapperTest {
     public void setUp() {
 
         cmrRelistedHearingNoticeFieldMapper =
-            new CmrRelistedHearingNoticeFieldMapper(stringProvider, customerServicesProvider);
+            new CmrRelistedHearingNoticeFieldMapper(stringProvider, customerServicesProvider, hearingDetailsFinder);
 
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
         when(caseDetailsBefore.getCaseData()).thenReturn(asylumCaseBefore);
@@ -208,7 +210,7 @@ class CmrRelistedHearingNoticeFieldMapperTest {
         when(asylumCase.read(IS_CASE_USING_LOCATION_REF_DATA, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
         when(asylumCase.read(IS_REMOTE_HEARING, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
         when(asylumCase.read(REMOTE_VIDEO_CALL_TRIBUNAL_RESPONSE, String.class)).thenReturn(Optional.of("agreed for remote hearing"));
-        when(asylumCase.read(CMR_HEARING_CENTRE, String.class)).thenReturn(Optional.of(manchesterRefDataAddress));
+        when(hearingDetailsFinder.getCmrHearingCentreAddress(asylumCase)).thenReturn(manchesterRefDataAddress);
 
         Map<String, Object> templateFieldValues =
             cmrRelistedHearingNoticeFieldMapper.mapFieldValues(caseDetails, caseDetailsBefore);

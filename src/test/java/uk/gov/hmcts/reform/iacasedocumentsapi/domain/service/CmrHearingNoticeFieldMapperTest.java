@@ -19,6 +19,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.HearingCentre;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.CustomerServicesProvider;
+import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.HearingDetailsFinder;
 
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
@@ -27,6 +28,7 @@ class CmrHearingNoticeFieldMapperTest {
     @Mock private StringProvider stringProvider;
     @Mock private AsylumCase asylumCase;
     @Mock private CustomerServicesProvider customerServicesProvider;
+    @Mock private HearingDetailsFinder hearingDetailsFinder;
 
     private final String appealReferenceNumber = "RP/11111/2020";
     private final String appellantGivenNames = "Talha";
@@ -65,7 +67,7 @@ class CmrHearingNoticeFieldMapperTest {
     public void setUp() {
 
         cmrHearingNoticeFieldMapper =
-            new CmrHearingNoticeFieldMapper(stringProvider, customerServicesProvider);
+            new CmrHearingNoticeFieldMapper(stringProvider, customerServicesProvider, hearingDetailsFinder);
 
         when(asylumCase.read(APPEAL_REFERENCE_NUMBER, String.class)).thenReturn(Optional.of(appealReferenceNumber));
         when(asylumCase.read(APPELLANT_GIVEN_NAMES, String.class)).thenReturn(Optional.of(appellantGivenNames));
@@ -158,7 +160,8 @@ class CmrHearingNoticeFieldMapperTest {
         when(asylumCase.read(IS_CASE_USING_LOCATION_REF_DATA, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
         when(asylumCase.read(CMR_IS_REMOTE_HEARING, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
         when(asylumCase.read(REMOTE_VIDEO_CALL_TRIBUNAL_RESPONSE, String.class)).thenReturn(Optional.of("agreed for remote hearing"));
-        when(asylumCase.read(CMR_HEARING_CENTRE_ADDRESS, String.class)).thenReturn(Optional.of(manchesterRefDataAddress));
+        when(hearingDetailsFinder.getCmrHearingCentreAddress(asylumCase)).thenReturn(manchesterRefDataAddress);
+
 
         Map<String, Object> templateFieldValues = cmrHearingNoticeFieldMapper.mapFields(asylumCase);
 
