@@ -111,6 +111,10 @@ public class Stf24WeeksUtils {
         return LocalDate.parse(appealReceivedDate).format(DateTimeFormatter.ofPattern(D_MMM_YYYY));
     }
 
+    public static boolean hasCompleteCaseReviewDate(AsylumCase asylumCase) {
+        return asylumCase.read(AsylumCaseDefinition.COMPLETE_CASE_REVIEW_DATE, String.class).isPresent();
+    }
+
     public static void setCompleteCaseReviewContentForRemoval(AsylumCase asylumCase, Map<String, Object> fieldValues) {
         asylumCase
             .read(AsylumCaseDefinition.COMPLETE_CASE_REVIEW_DATE, String.class)

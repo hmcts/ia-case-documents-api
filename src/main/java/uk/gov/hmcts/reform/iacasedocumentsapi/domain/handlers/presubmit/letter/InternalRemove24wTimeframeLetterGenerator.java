@@ -19,6 +19,7 @@ import static java.util.Objects.requireNonNull;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.LETTER_NOTIFICATION_DOCUMENTS;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.hasBeenSubmittedAsLegalRepresentedInternalCase;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.isInternalCase;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.Stf24WeeksUtils.hasCompleteCaseReviewDate;
 
 @Component
 public class InternalRemove24wTimeframeLetterGenerator implements PreSubmitCallbackHandler<AsylumCase> {
@@ -47,6 +48,7 @@ public class InternalRemove24wTimeframeLetterGenerator implements PreSubmitCallb
         requireNonNull(callback, "callback must not be null");
         final AsylumCase asylumCase = callback.getCaseDetails().getCaseData();
         return callback.getEvent() == Event.REMOVE_STATUTORY_TIMEFRAME_24_WEEKS
+            && hasCompleteCaseReviewDate(asylumCase)
             && isInternalCase(asylumCase);
     }
 

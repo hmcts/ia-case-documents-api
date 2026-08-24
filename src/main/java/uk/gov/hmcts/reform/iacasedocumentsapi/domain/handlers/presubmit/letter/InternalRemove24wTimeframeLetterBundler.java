@@ -30,6 +30,7 @@ import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtil
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.getMaybeLetterNotificationDocuments;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.hasBeenSubmittedAsLegalRepresentedInternalCase;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.isInternalCase;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.Stf24WeeksUtils.hasCompleteCaseReviewDate;
 
 @Component
 public class InternalRemove24wTimeframeLetterBundler implements PreSubmitCallbackHandler<AsylumCase> {
@@ -73,6 +74,7 @@ public class InternalRemove24wTimeframeLetterBundler implements PreSubmitCallbac
 
         return callback.getEvent() == Event.REMOVE_STATUTORY_TIMEFRAME_24_WEEKS
             && isInternalCase(asylumCase)
+            && hasCompleteCaseReviewDate(asylumCase)
             && isEmStitchingEnabled;
     }
 
