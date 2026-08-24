@@ -8,6 +8,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 import java.util.Optional;
 
 import static java.time.LocalDate.parse;
@@ -17,6 +18,7 @@ import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseD
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.STF_24W_CURRENT_STATUS_AUTO_GENERATED;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.TRIBUNAL_RECEIVED_DATE;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.Event.COMPLETE_CASE_REVIEW;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.Event.SEND_LATE_TIMELINE_NOTICE;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo.YES;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.isAppellantInUk;
 
@@ -44,9 +46,9 @@ public class Stf24WeeksUtils {
     public static boolean isCaseReviewFor24WeeksCase(Event event, AsylumCase asylumCase) {
         boolean inCountryAppeal = isAppellantInUk(asylumCase);
         boolean hasStf24W = hasStf24WeeksStatus(asylumCase);
-        return event == COMPLETE_CASE_REVIEW
-                && inCountryAppeal
-                && hasStf24W;
+        return List.of(SEND_LATE_TIMELINE_NOTICE, COMPLETE_CASE_REVIEW).contains(event)
+            && inCountryAppeal
+            && hasStf24W;
     }
 
     public static boolean hasStf24WeeksStatus(AsylumCase asylumCase) {
@@ -61,8 +63,8 @@ public class Stf24WeeksUtils {
 
     private static String getCaseDateDate(AsylumCase asylumCase, AsylumCaseDefinition asylumCaseDefinition) {
         return asylumCase
-                .read(asylumCaseDefinition, String.class)
-                .orElse("");
+            .read(asylumCaseDefinition, String.class)
+            .orElse("");
     }
 
     public static String getAppellantGivenName(AsylumCase asylumCase) {
