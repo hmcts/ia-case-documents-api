@@ -6,6 +6,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.HearingCentre;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseDetails;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.CustomerServicesProvider;
+import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.HearingDetailsFinder;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -23,13 +24,16 @@ public class CmrRelistedHearingNoticeFieldMapper  {
     private static final DateTimeFormatter DOCUMENT_DATE_FORMAT = DateTimeFormatter.ofPattern("ddMMyyyy");
     private static final DateTimeFormatter DOCUMENT_TIME_FORMAT = DateTimeFormatter.ofPattern("HHmm");
     private final StringProvider stringProvider;
+    private final HearingDetailsFinder hearingDetailsFinder;
 
     public CmrRelistedHearingNoticeFieldMapper(
             StringProvider stringProvider,
-            CustomerServicesProvider customerServicesProvider
+            CustomerServicesProvider customerServicesProvider,
+            HearingDetailsFinder hearingDetailsFinder
     ) {
         this.stringProvider = stringProvider;
         this.customerServicesProvider = customerServicesProvider;
+        this.hearingDetailsFinder = hearingDetailsFinder;
     }
 
     public Map<String, Object> mapFieldValues(
@@ -90,7 +94,7 @@ public class CmrRelistedHearingNoticeFieldMapper  {
         }
 
         fieldValues.put("hearingCentreAddress", isCaseUsingLocationRefData ?
-                asylumCase.read(CMR_HEARING_CENTRE, String.class).orElse("")
+                hearingDetailsFinder.getCmrHearingCentreAddress(asylumCase)
                 : stringProvider.get("hearingCentreAddress", listedHearingCentre.toString()).orElse("").replaceAll(",\\s*", "\n")
         );
 
