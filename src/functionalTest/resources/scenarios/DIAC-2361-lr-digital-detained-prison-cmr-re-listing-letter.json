@@ -109,6 +109,7 @@
       "template": "minimal-internal-appeal-submitted.json",
       "replacements": {
         "appellantsRepresentation": "No",
+        "isAdmin": "No",
         "appellantInDetention": "Yes",
         "detentionFacility": "prison",
         "prisonName": "HMP Pentonville",
