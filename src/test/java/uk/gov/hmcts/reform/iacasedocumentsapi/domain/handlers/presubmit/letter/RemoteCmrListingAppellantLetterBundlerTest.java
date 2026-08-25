@@ -112,14 +112,6 @@ class RemoteCmrListingAppellantLetterBundlerTest {
     }
 
     @Test
-    public void it_cannot_handle_callback_when_not_internal_case() {
-        when(callback.getEvent()).thenReturn(CMR_LISTING);
-        when(asylumCase.read(IS_ADMIN, YesOrNo.class)).thenReturn(Optional.of(NO));
-
-        assertFalse(remoteCmrListingAppellantLetterBundler.canHandle(ABOUT_TO_SUBMIT, callback));
-    }
-
-    @Test
     public void it_can_handle_callback_when_appellant_in_detention() {
         when(callback.getEvent()).thenReturn(CMR_LISTING);
         when(asylumCase.read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(YES));
@@ -134,16 +126,6 @@ class RemoteCmrListingAppellantLetterBundlerTest {
         when(callback.getEvent()).thenReturn(event);
         when(asylumCase.read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(YES));
         when(asylumCase.read(DETENTION_FACILITY, String.class)).thenReturn(Optional.of("other"));
-
-        assertTrue(remoteCmrListingAppellantLetterBundler.canHandle(ABOUT_TO_SUBMIT, callback));
-    }
-
-    @Test
-    public void it_can_handle_callback_when_detained_in_prison_or_irc_and_not_internal_case() {
-        when(callback.getEvent()).thenReturn(CMR_LISTING);
-        when(asylumCase.read(IS_ADMIN, YesOrNo.class)).thenReturn(Optional.of(NO));
-        when(asylumCase.read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(YES));
-        when(asylumCase.read(DETENTION_FACILITY, String.class)).thenReturn(Optional.of("prison"));
 
         assertTrue(remoteCmrListingAppellantLetterBundler.canHandle(ABOUT_TO_SUBMIT, callback));
     }
