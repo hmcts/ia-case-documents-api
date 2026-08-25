@@ -108,7 +108,6 @@
     "caseData": {
       "template": "minimal-internal-appeal-submitted.json",
       "replacements": {
-        "isAdmin": "Yes",
         "appellantsRepresentation": "No",
         "appellantInDetention": "Yes",
         "detentionFacility": "prison",
