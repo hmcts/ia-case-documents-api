@@ -57,7 +57,7 @@
         "template": "minimal-internal-appeal-submitted.json",
         "replacements": {
           "journeyType": "aip",
-          "isAdmin": "Yes",
+          "isAdmin": "No",
           "appellantsRepresentation": "No",
           "appellantInDetention": "Yes",
           "detentionFacility": "prison",
