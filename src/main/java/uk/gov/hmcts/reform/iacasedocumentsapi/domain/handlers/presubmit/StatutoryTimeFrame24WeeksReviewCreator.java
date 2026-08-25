@@ -15,7 +15,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentCreator;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentHandler;
 
 import static java.util.Objects.requireNonNull;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.LEGAL_REPRESENTATIVE_DOCUMENTS;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.TRIBUNAL_DOCUMENTS;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.isInternalCase;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.Stf24WeeksUtils.STF_24_WEEKS_REVIEW_DOCUMENT_CREATOR;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.Stf24WeeksUtils.isCaseReviewFor24WeeksCase;
@@ -61,7 +61,7 @@ public class StatutoryTimeFrame24WeeksReviewCreator implements PreSubmitCallback
             documentHandler.addWithMetadata(
                     asylumCase,
                     appealSubmission,
-                    LEGAL_REPRESENTATIVE_DOCUMENTS,
+                    TRIBUNAL_DOCUMENTS,
                     DocumentTag.STF_24WEEKS_CASE_REVIEW_APPELLANT_DOCUMENT
             );
             log.info("{} doc added successfully for tag {}", STF_24_WEEKS_REVIEW_DOCUMENT_CREATOR, DocumentTag.STF_24WEEKS_CASE_REVIEW_APPELLANT_DOCUMENT);

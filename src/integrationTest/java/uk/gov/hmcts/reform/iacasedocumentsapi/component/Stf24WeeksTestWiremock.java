@@ -120,7 +120,7 @@ class Stf24WeeksTestWiremock extends SpringBootIntegrationTest
         notCreatedByAdmin(caseData);
 
         Optional<List<IdValue<DocumentWithMetadata>>> docsOpt =
-                doCaseReview(caseData).getAsylumCase().read(AsylumCaseDefinition.LEGAL_REPRESENTATIVE_DOCUMENTS);
+                doCaseReview(caseData).getAsylumCase().read(AsylumCaseDefinition.TRIBUNAL_DOCUMENTS);
 
         IdValue<DocumentWithMetadata> docValue = docsOpt.get().get(0);
 
@@ -138,7 +138,7 @@ class Stf24WeeksTestWiremock extends SpringBootIntegrationTest
         notCreatedByAdmin(caseData);
         createdByAdmin(caseData);
         Optional<List<IdValue<DocumentWithMetadata>>> docsOpt =
-                doCaseReview(caseData).getAsylumCase().read(AsylumCaseDefinition.LEGAL_REPRESENTATIVE_DOCUMENTS);
+                doCaseReview(caseData).getAsylumCase().read(AsylumCaseDefinition.TRIBUNAL_DOCUMENTS);
         assertThat(docsOpt).isNotPresent();
     }
 
