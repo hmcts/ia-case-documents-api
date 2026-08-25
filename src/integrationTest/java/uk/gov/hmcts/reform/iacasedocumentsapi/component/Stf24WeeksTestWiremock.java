@@ -1,6 +1,5 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.component;
 
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.security.test.context.support.WithMockUser;
@@ -108,7 +107,6 @@ class Stf24WeeksTestWiremock extends SpringBootIntegrationTest
     }
 
     @ParameterizedTest
-    @Disabled
     @ValueSource(booleans = {true, false})
     @WithMockUser(authorities = {"caseworker-ia", "tribunal-caseworker"})
     void shouldCreate24WeeksReviewDocument(boolean cdamEnabled) {
@@ -131,7 +129,6 @@ class Stf24WeeksTestWiremock extends SpringBootIntegrationTest
     }
 
     @ParameterizedTest
-    @Disabled
     @ValueSource(booleans = {true, false})
     @WithMockUser(authorities = {"caseworker-ia", "tribunal-caseworker"})
     void shouldNotCreate24WeeksReviewDocumentIfCaseCreatedByAdmin(boolean cdamEnabled) {
