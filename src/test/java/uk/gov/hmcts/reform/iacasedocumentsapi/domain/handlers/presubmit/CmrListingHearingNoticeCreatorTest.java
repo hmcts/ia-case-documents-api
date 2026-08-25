@@ -44,9 +44,6 @@ class CmrListingHearingNoticeCreatorTest {
     @Mock private DocumentCreator<AsylumCase> cmrHearingNoticeDocumentCreator;
     @Mock private DocumentCreator<AsylumCase> cmrRelistedHearingNoticeDocumentCreator;
     @Mock private DocumentCreator<AsylumCase> remoteCmrHearingNoticeDocumentCreator;
-    @Mock private DocumentCreator<AsylumCase> remoteCmrRelistedHearingNoticeDocumentCreator;
-    @Mock private DocumentCreator<AsylumCase> remoteCmrLrHearingNoticeDocumentCreator;
-    @Mock private DocumentCreator<AsylumCase> remoteCmrLrRelistedHearingNoticeDocumentCreator;
     @Mock private DocumentHandler documentHandler;
 
     @Mock private Callback<AsylumCase> callback;
@@ -65,9 +62,6 @@ class CmrListingHearingNoticeCreatorTest {
                 cmrHearingNoticeDocumentCreator,
                 cmrRelistedHearingNoticeDocumentCreator,
                 remoteCmrHearingNoticeDocumentCreator,
-                remoteCmrRelistedHearingNoticeDocumentCreator,
-                remoteCmrLrHearingNoticeDocumentCreator,
-                remoteCmrLrRelistedHearingNoticeDocumentCreator,
                 documentHandler
             );
 
@@ -345,99 +339,6 @@ class CmrListingHearingNoticeCreatorTest {
             asylumCase, uploadedDocument, LETTER_NOTIFICATION_DOCUMENTS, DocumentTag.INTERNAL_CMR_LISTING_LETTER);
         verify(documentHandler, never()).addWithMetadata(
             asylumCase, uploadedDocument, NOTIFICATION_ATTACHMENT_DOCUMENTS, DocumentTag.INTERNAL_CMR_LISTING_LETTER);
-    }
-
-    @Test
-    void should_create_remote_cmr_lr_hearing_notice_when_remote_hearing_and_legal_representative() {
-
-        when(asylumCase.read(CMR_IS_REMOTE_HEARING, YesOrNo.class)).thenReturn(Optional.of(YES));
-        when(asylumCase.read(IS_ADMIN, YesOrNo.class)).thenReturn(Optional.of(YES));
-        when(asylumCase.read(APPELLANTS_REPRESENTATION, YesOrNo.class)).thenReturn(Optional.of(NO));
-
-        when(remoteCmrLrHearingNoticeDocumentCreator.create(caseDetails))
-                .thenReturn(uploadedDocument);
-
-        PreSubmitCallbackResponse<AsylumCase> callbackResponse =
-                cmrListingHearingNoticeCreator.handle(
-                        PreSubmitCallbackStage.ABOUT_TO_SUBMIT,
-                        callback
-                );
-
-        assertNotNull(callbackResponse);
-        assertEquals(asylumCase, callbackResponse.getData());
-
-        verify(remoteCmrLrHearingNoticeDocumentCreator, times(1))
-                .create(caseDetails);
-
-        verify(remoteCmrHearingNoticeDocumentCreator, never())
-                .create(caseDetails);
-
-        verify(cmrHearingNoticeDocumentCreator, never())
-                .create(caseDetails);
-
-        verify(documentHandler, times(1))
-                .addWithMetadataWithDateTimeWithoutReplacingExistingDocuments(
-                        asylumCase,
-                        uploadedDocument,
-                        HEARING_DOCUMENTS,
-                        DocumentTag.HEARING_NOTICE
-        );
-
-        verify(documentHandler, times(1))
-                .addWithMetadataWithoutReplacingExistingDocuments(
-                        asylumCase,
-                        uploadedDocument,
-                        LETTER_NOTIFICATION_DOCUMENTS,
-                        DocumentTag.INTERNAL_CMR_LISTING_LR_LETTER
-        );
-    }
-
-    @Test
-    void should_create_remote_cmr_lr_relisted_hearing_notice_when_remote_hearing_and_legal_representative() {
-
-        when(callback.getEvent()).thenReturn(Event.CMR_RE_LISTING);
-        when(asylumCase.read(CMR_IS_REMOTE_HEARING, YesOrNo.class)).thenReturn(Optional.of(YES));
-        when(asylumCase.read(IS_ADMIN, YesOrNo.class)).thenReturn(Optional.of(YES));
-        when(asylumCase.read(APPELLANTS_REPRESENTATION, YesOrNo.class)).thenReturn(Optional.of(NO));
-
-        when(remoteCmrLrRelistedHearingNoticeDocumentCreator.create(
-                caseDetails,
-                caseDetailsBefore
-        )).thenReturn(uploadedDocument);
-
-        PreSubmitCallbackResponse<AsylumCase> callbackResponse =
-                cmrListingHearingNoticeCreator.handle(
-                        PreSubmitCallbackStage.ABOUT_TO_SUBMIT,
-                        callback
-                );
-
-        assertNotNull(callbackResponse);
-        assertEquals(asylumCase, callbackResponse.getData());
-
-        verify(remoteCmrLrRelistedHearingNoticeDocumentCreator, times(1))
-                .create(caseDetails, caseDetailsBefore);
-
-        verify(remoteCmrRelistedHearingNoticeDocumentCreator, never())
-                .create(caseDetails, caseDetailsBefore);
-
-        verify(cmrRelistedHearingNoticeDocumentCreator, never())
-                .create(caseDetails, caseDetailsBefore);
-
-        verify(documentHandler, times(1))
-                .addWithMetadataWithDateTimeWithoutReplacingExistingDocuments(
-                        asylumCase,
-                        uploadedDocument,
-                        HEARING_DOCUMENTS,
-                        DocumentTag.HEARING_NOTICE
-        );
-
-        verify(documentHandler, times(1))
-                .addWithMetadataWithoutReplacingExistingDocuments(
-                        asylumCase,
-                        uploadedDocument,
-                        LETTER_NOTIFICATION_DOCUMENTS,
-                        DocumentTag.INTERNAL_CMR_RE_LISTING_LR_LETTER
-        );
     }
 
     @Test

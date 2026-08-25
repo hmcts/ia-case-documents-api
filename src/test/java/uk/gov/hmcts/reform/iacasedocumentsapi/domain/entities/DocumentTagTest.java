@@ -127,20 +127,12 @@ class DocumentTagTest {
         assertEquals("aipmDetainedInPrisonOrIrcReinstateAppealLetter", DocumentTag.AIPM_DETAINED_IN_PRISON_IRC_REINSTATE_APPEAL_LETTER.toString());
         assertEquals("cmrHearingCancelledLetter", DocumentTag.CMR_HEARING_CANCELLED_LETTER.toString());
         assertEquals("cmrHearingCancelledLrLetter", DocumentTag.CMR_HEARING_CANCELLED_LR_LETTER.toString());
-        assertEquals("remoteCmrListingLetter", DocumentTag.REMOTE_CMR_LISTING_LETTER.toString());
-        assertEquals("remoteCmrListingLrLetter", DocumentTag.REMOTE_CMR_LISTING_LR_LETTER.toString());
-        assertEquals("remoteCmrListingLetterBundle", DocumentTag.REMOTE_CMR_LISTING_LETTER_BUNDLE.toString());
-        assertEquals("remoteCmrListingLrLetterBundle", DocumentTag.REMOTE_CMR_LISTING_LR_LETTER_BUNDLE.toString());
-        assertEquals("remoteCmrReListingLetter", DocumentTag.REMOTE_CMR_RE_LISTING_LETTER.toString());
-        assertEquals("remoteCmrReListingLrLetter", DocumentTag.REMOTE_CMR_RE_LISTING_LR_LETTER.toString());
-        assertEquals("remoteCmrReListingLetterBundle", DocumentTag.REMOTE_CMR_RE_LISTING_LETTER_BUNDLE.toString());
-        assertEquals("remoteCmrReListingLrLetterBundle", DocumentTag.REMOTE_CMR_RE_LISTING_LR_LETTER_BUNDLE.toString());
         assertEquals("stf24WeeksCaseReviewAppeallantDocument", DocumentTag.STF_24WEEKS_CASE_REVIEW_APPELLANT_DOCUMENT.toString());
 
     }
 
     @Test
     public void if_this_test_fails_it_is_because_it_needs_updating_with_your_changes() {
-        assertEquals(142, DocumentTag.values().length);
+        assertEquals(134, DocumentTag.values().length);
     }
 }

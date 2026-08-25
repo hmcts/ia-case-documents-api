@@ -104,16 +104,6 @@ cmrRelistedHearingNoticeDocument.fileExtension: PDF
 cmrRelistedHearingNoticeDocument.fileName: "interim-hearing-notice"
 cmrRelistedHearingNoticeDocument.templateName: ${IA_HEARING_NOTICE_TEMPLATE:TB-IAC-HNO-ENG-00241-relisted.docx}
 
-remoteCmrRelistedHearingNoticeDocument.contentType: application/pdf
-remoteCmrRelistedHearingNoticeDocument.fileExtension: PDF
-remoteCmrRelistedHearingNoticeDocument.fileName: "hearing-notice"
-remoteCmrRelistedHearingNoticeDocument.templateName: ${IA_HEARING_NOTICE_TEMPLATE:TB-IAC-HNO-ENG-00241-relisted.docx}
-
-remoteCmrLrRelistedHearingNoticeDocument.contentType: application/pdf
-remoteCmrLrRelistedHearingNoticeDocument.fileExtension: PDF
-remoteCmrLrRelistedHearingNoticeDocument.fileName: "hearing-notice"
-remoteCmrLrRelistedHearingNoticeDocument.templateName: ${IA_HEARING_NOTICE_TEMPLATE:TB-IAC-HNO-ENG-00241-relisted.docx}
-
 hearingNoticeAdaDocument.templateName: ${IA_ADA_HEARING_NOTICE_TEMPLATE:TB-IAC-HNO-ENG-ADA-0001.docx}
 
 remoteHearingNoticeDocument.contentType: application/pdf
@@ -124,12 +114,7 @@ remoteHearingNoticeDocument.templateName: ${IA_REMOTE_HEARING_NOTICE_TEMPLATE:TB
 remoteCmrHearingNoticeDocument.contentType: application/pdf
 remoteCmrHearingNoticeDocument.fileExtension: PDF
 remoteCmrHearingNoticeDocument.fileName: "interim-hearing-notice"
-remoteCmrHearingNoticeDocument.templateName: ${IA_REMOTE_HEARING_NOTICE_TEMPLATE:TB-IAC-HNO-ENG-00680-Notice-Of-Hearing-Remote-CMR.docx}
-
-remoteCmrLrHearingNoticeDocument.contentType: application/pdf
-remoteCmrLrHearingNoticeDocument.fileExtension: PDF
-remoteCmrLrHearingNoticeDocument.fileName: "interim-hearing-notice"
-remoteCmrLrHearingNoticeDocument.templateName: ${IA_REMOTE_HEARING_NOTICE_TEMPLATE:TB-IAC-HNO-ENG-00680-Notice-Of-Hearing-Remote-CMR.docx}
+remoteCmrHearingNoticeDocument.templateName: ${IA_REMOTE_HEARING_NOTICE_TEMPLATE:TB-IAC-HNO-ENG-00680-Notice-Of-Hearing-Remote.docx}
 
 hearingNoticeAdjournedWithoutDateDocument.contentType: application/pdf
 hearingNoticeAdjournedWithoutDateDocument.fileExtension: PDF
@@ -674,21 +659,6 @@ internalCmrReListingLetter.fileExtension: PDF
 internalCmrReListingLetter.fileName: "internal-cmr-relisting-letter"
 internalCmrReListingLetter.templateName: ${INTERNAL_CMR_RE_LISTING_LETTER_TEMPLATE:TB-IAC-LET-ENG-Internal-Edit-Case-Listing.docx}
 
-remoteCmrListingLetter.contentType:  application/pdf
-remoteCmrListingLetter.fileExtension: PDF
-remoteCmrListingLetter.fileName: "remote-cmr-listing-letter"
-remoteCmrListingLetter.templateName: ${REMOTE_CMR_LISTING_LETTER_TEMPLATE:TB-IAC-LET-ENG-Internal-Case-Listed.docx}
-
-remoteCmrListingLrLetter.contentType:  application/pdf
-remoteCmrListingLrLetter.fileExtension: PDF
-remoteCmrListingLrLetter.fileName: "remote-cmr-listing-lr-letter"
-remoteCmrListingLrLetter.templateName: ${REMOTE_CMR_LISTING_LETTER_TEMPLATE:TB-IAC-LET-ENG-Internal-Case-Listed.docx}
-
-remoteCmrReListingLetter.contentType:  application/pdf
-remoteCmrReListingLetter.fileExtension: PDF
-remoteCmrReListingLetter.fileName: "remote-cmr-relisting-letter"
-remoteCmrReListingLetter.templateName: ${REMOTE_CMR_RE_LISTING_LETTER_TEMPLATE:TB-IAC-LET-ENG-Internal-Edit-Case-Listing.docx}
-
 internalCmrReListingLrLetter.contentType:  application/pdf
 internalCmrReListingLrLetter.fileExtension: PDF
 internalCmrReListingLrLetter.fileName: "internal-cmr-relisting-lr-letter"
@@ -717,12 +687,6 @@ internalCmrListingLetterWithAttachment.fileName: "internal-cmr-listing-letter-wi
 
 internalCmrListingLrLetterWithAttachment.fileExtension: PDF
 internalCmrListingLrLetterWithAttachment.fileName: "internal-cmr-listing-appellant-lr-letter-with-attachment"
-
-remoteCmrListingLetterWithAttachment.fileExtension: PDF
-remoteCmrListingLetterWithAttachment.fileName: "remote-cmr-listing-letter-with-attachment"
-
-remoteCmrReListingLetterWithAttachment.fileExtension: PDF
-remoteCmrReListingLetterWithAttachment.fileName: "remote-cmr-re-listing-letter-with-attachment"
 
 internalCmrReListingLetterWithAttachment.fileExtension: PDF
 internalCmrReListingLetterWithAttachment.fileName: "internal-cmr-relisting-letter-with-attachment"

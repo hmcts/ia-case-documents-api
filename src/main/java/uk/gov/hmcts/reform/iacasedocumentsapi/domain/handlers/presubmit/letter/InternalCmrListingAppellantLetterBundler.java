@@ -70,7 +70,6 @@ public class InternalCmrListingAppellantLetterBundler implements PreSubmitCallba
             && !hasBeenSubmittedAsLegalRepresentedInternalCase(asylumCase)
             && (isInternalCase(asylumCase)
             || isDetainedAppeal(asylumCase))
-            && !isRemoteCmrHearing(asylumCase)
             && isEmStitchingEnabled;
     }
 

@@ -52,8 +52,7 @@ public class InternalCmrListingLetterGenerator implements PreSubmitCallbackHandl
         return callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
             && callback.getEvent() == CMR_LISTING
                 && ((isInternalCase(asylumCase) && !isAppellantInDetention(asylumCase))
-                || isDetainedInFacilityType(asylumCase, OTHER))
-                && !isRemoteCmrHearing(asylumCase);
+                || isDetainedInFacilityType(asylumCase, OTHER));
     }
 
     public PreSubmitCallbackResponse<AsylumCase> handle(

@@ -188,27 +188,6 @@ public class DocumentCreatorConfiguration {
         );
     }
 
-    @Bean("remoteCmrRelistedHearingNotice")
-    public DocumentCreator<AsylumCase> getRemoteCmrRelistedHearingNoticeDocumentCreator(
-            @Value("${remoteCmrRelistedHearingNoticeDocument.contentType}") String contentType,
-            @Value("${remoteCmrRelistedHearingNoticeDocument.fileExtension}") String fileExtension,
-            @Value("${remoteCmrRelistedHearingNoticeDocument.fileName}") String fileName,
-            AsylumCaseFileNameQualifier fileNameQualifier,
-            @Qualifier("remoteCmrRelistedHearingNoticeTemplate") CmrRelistedHearingNoticeTemplate documentTemplate,
-            DocumentGenerator documentGenerator,
-            DocumentUploader documentUploader
-    ) {
-        return new DocumentCreator<>(
-                contentType,
-                fileExtension,
-                fileName,
-                fileNameQualifier,
-                documentTemplate,
-                documentGenerator,
-                documentUploader
-        );
-    }
-
     @Bean("hearingNoticeAdjournedWithoutDate")
     public DocumentCreator<AsylumCase> getHearingNoticeAdjournedWithoutDateDocumentCreator(
         @Value("${hearingNoticeAdjournedWithoutDateDocument.contentType}") String contentType,
@@ -1930,90 +1909,6 @@ public class DocumentCreatorConfiguration {
             documentTemplate,
             documentGenerator,
             documentUploader
-        );
-    }
-
-    @Bean("remoteCmrListingLetter")
-    public DocumentCreator<AsylumCase> getRemoteCmrListingLetterDocumentCreator(
-            @Value("${remoteCmrListingLetter.contentType}") String contentType,
-            @Value("${remoteCmrListingLetter.fileExtension}") String fileExtension,
-            @Value("${remoteCmrListingLetter.fileName}") String fileName,
-            AsylumCaseFileNameQualifier fileNameQualifier,
-            RemoteCmrListingLetterTemplate documentTemplate,
-            DocumentGenerator documentGenerator,
-            DocumentUploader documentUploader
-    ) {
-        return new DocumentCreator<>(
-                contentType,
-                fileExtension,
-                fileName,
-                fileNameQualifier,
-                documentTemplate,
-                documentGenerator,
-                documentUploader
-        );
-    }
-
-    @Bean("remoteCmrReListingLetter")
-    public DocumentCreator<AsylumCase> getRemoteCmrReListingLetterDocumentCreator(
-            @Value("${remoteCmrReListingLetter.contentType}") String contentType,
-            @Value("${remoteCmrReListingLetter.fileExtension}") String fileExtension,
-            @Value("${remoteCmrReListingLetter.fileName}") String fileName,
-            AsylumCaseFileNameQualifier fileNameQualifier,
-            RemoteCmrReListingLetterTemplate documentTemplate,
-            DocumentGenerator documentGenerator,
-            DocumentUploader documentUploader
-    ) {
-        return new DocumentCreator<>(
-                contentType,
-                fileExtension,
-                fileName,
-                fileNameQualifier,
-                documentTemplate,
-                documentGenerator,
-                documentUploader
-        );
-    }
-
-    @Bean("remoteCmrLrListingLetter")
-    public DocumentCreator<AsylumCase> getRemoteCmrLrListingLetterDocumentCreator(
-            @Value("${remoteCmrLrListingLetter.contentType}") String contentType,
-            @Value("${remoteCmrLrListingLetter.fileExtension}") String fileExtension,
-            @Value("${remoteCmrLrListingLetter.fileName}") String fileName,
-            AsylumCaseFileNameQualifier fileNameQualifier,
-            RemoteCmrLrListingLetterTemplate documentTemplate,
-            DocumentGenerator documentGenerator,
-            DocumentUploader documentUploader
-    ) {
-        return new DocumentCreator<>(
-                contentType,
-                fileExtension,
-                fileName,
-                fileNameQualifier,
-                documentTemplate,
-                documentGenerator,
-                documentUploader
-        );
-    }
-
-    @Bean("remoteCmrLrReListingLetter")
-    public DocumentCreator<AsylumCase> getRemoteCmrLrReListingLetterDocumentCreator(
-            @Value("${remoteCmrLrReListingLetter.contentType}") String contentType,
-            @Value("${remoteCmrLrReListingLetter.fileExtension}") String fileExtension,
-            @Value("${remoteCmrLrReListingLetter.fileName}") String fileName,
-            AsylumCaseFileNameQualifier fileNameQualifier,
-            RemoteCmrLrReListingLetterTemplate documentTemplate,
-            DocumentGenerator documentGenerator,
-            DocumentUploader documentUploader
-    ) {
-        return new DocumentCreator<>(
-                contentType,
-                fileExtension,
-                fileName,
-                fileNameQualifier,
-                documentTemplate,
-                documentGenerator,
-                documentUploader
         );
     }
 
