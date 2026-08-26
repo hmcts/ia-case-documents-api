@@ -75,13 +75,24 @@ public class CmrListingHearingNoticeCreator implements PreSubmitCallbackHandler<
             DocumentTag.HEARING_NOTICE
         );
 
+        boolean isReListing = Event.CMR_RE_LISTING.equals(callback.getEvent());
+
         if (isDetainedInOneOfFacilityTypes(asylumCase, IRC, PRISON)) {
-            documentHandler.addWithMetadata(
-                asylumCase,
-                hearingNotice,
-                NOTIFICATION_ATTACHMENT_DOCUMENTS,
-                DocumentTag.INTERNAL_CMR_LISTING_LETTER
-            );
+            if (isReListing) {
+                documentHandler.addWithMetadata(
+                        asylumCase,
+                        hearingNotice,
+                        NOTIFICATION_ATTACHMENT_DOCUMENTS,
+                        DocumentTag.INTERNAL_CMR_RE_LISTING_LETTER
+                );
+            } else {
+                documentHandler.addWithMetadata(
+                        asylumCase,
+                        hearingNotice,
+                        NOTIFICATION_ATTACHMENT_DOCUMENTS,
+                        DocumentTag.INTERNAL_CMR_LISTING_LETTER
+                );
+            }
         }
 
         boolean isReListing = Event.CMR_RE_LISTING.equals(callback.getEvent());
