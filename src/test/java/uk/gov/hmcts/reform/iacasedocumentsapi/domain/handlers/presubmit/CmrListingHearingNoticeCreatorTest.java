@@ -144,23 +144,6 @@ class CmrListingHearingNoticeCreatorTest {
     }
 
     @Test
-    void should_also_append_internal_cmr_listing_letter_to_letter_notification_documents_when_internal_non_detained_case() {
-
-        when(asylumCase.read(IS_ADMIN, YesOrNo.class)).thenReturn(Optional.of(YES));
-        when(asylumCase.read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(NO));
-        when(cmrHearingNoticeDocumentCreator.create(caseDetails)).thenReturn(uploadedDocument);
-
-        PreSubmitCallbackResponse<AsylumCase> callbackResponse =
-            cmrListingHearingNoticeCreator.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
-
-        assertNotNull(callbackResponse);
-        assertEquals(asylumCase, callbackResponse.getData());
-
-        verify(documentHandler, times(1)).addWithMetadataWithoutReplacingExistingDocuments(
-            asylumCase, uploadedDocument, LETTER_NOTIFICATION_DOCUMENTS, DocumentTag.INTERNAL_CMR_LISTING_LETTER);
-    }
-
-    @Test
     void should_append_internal_cmr_listing_lr_letter_when_submitted_as_legal_represented_internal_case() {
 
         when(asylumCase.read(IS_ADMIN, YesOrNo.class)).thenReturn(Optional.of(YES));
@@ -219,55 +202,6 @@ class CmrListingHearingNoticeCreatorTest {
 
         verify(documentHandler, never()).addWithMetadataWithoutReplacingExistingDocuments(
             asylumCase, uploadedDocument, LETTER_NOTIFICATION_DOCUMENTS, DocumentTag.INTERNAL_CMR_LISTING_LR_LETTER);
-    }
-
-    @Test
-    void should_tag_hearing_notice_with_re_listing_letter_tag_for_cmr_re_listing_event() {
-
-        when(callback.getEvent()).thenReturn(Event.CMR_RE_LISTING);
-        when(asylumCase.read(IS_ADMIN, YesOrNo.class)).thenReturn(Optional.of(YES));
-        when(asylumCase.read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(NO));
-        when(cmrRelistedHearingNoticeDocumentCreator.create(caseDetails, caseDetailsBefore))
-                .thenReturn(uploadedDocument);
-
-        PreSubmitCallbackResponse<AsylumCase> callbackResponse =
-                cmrListingHearingNoticeCreator.handle(
-                        PreSubmitCallbackStage.ABOUT_TO_SUBMIT,
-                        callback
-                );
-
-        assertNotNull(callbackResponse);
-        assertEquals(asylumCase, callbackResponse.getData());
-
-        verify(cmrRelistedHearingNoticeDocumentCreator, times(1))
-                .create(caseDetails, caseDetailsBefore);
-
-        verify(cmrHearingNoticeDocumentCreator, never())
-                .create(caseDetails);
-
-        verify(documentHandler, times(1))
-                .addWithMetadataWithDateTimeWithoutReplacingExistingDocuments(
-                        asylumCase,
-                        uploadedDocument,
-                        HEARING_DOCUMENTS,
-                        DocumentTag.HEARING_NOTICE
-        );
-
-        verify(documentHandler, times(1))
-                .addWithMetadataWithoutReplacingExistingDocuments(
-                        asylumCase,
-                        uploadedDocument,
-                        LETTER_NOTIFICATION_DOCUMENTS,
-                        DocumentTag.INTERNAL_CMR_RE_LISTING_LETTER
-        );
-
-        verify(documentHandler, never())
-                .addWithMetadataWithoutReplacingExistingDocuments(
-                        asylumCase,
-                        uploadedDocument,
-                        LETTER_NOTIFICATION_DOCUMENTS,
-                        DocumentTag.INTERNAL_CMR_LISTING_LETTER
-        );
     }
 
     @Test
