@@ -86,8 +86,8 @@ public class CmrListingHearingNoticeCreator implements PreSubmitCallbackHandler<
 
         boolean isReListing = Event.CMR_RE_LISTING.equals(callback.getEvent());
 
-        if (isInternalNonDetainedCase(asylumCase)
-            || (isInternalCase(asylumCase) && isDetainedInFacilityType(asylumCase, OTHER))) {
+        if ((!isInternalCase(asylumCase) && !isDetainedAppeal(asylumCase))
+                || (isInternalCase(asylumCase) && isDetainedInFacilityType(asylumCase, OTHER))) {
             if (isReListing) {
                 documentHandler.addWithMetadataWithoutReplacingExistingDocuments(
                         asylumCase,
