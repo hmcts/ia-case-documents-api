@@ -138,16 +138,16 @@
         "legalRepFamilyNamePaperJ": "Smith",
         "notificationAttachmentDocuments": [
           {
-            "id": "2",
+            "id": "3",
             "value": {
               "document": {
                 "document_url": "$/http.+\/documents/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/",
                 "document_binary_url": "$/http.+\/documents/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}\/binary/",
-                "document_filename": "PA 12345 2019-Awan-detained-appellant-cmr-relisting-letter.PDF"
+                "document_filename": "PA 12345 2019-Awan-internal-cmr-relisting-letter-with-attachment.PDF"
               },
               "description": "",
               "dateUploaded": "{$TODAY}",
-              "tag": "internalCmrReListingLetter"
+              "tag": "internalCmrReListingLetterBundle"
             }
           }
         ]
