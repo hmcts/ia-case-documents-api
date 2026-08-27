@@ -4,6 +4,8 @@ import static java.util.Objects.requireNonNull;
 
 import java.util.List;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
 import lombok.ToString;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.Document;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.IdValue;
@@ -23,6 +25,9 @@ public class MakeAnApplication {
     private String decisionReason;
     private String decisionDate;
     private String decisionMaker;
+    @Setter
+    @Getter
+    private Document refusalOfRemoval24wDocument;
 
     public MakeAnApplication() {
 
