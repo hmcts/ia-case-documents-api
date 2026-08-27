@@ -7,31 +7,35 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.StringProvider;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates.CmrHearingNoticeTemplate;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates.CmrRelistedHearingNoticeTemplate;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.CustomerServicesProvider;
+import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.HearingDetailsFinder;
 
 @Configuration
 public class CmrHearingNoticeTemplateConfiguration {
 
     private final CustomerServicesProvider customerServicesProvider;
+    private final HearingDetailsFinder hearingDetailsFinder;
 
-    public CmrHearingNoticeTemplateConfiguration(CustomerServicesProvider customerServicesProvider) {
+    public CmrHearingNoticeTemplateConfiguration(CustomerServicesProvider customerServicesProvider,
+                                                 HearingDetailsFinder hearingDetailsFinder) {
         this.customerServicesProvider = customerServicesProvider;
+        this.hearingDetailsFinder = hearingDetailsFinder;
     }
 
     @Bean("cmrHearingNoticeTemplate")
     public CmrHearingNoticeTemplate getCmrHearingNoticeTemplate(
         @Value("${cmrHearingNoticeDocument.templateName}") String templateName, StringProvider stringProvider) {
-        return new CmrHearingNoticeTemplate(templateName, stringProvider, customerServicesProvider);
+        return new CmrHearingNoticeTemplate(templateName, stringProvider, customerServicesProvider, hearingDetailsFinder);
     }
 
     @Bean("cmrRelistedHearingNoticeTemplate")
     public CmrRelistedHearingNoticeTemplate getCmrRelistedHearingNoticeTemplate(
             @Value("${cmrRelistedHearingNoticeDocument.templateName}") String templateName, StringProvider stringProvider) {
-        return new CmrRelistedHearingNoticeTemplate(templateName, stringProvider, customerServicesProvider);
+        return new CmrRelistedHearingNoticeTemplate(templateName, stringProvider, customerServicesProvider, hearingDetailsFinder);
     }
 
     @Bean("remoteCmrHearingNoticeTemplate")
     public CmrHearingNoticeTemplate getRemoteCmrHearingNoticeTemplate(
             @Value("${remoteCmrHearingNoticeDocument.templateName}") String templateName, StringProvider stringProvider) {
-        return new CmrHearingNoticeTemplate(templateName, stringProvider, customerServicesProvider);
+        return new CmrHearingNoticeTemplate(templateName, stringProvider, customerServicesProvider, hearingDetailsFinder);
     }
 }

@@ -5,6 +5,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseDetails;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.CmrHearingNoticeFieldMapper;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.StringProvider;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.CustomerServicesProvider;
+import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.HearingDetailsFinder;
 
 import java.util.Map;
 
@@ -13,12 +14,15 @@ public class CmrHearingNoticeTemplate implements DocumentTemplate<AsylumCase> {
     private final String templateName;
     private final StringProvider stringProvider;
     private final CustomerServicesProvider customerServicesProvider;
+    private final HearingDetailsFinder hearingDetailsFinder;
 
     public CmrHearingNoticeTemplate(String templateName, StringProvider stringProvider,
-                                    CustomerServicesProvider customerServicesProvider) {
+                                    CustomerServicesProvider customerServicesProvider,
+                                    HearingDetailsFinder hearingDetailsFinder) {
         this.templateName = templateName;
         this.stringProvider = stringProvider;
         this.customerServicesProvider = customerServicesProvider;
+        this.hearingDetailsFinder = hearingDetailsFinder;
     }
 
     public String getName() {
@@ -33,7 +37,7 @@ public class CmrHearingNoticeTemplate implements DocumentTemplate<AsylumCase> {
             caseDetails.getCaseData();
 
         final CmrHearingNoticeFieldMapper fieldMapper =
-            new CmrHearingNoticeFieldMapper(stringProvider, customerServicesProvider);
+            new CmrHearingNoticeFieldMapper(stringProvider, customerServicesProvider, hearingDetailsFinder);
 
         return fieldMapper.mapFields(asylumCase);
     }

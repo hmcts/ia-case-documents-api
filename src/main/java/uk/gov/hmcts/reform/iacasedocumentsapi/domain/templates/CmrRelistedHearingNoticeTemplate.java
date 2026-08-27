@@ -7,6 +7,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseDetails;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.CmrRelistedHearingNoticeFieldMapper;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.StringProvider;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.CustomerServicesProvider;
+import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.HearingDetailsFinder;
 
 import java.util.Map;
 
@@ -16,14 +17,17 @@ public class CmrRelistedHearingNoticeTemplate implements DocumentTemplate<Asylum
     private final String templateName;
     private final StringProvider stringProvider;
     private final CustomerServicesProvider customerServicesProvider;
+    private final HearingDetailsFinder hearingDetailsFinder;
 
     public CmrRelistedHearingNoticeTemplate(
             @Value("${cmrRelistedHearingNoticeDocument.templateName}") String templateName,
             StringProvider stringProvider,
-            CustomerServicesProvider customerServicesProvider) {
+            CustomerServicesProvider customerServicesProvider,
+            HearingDetailsFinder hearingDetailsFinder) {
         this.templateName = templateName;
         this.stringProvider = stringProvider;
         this.customerServicesProvider = customerServicesProvider;
+        this.hearingDetailsFinder = hearingDetailsFinder;
     }
 
     @Override
@@ -45,7 +49,8 @@ public class CmrRelistedHearingNoticeTemplate implements DocumentTemplate<Asylum
         final CmrRelistedHearingNoticeFieldMapper fieldMapper =
                 new CmrRelistedHearingNoticeFieldMapper(
                         stringProvider,
-                        customerServicesProvider
+                        customerServicesProvider,
+                        hearingDetailsFinder
                 );
 
         return fieldMapper.mapFieldValues(caseDetails, caseDetailsBefore);

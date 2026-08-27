@@ -22,6 +22,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseDetails;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.StringProvider;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.CustomerServicesProvider;
+import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.HearingDetailsFinder;
 
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
@@ -34,6 +35,7 @@ class CmrHearingNoticeTemplateTest {
     @Mock private CaseDetails<AsylumCase> caseDetails;
     @Mock private AsylumCase asylumCase;
     @Mock private CustomerServicesProvider customerServicesProvider;
+    @Mock private HearingDetailsFinder hearingDetailsFinder;
 
     private final String appealReferenceNumber = "RP/11111/2020";
     private final String appellantGivenNames = "Talha";
@@ -69,7 +71,8 @@ class CmrHearingNoticeTemplateTest {
             new CmrHearingNoticeTemplate(
                 templateName,
                 stringProvider,
-                customerServicesProvider
+                customerServicesProvider,
+                hearingDetailsFinder
             );
     }
 

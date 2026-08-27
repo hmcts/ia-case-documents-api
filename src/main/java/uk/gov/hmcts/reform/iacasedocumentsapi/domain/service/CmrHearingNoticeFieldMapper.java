@@ -5,6 +5,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.HearingCentre;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.CustomerServicesProvider;
+import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.HearingDetailsFinder;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -24,13 +25,17 @@ public class CmrHearingNoticeFieldMapper {
     private static final DateTimeFormatter DOCUMENT_TIME_FORMAT = DateTimeFormatter.ofPattern("HHmm");
     private final StringProvider stringProvider;
     private final CustomerServicesProvider customerServicesProvider;
+    private final HearingDetailsFinder hearingDetailsFinder;
 
     public CmrHearingNoticeFieldMapper(
         StringProvider stringProvider,
-        CustomerServicesProvider customerServicesProvider
+        CustomerServicesProvider customerServicesProvider,
+        HearingDetailsFinder hearingDetailsFinder
+
     ) {
         this.stringProvider = stringProvider;
         this.customerServicesProvider = customerServicesProvider;
+        this.hearingDetailsFinder = hearingDetailsFinder;
     }
 
     public Map<String, Object> mapFields(AsylumCase asylumCase) {
@@ -63,7 +68,7 @@ public class CmrHearingNoticeFieldMapper {
         //prevent the existing case with previous selected remote hearing when the ref data feature is on with different hearing centre
         //IS_REMOTE_HEARING is used for the case ref data
         if ((!isCaseUsingLocationRefData && listedHearingCentre.equals(HearingCentre.REMOTE_HEARING))
-                || (isCaseUsingLocationRefData && asylumCase.read(IS_REMOTE_HEARING, YesOrNo.class).orElse(YesOrNo.NO).equals(YesOrNo.YES))) {
+                || (isCaseUsingLocationRefData && asylumCase.read(CMR_IS_REMOTE_HEARING, YesOrNo.class).orElse(YesOrNo.NO).equals(YesOrNo.YES))) {
             fieldValues.put("remoteHearing", "Remote hearing");
             fieldValues.put("remoteVideoCallTribunalResponse", asylumCase.read(REMOTE_VIDEO_CALL_TRIBUNAL_RESPONSE, String.class).orElse(""));
         } else if (asylumCase.read(IS_VIRTUAL_HEARING, YesOrNo.class).orElse(YesOrNo.NO).equals(YesOrNo.YES)) {
@@ -72,7 +77,7 @@ public class CmrHearingNoticeFieldMapper {
         }
 
         fieldValues.put("hearingCentreAddress", isCaseUsingLocationRefData ?
-                asylumCase.read(CMR_HEARING_CENTRE_ADDRESS, String.class).orElse("")
+                hearingDetailsFinder.getCmrHearingCentreAddress(asylumCase)
                 : stringProvider.get("hearingCentreAddress", listedHearingCentre.toString()).orElse("").replaceAll(",\\s*", "\n")
         );
 
