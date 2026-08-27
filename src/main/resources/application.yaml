@@ -102,7 +102,7 @@ cmrHearingNoticeDocument.templateName: ${IA_HEARING_NOTICE_TEMPLATE:TB-IAC-HNO-E
 cmrRelistedHearingNoticeDocument.contentType: application/pdf
 cmrRelistedHearingNoticeDocument.fileExtension: PDF
 cmrRelistedHearingNoticeDocument.fileName: "interim-hearing-notice"
-cmrRelistedHearingNoticeDocument.templateName: ${IA_HEARING_NOTICE_TEMPLATE:TB-IAC-HNO-ENG-00241-CMR-Relisted.docx}
+cmrRelistedHearingNoticeDocument.templateName: ${IA_HEARING_NOTICE_TEMPLATE:TB-IAC-HNO-ENG-00241-relisted.docx}
 
 hearingNoticeAdaDocument.templateName: ${IA_ADA_HEARING_NOTICE_TEMPLATE:TB-IAC-HNO-ENG-ADA-0001.docx}
 
@@ -361,7 +361,7 @@ internalDetainedEditCaseListingLetter.templateName: ${IA_INTERNAL_DETAINED_EDIT_
 detainedCmrReListingLetter.contentType: application/pdf
 detainedCmrReListingLetter.fileExtension: PDF
 detainedCmrReListingLetter.fileName: "detained-appellant-cmr-relisting-letter"
-detainedCmrReListingLetter.templateName: ${IA_INTERNAL_DETAINED_EDIT_CASE_LISTING_LETTER_TEMPLATE:TB-IAC-LET-ENG-Internal-Edit-CMR-Listing.docx}
+detainedCmrReListingLetter.templateName: ${IA_INTERNAL_DETAINED_EDIT_CASE_LISTING_LETTER_TEMPLATE:TB-IAC-LET-ENG-Internal-CMR-Relisting.docx}
 
 internalDetainedManageFeeUpdateLetter.contentType: application/pdf
 internalDetainedManageFeeUpdateLetter.fileExtension: PDF
@@ -657,12 +657,12 @@ internalCmrListingLrLetter.templateName: ${INTERNAL_CASE_LISTED_LETTER_TEMPLATE:
 internalCmrReListingLetter.contentType:  application/pdf
 internalCmrReListingLetter.fileExtension: PDF
 internalCmrReListingLetter.fileName: "internal-cmr-relisting-letter"
-internalCmrReListingLetter.templateName: ${INTERNAL_CMR_RE_LISTING_LETTER_TEMPLATE:TB-IAC-LET-ENG-Internal-Edit-CMR-Listing.docx}
+internalCmrReListingLetter.templateName: ${INTERNAL_CMR_RE_LISTING_LETTER_TEMPLATE:TB-IAC-LET-ENG-Internal-CMR-Relisting.docx}
 
 internalCmrReListingLrLetter.contentType:  application/pdf
 internalCmrReListingLrLetter.fileExtension: PDF
 internalCmrReListingLrLetter.fileName: "internal-cmr-relisting-lr-letter"
-internalCmrReListingLrLetter.templateName: ${INTERNAL_CMR_RE_LISTING_LETTER_TEMPLATE:TB-IAC-LET-ENG-Internal-Edit-CMR-Listing.docx}
+internalCmrReListingLrLetter.templateName: ${INTERNAL_CMR_RE_LISTING_LETTER_TEMPLATE:TB-IAC-LET-ENG-Internal-CMR-Relisting.docx}
 
 cmrCancelledAppellantManualLetter.contentType:  application/pdf
 cmrCancelledAppellantManualLetter.fileExtension: PDF
