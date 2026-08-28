@@ -361,7 +361,7 @@ internalDetainedEditCaseListingLetter.templateName: ${IA_INTERNAL_DETAINED_EDIT_
 detainedCmrReListingLetter.contentType: application/pdf
 detainedCmrReListingLetter.fileExtension: PDF
 detainedCmrReListingLetter.fileName: "detained-appellant-cmr-relisting-letter"
-detainedCmrReListingLetter.templateName: ${IA_INTERNAL_DETAINED_EDIT_CASE_LISTING_LETTER_TEMPLATE:TB-IAC-LET-ENG-Internal-Edit-Case-Listing.docx}
+detainedCmrReListingLetter.templateName: ${IA_INTERNAL_DETAINED_EDIT_CASE_LISTING_LETTER_TEMPLATE:TB-IAC-HNO-ENG-00700cmr.docx}
 
 internalDetainedManageFeeUpdateLetter.contentType: application/pdf
 internalDetainedManageFeeUpdateLetter.fileExtension: PDF
@@ -657,12 +657,12 @@ internalCmrListingLrLetter.templateName: ${INTERNAL_CASE_LISTED_LETTER_TEMPLATE:
 internalCmrReListingLetter.contentType:  application/pdf
 internalCmrReListingLetter.fileExtension: PDF
 internalCmrReListingLetter.fileName: "internal-cmr-relisting-letter"
-internalCmrReListingLetter.templateName: ${INTERNAL_CMR_RE_LISTING_LETTER_TEMPLATE:TB-IAC-HNO-ENG-00700cmr.docx}
+internalCmrReListingLetter.templateName: ${INTERNAL_CMR_RE_LISTING_LETTER_TEMPLATE:TB-IAC-LET-ENG-Internal-Edit-Case-Listing.docx}
 
 internalCmrReListingLrLetter.contentType:  application/pdf
 internalCmrReListingLrLetter.fileExtension: PDF
 internalCmrReListingLrLetter.fileName: "internal-cmr-relisting-lr-letter"
-internalCmrReListingLrLetter.templateName: ${INTERNAL_CMR_RE_LISTING_LETTER_TEMPLATE:TB-IAC-HNO-ENG-00700cmr.docx}
+internalCmrReListingLrLetter.templateName: ${INTERNAL_CMR_RE_LISTING_LETTER_TEMPLATE:TB-IAC-LET-ENG-Internal-Edit-Case-Listing.docx}
 
 cmrCancelledAppellantManualLetter.contentType:  application/pdf
 cmrCancelledAppellantManualLetter.fileExtension: PDF
