@@ -28,7 +28,7 @@ public class InternalCmrListingLrLetterTemplate implements DocumentTemplate<Asyl
     private static final DateTimeFormatter DOCUMENT_TIME_FORMAT = DateTimeFormatter.ofPattern("HHmm");
 
     public InternalCmrListingLrLetterTemplate(
-        @Value("${internalCaseListedLetter.templateName}") String templateName,
+        @Value("${internalCmrListingLrLetter.templateName}") String templateName,
         CustomerServicesProvider customerServicesProvider,
         StringProvider stringProvider) {
         this.templateName = templateName;

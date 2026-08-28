@@ -341,7 +341,7 @@ internalDetainedListCaseLetter.templateName: ${IA_INTERNAL_DETAINED_LIST_CASE_LE
 detainedCmrListingLetter.contentType: application/pdf
 detainedCmrListingLetter.fileExtension: PDF
 detainedCmrListingLetter.fileName: "detained-appellant-cmr-listing-letter"
-detainedCmrListingLetter.templateName: ${IA_INTERNAL_DETAINED_LIST_CASE_LETTER_TEMPLATE:TB-IAC-LET-ENG-00005.docx}
+detainedCmrListingLetter.templateName: ${IA_INTERNAL_DETAINED_LIST_CASE_LETTER_TEMPLATE:TB-IAC-LET-ENG-00005-CMR-Detained.docx}
 
 internalDetainedRequestHearingRequirements.contentType:  application/pdf
 internalDetainedRequestHearingRequirements.fileExtension: PDF
@@ -647,12 +647,12 @@ internalCaseListedLetter.templateName: ${INTERNAL_CASE_LISTED_LETTER_TEMPLATE:TB
 internalCmrListingLetter.contentType:  application/pdf
 internalCmrListingLetter.fileExtension: PDF
 internalCmrListingLetter.fileName: "internal-cmr-listing-letter"
-internalCmrListingLetter.templateName: ${INTERNAL_CASE_LISTED_LETTER_TEMPLATE:TB-IAC-LET-ENG-Internal-Case-Listed.docx}
+internalCmrListingLetter.templateName: ${INTERNAL_CASE_LISTED_LETTER_TEMPLATE:TB-IAC-LET-ENG-Internal-CMR-Listing.docx}
 
 internalCmrListingLrLetter.contentType:  application/pdf
 internalCmrListingLrLetter.fileExtension: PDF
 internalCmrListingLrLetter.fileName: "internal-cmr-listing-lr-letter"
-internalCmrListingLrLetter.templateName: ${INTERNAL_CASE_LISTED_LETTER_TEMPLATE:TB-IAC-LET-ENG-Internal-Case-Listed.docx}
+internalCmrListingLrLetter.templateName: ${INTERNAL_CASE_LISTED_LETTER_TEMPLATE:TB-IAC-LET-ENG-Internal-CMR-Listing.docx}
 
 internalCmrReListingLetter.contentType:  application/pdf
 internalCmrReListingLetter.fileExtension: PDF
