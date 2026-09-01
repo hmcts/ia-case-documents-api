@@ -9,6 +9,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import static java.time.LocalDate.parse;
@@ -75,6 +76,10 @@ public class Stf24WeeksUtils {
         return asylumCase.read(AsylumCaseDefinition.APPELLANT_FAMILY_NAME, String.class).orElse(EMPTY_STRING);
     }
 
+    public static String getAppellantFullName(AsylumCase asylumCase) {
+        return (getAppellantGivenName(asylumCase) + " " + getAppellantFamilyName(asylumCase)).trim();
+    }
+
     public static String populateStatutoryTimeFrame24wDate(AsylumCase asylumCase) {
         String tribunalReceivedDate = getCaseDateDate(asylumCase, TRIBUNAL_RECEIVED_DATE);
         String stf24WeeksAddedToDate;
@@ -108,4 +113,17 @@ public class Stf24WeeksUtils {
         return LocalDate.parse(appealReceivedDate).format(DateTimeFormatter.ofPattern(D_MMM_YYYY));
     }
 
+    public static boolean hasCompleteCaseReviewDate(AsylumCase asylumCase) {
+        return asylumCase.read(AsylumCaseDefinition.COMPLETE_CASE_REVIEW_DATE, String.class).isPresent();
+    }
+
+    public static void setCompleteCaseReviewContentForRemoval(AsylumCase asylumCase, Map<String, Object> fieldValues) {
+        asylumCase
+            .read(AsylumCaseDefinition.COMPLETE_CASE_REVIEW_DATE, String.class)
+            .map(date -> LocalDate.parse(date).format(DateTimeFormatter.ofPattern(D_MMM_YYYY)))
+            .ifPresent(completeCaseReviewDate -> fieldValues.put("completeCaseReviewDependentContent",
+                "\nThe Pre-hearing Review and Directions sent to you on " + completeCaseReviewDate
+                    + " will no longer apply and you must now follow any new directions and "
+                    + "timescales sent by the Tribunal."));
+    }
 }

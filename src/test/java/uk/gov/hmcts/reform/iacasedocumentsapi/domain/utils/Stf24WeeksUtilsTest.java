@@ -14,14 +14,16 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefiniti
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.Event;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.STF_24W_CURRENT_STATUS_AUTO_GENERATED;
 
 @MockitoSettings(strictness = Strictness.LENIENT)
 @ExtendWith(MockitoExtension.class)
@@ -32,7 +34,7 @@ class Stf24WeeksUtilsTest {
 
     @BeforeEach
     void setUp() {
-        when(asylumCase.read(STF_24W_CURRENT_STATUS_AUTO_GENERATED, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
+        when(asylumCase.read(AsylumCaseDefinition.STF_24W_CURRENT_STATUS_AUTO_GENERATED, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
     }
 
     @ParameterizedTest
@@ -124,6 +126,7 @@ class Stf24WeeksUtilsTest {
                 .thenReturn(Optional.of("Smith"));
         assertEquals("John", Stf24WeeksUtils.getAppellantGivenName(asylumCase));
         assertEquals("Smith", Stf24WeeksUtils.getAppellantFamilyName(asylumCase));
+        assertEquals("John Smith", Stf24WeeksUtils.getAppellantFullName(asylumCase));
 
         when(asylumCase.read(AsylumCaseDefinition.APPELLANT_GIVEN_NAMES, String.class))
                 .thenReturn(Optional.empty());
@@ -131,6 +134,7 @@ class Stf24WeeksUtilsTest {
                 .thenReturn(Optional.empty());
         assertEquals("", Stf24WeeksUtils.getAppellantGivenName(asylumCase));
         assertEquals("", Stf24WeeksUtils.getAppellantFamilyName(asylumCase));
+        assertEquals("", Stf24WeeksUtils.getAppellantFullName(asylumCase));
     }
 
     @Test
@@ -176,4 +180,31 @@ class Stf24WeeksUtilsTest {
         IllegalStateException ex = assertThrows(IllegalStateException.class, () -> Stf24WeeksUtils.getAppealReceivedDate(asylumCase));
         assertEquals("Received date  is not present", ex.getMessage());
     }
+
+    @Test
+    void setCompleteCaseReviewContentForRemoval_should_set_when_complete_case_review_date_present() {
+        when(asylumCase.read(AsylumCaseDefinition.COMPLETE_CASE_REVIEW_DATE, String.class))
+            .thenReturn(Optional.of("2023-05-10"));
+        Map<String, Object> fieldValues = new HashMap<>();
+
+        Stf24WeeksUtils.setCompleteCaseReviewContentForRemoval(asylumCase, fieldValues);
+
+        assertEquals(1, fieldValues.size());
+        assertThat((String) fieldValues.get("completeCaseReviewDependentContent"))
+            .contains("\nThe Pre-hearing Review and Directions sent to you on ")
+            .contains("10 May 2023")
+            .contains(" will no longer apply and you must now follow any new directions and timescales sent by the Tribunal.");
+    }
+
+    @Test
+    void setCompleteCaseReviewContentForRemoval_should_nnot_set_when_complete_case_review_date_missing() {
+        when(asylumCase.read(AsylumCaseDefinition.COMPLETE_CASE_REVIEW_DATE, String.class))
+            .thenReturn(Optional.empty());
+        Map<String, Object> fieldValues = new HashMap<>();
+
+        Stf24WeeksUtils.setCompleteCaseReviewContentForRemoval(asylumCase, fieldValues);
+
+        assertTrue(fieldValues.isEmpty());
+    }
+
 }
