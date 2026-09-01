@@ -42,6 +42,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates.InternalDetainedR
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates.InternalDetainedRequestRespondentEvidenceTemplate;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates.InternalOocAppealSubmissionTemplate;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates.Stf24WeeksCaseReviewTemplate;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates.Stf24WeeksHearingNoticeTemplate;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates.Stf24WeeksRemovalDecisionTemplate;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates.UpdatedTribunalAipDecisionAndReasonsCoverLetterTemplate;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates.UpdatedTribunalDecisionAndReasonsCoverLetterTemplate;
