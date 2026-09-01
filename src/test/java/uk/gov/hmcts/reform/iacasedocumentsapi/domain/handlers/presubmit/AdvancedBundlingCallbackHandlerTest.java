@@ -14,12 +14,13 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+
 import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.ValueSource;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
@@ -44,15 +45,24 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.enties.em.Bundle;
 @MockitoSettings(strictness = Strictness.LENIENT)
 class AdvancedBundlingCallbackHandlerTest {
 
-    @Mock private EmBundleRequestExecutor emBundleRequestExecutor;
-    @Mock private Callback<AsylumCase> callback;
-    @Mock private CaseDetails<AsylumCase> caseDetails;
-    @Mock private AsylumCase asylumCase;
-    @Mock private PreSubmitCallbackResponse<AsylumCase> callbackResponse;
-    @Mock private Document document;
-    @Mock private DocumentsAppender documentsAppender;
-    @Mock private FeatureToggler featureToggler;
-    @Mock private List<IdValue<DocumentWithMetadata>> latestRemittalDocs;
+    @Mock
+    private EmBundleRequestExecutor emBundleRequestExecutor;
+    @Mock
+    private Callback<AsylumCase> callback;
+    @Mock
+    private CaseDetails<AsylumCase> caseDetails;
+    @Mock
+    private AsylumCase asylumCase;
+    @Mock
+    private PreSubmitCallbackResponse<AsylumCase> callbackResponse;
+    @Mock
+    private Document document;
+    @Mock
+    private DocumentsAppender documentsAppender;
+    @Mock
+    private FeatureToggler featureToggler;
+    @Mock
+    private List<IdValue<DocumentWithMetadata>> latestRemittalDocs;
 
     private String emBundlerUrl = "bundleurl";
     private String emBundlerStitchUri = "stitchingUri";
@@ -89,10 +99,19 @@ class AdvancedBundlingCallbackHandlerTest {
     }
 
     @ParameterizedTest
-    @ValueSource(strings = {"", "SUITABLE", "UNSUITABLE"})
-    void should_successfully_handle_the_callback(String maybeDecision) {
+    @CsvSource(value = {
+        "'',NO,false",
+        "SUITABLE,NO,true",
+        "UNSUITABLE,NO,true",
+        "'',YES,true",
+        "SUITABLE,YES,true",
+        "UNSUITABLE,YES,true"})
+    void should_successfully_handle_the_callback(String maybeDecision, YesOrNo is24w, boolean shouldHaveTribunalDocs) {
+
         when(asylumCase.read(SUITABILITY_REVIEW_DECISION)).thenReturn(maybeDecision.isEmpty()
-                ? Optional.empty() : Optional.of(AdaSuitabilityReviewDecision.valueOf(maybeDecision)));
+            ? Optional.empty() : Optional.of(AdaSuitabilityReviewDecision.valueOf(maybeDecision)));
+        when(asylumCase.read(STF_24W_PREVIOUS_STATUS_WAS_YES_AUTO_GENERATED, YesOrNo.class))
+            .thenReturn(Optional.of(is24w));
         PreSubmitCallbackResponse<AsylumCase> callbackResponse =
             advancedBundlingCallbackHandler.handle(ABOUT_TO_SUBMIT, callback);
 
@@ -107,18 +126,17 @@ class AdvancedBundlingCallbackHandlerTest {
         verify(asylumCase).write(AsylumCaseDefinition.HMCTS, "[userImage:hmcts.png]");
         verify(asylumCase).clear(AsylumCaseDefinition.CASE_BUNDLES);
         verify(asylumCase).write(AsylumCaseDefinition.BUNDLE_CONFIGURATION,
-                maybeDecision.isEmpty() ? "iac-hearing-bundle-config.yaml" : "iac-hearing-bundle-inc-tribunal-config.yaml");
+            shouldHaveTribunalDocs ? "iac-hearing-bundle-inc-tribunal-config.yaml" : "iac-hearing-bundle-config.yaml");
         verify(asylumCase).write(AsylumCaseDefinition.BUNDLE_FILE_NAME_PREFIX, "PA 50002 2020-" + appellantFamilyName);
-
     }
 
     @Test
     void should_successfully_handle_the_callback_in_reheard() {
 
         DocumentWithMetadata addendumEvidenceAppellantDocument = new DocumentWithMetadata(
-            document, "test","2020-12-12", DocumentTag.ADDENDUM_EVIDENCE, "The appellant");
+            document, "test", "2020-12-12", DocumentTag.ADDENDUM_EVIDENCE, "The appellant");
         DocumentWithMetadata addendumEvidenceRespondentDocument = new DocumentWithMetadata(
-            document, "test","2020-12-12", DocumentTag.ADDENDUM_EVIDENCE, "The respondent");
+            document, "test", "2020-12-12", DocumentTag.ADDENDUM_EVIDENCE, "The respondent");
         List<IdValue<DocumentWithMetadata>> documents = new ArrayList<>();
         documents.add(new IdValue<DocumentWithMetadata>("0", addendumEvidenceAppellantDocument));
         documents.add(new IdValue<DocumentWithMetadata>("1", addendumEvidenceRespondentDocument));
@@ -162,9 +180,9 @@ class AdvancedBundlingCallbackHandlerTest {
         final List<IdValue<RemittalDocument>> remittalDocuments = buildRemittalDocuments();
 
         DocumentWithMetadata addendumEvidenceAppellantDocument = new DocumentWithMetadata(
-                document, "test","2020-12-12", DocumentTag.ADDENDUM_EVIDENCE, "The appellant");
+            document, "test", "2020-12-12", DocumentTag.ADDENDUM_EVIDENCE, "The appellant");
         DocumentWithMetadata addendumEvidenceRespondentDocument = new DocumentWithMetadata(
-                document, "test","2020-12-12", DocumentTag.ADDENDUM_EVIDENCE, "The respondent");
+            document, "test", "2020-12-12", DocumentTag.ADDENDUM_EVIDENCE, "The respondent");
         List<IdValue<DocumentWithMetadata>> documents = new ArrayList<>();
         documents.add(new IdValue<>("0", addendumEvidenceAppellantDocument));
         documents.add(new IdValue<>("1", addendumEvidenceRespondentDocument));
@@ -176,11 +194,11 @@ class AdvancedBundlingCallbackHandlerTest {
         when(asylumCase.read(REHEARD_HEARING_DOCUMENTS_COLLECTION)).thenReturn(Optional.of(reheardHearingDocs));
         when(asylumCase.read(REMITTAL_DOCUMENTS)).thenReturn(Optional.of(remittalDocuments));
         when(documentsAppender.append(remittalDocuments.getFirst().getValue().getOtherRemittalDocs(),
-                Collections.singletonList(remittalDocuments.getFirst().getValue().getDecisionDocument())))
-                .thenReturn(latestRemittalDocs);
+            Collections.singletonList(remittalDocuments.getFirst().getValue().getDecisionDocument())))
+            .thenReturn(latestRemittalDocs);
 
         PreSubmitCallbackResponse<AsylumCase> callbackResponse =
-                advancedBundlingCallbackHandler.handle(ABOUT_TO_SUBMIT, callback);
+            advancedBundlingCallbackHandler.handle(ABOUT_TO_SUBMIT, callback);
 
         assertNotNull(callbackResponse);
         assertEquals(asylumCase, callbackResponse.getData());
@@ -214,11 +232,11 @@ class AdvancedBundlingCallbackHandlerTest {
     @Test
     void should_successfully_handle_the_callback_in_reheard_and_remitted_minimum_data_present() {
         IdValue<DocumentWithMetadata> finalDecisionsAndReasonsDoc =
-                new IdValue<>("1",
-                        new DocumentWithMetadata(document, "test","2020-12-12",
-                                DocumentTag.FTPA_DECISION_AND_REASONS, "The appellant"));
+            new IdValue<>("1",
+                new DocumentWithMetadata(document, "test", "2020-12-12",
+                    DocumentTag.FTPA_DECISION_AND_REASONS, "The appellant"));
         final List<IdValue<DocumentWithMetadata>> finalDecisionsAndReasonsDocs =
-                Lists.newArrayList(finalDecisionsAndReasonsDoc);
+            Lists.newArrayList(finalDecisionsAndReasonsDoc);
 
         when(asylumCase.read(CASE_FLAG_SET_ASIDE_REHEARD_EXISTS, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
         when(asylumCase.read(ADDENDUM_EVIDENCE_DOCUMENTS)).thenReturn(Optional.empty());
@@ -227,7 +245,7 @@ class AdvancedBundlingCallbackHandlerTest {
         when(asylumCase.read(FINAL_DECISION_AND_REASONS_DOCUMENTS)).thenReturn(Optional.of(finalDecisionsAndReasonsDocs));
 
         PreSubmitCallbackResponse<AsylumCase> callbackResponse =
-                advancedBundlingCallbackHandler.handle(ABOUT_TO_SUBMIT, callback);
+            advancedBundlingCallbackHandler.handle(ABOUT_TO_SUBMIT, callback);
 
         assertNotNull(callbackResponse);
         assertEquals(asylumCase, callbackResponse.getData());
@@ -351,36 +369,36 @@ class AdvancedBundlingCallbackHandlerTest {
         String description = "Some evidence";
         String dateUploaded = "2018-12-25";
         final DocumentWithMetadata coverLetterDocumentWithMetadata = new DocumentWithMetadata(
-                document, description, dateUploaded, DocumentTag.DECISION_AND_REASONS_COVER_LETTER, "");
+            document, description, dateUploaded, DocumentTag.DECISION_AND_REASONS_COVER_LETTER, "");
         final DocumentWithMetadata decisionDocumentWithMetadata = new DocumentWithMetadata(
-                document, description, dateUploaded, DocumentTag.FINAL_DECISION_AND_REASONS_PDF, "");
+            document, description, dateUploaded, DocumentTag.FINAL_DECISION_AND_REASONS_PDF, "");
 
         IdValue<DocumentWithMetadata> decisionDocWithMetadata =
-                new IdValue<>("2", decisionDocumentWithMetadata);
+            new IdValue<>("2", decisionDocumentWithMetadata);
         IdValue<DocumentWithMetadata> coverLetterDocWithMetadata =
-                new IdValue<>("1", coverLetterDocumentWithMetadata);
+            new IdValue<>("1", coverLetterDocumentWithMetadata);
         final List<IdValue<DocumentWithMetadata>> listOfDocumentsWithMetadata = Lists.newArrayList(decisionDocWithMetadata, coverLetterDocWithMetadata);
         IdValue<ReheardHearingDocuments> reheardHearingDocuments =
-                new IdValue<>("1", new ReheardHearingDocuments(listOfDocumentsWithMetadata));
+            new IdValue<>("1", new ReheardHearingDocuments(listOfDocumentsWithMetadata));
         return Lists.newArrayList(reheardHearingDocuments);
     }
 
     private List<IdValue<RemittalDocument>> buildRemittalDocuments() {
 
         final DocumentWithMetadata remittalDec = new DocumentWithMetadata(
-                document, "test","2023-12-12", DocumentTag.REMITTAL_DECISION, "");
+            document, "test", "2023-12-12", DocumentTag.REMITTAL_DECISION, "");
         final DocumentWithMetadata remittalOtherDoc1 = new DocumentWithMetadata(
-                document, "other-test-1","2023-12-12", DocumentTag.REMITTAL_DECISION, "");
+            document, "other-test-1", "2023-12-12", DocumentTag.REMITTAL_DECISION, "");
         final DocumentWithMetadata remittalOtherDoc2 = new DocumentWithMetadata(
-                document, "other-test-1","2023-12-12", DocumentTag.REMITTAL_DECISION, "");
+            document, "other-test-1", "2023-12-12", DocumentTag.REMITTAL_DECISION, "");
         IdValue<DocumentWithMetadata> decisionDocWithMetadata =
-                new IdValue<>("11", remittalOtherDoc1);
+            new IdValue<>("11", remittalOtherDoc1);
         IdValue<DocumentWithMetadata> coverLetterDocWithMetadata =
-                new IdValue<>("12", remittalOtherDoc2);
+            new IdValue<>("12", remittalOtherDoc2);
 
         final List<IdValue<DocumentWithMetadata>> listOfDocumentsWithMetadata = Lists.newArrayList(decisionDocWithMetadata, coverLetterDocWithMetadata);
         IdValue<RemittalDocument> remittalDocuments =
-                new IdValue<>("1", new RemittalDocument(remittalDec, listOfDocumentsWithMetadata));
+            new IdValue<>("1", new RemittalDocument(remittalDec, listOfDocumentsWithMetadata));
         return Lists.newArrayList(remittalDocuments);
     }
 }

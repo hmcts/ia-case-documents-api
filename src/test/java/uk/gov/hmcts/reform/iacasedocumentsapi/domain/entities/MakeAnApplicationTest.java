@@ -2,6 +2,7 @@ package uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 import java.util.Collections;
 import java.util.List;
@@ -46,6 +47,10 @@ public class MakeAnApplicationTest {
         assertEquals(decision, makeAnApplication.getDecision());
         assertEquals(state, makeAnApplication.getState());
         assertEquals(applicantRole, makeAnApplication.getApplicantRole());
+        assertNull(makeAnApplication.getRefusalOfRemoval24wDocument());
+        Document doc = new Document("document_url", "document_binary_url", "document_filename");
+        makeAnApplication.setRefusalOfRemoval24wDocument(doc);
+        assertEquals(doc, makeAnApplication.getRefusalOfRemoval24wDocument());
     }
 
     @Test
