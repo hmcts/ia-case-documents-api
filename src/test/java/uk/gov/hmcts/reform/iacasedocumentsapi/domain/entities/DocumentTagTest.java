@@ -1,8 +1,8 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
 import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class DocumentTagTest {
 
@@ -128,6 +128,16 @@ class DocumentTagTest {
         assertEquals("cmrHearingCancelledLetter", DocumentTag.CMR_HEARING_CANCELLED_LETTER.toString());
         assertEquals("cmrHearingCancelledLrLetter", DocumentTag.CMR_HEARING_CANCELLED_LR_LETTER.toString());
         assertEquals("stf24WeeksCaseReviewAppeallantDocument", DocumentTag.STF_24WEEKS_CASE_REVIEW_APPELLANT_DOCUMENT.toString());
+        assertEquals("stf24WeeksRemovalDecisionDocument", DocumentTag.STF_24WEEKS_REMOVAL_DECISION_DOCUMENT.toString());
+        assertEquals("stf24WeeksRemovalDecisionLetter", DocumentTag.STF_24WEEKS_REMOVAL_DECISION_LETTER.toString());
+        assertEquals("stf24WeeksRemovalDecisionLetterBundle", DocumentTag.STF_24WEEKS_REMOVAL_DECISION_LETTER_BUNDLE.toString());
+        assertEquals("stf24WeeksRemovalDecisionLetterLr", DocumentTag.STF_24WEEKS_REMOVAL_DECISION_LETTER_LR.toString());
+        assertEquals("stf24WeeksRemovalDecisionLetterLrBundle", DocumentTag.STF_24WEEKS_REMOVAL_DECISION_LETTER_LR_BUNDLE.toString());
+        assertEquals("stf24WeeksRemovalRefusedDecisionDocument", DocumentTag.STF_24WEEKS_REMOVAL_REFUSED_DECISION_DOCUMENT.toString());
+        assertEquals("stf24WeeksRemovalRefusedDecisionLetter", DocumentTag.STF_24WEEKS_REMOVAL_REFUSED_DECISION_LETTER.toString());
+        assertEquals("stf24WeeksRemovalRefusedDecisionLetterBundle", DocumentTag.STF_24WEEKS_REMOVAL_REFUSED_DECISION_LETTER_BUNDLE.toString());
+        assertEquals("stf24WeeksRemovalRefusedDecisionLetterLr", DocumentTag.STF_24WEEKS_REMOVAL_REFUSED_DECISION_LETTER_LR.toString());
+        assertEquals("stf24WeeksRemovalRefusedDecisionLetterLrBundle", DocumentTag.STF_24WEEKS_REMOVAL_REFUSED_DECISION_LETTER_LR_BUNDLE.toString());
 
     }
 

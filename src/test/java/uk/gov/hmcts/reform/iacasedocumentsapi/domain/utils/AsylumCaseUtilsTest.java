@@ -55,6 +55,7 @@ import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumAppea
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumAppealType.EU;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumAppealType.HU;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.ADDENDUM_EVIDENCE_DOCUMENTS;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.LETTER_NOTIFICATION_DOCUMENTS;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.OUT_OF_TIME_DECISION_DOCUMENT;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.AMOUNT_REMITTED;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.APPEAL_TYPE;
@@ -89,6 +90,7 @@ import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtil
 
 @MockitoSettings(strictness = Strictness.LENIENT)
 @ExtendWith(MockitoExtension.class)
+@SuppressWarnings("unchecked")
 public class AsylumCaseUtilsTest {
 
     @Mock
@@ -573,9 +575,8 @@ public class AsylumCaseUtilsTest {
     void should_throw_when_address_is_not_present() {
         when(asylumCase.read(AsylumCaseDefinition.APPELLANT_ADDRESS, AddressUk.class)).thenReturn(Optional.empty());
 
-        assertThrows(IllegalStateException.class, () -> {
-            AsylumCaseUtils.getAppellantAddressAsList(asylumCase);
-        }, "appellantAddress is not present");
+        assertThrows(IllegalStateException.class, () ->
+            AsylumCaseUtils.getAppellantAddressAsList(asylumCase), "appellantAddress is not present");
     }
 
     @Test
@@ -598,7 +599,7 @@ public class AsylumCaseUtilsTest {
 
         boolean result = AsylumCaseUtils.isAppellantInUk(asylumCase);
 
-        assertEquals(true, result);
+        assertTrue(result);
     }
 
     @Test
@@ -993,9 +994,8 @@ public class AsylumCaseUtilsTest {
         when(asylumCase.read(HEARING_CHANNEL, DynamicList.class)).thenReturn(Optional.of(hearingChannelDynamicList));
         when(hearingChannelDynamicList.getValue()).thenReturn(null);
 
-        assertThrows(NullPointerException.class, () -> {
-            AsylumCaseUtils.getHearingChannel(asylumCase, defaultValue);
-        });
+        assertThrows(NullPointerException.class, () ->
+            AsylumCaseUtils.getHearingChannel(asylumCase, defaultValue));
     }
 
     @Test
@@ -1107,6 +1107,176 @@ public class AsylumCaseUtilsTest {
             String result = AsylumCaseUtils.addIndefiniteArticle("  Admin  ");
             assertEquals("An Admin", result);
         }
+    }
+
+    @Test
+    void shouldReturnLatestLetterNotificationDocumentWhenMatchingDocumentExists() {
+        AsylumCase asylumCase = mock(AsylumCase.class);
+
+        DocumentTag documentTag = DocumentTag.ADDENDUM_EVIDENCE;
+        DocumentWithMetadata document = mock(DocumentWithMetadata.class);
+        IdValue<DocumentWithMetadata> idValue = mock(IdValue.class);
+
+        when(asylumCase.read(LETTER_NOTIFICATION_DOCUMENTS))
+            .thenReturn(Optional.of(List.of(idValue)));
+        when(idValue.getValue()).thenReturn(document);
+        when(document.getTag()).thenReturn(documentTag);
+
+        List<DocumentWithMetadata> result =
+            AsylumCaseUtils.getLatestLetterNotificationDocument(asylumCase, documentTag);
+
+        assertEquals(List.of(document), result);
+    }
+
+    @Test
+    void shouldReturnEmptyListWhenNoMatchingDocumentExists() {
+        AsylumCase asylumCase = mock(AsylumCase.class);
+
+        DocumentTag requestedTag = DocumentTag.ADDENDUM_EVIDENCE;
+        DocumentTag differentTag = DocumentTag.STF_24WEEKS_REMOVAL_DECISION_DOCUMENT;
+
+        DocumentWithMetadata document = mock(DocumentWithMetadata.class);
+        IdValue<DocumentWithMetadata> idValue = mock(IdValue.class);
+
+        when(asylumCase.read(LETTER_NOTIFICATION_DOCUMENTS))
+            .thenReturn(Optional.of(List.of(idValue)));
+        when(idValue.getValue()).thenReturn(document);
+        when(document.getTag()).thenReturn(differentTag);
+
+        List<DocumentWithMetadata> result =
+            AsylumCaseUtils.getLatestLetterNotificationDocument(asylumCase, requestedTag);
+
+        assertEquals(List.of(), result);
+    }
+
+    @Test
+    void shouldReturnEmptyListWhenLetterNotificationDocumentsAreNotPresent() {
+        AsylumCase asylumCase = mock(AsylumCase.class);
+
+        when(asylumCase.read(LETTER_NOTIFICATION_DOCUMENTS))
+            .thenReturn(Optional.empty());
+
+        List<DocumentWithMetadata> result =
+            AsylumCaseUtils.getLatestLetterNotificationDocument(
+                asylumCase,
+                DocumentTag.ADDENDUM_EVIDENCE
+            );
+
+        assertEquals(List.of(), result);
+    }
+
+    @Test
+    void shouldReturnEmptyListWhenLetterNotificationDocumentsListIsEmpty() {
+        AsylumCase asylumCase = mock(AsylumCase.class);
+
+        when(asylumCase.read(LETTER_NOTIFICATION_DOCUMENTS))
+            .thenReturn(Optional.of(List.of()));
+
+        List<DocumentWithMetadata> result =
+            AsylumCaseUtils.getLatestLetterNotificationDocument(
+                asylumCase,
+                DocumentTag.ADDENDUM_EVIDENCE
+            );
+
+        assertEquals(List.of(), result);
+    }
+
+    @Test
+    void shouldReturnFirstMatchingDocumentWhenMultipleDocumentsExist() {
+        AsylumCase asylumCase = mock(AsylumCase.class);
+
+        DocumentTag requestedTag = DocumentTag.ADDENDUM_EVIDENCE;
+
+        DocumentWithMetadata firstDocument = mock(DocumentWithMetadata.class);
+        DocumentWithMetadata secondDocument = mock(DocumentWithMetadata.class);
+
+        IdValue<DocumentWithMetadata> firstIdValue = mock(IdValue.class);
+        IdValue<DocumentWithMetadata> secondIdValue = mock(IdValue.class);
+
+        when(asylumCase.read(LETTER_NOTIFICATION_DOCUMENTS))
+            .thenReturn(Optional.of(List.of(firstIdValue, secondIdValue)));
+
+        when(firstIdValue.getValue()).thenReturn(firstDocument);
+        when(secondIdValue.getValue()).thenReturn(secondDocument);
+
+        when(firstDocument.getTag()).thenReturn(requestedTag);
+        when(secondDocument.getTag()).thenReturn(requestedTag);
+
+        List<DocumentWithMetadata> result =
+            AsylumCaseUtils.getLatestLetterNotificationDocument(
+                asylumCase,
+                requestedTag
+            );
+
+        assertEquals(List.of(firstDocument), result);
+    }
+
+    @Test
+    void shouldReturnMatchingDocumentWhenItIsNotFirstInList() {
+        AsylumCase asylumCase = mock(AsylumCase.class);
+
+        DocumentTag requestedTag = DocumentTag.ADDENDUM_EVIDENCE;
+        DocumentTag differentTag = DocumentTag.STF_24WEEKS_REMOVAL_DECISION_DOCUMENT;
+
+        DocumentWithMetadata firstDocument = mock(DocumentWithMetadata.class);
+        DocumentWithMetadata matchingDocument = mock(DocumentWithMetadata.class);
+
+        IdValue<DocumentWithMetadata> firstIdValue = mock(IdValue.class);
+        IdValue<DocumentWithMetadata> matchingIdValue = mock(IdValue.class);
+
+        when(asylumCase.read(LETTER_NOTIFICATION_DOCUMENTS))
+            .thenReturn(Optional.of(List.of(firstIdValue, matchingIdValue)));
+
+        when(firstIdValue.getValue()).thenReturn(firstDocument);
+        when(matchingIdValue.getValue()).thenReturn(matchingDocument);
+
+        when(firstDocument.getTag()).thenReturn(differentTag);
+        when(matchingDocument.getTag()).thenReturn(requestedTag);
+
+        List<DocumentWithMetadata> result =
+            AsylumCaseUtils.getLatestLetterNotificationDocument(
+                asylumCase,
+                requestedTag
+            );
+
+        assertEquals(List.of(matchingDocument), result);
+    }
+
+    @Test
+    void shouldOnlyReturnFirstMatchingDocumentWhenMultipleMatchingDocumentsExist() {
+        AsylumCase asylumCase = mock(AsylumCase.class);
+
+        DocumentTag requestedTag = DocumentTag.ADDENDUM_EVIDENCE;
+
+        DocumentWithMetadata firstMatchingDocument = mock(DocumentWithMetadata.class);
+        DocumentWithMetadata secondMatchingDocument = mock(DocumentWithMetadata.class);
+        DocumentWithMetadata thirdMatchingDocument = mock(DocumentWithMetadata.class);
+
+        IdValue<DocumentWithMetadata> firstIdValue = mock(IdValue.class);
+        IdValue<DocumentWithMetadata> secondIdValue = mock(IdValue.class);
+        IdValue<DocumentWithMetadata> thirdIdValue = mock(IdValue.class);
+
+        when(asylumCase.read(LETTER_NOTIFICATION_DOCUMENTS))
+            .thenReturn(Optional.of(
+                List.of(firstIdValue, secondIdValue, thirdIdValue)
+            ));
+
+        when(firstIdValue.getValue()).thenReturn(firstMatchingDocument);
+        when(secondIdValue.getValue()).thenReturn(secondMatchingDocument);
+        when(thirdIdValue.getValue()).thenReturn(thirdMatchingDocument);
+
+        when(firstMatchingDocument.getTag()).thenReturn(requestedTag);
+        when(secondMatchingDocument.getTag()).thenReturn(requestedTag);
+        when(thirdMatchingDocument.getTag()).thenReturn(requestedTag);
+
+        List<DocumentWithMetadata> result =
+            AsylumCaseUtils.getLatestLetterNotificationDocument(
+                asylumCase,
+                requestedTag
+            );
+
+        assertEquals(1, result.size());
+        assertEquals(firstMatchingDocument, result.getFirst());
     }
 
 }
