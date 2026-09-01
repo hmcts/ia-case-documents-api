@@ -3,11 +3,13 @@ package uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit;
 import static java.util.Collections.emptyList;
 import static java.util.Objects.requireNonNull;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.*;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.getTribunalInclusion;
 
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
@@ -28,7 +30,6 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.FeatureToggler;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.clients.EmBundleRequestExecutor;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.enties.em.Bundle;
 
-
 @Component
 public class AdvancedBundlingCallbackHandler implements PreSubmitCallbackHandler<AsylumCase> {
 
@@ -42,11 +43,11 @@ public class AdvancedBundlingCallbackHandler implements PreSubmitCallbackHandler
     private final FeatureToggler featureToggler;
 
     public AdvancedBundlingCallbackHandler(
-            @Value("${emBundler.url}") String emBundlerUrl,
-            @Value("${emBundler.stitch.async.uri}") String emBundlerStitchUri,
-            EmBundleRequestExecutor emBundleRequestExecutor,
-            DocumentsAppender documentsAppender,
-            FeatureToggler featureToggler) {
+        @Value("${emBundler.url}") String emBundlerUrl,
+        @Value("${emBundler.stitch.async.uri}") String emBundlerStitchUri,
+        EmBundleRequestExecutor emBundleRequestExecutor,
+        DocumentsAppender documentsAppender,
+        FeatureToggler featureToggler) {
         this.emBundlerUrl = emBundlerUrl;
         this.emBundlerStitchUri = emBundlerStitchUri;
         this.emBundleRequestExecutor = emBundleRequestExecutor;
@@ -62,7 +63,7 @@ public class AdvancedBundlingCallbackHandler implements PreSubmitCallbackHandler
         requireNonNull(callback, "callback must not be null");
 
         return callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
-               && callback.getEvent() == Event.GENERATE_HEARING_BUNDLE;
+            && callback.getEvent() == Event.GENERATE_HEARING_BUNDLE;
     }
 
     public PreSubmitCallbackResponse<AsylumCase> handle(
@@ -78,21 +79,23 @@ public class AdvancedBundlingCallbackHandler implements PreSubmitCallbackHandler
                 .getCaseDetails()
                 .getCaseData();
         asylumCase.clear(HMCTS);
-        asylumCase.write(AsylumCaseDefinition.HMCTS,"[userImage:hmcts.png]");
+        asylumCase.write(AsylumCaseDefinition.HMCTS, "[userImage:hmcts.png]");
         asylumCase.clear(AsylumCaseDefinition.CASE_BUNDLES);
 
-        Optional<YesOrNo> maybeCaseFlagSetAsideReheardExists = asylumCase.read(CASE_FLAG_SET_ASIDE_REHEARD_EXISTS,YesOrNo.class);
-        boolean isOrWasAda = asylumCase.read(SUITABILITY_REVIEW_DECISION).isPresent();
+        Optional<YesOrNo> maybeCaseFlagSetAsideReheardExists = asylumCase.read(CASE_FLAG_SET_ASIDE_REHEARD_EXISTS, YesOrNo.class);
+        boolean shouldIncTribunalDocs = asylumCase.read(SUITABILITY_REVIEW_DECISION).isPresent()
+            || asylumCase.read(STF_24W_PREVIOUS_STATUS_WAS_YES_AUTO_GENERATED, YesOrNo.class).orElse(YesOrNo.NO)
+            .equals(YesOrNo.YES);
 
         boolean isRemittedFeature = featureToggler.getValue("dlrm-remitted-feature-flag", false);
 
         if (maybeCaseFlagSetAsideReheardExists.isPresent()
             && maybeCaseFlagSetAsideReheardExists.get() == YesOrNo.YES) {
-            asylumCase.write(APPELLANT_ADDENDUM_EVIDENCE_DOCS,getIdValues(asylumCase,ADDENDUM_EVIDENCE_DOCUMENTS, SUPPLIED_BY_APPELLANT, DocumentTag.ADDENDUM_EVIDENCE));
-            asylumCase.write(RESPONDENT_ADDENDUM_EVIDENCE_DOCS,getIdValues(asylumCase,ADDENDUM_EVIDENCE_DOCUMENTS, SUPPLIED_BY_RESPONDENT,DocumentTag.ADDENDUM_EVIDENCE));
+            asylumCase.write(APPELLANT_ADDENDUM_EVIDENCE_DOCS, getIdValues(asylumCase, ADDENDUM_EVIDENCE_DOCUMENTS, SUPPLIED_BY_APPELLANT, DocumentTag.ADDENDUM_EVIDENCE));
+            asylumCase.write(RESPONDENT_ADDENDUM_EVIDENCE_DOCS, getIdValues(asylumCase, ADDENDUM_EVIDENCE_DOCUMENTS, SUPPLIED_BY_RESPONDENT, DocumentTag.ADDENDUM_EVIDENCE));
 
-            asylumCase.write(APP_ADDITIONAL_EVIDENCE_DOCS,getIdValues(asylumCase, ADDITIONAL_EVIDENCE_DOCUMENTS, SUPPLIED_BY_APPELLANT,DocumentTag.ADDITIONAL_EVIDENCE));
-            asylumCase.write(RESP_ADDITIONAL_EVIDENCE_DOCS,getIdValues(asylumCase, RESPONDENT_DOCUMENTS, SUPPLIED_BY_RESPONDENT,DocumentTag.ADDITIONAL_EVIDENCE));
+            asylumCase.write(APP_ADDITIONAL_EVIDENCE_DOCS, getIdValues(asylumCase, ADDITIONAL_EVIDENCE_DOCUMENTS, SUPPLIED_BY_APPELLANT, DocumentTag.ADDITIONAL_EVIDENCE));
+            asylumCase.write(RESP_ADDITIONAL_EVIDENCE_DOCS, getIdValues(asylumCase, RESPONDENT_DOCUMENTS, SUPPLIED_BY_RESPONDENT, DocumentTag.ADDITIONAL_EVIDENCE));
 
             if (isRemittedFeature) {
                 mapRemittedData(asylumCase);
@@ -102,8 +105,7 @@ public class AdvancedBundlingCallbackHandler implements PreSubmitCallbackHandler
             }
 
         } else {
-            asylumCase.write(AsylumCaseDefinition.BUNDLE_CONFIGURATION,
-                    isOrWasAda ? "iac-hearing-bundle-inc-tribunal-config.yaml" : "iac-hearing-bundle-config.yaml");
+            asylumCase.write(AsylumCaseDefinition.BUNDLE_CONFIGURATION, getTribunalInclusion("iac-hearing-bundle", shouldIncTribunalDocs));
 
         }
         asylumCase.write(AsylumCaseDefinition.BUNDLE_FILE_NAME_PREFIX, getBundlePrefix(asylumCase));
@@ -111,7 +113,7 @@ public class AdvancedBundlingCallbackHandler implements PreSubmitCallbackHandler
         final PreSubmitCallbackResponse<AsylumCase> response = emBundleRequestExecutor.post(callback, emBundlerUrl + emBundlerStitchUri);
 
         final AsylumCase responseData = response.getData();
-        Optional<List<IdValue<Bundle>>> maybeCaseBundles  = responseData.read(AsylumCaseDefinition.CASE_BUNDLES);
+        Optional<List<IdValue<Bundle>>> maybeCaseBundles = responseData.read(AsylumCaseDefinition.CASE_BUNDLES);
 
         final List<Bundle> caseBundles = maybeCaseBundles
             .orElseThrow(() -> new IllegalStateException("caseBundle is not present"))
@@ -150,12 +152,12 @@ public class AdvancedBundlingCallbackHandler implements PreSubmitCallbackHandler
                 .orElseThrow(() -> new IllegalStateException("appellantFamilyName is not present"));
 
         return appealReferenceNumber.replace("/", " ")
-               + "-" + appellantFamilyName;
+            + "-" + appellantFamilyName;
     }
 
     private List<IdValue<DocumentWithMetadata>> getIdValues(
         AsylumCase asylumCase,
-        AsylumCaseDefinition fieldDefinition,String suppliedBy, DocumentTag tag
+        AsylumCaseDefinition fieldDefinition, String suppliedBy, DocumentTag tag
     ) {
 
         Optional<List<IdValue<DocumentWithMetadata>>> maybeIdValues = asylumCase
@@ -183,13 +185,13 @@ public class AdvancedBundlingCallbackHandler implements PreSubmitCallbackHandler
 
     private List<IdValue<DocumentWithMetadata>> fetchLatestDecisionDocuments(AsylumCase asylumCase) {
         Optional<List<IdValue<ReheardHearingDocuments>>> maybeExistingReheardDocuments =
-                asylumCase.read(REHEARD_DECISION_REASONS_COLLECTION);
+            asylumCase.read(REHEARD_DECISION_REASONS_COLLECTION);
         List<IdValue<ReheardHearingDocuments>> allReheardDecisionDocuments = maybeExistingReheardDocuments
-                .orElse(emptyList());
+            .orElse(emptyList());
 
         if (allReheardDecisionDocuments.isEmpty()) {
             Optional<List<IdValue<DocumentWithMetadata>>> maybeFinalDecisionAndReasonsDocuments =
-                    asylumCase.read(FINAL_DECISION_AND_REASONS_DOCUMENTS);
+                asylumCase.read(FINAL_DECISION_AND_REASONS_DOCUMENTS);
             return maybeFinalDecisionAndReasonsDocuments.orElse(emptyList());
         } else {
             return allReheardDecisionDocuments.getFirst().getValue().getReheardHearingDocs();
@@ -198,18 +200,18 @@ public class AdvancedBundlingCallbackHandler implements PreSubmitCallbackHandler
 
     private List<IdValue<DocumentWithMetadata>> fetchLatestRemittalDocuments(AsylumCase asylumCase) {
         Optional<List<IdValue<RemittalDocument>>> maybeExistingRemittalDocuments =
-                asylumCase.read(REMITTAL_DOCUMENTS);
+            asylumCase.read(REMITTAL_DOCUMENTS);
         List<IdValue<RemittalDocument>> allRemittalDocuments = maybeExistingRemittalDocuments
-                .orElse(emptyList());
+            .orElse(emptyList());
 
         if (!allRemittalDocuments.isEmpty()) {
             RemittalDocument remittalDocument = allRemittalDocuments.getFirst().getValue();
 
             List<IdValue<DocumentWithMetadata>> allDocuments =
-                    documentsAppender.append(
-                            remittalDocument.getOtherRemittalDocs(),
-                            Collections.singletonList(remittalDocument.getDecisionDocument())
-                    );
+                documentsAppender.append(
+                    remittalDocument.getOtherRemittalDocs(),
+                    Collections.singletonList(remittalDocument.getDecisionDocument())
+                );
             return allDocuments;
         }
         return emptyList();
@@ -217,9 +219,9 @@ public class AdvancedBundlingCallbackHandler implements PreSubmitCallbackHandler
 
     private List<IdValue<DocumentWithMetadata>> fetchLatestReheardDocuments(AsylumCase asylumCase) {
         Optional<List<IdValue<ReheardHearingDocuments>>> maybeExistingReheardDocuments =
-                asylumCase.read(REHEARD_HEARING_DOCUMENTS_COLLECTION);
+            asylumCase.read(REHEARD_HEARING_DOCUMENTS_COLLECTION);
         List<IdValue<ReheardHearingDocuments>> allReheardHearingDocuments = maybeExistingReheardDocuments
-                .orElse(emptyList());
+            .orElse(emptyList());
 
         if (!allReheardHearingDocuments.isEmpty()) {
             return allReheardHearingDocuments.getFirst().getValue().getReheardHearingDocs();

@@ -47,6 +47,7 @@ public enum Event {
 
     RECORD_ADJOURNMENT_DETAILS("recordAdjournmentDetails", CaseType.ASYLUM),
 
+    REMOVE_STATUTORY_TIMEFRAME_24_WEEKS("removeStatutoryTimeframe24Weeks", CaseType.ASYLUM),
     UPDATE_TRIBUNAL_DECISION("updateTribunalDecision", CaseType.ASYLUM),
     REQUEST_CASE_BUILDING("requestCaseBuilding", CaseType.ASYLUM),
     UPLOAD_HOME_OFFICE_APPEAL_RESPONSE("uploadHomeOfficeAppealResponse", CaseType.ASYLUM),
@@ -91,6 +92,7 @@ public enum Event {
     REMOVE_REPRESENTATION("removeRepresentation", CaseType.ASYLUM),
     REMOVE_LEGAL_REPRESENTATIVE("removeLegalRepresentative", CaseType.ASYLUM),
     COMPLETE_CASE_REVIEW("completeCaseReview", CaseType.ASYLUM),
+    SEND_LATE_TIMELINE_NOTICE("sendLateTimelineNotice", CaseType.ASYLUM),
     @JsonEnumDefaultValue
     UNKNOWN("unknown", CaseType.UNKNOWN);
 

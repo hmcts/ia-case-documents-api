@@ -622,6 +622,22 @@ internalCaseListedLetter.templateName: ${INTERNAL_CASE_LISTED_LETTER_TEMPLATE:TB
 internalCaseListedLetterWithAttachment.fileExtension: PDF
 internalCaseListedLetterWithAttachment.fileName: "internal-case-listed-letter-with-attachment"
 
+internalRefusalOfRemoval24wTimeframeApplicationLetter.contentType:  application/pdf
+internalRefusalOfRemoval24wTimeframeApplicationLetter.fileExtension: PDF
+internalRefusalOfRemoval24wTimeframeApplicationLetter.fileName: "internal-refusal-of-removal-24w-timeframe-application-letter"
+internalRefusalOfRemoval24wTimeframeApplicationLetter.templateName: ${INTERNAL_REFUSAL_OF_REMOVAL_24W_LETTER_TEMPLATE:TB-IAC-LET-ENG-Internal-Application-Refusal-Remove-stf24w.docx}
+
+internalRemove24wTimeframeLetter.contentType:  application/pdf
+internalRemove24wTimeframeLetter.fileExtension: PDF
+internalRemove24wTimeframeLetter.fileName: "internal-remove-24w-timeframe-letter"
+internalRemove24wTimeframeLetter.templateName: ${INTERNAL_REMOVE_24W_LETTER_TEMPLATE:TB-IAC-LET-ENG-Internal-Remove-statutory-timeframe.docx}
+
+internalRefusalOfRemoval24wTimeframeApplicationLetterWithAttachment.fileExtension: PDF
+internalRefusalOfRemoval24wTimeframeApplicationLetterWithAttachment.fileName: "internal-refusal-of-removal-of-24w-timeframe-with-attachment"
+
+internalRemove24wTimeframeLetterWithAttachment.fileExtension: PDF
+internalRemove24wTimeframeLetterWithAttachment.fileName: "internal-remove-24w-timeframe-with-attachment"
+
 detainedLegalRepRemovedIrcPrisonLetter.contentType: application/pdf
 detainedLegalRepRemovedIrcPrisonLetter.fileExtension: PDF
 detainedLegalRepRemovedIrcPrisonLetter.fileName: "appeal-form"
@@ -648,6 +664,11 @@ stf24WeeksCaseReview.contentType:  application/pdf
 stf24WeeksCaseReview.fileExtension: PDF
 stf24WeeksCaseReview.fileName: "stf-24weeks-case-review-appellant-document"
 stf24WeeksCaseReview.templateName: ${AIPM_PRISON_STD_STF24_WEEKS_CASE_REVIEW:TB-IAC-STD-ENG-001-StfTwentyFourWeeks-Review-Appellant-v3.docx}
+
+stf24WeeksRemovalDecision.contentType:  application/pdf
+stf24WeeksRemovalDecision.fileExtension: PDF
+stf24WeeksRemovalDecision.fileName: "stf-24weeks-removal-notice-of-decision"
+stf24WeeksRemovalDecision.templateName: ${STF24_WEEKS_REMOVAL_DECISION_DOCUMENT:TB-IAC-DEC-ENG-02000.docx}
 
 ccdGatewayUrl: ${CCD_GW_URL:http://localhost:3453}
 
@@ -746,7 +767,9 @@ security:
       - "manageFeeUpdate"
       - "updateTribunalDecision"
       - "removeLegalRepresentative"
+      - "removeStatutoryTimeframe24Weeks"
       - "completeCaseReview"
+      - "sendLateTimelineNotice"
     challenged-access-legal-operations:
       - "sendDirection"
       - "changeDirectionDueDate"
@@ -791,7 +814,9 @@ security:
       - "manageFeeUpdate"
       - "updateTribunalDecision"
       - "removeLegalRepresentative"
+      - "removeStatutoryTimeframe24Weeks"
       - "completeCaseReview"
+      - "sendLateTimelineNotice"
     senior-tribunal-caseworker:
       - "sendDirection"
       - "changeDirectionDueDate"
@@ -836,7 +861,9 @@ security:
       - "manageFeeUpdate"
       - "updateTribunalDecision"
       - "removeLegalRepresentative"
+      - "removeStatutoryTimeframe24Weeks"
       - "completeCaseReview"
+      - "sendLateTimelineNotice"
     # These events are used by the bails service, they will need to be migrated to the admin access management roles - see DIAC-855
     caseworker-ia-admofficer:
       - "submitApplication"
@@ -882,6 +909,7 @@ security:
       - "saveNotificationsToData"
       - "manageFeeUpdate"
       - "removeLegalRepresentative"
+      - "removeStatutoryTimeframe24Weeks"
       - "requestRespondentEvidence"
     ctsc:
       - "listCase"
@@ -914,6 +942,7 @@ security:
       - "saveNotificationsToData"
       - "manageFeeUpdate"
       - "removeLegalRepresentative"
+      - "removeStatutoryTimeframe24Weeks"
       - "requestRespondentEvidence"
     ctsc-team-leader:
       - "listCase"
@@ -946,6 +975,7 @@ security:
       - "saveNotificationsToData"
       - "manageFeeUpdate"
       - "removeLegalRepresentative"
+      - "removeStatutoryTimeframe24Weeks"
       - "requestRespondentEvidence"
     national-business-centre:
       - "listCase"
@@ -978,6 +1008,7 @@ security:
       - "saveNotificationsToData"
       - "manageFeeUpdate"
       - "removeLegalRepresentative"
+      - "removeStatutoryTimeframe24Weeks"
       - "requestRespondentEvidence"
     challenged-access-ctsc:
       - "listCase"
@@ -1010,6 +1041,7 @@ security:
       - "saveNotificationsToData"
       - "manageFeeUpdate"
       - "removeLegalRepresentative"
+      - "removeStatutoryTimeframe24Weeks"
       - "requestRespondentEvidence"
     challenged-access-admin:
       - "listCase"
@@ -1042,6 +1074,7 @@ security:
       - "saveNotificationsToData"
       - "manageFeeUpdate"
       - "removeLegalRepresentative"
+      - "removeStatutoryTimeframe24Weeks"
       - "requestRespondentEvidence"
     citizen:
       - "startAppeal"
@@ -1077,6 +1110,7 @@ security:
       - "recordTheDecision"
       - "endApplication"
       - "uploadSignedDecisionNotice"
+      - "removeStatutoryTimeframe24Weeks"
       - "uploadSignedDecisionNoticeConditionalGrant"
     judge:
       - "sendDirection"
@@ -1098,6 +1132,7 @@ security:
       - "reinstateAppeal"
       - "UpdateHearingAdjustments"
       - "asyncStitchingComplete"
+      - "removeStatutoryTimeframe24Weeks"
       - "decideFtpaApplication"
     senior-judge:
       - "sendDirection"
@@ -1119,6 +1154,7 @@ security:
       - "reinstateAppeal"
       - "UpdateHearingAdjustments"
       - "asyncStitchingComplete"
+      - "removeStatutoryTimeframe24Weeks"
       - "decideFtpaApplication"
     leadership-judge:
       - "sendDirection"
@@ -1140,6 +1176,7 @@ security:
       - "reinstateAppeal"
       - "UpdateHearingAdjustments"
       - "asyncStitchingComplete"
+      - "removeStatutoryTimeframe24Weeks"
       - "decideFtpaApplication"
     fee-paid-judge:
       - "sendDirection"
@@ -1161,6 +1198,7 @@ security:
       - "reinstateAppeal"
       - "UpdateHearingAdjustments"
       - "asyncStitchingComplete"
+      - "removeStatutoryTimeframe24Weeks"
       - "decideFtpaApplication"
     lead-judge:
       - "sendDirection"
@@ -1182,6 +1220,7 @@ security:
       - "reinstateAppeal"
       - "UpdateHearingAdjustments"
       - "asyncStitchingComplete"
+      - "removeStatutoryTimeframe24Weeks"
       - "decideFtpaApplication"
     hearing-judge:
       - "sendDirection"
@@ -1203,6 +1242,7 @@ security:
       - "reinstateAppeal"
       - "UpdateHearingAdjustments"
       - "asyncStitchingComplete"
+      - "removeStatutoryTimeframe24Weeks"
       - "decideFtpaApplication"
     ftpa-judge:
       - "sendDirection"
@@ -1224,6 +1264,7 @@ security:
       - "reinstateAppeal"
       - "UpdateHearingAdjustments"
       - "asyncStitchingComplete"
+      - "removeStatutoryTimeframe24Weeks"
       - "decideFtpaApplication"
     hearing-panel-judge:
       - "sendDirection"
@@ -1245,6 +1286,7 @@ security:
       - "reinstateAppeal"
       - "UpdateHearingAdjustments"
       - "asyncStitchingComplete"
+      - "removeStatutoryTimeframe24Weeks"
       - "decideFtpaApplication"
     challenged-access-judiciary:
       - "sendDirection"
@@ -1266,6 +1308,7 @@ security:
       - "reinstateAppeal"
       - "UpdateHearingAdjustments"
       - "asyncStitchingComplete"
+      - "removeStatutoryTimeframe24Weeks"
       - "decideFtpaApplication"
     caseworker-ia-homeofficebail:
       - "submitApplication"
@@ -1281,7 +1324,9 @@ security:
       - "changeHearingCentre"
       - "saveNotificationsToData"
       - "saveNotificationsToDataBail"
+      - "removeStatutoryTimeframe24Weeks"
       - "completeCaseReview"
+      - "sendLateTimelineNotice"
     caseworker-ia-homeofficelart:
       - "uploadHomeOfficeAppealResponse"
       - "uploadAdditionalEvidenceHomeOffice"

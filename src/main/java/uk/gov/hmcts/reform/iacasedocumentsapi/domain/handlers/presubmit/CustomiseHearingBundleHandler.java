@@ -3,6 +3,7 @@ package uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit;
 import static java.util.Collections.emptyList;
 import static java.util.Objects.requireNonNull;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.*;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.getTribunalInclusion;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -89,19 +90,23 @@ public class CustomiseHearingBundleHandler implements PreSubmitCallbackHandler<A
         boolean isReheardCase = asylumCase.read(CASE_FLAG_SET_ASIDE_REHEARD_EXISTS, YesOrNo.class).map(flag -> flag.equals(YesOrNo.YES)).orElse(false);
         boolean isRemittedPath = asylumCase.read(SOURCE_OF_REMITTAL, String.class).isPresent();
 
-        boolean isOrWasAda = asylumCase.read(SUITABILITY_REVIEW_DECISION).isPresent();
         boolean isUpdatedBundle = callback.getEvent().equals(Event.GENERATE_UPDATED_HEARING_BUNDLE);
         if (isReheardCase || isUpdatedBundle) {
             //populate these collections to avoid error on the Stitching api
             initializeNewCollections(asylumCase);
         }
         String bundle;
+
+        boolean shouldIncTribunalDocs = asylumCase.read(SUITABILITY_REVIEW_DECISION).isPresent()
+            || asylumCase.read(STF_24W_PREVIOUS_STATUS_WAS_YES_AUTO_GENERATED, YesOrNo.class).orElse(YesOrNo.NO)
+            .equals(YesOrNo.YES);
+
         if (isReheardCase) {
             bundle = isRemittedPath ? "iac-remitted-reheard-hearing-bundle-config.yaml" : "iac-reheard-hearing-bundle-config.yaml";
         } else if (isUpdatedBundle) {
-            bundle = isOrWasAda ? "iac-updated-hearing-bundle-inc-tribunal-config.yaml" : "iac-updated-hearing-bundle-config.yaml";
+            bundle = getTribunalInclusion("iac-updated-hearing-bundle", shouldIncTribunalDocs);
         } else {
-            bundle = isOrWasAda ? "iac-hearing-bundle-inc-tribunal-config.yaml" : "iac-hearing-bundle-config.yaml";
+            bundle = getTribunalInclusion("iac-hearing-bundle", shouldIncTribunalDocs);
         }
 
         asylumCase.write(AsylumCaseDefinition.BUNDLE_CONFIGURATION, bundle);
@@ -118,7 +123,7 @@ public class CustomiseHearingBundleHandler implements PreSubmitCallbackHandler<A
 
         Map<String, String> dateUploadedMap = buildDateUploadedMap(asylumCaseCopy);
 
-        prepareDocuments(getMappingFields(isReheardCase, isRemittedPath, isOrWasAda, isUpdatedBundle), asylumCaseCopy, dateUploadedMap);
+        prepareDocuments(getMappingFields(isReheardCase, isRemittedPath, shouldIncTribunalDocs, isUpdatedBundle), asylumCaseCopy, dateUploadedMap);
         if (isReheardCase) {
             prepareDocuments(getMappingFieldsForAdditionalEvidenceDocuments(), asylumCaseCopy, dateUploadedMap);
         }
@@ -139,7 +144,7 @@ public class CustomiseHearingBundleHandler implements PreSubmitCallbackHandler<A
 
         final AsylumCase responseData = response.getData();
 
-        restoreCollections(asylumCase, asylumCaseCopy, isReheardCase);
+        restoreCollections(asylumCase, asylumCaseCopy, isReheardCase, shouldIncTribunalDocs);
 
         restoreAddendumEvidence(asylumCase, asylumCaseCopy, isReheardCase, isUpdatedBundle);
 
@@ -308,10 +313,10 @@ public class CustomiseHearingBundleHandler implements PreSubmitCallbackHandler<A
     private void restoreCollections(
         AsylumCase asylumCase,
         AsylumCase asylumCaseBefore,
-        boolean isReheardCase
+        boolean isReheardCase,
+        boolean shouldIncTribunalDocs
     ) {
-        boolean isOrWasAda = asylumCase.read(SUITABILITY_REVIEW_DECISION).isPresent();
-        getFieldDefinitions(isReheardCase, isOrWasAda).forEach(field -> {
+        getFieldDefinitions(isReheardCase, shouldIncTribunalDocs).forEach(field -> {
             Optional<List<IdValue<DocumentWithMetadata>>> currentIdValues = asylumCase.read(field);
             Optional<List<IdValue<DocumentWithMetadata>>> beforeIdValues = asylumCaseBefore.read(field);
 
@@ -466,7 +471,7 @@ public class CustomiseHearingBundleHandler implements PreSubmitCallbackHandler<A
     }
 
 
-    private List<AsylumCaseDefinition> getFieldDefinitions(boolean isReheardCase, boolean isOrWasAda) {
+    private List<AsylumCaseDefinition> getFieldDefinitions(boolean isReheardCase, boolean shouldIncTribunalDocs) {
         List<AsylumCaseDefinition> fieldDefnList;
         if (isReheardCase) {
             fieldDefnList = new ArrayList<>(Arrays.asList(
@@ -483,14 +488,14 @@ public class CustomiseHearingBundleHandler implements PreSubmitCallbackHandler<A
                 ADDITIONAL_EVIDENCE_DOCUMENTS,
                 RESPONDENT_DOCUMENTS
             ));
-            if (isOrWasAda) {
+            if (shouldIncTribunalDocs) {
                 fieldDefnList.add(TRIBUNAL_DOCUMENTS);
             }
         }
         return fieldDefnList;
     }
 
-    private Map<AsylumCaseDefinition, AsylumCaseDefinition> getMappingFields(boolean isReheardCase, boolean isRemittedFeature, boolean isOrWasAda, boolean isUpdatedBundle) {
+    private Map<AsylumCaseDefinition, AsylumCaseDefinition> getMappingFields(boolean isReheardCase, boolean isRemittedFeature, boolean shouldIncTribunalDocs, boolean isUpdatedBundle) {
         Map<AsylumCaseDefinition, AsylumCaseDefinition> fieldMap;
         if (isReheardCase) {
             if (isRemittedFeature) {
@@ -515,7 +520,7 @@ public class CustomiseHearingBundleHandler implements PreSubmitCallbackHandler<A
                 CUSTOM_LEGAL_REP_DOCUMENTS, LEGAL_REPRESENTATIVE_DOCUMENTS,
                 CUSTOM_ADDITIONAL_EVIDENCE_DOCUMENTS, ADDITIONAL_EVIDENCE_DOCUMENTS,
                 CUSTOM_RESPONDENT_DOCUMENTS, RESPONDENT_DOCUMENTS));
-            if (isOrWasAda) {
+            if (shouldIncTribunalDocs) {
                 fieldMap.put(CUSTOM_TRIBUNAL_DOCUMENTS, TRIBUNAL_DOCUMENTS);
             }
             if (isUpdatedBundle) {
