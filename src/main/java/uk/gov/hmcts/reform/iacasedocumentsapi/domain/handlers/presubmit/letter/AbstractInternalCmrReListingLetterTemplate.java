@@ -1,5 +1,6 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit.letter;
 
+import lombok.extern.slf4j.Slf4j;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.HearingCentre;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseDetails;
@@ -24,6 +25,7 @@ import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtil
  * Common field mapping for the letters generated when a case management review hearing is re-listed.
  * Subclasses only supply the address the letter is sent to.
  */
+@Slf4j
 public abstract class AbstractInternalCmrReListingLetterTemplate implements DocumentTemplate<AsylumCase> {
 
     private static final DateTimeFormatter DOCUMENT_DATE_FORMAT = DateTimeFormatter.ofPattern("d MMMM yyyy");
@@ -77,6 +79,8 @@ public abstract class AbstractInternalCmrReListingLetterTemplate implements Docu
         fieldValues.put("customerServicesEmail", customerServicesProvider.getInternalCustomerServicesEmail(asylumCase));
         fieldValues.put("dateLetterSent", formatDateForRendering(LocalDate.now().toString(), DOCUMENT_DATE_FORMAT));
 
+        log.info("----------asylumCase.read(CMR_HEARING_DATE, String.class): " + asylumCase.read(CMR_HEARING_DATE, String.class));
+        log.info("----------asylumCaseBefore.read(CMR_HEARING_DATE, String.class): " + asylumCaseBefore.read(CMR_HEARING_DATE, String.class));
         fieldValues.put("hearingCentreAddress", stringProvider.get("hearingCentreAddress", hearingCentre.toString()).orElse("").replaceAll(",\\s*", "\n"));
         fieldValues.put("hearingDate", formatDateTimeForRendering(asylumCase.read(CMR_HEARING_DATE, String.class).orElse(""), DOCUMENT_DATE_FORMAT));
         fieldValues.put("hearingTime", formatDateTimeForRendering(asylumCase.read(CMR_HEARING_DATE, String.class).orElse(""), DOCUMENT_TIME_FORMAT));
