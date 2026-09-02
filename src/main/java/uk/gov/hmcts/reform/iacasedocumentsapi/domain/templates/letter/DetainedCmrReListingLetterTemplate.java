@@ -1,5 +1,6 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates.letter;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
@@ -19,6 +20,7 @@ import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtil
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.DateUtils.formatDateForNotificationAttachmentDocument;
 
 @Component
+@Slf4j
 public class DetainedCmrReListingLetterTemplate implements DocumentTemplate<AsylumCase> {
     private final String templateName;
     private final CustomerServicesProvider customerServicesProvider;
@@ -72,6 +74,8 @@ public class DetainedCmrReListingLetterTemplate implements DocumentTemplate<Asyl
         fieldValues.put("customerServicesEmail", customerServicesProvider.getInternalCustomerServicesEmail(asylumCase));
         fieldValues.put("dateLetterSent", formatDateForNotificationAttachmentDocument(LocalDate.now()));
         fieldValues.put("oldHearingCentre", listedHearingCentreBefore);
+        log.info("-------asylumCaseBefore.read(CMR_HEARING_DATE, String.class): " + asylumCaseBefore.read(CMR_HEARING_DATE, String.class));
+        log.info("-------asylumCase.read(CMR_HEARING_DATE, String.class): " + asylumCase.read(CMR_HEARING_DATE, String.class));
         fieldValues.put("oldHearingDate", formatDateTimeForRendering(asylumCaseBefore.read(CMR_HEARING_DATE, String.class).orElse(""), DOCUMENT_DATE_FORMAT));
         fieldValues.put("oldHearingTime", formatDateTimeForRendering(asylumCaseBefore.read(CMR_HEARING_DATE, String.class).orElse(""), DOCUMENT_TIME_FORMAT));
         fieldValues.put("hearingDate", formatDateTimeForRendering(asylumCase.read(CMR_HEARING_DATE, String.class).orElse(""), DOCUMENT_DATE_FORMAT));
