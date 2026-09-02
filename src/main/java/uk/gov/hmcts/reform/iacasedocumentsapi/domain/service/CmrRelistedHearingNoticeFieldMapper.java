@@ -56,6 +56,10 @@ public class CmrRelistedHearingNoticeFieldMapper  {
                 asylumCaseBefore
                         .read(CMR_HEARING_CENTRE, HearingCentre.class)
                         .orElseThrow(() -> new IllegalStateException("listCaseHearingCentre (before) is not present"));
+        final String hearingCentreNameBefore =
+                stringProvider
+                        .get("hearingCentreName", listedHearingCentreBefore.toString())
+                        .orElseThrow(() -> new IllegalStateException("listCaseHearingCentre (before) is not present"));
 
         final Map<String, Object> fieldValues = new HashMap<>();
 
@@ -66,7 +70,7 @@ public class CmrRelistedHearingNoticeFieldMapper  {
         final Optional<YesOrNo> isSubmitRequirementsAvailable = asylumCase.read(SUBMIT_HEARING_REQUIREMENTS_AVAILABLE);
 
         fieldValues.putAll(getAppellantPersonalisation(asylumCase));
-        fieldValues.put("oldHearingCentre", listedHearingCentreBefore);
+        fieldValues.put("oldHearingCentre", hearingCentreNameBefore);
         log.info("-------asylumCase.read(CMR_HEARING_DATE, String.class): {}", asylumCase.read(CMR_HEARING_DATE, String.class));
         log.info("-------asylumCaseBefore.read(CMR_HEARING_DATE, String.class): {}", asylumCaseBefore.read(CMR_HEARING_DATE, String.class));
         try {
