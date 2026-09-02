@@ -1,5 +1,6 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.service;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.HearingCentre;
@@ -18,6 +19,7 @@ import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseD
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.*;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.DateUtils.formatDateForNotificationAttachmentDocument;
 
+@Slf4j
 @Component
 public class CmrRelistedHearingNoticeFieldMapper  {
     private final CustomerServicesProvider customerServicesProvider;
@@ -65,6 +67,8 @@ public class CmrRelistedHearingNoticeFieldMapper  {
 
         fieldValues.putAll(getAppellantPersonalisation(asylumCase));
         fieldValues.put("oldHearingCentre", listedHearingCentreBefore);
+        log.info("-------asylumCase.read(CMR_HEARING_DATE, String.class): {}", asylumCase.read(CMR_HEARING_DATE, String.class));
+        log.info("-------asylumCaseBefore.read(CMR_HEARING_DATE, String.class): {}", asylumCaseBefore.read(CMR_HEARING_DATE, String.class));
         fieldValues.put("oldHearingDate", formatDateTimeForRendering(asylumCaseBefore.read(CMR_HEARING_DATE, String.class).orElse(""), DOCUMENT_DATE_FORMAT));
         fieldValues.put("dateLetterSent", formatDateForNotificationAttachmentDocument(LocalDate.now()));
         fieldValues.put("legalRepReferenceNumber",

@@ -79,8 +79,6 @@ public abstract class AbstractInternalCmrReListingLetterTemplate implements Docu
         fieldValues.put("customerServicesEmail", customerServicesProvider.getInternalCustomerServicesEmail(asylumCase));
         fieldValues.put("dateLetterSent", formatDateForRendering(LocalDate.now().toString(), DOCUMENT_DATE_FORMAT));
 
-        log.info("----------asylumCase.read(CMR_HEARING_DATE, String.class): " + asylumCase.read(CMR_HEARING_DATE, String.class));
-        log.info("----------asylumCaseBefore.read(CMR_HEARING_DATE, String.class): " + asylumCaseBefore.read(CMR_HEARING_DATE, String.class));
         fieldValues.put("hearingCentreAddress", stringProvider.get("hearingCentreAddress", hearingCentre.toString()).orElse("").replaceAll(",\\s*", "\n"));
         fieldValues.put("hearingDate", formatDateTimeForRendering(asylumCase.read(CMR_HEARING_DATE, String.class).orElse(""), DOCUMENT_DATE_FORMAT));
         fieldValues.put("hearingTime", formatDateTimeForRendering(asylumCase.read(CMR_HEARING_DATE, String.class).orElse(""), DOCUMENT_TIME_FORMAT));
