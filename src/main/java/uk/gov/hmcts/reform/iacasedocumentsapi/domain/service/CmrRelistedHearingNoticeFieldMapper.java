@@ -69,6 +69,11 @@ public class CmrRelistedHearingNoticeFieldMapper  {
         fieldValues.put("oldHearingCentre", listedHearingCentreBefore);
         log.info("-------asylumCase.read(CMR_HEARING_DATE, String.class): {}", asylumCase.read(CMR_HEARING_DATE, String.class));
         log.info("-------asylumCaseBefore.read(CMR_HEARING_DATE, String.class): {}", asylumCaseBefore.read(CMR_HEARING_DATE, String.class));
+        try {
+            throw new RuntimeException("error") {}
+        } catch (RuntimeException ex) {
+            log.error(ex.getMessage(), ex);
+        }
         fieldValues.put("oldHearingDate", formatDateTimeForRendering(asylumCaseBefore.read(CMR_HEARING_DATE, String.class).orElse(""), DOCUMENT_DATE_FORMAT));
         fieldValues.put("dateLetterSent", formatDateForNotificationAttachmentDocument(LocalDate.now()));
         fieldValues.put("legalRepReferenceNumber",
