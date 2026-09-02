@@ -70,7 +70,7 @@ public class CmrRelistedHearingNoticeFieldMapper  {
         log.info("-------asylumCase.read(CMR_HEARING_DATE, String.class): {}", asylumCase.read(CMR_HEARING_DATE, String.class));
         log.info("-------asylumCaseBefore.read(CMR_HEARING_DATE, String.class): {}", asylumCaseBefore.read(CMR_HEARING_DATE, String.class));
         try {
-            throw new RuntimeException("error") {}
+            throw new RuntimeException("error");
         } catch (RuntimeException ex) {
             log.error(ex.getMessage(), ex);
         }
