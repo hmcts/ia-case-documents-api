@@ -28,7 +28,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.EnumSource;
-import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -125,11 +124,19 @@ class CustomiseHearingBundleHandlerTest {
     }
 
     @ParameterizedTest
-    @ValueSource(strings = {"", "SUITABLE", "UNSUITABLE"})
-    void should_successfully_handle_the_callback(String maybeDecision) throws JsonProcessingException {
-        when(callback.getEvent()).thenReturn(Event.CUSTOMISE_HEARING_BUNDLE);
+    @CsvSource(value = {
+        "'',NO,false",
+        "SUITABLE,NO,true",
+        "UNSUITABLE,NO,true",
+        "'',YES,true",
+        "SUITABLE,YES,true",
+        "UNSUITABLE,YES,true"})
+    void should_successfully_handle_the_callback(String maybeDecision, YesOrNo is24w, boolean shouldHaveTribunalDocs) throws JsonProcessingException {
         when(asylumCase.read(SUITABILITY_REVIEW_DECISION)).thenReturn(maybeDecision.isEmpty()
-                ? Optional.empty() : Optional.of(AdaSuitabilityReviewDecision.valueOf(maybeDecision)));
+            ? Optional.empty() : Optional.of(AdaSuitabilityReviewDecision.valueOf(maybeDecision)));
+        when(asylumCase.read(STF_24W_PREVIOUS_STATUS_WAS_YES_AUTO_GENERATED, YesOrNo.class))
+            .thenReturn(Optional.of(is24w));
+        when(callback.getEvent()).thenReturn(Event.CUSTOMISE_HEARING_BUNDLE);
         IdValue<DocumentWithDescription> legalRepDoc = new IdValue<>("1", createDocumentWithDescription());
         IdValue<DocumentWithDescription> respondentDoc = new IdValue<>("1", createDocumentWithDescription());
         IdValue<DocumentWithDescription> hearingDoc = new IdValue<>("1", createDocumentWithDescription());
@@ -180,7 +187,7 @@ class CustomiseHearingBundleHandlerTest {
         verify(asylumCaseCopy, times(2)).read(CUSTOM_LEGAL_REP_DOCUMENTS);
         verify(asylumCaseCopy, times(2)).read(CUSTOM_ADDITIONAL_EVIDENCE_DOCUMENTS);
         verify(asylumCaseCopy, times(2)).read(CUSTOM_RESPONDENT_DOCUMENTS);
-        verify(asylumCaseCopy, maybeDecision.isEmpty() ? never() : times(1))
+        verify(asylumCaseCopy, shouldHaveTribunalDocs ? times(1) : never())
                 .read(CUSTOM_TRIBUNAL_DOCUMENTS);
 
         verify(asylumCase, times(1)).write(HEARING_DOCUMENTS, hearingDocuments);
@@ -194,7 +201,7 @@ class CustomiseHearingBundleHandlerTest {
         verify(asylumCase, times(1)).clear(AsylumCaseDefinition.CASE_BUNDLES);
         verify(asylumCase, times(1)).write(CASE_BUNDLES, Optional.of(caseBundles));
         verify(asylumCase).write(AsylumCaseDefinition.BUNDLE_CONFIGURATION,
-                maybeDecision.isEmpty() ? "iac-hearing-bundle-config.yaml" : "iac-hearing-bundle-inc-tribunal-config.yaml");
+                shouldHaveTribunalDocs ? "iac-hearing-bundle-inc-tribunal-config.yaml" : "iac-hearing-bundle-config.yaml");
         verify(asylumCase).write(AsylumCaseDefinition.BUNDLE_FILE_NAME_PREFIX,
             "PA 50002 2020-" + appellantFamilyName);
         verify(asylumCase, times(1)).write(STITCHING_STATUS, "NEW");
@@ -202,11 +209,19 @@ class CustomiseHearingBundleHandlerTest {
     }
 
     @ParameterizedTest
-    @ValueSource(strings = {"", "SUITABLE", "UNSUITABLE"})
-    void should_successfully_handle_the_callback_updated_bundle(String maybeDecision) throws JsonProcessingException {
+    @CsvSource(value = {
+        "'',NO,false",
+        "SUITABLE,NO,true",
+        "UNSUITABLE,NO,true",
+        "'',YES,true",
+        "SUITABLE,YES,true",
+        "UNSUITABLE,YES,true"})
+    void should_successfully_handle_the_callback_updated_bundle(String maybeDecision, YesOrNo is24w, boolean shouldHaveTribunalDocs) throws JsonProcessingException {
         when(callback.getEvent()).thenReturn(Event.GENERATE_UPDATED_HEARING_BUNDLE);
         when(asylumCase.read(SUITABILITY_REVIEW_DECISION)).thenReturn(maybeDecision.isEmpty()
             ? Optional.empty() : Optional.of(AdaSuitabilityReviewDecision.valueOf(maybeDecision)));
+        when(asylumCase.read(STF_24W_PREVIOUS_STATUS_WAS_YES_AUTO_GENERATED, YesOrNo.class))
+            .thenReturn(Optional.of(is24w));
         IdValue<DocumentWithDescription> legalRepDoc = new IdValue<>("1", createDocumentWithDescription());
         IdValue<DocumentWithDescription> respondentDoc = new IdValue<>("1", createDocumentWithDescription());
         IdValue<DocumentWithDescription> hearingDoc = new IdValue<>("1", createDocumentWithDescription());
@@ -280,7 +295,7 @@ class CustomiseHearingBundleHandlerTest {
         verify(asylumCaseCopy, times(2)).read(CUSTOM_RESPONDENT_DOCUMENTS);
         verify(asylumCaseCopy, times(2)).read(CUSTOM_APP_ADDENDUM_EVIDENCE_DOCS);
         verify(asylumCaseCopy, times(2)).read(CUSTOM_RESP_ADDENDUM_EVIDENCE_DOCS);
-        verify(asylumCaseCopy, maybeDecision.isEmpty() ? never() : times(1))
+        verify(asylumCaseCopy, shouldHaveTribunalDocs ? times(1) : never())
             .read(CUSTOM_TRIBUNAL_DOCUMENTS);
 
         verify(asylumCase, times(1)).write(HEARING_DOCUMENTS, hearingDocuments);
@@ -295,7 +310,7 @@ class CustomiseHearingBundleHandlerTest {
         verify(asylumCase, times(1)).clear(AsylumCaseDefinition.CASE_BUNDLES);
         verify(asylumCase, times(1)).write(CASE_BUNDLES, Optional.of(caseBundles));
         verify(asylumCase).write(AsylumCaseDefinition.BUNDLE_CONFIGURATION,
-            maybeDecision.isEmpty() ? "iac-updated-hearing-bundle-config.yaml" : "iac-updated-hearing-bundle-inc-tribunal-config.yaml");
+            shouldHaveTribunalDocs ? "iac-updated-hearing-bundle-inc-tribunal-config.yaml" : "iac-updated-hearing-bundle-config.yaml");
         verify(asylumCase).write(AsylumCaseDefinition.BUNDLE_FILE_NAME_PREFIX,
             "PA 50002 2020-" + appellantFamilyName);
         verify(asylumCase, times(1)).write(STITCHING_STATUS, "NEW");

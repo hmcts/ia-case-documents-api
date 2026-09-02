@@ -445,7 +445,42 @@ public class BundleOrder implements Comparator<DocumentWithMetadata> {
                 log.warn("STF_24WEEKS_CASE_REVIEW_APPELLANT_DOCUMENT tag should not be checked for bundle ordering, document desc: {}", document.getDescription());
                 yield 125;
             }
-            case NONE ->  126;
+            case STF_24WEEKS_REMOVAL_DECISION_DOCUMENT -> 126;
+            case STF_24WEEKS_REMOVAL_DECISION_LETTER -> {
+                log.warn("STF_24WEEKS_REMOVAL_DECISION_LETTER tag should not be checked for bundle ordering, document desc: {}", document.getDescription());
+                yield 127;
+            }
+            case STF_24WEEKS_REMOVAL_DECISION_LETTER_BUNDLE -> {
+                log.warn("STF_24WEEKS_REMOVAL_DECISION_LETTER_BUNDLE tag should not be checked for bundle ordering, document desc: {}", document.getDescription());
+                yield 128;
+            }
+            case STF_24WEEKS_REMOVAL_DECISION_LETTER_LR -> {
+                log.warn("STF_24WEEKS_REMOVAL_DECISION_LETTER_LR tag should not be checked for bundle ordering, document desc: {}", document.getDescription());
+                yield 129;
+            }
+            case STF_24WEEKS_REMOVAL_DECISION_LETTER_LR_BUNDLE -> {
+                log.warn("STF_24WEEKS_REMOVAL_DECISION_LETTER_LR_BUNDLE tag should not be checked for bundle ordering, document desc: {}", document.getDescription());
+                yield 130;
+            }
+            case STF_24WEEKS_REMOVAL_REFUSED_DECISION_DOCUMENT -> 119;
+            case STF_24WEEKS_REMOVAL_REFUSED_DECISION_LETTER -> {
+                log.warn("STF_24WEEKS_REMOVAL_REFUSED_DECISION_LETTER tag should not be checked for bundle ordering, document desc: {}", document.getDescription());
+                yield 131;
+            }
+            case STF_24WEEKS_REMOVAL_REFUSED_DECISION_LETTER_BUNDLE -> {
+                log.warn("STF_24WEEKS_REMOVAL_REFUSED_DECISION_LETTER_BUNDLE tag should not be checked for bundle ordering, document desc: {}", document.getDescription());
+                yield 132;
+            }
+            case STF_24WEEKS_REMOVAL_REFUSED_DECISION_LETTER_LR -> {
+                log.warn("STF_24WEEKS_REMOVAL_REFUSED_DECISION_LETTER_LR tag should not be checked for bundle ordering, document desc: {}", document.getDescription());
+                yield 133;
+            }
+            case STF_24WEEKS_REMOVAL_REFUSED_DECISION_LETTER_LR_BUNDLE -> {
+                log.warn("STF_24WEEKS_REMOVAL_REFUSED_DECISION_LETTER_LR_BUNDLE tag should not be checked for bundle ordering, document desc: {}", document.getDescription());
+                yield 134;
+            }
+
+            case NONE ->  135;
 
             default ->
                 throw new IllegalStateException("document has unknown tag: " + document.getTag() + ", description: " + document.getDescription());

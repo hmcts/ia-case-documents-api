@@ -1954,6 +1954,7 @@ public class DocumentCreatorConfiguration {
         );
     }
 
+
     @Bean("internalCmrListingLrLetter")
     public DocumentCreator<AsylumCase> getInternalCmrListinglLrLetterDocumentCreator(
         @Value("${internalCmrListingLrLetter.contentType}") String contentType,
@@ -1961,6 +1962,92 @@ public class DocumentCreatorConfiguration {
         @Value("${internalCmrListingLrLetter.fileName}") String fileName,
         AsylumCaseFileNameQualifier fileNameQualifier,
         InternalCmrListingLrLetterTemplate documentTemplate,
+          DocumentGenerator documentGenerator,
+        DocumentUploader documentUploader
+    ) {
+        return new DocumentCreator<>(
+            contentType,
+            fileExtension,
+            fileName,
+            fileNameQualifier,
+            documentTemplate,
+            documentGenerator,
+            documentUploader
+        );
+    }
+
+    @Bean("internalRefusalOfRemoval24wTimeframeApplicationLetter")
+    public DocumentCreator<AsylumCase> getInternalRefusalOfRemoval24wTimeframeApplicationLetter(
+        @Value("${internalRefusalOfRemoval24wTimeframeApplicationLetter.contentType}") String contentType,
+        @Value("${internalRefusalOfRemoval24wTimeframeApplicationLetter.fileExtension}") String fileExtension,
+        @Value("${internalRefusalOfRemoval24wTimeframeApplicationLetter.fileName}") String fileName,
+        AsylumCaseFileNameQualifier fileNameQualifier,
+        InternalRefusalOfRemoval24wTimeframeApplicationLetterTemplate documentTemplate,
+        DocumentGenerator documentGenerator,
+        DocumentUploader documentUploader
+    ) {
+        return new DocumentCreator<>(
+            contentType,
+            fileExtension,
+            fileName,
+            fileNameQualifier,
+            documentTemplate,
+            documentGenerator,
+            documentUploader
+        );
+    }
+
+
+    @Bean("internalRefusalOfRemoval24wTimeframeApplicationLrLetter")
+    public DocumentCreator<AsylumCase> getInternalRefusalOfRemoval24wTimeframeApplicationLrLetter(
+        @Value("${internalRefusalOfRemoval24wTimeframeApplicationLetter.contentType}") String contentType,
+        @Value("${internalRefusalOfRemoval24wTimeframeApplicationLetter.fileExtension}") String fileExtension,
+        @Value("${internalRefusalOfRemoval24wTimeframeApplicationLetter.fileName}") String fileName,
+        AsylumCaseFileNameQualifier fileNameQualifier,
+        InternalRefusalOfRemoval24wTimeframeApplicationLrLetterTemplate documentTemplate,
+        DocumentGenerator documentGenerator,
+        DocumentUploader documentUploader
+    ) {
+        return new DocumentCreator<>(
+            contentType,
+            fileExtension,
+            fileName,
+            fileNameQualifier,
+            documentTemplate,
+            documentGenerator,
+            documentUploader
+        );
+    }
+
+    @Bean("internalRemove24wTimeframeLetter")
+    public DocumentCreator<AsylumCase> getInternalRemove24wTimeframeLetter(
+        @Value("${internalRemove24wTimeframeLetter.contentType}") String contentType,
+        @Value("${internalRemove24wTimeframeLetter.fileExtension}") String fileExtension,
+        @Value("${internalRemove24wTimeframeLetter.fileName}") String fileName,
+        AsylumCaseFileNameQualifier fileNameQualifier,
+        InternalRemove24wTimeframeLetterTemplate documentTemplate,
+        DocumentGenerator documentGenerator,
+        DocumentUploader documentUploader
+    ) {
+        return new DocumentCreator<>(
+            contentType,
+            fileExtension,
+            fileName,
+            fileNameQualifier,
+            documentTemplate,
+            documentGenerator,
+            documentUploader
+        );
+    }
+
+
+    @Bean("internalRemove24wTimeframeLrLetter")
+    public DocumentCreator<AsylumCase> getInternalRemove24wTimeframeLrLetter(
+        @Value("${internalRemove24wTimeframeLetter.contentType}") String contentType,
+        @Value("${internalRemove24wTimeframeLetter.fileExtension}") String fileExtension,
+        @Value("${internalRemove24wTimeframeLetter.fileName}") String fileName,
+        AsylumCaseFileNameQualifier fileNameQualifier,
+        InternalRemove24wTimeframeLrLetterTemplate documentTemplate,
         DocumentGenerator documentGenerator,
         DocumentUploader documentUploader
     ) {
@@ -2486,6 +2573,27 @@ public class DocumentCreatorConfiguration {
         @Value("${aipmPrisonIrcReinstateAppealLetter.fileName}") String fileName,
         AsylumCaseFileNameQualifier fileNameQualifier,
         AipManualDetainedInPrisonOrIrcReinstateAppealLetterTemplate documentTemplate,
+        DocumentGenerator documentGenerator,
+        DocumentUploader documentUploader
+    ) {
+        return new DocumentCreator<>(
+            contentType,
+            fileExtension,
+            fileName,
+            fileNameQualifier,
+            documentTemplate,
+            documentGenerator,
+            documentUploader
+        );
+    }
+
+    @Bean("stf24WeeksRemovalDecisionDocumentCreator")
+    public DocumentCreator<AsylumCase> stf24WeeksRemovalDecisionDocumentCreator(
+        @Value("${stf24WeeksRemovalDecision.contentType}") String contentType,
+        @Value("${stf24WeeksRemovalDecision.fileExtension}") String fileExtension,
+        @Value("${stf24WeeksRemovalDecision.fileName}") String fileName,
+        AsylumCaseFileNameQualifier fileNameQualifier,
+        Stf24WeeksRemovalDecisionTemplate documentTemplate,
         DocumentGenerator documentGenerator,
         DocumentUploader documentUploader
     ) {

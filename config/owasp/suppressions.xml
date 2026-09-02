@@ -1,17 +1,8 @@
 <?xml version='1.0' encoding='utf-8'?>
 <suppressions xmlns="https://jeremylong.github.io/DependencyCheck/dependency-suppression.1.3.xsd">
     <suppress until="2026-09-30">
-        <notes>Awaiting tomcat 10.1.58</notes>
-        <cve>CVE-2026-66299</cve>
-        <cve>CVE-2026-65637</cve>
-        <cve>CVE-2026-65905</cve>
-        <cve>CVE-2026-65182</cve>
-        <cve>CVE-2026-68525</cve>
-        <cve>CVE-2026-65183</cve>
-        <cve>CVE-2026-66422</cve>
-        <cve>CVE-2026-68569</cve>
-        <cve>CVE-2026-65927</cve>
-        <cve>CVE-2026-68763</cve>
-        <cve>CVE-2026-73180</cve>
+        <notes>Awaiting spring dependencies 6.2.20 (should be updated with springboot/cloud dependencies pom)</notes>
+        <cve>CVE-2026-59313</cve>
+        <cve>CVE-2026-59314</cve>
     </suppress>
 </suppressions>
