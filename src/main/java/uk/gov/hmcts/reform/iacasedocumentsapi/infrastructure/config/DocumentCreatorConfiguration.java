@@ -6,45 +6,12 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit.letter.InternalCaseListedLetterTemplate;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit.letter.InternalCaseListedLrLetterTemplate;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit.letter.InternalRecordOutOfTimeDecisionLetterTemplate;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit.letter.InternalRefusalOfRemoval24wTimeframeApplicationLetterTemplate;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit.letter.InternalRefusalOfRemoval24wTimeframeApplicationLrLetterTemplate;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit.letter.InternalRemove24wTimeframeLetterTemplate;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit.letter.InternalRemove24wTimeframeLrLetterTemplate;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit.letter.*;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.AsylumCaseFileNameQualifier;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentCreator;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentGenerator;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentUploader;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates.AdaHearingNoticeUpdatedDetailsTemplate;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates.AdaSuitabilityTemplate;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates.AppealReasonsTemplate;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates.AppealSubmissionTemplate;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates.AppellantDecisionAndReasonsCoverLetterTemplate;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates.ClarifyingQuestionsAnswersTemplate;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates.CmaAppointmentNoticeTemplate;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates.CmaRequirementsTemplate;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates.DecisionAndReasonsCoverLetterTemplate;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates.DecisionAndReasonsTemplate;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates.EndAppealAppellantTemplate;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates.EndAppealAutomaticallyTemplate;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates.EndAppealTemplate;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates.HearingNoticeEditedTemplate;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates.HearingNoticeTemplate;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates.HearingNoticeUpdatedDetailsRemoteTemplate;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates.HearingNoticeUpdatedDetailsTemplate;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates.HearingNoticeUpdatedRequirementsTemplate;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates.HearingRequirementsTemplate;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates.InternalAdaRequestBuildCaseTemplate;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates.InternalDetainedRequestBuildCaseTemplate;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates.InternalDetainedRequestHearingRequirementsTemplate;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates.InternalDetainedRequestRespondentEvidenceTemplate;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates.InternalOocAppealSubmissionTemplate;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates.Stf24WeeksCaseReviewTemplate;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates.Stf24WeeksRemovalDecisionTemplate;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates.UpdatedTribunalAipDecisionAndReasonsCoverLetterTemplate;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates.UpdatedTribunalDecisionAndReasonsCoverLetterTemplate;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates.*;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates.letter.*;
 
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.Stf24WeeksUtils.STF_24_WEEKS_REVIEW_DOCUMENT_CREATOR;
@@ -137,6 +104,48 @@ public class DocumentCreatorConfiguration {
         );
     }
 
+    @Bean("cmrHearingNotice")
+    public DocumentCreator<AsylumCase> getCmrHearingNoticeDocumentCreator(
+        @Value("${cmrHearingNoticeDocument.contentType}") String contentType,
+        @Value("${cmrHearingNoticeDocument.fileExtension}") String fileExtension,
+        @Value("${cmrHearingNoticeDocument.fileName}") String fileName,
+        AsylumCaseFileNameQualifier fileNameQualifier,
+        @Qualifier("cmrHearingNoticeTemplate") CmrHearingNoticeTemplate documentTemplate,
+        DocumentGenerator documentGenerator,
+        DocumentUploader documentUploader
+    ) {
+        return new DocumentCreator<>(
+                contentType,
+                fileExtension,
+                fileName,
+                fileNameQualifier,
+                documentTemplate,
+                documentGenerator,
+                documentUploader
+        );
+    }
+
+    @Bean("cmrRelistedHearingNotice")
+    public DocumentCreator<AsylumCase> getCmrRelistedHearingNoticeDocumentCreator(
+            @Value("${cmrRelistedHearingNoticeDocument.contentType}") String contentType,
+            @Value("${cmrRelistedHearingNoticeDocument.fileExtension}") String fileExtension,
+            @Value("${cmrRelistedHearingNoticeDocument.fileName}") String fileName,
+            AsylumCaseFileNameQualifier fileNameQualifier,
+            @Qualifier("cmrRelistedHearingNoticeTemplate") CmrRelistedHearingNoticeTemplate documentTemplate,
+            DocumentGenerator documentGenerator,
+            DocumentUploader documentUploader
+    ) {
+        return new DocumentCreator<>(
+                contentType,
+                fileExtension,
+                fileName,
+                fileNameQualifier,
+                documentTemplate,
+                documentGenerator,
+                documentUploader
+        );
+    }
+
     @Bean("remoteHearingNotice")
     public DocumentCreator<AsylumCase> getRemoteHearingNoticeDocumentCreator(
         @Value("${remoteHearingNoticeDocument.contentType}") String contentType,
@@ -144,6 +153,27 @@ public class DocumentCreatorConfiguration {
         @Value("${remoteHearingNoticeDocument.fileName}") String fileName,
         AsylumCaseFileNameQualifier fileNameQualifier,
         @Qualifier("remoteHearingNoticeTemplate") HearingNoticeTemplate documentTemplate,
+        DocumentGenerator documentGenerator,
+        DocumentUploader documentUploader
+    ) {
+        return new DocumentCreator<>(
+            contentType,
+            fileExtension,
+            fileName,
+            fileNameQualifier,
+            documentTemplate,
+            documentGenerator,
+            documentUploader
+        );
+    }
+
+    @Bean("remoteCmrHearingNotice")
+    public DocumentCreator<AsylumCase> getRemoteCmrHearingNoticeDocumentCreator(
+        @Value("${remoteCmrHearingNoticeDocument.contentType}") String contentType,
+        @Value("${remoteCmrHearingNoticeDocument.fileExtension}") String fileExtension,
+        @Value("${remoteCmrHearingNoticeDocument.fileName}") String fileName,
+        AsylumCaseFileNameQualifier fileNameQualifier,
+        @Qualifier("remoteCmrHearingNoticeTemplate") CmrHearingNoticeTemplate documentTemplate,
         DocumentGenerator documentGenerator,
         DocumentUploader documentUploader
     ) {
@@ -977,6 +1007,110 @@ public class DocumentCreatorConfiguration {
         );
     }
 
+    @Bean("detainedCmrListing")
+    public DocumentCreator<AsylumCase> getDetainedCmrListingDocumentCreator(
+        @Value("${detainedCmrListingLetter.contentType}") String contentType,
+        @Value("${detainedCmrListingLetter.fileExtension}") String fileExtension,
+        @Value("${detainedCmrListingLetter.fileName}") String fileName,
+        AsylumCaseFileNameQualifier fileNameQualifier,
+        DetainedCmrListingLetterTemplate documentTemplate,
+        DocumentGenerator documentGenerator,
+        DocumentUploader documentUploader
+    ) {
+        return new DocumentCreator<>(
+            contentType,
+            fileExtension,
+            fileName,
+            fileNameQualifier,
+            documentTemplate,
+            documentGenerator,
+            documentUploader
+        );
+    }
+
+    @Bean("detainedCmrReListing")
+    public DocumentCreator<AsylumCase> getDetainedCmrReListingDocumentCreator(
+        @Value("${detainedCmrReListingLetter.contentType}") String contentType,
+        @Value("${detainedCmrReListingLetter.fileExtension}") String fileExtension,
+        @Value("${detainedCmrReListingLetter.fileName}") String fileName,
+        AsylumCaseFileNameQualifier fileNameQualifier,
+        DetainedCmrReListingLetterTemplate documentTemplate,
+        DocumentGenerator documentGenerator,
+        DocumentUploader documentUploader
+    ) {
+        return new DocumentCreator<>(
+            contentType,
+            fileExtension,
+            fileName,
+            fileNameQualifier,
+            documentTemplate,
+            documentGenerator,
+            documentUploader
+        );
+    }
+
+    @Bean("cmrCancelledAppellantManualLetter")
+    public DocumentCreator<AsylumCase> getCmrCancelledAppellantManualDocumentCreator(
+            @Value("${cmrCancelledAppellantManualLetter.contentType}") String contentType,
+            @Value("${cmrCancelledAppellantManualLetter.fileExtension}") String fileExtension,
+            @Value("${cmrCancelledAppellantManualLetter.fileName}") String fileName,
+            AsylumCaseFileNameQualifier fileNameQualifier,
+            CmrCancelledAppellantManualLetterTemplate documentTemplate,
+            DocumentGenerator documentGenerator,
+            DocumentUploader documentUploader
+    ) {
+        return new DocumentCreator<>(
+                contentType,
+                fileExtension,
+                fileName,
+                fileNameQualifier,
+                documentTemplate,
+                documentGenerator,
+                documentUploader
+        );
+    }
+
+    @Bean("cmrCancelledAppellantDetainedLetter")
+    public DocumentCreator<AsylumCase> getCmrCancelledAppellantDetainedDocumentCreator(
+            @Value("${cmrCancelledAppellantDetainedLetter.contentType}") String contentType,
+            @Value("${cmrCancelledAppellantDetainedLetter.fileExtension}") String fileExtension,
+            @Value("${cmrCancelledAppellantDetainedLetter.fileName}") String fileName,
+            AsylumCaseFileNameQualifier fileNameQualifier,
+            CmrCancelledAppellantDetainedLetterTemplate documentTemplate,
+            DocumentGenerator documentGenerator,
+            DocumentUploader documentUploader
+    ) {
+        return new DocumentCreator<>(
+                contentType,
+                fileExtension,
+                fileName,
+                fileNameQualifier,
+                documentTemplate,
+                documentGenerator,
+                documentUploader
+        );
+    }
+
+    @Bean("cmrCancelledLrManualLetter")
+    public DocumentCreator<AsylumCase> getCmrCancelledLrManualDocumentCreator(
+            @Value("${cmrCancelledLrManualLetter.contentType}") String contentType,
+            @Value("${cmrCancelledLrManualLetter.fileExtension}") String fileExtension,
+            @Value("${cmrCancelledLrManualLetter.fileName}") String fileName,
+            AsylumCaseFileNameQualifier fileNameQualifier,
+            CmrCancelledLrManualLetterTemplate documentTemplate,
+            DocumentGenerator documentGenerator,
+            DocumentUploader documentUploader
+    ) {
+        return new DocumentCreator<>(
+                contentType,
+                fileExtension,
+                fileName,
+                fileNameQualifier,
+                documentTemplate,
+                documentGenerator,
+                documentUploader
+        );
+    }
 
     @Bean("internalDetainedRequestHearingRequirements")
     public DocumentCreator<AsylumCase> getInternalDetainedRequestHearingRequirementsCreator(
@@ -1736,6 +1870,69 @@ public class DocumentCreatorConfiguration {
         );
     }
 
+    @Bean("internalCmrListingLetter")
+    public DocumentCreator<AsylumCase> getInternalCmrListingLetterDocumentCreator(
+        @Value("${internalCmrListingLetter.contentType}") String contentType,
+        @Value("${internalCmrListingLetter.fileExtension}") String fileExtension,
+        @Value("${internalCmrListingLetter.fileName}") String fileName,
+        AsylumCaseFileNameQualifier fileNameQualifier,
+        InternalCmrListingLetterTemplate documentTemplate,
+        DocumentGenerator documentGenerator,
+        DocumentUploader documentUploader
+    ) {
+        return new DocumentCreator<>(
+            contentType,
+            fileExtension,
+            fileName,
+            fileNameQualifier,
+            documentTemplate,
+            documentGenerator,
+            documentUploader
+        );
+    }
+
+    @Bean("internalCmrReListingLetter")
+    public DocumentCreator<AsylumCase> getInternalCmrReListingLetterDocumentCreator(
+        @Value("${internalCmrReListingLetter.contentType}") String contentType,
+        @Value("${internalCmrReListingLetter.fileExtension}") String fileExtension,
+        @Value("${internalCmrReListingLetter.fileName}") String fileName,
+        AsylumCaseFileNameQualifier fileNameQualifier,
+        InternalCmrReListingLetterTemplate documentTemplate,
+        DocumentGenerator documentGenerator,
+        DocumentUploader documentUploader
+    ) {
+        return new DocumentCreator<>(
+            contentType,
+            fileExtension,
+            fileName,
+            fileNameQualifier,
+            documentTemplate,
+            documentGenerator,
+            documentUploader
+        );
+    }
+
+    @Bean("internalCmrReListingLrLetter")
+    public DocumentCreator<AsylumCase> getInternalCmrReListingLrLetterDocumentCreator(
+        @Value("${internalCmrReListingLrLetter.contentType}") String contentType,
+        @Value("${internalCmrReListingLrLetter.fileExtension}") String fileExtension,
+        @Value("${internalCmrReListingLrLetter.fileName}") String fileName,
+        AsylumCaseFileNameQualifier fileNameQualifier,
+        InternalCmrReListingLrLetterTemplate documentTemplate,
+        DocumentGenerator documentGenerator,
+        DocumentUploader documentUploader
+    ) {
+        return new DocumentCreator<>(
+            contentType,
+            fileExtension,
+            fileName,
+            fileNameQualifier,
+            documentTemplate,
+            documentGenerator,
+            documentUploader
+        );
+    }
+
     @Bean("internalCaseListedLrLetter")
     public DocumentCreator<AsylumCase> getinternalCaseListedlLrLetterDocumentCreator(
         @Value("${internalCaseListedLetter.contentType}") String contentType,
@@ -1757,6 +1954,27 @@ public class DocumentCreatorConfiguration {
         );
     }
 
+
+    @Bean("internalCmrListingLrLetter")
+    public DocumentCreator<AsylumCase> getInternalCmrListinglLrLetterDocumentCreator(
+        @Value("${internalCmrListingLrLetter.contentType}") String contentType,
+        @Value("${internalCmrListingLrLetter.fileExtension}") String fileExtension,
+        @Value("${internalCmrListingLrLetter.fileName}") String fileName,
+        AsylumCaseFileNameQualifier fileNameQualifier,
+        InternalCmrListingLrLetterTemplate documentTemplate,
+          DocumentGenerator documentGenerator,
+        DocumentUploader documentUploader
+    ) {
+        return new DocumentCreator<>(
+            contentType,
+            fileExtension,
+            fileName,
+            fileNameQualifier,
+            documentTemplate,
+            documentGenerator,
+            documentUploader
+        );
+    }
 
     @Bean("internalRefusalOfRemoval24wTimeframeApplicationLetter")
     public DocumentCreator<AsylumCase> getInternalRefusalOfRemoval24wTimeframeApplicationLetter(

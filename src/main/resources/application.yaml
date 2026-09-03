@@ -94,12 +94,27 @@ hearingNoticeDocument.fileExtension: PDF
 hearingNoticeDocument.fileName: "hearing-notice"
 hearingNoticeDocument.templateName: ${IA_HEARING_NOTICE_TEMPLATE:TB-IAC-HNO-ENG-00241-Notice-Of-Hearing.docx}
 
+cmrHearingNoticeDocument.contentType: application/pdf
+cmrHearingNoticeDocument.fileExtension: PDF
+cmrHearingNoticeDocument.fileName: "interim-hearing-notice"
+cmrHearingNoticeDocument.templateName: ${IA_HEARING_NOTICE_TEMPLATE:TB-IAC-HNO-ENG-00241-CMR-Notice-Of-Hearing.docx}
+
+cmrRelistedHearingNoticeDocument.contentType: application/pdf
+cmrRelistedHearingNoticeDocument.fileExtension: PDF
+cmrRelistedHearingNoticeDocument.fileName: "interim-hearing-notice"
+cmrRelistedHearingNoticeDocument.templateName: ${IA_HEARING_NOTICE_TEMPLATE:TB-IAC-HNO-ENG-00241-relisted.docx}
+
 hearingNoticeAdaDocument.templateName: ${IA_ADA_HEARING_NOTICE_TEMPLATE:TB-IAC-HNO-ENG-ADA-0001.docx}
 
 remoteHearingNoticeDocument.contentType: application/pdf
 remoteHearingNoticeDocument.fileExtension: PDF
 remoteHearingNoticeDocument.fileName: "hearing-notice"
 remoteHearingNoticeDocument.templateName: ${IA_REMOTE_HEARING_NOTICE_TEMPLATE:TB-IAC-HNO-ENG-00680-Notice-Of-Hearing-Remote.docx}
+
+remoteCmrHearingNoticeDocument.contentType: application/pdf
+remoteCmrHearingNoticeDocument.fileExtension: PDF
+remoteCmrHearingNoticeDocument.fileName: "interim-hearing-notice"
+remoteCmrHearingNoticeDocument.templateName: ${IA_REMOTE_HEARING_NOTICE_TEMPLATE:TB-IAC-HNO-ENG-00680-Notice-Of-Hearing-Remote.docx}
 
 hearingNoticeAdjournedWithoutDateDocument.contentType: application/pdf
 hearingNoticeAdjournedWithoutDateDocument.fileExtension: PDF
@@ -323,6 +338,11 @@ internalDetainedListCaseLetter.fileExtension: PDF
 internalDetainedListCaseLetter.fileName: "detained-appellant-list-case-letter"
 internalDetainedListCaseLetter.templateName: ${IA_INTERNAL_DETAINED_LIST_CASE_LETTER_TEMPLATE:TB-IAC-LET-ENG-00005.docx}
 
+detainedCmrListingLetter.contentType: application/pdf
+detainedCmrListingLetter.fileExtension: PDF
+detainedCmrListingLetter.fileName: "detained-appellant-cmr-listing-letter"
+detainedCmrListingLetter.templateName: ${IA_INTERNAL_DETAINED_LIST_CASE_LETTER_TEMPLATE:TB-IAC-LET-ENG-00005-CMR-Detained.docx}
+
 internalDetainedRequestHearingRequirements.contentType:  application/pdf
 internalDetainedRequestHearingRequirements.fileExtension: PDF
 internalDetainedRequestHearingRequirements.fileName: "detained-appellant-request-hearing-requirements-letter"
@@ -337,6 +357,11 @@ internalDetainedEditCaseListingLetter.contentType: application/pdf
 internalDetainedEditCaseListingLetter.fileExtension: PDF
 internalDetainedEditCaseListingLetter.fileName: "detained-appellant-edit-case-listing-letter"
 internalDetainedEditCaseListingLetter.templateName: ${IA_INTERNAL_DETAINED_EDIT_CASE_LISTING_LETTER_TEMPLATE:TB-IAC-HNO-ENG-00700.docx}
+
+detainedCmrReListingLetter.contentType: application/pdf
+detainedCmrReListingLetter.fileExtension: PDF
+detainedCmrReListingLetter.fileName: "detained-appellant-cmr-relisting-letter"
+detainedCmrReListingLetter.templateName: ${IA_INTERNAL_DETAINED_EDIT_CASE_LISTING_LETTER_TEMPLATE:TB-IAC-HNO-ENG-00700cmr.docx}
 
 internalDetainedManageFeeUpdateLetter.contentType: application/pdf
 internalDetainedManageFeeUpdateLetter.fileExtension: PDF
@@ -619,9 +644,55 @@ internalCaseListedLetter.fileExtension: PDF
 internalCaseListedLetter.fileName: "internal-case-listed-letter"
 internalCaseListedLetter.templateName: ${INTERNAL_CASE_LISTED_LETTER_TEMPLATE:TB-IAC-LET-ENG-Internal-Case-Listed.docx}
 
+internalCmrListingLetter.contentType:  application/pdf
+internalCmrListingLetter.fileExtension: PDF
+internalCmrListingLetter.fileName: "internal-cmr-listing-letter"
+internalCmrListingLetter.templateName: ${INTERNAL_CASE_LISTED_LETTER_TEMPLATE:TB-IAC-LET-ENG-Internal-CMR-Listing.docx}
+
+internalCmrListingLrLetter.contentType:  application/pdf
+internalCmrListingLrLetter.fileExtension: PDF
+internalCmrListingLrLetter.fileName: "internal-cmr-listing-lr-letter"
+internalCmrListingLrLetter.templateName: ${INTERNAL_CASE_LISTED_LETTER_TEMPLATE:TB-IAC-LET-ENG-Internal-CMR-Listing.docx}
+
+internalCmrReListingLetter.contentType:  application/pdf
+internalCmrReListingLetter.fileExtension: PDF
+internalCmrReListingLetter.fileName: "internal-cmr-relisting-letter"
+internalCmrReListingLetter.templateName: ${INTERNAL_CMR_RE_LISTING_LETTER_TEMPLATE:TB-IAC-LET-ENG-Internal-Edit-Case-Listing.docx}
+
+internalCmrReListingLrLetter.contentType:  application/pdf
+internalCmrReListingLrLetter.fileExtension: PDF
+internalCmrReListingLrLetter.fileName: "internal-cmr-relisting-lr-letter"
+internalCmrReListingLrLetter.templateName: ${INTERNAL_CMR_RE_LISTING_LETTER_TEMPLATE:TB-IAC-LET-ENG-Internal-Edit-Case-Listing.docx}
+
+cmrCancelledAppellantManualLetter.contentType:  application/pdf
+cmrCancelledAppellantManualLetter.fileExtension: PDF
+cmrCancelledAppellantManualLetter.fileName: "cmr-cancelled_aip_letter"
+cmrCancelledAppellantManualLetter.templateName: ${CMR_CANCELLED_AIP_MANUAL_LETTER_TEMPLATE:TB-IAC-LET-ENG-CRM-Cancelled-AIP-Manual.docx}
+
+cmrCancelledAppellantDetainedLetter.contentType:  application/pdf
+cmrCancelledAppellantDetainedLetter.fileExtension: PDF
+cmrCancelledAppellantDetainedLetter.fileName: "cmr-cancelled_detained_letter"
+cmrCancelledAppellantDetainedLetter.templateName: ${CMR_CANCELLED_DETAINED_LETTER_TEMPLATE:TB-IAC-LET-ENG-CMR-Cancelled-Detained-Prison-Irc.docx}
+
+cmrCancelledLrManualLetter.contentType:  application/pdf
+cmrCancelledLrManualLetter.fileExtension: PDF
+cmrCancelledLrManualLetter.fileName: "cmr-cancelled_lr_letter"
+cmrCancelledLrManualLetter.templateName: ${CRM_CANCELLED_LR_MANUAL_LETTER_TEMPLATE:TB-IAC-LET-ENG-CRM-Cancelled-AIP-Manual.docx}
+
 internalCaseListedLetterWithAttachment.fileExtension: PDF
 internalCaseListedLetterWithAttachment.fileName: "internal-case-listed-letter-with-attachment"
 
+internalCmrListingLetterWithAttachment.fileExtension: PDF
+internalCmrListingLetterWithAttachment.fileName: "internal-cmr-listing-letter-with-attachment"
+
+internalCmrListingLrLetterWithAttachment.fileExtension: PDF
+internalCmrListingLrLetterWithAttachment.fileName: "internal-cmr-listing-appellant-lr-letter-with-attachment"
+
+internalCmrReListingLetterWithAttachment.fileExtension: PDF
+internalCmrReListingLetterWithAttachment.fileName: "internal-cmr-relisting-letter-with-attachment"
+
+internalCmrReListingLrLetterWithAttachment.fileExtension: PDF
+internalCmrReListingLrLetterWithAttachment.fileName: "internal-cmr-relisting-appellant-lr-letter-with-attachment"
 internalRefusalOfRemoval24wTimeframeApplicationLetter.contentType:  application/pdf
 internalRefusalOfRemoval24wTimeframeApplicationLetter.fileExtension: PDF
 internalRefusalOfRemoval24wTimeframeApplicationLetter.fileName: "internal-refusal-of-removal-24w-timeframe-application-letter"
@@ -763,6 +834,8 @@ security:
       - "UpdateHearingAdjustments"
       - "buildCase"
       - "listCase"
+      - "cmrListing"
+      - "cmrReListing"
       - "draftHearingRequirements"
       - "manageFeeUpdate"
       - "updateTribunalDecision"
@@ -810,6 +883,8 @@ security:
       - "UpdateHearingAdjustments"
       - "buildCase"
       - "listCase"
+      - "cmrListing"
+      - "cmrReListing"
       - "draftHearingRequirements"
       - "manageFeeUpdate"
       - "updateTribunalDecision"
@@ -857,6 +932,8 @@ security:
       - "UpdateHearingAdjustments"
       - "buildCase"
       - "listCase"
+      - "cmrListing"
+      - "cmrReListing"
       - "draftHearingRequirements"
       - "manageFeeUpdate"
       - "updateTribunalDecision"
@@ -874,12 +951,16 @@ security:
       - "uploadSignedDecisionNotice"
       - "uploadSignedDecisionNoticeConditionalGrant"
       - "caseListing"
+      - "cmrListing"
+      - "cmrReListing"
       - "removeRepresentation"
       - "removeLegalRepresentative"
       - "markAppealAsRemitted"
       - "saveNotificationsToDataBail"
     hearing-centre-admin:
       - "listCase"
+      - "cmrListing"
+      - "cmrReListing"
       - "submitAppeal"
       - "editAppeal"
       - "draftHearingRequirements"
@@ -911,8 +992,11 @@ security:
       - "removeLegalRepresentative"
       - "removeStatutoryTimeframe24Weeks"
       - "requestRespondentEvidence"
+      - "cmrHearingCancelled"
     ctsc:
       - "listCase"
+      - "cmrListing"
+      - "cmrReListing"
       - "submitAppeal"
       - "editAppeal"
       - "draftHearingRequirements"
@@ -944,8 +1028,11 @@ security:
       - "removeLegalRepresentative"
       - "removeStatutoryTimeframe24Weeks"
       - "requestRespondentEvidence"
+      - "cmrHearingCancelled"
     ctsc-team-leader:
       - "listCase"
+      - "cmrListing"
+      - "cmrReListing"
       - "submitAppeal"
       - "editAppeal"
       - "draftHearingRequirements"
@@ -970,6 +1057,7 @@ security:
       - "uploadAddendumEvidenceAdminOfficer"
       - "createCaseLink"
       - "reinstateAppeal"
+      - "cmrHearingCancelled"
       - "buildCase"
       - "asyncStitchingComplete"
       - "saveNotificationsToData"
@@ -979,6 +1067,8 @@ security:
       - "requestRespondentEvidence"
     national-business-centre:
       - "listCase"
+      - "cmrListing"
+      - "cmrReListing"
       - "submitAppeal"
       - "editAppeal"
       - "draftHearingRequirements"
@@ -999,6 +1089,7 @@ security:
       - "recordRemissionDecision"
       - "markAppealAsAda"
       - "applyForFTPAAppellant"
+      - "cmrHearingCancelled"
       - "maintainCaseLinks"
       - "uploadAddendumEvidenceAdminOfficer"
       - "createCaseLink"
@@ -1012,6 +1103,8 @@ security:
       - "requestRespondentEvidence"
     challenged-access-ctsc:
       - "listCase"
+      - "cmrListing"
+      - "cmrReListing"
       - "submitAppeal"
       - "editAppeal"
       - "draftHearingRequirements"
@@ -1039,12 +1132,15 @@ security:
       - "buildCase"
       - "asyncStitchingComplete"
       - "saveNotificationsToData"
+      - "cmrHearingCancelled"
       - "manageFeeUpdate"
       - "removeLegalRepresentative"
       - "removeStatutoryTimeframe24Weeks"
       - "requestRespondentEvidence"
     challenged-access-admin:
       - "listCase"
+      - "cmrListing"
+      - "cmrReListing"
       - "submitAppeal"
       - "editAppeal"
       - "draftHearingRequirements"
@@ -1065,6 +1161,7 @@ security:
       - "recordRemissionDecision"
       - "markAppealAsAda"
       - "applyForFTPAAppellant"
+      - "cmrHearingCancelled"
       - "maintainCaseLinks"
       - "uploadAddendumEvidenceAdminOfficer"
       - "createCaseLink"
@@ -1319,6 +1416,9 @@ security:
       - "listCase"
       - "editCaseListing"
       - "caseListing"
+      - "cmrListing"
+      - "cmrReListing"
+      - "cmrHearingCancelled"
       - "recordAdjournmentDetails"
       - "requestHearingRequirementsFeature"
       - "changeHearingCentre"

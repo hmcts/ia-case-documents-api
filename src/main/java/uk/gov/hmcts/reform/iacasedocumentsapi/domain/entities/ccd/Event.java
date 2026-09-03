@@ -23,6 +23,8 @@ public enum Event {
     CHANGE_DIRECTION_DUE_DATE("changeDirectionDueDate", CaseType.ASYLUM),
     UPLOAD_ADDITIONAL_EVIDENCE("uploadAdditionalEvidence", CaseType.ASYLUM),
     LIST_CASE("listCase", CaseType.ASYLUM),
+    CMR_LISTING("cmrListing", CaseType.ASYLUM),
+    CMR_RE_LISTING("cmrReListing", CaseType.ASYLUM),
     CREATE_CASE_SUMMARY("createCaseSummary", CaseType.ASYLUM),
     REVERT_STATE_TO_AWAITING_RESPONDENT_EVIDENCE("revertStateToAwaitingRespondentEvidence", CaseType.ASYLUM),
     GENERATE_HEARING_BUNDLE("generateHearingBundle", CaseType.ASYLUM),
@@ -46,6 +48,8 @@ public enum Event {
     SUBMIT_CLARIFYING_QUESTION_ANSWERS("submitClarifyingQuestionAnswers", CaseType.ASYLUM),
 
     RECORD_ADJOURNMENT_DETAILS("recordAdjournmentDetails", CaseType.ASYLUM),
+
+    CMR_HEARING_CANCELLED("cmrHearingCancelled", CaseType.ASYLUM),
 
     REMOVE_STATUTORY_TIMEFRAME_24_WEEKS("removeStatutoryTimeframe24Weeks", CaseType.ASYLUM),
     UPDATE_TRIBUNAL_DECISION("updateTribunalDecision", CaseType.ASYLUM),

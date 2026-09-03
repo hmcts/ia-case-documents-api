@@ -7,9 +7,12 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.toUnmodifiableMap;
+
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.access.AccessDeniedException;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.Event;
 
+@Slf4j
 public class CcdEventAuthorizor {
 
     private final Map<String, List<Event>> roleEventAccess;
@@ -32,6 +35,9 @@ public class CcdEventAuthorizor {
     ) {
         List<String> requiredRoles = getRequiredRolesForEvent(event);
         Set<String> userRoles = authorizedRolesProvider.getRoles();
+
+        log.info("requiredRoles: {}", requiredRoles);
+        log.info("userRoles: {}", userRoles);
 
         if (requiredRoles.isEmpty()
             || userRoles.isEmpty()
