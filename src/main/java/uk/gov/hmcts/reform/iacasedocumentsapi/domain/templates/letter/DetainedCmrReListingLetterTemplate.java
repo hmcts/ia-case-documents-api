@@ -78,13 +78,6 @@ public class DetainedCmrReListingLetterTemplate implements DocumentTemplate<Asyl
         fieldValues.put("customerServicesEmail", customerServicesProvider.getInternalCustomerServicesEmail(asylumCase));
         fieldValues.put("dateLetterSent", formatDateForNotificationAttachmentDocument(LocalDate.now()));
         fieldValues.put("oldHearingCentre", hearingCentreNameBefore);
-        log.info("-------asylumCase.read(CMR_HEARING_DATE, String.class): {}", asylumCase.read(CMR_HEARING_DATE, String.class));
-        log.info("-------asylumCaseBefore.read(CMR_HEARING_DATE, String.class): {}", asylumCaseBefore.read(CMR_HEARING_DATE, String.class));
-        try {
-            throw new RuntimeException("error");
-        } catch (RuntimeException ex) {
-            log.error(ex.getMessage(), ex);
-        }
         fieldValues.put("oldHearingDate", formatDateTimeForRendering(asylumCaseBefore.read(CMR_HEARING_DATE, String.class).orElse(""), DOCUMENT_DATE_FORMAT));
         fieldValues.put("oldHearingTime", formatDateTimeForRendering(asylumCaseBefore.read(CMR_HEARING_DATE, String.class).orElse(""), DOCUMENT_TIME_FORMAT));
         fieldValues.put("hearingDate", formatDateTimeForRendering(asylumCase.read(CMR_HEARING_DATE, String.class).orElse(""), DOCUMENT_DATE_FORMAT));
