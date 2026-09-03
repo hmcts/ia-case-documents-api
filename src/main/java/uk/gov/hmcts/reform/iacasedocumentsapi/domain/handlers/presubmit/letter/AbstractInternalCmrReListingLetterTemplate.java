@@ -1,6 +1,5 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit.letter;
 
-import lombok.extern.slf4j.Slf4j;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.HearingCentre;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseDetails;
@@ -25,7 +24,6 @@ import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtil
  * Common field mapping for the letters generated when a case management review hearing is re-listed.
  * Subclasses only supply the address the letter is sent to.
  */
-@Slf4j
 public abstract class AbstractInternalCmrReListingLetterTemplate implements DocumentTemplate<AsylumCase> {
 
     private static final DateTimeFormatter DOCUMENT_DATE_FORMAT = DateTimeFormatter.ofPattern("d MMMM yyyy");

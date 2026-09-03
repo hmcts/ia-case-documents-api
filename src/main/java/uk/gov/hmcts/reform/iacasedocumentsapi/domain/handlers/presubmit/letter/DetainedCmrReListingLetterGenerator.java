@@ -8,7 +8,6 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DocumentTag;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DocumentWithMetadata;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseDetails;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.Callback;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.DispatchPriority;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.PreSubmitCallbackResponse;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.PreSubmitCallbackStage;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.Document;
@@ -38,11 +37,6 @@ public class DetainedCmrReListingLetterGenerator implements PreSubmitCallbackHan
     ) {
         this.documentCreator = documentCreator;
         this.documentHandler = documentHandler;
-    }
-
-    @Override
-    public DispatchPriority getDispatchPriority() {
-        return  DispatchPriority.EARLIEST;
     }
 
     public boolean canHandle(
