@@ -60,6 +60,8 @@ public class CmrRelistedHearingNoticeFieldMapper  {
                 stringProvider
                         .get("hearingCentreName", listedHearingCentreBefore.toString())
                         .orElseThrow(() -> new IllegalStateException("listCaseHearingCentre (before) is not present"));
+        log.info("-------listedHearingCentreBefore: {}", listedHearingCentreBefore);
+        log.info("-------hearingCentreNameBefore: {}", hearingCentreNameBefore);
 
         final Map<String, Object> fieldValues = new HashMap<>();
 
