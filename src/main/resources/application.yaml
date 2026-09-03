@@ -670,6 +670,11 @@ stf24WeeksRemovalDecision.fileExtension: PDF
 stf24WeeksRemovalDecision.fileName: "stf-24weeks-removal-notice-of-decision"
 stf24WeeksRemovalDecision.templateName: ${STF24_WEEKS_REMOVAL_DECISION_DOCUMENT:TB-IAC-DEC-ENG-02000.docx}
 
+stf24WeeksHearingNoticeDocument.contentType: application/pdf
+stf24WeeksHearingNoticeDocument.fileExtension: PDF
+stf24WeeksHearingNoticeDocument.fileName: "stf-24weeks-hearing-notice"
+stf24WeeksHearingNoticeDocument.templateName: ${STF24_WEEKS_IA_HEARING_NOTICE_TEMPLATE:TB-IAC-HNO-ENG-00072-STF24W-V2.docx}
+
 ccdGatewayUrl: ${CCD_GW_URL:http://localhost:3453}
 
 docmosis.accessKey: ${DOCMOSIS_ACCESS_KEY}

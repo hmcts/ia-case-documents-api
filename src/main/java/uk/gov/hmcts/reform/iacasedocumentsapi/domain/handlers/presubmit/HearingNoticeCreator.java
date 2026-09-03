@@ -52,6 +52,7 @@ public class HearingNoticeCreator implements PreSubmitCallbackHandler<AsylumCase
     private final DocumentCreator<AsylumCase> hearingNoticeDocumentCreator;
     private final DocumentCreator<AsylumCase> remoteHearingNoticeDocumentCreator;
     private final DocumentCreator<AsylumCase> adaHearingNoticeDocumentCreator;
+    private final DocumentCreator<AsylumCase> stf24WeeksHearingNoticeDocumentCreator;
     private final DocumentHandler documentHandler;
     private final FeatureToggler featureToggler;
     private final DocumentReceiver documentReceiver;
@@ -62,6 +63,7 @@ public class HearingNoticeCreator implements PreSubmitCallbackHandler<AsylumCase
         @Qualifier("hearingNotice") DocumentCreator<AsylumCase> hearingNoticeDocumentCreator,
         @Qualifier("remoteHearingNotice") DocumentCreator<AsylumCase> remoteHearingNoticeDocumentCreator,
         @Qualifier("adaHearingNotice") DocumentCreator<AsylumCase> adaHearingNoticeDocumentCreator,
+        @Qualifier("stf24WeeksHearingNotice") DocumentCreator<AsylumCase> stf24WeeksHearingNoticeDocumentCreator,
         DocumentHandler documentHandler,
         FeatureToggler featureToggler,
         DocumentReceiver documentReceiver,
@@ -71,6 +73,7 @@ public class HearingNoticeCreator implements PreSubmitCallbackHandler<AsylumCase
         this.hearingNoticeDocumentCreator = hearingNoticeDocumentCreator;
         this.remoteHearingNoticeDocumentCreator = remoteHearingNoticeDocumentCreator;
         this.adaHearingNoticeDocumentCreator = adaHearingNoticeDocumentCreator;
+        this.stf24WeeksHearingNoticeDocumentCreator = stf24WeeksHearingNoticeDocumentCreator;
         this.documentHandler = documentHandler;
         this.featureToggler = featureToggler;
         this.documentReceiver = documentReceiver;
@@ -168,7 +171,9 @@ public class HearingNoticeCreator implements PreSubmitCallbackHandler<AsylumCase
 
     private Document getHearingNotice(boolean isCaseUsingLocationRefData, HearingCentre listCaseHearingCentre, AsylumCase asylumCase, CaseDetails<AsylumCase> caseDetails) {
         Document hearingNotice;
-        if ((!isCaseUsingLocationRefData && listCaseHearingCentre.equals(HearingCentre.REMOTE_HEARING))
+        if (is24WeeksCase(asylumCase)) {
+            hearingNotice = stf24WeeksHearingNoticeDocumentCreator.create(caseDetails);
+        } else if ((!isCaseUsingLocationRefData && listCaseHearingCentre.equals(HearingCentre.REMOTE_HEARING))
             || (isCaseUsingLocationRefData && isRemoteHearing(asylumCase))
             || isVirtualHearing(asylumCase)) {
             hearingNotice = remoteHearingNoticeDocumentCreator.create(caseDetails);
