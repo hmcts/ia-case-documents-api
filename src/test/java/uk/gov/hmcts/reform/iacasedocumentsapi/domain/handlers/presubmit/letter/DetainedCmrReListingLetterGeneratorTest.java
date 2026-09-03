@@ -40,6 +40,8 @@ class DetainedCmrReListingLetterGeneratorTest {
     @Mock
     private CaseDetails<AsylumCase> caseDetails;
     @Mock
+    private CaseDetails<AsylumCase> caseDetailsBefore;
+    @Mock
     private AsylumCase asylumCase;
     @Mock
     private Document uploadedDocument;
@@ -64,7 +66,8 @@ class DetainedCmrReListingLetterGeneratorTest {
         when(asylumCase.read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
         when(asylumCase.read(DETENTION_FACILITY, String.class)).thenReturn(Optional.of("immigrationRemovalCentre"));
 
-        when(detainedCmrReListingCaseLetterCreator.create(caseDetails)).thenReturn(uploadedDocument);
+        when(callback.getCaseDetailsBefore()).thenReturn(Optional.of(caseDetailsBefore));
+        when(detainedCmrReListingCaseLetterCreator.create(caseDetails, caseDetailsBefore)).thenReturn(uploadedDocument);
 
         PreSubmitCallbackResponse<AsylumCase> callbackResponse =
                 detainedCmrReListingLetterGenerator.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback);
@@ -72,11 +75,33 @@ class DetainedCmrReListingLetterGeneratorTest {
         assertNotNull(callbackResponse);
         assertEquals(asylumCase, callbackResponse.getData());
 
+        // the letter contrasts the old and new hearing details, so the before case must be passed through
+        verify(detainedCmrReListingCaseLetterCreator, times(1)).create(caseDetails, caseDetailsBefore);
+        verify(detainedCmrReListingCaseLetterCreator, never()).create(caseDetails);
+
         verify(documentHandler, times(1)).addWithMetadataWithoutReplacingExistingDocuments(
             asylumCase, uploadedDocument,
             NOTIFICATION_ATTACHMENT_DOCUMENTS,
             DocumentTag.INTERNAL_CMR_RE_LISTING_LETTER
         );
+    }
+
+    @Test
+    public void handling_should_throw_if_no_case_details_before() {
+        when(callback.getCaseDetails()).thenReturn(caseDetails);
+        when(callback.getEvent()).thenReturn(CMR_RE_LISTING);
+        when(caseDetails.getCaseData()).thenReturn(asylumCase);
+        when(asylumCase.read(IS_ACCELERATED_DETAINED_APPEAL, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO));
+        when(asylumCase.read(CMR_IS_REMOTE_HEARING, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO));
+        when(asylumCase.read(APPELLANT_IN_DETENTION, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
+        when(asylumCase.read(DETENTION_FACILITY, String.class)).thenReturn(Optional.of("immigrationRemovalCentre"));
+        when(callback.getCaseDetailsBefore()).thenReturn(Optional.empty());
+
+        assertThatThrownBy(() -> detainedCmrReListingLetterGenerator.handle(PreSubmitCallbackStage.ABOUT_TO_SUBMIT, callback))
+            .hasMessage("previous case data is not present")
+            .isExactlyInstanceOf(IllegalStateException.class);
+
+        verifyNoInteractions(documentHandler);
     }
 
     @Test

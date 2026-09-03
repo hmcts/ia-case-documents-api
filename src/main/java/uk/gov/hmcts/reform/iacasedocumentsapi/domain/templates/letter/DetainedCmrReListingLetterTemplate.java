@@ -65,13 +65,17 @@ public class DetainedCmrReListingLetterTemplate implements DocumentTemplate<Asyl
                 asylumCaseBefore
                         .read(CMR_HEARING_CENTRE, HearingCentre.class)
                         .orElseThrow(() -> new IllegalStateException("listCaseHearingCentre (before) is not present"));
+        final String hearingCentreNameBefore =
+                stringProvider
+                        .get("hearingCentreName", listedHearingCentreBefore.toString())
+                        .orElseThrow(() -> new IllegalStateException("listCaseHearingCentre (before) is not present"));
 
         fieldValues.putAll(getAppellantPersonalisation(asylumCase));
         fieldValues.put("ccdReferenceNumberForDisplay", asylumCase.read(CCD_REFERENCE_NUMBER_FOR_DISPLAY, String.class).orElse(""));
         fieldValues.put("customerServicesTelephone", customerServicesProvider.getInternalCustomerServicesTelephone(asylumCase));
         fieldValues.put("customerServicesEmail", customerServicesProvider.getInternalCustomerServicesEmail(asylumCase));
         fieldValues.put("dateLetterSent", formatDateForNotificationAttachmentDocument(LocalDate.now()));
-        fieldValues.put("oldHearingCentre", listedHearingCentreBefore);
+        fieldValues.put("oldHearingCentre", hearingCentreNameBefore);
         fieldValues.put("oldHearingDate", formatDateTimeForRendering(asylumCaseBefore.read(CMR_HEARING_DATE, String.class).orElse(""), DOCUMENT_DATE_FORMAT));
         fieldValues.put("oldHearingTime", formatDateTimeForRendering(asylumCaseBefore.read(CMR_HEARING_DATE, String.class).orElse(""), DOCUMENT_TIME_FORMAT));
         fieldValues.put("hearingDate", formatDateTimeForRendering(asylumCase.read(CMR_HEARING_DATE, String.class).orElse(""), DOCUMENT_DATE_FORMAT));

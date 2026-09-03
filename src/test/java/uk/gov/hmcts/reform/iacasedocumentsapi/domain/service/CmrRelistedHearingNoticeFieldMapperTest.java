@@ -47,6 +47,8 @@ class CmrRelistedHearingNoticeFieldMapperTest {
     private final String hearingDate = "2020-12-25T12:34:56";
     private final String oldHearingDate = "2020-11-24T09:15:00";
     private final String manchesterHearingCentreAddress = "Manchester, 123 Somewhere, North";
+    private final String manchesterHearingCentreName = "Manchester";
+    private final String taylorHouseHearingCentreName = "Taylor House";
     private final String ariaListingReference = "AA/12345/1234";
 
     private final String vulnerabilities = "Vulnerabilities";
@@ -93,6 +95,8 @@ class CmrRelistedHearingNoticeFieldMapperTest {
 
         when(asylumCase.read(CMR_HEARING_CENTRE, HearingCentre.class)).thenReturn(Optional.of(HearingCentre.MANCHESTER));
         when(stringProvider.get("hearingCentreAddress", "manchester")).thenReturn(Optional.of(manchesterHearingCentreAddress));
+        when(stringProvider.get("hearingCentreName", "manchester")).thenReturn(Optional.of(manchesterHearingCentreName));
+        when(stringProvider.get("hearingCentreName", "taylorHouse")).thenReturn(Optional.of(taylorHouseHearingCentreName));
         when(asylumCase.read(IS_CASE_USING_LOCATION_REF_DATA, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO));
 
         when(asylumCase.read(SUBMIT_HEARING_REQUIREMENTS_AVAILABLE)).thenReturn(Optional.of(YesOrNo.NO));
@@ -125,7 +129,7 @@ class CmrRelistedHearingNoticeFieldMapperTest {
         assertEquals(homeOfficeReferenceNumber, templateFieldValues.get("homeOfficeReferenceNumber"));
         assertEquals(legalRepReferenceNumber, templateFieldValues.get("legalRepReferenceNumber"));
         assertEquals(ccdReferenceNumber, templateFieldValues.get("ccdReferenceNumberForDisplay"));
-        assertEquals(HearingCentre.TAYLOR_HOUSE, templateFieldValues.get("oldHearingCentre"));
+        assertEquals(taylorHouseHearingCentreName, templateFieldValues.get("oldHearingCentre"));
         assertEquals(expectedFormattedOldHearingDatePart, templateFieldValues.get("oldHearingDate"));
         assertEquals(expectedFormattedHearingDatePart, templateFieldValues.get("hearingDate"));
         assertEquals(expectedFormattedHearingTimePart, templateFieldValues.get("hearingTime"));
@@ -152,7 +156,7 @@ class CmrRelistedHearingNoticeFieldMapperTest {
             cmrRelistedHearingNoticeFieldMapper.mapFieldValues(caseDetails);
 
         assertEquals(23, templateFieldValues.size());
-        assertEquals(HearingCentre.MANCHESTER, templateFieldValues.get("oldHearingCentre"));
+        assertEquals(manchesterHearingCentreName, templateFieldValues.get("oldHearingCentre"));
         assertEquals(expectedFormattedHearingDatePart, templateFieldValues.get("oldHearingDate"));
         assertEquals(expectedFormattedHearingDatePart, templateFieldValues.get("hearingDate"));
     }
@@ -280,6 +284,16 @@ class CmrRelistedHearingNoticeFieldMapperTest {
     void should_throw_if_cmr_hearing_centre_before_not_present() {
 
         when(asylumCaseBefore.read(CMR_HEARING_CENTRE, HearingCentre.class)).thenReturn(Optional.empty());
+
+        assertThatThrownBy(() -> cmrRelistedHearingNoticeFieldMapper.mapFieldValues(caseDetails, caseDetailsBefore))
+            .hasMessage("listCaseHearingCentre (before) is not present")
+            .isExactlyInstanceOf(IllegalStateException.class);
+    }
+
+    @Test
+    void should_throw_if_hearing_centre_name_before_cannot_be_resolved() {
+
+        when(stringProvider.get("hearingCentreName", "taylorHouse")).thenReturn(Optional.empty());
 
         assertThatThrownBy(() -> cmrRelistedHearingNoticeFieldMapper.mapFieldValues(caseDetails, caseDetailsBefore))
             .hasMessage("listCaseHearingCentre (before) is not present")

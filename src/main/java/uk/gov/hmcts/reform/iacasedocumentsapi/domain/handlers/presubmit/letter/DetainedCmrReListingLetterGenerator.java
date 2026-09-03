@@ -64,7 +64,9 @@ public class DetainedCmrReListingLetterGenerator implements PreSubmitCallbackHan
         final CaseDetails<AsylumCase> caseDetails = callback.getCaseDetails();
         final AsylumCase asylumCase = caseDetails.getCaseData();
 
-        Document detainedCmrReListLetter = documentCreator.create(caseDetails);
+        final CaseDetails<AsylumCase> caseDetailsBefore = callback.getCaseDetailsBefore()
+                .orElseThrow(() -> new IllegalStateException("previous case data is not present"));
+        Document detainedCmrReListLetter = documentCreator.create(caseDetails, caseDetailsBefore);
 
         documentHandler.addWithMetadataWithoutReplacingExistingDocuments(
             asylumCase,
