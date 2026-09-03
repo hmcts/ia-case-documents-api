@@ -1,5 +1,6 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates.letter;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
@@ -19,6 +20,7 @@ import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtil
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.DateUtils.formatDateForNotificationAttachmentDocument;
 
 @Component
+@Slf4j
 public class DetainedCmrReListingLetterTemplate implements DocumentTemplate<AsylumCase> {
     private final String templateName;
     private final CustomerServicesProvider customerServicesProvider;
@@ -65,13 +67,24 @@ public class DetainedCmrReListingLetterTemplate implements DocumentTemplate<Asyl
                 asylumCaseBefore
                         .read(CMR_HEARING_CENTRE, HearingCentre.class)
                         .orElseThrow(() -> new IllegalStateException("listCaseHearingCentre (before) is not present"));
+        final String hearingCentreNameBefore =
+                stringProvider
+                        .get("hearingCentreName", listedHearingCentreBefore.toString())
+                        .orElseThrow(() -> new IllegalStateException("listCaseHearingCentre (before) is not present"));
 
         fieldValues.putAll(getAppellantPersonalisation(asylumCase));
         fieldValues.put("ccdReferenceNumberForDisplay", asylumCase.read(CCD_REFERENCE_NUMBER_FOR_DISPLAY, String.class).orElse(""));
         fieldValues.put("customerServicesTelephone", customerServicesProvider.getInternalCustomerServicesTelephone(asylumCase));
         fieldValues.put("customerServicesEmail", customerServicesProvider.getInternalCustomerServicesEmail(asylumCase));
         fieldValues.put("dateLetterSent", formatDateForNotificationAttachmentDocument(LocalDate.now()));
-        fieldValues.put("oldHearingCentre", listedHearingCentreBefore);
+        fieldValues.put("oldHearingCentre", hearingCentreNameBefore);
+        log.info("-------asylumCase.read(CMR_HEARING_DATE, String.class): {}", asylumCase.read(CMR_HEARING_DATE, String.class));
+        log.info("-------asylumCaseBefore.read(CMR_HEARING_DATE, String.class): {}", asylumCaseBefore.read(CMR_HEARING_DATE, String.class));
+        try {
+            throw new RuntimeException("error");
+        } catch (RuntimeException ex) {
+            log.error(ex.getMessage(), ex);
+        }
         fieldValues.put("oldHearingDate", formatDateTimeForRendering(asylumCaseBefore.read(CMR_HEARING_DATE, String.class).orElse(""), DOCUMENT_DATE_FORMAT));
         fieldValues.put("oldHearingTime", formatDateTimeForRendering(asylumCaseBefore.read(CMR_HEARING_DATE, String.class).orElse(""), DOCUMENT_TIME_FORMAT));
         fieldValues.put("hearingDate", formatDateTimeForRendering(asylumCase.read(CMR_HEARING_DATE, String.class).orElse(""), DOCUMENT_DATE_FORMAT));

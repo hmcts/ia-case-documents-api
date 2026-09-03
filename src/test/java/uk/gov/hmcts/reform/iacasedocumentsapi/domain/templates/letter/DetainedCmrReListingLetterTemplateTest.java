@@ -52,7 +52,12 @@ public class DetainedCmrReListingLetterTemplateTest {
     private final String cmrHearingDate = "2023-08-14T14:30:00.000";
     private final String formattedCmrHearingDate = "14082023";
     private final String formattedCmrHearingTime = "1430";
+    private final String oldCmrHearingDate = "2023-07-03T09:15:00.000";
+    private final String formattedOldCmrHearingDate = "03072023";
+    private final String formattedOldCmrHearingTime = "0915";
     private final String manchesterHearingCentreAddress = "Manchester, 123 Somewhere, North";
+    private final String manchesterHearingCentreName = "Manchester";
+    private final String taylorHouseHearingCentreName = "Taylor House";
     private final String formattedManchesterHearingCentreAddress = "Manchester\n123 Somewhere\nNorth";
     private final String customerServicesTelephone = "0300 123 1711";
     private final String customerServicesEmail = "email@example.com";
@@ -88,6 +93,8 @@ public class DetainedCmrReListingLetterTemplateTest {
         when(hearingChannelDynamicList.getValue()).thenReturn(hearingChannelValue);
         when(hearingChannelValue.getLabel()).thenReturn(hearingChannelLabel);
         when(stringProvider.get("hearingCentreAddress", "manchester")).thenReturn(Optional.of(manchesterHearingCentreAddress));
+        when(stringProvider.get("hearingCentreName", "manchester")).thenReturn(Optional.of(manchesterHearingCentreName));
+        when(stringProvider.get("hearingCentreName", "taylorHouse")).thenReturn(Optional.of(taylorHouseHearingCentreName));
         when(customerServicesProvider.getInternalCustomerServicesTelephone(asylumCase)).thenReturn(customerServicesTelephone);
         when(customerServicesProvider.getInternalCustomerServicesEmail(asylumCase)).thenReturn(customerServicesEmail);
     }
@@ -109,6 +116,9 @@ public class DetainedCmrReListingLetterTemplateTest {
         assertEquals(formattedCmrHearingDate, templateFieldValues.get("hearingDate"));
         assertEquals(formattedCmrHearingTime, templateFieldValues.get("hearingTime"));
         assertEquals(formattedManchesterHearingCentreAddress, templateFieldValues.get("hearingCentreAddress"));
+        assertEquals(manchesterHearingCentreName, templateFieldValues.get("oldHearingCentre"));
+        assertEquals(formattedCmrHearingDate, templateFieldValues.get("oldHearingDate"));
+        assertEquals(formattedCmrHearingTime, templateFieldValues.get("oldHearingTime"));
         assertEquals(customerServicesTelephone, templateFieldValues.get("customerServicesTelephone"));
         assertEquals(customerServicesEmail, templateFieldValues.get("customerServicesEmail"));
         // single-arg overload uses caseDetails as the "before" case, so both channels are the same
@@ -122,7 +132,8 @@ public class DetainedCmrReListingLetterTemplateTest {
 
         when(caseDetailsBefore.getCaseData()).thenReturn(asylumCaseBefore);
         when(asylumCaseBefore.read(CMR_HEARING_CHANNEL, DynamicList.class)).thenReturn(Optional.of(oldHearingChannelDynamicList));
-        when(asylumCaseBefore.read(CMR_HEARING_CENTRE, HearingCentre.class)).thenReturn(Optional.of(HearingCentre.MANCHESTER));
+        when(asylumCaseBefore.read(CMR_HEARING_CENTRE, HearingCentre.class)).thenReturn(Optional.of(HearingCentre.TAYLOR_HOUSE));
+        when(asylumCaseBefore.read(CMR_HEARING_DATE, String.class)).thenReturn(Optional.of(oldCmrHearingDate));
         when(oldHearingChannelDynamicList.getValue()).thenReturn(oldHearingChannelValue);
         when(oldHearingChannelValue.getLabel()).thenReturn(oldHearingChannelLabel);
 
@@ -131,6 +142,11 @@ public class DetainedCmrReListingLetterTemplateTest {
 
         assertEquals(hearingChannelLabel, templateFieldValues.get("hearingChannel"));
         assertEquals(oldHearingChannelLabel, templateFieldValues.get("oldHearingChannel"));
+        assertEquals(taylorHouseHearingCentreName, templateFieldValues.get("oldHearingCentre"));
+        assertEquals(formattedOldCmrHearingDate, templateFieldValues.get("oldHearingDate"));
+        assertEquals(formattedOldCmrHearingTime, templateFieldValues.get("oldHearingTime"));
+        // the hearing centre address always comes from the current case data
+        assertEquals(formattedManchesterHearingCentreAddress, templateFieldValues.get("hearingCentreAddress"));
     }
 
     @Test
@@ -155,6 +171,18 @@ public class DetainedCmrReListingLetterTemplateTest {
 
         assertEquals("", templateFieldValues.get("hearingDate"));
         assertEquals("", templateFieldValues.get("hearingTime"));
+        assertEquals("", templateFieldValues.get("oldHearingDate"));
+        assertEquals("", templateFieldValues.get("oldHearingTime"));
+    }
+
+    @Test
+    void should_throw_when_old_hearing_centre_name_cannot_be_resolved() {
+        dataSetUp();
+
+        when(stringProvider.get("hearingCentreName", "manchester")).thenReturn(Optional.empty());
+
+        assertThrows(IllegalStateException.class,
+            () -> detainedCmrReListingLetterTemplate.mapFieldValues(caseDetails));
     }
 
     @Test
