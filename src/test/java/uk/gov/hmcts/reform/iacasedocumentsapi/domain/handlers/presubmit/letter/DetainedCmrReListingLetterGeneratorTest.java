@@ -26,6 +26,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.*;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.Event.CMR_RE_LISTING;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.DispatchPriority.EARLIEST;
 
 @ExtendWith(MockitoExtension.class)
 @SuppressWarnings("unchecked")
@@ -173,6 +174,12 @@ class DetainedCmrReListingLetterGeneratorTest {
 
             reset(callback);
         }
+    }
+
+    @Test
+    public void should_have_earliest_dispatch_priority() {
+
+        assertEquals(EARLIEST, detainedCmrReListingLetterGenerator.getDispatchPriority());
     }
 
     @Test
