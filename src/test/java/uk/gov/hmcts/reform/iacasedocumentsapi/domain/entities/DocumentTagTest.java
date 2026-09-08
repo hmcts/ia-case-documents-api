@@ -1,8 +1,8 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
 import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class DocumentTagTest {
 
@@ -122,11 +122,21 @@ class DocumentTagTest {
         assertEquals("homeOfficeApplicationDecidedLetter", DocumentTag.HOME_OFFICE_APPLICATION_DECIDED_LETTER.toString());
         assertEquals("aipmDetainedInPrisonOrIrcReinstateAppealLetter", DocumentTag.AIPM_DETAINED_IN_PRISON_IRC_REINSTATE_APPEAL_LETTER.toString());
         assertEquals("stf24WeeksCaseReviewAppeallantDocument", DocumentTag.STF_24WEEKS_CASE_REVIEW_APPELLANT_DOCUMENT.toString());
+        assertEquals("stf24WeeksRemovalDecisionDocument", DocumentTag.STF_24WEEKS_REMOVAL_DECISION_DOCUMENT.toString());
+        assertEquals("stf24WeeksRemovalDecisionLetter", DocumentTag.STF_24WEEKS_REMOVAL_DECISION_LETTER.toString());
+        assertEquals("stf24WeeksRemovalDecisionLetterBundle", DocumentTag.STF_24WEEKS_REMOVAL_DECISION_LETTER_BUNDLE.toString());
+        assertEquals("stf24WeeksRemovalDecisionLetterLr", DocumentTag.STF_24WEEKS_REMOVAL_DECISION_LETTER_LR.toString());
+        assertEquals("stf24WeeksRemovalDecisionLetterLrBundle", DocumentTag.STF_24WEEKS_REMOVAL_DECISION_LETTER_LR_BUNDLE.toString());
+        assertEquals("stf24WeeksRemovalRefusedDecisionDocument", DocumentTag.STF_24WEEKS_REMOVAL_REFUSED_DECISION_DOCUMENT.toString());
+        assertEquals("stf24WeeksRemovalRefusedDecisionLetter", DocumentTag.STF_24WEEKS_REMOVAL_REFUSED_DECISION_LETTER.toString());
+        assertEquals("stf24WeeksRemovalRefusedDecisionLetterBundle", DocumentTag.STF_24WEEKS_REMOVAL_REFUSED_DECISION_LETTER_BUNDLE.toString());
+        assertEquals("stf24WeeksRemovalRefusedDecisionLetterLr", DocumentTag.STF_24WEEKS_REMOVAL_REFUSED_DECISION_LETTER_LR.toString());
+        assertEquals("stf24WeeksRemovalRefusedDecisionLetterLrBundle", DocumentTag.STF_24WEEKS_REMOVAL_REFUSED_DECISION_LETTER_LR_BUNDLE.toString());
 
     }
 
     @Test
     public void if_this_test_fails_it_is_because_it_needs_updating_with_your_changes() {
-        assertEquals(124, DocumentTag.values().length);
+        assertEquals(134, DocumentTag.values().length);
     }
 }

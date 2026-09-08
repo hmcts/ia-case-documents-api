@@ -66,6 +66,7 @@ public class SaveNotificationsToDataPdfService {
     public Document createLetterPdf(StoredNotification storedNotification, String notificationReference) {
         byte[] decodedBytes = Base64.getDecoder().decode(storedNotification.getNotificationDocumentEncoded());
         ByteArrayResource byteArrayResource = getByteArrayResource(decodedBytes, notificationReference + ".PDF");
+        storedNotification.setNotificationDocumentEncoded(null); // Clear the encoded document after decoding
         return documentUploader.upload(byteArrayResource, PDF_CONTENT_TYPE);
     }
 

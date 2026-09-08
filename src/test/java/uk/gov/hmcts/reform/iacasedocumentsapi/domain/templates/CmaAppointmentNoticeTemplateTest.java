@@ -13,6 +13,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.junit.jupiter.MockitoSettings;
+import org.mockito.quality.Strictness;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.Direction;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DirectionTag;
@@ -25,7 +27,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.DirectionFinder;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.HearingDetailsFinder;
 
 @ExtendWith(MockitoExtension.class)
-@SuppressWarnings("unchecked")
+@MockitoSettings(strictness = Strictness.LENIENT)
 public class CmaAppointmentNoticeTemplateTest {
 
     private final String templateName = "HEARING_NOTICE_TEMPLATE.docx";

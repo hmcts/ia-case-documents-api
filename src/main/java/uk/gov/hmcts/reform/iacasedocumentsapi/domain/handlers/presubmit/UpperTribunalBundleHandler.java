@@ -2,6 +2,7 @@ package uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit;
 
 import static java.util.Objects.requireNonNull;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.*;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.getTribunalInclusion;
 
 import java.util.List;
 import java.util.Optional;
@@ -16,6 +17,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.Callb
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.PreSubmitCallbackResponse;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.PreSubmitCallbackStage;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.IdValue;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.PreSubmitCallbackHandler;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.clients.EmBundleRequestExecutor;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.enties.em.Bundle;
@@ -62,12 +64,14 @@ public class UpperTribunalBundleHandler implements PreSubmitCallbackHandler<Asyl
                 .getCaseDetails()
                 .getCaseData();
 
-        boolean isOrWasAda = asylumCase.read(SUITABILITY_REVIEW_DECISION).isPresent();
         asylumCase.clear(HMCTS);
         asylumCase.write(AsylumCaseDefinition.HMCTS, "[userImage:hmcts.png]");
         asylumCase.clear(AsylumCaseDefinition.CASE_BUNDLES);
+        boolean shouldIncTribunalDocs = asylumCase.read(SUITABILITY_REVIEW_DECISION).isPresent()
+            || asylumCase.read(STF_24W_PREVIOUS_STATUS_WAS_YES_AUTO_GENERATED, YesOrNo.class).orElse(YesOrNo.NO)
+            .equals(YesOrNo.YES);
         asylumCase.write(AsylumCaseDefinition.BUNDLE_CONFIGURATION,
-                isOrWasAda ? "iac-upper-tribunal-bundle-inc-tribunal-config.yaml" : "iac-upper-tribunal-bundle-config.yaml");
+            getTribunalInclusion("iac-upper-tribunal-bundle", shouldIncTribunalDocs));
 
         asylumCase.write(AsylumCaseDefinition.BUNDLE_FILE_NAME_PREFIX, getBundlePrefix(asylumCase));
 
