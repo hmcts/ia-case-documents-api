@@ -42,6 +42,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates.InternalDetainedR
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates.InternalDetainedRequestRespondentEvidenceTemplate;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates.InternalOocAppealSubmissionTemplate;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates.Stf24WeeksCaseReviewTemplate;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates.Stf24WeeksHearingNoticeTemplate;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates.Stf24WeeksRemovalDecisionTemplate;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates.UpdatedTribunalAipDecisionAndReasonsCoverLetterTemplate;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates.UpdatedTribunalDecisionAndReasonsCoverLetterTemplate;
@@ -2397,6 +2398,28 @@ public class DocumentCreatorConfiguration {
             @Value("${stf24WeeksCaseReview.fileName}") String fileName,
             AsylumCaseFileNameQualifier fileNameQualifier,
             Stf24WeeksCaseReviewTemplate documentTemplate,
+            DocumentGenerator documentGenerator,
+            DocumentUploader documentUploader
+    ) {
+        log.info("contentType {}, fileExtension {},fileName {}", contentType, fileExtension, fileName);
+        return new DocumentCreator<>(
+                contentType,
+                fileExtension,
+                fileName,
+                fileNameQualifier,
+                documentTemplate,
+                documentGenerator,
+                documentUploader
+        );
+    }
+
+    @Bean("stf24WeeksHearingNotice")
+    public DocumentCreator<AsylumCase> getStatutoryTimeFrame24WeeksHearingNoticeDocumentCreator(
+            @Value("${stf24WeeksHearingNoticeDocument.contentType}") String contentType,
+            @Value("${stf24WeeksHearingNoticeDocument.fileExtension}") String fileExtension,
+            @Value("${stf24WeeksHearingNoticeDocument.fileName}") String fileName,
+            AsylumCaseFileNameQualifier fileNameQualifier,
+            Stf24WeeksHearingNoticeTemplate documentTemplate,
             DocumentGenerator documentGenerator,
             DocumentUploader documentUploader
     ) {

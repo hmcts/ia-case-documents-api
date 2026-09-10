@@ -454,6 +454,15 @@ public enum AsylumCaseDefinition {
     IS_HEARING_LOOP_NEEDED(
         "isHearingLoopNeeded", new TypeReference<YesOrNo>(){}),
 
+    HAS_NON_LEGAL_REP(
+        "hasNonLegalRep", new TypeReference<YesOrNo>(){}),
+
+    NLR_NEEDS_STEP_FREE_ACCESS(
+        "nlrNeedsStepFreeAccess", new TypeReference<YesOrNo>(){}),
+
+    NLR_NEEDS_HEARING_LOOP(
+        "nlrNeedsHearingLoop", new TypeReference<YesOrNo>(){}),
+
     PHYSICAL_OR_MENTAL_HEALTH_ISSUES(
         "physicalOrMentalHealthIssues", new TypeReference<YesOrNo>(){}),
 
