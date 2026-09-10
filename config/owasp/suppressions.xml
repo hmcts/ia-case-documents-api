@@ -4,18 +4,29 @@
         <notes>Awaiting spring boot 4 upgrade as springboot 3.x has reached end of OSS support</notes>
         <cve>CVE-2026-59313</cve>
         <cve>CVE-2026-59314</cve>
-        <cve>CVE-2026-47890</cve>
-        <cve>CVE-2026-47891</cve>
+        <cve>CVE-2026-66299</cve>
+        <cve>CVE-2026-65637</cve>
+        <cve>CVE-2026-65905</cve>
+        <cve>CVE-2026-65182</cve>
+        <cve>CVE-2026-68525</cve>
+        <cve>CVE-2026-65183</cve>
+        <cve>CVE-2026-66422</cve>
+        <cve>CVE-2026-68569</cve>
+        <cve>CVE-2026-65927</cve>
+        <cve>CVE-2026-68763</cve>
+        <cve>CVE-2026-73180</cve>
         <cve>CVE-2026-47892</cve>
         <cve>CVE-2026-59283</cve>
         <cve>CVE-2026-47893</cve>
+        <cve>CVE-2026-59280</cve>
+        <cve>CVE-2026-59270</cve>
+        <cve>CVE-2026-59284</cve>
+        <cve>CVE-2026-59276</cve>
+        <cve>CVE-2026-47890</cve>
+        <cve>CVE-2026-47891</cve>
         <cve>CVE-2026-59282</cve>
         <cve>CVE-2026-59281</cve>
-        <cve>CVE-2026-59280</cve>
-        <cve>CVE-2026-59284</cve>
-        <cve>CVE-2026-59270</cve>
         <cve>CVE-2026-47841</cve>
         <cve>CVE-2026-47842</cve>
-        <cve>CVE-2026-59276</cve>
     </suppress>
 </suppressions>

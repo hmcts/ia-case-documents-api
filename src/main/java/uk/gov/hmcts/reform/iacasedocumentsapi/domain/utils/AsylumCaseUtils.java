@@ -29,6 +29,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.RequiredFieldMissingException;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ApplicantType;
@@ -50,6 +51,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.RemissionType;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.NationalityGovUk;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.*;
 
+@Slf4j
 public class AsylumCaseUtils {
 
     private AsylumCaseUtils() {
@@ -74,6 +76,23 @@ public class AsylumCaseUtils {
 
     public static boolean isInternalCase(AsylumCase asylumCase) {
         return asylumCase.read(IS_ADMIN, YesOrNo.class).map(isAdmin -> YES == isAdmin).orElse(false);
+    }
+
+    public static boolean isCmrHearingInPersonOrRemote(AsylumCase asylumCase) {
+        return isCmrHearingChannel(asylumCase, "INTER")
+                || isCmrHearingChannel(asylumCase, "VID")
+                || isCmrHearingChannel(asylumCase, "TEL");
+    }
+
+    public static boolean isCmrHearingChannel(AsylumCase asylumCase, String hearingChannelCode) {
+        return asylumCase.read(CMR_HEARING_CHANNEL, DynamicList.class)
+                .map(hearingChannels -> hearingChannels.getValue().getCode().equals(hearingChannelCode))
+                .orElse(false);
+    }
+
+    public static boolean hasBeenSubmittedByAppellantInternalCase(AsylumCase asylumCase) {
+        return asylumCase.read(APPELLANTS_REPRESENTATION, YesOrNo.class)
+                .map(yesOrNo -> YES == yesOrNo).orElse(false);
     }
 
     public static boolean hasAppealBeenSubmittedByAppellantInternalCase(AsylumCase asylumCase) {
@@ -292,6 +311,14 @@ public class AsylumCaseUtils {
         return asylumCase.read(IS_REMOTE_HEARING, YesOrNo.class).orElse(YesOrNo.NO).equals(YesOrNo.YES);
     }
 
+    public static boolean isRemoteCmrHearing(AsylumCase asylumCase) {
+        return asylumCase.read(CMR_IS_REMOTE_HEARING, YesOrNo.class).orElse(YesOrNo.NO).equals(YesOrNo.YES);
+    }
+
+    public static boolean isCmrCase(AsylumCase asylumCase) {
+        return asylumCase.read(CMR_HEARING_CENTRE, HearingCentre.class).isPresent();
+    }
+
     public static boolean isVirtualHearing(AsylumCase asylumCase) {
         return asylumCase.read(IS_VIRTUAL_HEARING, YesOrNo.class).orElse(YesOrNo.NO).equals(YesOrNo.YES)
             || asylumCase.read(LIST_CASE_HEARING_CENTRE, HearingCentre.class)
@@ -390,6 +417,15 @@ public class AsylumCaseUtils {
 
     public static List<DocumentWithMetadata> getMaybeNotificationAttachmentDocuments(AsylumCase asylumCase, DocumentTag documentTag) {
         Optional<List<IdValue<DocumentWithMetadata>>> maybeLetterNotificationDocuments = asylumCase.read(NOTIFICATION_ATTACHMENT_DOCUMENTS);
+
+        List<DocumentWithMetadata> docs = maybeLetterNotificationDocuments
+                .orElse(Collections.emptyList())
+                .stream()
+                .map(IdValue::getValue)
+                .filter(document -> {
+                    return document.getTag() == documentTag;
+                })
+                .collect(Collectors.toList());
 
         return maybeLetterNotificationDocuments
             .orElse(Collections.emptyList())
@@ -561,6 +597,14 @@ public class AsylumCaseUtils {
 
     public static String getHearingChannel(AsylumCase asylumCase, String defaultValue) {
         Optional<DynamicList> hearingChannelDl = asylumCase.read(HEARING_CHANNEL, DynamicList.class);
+
+        return hearingChannelDl
+            .map(dynamicList -> dynamicList.getValue().getLabel())
+            .orElse(defaultValue);
+    }
+
+    public static String getCmrHearingChannel(AsylumCase asylumCase, String defaultValue) {
+        Optional<DynamicList> hearingChannelDl = asylumCase.read(CMR_HEARING_CHANNEL, DynamicList.class);
 
         return hearingChannelDl
             .map(dynamicList -> dynamicList.getValue().getLabel())
