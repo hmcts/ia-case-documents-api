@@ -338,12 +338,12 @@ class HearingNoticeCreatorTest {
     }
 
     @Test
-    void should_create_stf24w_hearing_notice_pdf_and_append_to_legal_representative_documents_for_the_case_when_remote_hearing() {
+    void should_create_remote_hearing_notice_pdf_and_append_to_legal_representative_documents_for_the_case_when_remote_hearing_and_stf() {
 
         when(callback.getCaseDetails()).thenReturn(caseDetails);
         when(callback.getEvent()).thenReturn(Event.LIST_CASE);
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
-        when(stf24WeeksHearingNoticeDocumentCreator.create(caseDetails)).thenReturn(uploadedDocument);
+        when(remoteHearingNoticeDocumentCreator.create(caseDetails)).thenReturn(uploadedDocument);
         when(asylumCase.read(LIST_CASE_HEARING_CENTRE, HearingCentre.class)).thenReturn(Optional.of(HearingCentre.REMOTE_HEARING));
         when(asylumCase.read(IS_REHEARD_APPEAL_ENABLED, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO));
         when(asylumCase.read(IS_CASE_USING_LOCATION_REF_DATA, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO));
@@ -356,8 +356,8 @@ class HearingNoticeCreatorTest {
         assertNotNull(callbackResponse);
         assertEquals(asylumCase, callbackResponse.getData());
 
-        verify(stf24WeeksHearingNoticeDocumentCreator, times(1)).create(caseDetails);
-        verify(remoteHearingNoticeDocumentCreator, times(0)).create(caseDetails);
+        verify(stf24WeeksHearingNoticeDocumentCreator, times(0)).create(caseDetails);
+        verify(remoteHearingNoticeDocumentCreator, times(1)).create(caseDetails);
         verify(documentHandler, times(1)).addWithMetadataWithDateTimeWithoutReplacingExistingDocuments(asylumCase, uploadedDocument, HEARING_DOCUMENTS, DocumentTag.HEARING_NOTICE);
     }
 
