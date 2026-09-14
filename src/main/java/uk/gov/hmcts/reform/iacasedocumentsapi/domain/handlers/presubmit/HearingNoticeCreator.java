@@ -15,12 +15,14 @@ import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DetentionFa
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo.NO;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo.YES;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.*;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.isRemoteHearing;
 
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
@@ -83,7 +85,7 @@ public class HearingNoticeCreator implements PreSubmitCallbackHandler<AsylumCase
 
     @Override
     public DispatchPriority getDispatchPriority() {
-        return  DispatchPriority.EARLIEST;
+        return DispatchPriority.EARLIEST;
     }
 
     public boolean canHandle(
@@ -170,18 +172,17 @@ public class HearingNoticeCreator implements PreSubmitCallbackHandler<AsylumCase
     }
 
     private Document getHearingNotice(boolean isCaseUsingLocationRefData, HearingCentre listCaseHearingCentre, AsylumCase asylumCase, CaseDetails<AsylumCase> caseDetails) {
-        Document hearingNotice;
+        boolean isRemote = isCaseUsingLocationRefData ? isRemoteHearing(asylumCase)
+            : HearingCentre.REMOTE_HEARING.equals(listCaseHearingCentre);
         if (is24WeeksCase(asylumCase)) {
-            hearingNotice = stf24WeeksHearingNoticeDocumentCreator.create(caseDetails);
-        } else if ((!isCaseUsingLocationRefData && listCaseHearingCentre.equals(HearingCentre.REMOTE_HEARING))
-            || (isCaseUsingLocationRefData && isRemoteHearing(asylumCase))
-            || isVirtualHearing(asylumCase)) {
-            hearingNotice = remoteHearingNoticeDocumentCreator.create(caseDetails);
-        } else {
-            boolean isAda = asylumCase.read(IS_ACCELERATED_DETAINED_APPEAL, YesOrNo.class).orElse(NO) == YES;
-            hearingNotice = isAda ? adaHearingNoticeDocumentCreator.create(caseDetails) : hearingNoticeDocumentCreator.create(caseDetails);
+            return isRemote ? remoteHearingNoticeDocumentCreator.create(caseDetails)
+                : stf24WeeksHearingNoticeDocumentCreator.create(caseDetails);
+        } else if (isRemote || isVirtualHearing(asylumCase)) {
+            return remoteHearingNoticeDocumentCreator.create(caseDetails);
         }
-        return hearingNotice;
+
+        boolean isAda = asylumCase.read(IS_ACCELERATED_DETAINED_APPEAL, YesOrNo.class).orElse(NO) == YES;
+        return isAda ? adaHearingNoticeDocumentCreator.create(caseDetails) : hearingNoticeDocumentCreator.create(caseDetails);
     }
 
     private void appendReheardHearingDocuments(AsylumCase asylumCase, Document hearingNotice) {
