@@ -41,6 +41,7 @@ public enum Event {
     SUBMIT_CMA_REQUIREMENTS("submitCmaRequirements", CaseType.ASYLUM),
     LIST_CMA("listCma", CaseType.ASYLUM),
     EDIT_APPEAL_AFTER_SUBMIT("editAppealAfterSubmit", CaseType.ASYLUM),
+    EDIT_APPELLANT_PERSONAL_DATA("editAppellantPersonalData", CaseType.ASYLUM),
     GENERATE_UPPER_TRIBUNAL_BUNDLE("generateUpperTribunalBundle", CaseType.ASYLUM),
     SUBMIT_REASONS_FOR_APPEAL("submitReasonsForAppeal", CaseType.ASYLUM),
     SUBMIT_CLARIFYING_QUESTION_ANSWERS("submitClarifyingQuestionAnswers", CaseType.ASYLUM),
