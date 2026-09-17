@@ -67,6 +67,7 @@ public class EventTest {
             Arguments.of("submitCmaRequirements", CaseType.ASYLUM, Event.SUBMIT_CMA_REQUIREMENTS),
             Arguments.of("listCma", CaseType.ASYLUM, Event.LIST_CMA),
             Arguments.of("editAppealAfterSubmit", CaseType.ASYLUM, Event.EDIT_APPEAL_AFTER_SUBMIT),
+            Arguments.of("editAppellantPersonalData", CaseType.ASYLUM, Event.EDIT_APPELLANT_PERSONAL_DATA),
             Arguments.of("generateUpperTribunalBundle", CaseType.ASYLUM, Event.GENERATE_UPPER_TRIBUNAL_BUNDLE),
             Arguments.of("submitReasonsForAppeal", CaseType.ASYLUM, Event.SUBMIT_REASONS_FOR_APPEAL),
             Arguments.of("submitClarifyingQuestionAnswers", CaseType.ASYLUM, Event.SUBMIT_CLARIFYING_QUESTION_ANSWERS),
