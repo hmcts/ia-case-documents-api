@@ -10,12 +10,15 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.Callb
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.PreSubmitCallbackResponse;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.PreSubmitCallbackStage;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.Document;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.JourneyType;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.PreSubmitCallbackHandler;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentCreator;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentHandler;
 
 import static java.util.Objects.requireNonNull;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.JOURNEY_TYPE;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.TRIBUNAL_DOCUMENTS;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.JourneyType.AIP;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.isInternalCase;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.Stf24WeeksUtils.STF_24_WEEKS_REVIEW_DOCUMENT_CREATOR;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.Stf24WeeksUtils.isCaseReviewFor24WeeksCase;
@@ -28,43 +31,42 @@ public class StatutoryTimeFrame24WeeksReviewCreator implements PreSubmitCallback
     private final DocumentHandler documentHandler;
 
     public StatutoryTimeFrame24WeeksReviewCreator(
-            @Qualifier(STF_24_WEEKS_REVIEW_DOCUMENT_CREATOR) DocumentCreator<AsylumCase> stf24WeeksReviewDocumentCreator,
-            DocumentHandler documentHandler) {
+        @Qualifier(STF_24_WEEKS_REVIEW_DOCUMENT_CREATOR) DocumentCreator<AsylumCase> stf24WeeksReviewDocumentCreator,
+        DocumentHandler documentHandler) {
         this.stf24WeeksReviewDocumentCreator = stf24WeeksReviewDocumentCreator;
         this.documentHandler = documentHandler;
     }
 
     public boolean canHandle(
-            PreSubmitCallbackStage callbackStage,
-            Callback<AsylumCase> callback) {
+        PreSubmitCallbackStage callbackStage,
+        Callback<AsylumCase> callback) {
         requireNonNull(callbackStage, "callbackStage must not be null");
         requireNonNull(callback, "callback must not be null");
         final AsylumCase asylumCase = callback.getCaseDetails().getCaseData();
-        boolean canHandleReviewDoc = callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
-                && isCaseReviewFor24WeeksCase(callback.getEvent(), asylumCase)
-                && !isInternalCase(asylumCase);
-        log.info("{} canHandle Review Doc {}", STF_24_WEEKS_REVIEW_DOCUMENT_CREATOR, canHandleReviewDoc);
-        return canHandleReviewDoc;
+        return callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
+            && isCaseReviewFor24WeeksCase(callback.getEvent(), asylumCase)
+            && asylumCase
+            .read(JOURNEY_TYPE, JourneyType.class)
+            .map(type -> type == AIP).orElse(false)
+            && !isInternalCase(asylumCase);
     }
 
     public PreSubmitCallbackResponse<AsylumCase> handle(
-            PreSubmitCallbackStage callbackStage,
-            Callback<AsylumCase> callback) {
+        PreSubmitCallbackStage callbackStage,
+        Callback<AsylumCase> callback) {
 
         final CaseDetails<AsylumCase> caseDetails = callback.getCaseDetails();
         final AsylumCase asylumCase = caseDetails.getCaseData();
 
         boolean canAddDocument = isCaseReviewFor24WeeksCase(callback.getEvent(), asylumCase) && !isInternalCase(asylumCase);
-        log.info("{} canAddDocument Doc {}", STF_24_WEEKS_REVIEW_DOCUMENT_CREATOR, canAddDocument);
         if (canAddDocument) {
             Document appealSubmission = stf24WeeksReviewDocumentCreator.create(caseDetails);
             documentHandler.addWithMetadata(
-                    asylumCase,
-                    appealSubmission,
-                    TRIBUNAL_DOCUMENTS,
-                    DocumentTag.STF_24WEEKS_CASE_REVIEW_APPELLANT_DOCUMENT
+                asylumCase,
+                appealSubmission,
+                TRIBUNAL_DOCUMENTS,
+                DocumentTag.STF_24WEEKS_CASE_REVIEW_APPELLANT_DOCUMENT
             );
-            log.info("{} doc added successfully for tag {}", STF_24_WEEKS_REVIEW_DOCUMENT_CREATOR, DocumentTag.STF_24WEEKS_CASE_REVIEW_APPELLANT_DOCUMENT);
         }
 
         return new PreSubmitCallbackResponse<>(asylumCase);
