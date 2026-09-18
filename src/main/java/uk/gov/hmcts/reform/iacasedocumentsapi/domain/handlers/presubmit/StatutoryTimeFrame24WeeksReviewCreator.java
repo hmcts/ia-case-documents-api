@@ -10,15 +10,12 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.Callb
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.PreSubmitCallbackResponse;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.PreSubmitCallbackStage;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.Document;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.JourneyType;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.PreSubmitCallbackHandler;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentCreator;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentHandler;
 
 import static java.util.Objects.requireNonNull;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.JOURNEY_TYPE;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.TRIBUNAL_DOCUMENTS;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.JourneyType.AIP;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.isInternalCase;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.Stf24WeeksUtils.STF_24_WEEKS_REVIEW_DOCUMENT_CREATOR;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.Stf24WeeksUtils.isCaseReviewFor24WeeksCase;
@@ -44,11 +41,7 @@ public class StatutoryTimeFrame24WeeksReviewCreator implements PreSubmitCallback
         requireNonNull(callback, "callback must not be null");
         final AsylumCase asylumCase = callback.getCaseDetails().getCaseData();
         return callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
-            && isCaseReviewFor24WeeksCase(callback.getEvent(), asylumCase)
-            && asylumCase
-            .read(JOURNEY_TYPE, JourneyType.class)
-            .map(type -> type == AIP).orElse(false)
-            && !isInternalCase(asylumCase);
+            && isCaseReviewFor24WeeksCase(callback.getEvent(), asylumCase);
     }
 
     public PreSubmitCallbackResponse<AsylumCase> handle(

@@ -4,6 +4,7 @@ import org.springframework.stereotype.Service;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseDetails;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.JourneyType;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.Stf24WeeksUtils;
 
 import java.time.LocalDate;
@@ -11,6 +12,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static java.time.format.DateTimeFormatter.ofPattern;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.LEGAL_REP_REFERENCE_NUMBER;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.Stf24WeeksUtils.APPEAL_RECEIVED_DATE;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.Stf24WeeksUtils.APPEAL_REFERENCE_NUMBER_KEY;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.Stf24WeeksUtils.APPELLANT_FULL_NAME;
@@ -41,7 +43,7 @@ public class Stf24WeeksCaseReviewDocFieldMapper {
     }
 
     public Map<String, Object> mapFieldValues(
-            CaseDetails<AsylumCase> caseDetails) {
+        CaseDetails<AsylumCase> caseDetails) {
         final AsylumCase asylumCase = caseDetails.getCaseData();
         LOGGER.info("Mapping field values for case ID: {}", caseDetails.getId());
         final Map<String, Object> fieldValues = new HashMap<>();
@@ -62,6 +64,11 @@ public class Stf24WeeksCaseReviewDocFieldMapper {
         fieldValues.put(WEEKS_DEADLINE, populateStatutoryTimeFrame24wDate(asylumCase));
         fieldValues.put(DECISION_SENT_DATE, Stf24WeeksUtils.getHomeOfficeDecisionDate(asylumCase));
         fieldValues.put(APPEAL_RECEIVED_DATE, Stf24WeeksUtils.getAppealReceivedDate(asylumCase));
+        fieldValues.put("journeyType", asylumCase.read(AsylumCaseDefinition.JOURNEY_TYPE, JourneyType.class)
+            .map(Enum::toString)
+            .orElse(EMPTY_STRING));
+        fieldValues.put("legalRepReferenceNumber", asylumCase.read(LEGAL_REP_REFERENCE_NUMBER, String.class)
+            .orElse(""));
         /// STF24W
 
         return fieldValues;
