@@ -135,9 +135,13 @@ class Stf24WeeksTestWiremock extends SpringBootIntegrationTest
     @WithMockUser(authorities = {"caseworker-ia", "tribunal-caseworker"})
     void shouldCreate24WeeksReviewDocumentIfCaseCreatedByAdmin(boolean cdamEnabled) {
         setup(cdamEnabled);
+
         AsylumCaseForTest caseData = mockCaseData();
-        caseData.with(STF_24W_CURRENT_STATUS_AUTO_GENERATED, YesOrNo.YES).with(HOME_OFFICE_DECISION_DATE, "2002-02-02");
-        notCreatedByAdmin(caseData);
+        caseData.with(STF_24W_CURRENT_STATUS_AUTO_GENERATED, YesOrNo.YES).with(COMPLETE_CASE_REVIEW_DATE, "2002-02-02")
+            .with(APPEAL_SUBMISSION_DATE, "2002-02-02")
+            .with(TRIBUNAL_RECEIVED_DATE, "2002-02-02")
+            .with(HOME_OFFICE_DECISION_DATE, "2002-02-02");
+
         createdByAdmin(caseData);
         Optional<List<IdValue<DocumentWithMetadata>>> docsOpt =
             doCaseReview(caseData).getAsylumCase().read(AsylumCaseDefinition.TRIBUNAL_DOCUMENTS);
