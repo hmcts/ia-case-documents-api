@@ -51,16 +51,13 @@ public class StatutoryTimeFrame24WeeksReviewCreator implements PreSubmitCallback
         final CaseDetails<AsylumCase> caseDetails = callback.getCaseDetails();
         final AsylumCase asylumCase = caseDetails.getCaseData();
 
-        boolean canAddDocument = isCaseReviewFor24WeeksCase(callback.getEvent(), asylumCase) && !isInternalCase(asylumCase);
-        if (canAddDocument) {
-            Document appealSubmission = stf24WeeksReviewDocumentCreator.create(caseDetails);
-            documentHandler.addWithMetadata(
-                asylumCase,
-                appealSubmission,
-                TRIBUNAL_DOCUMENTS,
-                DocumentTag.STF_24WEEKS_CASE_REVIEW_APPELLANT_DOCUMENT
-            );
-        }
+        Document appealSubmission = stf24WeeksReviewDocumentCreator.create(caseDetails);
+        documentHandler.addWithMetadata(
+            asylumCase,
+            appealSubmission,
+            TRIBUNAL_DOCUMENTS,
+            DocumentTag.STF_24WEEKS_CASE_REVIEW_APPELLANT_DOCUMENT
+        );
 
         return new PreSubmitCallbackResponse<>(asylumCase);
     }
