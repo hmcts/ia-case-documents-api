@@ -48,6 +48,7 @@ public class Stf24WeeksCaseReviewDocFieldMapper {
         LOGGER.info("Mapping field values for case ID: {}", caseDetails.getId());
         final Map<String, Object> fieldValues = new HashMap<>();
         /// STF 24w
+        fieldValues.put("hmcts", "[userImage:hmcts.png]");
         fieldValues.put(HOME_OFFICE_REFERENCE_NUMBER_KEY, asylumCase.read(AsylumCaseDefinition.HOME_OFFICE_REFERENCE_NUMBER, String.class).orElse(EMPTY_STRING));
         fieldValues.put(APPEAL_REFERENCE_NUMBER_KEY, asylumCase.read(AsylumCaseDefinition.APPEAL_REFERENCE_NUMBER, String.class).orElse(EMPTY_STRING));
         LocalDate now = LocalDate.now();
