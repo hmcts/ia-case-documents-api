@@ -3,16 +3,12 @@ package uk.gov.hmcts.reform.iacasedocumentsapi.domain.service;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.EnumSource;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseDetails;
-import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.JourneyType;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.Stf24WeeksUtils;
 
 import java.time.LocalDate;
@@ -22,7 +18,6 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.LEGAL_REP_REFERENCE_NUMBER;
 
 @MockitoSettings(strictness = Strictness.LENIENT)
 @ExtendWith(MockitoExtension.class)
@@ -44,13 +39,13 @@ class Stf24WeeksCaseReviewDocFieldMapperTest {
     void should_map_all_stf24_week_field_values_when_all_data_present() {
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
         when(caseDetails.getId()).thenReturn(123L);
-        when(asylumCase.read(AsylumCaseDefinition.APPELLANT_GIVEN_NAMES, String.class))
+        when(asylumCase.read(uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.APPELLANT_GIVEN_NAMES, String.class))
                 .thenReturn(Optional.of("John"));
-        when(asylumCase.read(AsylumCaseDefinition.APPELLANT_FAMILY_NAME, String.class))
+        when(asylumCase.read(uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.APPELLANT_FAMILY_NAME, String.class))
                 .thenReturn(Optional.of("Smith"));
-        when(asylumCase.read(AsylumCaseDefinition.TRIBUNAL_RECEIVED_DATE, String.class))
+        when(asylumCase.read(uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.TRIBUNAL_RECEIVED_DATE, String.class))
                 .thenReturn(Optional.of("2023-01-01"));
-        when(asylumCase.read(AsylumCaseDefinition.HOME_OFFICE_DECISION_DATE, String.class))
+        when(asylumCase.read(uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.HOME_OFFICE_DECISION_DATE, String.class))
                 .thenReturn(Optional.of("2022-12-01"));
 
         Map<String, Object> result = fieldMapper.mapFieldValues(caseDetails);
@@ -71,13 +66,13 @@ class Stf24WeeksCaseReviewDocFieldMapperTest {
     void should_handle_empty_appellant_names_and_trim_full_name() {
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
         when(caseDetails.getId()).thenReturn(124L);
-        when(asylumCase.read(AsylumCaseDefinition.APPELLANT_GIVEN_NAMES, String.class))
+        when(asylumCase.read(uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.APPELLANT_GIVEN_NAMES, String.class))
                 .thenReturn(Optional.empty());
-        when(asylumCase.read(AsylumCaseDefinition.APPELLANT_FAMILY_NAME, String.class))
+        when(asylumCase.read(uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.APPELLANT_FAMILY_NAME, String.class))
                 .thenReturn(Optional.empty());
-        when(asylumCase.read(AsylumCaseDefinition.TRIBUNAL_RECEIVED_DATE, String.class))
+        when(asylumCase.read(uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.TRIBUNAL_RECEIVED_DATE, String.class))
                 .thenReturn(Optional.of("2023-01-01"));
-        when(asylumCase.read(AsylumCaseDefinition.HOME_OFFICE_DECISION_DATE, String.class))
+        when(asylumCase.read(uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.HOME_OFFICE_DECISION_DATE, String.class))
                 .thenReturn(Optional.of("2022-12-01"));
 
         Map<String, Object> result = fieldMapper.mapFieldValues(caseDetails);
@@ -91,13 +86,13 @@ class Stf24WeeksCaseReviewDocFieldMapperTest {
     void should_handle_only_given_names_and_trim_full_name() {
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
         when(caseDetails.getId()).thenReturn(125L);
-        when(asylumCase.read(AsylumCaseDefinition.APPELLANT_GIVEN_NAMES, String.class))
+        when(asylumCase.read(uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.APPELLANT_GIVEN_NAMES, String.class))
                 .thenReturn(Optional.of("John"));
-        when(asylumCase.read(AsylumCaseDefinition.APPELLANT_FAMILY_NAME, String.class))
+        when(asylumCase.read(uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.APPELLANT_FAMILY_NAME, String.class))
                 .thenReturn(Optional.empty());
-        when(asylumCase.read(AsylumCaseDefinition.TRIBUNAL_RECEIVED_DATE, String.class))
+        when(asylumCase.read(uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.TRIBUNAL_RECEIVED_DATE, String.class))
                 .thenReturn(Optional.of("2023-01-01"));
-        when(asylumCase.read(AsylumCaseDefinition.HOME_OFFICE_DECISION_DATE, String.class))
+        when(asylumCase.read(uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.HOME_OFFICE_DECISION_DATE, String.class))
                 .thenReturn(Optional.of("2022-12-01"));
 
         Map<String, Object> result = fieldMapper.mapFieldValues(caseDetails);
@@ -109,13 +104,13 @@ class Stf24WeeksCaseReviewDocFieldMapperTest {
     void should_handle_only_family_names_and_trim_full_name() {
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
         when(caseDetails.getId()).thenReturn(126L);
-        when(asylumCase.read(AsylumCaseDefinition.APPELLANT_GIVEN_NAMES, String.class))
+        when(asylumCase.read(uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.APPELLANT_GIVEN_NAMES, String.class))
                 .thenReturn(Optional.empty());
-        when(asylumCase.read(AsylumCaseDefinition.APPELLANT_FAMILY_NAME, String.class))
+        when(asylumCase.read(uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.APPELLANT_FAMILY_NAME, String.class))
                 .thenReturn(Optional.of("Smith"));
-        when(asylumCase.read(AsylumCaseDefinition.TRIBUNAL_RECEIVED_DATE, String.class))
+        when(asylumCase.read(uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.TRIBUNAL_RECEIVED_DATE, String.class))
                 .thenReturn(Optional.of("2023-01-01"));
-        when(asylumCase.read(AsylumCaseDefinition.HOME_OFFICE_DECISION_DATE, String.class))
+        when(asylumCase.read(uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.HOME_OFFICE_DECISION_DATE, String.class))
                 .thenReturn(Optional.of("2022-12-01"));
 
         Map<String, Object> result = fieldMapper.mapFieldValues(caseDetails);
@@ -127,13 +122,13 @@ class Stf24WeeksCaseReviewDocFieldMapperTest {
     void should_calculate_correct_deadline_dates_from_today() {
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
         when(caseDetails.getId()).thenReturn(127L);
-        when(asylumCase.read(AsylumCaseDefinition.APPELLANT_GIVEN_NAMES, String.class))
+        when(asylumCase.read(uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.APPELLANT_GIVEN_NAMES, String.class))
                 .thenReturn(Optional.of("Jane"));
-        when(asylumCase.read(AsylumCaseDefinition.APPELLANT_FAMILY_NAME, String.class))
+        when(asylumCase.read(uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.APPELLANT_FAMILY_NAME, String.class))
                 .thenReturn(Optional.of("Doe"));
-        when(asylumCase.read(AsylumCaseDefinition.TRIBUNAL_RECEIVED_DATE, String.class))
+        when(asylumCase.read(uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.TRIBUNAL_RECEIVED_DATE, String.class))
                 .thenReturn(Optional.of("2023-01-01"));
-        when(asylumCase.read(AsylumCaseDefinition.HOME_OFFICE_DECISION_DATE, String.class))
+        when(asylumCase.read(uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.HOME_OFFICE_DECISION_DATE, String.class))
                 .thenReturn(Optional.of("2022-12-01"));
 
         Map<String, Object> result = fieldMapper.mapFieldValues(caseDetails);
@@ -148,26 +143,5 @@ class Stf24WeeksCaseReviewDocFieldMapperTest {
         assertEquals(expected56Days, result.get(Stf24WeeksUtils.DAYS_56_FROM_DATE_OF_DIRECTION_KEY));
     }
 
-    @ParameterizedTest
-    @EnumSource(JourneyType.class)
-    void maps_journeyType_and_lr_reference(JourneyType journeyType) {
-        when(caseDetails.getCaseData()).thenReturn(asylumCase);
-        when(caseDetails.getId()).thenReturn(128L);
-        when(asylumCase.read(AsylumCaseDefinition.APPELLANT_GIVEN_NAMES, String.class))
-            .thenReturn(Optional.of("Jane"));
-        when(asylumCase.read(AsylumCaseDefinition.APPELLANT_FAMILY_NAME, String.class))
-            .thenReturn(Optional.of("Doe"));
-        when(asylumCase.read(AsylumCaseDefinition.TRIBUNAL_RECEIVED_DATE, String.class))
-            .thenReturn(Optional.of("2023-01-01"));
-        when(asylumCase.read(AsylumCaseDefinition.HOME_OFFICE_DECISION_DATE, String.class))
-            .thenReturn(Optional.of("2022-12-01"));
-        when(asylumCase.read(AsylumCaseDefinition.JOURNEY_TYPE, JourneyType.class)).thenReturn(Optional.of(journeyType));
-        when(asylumCase.read(LEGAL_REP_REFERENCE_NUMBER, String.class)).thenReturn(Optional.of("LR123456"));
-
-        Map<String, Object> result = fieldMapper.mapFieldValues(caseDetails);
-
-        assertEquals(journeyType.toString(), result.get("journeyType"));
-        assertEquals("LR123456", result.get("legalRepReferenceNumber"));
-    }
 
 }

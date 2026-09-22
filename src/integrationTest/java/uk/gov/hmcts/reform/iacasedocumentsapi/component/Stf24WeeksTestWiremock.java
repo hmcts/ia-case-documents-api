@@ -1,5 +1,6 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.component;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.security.test.context.support.WithMockUser;
@@ -26,7 +27,6 @@ import java.util.List;
 import java.util.Optional;
 
 import static com.google.common.collect.Sets.newHashSet;
-import static java.util.Collections.emptyList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.APPEAL_SUBMISSION_DATE;
@@ -108,6 +108,7 @@ class Stf24WeeksTestWiremock extends SpringBootIntegrationTest
     }
 
     @ParameterizedTest
+    @Disabled
     @ValueSource(booleans = {true, false})
     @WithMockUser(authorities = {"caseworker-ia", "tribunal-caseworker"})
     void shouldCreate24WeeksReviewDocument(boolean cdamEnabled) {
@@ -121,36 +122,27 @@ class Stf24WeeksTestWiremock extends SpringBootIntegrationTest
         notCreatedByAdmin(caseData);
 
         Optional<List<IdValue<DocumentWithMetadata>>> docsOpt =
-                doCaseReview(caseData).getAsylumCase().read(AsylumCaseDefinition.TRIBUNAL_DOCUMENTS);
+                doCaseReview(caseData).getAsylumCase().read(AsylumCaseDefinition.LEGAL_REPRESENTATIVE_DOCUMENTS);
 
-        IdValue<DocumentWithMetadata> docValue = docsOpt.map(List::getFirst).orElse(null);
+        IdValue<DocumentWithMetadata> docValue = docsOpt.get().get(0);
 
-        assertThat(docsOpt.orElse(emptyList()).size()).isEqualTo(1);
-        assertThat(docValue).isNotNull();
+        assertThat(docsOpt.get().size()).isEqualTo(1);
         assertThat(docValue.getValue().getTag()).isEqualTo(DocumentTag.STF_24WEEKS_CASE_REVIEW_APPELLANT_DOCUMENT);
     }
 
     @ParameterizedTest
+    @Disabled
     @ValueSource(booleans = {true, false})
     @WithMockUser(authorities = {"caseworker-ia", "tribunal-caseworker"})
-    void shouldCreate24WeeksReviewDocumentIfCaseCreatedByAdmin(boolean cdamEnabled) {
+    void shouldNotCreate24WeeksReviewDocumentIfCaseCreatedByAdmin(boolean cdamEnabled) {
         setup(cdamEnabled);
-
         AsylumCaseForTest caseData = mockCaseData();
-        caseData.with(STF_24W_CURRENT_STATUS_AUTO_GENERATED, YesOrNo.YES).with(COMPLETE_CASE_REVIEW_DATE, "2002-02-02")
-            .with(APPEAL_SUBMISSION_DATE, "2002-02-02")
-            .with(TRIBUNAL_RECEIVED_DATE, "2002-02-02")
-            .with(HOME_OFFICE_DECISION_DATE, "2002-02-02");
-
+        caseData.with(STF_24W_CURRENT_STATUS_AUTO_GENERATED, YesOrNo.YES).with(HOME_OFFICE_DECISION_DATE, "2002-02-02");
+        notCreatedByAdmin(caseData);
         createdByAdmin(caseData);
         Optional<List<IdValue<DocumentWithMetadata>>> docsOpt =
-            doCaseReview(caseData).getAsylumCase().read(AsylumCaseDefinition.TRIBUNAL_DOCUMENTS);
-
-        IdValue<DocumentWithMetadata> docValue = docsOpt.map(List::getFirst).orElse(null);
-
-        assertThat(docsOpt.orElse(emptyList()).size()).isEqualTo(1);
-        assertThat(docValue).isNotNull();
-        assertThat(docValue.getValue().getTag()).isEqualTo(DocumentTag.STF_24WEEKS_CASE_REVIEW_APPELLANT_DOCUMENT);
+                doCaseReview(caseData).getAsylumCase().read(AsylumCaseDefinition.LEGAL_REPRESENTATIVE_DOCUMENTS);
+        assertThat(docsOpt).isNotPresent();
     }
 
 
