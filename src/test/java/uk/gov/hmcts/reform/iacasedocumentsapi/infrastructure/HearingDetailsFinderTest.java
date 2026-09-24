@@ -3,9 +3,7 @@ package uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.IS_DECISION_WITHOUT_HEARING;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.LIST_CASE_HEARING_CENTRE;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.LIST_CASE_HEARING_DATE;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.*;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.HearingCentre.*;
 
 import java.util.Optional;
@@ -17,6 +15,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DynamicList;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.HearingCentre;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.StringProvider;
@@ -141,6 +140,25 @@ public class HearingDetailsFinderTest {
         assertEquals(newportHearingCentreUrl, hearingDetailsFinder.getHearingCentreUrl(NEWPORT));
         assertEquals(nottinghamHearingCentreUrl, hearingDetailsFinder.getHearingCentreUrl(NOTTINGHAM));
         assertEquals(northShieldsHearingCentreUrl, hearingDetailsFinder.getHearingCentreUrl(NORTH_SHIELDS));
+    }
+
+    @Test
+    void should_return_given_cmr_hearing_centre_address() {
+        String cmrHearingCentreAddress = "some cmr hearing centre address";
+        when(asylumCase.read(CMR_HEARING_CENTRE_ADDRESS, DynamicList.class))
+                .thenReturn(Optional.of(new DynamicList(cmrHearingCentreAddress)));
+
+        assertEquals(cmrHearingCentreAddress, hearingDetailsFinder.getCmrHearingCentreAddress(asylumCase));
+    }
+
+    @Test
+    public void should_throw_exception_when_cmr_hearing_centre_address_is_empty() {
+
+        when(asylumCase.read(CMR_HEARING_CENTRE_ADDRESS, DynamicList.class)).thenReturn(Optional.empty());
+
+        assertThatThrownBy(() -> hearingDetailsFinder.getCmrHearingCentreAddress(asylumCase))
+                .isExactlyInstanceOf(IllegalStateException.class)
+                .hasMessage("cmrHearingCentreAddress is not present");
     }
 }
 

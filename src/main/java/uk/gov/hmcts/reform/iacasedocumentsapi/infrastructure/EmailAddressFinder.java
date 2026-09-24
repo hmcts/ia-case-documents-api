@@ -36,7 +36,6 @@ public class EmailAddressFinder {
             hearingCentreEmailAddresses
                 .get(hearingCentre);
 
-        log.info("------------Hearing centre email address is {}", hearingCentreEmailAddress);
         if (hearingCentreEmailAddress == null) {
             throw new IllegalStateException("Hearing centre email address not found: " + hearingCentre.toString());
         }
