@@ -38,7 +38,7 @@ class BundleOrderTest {
             .map(DocumentWithMetadata::getTag)
             .toList();
 
-        assertEquals(127, sortedTags.size());
+        assertEquals(137, sortedTags.size());
 
         List<DocumentTag> documentTagList = Arrays.asList(
             DocumentTag.CASE_SUMMARY,
@@ -125,6 +125,10 @@ class BundleOrderTest {
             DocumentTag.INTERNAL_END_APPEAL_LETTER_BUNDLE,
             DocumentTag.INTERNAL_CASE_LISTED_LETTER,
             DocumentTag.INTERNAL_CASE_LISTED_LETTER_BUNDLE,
+            DocumentTag.INTERNAL_CMR_LISTING_LETTER,
+            DocumentTag.INTERNAL_CMR_LISTING_LETTER_BUNDLE,
+            DocumentTag.INTERNAL_CMR_LISTING_LR_LETTER,
+            DocumentTag.INTERNAL_CMR_LISTING_LR_LETTER_BUNDLE,
             DocumentTag.INTERNAL_CASE_LISTED_LR_LETTER,
             DocumentTag.INTERNAL_CASE_LISTED_LR_LETTER_BUNDLE,
             DocumentTag.INTERNAL_OUT_OF_TIME_DECISION_LETTER,
@@ -149,6 +153,8 @@ class BundleOrderTest {
             DocumentTag.INTERNAL_DETAINED_IRC_PRISON_FTPA_DISPOSED_RULES_31_OR_32_LETTER,
             DocumentTag.INTERNAL_DETAINED_APPEAL_REMITTED_AIP_IRC_PRISON_LETTER,
             DocumentTag.AIPM_DETAINED_IN_PRISON_IRC_REINSTATE_APPEAL_LETTER,
+            DocumentTag.CMR_HEARING_CANCELLED_LETTER,
+            DocumentTag.CMR_HEARING_CANCELLED_LR_LETTER,
             DocumentTag.STF_24WEEKS_CASE_REVIEW_APPELLANT_DOCUMENT,
             DocumentTag.STF_24WEEKS_REMOVAL_DECISION_DOCUMENT,
             DocumentTag.STF_24WEEKS_REMOVAL_DECISION_LETTER,
