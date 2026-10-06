@@ -1,5 +1,6 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonEnumDefaultValue;
 import com.fasterxml.jackson.annotation.JsonValue;
 import lombok.Getter;
@@ -106,6 +107,7 @@ public enum Event {
     @Getter
     private final CaseType caseType;
 
+    @JsonCreator
     Event(String id, CaseType caseType) {
         this.id = id;
         this.caseType = caseType;
