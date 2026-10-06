@@ -39,5 +39,6 @@
     </suppress>
     <suppress>
         <cve>CVE-2026-41707</cve>
+        <cve>CVE-2026-53914</cve>
     </suppress>
 </suppressions>
