@@ -3,10 +3,10 @@ package uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.config;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.client.RestOperations;
 import org.springframework.web.client.RestTemplate;
 
+@SuppressWarnings("removal")
 @Configuration
 public class RestTemplateConfiguration {
 
@@ -30,9 +30,9 @@ public class RestTemplateConfiguration {
     }
 
     @Bean
-    public MappingJackson2HttpMessageConverter mappingJackson2HttpMessageConverter(
+    public org.springframework.http.converter.json.MappingJackson2HttpMessageConverter mappingJackson2HttpMessageConverter(
         ObjectMapper objectMapper
     ) {
-        return new MappingJackson2HttpMessageConverter(objectMapper);
+        return new org.springframework.http.converter.json.MappingJackson2HttpMessageConverter(objectMapper);
     }
 }
