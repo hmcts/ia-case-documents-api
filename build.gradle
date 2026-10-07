@@ -366,7 +366,6 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-jackson2'
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
     implementation 'org.springframework.boot:spring-boot-starter-aspectj'
-    implementation 'org.springframework.boot:spring-boot-starter-json'
     implementation "org.springframework.boot:spring-boot-starter-restclient:4.0.8"
     implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'org.springframework.boot:spring-boot-starter-webmvc'
