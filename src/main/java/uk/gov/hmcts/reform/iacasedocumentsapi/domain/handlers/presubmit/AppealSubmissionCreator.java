@@ -72,6 +72,7 @@ public class AppealSubmissionCreator implements PreSubmitCallbackHandler<AsylumC
                && Arrays.asList(
                     Event.SUBMIT_APPEAL,
                     Event.EDIT_APPEAL_AFTER_SUBMIT,
+                    Event.EDIT_APPELLANT_PERSONAL_DATA,
                     Event.PAY_AND_SUBMIT_APPEAL)
                    .contains(callback.getEvent())
                && (!paymentFailed || paymentFailedChangedToPayLater);

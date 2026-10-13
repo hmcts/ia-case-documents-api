@@ -27,16 +27,16 @@ public class InternalEditAppealGenerator implements PreSubmitCallbackHandler<Asy
     private final DocumentHandler documentHandler;
 
     public InternalEditAppealGenerator(
-            @Qualifier("internalEditAppealNotice") DocumentCreator<AsylumCase> documentCreator,
-            DocumentHandler documentHandler
+        @Qualifier("internalEditAppealNotice") DocumentCreator<AsylumCase> documentCreator,
+        DocumentHandler documentHandler
     ) {
         this.documentCreator = documentCreator;
         this.documentHandler = documentHandler;
     }
 
     public boolean canHandle(
-            PreSubmitCallbackStage callbackStage,
-            Callback<AsylumCase> callback
+        PreSubmitCallbackStage callbackStage,
+        Callback<AsylumCase> callback
     ) {
         Objects.requireNonNull(callbackStage, "callbackStage must not be null");
         Objects.requireNonNull(callback, "callback must not be null");
@@ -44,14 +44,15 @@ public class InternalEditAppealGenerator implements PreSubmitCallbackHandler<Asy
         AsylumCase asylumCase = callback.getCaseDetails().getCaseData();
 
         return callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
-                && callback.getEvent() == Event.EDIT_APPEAL_AFTER_SUBMIT
-                && isInternalCase(asylumCase)
-                && isAppellantInDetention(asylumCase);
+            && (callback.getEvent() == Event.EDIT_APPEAL_AFTER_SUBMIT
+            || callback.getEvent() == Event.EDIT_APPELLANT_PERSONAL_DATA)
+            && isInternalCase(asylumCase)
+            && isAppellantInDetention(asylumCase);
     }
 
     public PreSubmitCallbackResponse<AsylumCase> handle(
-            PreSubmitCallbackStage callbackStage,
-            Callback<AsylumCase> callback
+        PreSubmitCallbackStage callbackStage,
+        Callback<AsylumCase> callback
     ) {
         if (!canHandle(callbackStage, callback)) {
             throw new IllegalStateException("Cannot handle callback");
@@ -63,10 +64,10 @@ public class InternalEditAppealGenerator implements PreSubmitCallbackHandler<Asy
         Document internalEditAppealNotice = documentCreator.create(caseDetails);
 
         documentHandler.addWithMetadataWithoutReplacingExistingDocuments(
-                asylumCase,
-                internalEditAppealNotice,
-                NOTIFICATION_ATTACHMENT_DOCUMENTS,
-                DocumentTag.INTERNAL_EDIT_APPEAL_LETTER
+            asylumCase,
+            internalEditAppealNotice,
+            NOTIFICATION_ATTACHMENT_DOCUMENTS,
+            DocumentTag.INTERNAL_EDIT_APPEAL_LETTER
         );
 
         return new PreSubmitCallbackResponse<>(asylumCase);
