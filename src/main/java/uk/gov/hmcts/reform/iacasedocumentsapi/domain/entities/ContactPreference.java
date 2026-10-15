@@ -1,5 +1,6 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import java.util.Arrays;
 import java.util.Optional;
@@ -12,6 +13,7 @@ public enum ContactPreference {
     @JsonValue
     private String value;
 
+    @JsonCreator
     ContactPreference(String value) {
         this.value = value;
     }

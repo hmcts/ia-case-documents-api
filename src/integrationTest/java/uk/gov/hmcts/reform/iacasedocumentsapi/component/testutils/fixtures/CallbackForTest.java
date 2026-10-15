@@ -1,5 +1,6 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.component.testutils.fixtures;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.Event;
 
@@ -10,6 +11,7 @@ public class CallbackForTest {
     @JsonProperty("case_details")
     private CaseDetailsForTest caseDetails;
 
+    @JsonCreator
     CallbackForTest(Event event, CaseDetailsForTest caseDetails) {
         this.event = event;
         this.caseDetails = caseDetails;

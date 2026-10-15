@@ -9,14 +9,14 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
-import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 
+@SuppressWarnings("removal")
 @Configuration
 public class JacksonConfiguration {
 
     @Bean
     @Primary
-    public ObjectMapper jacksonObjectMapper(Jackson2ObjectMapperBuilder builder) {
+    public ObjectMapper jacksonObjectMapper(org.springframework.http.converter.json.Jackson2ObjectMapperBuilder builder) {
         return builder
             .featuresToEnable(READ_ENUMS_USING_TO_STRING)
             .featuresToEnable(READ_UNKNOWN_ENUM_VALUES_USING_DEFAULT_VALUE)

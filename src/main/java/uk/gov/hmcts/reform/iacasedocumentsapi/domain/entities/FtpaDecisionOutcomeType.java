@@ -1,5 +1,6 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 public enum FtpaDecisionOutcomeType {
@@ -16,6 +17,7 @@ public enum FtpaDecisionOutcomeType {
     @JsonValue
     private final String value;
 
+    @JsonCreator
     FtpaDecisionOutcomeType(String value) {
         this.value = value;
     }
