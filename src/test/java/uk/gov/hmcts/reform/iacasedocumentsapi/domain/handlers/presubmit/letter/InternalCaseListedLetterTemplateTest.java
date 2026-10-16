@@ -9,6 +9,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Map;
 import java.util.Optional;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -48,6 +49,7 @@ class InternalCaseListedLetterTemplateTest {
     @Mock
     private Value hearingChannelValue;
     private final String telephoneNumber = "0300 123 1711";
+    private final String emailAddress = "customer.services@example.com";
     private String appellantGivenNames = "John";
     private String appellantFamilyName = "Smith";
     private String homeOfficeReferenceNumber = "123654";
@@ -71,7 +73,7 @@ class InternalCaseListedLetterTemplateTest {
     @BeforeEach
     public void setUp() {
         internalCaseListedLetterTemplate =
-            new InternalCaseListedLetterTemplate(templateName, customerServicesProvider, stringProvider);
+                new InternalCaseListedLetterTemplate(templateName, customerServicesProvider, stringProvider);
     }
 
     @Test
@@ -90,6 +92,7 @@ class InternalCaseListedLetterTemplateTest {
         assertEquals(appellantFamilyName, fieldValuesMap.get("appellantFamilyName"));
         assertEquals(homeOfficeReferenceNumber, fieldValuesMap.get("homeOfficeReferenceNumber"));
         assertEquals(telephoneNumber, fieldValuesMap.get("customerServicesTelephone"));
+        assertEquals(emailAddress, fieldValuesMap.get("customerServicesEmail"));
         assertEquals(formattedListCaseHearingDate, fieldValuesMap.get("hearingDate"));
         assertEquals(formattedListCaseHearingTime, fieldValuesMap.get("hearingTime"));
         assertEquals(formattedManchesterHearingCentreAddress, fieldValuesMap.get("hearingLocation"));
@@ -114,6 +117,7 @@ class InternalCaseListedLetterTemplateTest {
         assertEquals(appellantFamilyName, fieldValuesMap.get("appellantFamilyName"));
         assertEquals(homeOfficeReferenceNumber, fieldValuesMap.get("homeOfficeReferenceNumber"));
         assertEquals(telephoneNumber, fieldValuesMap.get("customerServicesTelephone"));
+        assertEquals(emailAddress, fieldValuesMap.get("customerServicesEmail"));
         assertEquals(formattedListCaseHearingDate, fieldValuesMap.get("hearingDate"));
         assertEquals(formattedListCaseHearingTime, fieldValuesMap.get("hearingTime"));
         assertEquals(formattedManchesterHearingCentreAddress, fieldValuesMap.get("hearingLocation"));
@@ -127,9 +131,21 @@ class InternalCaseListedLetterTemplateTest {
         assertEquals("In Person", fieldValuesMap.get("hearingChannel"));
     }
 
+    @Test
+    void should_set_hearing_location_to_remote_for_24_week_cases() {
+        dataSetup(true);
+        when(asylumCase.read(STF_24W_CURRENT_STATUS_AUTO_GENERATED, YesOrNo.class))
+                .thenReturn(Optional.of(YesOrNo.YES));
+
+        fieldValuesMap = internalCaseListedLetterTemplate.mapFieldValues(caseDetails);
+
+        assertEquals("Remote", fieldValuesMap.get("hearingLocation"));
+    }
+
     void dataSetup(boolean appellantInUk) {
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
         when(customerServicesProvider.getInternalCustomerServicesTelephone(asylumCase)).thenReturn(telephoneNumber);
+        when(customerServicesProvider.getInternalCustomerServicesEmail(asylumCase)).thenReturn(emailAddress);
         when(asylumCase.read(APPEAL_REFERENCE_NUMBER, String.class)).thenReturn(Optional.of(appealReferenceNumber));
         when(asylumCase.read(APPELLANT_GIVEN_NAMES, String.class)).thenReturn(Optional.of(appellantGivenNames));
         when(asylumCase.read(APPELLANT_FAMILY_NAME, String.class)).thenReturn(Optional.of(appellantFamilyName));

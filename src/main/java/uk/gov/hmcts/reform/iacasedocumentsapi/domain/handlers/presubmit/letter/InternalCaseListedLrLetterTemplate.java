@@ -7,22 +7,19 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.HearingCentre;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseDetails;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.StringProvider;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates.DocumentTemplate;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.Stf24WeeksUtils;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.CustomerServicesProvider;
 
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.LIST_CASE_HEARING_CENTRE;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.LIST_CASE_HEARING_DATE;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.*;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.formatDateForRendering;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.formatDateTimeForRendering;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.getLegalRepresentativeAddressAsList;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.getLegalRepresentativeAddressOocAsList;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.legalRepInCountryAppeal;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.Stf24WeeksUtils.populateInternalCaseListedLetterFields;
 
 @Component
 public class InternalCaseListedLrLetterTemplate implements DocumentTemplate<AsylumCase> {
@@ -30,8 +27,6 @@ public class InternalCaseListedLrLetterTemplate implements DocumentTemplate<Asyl
     private final String templateName;
     private final CustomerServicesProvider customerServicesProvider;
     private final StringProvider stringProvider;
-    private static final DateTimeFormatter DOCUMENT_DATE_FORMAT = DateTimeFormatter.ofPattern("d MMMM yyyy");
-    private static final DateTimeFormatter DOCUMENT_TIME_FORMAT = DateTimeFormatter.ofPattern("HHmm");
 
     public InternalCaseListedLrLetterTemplate(
         @Value("${internalCaseListedLetter.templateName}") String templateName,
@@ -59,21 +54,19 @@ public class InternalCaseListedLrLetterTemplate implements DocumentTemplate<Asyl
         final Map<String, Object> fieldValues = new HashMap<>();
 
         fieldValues.putAll(getLegalRepPersonalisation(asylumCase));
-        fieldValues.put("customerServicesTelephone", customerServicesProvider.getInternalCustomerServicesTelephone(asylumCase));
-        fieldValues.put("customerServicesEmail", customerServicesProvider.getInternalCustomerServicesEmail(asylumCase));
-        fieldValues.put("hearingLocation", stringProvider.get("hearingCentreAddress", listedHearingCentre.toString()).orElse("").replaceAll(",\\s*", "\n"));
-        fieldValues.put("hearingDate", formatDateTimeForRendering(asylumCase.read(LIST_CASE_HEARING_DATE, String.class).orElse(""), DOCUMENT_DATE_FORMAT));
-        fieldValues.put("hearingTime", formatDateTimeForRendering(asylumCase.read(LIST_CASE_HEARING_DATE, String.class).orElse(""), DOCUMENT_TIME_FORMAT));
-        fieldValues.put("dateLetterSent", formatDateForRendering(LocalDate.now().toString(), DOCUMENT_DATE_FORMAT));
-        fieldValues.put("hearingChannel", getHearingChannel(asylumCase, "Unknown"));
-
         List<String> legalRepAddress = legalRepInCountryAppeal(asylumCase)
                 ? getLegalRepresentativeAddressAsList(asylumCase)
                 : getLegalRepresentativeAddressOocAsList(asylumCase);
 
-        for (int i = 0; i < legalRepAddress.size(); i++) {
-            fieldValues.put("address_line_" + (i + 1), legalRepAddress.get(i));
-        }
+        populateInternalCaseListedLetterFields(
+            fieldValues,
+            asylumCase,
+            listedHearingCentre,
+            customerServicesProvider,
+            stringProvider,
+            legalRepAddress,
+            !Stf24WeeksUtils.is24WeeksCase(asylumCase)
+        );
         return fieldValues;
     }
 }

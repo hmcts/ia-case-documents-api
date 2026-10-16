@@ -14,7 +14,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentUploader;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates.*;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.templates.letter.*;
 
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.Stf24WeeksUtils.STF_24_WEEKS_REVIEW_DOCUMENT_CREATOR;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.Stf24WeeksUtils.*;
 
 @Slf4j
 @Configuration
@@ -1870,6 +1870,28 @@ public class DocumentCreatorConfiguration {
         );
     }
 
+    @Bean(INTERNAL_CASE_24_WEEKS_LISTED_LETTER)
+    public DocumentCreator<AsylumCase> getinternalCaseListedl24WeeksLetterDocumentCreator(
+            @Value("${internalCaseListedLetter.contentType}") String contentType,
+            @Value("${internalCaseListedLetter.fileExtension}") String fileExtension,
+            @Value("${internalCaseListedLetter.fileName}") String fileName,
+            AsylumCaseFileNameQualifier fileNameQualifier,
+            InternalCaseListedLetterTemplate documentTemplate,
+            DocumentGenerator documentGenerator,
+            DocumentUploader documentUploader
+    ) {
+        return new DocumentCreator<>(
+                contentType,
+                fileExtension,
+                fileName,
+                fileNameQualifier,
+                documentTemplate,
+                documentGenerator,
+                documentUploader
+        );
+    }
+
+
     @Bean("internalCmrListingLetter")
     public DocumentCreator<AsylumCase> getInternalCmrListingLetterDocumentCreator(
         @Value("${internalCmrListingLetter.contentType}") String contentType,
@@ -1954,6 +1976,26 @@ public class DocumentCreatorConfiguration {
         );
     }
 
+    @Bean(INTERNAL_CASE_LISTED_LR_24_WEEKS_LETTER)
+    public DocumentCreator<AsylumCase> getinternalCaseListedlLr24WeeksLetterDocumentCreator(
+            @Value("${internalCaseListedLetter.contentType}") String contentType,
+            @Value("${internalCaseListedLetter.fileExtension}") String fileExtension,
+            @Value("${internalCaseListedLetter.fileName}") String fileName,
+            AsylumCaseFileNameQualifier fileNameQualifier,
+            InternalCaseListedLrLetterTemplate documentTemplate,
+            DocumentGenerator documentGenerator,
+            DocumentUploader documentUploader
+    ) {
+        return new DocumentCreator<>(
+                contentType,
+                fileExtension,
+                fileName,
+                fileNameQualifier,
+                documentTemplate,
+                documentGenerator,
+                documentUploader
+        );
+    }
 
     @Bean("internalCmrListingLrLetter")
     public DocumentCreator<AsylumCase> getInternalCmrListinglLrLetterDocumentCreator(
