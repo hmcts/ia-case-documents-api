@@ -19,6 +19,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.CustomerServicesPro
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -38,7 +39,11 @@ import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.Event.S
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo.YES;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.formatDateForRendering;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.formatDateTimeForRendering;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.getAppellantAddressInCountryOrOoc;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.getAppellantPersonalisation;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.getHearingChannel;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.getLegalRepAddressInCountryOrOoc;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.getLegalRepPersonalisation;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.hasBeenSubmittedAsLegalRepresentedInternalCase;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.isAppellantInUk;
 
@@ -116,7 +121,39 @@ public class Stf24WeeksUtils {
         return read.map(value -> value.equals(YES)).orElse(false);
     }
 
-    public static void populateInternalCaseListedLetterFields(
+    public static Map<String, Object> createInternalCaseListedLetterFieldValues(
+        CaseDetails<AsylumCase> caseDetails,
+        CustomerServicesProvider customerServicesProvider,
+        StringProvider stringProvider,
+        boolean legalRepresentative,
+        boolean remoteHearing
+    ) {
+        AsylumCase asylumCase = caseDetails.getCaseData();
+        HearingCentre listedHearingCentre = asylumCase
+            .read(AsylumCaseDefinition.LIST_CASE_HEARING_CENTRE, HearingCentre.class)
+            .orElseThrow(() -> new IllegalStateException("listCaseHearingCentre is not present"));
+
+        Map<String, Object> fieldValues = new HashMap<>(legalRepresentative
+            ? getLegalRepPersonalisation(asylumCase)
+            : getAppellantPersonalisation(asylumCase));
+
+        List<String> addressLines = legalRepresentative
+            ? getLegalRepAddressInCountryOrOoc(asylumCase)
+            : getAppellantAddressInCountryOrOoc(asylumCase);
+
+        populateInternalCaseListedLetterFields(
+            fieldValues,
+            asylumCase,
+            listedHearingCentre,
+            customerServicesProvider,
+            stringProvider,
+            addressLines,
+            remoteHearing
+        );
+        return fieldValues;
+    }
+
+    private static void populateInternalCaseListedLetterFields(
         Map<String, Object> fieldValues,
         AsylumCase asylumCase,
         HearingCentre listedHearingCentre,

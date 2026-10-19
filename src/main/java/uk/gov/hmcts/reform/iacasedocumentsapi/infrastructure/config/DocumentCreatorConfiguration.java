@@ -1874,9 +1874,9 @@ public class DocumentCreatorConfiguration {
     public DocumentCreator<AsylumCase> getinternalCaseListedl24WeeksLetterDocumentCreator(
             @Value("${internalCaseListedLetter.contentType}") String contentType,
             @Value("${internalCaseListedLetter.fileExtension}") String fileExtension,
-            @Value("${internalCaseListedLetter.fileName}") String fileName,
+            @Value("${internalCaseListed24WeeksLrLetter.fileName}") String fileName,
             AsylumCaseFileNameQualifier fileNameQualifier,
-            InternalCaseListedLetterTemplate documentTemplate,
+            InternalCaseListed24WeeksAppellantLetterTemplate documentTemplate,
             DocumentGenerator documentGenerator,
             DocumentUploader documentUploader
     ) {
@@ -1980,9 +1980,9 @@ public class DocumentCreatorConfiguration {
     public DocumentCreator<AsylumCase> getinternalCaseListedlLr24WeeksLetterDocumentCreator(
             @Value("${internalCaseListedLetter.contentType}") String contentType,
             @Value("${internalCaseListedLetter.fileExtension}") String fileExtension,
-            @Value("${internalCaseListedLetter.fileName}") String fileName,
+            @Value("${internalCaseListed24WeeksLrLetter.fileName}") String fileName,
             AsylumCaseFileNameQualifier fileNameQualifier,
-            InternalCaseListedLrLetterTemplate documentTemplate,
+            InternalCaseListed24WeeksLrLetterTemplate documentTemplate,
             DocumentGenerator documentGenerator,
             DocumentUploader documentUploader
     ) {

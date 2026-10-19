@@ -37,7 +37,7 @@ public class InternalCaseListedLrLetterGenerator implements PreSubmitCallbackHan
         Callback<AsylumCase> callback
     ) {
         return canHandleInternalCaseListedLrLetter(callbackStage, callback) &&
-                !isCaseReviewFor24WeeksCase(callback.getEvent(), callback.getCaseDetails().getCaseData());
+                !is24WeeksCase(callback.getCaseDetails().getCaseData());
     }
 
     public PreSubmitCallbackResponse<AsylumCase> handle(

@@ -25,6 +25,8 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.APPELLANT_FAMILY_NAME;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.APPELLANT_GIVEN_NAMES;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.STF_24W_CURRENT_STATUS_AUTO_GENERATED;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.APPEAL_REFERENCE_NUMBER;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.APPELLANTS_REPRESENTATION;
@@ -144,6 +146,25 @@ class InternalCaseListedLrLetterTemplateTest {
         fieldValuesMap = internalCaseListedLrLetterTemplate.mapFieldValues(caseDetails);
 
         assertEquals(formattedManchesterHearingCentreAddress, fieldValuesMap.get("hearingLocation"));
+    }
+
+    @Test
+    void should_populate_24_week_legal_rep_letter_with_legal_rep_details_and_address() {
+        dataSetup(true);
+        when(asylumCase.read(STF_24W_CURRENT_STATUS_AUTO_GENERATED, YesOrNo.class))
+            .thenReturn(Optional.of(YesOrNo.YES));
+        when(asylumCase.read(APPELLANT_GIVEN_NAMES, String.class)).thenReturn(Optional.of("Appellant"));
+        when(asylumCase.read(APPELLANT_FAMILY_NAME, String.class)).thenReturn(Optional.of("Person"));
+
+        InternalCaseListed24WeeksLrLetterTemplate template =
+            new InternalCaseListed24WeeksLrLetterTemplate(templateName, customerServicesProvider, stringProvider);
+
+        fieldValuesMap = template.mapFieldValues(caseDetails);
+
+        assertEquals(appellantGivenNames, fieldValuesMap.get("appellantGivenNames"));
+        assertEquals(appellantFamilyName, fieldValuesMap.get("appellantFamilyName"));
+        assertEquals(addressLine1, fieldValuesMap.get("address_line_1"));
+        assertEquals("Remote", fieldValuesMap.get("hearingLocation"));
     }
 
     void dataSetup(boolean legalRepInUk) {
