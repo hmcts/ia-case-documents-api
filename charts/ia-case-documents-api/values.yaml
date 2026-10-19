@@ -73,6 +73,8 @@ java:
           alias: IA_REDIS_ENCRYPTION_KEY
         - name: hearing-centre-hendon-email
           alias: IA_HEARING_CENTRE_HENDON_EMAIL
+        - name: hearing-centre-kirklees-email
+          alias: IA_HEARING_CENTRE_BRADFORD_EMAIL
         - name: hearing-centre-yarlswood-email
           alias: IA_HEARING_CENTRE_YARLSWOOD_EMAIL
         - name: hearing-centre-bradford-keighley-email
