@@ -11,7 +11,6 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.CustomerServicesPro
 
 import java.util.Map;
 
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.Stf24WeeksUtils.is24WeeksCase;
 
 @Component
 public class InternalCaseListedLrLetterTemplate implements DocumentTemplate<AsylumCase> {
@@ -42,7 +41,7 @@ public class InternalCaseListedLrLetterTemplate implements DocumentTemplate<Asyl
             customerServicesProvider,
             stringProvider,
             true,
-            !is24WeeksCase(caseDetails.getCaseData())
+           false
         );
     }
 }

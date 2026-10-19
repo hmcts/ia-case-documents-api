@@ -167,6 +167,23 @@ class InternalCaseListedLrLetterTemplateTest {
         assertEquals("Remote", fieldValuesMap.get("hearingLocation"));
     }
 
+    @Test
+    void should_use_remote_hearing_location_for_24_week_legal_rep_template() {
+        dataSetup(true);
+        when(asylumCase.read(STF_24W_CURRENT_STATUS_AUTO_GENERATED, YesOrNo.class))
+            .thenReturn(Optional.of(YesOrNo.YES));
+
+        InternalCaseListed24WeeksLrLetterTemplate template =
+            new InternalCaseListed24WeeksLrLetterTemplate(templateName, customerServicesProvider, stringProvider);
+
+        fieldValuesMap = template.mapFieldValues(caseDetails);
+
+        assertEquals("Remote", fieldValuesMap.get("hearingLocation"));
+        assertEquals(appellantGivenNames, fieldValuesMap.get("appellantGivenNames"));
+        assertEquals(appellantFamilyName, fieldValuesMap.get("appellantFamilyName"));
+        assertEquals(addressLine1, fieldValuesMap.get("address_line_1"));
+    }
+
     void dataSetup(boolean legalRepInUk) {
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
         when(customerServicesProvider.getInternalCustomerServicesTelephone(asylumCase)).thenReturn(telephoneNumber);

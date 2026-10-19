@@ -84,7 +84,6 @@ class InternalCaseListedLetterTemplateTest {
     @Test
     void should_populate_template_correctly_appellant_in_uk() {
         dataSetup(true);
-
         fieldValuesMap = internalCaseListedLetterTemplate.mapFieldValues(caseDetails);
         assertEquals(logo, fieldValuesMap.get("hmcts"));
         assertEquals(appealReferenceNumber, fieldValuesMap.get("appealReferenceNumber"));
@@ -95,7 +94,7 @@ class InternalCaseListedLetterTemplateTest {
         assertEquals(emailAddress, fieldValuesMap.get("customerServicesEmail"));
         assertEquals(formattedListCaseHearingDate, fieldValuesMap.get("hearingDate"));
         assertEquals(formattedListCaseHearingTime, fieldValuesMap.get("hearingTime"));
-        assertEquals(formattedManchesterHearingCentreAddress, fieldValuesMap.get("hearingLocation"));
+        assertEquals("Remote", fieldValuesMap.get("hearingLocation"));
         assertEquals(LocalDate.now().format(DateTimeFormatter.ofPattern("d MMMM yyyy")), fieldValuesMap.get("dateLetterSent"));
         assertEquals(appellantGivenNames + " " + appellantFamilyName, fieldValuesMap.get("address_line_1"));
         assertEquals(addressLine1, fieldValuesMap.get("address_line_2"));
@@ -120,7 +119,7 @@ class InternalCaseListedLetterTemplateTest {
         assertEquals(emailAddress, fieldValuesMap.get("customerServicesEmail"));
         assertEquals(formattedListCaseHearingDate, fieldValuesMap.get("hearingDate"));
         assertEquals(formattedListCaseHearingTime, fieldValuesMap.get("hearingTime"));
-        assertEquals(formattedManchesterHearingCentreAddress, fieldValuesMap.get("hearingLocation"));
+        assertEquals("Remote", fieldValuesMap.get("hearingLocation"));
         assertEquals(LocalDate.now().format(DateTimeFormatter.ofPattern("d MMMM yyyy")), fieldValuesMap.get("dateLetterSent"));
         assertEquals(appellantGivenNames + " " + appellantFamilyName, fieldValuesMap.get("address_line_1"));
         assertEquals(addressLine1, fieldValuesMap.get("address_line_2"));
@@ -132,14 +131,20 @@ class InternalCaseListedLetterTemplateTest {
     }
 
     @Test
-    void should_set_hearing_location_to_remote_for_24_week_cases() {
+    void should_use_remote_hearing_location_for_24_week_appellant_template() {
         dataSetup(true);
         when(asylumCase.read(STF_24W_CURRENT_STATUS_AUTO_GENERATED, YesOrNo.class))
-                .thenReturn(Optional.of(YesOrNo.YES));
+            .thenReturn(Optional.of(YesOrNo.YES));
 
-        fieldValuesMap = internalCaseListedLetterTemplate.mapFieldValues(caseDetails);
+        InternalCaseListed24WeeksAppellantLetterTemplate template =
+            new InternalCaseListed24WeeksAppellantLetterTemplate(templateName, customerServicesProvider, stringProvider);
+
+        fieldValuesMap = template.mapFieldValues(caseDetails);
 
         assertEquals("Remote", fieldValuesMap.get("hearingLocation"));
+        assertEquals(appellantGivenNames, fieldValuesMap.get("appellantGivenNames"));
+        assertEquals(appellantFamilyName, fieldValuesMap.get("appellantFamilyName"));
+        assertEquals(addressLine1, fieldValuesMap.get("address_line_2"));
     }
 
     void dataSetup(boolean appellantInUk) {
@@ -156,6 +161,7 @@ class InternalCaseListedLetterTemplateTest {
         when(asylumCase.read(HEARING_CHANNEL, DynamicList.class)).thenReturn(Optional.of(hearingChannelDynamicList));
         when(hearingChannelDynamicList.getValue()).thenReturn(hearingChannelValue);
         when(hearingChannelValue.getLabel()).thenReturn("In Person");
+        when(asylumCase.read(STF_24W_CURRENT_STATUS_AUTO_GENERATED, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.NO));
         if (appellantInUk) {
             when(asylumCase.read(APPELLANT_IN_UK, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
             when(asylumCase.read(APPELLANT_ADDRESS, AddressUk.class)).thenReturn(Optional.of(address));
