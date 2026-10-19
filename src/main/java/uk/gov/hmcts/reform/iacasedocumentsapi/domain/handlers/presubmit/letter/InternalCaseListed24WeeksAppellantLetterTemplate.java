@@ -11,6 +11,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.CustomerServicesPro
 
 import java.util.Map;
 
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.Stf24WeeksUtils.INTERNAL_CASE_LISTED_LETTER_24_WEEKS_TEMPLATE_NAME;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.Stf24WeeksUtils.is24WeeksCase;
 
 @Component
@@ -21,7 +22,7 @@ public class InternalCaseListed24WeeksAppellantLetterTemplate implements Documen
     private final StringProvider stringProvider;
 
     public InternalCaseListed24WeeksAppellantLetterTemplate(
-        @Value("${internalCaseListedLetter24Weeks.templateName}") String templateName,
+        @Value(INTERNAL_CASE_LISTED_LETTER_24_WEEKS_TEMPLATE_NAME) String templateName,
         CustomerServicesProvider customerServicesProvider,
         StringProvider stringProvider) {
         this.templateName = templateName;

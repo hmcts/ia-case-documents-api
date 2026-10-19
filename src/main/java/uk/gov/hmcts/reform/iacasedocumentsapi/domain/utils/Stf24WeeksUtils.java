@@ -69,6 +69,7 @@ public class Stf24WeeksUtils {
     public static final String HOME_OFFICE_REFERENCE_NUMBER_KEY = "homeOfficeReferenceNumber";
     private static final DateTimeFormatter DOCUMENT_DATE_FORMAT = DateTimeFormatter.ofPattern("d MMMM yyyy");
     private static final DateTimeFormatter DOCUMENT_TIME_FORMAT = DateTimeFormatter.ofPattern("HHmm");
+    public static final String INTERNAL_CASE_LISTED_LETTER_24_WEEKS_TEMPLATE_NAME = "${internalCaseListedLetter24Weeks.templateName}";
 
 
     private Stf24WeeksUtils() {

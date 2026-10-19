@@ -21,7 +21,7 @@ public class InternalCaseListed24WeeksLrLetterTemplate implements DocumentTempla
     private final StringProvider stringProvider;
 
     public InternalCaseListed24WeeksLrLetterTemplate(
-        @Value("${internalCaseListedLetter24Weeks.templateName}") String templateName,
+        @Value(Stf24WeeksUtils.INTERNAL_CASE_LISTED_LETTER_24_WEEKS_TEMPLATE_NAME) String templateName,
         CustomerServicesProvider customerServicesProvider,
         StringProvider stringProvider) {
         this.templateName = templateName;
