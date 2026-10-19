@@ -126,7 +126,7 @@ public class Stf24WeeksUtils {
         CustomerServicesProvider customerServicesProvider,
         StringProvider stringProvider,
         boolean legalRepresentative,
-        boolean remoteHearing
+        boolean is24WeeksCase
     ) {
         AsylumCase asylumCase = caseDetails.getCaseData();
         HearingCentre listedHearingCentre = asylumCase
@@ -148,7 +148,7 @@ public class Stf24WeeksUtils {
             customerServicesProvider,
             stringProvider,
             addressLines,
-            remoteHearing
+            is24WeeksCase
         );
         return fieldValues;
     }
@@ -160,11 +160,12 @@ public class Stf24WeeksUtils {
         CustomerServicesProvider customerServicesProvider,
         StringProvider stringProvider,
         List<String> addressLines,
-        boolean remoteHearing
+        boolean is24WeeksTemplate
     ) {
         fieldValues.put("customerServicesTelephone", customerServicesProvider.getInternalCustomerServicesTelephone(asylumCase));
         fieldValues.put("customerServicesEmail", customerServicesProvider.getInternalCustomerServicesEmail(asylumCase));
-        fieldValues.put("hearingLocation", remoteHearing
+        boolean isCurrentCase24Weeks = is24WeeksCase(asylumCase);
+        fieldValues.put("hearingLocation", is24WeeksTemplate || !isCurrentCase24Weeks
             ? "Remote"
             : stringProvider.get("hearingCentreAddress", listedHearingCentre.toString())
                 .orElse("").replaceAll(",\\s*", "\n"));
