@@ -644,6 +644,7 @@ internalCaseListedLetter.fileExtension: PDF
 internalCaseListedLetter.fileName: "internal-case-listed-letter"
 internalCaseListedLetter.templateName: ${INTERNAL_CASE_LISTED_LETTER_TEMPLATE:TB-IAC-LET-ENG-Internal-Case-Listed.docx}
 internalCaseListedLetter24Weeks.templateName: ${INTERNAL_CASE_LISTED_LETTER_TEMPLATE:TB-IAC-LET-ENG-Internal-Case-Listed-24-Weeks.docx}
+internalCaseListed24WeeksLrLetter.fileName: "internal-case-listed-24-weeks-letter"
 
 internalCmrListingLetter.contentType:  application/pdf
 internalCmrListingLetter.fileExtension: PDF

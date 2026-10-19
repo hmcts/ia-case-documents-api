@@ -3,6 +3,7 @@ package uk.gov.hmcts.reform.iacasedocumentsapi.component;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import uk.gov.hmcts.reform.iacasedocumentsapi.component.testutils.GivensBuilder;
 import uk.gov.hmcts.reform.iacasedocumentsapi.component.testutils.SpringBootIntegrationTest;
@@ -17,6 +18,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefiniti
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DocumentTag;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DocumentWithMetadata;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.Event;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.AddressUk;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.IdValue;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.FeatureToggler;
@@ -26,19 +28,32 @@ import java.util.List;
 import java.util.Optional;
 
 import static com.google.common.collect.Sets.newHashSet;
+import static com.github.tomakehurst.wiremock.client.WireMock.containing;
+import static com.github.tomakehurst.wiremock.client.WireMock.postRequestedFor;
+import static com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo;
 import static java.util.Collections.emptyList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.APPEAL_SUBMISSION_DATE;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.APPELLANTS_REPRESENTATION;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.APPELLANT_ADDRESS;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.COMPLETE_CASE_REVIEW_DATE;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.HOME_OFFICE_DECISION_DATE;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.IS_ADMIN;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.LEGAL_REP_ADDRESS_U_K;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.LEGAL_REP_FAMILY_NAME_PAPER_J;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.LEGAL_REP_GIVEN_NAME;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.LEGAL_REP_HAS_ADDRESS;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.LIST_CASE_HEARING_DATE;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.STF_24W_CURRENT_STATUS_AUTO_GENERATED;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.TRIBUNAL_RECEIVED_DATE;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo.NO;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.YesOrNo.YES;
 
 /**
  * Simplified-but-equivalent version of the original test class.
  */
+@TestPropertySource(properties = "featureFlag.isEmStitchingEnabled=false")
 class Stf24WeeksTestWiremock extends SpringBootIntegrationTest
         implements WithServiceAuthStub, WithDocumentUploadStub, DocmosisStub, WithIdamStub, GivensBuilder, WithRoleAssignmentStub {
 
@@ -93,11 +108,11 @@ class Stf24WeeksTestWiremock extends SpringBootIntegrationTest
         addRoleAssignmentActorStub(server);
     }
 
-    private PreSubmitCallbackResponseForTest doCaseReview(AsylumCaseForTest caseData) {
+    private PreSubmitCallbackResponseForTest performCaseEvent(AsylumCaseForTest caseData, Event event) {
         // perform the callback that the system under test expects
         PreSubmitCallbackResponseForTest response = iaCaseDocumentsApiClient.aboutToSubmit(
                 uk.gov.hmcts.reform.iacasedocumentsapi.component.testutils.fixtures.CallbackForTest.CallbackForTestBuilder.callback()
-                        .event(Event.COMPLETE_CASE_REVIEW)
+                        .event(event)
                         .caseDetails(
                                 uk.gov.hmcts.reform.iacasedocumentsapi.component.testutils.fixtures.CaseDetailsForTest.CaseDetailsForTestBuilder.someCaseDetailsWith()
                                         .state(uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.State.DECISION)
@@ -121,7 +136,7 @@ class Stf24WeeksTestWiremock extends SpringBootIntegrationTest
         notCreatedByAdmin(caseData);
 
         Optional<List<IdValue<DocumentWithMetadata>>> docsOpt =
-                doCaseReview(caseData).getAsylumCase().read(AsylumCaseDefinition.TRIBUNAL_DOCUMENTS);
+                performCaseEvent(caseData, Event.COMPLETE_CASE_REVIEW).getAsylumCase().read(AsylumCaseDefinition.TRIBUNAL_DOCUMENTS);
 
         IdValue<DocumentWithMetadata> docValue = docsOpt.map(List::getFirst).orElse(null);
 
@@ -144,13 +159,57 @@ class Stf24WeeksTestWiremock extends SpringBootIntegrationTest
 
         createdByAdmin(caseData);
         Optional<List<IdValue<DocumentWithMetadata>>> docsOpt =
-            doCaseReview(caseData).getAsylumCase().read(AsylumCaseDefinition.TRIBUNAL_DOCUMENTS);
+            performCaseEvent(caseData, Event.COMPLETE_CASE_REVIEW).getAsylumCase().read(AsylumCaseDefinition.TRIBUNAL_DOCUMENTS);
 
         IdValue<DocumentWithMetadata> docValue = docsOpt.map(List::getFirst).orElse(null);
 
         assertThat(docsOpt.orElse(emptyList()).size()).isEqualTo(1);
         assertThat(docValue).isNotNull();
         assertThat(docValue.getValue().getTag()).isEqualTo(DocumentTag.STF_24WEEKS_CASE_REVIEW_APPELLANT_DOCUMENT);
+    }
+
+    @ParameterizedTest
+    @ValueSource(booleans = {true, false})
+    @WithMockUser(authorities = {"caseworker-ia", "tribunal-caseworker"})
+    void shouldCreate24WeeksCaseListedAppellantLetter(boolean cdamEnabled) {
+        setup(cdamEnabled);
+
+        AsylumCaseForTest caseData = mockCaseData();
+        caseData.with(STF_24W_CURRENT_STATUS_AUTO_GENERATED, YES)
+            .with(IS_ADMIN, YES)
+            .with(APPELLANTS_REPRESENTATION, YES)
+            .with(LIST_CASE_HEARING_DATE, "2025-01-01T10:00:00")
+            .with(APPELLANT_ADDRESS, new AddressUk("1 Some Street", null, null, "London", null, "SW1A 1AA", "United Kingdom"));
+
+        performCaseEvent(caseData, Event.LIST_CASE);
+
+        server.verify(postRequestedFor(urlEqualTo("/docmosis"))
+            .withRequestBody(containing("TB-IAC-LET-ENG-Internal-Case-Listed-24-Weeks.docx"))
+            .withRequestBody(containing("some-gname")));
+    }
+
+    @ParameterizedTest
+    @ValueSource(booleans = {true, false})
+    @WithMockUser(authorities = {"caseworker-ia", "tribunal-caseworker"})
+    void shouldCreate24WeeksCaseListedLegalRepresentativeLetter(boolean cdamEnabled) {
+        setup(cdamEnabled);
+
+        AsylumCaseForTest caseData = mockCaseData();
+        caseData.with(STF_24W_CURRENT_STATUS_AUTO_GENERATED, YES)
+            .with(IS_ADMIN, YES)
+            .with(APPELLANTS_REPRESENTATION, NO)
+            .with(LEGAL_REP_HAS_ADDRESS, YES)
+            .with(LEGAL_REP_ADDRESS_U_K, new AddressUk("1 Some Street", null, null, "London", null, "SW1A 1AA", "United Kingdom"))
+            .with(APPELLANT_ADDRESS, new AddressUk("1 Some Street", null, null, "London", null, "SW1A 1AA", "United Kingdom"))
+            .with(LEGAL_REP_GIVEN_NAME, "Legal")
+            .with(LEGAL_REP_FAMILY_NAME_PAPER_J, "Representative")
+            .with(LIST_CASE_HEARING_DATE, "2025-01-01T10:00:00");
+
+        performCaseEvent(caseData, Event.LIST_CASE);
+
+        server.verify(postRequestedFor(urlEqualTo("/docmosis"))
+            .withRequestBody(containing("TB-IAC-LET-ENG-Internal-Case-Listed-24-Weeks.docx"))
+            .withRequestBody(containing("Legal")));
     }
 
 
