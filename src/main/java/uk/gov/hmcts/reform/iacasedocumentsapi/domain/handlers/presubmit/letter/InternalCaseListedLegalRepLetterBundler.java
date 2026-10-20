@@ -11,6 +11,7 @@ import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtil
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestAttributes;
@@ -29,6 +30,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentBundler;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentHandler;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.FileNameQualifier;
 
+@Slf4j
 @Component
 public class InternalCaseListedLegalRepLetterBundler implements PreSubmitCallbackHandler<AsylumCase> {
 
@@ -153,7 +155,7 @@ public class InternalCaseListedLegalRepLetterBundler implements PreSubmitCallbac
             );
         }
 
-
+        log.info("Done: 5 appellantLrBundleFuture: {}, legalRepLrBundleFuture: {}", appellantLrBundleFuture, legalRepLrBundleFuture);
         return new PreSubmitCallbackResponse<>(asylumCase);
     }
 }

@@ -1,5 +1,6 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit.letter;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
@@ -11,6 +12,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.CustomerServicesPro
 
 import java.util.Map;
 
+@Slf4j
 @Component
 public class InternalCaseListedLetterTemplate implements DocumentTemplate<AsylumCase> {
 
@@ -35,12 +37,14 @@ public class InternalCaseListedLetterTemplate implements DocumentTemplate<Asylum
     public Map<String, Object> mapFieldValues(
         CaseDetails<AsylumCase> caseDetails
     ) {
-        return Stf24WeeksUtils.createInternalCaseListedLetterFieldValues(
-            caseDetails,
-            customerServicesProvider,
-            stringProvider,
-            false,
-            false
+        Map<String, Object> values = Stf24WeeksUtils.createInternalCaseListedLetterFieldValues(
+                caseDetails,
+                customerServicesProvider,
+                stringProvider,
+                false,
+                false
         );
+        log.info("Done 7 : values: {}", values);
+        return values;
     }
 }

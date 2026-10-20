@@ -1,5 +1,6 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit.letter;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
@@ -13,6 +14,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentHandler;
 
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.Stf24WeeksUtils.*;
 
+@Slf4j
 @Component
 public class InternalCaseListedLrLetterGenerator implements PreSubmitCallbackHandler<AsylumCase> {
 
@@ -48,6 +50,8 @@ public class InternalCaseListedLrLetterGenerator implements PreSubmitCallbackHan
             throw new IllegalStateException("Cannot handle callback");
         }
 
-        return handleInternalCaseListedLrLetter(callback, documentCreator, documentHandler);
+        PreSubmitCallbackResponse<AsylumCase> response = handleInternalCaseListedLrLetter(callback, documentCreator, documentHandler);
+        log.info("Done 9 : {}", response);
+        return response;
     }
 }

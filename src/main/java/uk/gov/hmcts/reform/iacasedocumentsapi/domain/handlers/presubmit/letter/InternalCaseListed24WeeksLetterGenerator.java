@@ -1,5 +1,6 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit.letter;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
@@ -22,6 +23,7 @@ import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtil
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.isInternalCase;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.Stf24WeeksUtils.*;
 
+@Slf4j
 @Component
 public class InternalCaseListed24WeeksLetterGenerator implements PreSubmitCallbackHandler<AsylumCase> {
 
@@ -69,14 +71,14 @@ public class InternalCaseListed24WeeksLetterGenerator implements PreSubmitCallba
         final AsylumCase asylumCase = caseDetails.getCaseData();
 
         Document internalCaseListedLetter = documentCreator.create(caseDetails);
-
+        log.info("InternalCaseListed24WeeksLetterGenerator: {}", internalCaseListedLetter);
         documentHandler.addWithMetadataWithoutReplacingExistingDocuments(
             asylumCase,
             internalCaseListedLetter,
             LETTER_NOTIFICATION_DOCUMENTS,
             DocumentTag.INTERNAL_CASE_LISTED_LETTER
         );
-
+        log.info("Done: 2 {}", internalCaseListedLetter);
         return new PreSubmitCallbackResponse<>(asylumCase);
     }
 }
