@@ -25,7 +25,6 @@ def secrets = [
         secret('hearing-centre-hatton-cross-email', 'IA_HEARING_CENTRE_HATTON_CROSS_EMAIL'),
         secret('hearing-centre-glasgow-email', 'IA_HEARING_CENTRE_GLASGOW_EMAIL'),
         secret('hearing-centre-hendon-email', 'IA_HEARING_CENTRE_HENDON_EMAIL'),
-        secret('hearing-centre-kirklees-email', 'IA_HEARING_CENTRE_BRADFORD_EMAIL'),
         secret('hearing-centre-yarlswood-email', 'IA_HEARING_CENTRE_YARLSWOOD_EMAIL'),
         secret('hearing-centre-bradford-keighley-email', 'IA_HEARING_CENTRE_BRADFORD_KEIGHLEY_EMAIL'),
         secret('hearing-centre-mcc-minshull-email', 'IA_HEARING_CENTRE_MCC_MINSHULL_EMAIL'),
