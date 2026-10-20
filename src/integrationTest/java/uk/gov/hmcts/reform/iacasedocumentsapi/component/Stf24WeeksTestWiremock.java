@@ -46,6 +46,7 @@ import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.Y
 class Stf24WeeksTestWiremock extends SpringBootIntegrationTest
         implements WithServiceAuthStub, WithDocumentUploadStub, DocmosisStub, WithIdamStub, GivensBuilder, WithRoleAssignmentStub {
 
+    public static final String TB_IAC_LET_ENG_INTERNAL_CASE_LISTED_24_WEEKS_DOCX = "TB-IAC-LET-ENG-Internal-24Weeks-Case-Listed.docx";
     @MockitoBean
     private FeatureToggler featureToggler;
 
@@ -169,7 +170,7 @@ class Stf24WeeksTestWiremock extends SpringBootIntegrationTest
         submit(caseData, Event.LIST_CASE);
 
         server.verify(postRequestedFor(urlEqualTo("/docmosis"))
-                .withRequestBody(containing("TB-IAC-LET-ENG-Internal-Case-Listed-24-Weeks.docx"))
+                .withRequestBody(containing(TB_IAC_LET_ENG_INTERNAL_CASE_LISTED_24_WEEKS_DOCX))
                 .withRequestBody(containing("some-gname")));
     }
 
@@ -193,7 +194,7 @@ class Stf24WeeksTestWiremock extends SpringBootIntegrationTest
         submit(caseData, Event.LIST_CASE);
 
         server.verify(postRequestedFor(urlEqualTo("/docmosis"))
-                .withRequestBody(containing("TB-IAC-LET-ENG-Internal-Case-Listed-24-Weeks.docx"))
+                .withRequestBody(containing(TB_IAC_LET_ENG_INTERNAL_CASE_LISTED_24_WEEKS_DOCX))
                 .withRequestBody(containing("Legal")));
     }
 }
