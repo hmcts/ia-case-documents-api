@@ -140,7 +140,7 @@ public class Stf24WeeksUtils {
         List<String> addressLines = legalRepresentative
             ? getLegalRepAddressInCountryOrOoc(asylumCase)
             : getAppellantAddressInCountryOrOoc(asylumCase);
-
+        fieldValues.put("letterFor", legalRepresentative ? "legalRep" : "appellant");
         populateInternalCaseListedLetterFields(
             fieldValues,
             asylumCase,
