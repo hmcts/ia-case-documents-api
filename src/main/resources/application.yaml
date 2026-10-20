@@ -643,7 +643,7 @@ internalCaseListedLetter.contentType:  application/pdf
 internalCaseListedLetter.fileExtension: PDF
 internalCaseListedLetter.fileName: "internal-case-listed-letter"
 internalCaseListedLetter.templateName: ${INTERNAL_CASE_LISTED_LETTER_TEMPLATE:TB-IAC-LET-ENG-Internal-Case-Listed.docx}
-internalCaseListedLetter24Weeks.templateName: ${INTERNAL_CASE_LISTED_LETTER_TEMPLATE:TB-IAC-LET-ENG-Internal-Case-Listed-24-Weeks.docx}
+internalCaseListedLetter24Weeks.templateName: ${INTERNAL_CASE_LISTED_LETTER_TEMPLATE:TB-IAC-LET-ENG-Internal-24Weeks-Case-Listed.docx}
 internalCaseListed24WeeksLrLetter.fileName: "internal-case-listed-24-weeks-letter"
 
 internalCmrListingLetter.contentType:  application/pdf
