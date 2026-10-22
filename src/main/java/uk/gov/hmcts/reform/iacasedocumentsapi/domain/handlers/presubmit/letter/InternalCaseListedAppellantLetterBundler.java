@@ -1,5 +1,6 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.presubmit.letter;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
@@ -24,6 +25,7 @@ import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DetentionFa
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.Event.LIST_CASE;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.*;
 
+@Slf4j
 @Component
 public class InternalCaseListedAppellantLetterBundler implements PreSubmitCallbackHandler<AsylumCase> {
 
@@ -98,7 +100,7 @@ public class InternalCaseListedAppellantLetterBundler implements PreSubmitCallba
             LETTER_BUNDLE_DOCUMENTS,
             DocumentTag.INTERNAL_CASE_LISTED_LETTER_BUNDLE
         );
-
+        log.info("Done 4 Successfully created the internal case listed letter template for the case");
         return new PreSubmitCallbackResponse<>(asylumCase);
     }
 }

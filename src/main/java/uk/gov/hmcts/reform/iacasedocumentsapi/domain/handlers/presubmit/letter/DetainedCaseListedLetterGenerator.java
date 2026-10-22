@@ -20,6 +20,7 @@ import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseD
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DetentionFacility.OTHER;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.Event.LIST_CASE;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.*;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.Stf24WeeksUtils.is24WeeksCase;
 
 @Component
 public class DetainedCaseListedLetterGenerator implements PreSubmitCallbackHandler<AsylumCase> {
@@ -51,7 +52,8 @@ public class DetainedCaseListedLetterGenerator implements PreSubmitCallbackHandl
 
         return callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
                && callback.getEvent() == LIST_CASE
-               && isDetainedInFacilityType(asylumCase, OTHER);
+               && isDetainedInFacilityType(asylumCase, OTHER)
+               && !is24WeeksCase(callback.getCaseDetails().getCaseData());
     }
 
     public PreSubmitCallbackResponse<AsylumCase> handle(

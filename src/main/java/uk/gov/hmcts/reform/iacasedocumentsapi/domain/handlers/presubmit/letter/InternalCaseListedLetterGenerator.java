@@ -4,8 +4,11 @@ import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseD
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.Event.LIST_CASE;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.isAppellantInDetention;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.isInternalCase;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.Stf24WeeksUtils.is24WeeksCase;
 
 import java.util.Objects;
+
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
@@ -20,6 +23,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.handlers.PreSubmitCallbackH
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentCreator;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentHandler;
 
+@Slf4j
 @Component
 public class InternalCaseListedLetterGenerator implements PreSubmitCallbackHandler<AsylumCase> {
 
@@ -51,7 +55,8 @@ public class InternalCaseListedLetterGenerator implements PreSubmitCallbackHandl
         return callbackStage == PreSubmitCallbackStage.ABOUT_TO_SUBMIT
                && callback.getEvent() == LIST_CASE
                && isInternalCase(asylumCase)
-               && !isAppellantInDetention(asylumCase);
+               && !isAppellantInDetention(asylumCase)
+               && !is24WeeksCase(callback.getCaseDetails().getCaseData());
     }
 
     public PreSubmitCallbackResponse<AsylumCase> handle(
@@ -66,14 +71,14 @@ public class InternalCaseListedLetterGenerator implements PreSubmitCallbackHandl
         final AsylumCase asylumCase = caseDetails.getCaseData();
 
         Document internalCaseListedLetter = documentCreator.create(caseDetails);
-
+        log.info("InternalCaseListedLetterGenerator: {}", internalCaseListedLetter);
         documentHandler.addWithMetadataWithoutReplacingExistingDocuments(
             asylumCase,
             internalCaseListedLetter,
             LETTER_NOTIFICATION_DOCUMENTS,
             DocumentTag.INTERNAL_CASE_LISTED_LETTER
         );
-
+        log.info("Done 6 : {}", internalCaseListedLetter);
         return new PreSubmitCallbackResponse<>(asylumCase);
     }
 }
