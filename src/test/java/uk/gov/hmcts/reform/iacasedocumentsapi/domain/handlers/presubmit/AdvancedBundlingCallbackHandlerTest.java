@@ -190,6 +190,7 @@ class AdvancedBundlingCallbackHandlerTest {
         when(asylumCase.read(CASE_FLAG_SET_ASIDE_REHEARD_EXISTS, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
         when(asylumCase.read(ADDENDUM_EVIDENCE_DOCUMENTS)).thenReturn(Optional.of(documents));
         when(featureToggler.getValue("dlrm-remitted-feature-flag", false)).thenReturn(true);
+        when(asylumCase.read(SOURCE_OF_REMITTAL, String.class)).thenReturn(Optional.of("Upper Tribunal"));
         when(asylumCase.read(REHEARD_DECISION_REASONS_COLLECTION)).thenReturn(Optional.of(reheardDecisionDocs));
         when(asylumCase.read(REHEARD_HEARING_DOCUMENTS_COLLECTION)).thenReturn(Optional.of(reheardHearingDocs));
         when(asylumCase.read(REMITTAL_DOCUMENTS)).thenReturn(Optional.of(remittalDocuments));
@@ -241,6 +242,7 @@ class AdvancedBundlingCallbackHandlerTest {
         when(asylumCase.read(CASE_FLAG_SET_ASIDE_REHEARD_EXISTS, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
         when(asylumCase.read(ADDENDUM_EVIDENCE_DOCUMENTS)).thenReturn(Optional.empty());
         when(featureToggler.getValue("dlrm-remitted-feature-flag", false)).thenReturn(true);
+        when(asylumCase.read(SOURCE_OF_REMITTAL, String.class)).thenReturn(Optional.of("Upper Tribunal"));
         when(asylumCase.read(REHEARD_DECISION_REASONS_COLLECTION)).thenReturn(Optional.empty());
         when(asylumCase.read(FINAL_DECISION_AND_REASONS_DOCUMENTS)).thenReturn(Optional.of(finalDecisionsAndReasonsDocs));
 
@@ -266,6 +268,41 @@ class AdvancedBundlingCallbackHandlerTest {
         verify(asylumCase).clear(LATEST_DECISION_AND_REASONS_DOCUMENTS);
         verify(asylumCase).clear(LATEST_REMITTAL_DOCUMENTS);
         verify(asylumCase).clear(LATEST_REHEARD_HEARING_DOCUMENTS);
+    }
+
+    @Test
+    void should_use_reheard_bundle_when_feature_flag_enabled_but_source_of_remittal_not_present() {
+
+        DocumentWithMetadata addendumEvidenceAppellantDocument = new DocumentWithMetadata(
+            document, "test", "2020-12-12", DocumentTag.ADDENDUM_EVIDENCE, "The appellant");
+        DocumentWithMetadata addendumEvidenceRespondentDocument = new DocumentWithMetadata(
+            document, "test", "2020-12-12", DocumentTag.ADDENDUM_EVIDENCE, "The respondent");
+        List<IdValue<DocumentWithMetadata>> documents = new ArrayList<>();
+        documents.add(new IdValue<>("0", addendumEvidenceAppellantDocument));
+        documents.add(new IdValue<>("1", addendumEvidenceRespondentDocument));
+
+        when(asylumCase.read(CASE_FLAG_SET_ASIDE_REHEARD_EXISTS, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
+        when(asylumCase.read(ADDENDUM_EVIDENCE_DOCUMENTS)).thenReturn(Optional.of(documents));
+        when(featureToggler.getValue("dlrm-remitted-feature-flag", false)).thenReturn(true);
+        when(asylumCase.read(SOURCE_OF_REMITTAL, String.class)).thenReturn(Optional.empty());
+
+        PreSubmitCallbackResponse<AsylumCase> callbackResponse =
+            advancedBundlingCallbackHandler.handle(ABOUT_TO_SUBMIT, callback);
+
+        assertNotNull(callbackResponse);
+        assertEquals(asylumCase, callbackResponse.getData());
+
+        // Should use reheard bundle config, not remitted
+        verify(asylumCase).write(AsylumCaseDefinition.BUNDLE_CONFIGURATION, "iac-reheard-hearing-bundle-config.yaml");
+        verify(asylumCase).write(AsylumCaseDefinition.BUNDLE_FILE_NAME_PREFIX, "PA 50002 2020-" + appellantFamilyName);
+
+        // Should NOT call mapRemittedData or clear LATEST_* fields
+        verify(asylumCase, never()).write(eq(LATEST_DECISION_AND_REASONS_DOCUMENTS), any());
+        verify(asylumCase, never()).write(eq(LATEST_REMITTAL_DOCUMENTS), any());
+        verify(asylumCase, never()).write(eq(LATEST_REHEARD_HEARING_DOCUMENTS), any());
+        verify(asylumCase, never()).clear(LATEST_DECISION_AND_REASONS_DOCUMENTS);
+        verify(asylumCase, never()).clear(LATEST_REMITTAL_DOCUMENTS);
+        verify(asylumCase, never()).clear(LATEST_REHEARD_HEARING_DOCUMENTS);
     }
 
     @Test
