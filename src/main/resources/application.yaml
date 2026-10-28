@@ -1527,6 +1527,7 @@ appellantDaysToWait:
 ### Email addresses
 hearingCentreEmailAddresses:
   bradford: ${IA_HEARING_CENTRE_BRADFORD_EMAIL:hc-bradford-default@example.com}
+  kirklees: ${IA_HEARING_CENTRE_BRADFORD_EMAIL:hc-bradford-default@example.com}
   manchester: ${IA_HEARING_CENTRE_MANCHESTER_EMAIL:hc-manchester-default@example.com}
   newport: ${IA_HEARING_CENTRE_NEWPORT_EMAIL:hc-newport-default@example.com}
   taylorHouse: ${IA_HEARING_CENTRE_TAYLOR_HOUSE_EMAIL:hc-taylorhouse-default@example.com}
