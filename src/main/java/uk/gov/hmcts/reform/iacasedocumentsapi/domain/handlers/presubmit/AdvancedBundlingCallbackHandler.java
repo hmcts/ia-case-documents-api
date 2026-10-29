@@ -223,9 +223,21 @@ public class AdvancedBundlingCallbackHandler implements PreSubmitCallbackHandler
         List<IdValue<ReheardHearingDocuments>> allReheardHearingDocuments = maybeExistingReheardDocuments
             .orElse(emptyList());
 
+        List<IdValue<DocumentWithMetadata>> reheardHearingDocsInCollection = emptyList();
         if (!allReheardHearingDocuments.isEmpty()) {
-            return allReheardHearingDocuments.getFirst().getValue().getReheardHearingDocs();
+            reheardHearingDocsInCollection = allReheardHearingDocuments.getFirst().getValue().getReheardHearingDocs();
         }
-        return emptyList();
+
+        // Also include documents prior to set-aside release in REHEARD_HEARING_DOCUMENTS
+        Optional<List<IdValue<DocumentWithMetadata>>> maybeExistingReheardDocumentsPreSetAside =
+            asylumCase.read(REHEARD_HEARING_DOCUMENTS);
+        if (maybeExistingReheardDocumentsPreSetAside.isPresent()) {
+            List<IdValue<DocumentWithMetadata>> existingReheardDocumentsPreSetAside = maybeExistingReheardDocumentsPreSetAside.get();
+            List<DocumentWithMetadata> docsFromCollection = reheardHearingDocsInCollection.stream()
+                .map(IdValue::getValue)
+                .collect(Collectors.toList());
+            return documentsAppender.append(existingReheardDocumentsPreSetAside, docsFromCollection);
+        }
+        return reheardHearingDocsInCollection;
     }
 }

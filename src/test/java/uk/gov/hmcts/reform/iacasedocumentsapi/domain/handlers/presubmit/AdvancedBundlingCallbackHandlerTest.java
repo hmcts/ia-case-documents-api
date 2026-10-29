@@ -271,6 +271,54 @@ class AdvancedBundlingCallbackHandlerTest {
     }
 
     @Test
+    void should_successfully_handle_the_callback_in_reheard_and_remitted_with_pre_set_aside_documents() {
+
+        final List<IdValue<ReheardHearingDocuments>> reheardDecisionDocs = buildReheardDocuments();
+        final List<IdValue<ReheardHearingDocuments>> reheardHearingDocs = buildReheardDocuments();
+        final List<IdValue<RemittalDocument>> remittalDocuments = buildRemittalDocuments();
+
+        // Pre-set-aside documents (from REHEARD_HEARING_DOCUMENTS)
+        DocumentWithMetadata preSetAsideDoc = new DocumentWithMetadata(
+            document, "pre-set-aside-doc", "2020-01-01", DocumentTag.HEARING_NOTICE, "");
+        List<IdValue<DocumentWithMetadata>> preSetAsideDocs = new ArrayList<>();
+        preSetAsideDocs.add(new IdValue<>("1", preSetAsideDoc));
+
+        // Combined documents expected after appending
+        List<IdValue<DocumentWithMetadata>> combinedReheardDocs = new ArrayList<>();
+        combinedReheardDocs.addAll(preSetAsideDocs);
+        combinedReheardDocs.addAll(reheardHearingDocs.getFirst().getValue().getReheardHearingDocs());
+
+        when(asylumCase.read(CASE_FLAG_SET_ASIDE_REHEARD_EXISTS, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
+        when(asylumCase.read(ADDENDUM_EVIDENCE_DOCUMENTS)).thenReturn(Optional.empty());
+        when(featureToggler.getValue("dlrm-remitted-feature-flag", false)).thenReturn(true);
+        when(asylumCase.read(SOURCE_OF_REMITTAL, String.class)).thenReturn(Optional.of("Upper Tribunal"));
+        when(asylumCase.read(REHEARD_DECISION_REASONS_COLLECTION)).thenReturn(Optional.of(reheardDecisionDocs));
+        when(asylumCase.read(REHEARD_HEARING_DOCUMENTS_COLLECTION)).thenReturn(Optional.of(reheardHearingDocs));
+        when(asylumCase.read(REHEARD_HEARING_DOCUMENTS)).thenReturn(Optional.of(preSetAsideDocs));
+        when(asylumCase.read(REMITTAL_DOCUMENTS)).thenReturn(Optional.of(remittalDocuments));
+
+        // Extract DocumentWithMetadata from collection docs for the append call
+        List<DocumentWithMetadata> docsFromCollection = reheardHearingDocs.getFirst().getValue().getReheardHearingDocs()
+            .stream().map(IdValue::getValue).collect(java.util.stream.Collectors.toList());
+
+        when(documentsAppender.append(remittalDocuments.getFirst().getValue().getOtherRemittalDocs(),
+            Collections.singletonList(remittalDocuments.getFirst().getValue().getDecisionDocument())))
+            .thenReturn(latestRemittalDocs);
+        when(documentsAppender.append(preSetAsideDocs, docsFromCollection))
+            .thenReturn(combinedReheardDocs);
+
+        PreSubmitCallbackResponse<AsylumCase> callbackResponse =
+            advancedBundlingCallbackHandler.handle(ABOUT_TO_SUBMIT, callback);
+
+        assertNotNull(callbackResponse);
+        assertEquals(asylumCase, callbackResponse.getData());
+
+        verify(asylumCase).write(AsylumCaseDefinition.BUNDLE_CONFIGURATION, "iac-remitted-reheard-hearing-bundle-config.yaml");
+        verify(asylumCase).write(LATEST_REHEARD_HEARING_DOCUMENTS, combinedReheardDocs);
+        verify(asylumCase).read(REHEARD_HEARING_DOCUMENTS);
+    }
+
+    @Test
     void should_use_reheard_bundle_when_feature_flag_enabled_but_source_of_remittal_not_present() {
 
         DocumentWithMetadata addendumEvidenceAppellantDocument = new DocumentWithMetadata(
