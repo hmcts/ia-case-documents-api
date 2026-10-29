@@ -88,7 +88,7 @@ public class AdvancedBundlingCallbackHandler implements PreSubmitCallbackHandler
             .equals(YesOrNo.YES);
 
         boolean isRemittedFeature = featureToggler.getValue("dlrm-remitted-feature-flag", false);
-
+        boolean isRemittedPath = asylumCase.read(SOURCE_OF_REMITTAL, String.class).isPresent();
         if (maybeCaseFlagSetAsideReheardExists.isPresent()
             && maybeCaseFlagSetAsideReheardExists.get() == YesOrNo.YES) {
             asylumCase.write(APPELLANT_ADDENDUM_EVIDENCE_DOCS, getIdValues(asylumCase, ADDENDUM_EVIDENCE_DOCUMENTS, SUPPLIED_BY_APPELLANT, DocumentTag.ADDENDUM_EVIDENCE));
@@ -97,7 +97,7 @@ public class AdvancedBundlingCallbackHandler implements PreSubmitCallbackHandler
             asylumCase.write(APP_ADDITIONAL_EVIDENCE_DOCS, getIdValues(asylumCase, ADDITIONAL_EVIDENCE_DOCUMENTS, SUPPLIED_BY_APPELLANT, DocumentTag.ADDITIONAL_EVIDENCE));
             asylumCase.write(RESP_ADDITIONAL_EVIDENCE_DOCS, getIdValues(asylumCase, RESPONDENT_DOCUMENTS, SUPPLIED_BY_RESPONDENT, DocumentTag.ADDITIONAL_EVIDENCE));
 
-            if (isRemittedFeature) {
+            if (isRemittedFeature && isRemittedPath) {
                 mapRemittedData(asylumCase);
                 asylumCase.write(AsylumCaseDefinition.BUNDLE_CONFIGURATION, "iac-remitted-reheard-hearing-bundle-config.yaml");
             } else {
@@ -130,7 +130,7 @@ public class AdvancedBundlingCallbackHandler implements PreSubmitCallbackHandler
 
         responseData.write(AsylumCaseDefinition.STITCHING_STATUS, stitchStatus);
 
-        if (isRemittedFeature) {
+        if (isRemittedFeature && isRemittedPath) {
             //Clearing temporary fields
             responseData.clear(LATEST_DECISION_AND_REASONS_DOCUMENTS);
             responseData.clear(LATEST_REMITTAL_DOCUMENTS);
@@ -223,9 +223,21 @@ public class AdvancedBundlingCallbackHandler implements PreSubmitCallbackHandler
         List<IdValue<ReheardHearingDocuments>> allReheardHearingDocuments = maybeExistingReheardDocuments
             .orElse(emptyList());
 
+        List<IdValue<DocumentWithMetadata>> reheardHearingDocsInCollection = emptyList();
         if (!allReheardHearingDocuments.isEmpty()) {
-            return allReheardHearingDocuments.getFirst().getValue().getReheardHearingDocs();
+            reheardHearingDocsInCollection = allReheardHearingDocuments.getFirst().getValue().getReheardHearingDocs();
         }
-        return emptyList();
+
+        // Also include documents prior to set-aside release in REHEARD_HEARING_DOCUMENTS
+        Optional<List<IdValue<DocumentWithMetadata>>> maybeExistingReheardDocumentsPreSetAside =
+            asylumCase.read(REHEARD_HEARING_DOCUMENTS);
+        if (maybeExistingReheardDocumentsPreSetAside.isPresent()) {
+            List<IdValue<DocumentWithMetadata>> existingReheardDocumentsPreSetAside = maybeExistingReheardDocumentsPreSetAside.get();
+            List<DocumentWithMetadata> docsFromCollection = reheardHearingDocsInCollection.stream()
+                .map(IdValue::getValue)
+                .collect(Collectors.toList());
+            return documentsAppender.append(existingReheardDocumentsPreSetAside, docsFromCollection);
+        }
+        return reheardHearingDocsInCollection;
     }
 }
