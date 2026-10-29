@@ -100,7 +100,6 @@ public class InternalCaseListedAppellantLetterBundler implements PreSubmitCallba
             LETTER_BUNDLE_DOCUMENTS,
             DocumentTag.INTERNAL_CASE_LISTED_LETTER_BUNDLE
         );
-        log.info("Done 4 Successfully created the internal case listed letter template for the case");
         return new PreSubmitCallbackResponse<>(asylumCase);
     }
 }

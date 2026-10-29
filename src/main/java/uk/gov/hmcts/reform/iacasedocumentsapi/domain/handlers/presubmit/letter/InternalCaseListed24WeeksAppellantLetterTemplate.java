@@ -39,14 +39,12 @@ public class InternalCaseListed24WeeksAppellantLetterTemplate implements Documen
     public Map<String, Object> mapFieldValues(
         CaseDetails<AsylumCase> caseDetails
     ) {
-        Map<String, Object> fieldValues = Stf24WeeksUtils.createInternalCaseListedLetterFieldValues(
+        return Stf24WeeksUtils.createInternalCaseListedLetterFieldValues(
                 caseDetails,
                 customerServicesProvider,
                 stringProvider,
                 false,
                 is24WeeksCase(caseDetails.getCaseData())
         );
-        log.info("Done 1: fieldValues: {}", fieldValues);
-        return fieldValues;
     }
 }

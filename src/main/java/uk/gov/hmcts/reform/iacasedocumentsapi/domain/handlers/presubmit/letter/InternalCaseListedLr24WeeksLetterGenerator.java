@@ -50,8 +50,6 @@ public class InternalCaseListedLr24WeeksLetterGenerator implements PreSubmitCall
             throw new IllegalStateException("Cannot handle callback");
         }
 
-        PreSubmitCallbackResponse<AsylumCase> response = handleInternalCaseListedLrLetter(callback, documentCreator, documentHandler);
-        log.info("Done 88 : response: {}", response);
-        return response;
+        return handleInternalCaseListedLrLetter(callback, documentCreator, documentHandler);
     }
 }

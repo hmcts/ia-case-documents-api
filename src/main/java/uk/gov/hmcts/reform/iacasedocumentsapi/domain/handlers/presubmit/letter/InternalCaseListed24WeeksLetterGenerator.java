@@ -71,14 +71,12 @@ public class InternalCaseListed24WeeksLetterGenerator implements PreSubmitCallba
         final AsylumCase asylumCase = caseDetails.getCaseData();
 
         Document internalCaseListedLetter = documentCreator.create(caseDetails);
-        log.info("InternalCaseListed24WeeksLetterGenerator: {}", internalCaseListedLetter);
         documentHandler.addWithMetadataWithoutReplacingExistingDocuments(
             asylumCase,
             internalCaseListedLetter,
             LETTER_NOTIFICATION_DOCUMENTS,
             DocumentTag.INTERNAL_CASE_LISTED_LETTER
         );
-        log.info("Done: 2 {}", internalCaseListedLetter);
         return new PreSubmitCallbackResponse<>(asylumCase);
     }
 }

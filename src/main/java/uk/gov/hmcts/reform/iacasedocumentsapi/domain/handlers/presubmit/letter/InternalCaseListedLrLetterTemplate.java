@@ -38,14 +38,12 @@ public class InternalCaseListedLrLetterTemplate implements DocumentTemplate<Asyl
     public Map<String, Object> mapFieldValues(
         CaseDetails<AsylumCase> caseDetails
     ) {
-        Map<String, Object> letterFieldValues = Stf24WeeksUtils.createInternalCaseListedLetterFieldValues(
+        return Stf24WeeksUtils.createInternalCaseListedLetterFieldValues(
                 caseDetails,
                 customerServicesProvider,
                 stringProvider,
                 true,
                 false
         );
-        log.info("CaseDetails Done 10 : {}, letterFieldValues: {}", caseDetails, letterFieldValues);
-        return letterFieldValues;
     }
 }

@@ -50,8 +50,6 @@ public class InternalCaseListedLrLetterGenerator implements PreSubmitCallbackHan
             throw new IllegalStateException("Cannot handle callback");
         }
 
-        PreSubmitCallbackResponse<AsylumCase> response = handleInternalCaseListedLrLetter(callback, documentCreator, documentHandler);
-        log.info("Done 9 : {}", response);
-        return response;
+        return handleInternalCaseListedLrLetter(callback, documentCreator, documentHandler);
     }
 }

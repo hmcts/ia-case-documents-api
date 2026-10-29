@@ -155,7 +155,6 @@ public class InternalCaseListedLegalRepLetterBundler implements PreSubmitCallbac
             );
         }
 
-        log.info("Done: 5 appellantLrBundleFuture: {}, legalRepLrBundleFuture: {}", appellantLrBundleFuture, legalRepLrBundleFuture);
         return new PreSubmitCallbackResponse<>(asylumCase);
     }
 }

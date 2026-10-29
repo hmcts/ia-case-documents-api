@@ -39,14 +39,12 @@ public class InternalCaseListed24WeeksLrLetterTemplate implements DocumentTempla
     public Map<String, Object> mapFieldValues(
         CaseDetails<AsylumCase> caseDetails
     ) {
-        Map<String, Object> letterFieldValues = Stf24WeeksUtils.createInternalCaseListedLetterFieldValues(
+        return Stf24WeeksUtils.createInternalCaseListedLetterFieldValues(
                 caseDetails,
                 customerServicesProvider,
                 stringProvider,
                 true,
                 is24WeeksCase(caseDetails.getCaseData())
         );
-        log.info("Done 3 : {}", letterFieldValues);
-        return letterFieldValues;
     }
 }

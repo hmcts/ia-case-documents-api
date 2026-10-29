@@ -44,7 +44,6 @@ public class InternalCaseListedLetterTemplate implements DocumentTemplate<Asylum
                 false,
                 false
         );
-        log.info("Done 7 : values: {}", values);
         return values;
     }
 }
