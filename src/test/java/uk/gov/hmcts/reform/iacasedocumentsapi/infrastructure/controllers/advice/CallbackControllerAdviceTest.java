@@ -200,7 +200,6 @@ class CallbackControllerAdviceTest {
 
     @Test
     void should_handle_stitching_exception_and_log_message_correctly() {
-        doNothing().when(errorResponseLogger).maybeLogErrorsListResponse(any());
 
         DocumentStitchingErrorResponseException ex =
             new DocumentStitchingErrorResponseException(testExceptionMessage, preSubmitCallbackResponse);

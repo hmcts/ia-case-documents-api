@@ -1,5 +1,6 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.component.testutils.fixtures;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.time.LocalDateTime;
 import lombok.Data;
@@ -17,6 +18,7 @@ public class CaseDetailsForTest {
     @JsonProperty("created_date")
     private LocalDateTime createdDate;
 
+    @JsonCreator
     CaseDetailsForTest(long id, String jurisdiction, State state, AsylumCase caseData, LocalDateTime createdDate) {
         this.id = id;
         this.jurisdiction = jurisdiction;

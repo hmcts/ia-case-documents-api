@@ -51,6 +51,9 @@ spring:
     name: Immigration & Asylum case documents API
   config:
     import: "optional:configtree:/mnt/secrets/ia/"
+  http:
+    converters:
+      preferred-json-mapper: jackson2
   jackson.date-format: yyyy-MM-dd
   security:
     oauth2:
