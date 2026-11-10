@@ -1,8 +1,8 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.service;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
-import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
+import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.SerializationFeature;
+import tools.jackson.databind.json.JsonMapper;
 import com.google.common.collect.ImmutableMap;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -59,9 +59,9 @@ class AppealSubmissionDocFieldMapperTest {
                 asylumCase,
                 createdDate
         );
-        objectMapper = new ObjectMapper();
-        objectMapper.registerModule(new Jdk8Module());
-        objectMapper.enable(SerializationFeature.INDENT_OUTPUT);
+        objectMapper = JsonMapper.builder()
+            .enable(SerializationFeature.INDENT_OUTPUT)
+            .build();
 
         // Set up the asylum case with the provided JSON data
         asylumCase.write(APPEAL_SUBMISSION_DATE, "2025-05-08");

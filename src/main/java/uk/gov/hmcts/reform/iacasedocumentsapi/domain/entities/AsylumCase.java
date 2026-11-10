@@ -1,29 +1,16 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
-import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
+import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.json.JsonMapper;
 import java.util.HashMap;
 import java.util.Optional;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseData;
 
 public class AsylumCase extends HashMap<String, Object> implements CaseData {
 
-    private final ObjectMapper objectMapper = new ObjectMapper();
+    private final ObjectMapper objectMapper = new JsonMapper();
 
     public AsylumCase() {
-        objectMapper.registerModule(new Jdk8Module());
-
-        JavaTimeModule javaTimeModule = new JavaTimeModule();
-
-        javaTimeModule.addDeserializer(LocalDateTime.class, new LocalDateTimeDeserializer(DateTimeFormatter.ISO_DATE_TIME));
-
-        objectMapper.registerModule(javaTimeModule);
-        objectMapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
     }
 
     /*

@@ -1,7 +1,7 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd;
 
-import com.fasterxml.jackson.databind.PropertyNamingStrategies;
-import com.fasterxml.jackson.databind.annotation.JsonNaming;
+import tools.jackson.databind.PropertyNamingStrategies;
+import tools.jackson.databind.annotation.JsonNaming;
 import java.time.LocalDateTime;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.RequiredFieldMissingException;
 

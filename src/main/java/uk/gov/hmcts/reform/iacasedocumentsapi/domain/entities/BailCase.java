@@ -1,17 +1,16 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
+import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.json.JsonMapper;
 import java.util.HashMap;
 import java.util.Optional;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseData;
 
 public class BailCase extends HashMap<String, Object> implements CaseData {
 
-    private final ObjectMapper objectMapper = new ObjectMapper();
+    private final ObjectMapper objectMapper = new JsonMapper();
 
     public BailCase() {
-        objectMapper.registerModule(new Jdk8Module());
     }
 
     public <T> Optional<T> read(BailCaseFieldDefinition extractor, Class<T> type) {

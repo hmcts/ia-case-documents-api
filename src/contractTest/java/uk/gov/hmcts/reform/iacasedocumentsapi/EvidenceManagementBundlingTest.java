@@ -10,7 +10,8 @@ import au.com.dius.pact.consumer.junit5.PactConsumerTestExt;
 import au.com.dius.pact.consumer.junit5.PactTestFor;
 import au.com.dius.pact.core.model.V4Pact;
 import au.com.dius.pact.core.model.annotations.Pact;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.json.JsonMapper;
 import com.google.common.collect.Maps;
 import io.restassured.RestAssured;
 import io.restassured.config.EncoderConfig;
@@ -48,7 +49,7 @@ public class EvidenceManagementBundlingTest {
     private static final String ACCESS_TOKEN = "111";
     private static final String AUTHORIZATION_TOKEN = "222";
 
-    private ObjectMapper objectMapper = new ObjectMapper();
+    private ObjectMapper objectMapper = new JsonMapper();
 
     @BeforeEach
     public void setUp() {
