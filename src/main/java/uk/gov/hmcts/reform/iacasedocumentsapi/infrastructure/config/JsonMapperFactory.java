@@ -5,8 +5,6 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
 import tools.jackson.databind.json.JsonMapper;
 
-import static tools.jackson.databind.DeserializationFeature.*;
-import static tools.jackson.databind.SerializationFeature.FAIL_ON_EMPTY_BEANS;
 import static tools.jackson.databind.cfg.EnumFeature.*;
 
 public final class JsonMapperFactory {
