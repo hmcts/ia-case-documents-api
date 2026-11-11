@@ -1,5 +1,6 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import tools.jackson.databind.PropertyNamingStrategies;
 import tools.jackson.databind.annotation.JsonNaming;
 import lombok.EqualsAndHashCode;
@@ -15,6 +16,7 @@ public class DynamicList {
     private Value value;
     private List<Value> listItems;
 
+    @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
     public DynamicList(String value) {
         this.value = new Value(value, value);
     }
