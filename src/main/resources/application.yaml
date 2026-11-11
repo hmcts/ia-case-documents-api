@@ -92,7 +92,7 @@ hearingRequirementsDocument.templateName: ${IA_HEARING_REQUIREMENTS_TEMPLATE:TB-
 hearingNoticeDocument.contentType: application/pdf
 hearingNoticeDocument.fileExtension: PDF
 hearingNoticeDocument.fileName: "hearing-notice"
-hearingNoticeDocument.templateName: ${IA_HEARING_NOTICE_TEMPLATE:TB-IAC-HNO-ENG-00241-Notice-Of-Hearing.docx}
+hearingNoticeDocument.templateName: ${IA_HEARING_NOTICE_TEMPLATE:TB-IAC-HNO-ENG-00241-Notice-Of-Hearing-v1.docx}
 
 cmrHearingNoticeDocument.contentType: application/pdf
 cmrHearingNoticeDocument.fileExtension: PDF
@@ -129,17 +129,17 @@ noticeOfAdjournedHearingDocument.templateName: ${NOTICE_OF_ADJOURNED_HEARING_TEM
 hearingNoticeEditedDocument.contentType: application/pdf
 hearingNoticeEditedDocument.fileExtension: PDF
 hearingNoticeEditedDocument.fileName: "hearing-notice"
-hearingNoticeEditedDocument.templateName: ${IA_HEARING_NOTICE_EDITED_TEMPLATE:TB-IAC-HNO-ENG-00074B-Notice-Of-Hearing-Edited.docx}
+hearingNoticeEditedDocument.templateName: ${IA_HEARING_NOTICE_EDITED_TEMPLATE:TB-IAC-HNO-ENG-00074B-Notice-Of-Hearing-Edited-v1.docx}
 
 hearingNoticeUpdatedRequirementsDocument.contentType: application/pdf
 hearingNoticeUpdatedRequirementsDocument.fileExtension: PDF
 hearingNoticeUpdatedRequirementsDocument.fileName: "hearing-notice"
-hearingNoticeUpdatedRequirementsDocument.templateName: ${IA_HEARING_NOTICE_UPDATED_REQUIREMENTS_TEMPLATE:TB-IAC-HNO-ENG-00243-Notice-Of-Hearing-Updated-Requirements.docx}
+hearingNoticeUpdatedRequirementsDocument.templateName: ${IA_HEARING_NOTICE_UPDATED_REQUIREMENTS_TEMPLATE:TB-IAC-HNO-ENG-00243-Notice-Of-Hearing-Updated-Requirements-v1.docx}
 
 hearingNoticeUpdatedDetailsDocument.contentType: application/pdf
 hearingNoticeUpdatedDetailsDocument.fileExtension: PDF
 hearingNoticeUpdatedDetailsDocument.fileName: "hearing-notice"
-hearingNoticeUpdatedDetailsDocument.templateName: ${IA_HEARING_NOTICE_UPDATED_DETAILS_TEMPLATE:TB-IAC-HNO-ENG-00641-Notice-Of-Hearing-Updated-Details.docx}
+hearingNoticeUpdatedDetailsDocument.templateName: ${IA_HEARING_NOTICE_UPDATED_DETAILS_TEMPLATE:TB-IAC-HNO-ENG-00641-Notice-Of-Hearing-Updated-Details-v1.docx}
 
 adaHearingNoticeUpdatedDetailsDocument.contentType: application/pdf
 adaHearingNoticeUpdatedDetailsDocument.fileExtension: PDF
@@ -744,7 +744,7 @@ stf24WeeksRemovalDecision.templateName: ${STF24_WEEKS_REMOVAL_DECISION_DOCUMENT:
 stf24WeeksHearingNoticeDocument.contentType: application/pdf
 stf24WeeksHearingNoticeDocument.fileExtension: PDF
 stf24WeeksHearingNoticeDocument.fileName: "stf-24weeks-hearing-notice"
-stf24WeeksHearingNoticeDocument.templateName: ${STF24_WEEKS_IA_HEARING_NOTICE_TEMPLATE:TB-IAC-HNO-ENG-00072-STF24W-V2.docx}
+stf24WeeksHearingNoticeDocument.templateName: ${STF24_WEEKS_IA_HEARING_NOTICE_TEMPLATE:TB-IAC-HNO-ENG-00072-STF24W-V3.docx}
 
 ccdGatewayUrl: ${CCD_GW_URL:http://localhost:3453}
 
