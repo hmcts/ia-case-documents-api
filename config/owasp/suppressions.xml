@@ -2,6 +2,6 @@
 <suppressions xmlns="https://jeremylong.github.io/DependencyCheck/dependency-suppression.1.3.xsd">
     <suppress until="2026-12-30">
         <notes>Kotlin deserialisation</notes>
-        CVE-2026-53914
+        <cve>CVE-2026-53914</cve>
     </suppress>
 </suppressions>

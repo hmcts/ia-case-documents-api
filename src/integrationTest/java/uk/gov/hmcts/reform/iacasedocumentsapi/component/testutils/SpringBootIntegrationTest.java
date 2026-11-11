@@ -1,5 +1,7 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.component.testutils;
 
+import org.springframework.security.oauth2.jwt.JwtDecoder;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import tools.jackson.databind.ObjectMapper;
 import com.github.tomakehurst.wiremock.WireMockServer;
 import com.github.tomakehurst.wiremock.common.Slf4jNotifier;
@@ -32,6 +34,9 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.Application;
 @ActiveProfiles("integration")
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public abstract class SpringBootIntegrationTest {
+
+    @MockitoBean
+    protected JwtDecoder jwtDecoder;
 
     protected GivensBuilder given;
 
