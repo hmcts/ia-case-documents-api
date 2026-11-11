@@ -42,7 +42,8 @@ public class HearingNoticeFieldMapper {
         final Optional<YesOrNo> isSubmitRequirementsAvailable = asylumCase.read(SUBMIT_HEARING_REQUIREMENTS_AVAILABLE);
 
         fieldValues.putAll(getAppellantPersonalisation(asylumCase));
-        fieldValues.put("legalRepReferenceNumber", asylumCase.read((isInternalCase(asylumCase) ? LEGAL_REP_REF_NUMBER_PAPER_J : LEGAL_REP_REFERENCE_NUMBER), String.class).orElse(""));
+        boolean internalCase = isInternalCase(asylumCase);
+        fieldValues.put("legalRepReferenceNumber", asylumCase.read((internalCase ? LEGAL_REP_REF_NUMBER_PAPER_J : LEGAL_REP_REFERENCE_NUMBER), String.class).orElse(""));
         fieldValues.put("hearingDate", formatDateTimeForRendering(asylumCase.read(LIST_CASE_HEARING_DATE, String.class).orElse(""), DOCUMENT_DATE_FORMAT));
         fieldValues.put("hearingTime", formatDateTimeForRendering(asylumCase.read(LIST_CASE_HEARING_DATE, String.class).orElse(""), DOCUMENT_TIME_FORMAT));
 
@@ -85,7 +86,7 @@ public class HearingNoticeFieldMapper {
         fieldValues.put("customerServicesTelephone", customerServicesProvider.getCustomerServicesTelephone());
         fieldValues.put("customerServicesEmail", customerServicesProvider.getCustomerServicesEmail());
         fieldValues.put("isIntegrated", asylumCase.read(IS_INTEGRATED, YesOrNo.class).orElse(YesOrNo.NO));
-
+        fieldValues.put("internalCase", Boolean.toString(internalCase));
         return fieldValues;
     }
 
