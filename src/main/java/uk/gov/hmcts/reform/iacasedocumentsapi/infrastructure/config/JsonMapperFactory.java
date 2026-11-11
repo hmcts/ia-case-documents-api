@@ -22,7 +22,8 @@ public final class JsonMapperFactory {
                 READ_UNKNOWN_ENUM_VALUES_USING_DEFAULT_VALUE,
                 WRITE_ENUMS_USING_TO_STRING)
             .changeDefaultPropertyInclusion(incl -> incl
-                .withValueInclusion(JsonInclude.Include.NON_ABSENT))
+                    .withValueInclusion(JsonInclude.Include.NON_ABSENT)
+                    .withContentInclusion(JsonInclude.Include.NON_ABSENT))
             .changeDefaultVisibility(vc -> vc.withVisibility(
                     PropertyAccessor.CREATOR,
                     JsonAutoDetect.Visibility.NONE
