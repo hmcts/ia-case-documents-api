@@ -91,15 +91,15 @@ class Stf24WeeksUtilsTest {
     void should_return_true_when_stf24w_current_status_is_yes_and_false_when_missing_or_no() {
         when(asylumCase.read(AsylumCaseDefinition.STF_24W_CURRENT_STATUS_AUTO_GENERATED, YesOrNo.class))
                 .thenReturn(Optional.of(YesOrNo.YES));
-        assertTrue(Stf24WeeksUtils.hasStf24WeeksStatus(asylumCase));
+        assertTrue(Stf24WeeksUtils.is24WeeksCase(asylumCase));
 
         when(asylumCase.read(AsylumCaseDefinition.STF_24W_CURRENT_STATUS_AUTO_GENERATED, YesOrNo.class))
                 .thenReturn(Optional.of(YesOrNo.NO));
-        assertFalse(Stf24WeeksUtils.hasStf24WeeksStatus(asylumCase));
+        assertFalse(Stf24WeeksUtils.is24WeeksCase(asylumCase));
 
         when(asylumCase.read(AsylumCaseDefinition.STF_24W_CURRENT_STATUS_AUTO_GENERATED, YesOrNo.class))
                 .thenReturn(Optional.empty());
-        assertFalse(Stf24WeeksUtils.hasStf24WeeksStatus(asylumCase));
+        assertFalse(Stf24WeeksUtils.is24WeeksCase(asylumCase));
     }
 
     @Test

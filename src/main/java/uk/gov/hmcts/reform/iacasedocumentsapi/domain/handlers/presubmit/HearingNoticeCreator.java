@@ -47,6 +47,7 @@ import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentHandler;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentReceiver;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.DocumentsAppender;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.FeatureToggler;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.Stf24WeeksUtils;
 
 @Component
 public class HearingNoticeCreator implements PreSubmitCallbackHandler<AsylumCase> {
@@ -174,7 +175,7 @@ public class HearingNoticeCreator implements PreSubmitCallbackHandler<AsylumCase
     private Document getHearingNotice(boolean isCaseUsingLocationRefData, HearingCentre listCaseHearingCentre, AsylumCase asylumCase, CaseDetails<AsylumCase> caseDetails) {
         boolean isRemote = isCaseUsingLocationRefData ? isRemoteHearing(asylumCase)
             : HearingCentre.REMOTE_HEARING.equals(listCaseHearingCentre);
-        if (is24WeeksCase(asylumCase)) {
+        if (Stf24WeeksUtils.is24WeeksCase(asylumCase)) {
             return isRemote ? remoteHearingNoticeDocumentCreator.create(caseDetails)
                 : stf24WeeksHearingNoticeDocumentCreator.create(caseDetails);
         } else if (isRemote || isVirtualHearing(asylumCase)) {
