@@ -3,6 +3,7 @@ package uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.config;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import tools.jackson.databind.json.JsonMapper;
 
+import static tools.jackson.databind.DeserializationFeature.FAIL_ON_NULL_FOR_PRIMITIVES;
 import static tools.jackson.databind.cfg.EnumFeature.*;
 
 public final class JsonMapperFactory {
@@ -19,6 +20,7 @@ public final class JsonMapperFactory {
                 READ_ENUMS_USING_TO_STRING,
                 READ_UNKNOWN_ENUM_VALUES_USING_DEFAULT_VALUE,
                 WRITE_ENUMS_USING_TO_STRING)
+            .disable(FAIL_ON_NULL_FOR_PRIMITIVES)
             .changeDefaultPropertyInclusion(incl -> incl
                     .withValueInclusion(JsonInclude.Include.NON_ABSENT)
                     .withContentInclusion(JsonInclude.Include.NON_ABSENT))
