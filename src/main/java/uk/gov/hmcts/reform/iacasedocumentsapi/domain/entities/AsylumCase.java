@@ -3,7 +3,6 @@ package uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities;
 import tools.jackson.databind.ObjectMapper;
 import tools.jackson.databind.json.JsonMapper;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseData;
-import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.config.JsonMapperFactory;
 
 import java.util.HashMap;
 import java.util.Optional;

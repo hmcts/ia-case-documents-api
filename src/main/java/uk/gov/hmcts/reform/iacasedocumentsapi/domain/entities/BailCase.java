@@ -7,7 +7,6 @@ import java.util.Optional;
 
 import tools.jackson.databind.json.JsonMapper;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseData;
-import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.config.JsonMapperFactory;
 
 public class BailCase extends HashMap<String, Object> implements CaseData {
 
