@@ -1,6 +1,5 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -15,7 +14,6 @@ public class WitnessDetails {
         // noop -- for deserializer
     }
 
-    @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
     public WitnessDetails(String witnessName) {
         this.witnessName = witnessName;
     }
