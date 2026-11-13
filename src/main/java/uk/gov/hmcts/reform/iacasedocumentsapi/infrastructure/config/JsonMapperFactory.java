@@ -1,8 +1,6 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.config;
 
-import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.PropertyAccessor;
 import tools.jackson.databind.json.JsonMapper;
 
 import static tools.jackson.databind.cfg.EnumFeature.*;
