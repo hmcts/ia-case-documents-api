@@ -4,8 +4,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import tools.jackson.databind.ObjectMapper;
 import java.util.Map;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -22,6 +21,7 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.RestTemplate;
+import tools.jackson.core.JacksonException;
 
 @ExtendWith(MockitoExtension.class)
 @SuppressWarnings("unchecked")
@@ -56,7 +56,7 @@ public class DocmosisDocumentGeneratorTest {
     }
 
     @Test
-    public void should_call_docmosis_to_generate_document() throws JsonProcessingException {
+    public void should_call_docmosis_to_generate_document() {
 
         when(objectMapper.writeValueAsString(templateFieldValues)).thenReturn(serializedTemplateFieldValues);
 
@@ -102,9 +102,9 @@ public class DocmosisDocumentGeneratorTest {
     }
 
     @Test
-    public void should_throw_if_template_field_values_cannot_be_serialized() throws JsonProcessingException {
+    public void should_throw_if_template_field_values_cannot_be_serialized() {
 
-        doThrow(JsonProcessingException.class)
+        doThrow(JacksonException.class)
             .when(objectMapper)
             .writeValueAsString(any());
 
@@ -120,7 +120,7 @@ public class DocmosisDocumentGeneratorTest {
     }
 
     @Test
-    public void should_throw_if_no_data_returned() throws JsonProcessingException {
+    public void should_throw_if_no_data_returned() {
 
         when(objectMapper.writeValueAsString(templateFieldValues)).thenReturn(serializedTemplateFieldValues);
 

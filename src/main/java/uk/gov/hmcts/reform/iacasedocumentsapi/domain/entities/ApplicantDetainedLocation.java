@@ -1,5 +1,6 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import java.util.HashMap;
 import java.util.Map;
@@ -14,6 +15,7 @@ public enum ApplicantDetainedLocation {
     private final String code;
     private final String location;
 
+    @JsonCreator
     ApplicantDetainedLocation(String code, String location) {
         this.code = code;
         this.location = location;

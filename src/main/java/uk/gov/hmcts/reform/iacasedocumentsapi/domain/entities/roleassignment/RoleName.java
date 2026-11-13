@@ -1,8 +1,9 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.roleassignment;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonEnumDefaultValue;
 import com.fasterxml.jackson.annotation.JsonValue;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import tools.jackson.databind.annotation.JsonDeserialize;
 import lombok.Getter;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.roleassignment.RoleNameDeserializer;
 
@@ -40,6 +41,7 @@ public enum RoleName {
     @JsonValue
     private final String value;
 
+    @JsonCreator
     RoleName(String value) {
         this.value = value;
     }

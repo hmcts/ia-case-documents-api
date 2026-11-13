@@ -15,7 +15,6 @@ public class IdValue<T> {
         String id,
         T value
     ) {
-        requireNonNull(id);
         requireNonNull(value);
 
         this.id = id;
@@ -23,7 +22,6 @@ public class IdValue<T> {
     }
 
     public String getId() {
-        requireNonNull(id);
         return id;
     }
 

@@ -1,5 +1,6 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 public enum MaleOrFemale {
@@ -11,6 +12,7 @@ public enum MaleOrFemale {
     @JsonValue
     private final String id;
 
+    @JsonCreator
     MaleOrFemale(String id) {
         this.id = id;
     }

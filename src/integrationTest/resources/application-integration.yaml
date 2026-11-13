@@ -13,11 +13,6 @@ spring:
   data:
     redis:
       url: "redis://SOME_KEY@hostname.redis.cache.windows.net:6380?tls=true"
-      secret: "something"
-      encryption:
-        key: "6YN2mGkOiEFMPzg/GCFdujQD9aXZN5oSd5LVwc9hX+Q="
-      ssl:
-        enabled: true
   autoconfigure:
     exclude:
           - org.springframework.boot.autoconfigure.cache.CacheAutoConfiguration

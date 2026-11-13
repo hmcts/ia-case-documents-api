@@ -2,7 +2,7 @@ package uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities;
 
 import java.util.List;
 import java.util.Map;
-import com.fasterxml.jackson.core.type.TypeReference;
+import tools.jackson.core.type.TypeReference;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.OutOfCountryCircumstances;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.OutOfCountryDecisionType;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.HoursMinutes;
