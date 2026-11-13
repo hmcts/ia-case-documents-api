@@ -121,7 +121,7 @@ class HearingNoticeUpdatedTemplateProviderTest {
 
         Map<String, Object> templateFieldValues = hearingNoticeUpdatedTemplateProvider.mapFieldValues(caseDetails, caseDetailsBefore);
 
-        assertEquals(21, templateFieldValues.size());
+        assertEquals(22, templateFieldValues.size());
         assertEquals("[userImage:hmcts.png]", templateFieldValues.get("hmcts"));
         assertEquals(expectedFormattedTaylorHouseHearingCentreName, templateFieldValues.get("oldHearingCentre"));
         assertEquals(expectedFormattedHearingDatePartBefore, templateFieldValues.get("oldHearingDate"));
@@ -597,7 +597,7 @@ class HearingNoticeUpdatedTemplateProviderTest {
 
         Map<String, Object> templateFieldValues = hearingNoticeUpdatedTemplateProvider.mapFieldValues(caseDetails, caseDetailsBefore);
 
-        assertEquals(21, templateFieldValues.size());
+        assertEquals(22, templateFieldValues.size());
         assertEquals("[userImage:hmcts.png]", templateFieldValues.get("hmcts"));
         assertEquals(expectedFormattedTaylorHouseHearingCentreName, templateFieldValues.get("oldHearingCentre"));
         assertEquals("", templateFieldValues.get("oldHearingDate"));

@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='utf-8'?>
 <suppressions xmlns="https://jeremylong.github.io/DependencyCheck/dependency-suppression.1.3.xsd">
-    <suppress until="2026-10-30">
+    <suppress until="2026-11-30">
         <notes>Awaiting spring boot 4 upgrade as springboot 3.x has reached end of OSS support</notes>
         <cve>CVE-2026-59313</cve>
         <cve>CVE-2026-59314</cve>

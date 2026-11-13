@@ -188,7 +188,7 @@ public class CmaAppointmentNoticeTemplateTest {
 
         Map<String, Object> templateFieldValues = cmaAppointmentNoticeTemplate.mapFieldValues(caseDetails);
 
-        assertEquals(25, templateFieldValues.size());
+        assertEquals(26, templateFieldValues.size());
         assertEquals("[userImage:hmcts.png]", templateFieldValues.get("hmcts"));
         assertEquals(appealReferenceNumber, templateFieldValues.get("appealReferenceNumber"));
         assertEquals(appellantGivenNames, templateFieldValues.get("appellantGivenNames"));
@@ -270,7 +270,7 @@ public class CmaAppointmentNoticeTemplateTest {
 
         Map<String, Object> templateFieldValues = cmaAppointmentNoticeTemplate.mapFieldValues(caseDetails);
 
-        assertEquals(25, templateFieldValues.size());
+        assertEquals(26, templateFieldValues.size());
         assertEquals("[userImage:hmcts.png]", templateFieldValues.get("hmcts"));
         assertEquals("", templateFieldValues.get("appealReferenceNumber"));
         assertEquals("", templateFieldValues.get("appellantGivenNames"));
