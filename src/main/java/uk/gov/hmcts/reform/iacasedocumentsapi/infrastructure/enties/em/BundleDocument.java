@@ -1,5 +1,6 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.enties.em;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseData;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.Document;
 
@@ -10,6 +11,7 @@ public class BundleDocument implements CaseData {
     private int sortIndex;
     private Document sourceDocument;
 
+    @JsonCreator
     private BundleDocument() {
         // noop -- for deserializer
     }

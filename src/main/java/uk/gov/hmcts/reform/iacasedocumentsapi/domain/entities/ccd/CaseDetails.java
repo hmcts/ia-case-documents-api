@@ -1,5 +1,6 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import tools.jackson.databind.PropertyNamingStrategies;
 import tools.jackson.databind.annotation.JsonNaming;
 import java.time.LocalDateTime;
@@ -14,6 +15,7 @@ public class CaseDetails<T extends CaseData> {
     private T caseData;
     private LocalDateTime createdDate;
 
+    @JsonCreator
     private CaseDetails() {
         // noop -- for deserializer
     }
