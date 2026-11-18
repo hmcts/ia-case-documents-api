@@ -5,6 +5,7 @@ import java.util.Map;
 import com.fasterxml.jackson.core.type.TypeReference;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.OutOfCountryCircumstances;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.OutOfCountryDecisionType;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.HoursMinutes;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.*;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.caselinking.CaseLink;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.enties.em.Bundle;
@@ -198,6 +199,20 @@ public enum AsylumCaseDefinition {
 
     LIST_CASE_REQUIREMENTS_OTHER(
         "listCaseRequirementsOther", new TypeReference<String>(){}),
+
+    CMR_HEARING_CENTRE("cmrHearingCentre", new TypeReference<HearingCentre>(){}),
+
+    CMR_HEARING_CENTRE_ADDRESS("cmrHearingCentreAddress", new TypeReference<DynamicList>(){}),
+
+    CMR_HEARING_LENGTH("cmrHearingLength", new TypeReference<HoursMinutes>(){}),
+
+    CMR_HEARING_DATE("cmrHearingDate", new TypeReference<String>(){}),
+
+    CMR_HEARING_CHANNEL("cmrHearingChannel", new TypeReference<DynamicList>(){}),
+
+    CMR_IS_REMOTE_HEARING("cmrIsRemoteHearing", new TypeReference<YesOrNo>(){}),
+
+    CMR_HEARING_ID_LIST("cmrHearingIdList", new TypeReference<List<IdValue<String>>>(){}),
 
     DRAFT_DECISION_AND_REASONS_DOCUMENTS(
         "draftDecisionAndReasonsDocuments", new TypeReference<List<IdValue<DocumentWithMetadata>>>(){}),

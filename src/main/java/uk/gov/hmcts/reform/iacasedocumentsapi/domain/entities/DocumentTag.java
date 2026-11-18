@@ -46,6 +46,9 @@ public enum DocumentTag {
     APPEAL_REASONS("appealReasons", CaseType.ASYLUM),
     CLARIFYING_QUESTIONS("clarifyingQuestions", CaseType.ASYLUM),
 
+    CMR_HEARING_CANCELLED_LETTER("cmrHearingCancelledLetter", CaseType.ASYLUM),
+    CMR_HEARING_CANCELLED_LR_LETTER("cmrHearingCancelledLrLetter", CaseType.ASYLUM),
+
     NOTICE_OF_ADJOURNED_HEARING("noticeOfAdjournedHearing", CaseType.ASYLUM),
 
     APPEAL_FORM("appealForm", CaseType.ASYLUM),
@@ -93,6 +96,10 @@ public enum DocumentTag {
     INTERNAL_CASE_LISTED_LETTER_BUNDLE("internalCaseListedLetterBundle", CaseType.ASYLUM),
     INTERNAL_CASE_LISTED_LR_LETTER("internalCaseListedLrLetter", CaseType.ASYLUM),
     INTERNAL_CASE_LISTED_LR_LETTER_BUNDLE("internalCaseListedLrLetterBundle", CaseType.ASYLUM),
+    INTERNAL_CMR_LISTING_LETTER("internalCmrListingLetter", CaseType.ASYLUM),
+    INTERNAL_CMR_LISTING_LETTER_BUNDLE("internalCmrListingLetterBundle", CaseType.ASYLUM),
+    INTERNAL_CMR_LISTING_LR_LETTER("internalCmrListingLrLetter", CaseType.ASYLUM),
+    INTERNAL_CMR_LISTING_LR_LETTER_BUNDLE("internalCmrListingLrLetterBundle", CaseType.ASYLUM),
     APPEAL_WAS_NOT_SUBMITTED_SUPPORTING_DOCUMENT("appealWasNotSubmittedSupportingDocument", CaseType.ASYLUM),
     INTERNAL_OUT_OF_TIME_DECISION_LETTER("internalOutOfTimeDecisionLetter", CaseType.ASYLUM),
     INTERNAL_OUT_OF_TIME_DECISION_LETTER_BUNDLE("internalOutOfTimeDecisionLetter", CaseType.ASYLUM),
@@ -100,6 +107,10 @@ public enum DocumentTag {
     INTERNAL_EDIT_CASE_LISTING_LETTER_BUNDLE("internalEditCaseListingLetterBundle", CaseType.ASYLUM),
     INTERNAL_EDIT_CASE_LISTING_LR_LETTER("internalEditCaseListingLrLetter", CaseType.ASYLUM),
     INTERNAL_EDIT_CASE_LISTING_LR_LETTER_BUNDLE("internalEditCaseListingLrLetterBundle", CaseType.ASYLUM),
+    INTERNAL_CMR_RE_LISTING_LETTER("internalCmrReListingLetter", CaseType.ASYLUM),
+    INTERNAL_CMR_RE_LISTING_LETTER_BUNDLE("internalCmrReListingLetterBundle", CaseType.ASYLUM),
+    INTERNAL_CMR_RE_LISTING_LR_LETTER("internalCmrReListingLrLetter", CaseType.ASYLUM),
+    INTERNAL_CMR_RE_LISTING_LR_LETTER_BUNDLE("internalCmrReListingLrLetterBundle", CaseType.ASYLUM),
     INTERNAL_DETAINED_APPEAL_SUBMITTED_OUT_OF_TIME_WITH_EXEMPTION_LETTER("internalDetainedAppealSubmittedOutOfTimeWithExemptionLetter", CaseType.ASYLUM),
     INTERNAL_DETAINED_APPEAL_SUBMITTED_IN_TIME_WITH_FEE_TO_PAY_LETTER("internalDetainedAppealSubmittedInTimeWithFeeToPayLetter", CaseType.ASYLUM),
     INTERNAL_DETAINED_APPEAL_REMISSION_GRANTED_IN_TIME_LETTER("internalDetainedAppealRemissionGrantedInTimeLetter", CaseType.ASYLUM),

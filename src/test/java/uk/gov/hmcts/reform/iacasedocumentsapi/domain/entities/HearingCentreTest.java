@@ -25,6 +25,7 @@ public class HearingCentreTest {
         assertEquals("newcastle", HearingCentre.NEWCASTLE.toString());
         assertEquals("harmondsworth", HearingCentre.HARMONDSWORTH.toString());
         assertEquals("hendon", HearingCentre.HENDON.toString());
+        assertEquals("kirklees", HearingCentre.KIRKLEES.toString());
         assertEquals("yarlsWood", HearingCentre.YARLS_WOOD.toString());
         assertEquals("bradfordKeighley", HearingCentre.BRADFORD_KEIGHLEY.toString());
         assertEquals("mccMinshull", HearingCentre.MCC_MINSHULL.toString());
@@ -55,6 +56,7 @@ public class HearingCentreTest {
         assertEquals(HearingCentre.NEWCASTLE, HearingCentre.from("newcastle").get());
         assertEquals(HearingCentre.HARMONDSWORTH, HearingCentre.from("harmondsworth").get());
         assertEquals(HearingCentre.HENDON, HearingCentre.from("hendon").get());
+        assertEquals(HearingCentre.KIRKLEES, HearingCentre.from("kirklees").get());
         assertEquals(HearingCentre.YARLS_WOOD, HearingCentre.from("yarlsWood").get());
         assertEquals(HearingCentre.BRADFORD_KEIGHLEY, HearingCentre.from("bradfordKeighley").get());
         assertEquals(HearingCentre.MCC_MINSHULL, HearingCentre.from("mccMinshull").get());
@@ -70,6 +72,6 @@ public class HearingCentreTest {
 
     @Test
     public void if_this_test_fails_it_is_because_it_needs_updating_with_your_changes() {
-        assertEquals(26, HearingCentre.values().length);
+        assertEquals(27, HearingCentre.values().length);
     }
 }

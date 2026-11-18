@@ -1,11 +1,11 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure;
 
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.LIST_CASE_HEARING_CENTRE;
-import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.LIST_CASE_HEARING_DATE;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.*;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.AsylumCaseUtils.isDecisionWithoutHearingAppeal;
 
 import org.springframework.stereotype.Service;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCase;
+import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.DynamicList;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.HearingCentre;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.service.StringProvider;
 
@@ -67,6 +67,13 @@ public class HearingDetailsFinder {
             case NORTH_SHIELDS -> "https://courttribunalfinder.service.gov.uk/courts/newcastle-civil-family-courts-and-tribunals-centre";
             default -> "Hearing centre url not available";
         };
+    }
+
+    public String getCmrHearingCentreAddress(AsylumCase asylumCase) {
+        DynamicList cmrHearingCentreAddress = asylumCase.read(CMR_HEARING_CENTRE_ADDRESS, DynamicList.class)
+                .orElseThrow(() -> new IllegalStateException("cmrHearingCentreAddress is not present"));
+
+        return cmrHearingCentreAddress.getValue().getLabel();
     }
 
 }
