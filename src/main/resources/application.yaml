@@ -602,6 +602,11 @@ internalDetainedIrcPrisonAppealDisposedUnderRule31Or32Ftpa.fileExtension: PDF
 internalDetainedIrcPrisonAppealDisposedUnderRule31Or32Ftpa.fileName: "ftp-disposed-of-under-rules-31-or-32-letter"
 internalDetainedIrcPrisonAppealDisposedUnderRule31Or32Ftpa.templateName: ${INTERNAL_DETAINED_IRC_PRISON_FTPA_DISPOSED_RULE_31_OR_32_LETTER:TB-IAC-LET-ENG-00825.docx}
 
+internalDetainedIrcPrisonUpdateFtpaDecisionLetter.contentType: application/pdf
+internalDetainedIrcPrisonUpdateFtpaDecisionLetter.fileExtension: PDF
+internalDetainedIrcPrisonUpdateFtpaDecisionLetter.fileName: "ftpa-decision-updated-letter"
+internalDetainedIrcPrisonUpdateFtpaDecisionLetter.templateName: ${INTERNAL_DETAINED_IRC_PRISON_UPDATE_FTPA_DECISION_LETTER:TB-IAC-LET-ENG-Internal-detained-update-ftpa-decision-rule-31-irc-prison.docx}
+
 internalDetainedAppealRemittedAipIrcPrisonLetter.contentType: application/pdf
 internalDetainedAppealRemittedAipIrcPrisonLetter.fileExtension: PDF
 internalDetainedAppealRemittedAipIrcPrisonLetter.fileName: "appeal-form"
