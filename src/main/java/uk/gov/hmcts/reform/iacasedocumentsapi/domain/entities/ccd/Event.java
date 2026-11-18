@@ -49,6 +49,7 @@ public enum Event {
 
     REMOVE_STATUTORY_TIMEFRAME_24_WEEKS("removeStatutoryTimeframe24Weeks", CaseType.ASYLUM),
     UPDATE_TRIBUNAL_DECISION("updateTribunalDecision", CaseType.ASYLUM),
+    UPDATE_FTPA_DECISION("updateFtpaDecision", CaseType.ASYLUM),
     REQUEST_CASE_BUILDING("requestCaseBuilding", CaseType.ASYLUM),
     UPLOAD_HOME_OFFICE_APPEAL_RESPONSE("uploadHomeOfficeAppealResponse", CaseType.ASYLUM),
     RECORD_OUT_OF_TIME_DECISION("recordOutOfTimeDecision", CaseType.ASYLUM),

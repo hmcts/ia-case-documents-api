@@ -118,6 +118,7 @@ class DocumentTagTest {
         assertEquals("internalDetainedDecisionWithoutHearing", DocumentTag.INTERNAL_DETAINED_DECISION_WITHOUT_HEARING.toString());
         assertEquals("internalDetainedLateRemissionRefusedTemplateLetter", DocumentTag.INTERNAL_DETAINED_LATE_REMISSION_REFUSED_TEMPLATE_LETTER.toString());
         assertEquals("internalDetainedIrcPrisonFtpaDisposedRules31Or32Letter", DocumentTag.INTERNAL_DETAINED_IRC_PRISON_FTPA_DISPOSED_RULES_31_OR_32_LETTER.toString());
+        assertEquals("internalDetainedIrcPrisonUpdateFtpaDecisionLetter", DocumentTag.INTERNAL_DETAINED_IRC_PRISON_UPDATE_FTPA_DECISION_LETTER.toString());
         assertEquals("internalDetainedAppealRemittedAipIrcPrisonLetter", DocumentTag.INTERNAL_DETAINED_APPEAL_REMITTED_AIP_IRC_PRISON_LETTER.toString());
         assertEquals("homeOfficeApplicationDecidedLetter", DocumentTag.HOME_OFFICE_APPLICATION_DECIDED_LETTER.toString());
         assertEquals("aipmDetainedInPrisonOrIrcReinstateAppealLetter", DocumentTag.AIPM_DETAINED_IN_PRISON_IRC_REINSTATE_APPEAL_LETTER.toString());
@@ -137,6 +138,6 @@ class DocumentTagTest {
 
     @Test
     public void if_this_test_fails_it_is_because_it_needs_updating_with_your_changes() {
-        assertEquals(134, DocumentTag.values().length);
+        assertEquals(135, DocumentTag.values().length);
     }
 }

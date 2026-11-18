@@ -72,6 +72,7 @@ public class EventTest {
             Arguments.of("submitClarifyingQuestionAnswers", CaseType.ASYLUM, Event.SUBMIT_CLARIFYING_QUESTION_ANSWERS),
             Arguments.of("recordAdjournmentDetails", CaseType.ASYLUM, Event.RECORD_ADJOURNMENT_DETAILS),
             Arguments.of("updateTribunalDecision", CaseType.ASYLUM, Event.UPDATE_TRIBUNAL_DECISION),
+            Arguments.of("updateFtpaDecision", CaseType.ASYLUM, Event.UPDATE_FTPA_DECISION),
             Arguments.of("requestCaseBuilding", CaseType.ASYLUM, Event.REQUEST_CASE_BUILDING),
             Arguments.of("uploadHomeOfficeAppealResponse", CaseType.ASYLUM, Event.UPLOAD_HOME_OFFICE_APPEAL_RESPONSE),
             Arguments.of("recordOutOfTimeDecision", CaseType.ASYLUM, Event.RECORD_OUT_OF_TIME_DECISION),
