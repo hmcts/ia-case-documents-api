@@ -1,5 +1,6 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonEnumDefaultValue;
 import com.fasterxml.jackson.annotation.JsonValue;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseType;
@@ -163,6 +164,7 @@ public enum DocumentTag {
     private final String id;
     private final CaseType caseType;
 
+    @JsonCreator
     DocumentTag(String id, CaseType caseType) {
         this.id = id;
         this.caseType = caseType;

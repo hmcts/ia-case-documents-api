@@ -1,7 +1,7 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.utils.roleassignment;
 
-import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.databind.DeserializationContext;
+import tools.jackson.core.JsonParser;
+import tools.jackson.databind.DeserializationContext;
 import org.junit.jupiter.api.Test;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.roleassignment.RoleName;
 
@@ -19,11 +19,11 @@ class RoleNameDeserializerTest {
         JsonParser parser = mock(JsonParser.class);
         DeserializationContext ctx = mock(DeserializationContext.class);
 
-        when(parser.getText()).thenReturn("tribunal-caseworker");
+        when(parser.getString()).thenReturn("tribunal-caseworker");
         RoleName result = deserializer.deserialize(parser, ctx);
         assertEquals(RoleName.TRIBUNAL_CASEWORKER, result);
 
-        when(parser.getText()).thenReturn("not-a-role");
+        when(parser.getString()).thenReturn("not-a-role");
         result = deserializer.deserialize(parser, ctx);
 
         assertEquals(RoleName.UNKNOWN, result);
@@ -35,7 +35,7 @@ class RoleNameDeserializerTest {
         JsonParser parser = mock(JsonParser.class);
         DeserializationContext ctx = mock(DeserializationContext.class);
 
-        when(parser.getText()).thenReturn(null);
+        when(parser.getString()).thenReturn(null);
         RoleName result = deserializer.deserialize(parser, ctx);
 
         assertEquals(RoleName.UNKNOWN, result);
@@ -47,7 +47,7 @@ class RoleNameDeserializerTest {
         JsonParser parser = mock(JsonParser.class);
         DeserializationContext ctx = mock(DeserializationContext.class);
 
-        when(parser.getText()).thenReturn("");
+        when(parser.getString()).thenReturn("");
         RoleName result = deserializer.deserialize(parser, ctx);
 
         assertEquals(RoleName.UNKNOWN, result);

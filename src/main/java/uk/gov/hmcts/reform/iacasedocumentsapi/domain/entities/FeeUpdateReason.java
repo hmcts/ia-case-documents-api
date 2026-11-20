@@ -1,5 +1,6 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 public enum FeeUpdateReason {
@@ -11,6 +12,7 @@ public enum FeeUpdateReason {
     @JsonValue
     private String value;
 
+    @JsonCreator
     FeeUpdateReason(String value) {
         this.value = value;
     }

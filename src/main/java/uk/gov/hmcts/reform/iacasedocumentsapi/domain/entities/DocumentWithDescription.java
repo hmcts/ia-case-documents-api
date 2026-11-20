@@ -3,6 +3,8 @@ package uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities;
 import static java.util.Objects.requireNonNull;
 
 import java.util.Optional;
+
+import com.fasterxml.jackson.annotation.JsonCreator;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field.Document;
 
 public class DocumentWithDescription {
@@ -10,6 +12,7 @@ public class DocumentWithDescription {
     private Optional<Document> document = Optional.empty();
     private Optional<String> description = Optional.empty();
 
+    @JsonCreator
     private DocumentWithDescription() {
         // noop -- for deserializer
     }

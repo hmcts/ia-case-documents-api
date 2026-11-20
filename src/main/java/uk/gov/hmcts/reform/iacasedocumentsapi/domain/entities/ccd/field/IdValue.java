@@ -1,5 +1,7 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.field;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+
 import static java.util.Objects.requireNonNull;
 
 public class IdValue<T> {
@@ -7,6 +9,7 @@ public class IdValue<T> {
     private String id = "";
     private T value;
 
+    @JsonCreator
     private IdValue() {
         // noop -- for deserializer
     }
@@ -15,7 +18,6 @@ public class IdValue<T> {
         String id,
         T value
     ) {
-        requireNonNull(id);
         requireNonNull(value);
 
         this.id = id;
@@ -23,7 +25,6 @@ public class IdValue<T> {
     }
 
     public String getId() {
-        requireNonNull(id);
         return id;
     }
 

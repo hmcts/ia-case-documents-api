@@ -2,9 +2,10 @@ package uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback;
 
 import static java.util.Objects.requireNonNull;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.databind.PropertyNamingStrategies;
-import com.fasterxml.jackson.databind.annotation.JsonNaming;
+import tools.jackson.databind.PropertyNamingStrategies;
+import tools.jackson.databind.annotation.JsonNaming;
 import java.util.Optional;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.RequiredFieldMissingException;
 import uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.CaseData;
@@ -20,6 +21,7 @@ public class Callback<T extends CaseData> {
     private CaseDetails<T> caseDetails;
     private Optional<CaseDetails<T>> caseDetailsBefore = Optional.empty();
 
+    @JsonCreator
     private Callback() {
         // noop -- for deserializer
     }

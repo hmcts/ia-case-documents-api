@@ -13,8 +13,7 @@ import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseD
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.PreSubmitCallbackStage.ABOUT_TO_START;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback.PreSubmitCallbackStage.ABOUT_TO_SUBMIT;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import tools.jackson.databind.ObjectMapper;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -83,7 +82,7 @@ class CustomiseHearingBundleHandlerTest {
     private CustomiseHearingBundleHandler customiseHearingBundleHandler;
 
     @BeforeEach
-    public void setUp() throws JsonProcessingException {
+    public void setUp() {
         String emBundlerStitchUri = "stitchingUri";
         String emBundlerUrl = "bundleurl";
         customiseHearingBundleHandler =
@@ -131,7 +130,7 @@ class CustomiseHearingBundleHandlerTest {
         "'',YES,true",
         "SUITABLE,YES,true",
         "UNSUITABLE,YES,true"})
-    void should_successfully_handle_the_callback(String maybeDecision, YesOrNo is24w, boolean shouldHaveTribunalDocs) throws JsonProcessingException {
+    void should_successfully_handle_the_callback(String maybeDecision, YesOrNo is24w, boolean shouldHaveTribunalDocs) {
         when(asylumCase.read(SUITABILITY_REVIEW_DECISION)).thenReturn(maybeDecision.isEmpty()
             ? Optional.empty() : Optional.of(AdaSuitabilityReviewDecision.valueOf(maybeDecision)));
         when(asylumCase.read(STF_24W_PREVIOUS_STATUS_WAS_YES_AUTO_GENERATED, YesOrNo.class))
@@ -216,7 +215,7 @@ class CustomiseHearingBundleHandlerTest {
         "'',YES,true",
         "SUITABLE,YES,true",
         "UNSUITABLE,YES,true"})
-    void should_successfully_handle_the_callback_updated_bundle(String maybeDecision, YesOrNo is24w, boolean shouldHaveTribunalDocs) throws JsonProcessingException {
+    void should_successfully_handle_the_callback_updated_bundle(String maybeDecision, YesOrNo is24w, boolean shouldHaveTribunalDocs) {
         when(callback.getEvent()).thenReturn(Event.GENERATE_UPDATED_HEARING_BUNDLE);
         when(asylumCase.read(SUITABILITY_REVIEW_DECISION)).thenReturn(maybeDecision.isEmpty()
             ? Optional.empty() : Optional.of(AdaSuitabilityReviewDecision.valueOf(maybeDecision)));
@@ -317,7 +316,7 @@ class CustomiseHearingBundleHandlerTest {
         verify(objectMapper, times(1)).readValue(anyString(), eq(AsylumCase.class));
     }
 
-    private void verifyAsylumCaseReadsFor_should_successfully_handle_Reheard_the_callback() throws JsonProcessingException {
+    private void verifyAsylumCaseReadsFor_should_successfully_handle_Reheard_the_callback() {
         verify(asylumCaseCopy, times(4)).read(CUSTOM_APP_ADDITIONAL_EVIDENCE_DOCS);
         verify(asylumCaseCopy, times(4)).read(CUSTOM_RESP_ADDITIONAL_EVIDENCE_DOCS);
         verify(asylumCaseCopy, times(2)).read(CUSTOM_FTPA_APPELLANT_DOCS);
@@ -346,7 +345,7 @@ class CustomiseHearingBundleHandlerTest {
 
     @ParameterizedTest
     @EnumSource(value = Event.class, names = {"CUSTOMISE_HEARING_BUNDLE", "GENERATE_UPDATED_HEARING_BUNDLE"})
-    void should_successfully_handle_Reheard_the_callback(Event event) throws JsonProcessingException {
+    void should_successfully_handle_Reheard_the_callback(Event event) {
         when(callback.getEvent()).thenReturn(event);
         when(asylumCase.read(CASE_FLAG_SET_ASIDE_REHEARD_EXISTS, YesOrNo.class)).thenReturn(Optional.of(YesOrNo.YES));
 
@@ -490,7 +489,7 @@ class CustomiseHearingBundleHandlerTest {
     }
 
     @Test
-    void should_successfully_handle_Reheard_the_callback_with_Remitted() throws JsonProcessingException {
+    void should_successfully_handle_Reheard_the_callback_with_Remitted() {
         when(callback.getEvent()).thenReturn(Event.CUSTOMISE_HEARING_BUNDLE);
         when(featureToggler.getValue("dlrm-remitted-feature-flag", false)).thenReturn(true);
 
@@ -722,7 +721,7 @@ class CustomiseHearingBundleHandlerTest {
 
     @ParameterizedTest
     @EnumSource(value = Event.class, names = {"CUSTOMISE_HEARING_BUNDLE", "GENERATE_UPDATED_HEARING_BUNDLE"})
-    void should_throw_when_asylumcase_can_not_copied(Event event) throws JsonProcessingException {
+    void should_throw_when_asylumcase_can_not_copied(Event event) {
         when(callback.getEvent()).thenReturn(event);
 
         when(objectMapper.readValue("Test", AsylumCase.class))
