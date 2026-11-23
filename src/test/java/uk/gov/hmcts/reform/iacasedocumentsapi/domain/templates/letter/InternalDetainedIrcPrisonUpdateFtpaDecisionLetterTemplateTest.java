@@ -39,8 +39,8 @@ class InternalDetainedIrcPrisonUpdateFtpaDecisionLetterTemplateTest {
     private final String homeOfficeReferenceNumber = "A1234567/001";
     private final String appellantGivenNames = "John";
     private final String appellantFamilyName = "Doe";
-    private final String appellantReason = "Appellant rule 31 reason";
-    private final String respondentReason = "Respondent rule 31 reason";
+    private final String appellantReason = "Correct decision error under rule 31";
+    private final String respondentReason = "Correct decision error under rule 31";
 
     @Mock
     private CaseDetails<AsylumCase> caseDetails;
@@ -61,8 +61,6 @@ class InternalDetainedIrcPrisonUpdateFtpaDecisionLetterTemplateTest {
         when(asylumCase.read(APPELLANT_GIVEN_NAMES, String.class)).thenReturn(Optional.of(appellantGivenNames));
         when(asylumCase.read(APPELLANT_FAMILY_NAME, String.class)).thenReturn(Optional.of(appellantFamilyName));
         when(asylumCase.read(FTPA_APPLICANT_TYPE, ApplicantType.class)).thenReturn(Optional.of(ApplicantType.APPELLANT));
-        when(asylumCase.read(FTPA_APPELLANT_DECISION_REMADE_RULE_32_TEXT, String.class)).thenReturn(Optional.of(appellantReason));
-        when(asylumCase.read(FTPA_RESPONDENT_DECISION_REMADE_RULE_32_TEXT, String.class)).thenReturn(Optional.of(respondentReason));
         when(customerServicesProvider.getInternalCustomerServicesTelephone(asylumCase)).thenReturn(customerServicesTelephone);
         when(customerServicesProvider.getInternalCustomerServicesEmail(asylumCase)).thenReturn(customerServicesEmail);
     }
@@ -97,13 +95,6 @@ class InternalDetainedIrcPrisonUpdateFtpaDecisionLetterTemplateTest {
         assertThat(template.mapFieldValues(caseDetails))
             .containsEntry("applicant", "the Home Office's")
             .containsEntry("ftpaDisposedReason", respondentReason);
-    }
-
-    @Test
-    void should_return_empty_reason_when_not_present() {
-        when(asylumCase.read(FTPA_APPELLANT_DECISION_REMADE_RULE_32_TEXT, String.class)).thenReturn(Optional.empty());
-
-        assertThat(template.mapFieldValues(caseDetails)).containsEntry("ftpaDisposedReason", "");
     }
 
     @Test

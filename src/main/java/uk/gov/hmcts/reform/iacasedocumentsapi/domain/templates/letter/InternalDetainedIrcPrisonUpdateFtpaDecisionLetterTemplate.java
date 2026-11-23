@@ -23,6 +23,7 @@ public class InternalDetainedIrcPrisonUpdateFtpaDecisionLetterTemplate implement
 
     private final String templateName;
     private final CustomerServicesProvider customerServicesProvider;
+    private static final String FTPA_DISPOSE_REASON = "Correct decision error under rule 31";
 
     public InternalDetainedIrcPrisonUpdateFtpaDecisionLetterTemplate(
         @Value("${internalDetainedIrcPrisonUpdateFtpaDecisionLetter.templateName}") String templateName,
@@ -48,7 +49,7 @@ public class InternalDetainedIrcPrisonUpdateFtpaDecisionLetterTemplate implement
         fieldValues.put("customerServicesTelephone", customerServicesProvider.getInternalCustomerServicesTelephone(asylumCase));
         fieldValues.put("customerServicesEmail", customerServicesProvider.getInternalCustomerServicesEmail(asylumCase));
         fieldValues.put("applicant", isAppellantApplicant(asylumCase) ? "your" : "the Home Office's");
-        fieldValues.put("ftpaDisposedReason", getDisposedReason(asylumCase));
+        fieldValues.put("ftpaDisposedReason", FTPA_DISPOSE_REASON);
 
         return fieldValues;
     }
@@ -58,14 +59,5 @@ public class InternalDetainedIrcPrisonUpdateFtpaDecisionLetterTemplate implement
             .read(FTPA_APPLICANT_TYPE, ApplicantType.class)
             .orElseThrow(() -> new IllegalStateException("ftpaApplicantType is not present"))
             == APPELLANT;
-    }
-
-    private String getDisposedReason(AsylumCase asylumCase) {
-        return asylumCase.read(
-            isAppellantApplicant(asylumCase)
-                ? FTPA_APPELLANT_DECISION_REMADE_RULE_32_TEXT
-                : FTPA_RESPONDENT_DECISION_REMADE_RULE_32_TEXT,
-            String.class
-        ).orElse("");
     }
 }
