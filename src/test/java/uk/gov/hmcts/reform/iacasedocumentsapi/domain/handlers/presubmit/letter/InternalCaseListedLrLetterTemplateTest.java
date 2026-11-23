@@ -25,6 +25,9 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.APPELLANT_FAMILY_NAME;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.APPELLANT_GIVEN_NAMES;
+import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.STF_24W_CURRENT_STATUS_AUTO_GENERATED;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.APPEAL_REFERENCE_NUMBER;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.APPELLANTS_REPRESENTATION;
 import static uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.AsylumCaseDefinition.HOME_OFFICE_REFERENCE_NUMBER;
@@ -56,6 +59,7 @@ class InternalCaseListedLrLetterTemplateTest {
     @Mock
     private StringProvider stringProvider;
     private final String telephoneNumber = "0300 123 1711";
+    private final String emailAddress = "customer.services@example.com";
     private String appellantGivenNames = "John";
     private String appellantFamilyName = "Smith";
     private String homeOfficeReferenceNumber = "123654";
@@ -79,7 +83,7 @@ class InternalCaseListedLrLetterTemplateTest {
     @BeforeEach
     public void setUp() {
         internalCaseListedLrLetterTemplate =
-            new InternalCaseListedLrLetterTemplate(templateName, customerServicesProvider, stringProvider);
+                new InternalCaseListedLrLetterTemplate(templateName, customerServicesProvider, stringProvider);
     }
 
     @Test
@@ -98,9 +102,10 @@ class InternalCaseListedLrLetterTemplateTest {
         assertEquals(appellantFamilyName, fieldValuesMap.get("appellantFamilyName"));
         assertEquals(homeOfficeReferenceNumber, fieldValuesMap.get("homeOfficeReferenceNumber"));
         assertEquals(telephoneNumber, fieldValuesMap.get("customerServicesTelephone"));
+        assertEquals(emailAddress, fieldValuesMap.get("customerServicesEmail"));
         assertEquals(formattedListCaseHearingDate, fieldValuesMap.get("hearingDate"));
         assertEquals(formattedListCaseHearingTime, fieldValuesMap.get("hearingTime"));
-        assertEquals(formattedManchesterHearingCentreAddress, fieldValuesMap.get("hearingLocation"));
+        assertEquals("Remote", fieldValuesMap.get("hearingLocation"));
         assertEquals(LocalDate.now().format(DateTimeFormatter.ofPattern("d MMMM yyyy")), fieldValuesMap.get("dateLetterSent"));
         assertEquals(addressLine1, fieldValuesMap.get("address_line_1"));
         assertEquals(addressLine2, fieldValuesMap.get("address_line_2"));
@@ -120,9 +125,10 @@ class InternalCaseListedLrLetterTemplateTest {
         assertEquals(appellantFamilyName, fieldValuesMap.get("appellantFamilyName"));
         assertEquals(homeOfficeReferenceNumber, fieldValuesMap.get("homeOfficeReferenceNumber"));
         assertEquals(telephoneNumber, fieldValuesMap.get("customerServicesTelephone"));
+        assertEquals(emailAddress, fieldValuesMap.get("customerServicesEmail"));
         assertEquals(formattedListCaseHearingDate, fieldValuesMap.get("hearingDate"));
         assertEquals(formattedListCaseHearingTime, fieldValuesMap.get("hearingTime"));
-        assertEquals(formattedManchesterHearingCentreAddress, fieldValuesMap.get("hearingLocation"));
+        assertEquals("Remote", fieldValuesMap.get("hearingLocation"));
         assertEquals(LocalDate.now().format(DateTimeFormatter.ofPattern("d MMMM yyyy")), fieldValuesMap.get("dateLetterSent"));
         assertEquals(addressLine1, fieldValuesMap.get("address_line_1"));
         assertEquals(addressLine2, fieldValuesMap.get("address_line_2"));
@@ -131,9 +137,57 @@ class InternalCaseListedLrLetterTemplateTest {
         assertEquals(Nationality.ES.toString(), fieldValuesMap.get("address_line_5"));
     }
 
+    @Test
+    void should_use_hearing_centre_address_for_24_week_cases() {
+        dataSetup(true);
+        when(asylumCase.read(STF_24W_CURRENT_STATUS_AUTO_GENERATED, YesOrNo.class))
+                .thenReturn(Optional.of(YesOrNo.YES));
+
+        fieldValuesMap = internalCaseListedLrLetterTemplate.mapFieldValues(caseDetails);
+
+        assertEquals(formattedManchesterHearingCentreAddress, fieldValuesMap.get("hearingLocation"));
+    }
+
+    @Test
+    void should_populate_24_week_legal_rep_letter_with_legal_rep_details_and_address() {
+        dataSetup(true);
+        when(asylumCase.read(STF_24W_CURRENT_STATUS_AUTO_GENERATED, YesOrNo.class))
+            .thenReturn(Optional.of(YesOrNo.YES));
+        when(asylumCase.read(APPELLANT_GIVEN_NAMES, String.class)).thenReturn(Optional.of("Appellant"));
+        when(asylumCase.read(APPELLANT_FAMILY_NAME, String.class)).thenReturn(Optional.of("Person"));
+
+        InternalCaseListed24WeeksLrLetterTemplate template =
+            new InternalCaseListed24WeeksLrLetterTemplate(templateName, customerServicesProvider, stringProvider);
+
+        fieldValuesMap = template.mapFieldValues(caseDetails);
+
+        assertEquals(appellantGivenNames, fieldValuesMap.get("appellantGivenNames"));
+        assertEquals(appellantFamilyName, fieldValuesMap.get("appellantFamilyName"));
+        assertEquals(addressLine1, fieldValuesMap.get("address_line_1"));
+        assertEquals("Remote", fieldValuesMap.get("hearingLocation"));
+    }
+
+    @Test
+    void should_use_remote_hearing_location_for_24_week_legal_rep_template() {
+        dataSetup(true);
+        when(asylumCase.read(STF_24W_CURRENT_STATUS_AUTO_GENERATED, YesOrNo.class))
+            .thenReturn(Optional.of(YesOrNo.YES));
+
+        InternalCaseListed24WeeksLrLetterTemplate template =
+            new InternalCaseListed24WeeksLrLetterTemplate(templateName, customerServicesProvider, stringProvider);
+
+        fieldValuesMap = template.mapFieldValues(caseDetails);
+
+        assertEquals("Remote", fieldValuesMap.get("hearingLocation"));
+        assertEquals(appellantGivenNames, fieldValuesMap.get("appellantGivenNames"));
+        assertEquals(appellantFamilyName, fieldValuesMap.get("appellantFamilyName"));
+        assertEquals(addressLine1, fieldValuesMap.get("address_line_1"));
+    }
+
     void dataSetup(boolean legalRepInUk) {
         when(caseDetails.getCaseData()).thenReturn(asylumCase);
         when(customerServicesProvider.getInternalCustomerServicesTelephone(asylumCase)).thenReturn(telephoneNumber);
+        when(customerServicesProvider.getInternalCustomerServicesEmail(asylumCase)).thenReturn(emailAddress);
         when(asylumCase.read(APPEAL_REFERENCE_NUMBER, String.class)).thenReturn(Optional.of(appealReferenceNumber));
         when(asylumCase.read(LEGAL_REP_GIVEN_NAME, String.class)).thenReturn(Optional.of(appellantGivenNames));
         when(asylumCase.read(LEGAL_REP_FAMILY_NAME_PAPER_J, String.class)).thenReturn(Optional.of(appellantFamilyName));
