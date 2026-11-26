@@ -18,6 +18,7 @@
           "listCaseRequirementsSingleSexCourt": "something around SingleSexCourt",
           "listCaseRequirementsInCameraCourt": "something around InCameraCourt",
           "listCaseRequirementsOther": "something around Other",
+          "listCaseInternalCase": "something around internalCase",
           "ariaListingReference": "AA/12345/1234",
           "customerServicesTelephone": "{$customerServices.telephoneNumber}",
           "customerServicesEmail": "{$customerServices.emailAddress}"
@@ -54,6 +55,7 @@
         "listCaseRequirementsSingleSexCourt": "something around SingleSexCourt",
         "listCaseRequirementsInCameraCourt": "something around InCameraCourt",
         "listCaseRequirementsOther": "something around Other",
+        "listCaseInternalCase": "something around internalCase",
         "ariaListingReference": "AA/12345/1234",
         "customerServicesTelephone": "{$customerServices.telephoneNumber}",
         "customerServicesEmail": "{$customerServices.emailAddress}"
