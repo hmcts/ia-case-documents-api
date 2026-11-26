@@ -2566,6 +2566,27 @@ public class DocumentCreatorConfiguration {
         );
     }
 
+    @Bean("internalDetainedIrcPrisonUpdateFtpaDecisionLetter")
+    public DocumentCreator<AsylumCase> getInternalDetainedIrcPrisonUpdateFtpaDecisionLetterDocumentCreator(
+        @Value("${internalDetainedIrcPrisonUpdateFtpaDecisionLetter.contentType}") String contentType,
+        @Value("${internalDetainedIrcPrisonUpdateFtpaDecisionLetter.fileExtension}") String fileExtension,
+        @Value("${internalDetainedIrcPrisonUpdateFtpaDecisionLetter.fileName}") String fileName,
+        AsylumCaseFileNameQualifier fileNameQualifier,
+        InternalDetainedIrcPrisonUpdateFtpaDecisionLetterTemplate documentTemplate,
+        DocumentGenerator documentGenerator,
+        DocumentUploader documentUploader
+    ) {
+        return new DocumentCreator<>(
+            contentType,
+            fileExtension,
+            fileName,
+            fileNameQualifier,
+            documentTemplate,
+            documentGenerator,
+            documentUploader
+        );
+    }
+
     @Bean("internalDetainedAppealRemittedAipIrcPrisonLetter")
     public DocumentCreator<AsylumCase> getInternalDetainedAppealRemittedAipIrcPrisonLetterDocumentCreator(
             @Value("${internalDetainedAppealRemittedAipIrcPrisonLetter.contentType}") String contentType,
