@@ -2,6 +2,7 @@ package uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd.callback;
 
 import static java.util.Objects.requireNonNull;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.google.common.collect.ImmutableSet;
 import java.util.Collection;
 import java.util.LinkedHashSet;
@@ -13,6 +14,7 @@ public class PreSubmitCallbackResponse<T extends CaseData> {
     private T data;
     private Set<String> errors = new LinkedHashSet<>();
 
+    @JsonCreator
     private PreSubmitCallbackResponse() {
         // noop -- for deserializer
     }

@@ -1,5 +1,6 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
@@ -10,6 +11,7 @@ public class PriorApplication {
     private String applicationId;
     private String caseDataJson;
 
+    @JsonCreator
     private PriorApplication() {
         // noop -- for deserializer
     }

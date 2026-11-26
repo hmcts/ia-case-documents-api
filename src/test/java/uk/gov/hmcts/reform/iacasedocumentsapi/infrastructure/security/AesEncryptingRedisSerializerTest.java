@@ -2,7 +2,7 @@ package uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.security;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
+import org.springframework.data.redis.serializer.JacksonJsonRedisSerializer;
 import org.springframework.data.redis.serializer.SerializationException;
 import uk.gov.hmcts.reform.iacasedocumentsapi.infrastructure.clients.model.idam.UserInfo;
 
@@ -17,11 +17,11 @@ class AesEncryptingRedisSerializerTest {
         .encodeToString("01234567890123456789012345678901".getBytes());
 
     private AesEncryptingRedisSerializer<String> serializer;
-    private Jackson2JsonRedisSerializer<String> delegateSerializer;
+    private JacksonJsonRedisSerializer<String> delegateSerializer;
 
     @BeforeEach
     void setUp() {
-        delegateSerializer = new Jackson2JsonRedisSerializer<>(String.class);
+        delegateSerializer = new JacksonJsonRedisSerializer<>(String.class);
         serializer = new AesEncryptingRedisSerializer<>(delegateSerializer, VALID_KEY_256);
     }
 
@@ -47,8 +47,8 @@ class AesEncryptingRedisSerializerTest {
 
     @Test
     void roundTrip_pojoDelegate() {
-        Jackson2JsonRedisSerializer<UserInfo> userInfoDelegate =
-            new Jackson2JsonRedisSerializer<>(UserInfo.class);
+        JacksonJsonRedisSerializer<UserInfo> userInfoDelegate =
+            new JacksonJsonRedisSerializer<>(UserInfo.class);
         AesEncryptingRedisSerializer<UserInfo> userInfoSerializer =
             new AesEncryptingRedisSerializer<>(userInfoDelegate, VALID_KEY_256);
 

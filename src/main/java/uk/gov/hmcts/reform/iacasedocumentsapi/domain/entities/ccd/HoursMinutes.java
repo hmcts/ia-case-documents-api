@@ -1,5 +1,6 @@
 package uk.gov.hmcts.reform.iacasedocumentsapi.domain.entities.ccd;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import lombok.EqualsAndHashCode;
 
 @EqualsAndHashCode
@@ -8,6 +9,7 @@ public class HoursMinutes {
     private int hours;
     private int minutes;
 
+    @JsonCreator
     public HoursMinutes() {
         // noop -- for deserializer
     }
